@@ -1,58 +1,128 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PATENPAKMIKO 🏛️🌱
+> **Sistem Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKKPR) & Pelayanan Terpadu Terintegrasi**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem **PATENPAKMIKO** adalah aplikasi berbasis web modern yang dirancang untuk mendigitalisasi, mengotomatisasi, dan menyelaraskan alur pengajuan tata ruang serta perizinan pertanahan secara komprehensif. Aplikasi ini mengintegrasikan berbagai aktor instansi (BPN, Dinas Pekerjaan Umum/Tata Ruang, Dinas 1 Pintu/PTSP) dengan Pelaku Usaha dan Masyarakat Umum dalam satu ekosistem digital yang efisien, transparan, dan aman.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🎨 Visual Identity & Aesthetics
+Aplikasi dibangun dengan standar estetika premium:
+* **Brand Color Utama:** **Emerald Green (`#006644`)** — Merepresentasikan profesionalisme, keberlanjutan, dan instansi pertanahan yang berwibawa.
+* **UI Style:** Modern *Glassmorphism* dengan shadow halus, kelengkungan sudut (`rounded-2xl`), dipadukan dengan tipografi modern (**Outfit / Inter**) serta transisi antarmuka yang sangat halus.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🚀 5 Alur Kerja Utama (Core Workflows)
 
-## Learning Laravel
+Sistem melayani 5 alur kebutuhan yang dapat diakses dari halaman utama:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. ALUR 1: LAPOR-PA (Pelaporan & Penjadwalan Aduan)
+Alur pengaduan langsung bagi masyarakat:
+* Input Nomor WhatsApp & Pilih Jadwal rencana audiensi.
+* Tombol "Kirim Jadwal" memicu notifikasi ke panel **Super Admin (DPN)** dan log WhatsApp blast.
+* Sistem menampilkan panduan lengkap tindak lanjut langsung di layar pemohon.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. ALUR 2: PPKPR Non Berusaha (Bypass Gistaru & Pembayaran)
+Alur cepat khusus non-bisnis yang memotong jalur spasial Gistaru & Pembayaran PNBP:
+* Register & Login $\rightarrow$ Unduh Formulir & 11 PDF syarat $\rightarrow$ Submit berkas digital.
+* Validasi Berkas oleh BPN (Jika sesuai $\rightarrow$ WA blast ke PU untuk mendaftarkan berkas fisik ke loket BPN).
+* BPN input jadwal cek lokasi $\rightarrow$ Peninjauan Lapangan Offline.
+* BPN input jadwal rapat $\rightarrow$ Rapat pleno koordinasi.
+* Penerbitan **Pertimbangan Teknis (Pertek) Pertanahan**.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 3. ALUR 3: PPKPR Berusaha (Jalur Tengah - Kompleks)
+Alur perizinan tata ruang terpadu berskala bisnis besar:
+* Register & Login $\rightarrow$ Unduh Formulir & 11 PDF syarat $\rightarrow$ Submit berkas digital.
+* Validasi Berkas BPN $\rightarrow$ PU kirim notifikasi $\rightarrow$ WA blast ke PU & BPN.
+* BPN cek PKKPR Gistaru $\rightarrow$ Verifikasi Pembayaran PNBP (tagihan/lunas).
+* BPN input jadwal cek lokasi $\rightarrow$ Cek lapangan offline $\rightarrow$ Rapat pleno koordinasi.
+* Penerbitan Pertek Pertanahan oleh BPN.
+* **Penilaian Teknis Dinas PU:** Dinas PU (Tata Ruang) menguji berkas (Sesuai $\rightarrow$ WA blast ke 1 Pintu).
+* **Finalisasi 1 Pintu (PTSP):** Input Nomor PKKPR, Tanggal Terbit, dan Unggah PDF produk akhir $\rightarrow$ Notifikasi rilis final dikirim ke BPN, PU, dan Pelaku Usaha.
 
-## Agentic Development
+### 4. ALUR 4: Kebijakan (Bypass Gistaru & Pembayaran)
+Alur permohonan berbasis kebijakan khusus (strukturnya ekuivalen penuh dengan *Non Berusaha*):
+* Register/Login $\rightarrow$ Submit berkas digital.
+* Validasi Berkas BPN $\rightarrow$ WhatsApp loket fisik BPN.
+* BPN input jadwal cek lokasi lapangan $\rightarrow$ Cek lapangan offline.
+* BPN input jadwal rapat pleno $\rightarrow$ Rapat koordinasi.
+* Penerbitan Pertek Pertanahan.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 5. ALUR 5: INFORMAL (Cek Wilayah Mandiri)
+Modul peta spasial interaktif publik tanpa autentikasi/login:
+* Pengguna menggeser penanda lokasi (marker) ke titik koordinat peta.
+* Tombol "Cek Wilayah" memetakan zona koordinat secara *real-time*.
+* Sistem menampilkan detail zonasi wilayah (RTRW) serta status izin peruntukan.
 
+---
+
+## 👥 Aktor & Hak Akses (Multi-Role)
+
+| Aktor | Role String | Deskripsi Hak Akses |
+| :--- | :--- | :--- |
+| **Pelaku Usaha (PU)** | `pelaku_usaha` | Mengajukan permohonan, submit berkas, memantau berkas, download produk akhir, memberikan rating. |
+| **BPN** | `bpn` | Melakukan cek berkas awal, cek Gistaru, verifikasi bayar, input jadwal lokasi/rapat, terbitkan Pertek. |
+| **Dinas PU** | `dinas_pu` | Melakukan analisis tata ruang teknis pasca-Pertek, menyetujui/menolak kelayakan spasial. |
+| **Dinas 1 Pintu** | `satu_pintu` | Menginput nomor PKKPR resmi, mengunggah PDF produk akhir untuk didistribusikan. |
+| **Super Admin (DPN)** | `dpn` | Mengelola data aduan LAPOR-PA, audit log simulator WhatsApp blast, dan konfigurasi global. |
+
+---
+
+## 🛠️ Tech Stack & Dependencies
+* **Core Framework:** Laravel 13 (PHP ^8.3)
+* **Vite Bundler:** Asset compiler frontend
+* **Database Engine:** MySQL / MariaDB
+* **Map Engine (Spasial):** Leaflet.js / OpenStreetMap
+* **Notification Integrator:** WhatsApp Blast API (Simulator Local Logs)
+
+---
+
+## 💻 Panduan Instalasi Lokal
+
+### 1. Prasyarat
+Pastikan komputer Anda sudah terinstal:
+* PHP >= 8.3
+* Composer
+* Node.js & NPM
+* MySQL Server (XAMPP / Laragon / Native)
+
+### 2. Kloning & Pengaturan Dependensi
+Masuk ke direktori proyek dan jalankan install composer:
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+cd Patenpakminko
+composer install
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Konfigurasi Environment (`.env`)
+Salin file konfigurasi contoh dan buat file `.env` baru:
+```bash
+cp .env.example .env
+```
+Sesuaikan konfigurasi database Anda di dalam `.env`:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=Paten_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-## Contributing
+### 4. Inisialisasi Database & Key
+Generate Application Key, buat database `Paten_db` di MySQL Anda, kemudian jalankan migrasi:
+```bash
+php artisan key:generate
+php artisan migrate --seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 5. Menjalankan Server Pengembangan
+Jalankan dev-server PHP Artisan dan Vite compiler secara bersamaan:
+```bash
+npm run dev
+```
 
-## Code of Conduct
+Aplikasi sekarang dapat diakses secara lokal di [http://localhost:8000](http://localhost:8000)!
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+*© 2026 PATENPAKMIKO - Project developed by Cyberlabs Team*
