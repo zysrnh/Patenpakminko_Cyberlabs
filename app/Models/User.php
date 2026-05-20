@@ -10,12 +10,38 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role', 'phone_number'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    // Helper functions to check roles
+    public function isDpn(): bool
+    {
+        return $this->role === 'dpn';
+    }
+
+    public function isBpn(): bool
+    {
+        return $this->role === 'bpn';
+    }
+
+    public function isDinasPu(): bool
+    {
+        return $this->role === 'dinas_pu';
+    }
+
+    public function isSatuPintu(): bool
+    {
+        return $this->role === 'satu_pintu';
+    }
+
+    public function isPelakuUsaha(): bool
+    {
+        return $this->role === 'pelaku_usaha';
+    }
 
     /**
      * Get the attributes that should be cast.

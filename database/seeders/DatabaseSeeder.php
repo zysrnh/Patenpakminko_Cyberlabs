@@ -15,11 +15,49 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // 1. Pelaku Usaha (PU)
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Budi Pelaku Usaha',
+            'email' => 'pu@patenpakmiko.go.id',
+            'password' => bcrypt('password'),
+            'role' => 'pelaku_usaha',
+            'phone_number' => '081234567890',
+        ]);
+
+        // 2. BPN
+        User::factory()->create([
+            'name' => 'Petugas BPN',
+            'email' => 'bpn@patenpakmiko.go.id',
+            'password' => bcrypt('password'),
+            'role' => 'bpn',
+            'phone_number' => '081234567891',
+        ]);
+
+        // 3. Dinas PU (Tata Ruang)
+        User::factory()->create([
+            'name' => 'Verifikator Dinas PU',
+            'email' => 'pu_dinas@patenpakmiko.go.id',
+            'password' => bcrypt('password'),
+            'role' => 'dinas_pu',
+            'phone_number' => '081234567892',
+        ]);
+
+        // 4. Dinas 1 Pintu (PTSP)
+        User::factory()->create([
+            'name' => 'Petugas Satu Pintu',
+            'email' => 'satupintu@patenpakmiko.go.id',
+            'password' => bcrypt('password'),
+            'role' => 'satu_pintu',
+            'phone_number' => '081234567893',
+        ]);
+
+        // 5. DPN (Dashboard Penerima Notifikasi / Super Admin)
+        User::factory()->create([
+            'name' => 'Super Admin DPN',
+            'email' => 'dpn@patenpakmiko.go.id',
+            'password' => bcrypt('password'),
+            'role' => 'dpn',
+            'phone_number' => '081234567894',
         ]);
     }
 }

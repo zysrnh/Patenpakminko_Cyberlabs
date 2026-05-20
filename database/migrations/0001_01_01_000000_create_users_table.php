@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default('pelaku_usaha'); // pelaku_usaha | bpn | dinas_pu | satu_pintu | dpn
+            $table->string('phone_number')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
