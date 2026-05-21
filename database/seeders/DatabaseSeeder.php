@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Pelaku Usaha (PU)
         User::factory()->create([
+            'username' => 'budi_pu',
             'name' => 'Budi Pelaku Usaha',
             'email' => 'pu@patenpakmiko.go.id',
             'password' => bcrypt('password'),
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. BPN
         User::factory()->create([
+            'username' => 'petugas_bpn',
             'name' => 'Petugas BPN',
             'email' => 'bpn@patenpakmiko.go.id',
             'password' => bcrypt('password'),
@@ -35,6 +37,7 @@ class DatabaseSeeder extends Seeder
 
         // 3. Dinas PU (Tata Ruang)
         User::factory()->create([
+            'username' => 'verifikator_pu',
             'name' => 'Verifikator Dinas PU',
             'email' => 'pu_dinas@patenpakmiko.go.id',
             'password' => bcrypt('password'),
@@ -44,6 +47,7 @@ class DatabaseSeeder extends Seeder
 
         // 4. Dinas 1 Pintu (PTSP)
         User::factory()->create([
+            'username' => 'petugas_satupintu',
             'name' => 'Petugas Satu Pintu',
             'email' => 'satupintu@patenpakmiko.go.id',
             'password' => bcrypt('password'),
@@ -53,6 +57,7 @@ class DatabaseSeeder extends Seeder
 
         // 5. DPN (Dashboard Penerima Notifikasi / Super Admin)
         User::factory()->create([
+            'username' => 'admin_dpn',
             'name' => 'Super Admin DPN',
             'email' => 'dpn@patenpakmiko.go.id',
             'password' => bcrypt('password'),

@@ -13,12 +13,20 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('username')->unique();
+            $table->string('phone_number')->unique();
             $table->string('password');
             $table->string('role')->default('pelaku_usaha'); // pelaku_usaha | bpn | dinas_pu | satu_pintu | dpn
-            $table->string('phone_number')->nullable();
+            
+            // Kolom profil opsional (dilengkapi di dashboard):
+            $table->string('name')->nullable(); // Nama Lengkap
+            $table->string('email')->nullable()->unique(); // Email
+            $table->text('address')->nullable(); // Alamat
+            $table->string('business_name')->nullable(); // Nama Usaha
+            $table->string('business_role')->nullable(); // Jabatan/Sebagai apa di usaha
+            $table->string('profile_photo')->nullable(); // Path foto profil
+            
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

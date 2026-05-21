@@ -486,7 +486,7 @@
                 <a href="#">Panduan</a>
                 <a href="#">Kontak</a>
                 <div class="nav-divider" aria-hidden="true"></div>
-                <a href="#" class="btn btn-primary">Masuk Portal</a>
+                <a href="{{ route('login') }}" class="btn btn-primary">Masuk Portal</a>
             </nav>
 
             <button class="mobile-toggle" aria-label="Buka Menu" id="menu-toggle">
@@ -658,7 +658,7 @@
             </a>
 
             <!-- 2. PPKPR Non Berusaha -->
-            <a href="#" class="service-card green reveal reveal-delay-2">
+            <a href="{{ route('dashboard') }}" class="service-card green reveal reveal-delay-2">
                 <span class="card-num">02 / NON-BISNIS</span>
                 <div class="card-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
