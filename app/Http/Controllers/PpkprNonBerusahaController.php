@@ -255,6 +255,7 @@ class PpkprNonBerusahaController extends Controller
         
         if ($settings['connected']) {
             $settings['phone_number'] = $request->input('phone_number') ?: '081234567894';
+            $settings['fonnte_token'] = $request->input('fonnte_token') ?: '';
         }
 
         $this->saveSettings($settings);
@@ -273,12 +274,17 @@ class PpkprNonBerusahaController extends Controller
             $default = [
                 'connected' => false,
                 'phone_number' => '081234567894',
+                'fonnte_token' => '',
                 'template' => "Halo {nama_pemohon}, permohonan PPKPR Non Berusaha Anda ({nomor_registrasi}) saat ini memasuki tahap: {status_sekarang}.\n\nCatatan Pemeriksa: {catatan_terakhir}\n\nPantau detail pengajuan Anda di: {tautan_detail}"
             ];
             file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT));
             return $default;
         }
-        return json_decode(file_get_contents($path), true);
+        $settings = json_decode(file_get_contents($path), true);
+        if (!isset($settings['fonnte_token'])) {
+            $settings['fonnte_token'] = '';
+        }
+        return $settings;
     }
 
     /**
@@ -309,6 +315,55 @@ class PpkprNonBerusahaController extends Controller
             $template
         );
 
+        $statusText = 'Simulasi';
+        $fonnteResponse = null;
+
+        // Kirim via Fonnte jika token diisi
+        if (!empty($settings['fonnte_token'])) {
+            $recipient = $application->user->phone_number;
+            
+            // Bersihkan format nomor telepon agar sesuai standar Fonnte (hanya angka)
+            $recipientClean = preg_replace('/[^0-9]/', '', $recipient);
+            if (str_starts_with($recipientClean, '0')) {
+                // Konversi 08xxx menjadi format 628xxx
+                $recipientClean = '62' . substr($recipientClean, 1);
+            }
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.fonnte.com/send',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 20,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => array(
+                    'target' => $recipientClean,
+                    'message' => $message,
+                ),
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: ' . $settings['fonnte_token']
+                ),
+            ));
+            
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if (!$err) {
+                $fonnteResponse = json_decode($response, true);
+                if (isset($fonnteResponse['status']) && $fonnteResponse['status'] == true) {
+                    $statusText = 'Terkirim (Fonnte API)';
+                } else {
+                    $statusText = 'Gagal (Fonnte: ' . ($fonnteResponse['reason'] ?? 'Kesalahan Token') . ')';
+                }
+            } else {
+                $statusText = 'Gagal (Koneksi API Error)';
+            }
+        }
+
         $logPath = storage_path('app/whatsapp_logs.json');
         $logs = [];
         if (file_exists($logPath)) {
@@ -320,6 +375,7 @@ class PpkprNonBerusahaController extends Controller
             'recipient' => $application->user->phone_number,
             'message' => $message,
             'timestamp' => now()->format('d M Y, H:i:s'),
+            'status' => $statusText,
         ];
 
         array_unshift($logs, $newLog);

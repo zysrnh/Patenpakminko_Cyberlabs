@@ -540,6 +540,10 @@
                                     <td class="val">+{{ $settings['phone_number'] }}</td>
                                 </tr>
                                 <tr>
+                                    <td class="label">Fonnte API Token</td>
+                                    <td class="val mono" style="font-size: 11px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: right;">{{ $settings['fonnte_token'] ? substr($settings['fonnte_token'], 0, 10) . '...' : 'Dikosongkan (Simulasi)' }}</td>
+                                </tr>
+                                <tr>
                                     <td class="label">Sinyal Perangkat</td>
                                     <td class="val" style="color: var(--clr-green-dk);">Sangat Baik (Excellent)</td>
                                 </tr>
@@ -575,6 +579,12 @@
                                 <div class="form-group" style="text-align: left; margin-bottom: 16px;">
                                     <label for="phone_number" class="form-label">Nomor Telepon Gateway</label>
                                     <input type="text" id="phone_number" name="phone_number" class="form-control" placeholder="cth: 081234567894" value="{{ $settings['phone_number'] }}" required>
+                                </div>
+
+                                <div class="form-group" style="text-align: left; margin-bottom: 16px;">
+                                    <label for="fonnte_token" class="form-label">Fonnte API Token (Opsional)</label>
+                                    <input type="text" id="fonnte_token" name="fonnte_token" class="form-control" placeholder="Masukkan Token API Fonnte Anda" value="{{ $settings['fonnte_token'] ?? '' }}">
+                                    <span style="font-size: 11px; color: var(--clr-muted); display: block; margin-top: 4px;">Kosongkan jika hanya ingin mencoba mode simulasi log tanpa kirim pesan asli.</span>
                                 </div>
 
                                 <div class="qr-area" style="margin-bottom: 20px;">
@@ -658,11 +668,12 @@
                             @else
                                 @foreach($logs as $log)
                                     <div class="log-item">
-                                        <div class="log-header">
-                                            <span class="log-recipient">Ke: +{{ $log['recipient'] }}</span>
-                                            <span class="log-time">{{ $log['timestamp'] }}</span>
+                                        <div class="log-header" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                                            <span class="log-recipient" style="font-weight: 700; color: var(--clr-blue-dk); font-family: 'DM Mono', monospace;">Ke: +{{ $log['recipient'] }}</span>
+                                            <span class="log-status" style="font-size: 10px; font-weight: 700; background: {{ strpos($log['status'] ?? '', 'Terkirim') !== false ? '#E6F4EA' : (strpos($log['status'] ?? '', 'Gagal') !== false ? '#FFF5F5' : '#EDEDED') }}; color: {{ strpos($log['status'] ?? '', 'Terkirim') !== false ? '#137333' : (strpos($log['status'] ?? '', 'Gagal') !== false ? '#E53E3E' : '#555') }}; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">{{ $log['status'] ?? 'Simulasi' }}</span>
+                                            <span class="log-time" style="color: var(--clr-muted); font-size: 11px;">{{ $log['timestamp'] }}</span>
                                         </div>
-                                        <div class="log-message">{{ $log['message'] }}</div>
+                                        <div class="log-message" style="margin-top: 8px; font-size: 12.5px; line-height: 1.45; white-space: pre-wrap;">{{ $log['message'] }}</div>
                                     </div>
                                 @endforeach
                             @endif
