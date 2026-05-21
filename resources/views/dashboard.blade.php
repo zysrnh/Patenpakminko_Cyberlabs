@@ -490,18 +490,19 @@
                     </a>
 
                     <!-- 3. Kebijakan -->
-                    <a href="#" class="service-item service-locked">
+                    <a href="{{ route('kebijakan.index') }}" class="service-item">
                         <div class="service-info">
                             <div class="service-icon blue">
                                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                             </div>
                             <div class="service-text">
-                                <h3>Kebijakan Khusus (Segera Hadir)</h3>
+                                <h3>Kebijakan Khusus</h3>
                                 <p>Permohonan peninjauan ruang berdasarkan mandat kebijakan khusus pemerintah.</p>
                             </div>
                         </div>
-                        <span class="service-action" style="color: var(--clr-muted)">
-                            Terkunci
+                        <span class="service-action">
+                            Buka Layanan
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </span>
                     </a>
 

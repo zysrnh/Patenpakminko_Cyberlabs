@@ -1,11 +1,11 @@
 <?php
-
+ 
 namespace App\Models;
-
+ 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
-
+ 
 #[Fillable([
     'user_id',
     'application_number',
@@ -26,12 +26,13 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'bpn_rapat_dt',
     'bpn_pertek_document',
 ])]
-class PpkprApplication extends Model
+class KebijakanApplication extends Model
 {
     protected $casts = [
         'bpn_cek_lokasi_dt' => 'datetime',
         'bpn_rapat_dt'      => 'datetime',
     ];
+ 
     /**
      * Relasi ke User pembuat permohonan.
      */
@@ -39,7 +40,7 @@ class PpkprApplication extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+ 
     /**
      * Label Status Manusiawi.
      */
@@ -54,7 +55,7 @@ class PpkprApplication extends Model
             default               => 'Draft / Baru',
         };
     }
-
+ 
     /**
      * Badge CSS Kelas warna status.
      */

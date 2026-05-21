@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layanan PPKPR Non Berusaha — PATENPAKMIKO</title>
+    <title>Layanan Kebijakan Khusus — PATENPAKMIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+ 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
         :root {
             --clr-blue:    #1393CC;
             --clr-blue-dk: #0f7bb0;
@@ -30,7 +30,7 @@
             --radius-lg:   16px;
             --radius-xl:   24px;
         }
-
+ 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--clr-surface);
@@ -38,13 +38,13 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
-
+ 
         .container {
             max-width: 1000px;
             margin: 0 auto;
             padding: 0 24px;
         }
-
+ 
         /* ─── HEADER ─────────────────────────────────────────── */
         header {
             background: var(--clr-white);
@@ -53,14 +53,14 @@
             top: 0;
             z-index: 10;
         }
-
+ 
         .header-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
             height: 72px;
         }
-
+ 
         .logo-wrap {
             display: flex;
             align-items: center;
@@ -104,7 +104,7 @@
             letter-spacing: .1em;
             margin-top: 3px;
         }
-
+ 
         .nav-menu {
             display: flex;
             align-items: center;
@@ -120,7 +120,7 @@
         .nav-link:hover, .nav-link.active {
             color: var(--clr-blue);
         }
-
+ 
         .btn-logout {
             background: transparent;
             border: 1px solid var(--clr-line);
@@ -141,7 +141,7 @@
             border-color: #FED7D7;
             background: #FFF5F5;
         }
-
+ 
         .user-nav {
             display: flex;
             align-items: center;
@@ -183,12 +183,12 @@
             color: var(--clr-muted);
             font-weight: 600;
         }
-
+ 
         /* ─── MAIN CONTENT ───────────────────────────────────── */
         main {
             padding: 40px 0;
         }
-
+ 
         .page-header {
             display: flex;
             align-items: center;
@@ -201,7 +201,7 @@
             letter-spacing: -0.02em;
             color: var(--clr-ink);
         }
-
+ 
         .btn-primary {
             background: var(--clr-blue);
             color: var(--clr-white);
@@ -223,7 +223,7 @@
             box-shadow: 0 4px 12px rgba(19, 147, 204, 0.2);
             transform: translateY(-0.5px);
         }
-
+ 
         .alert-success {
             background: #E6F4EA;
             border: 1px solid #B8E2C8;
@@ -237,7 +237,7 @@
             align-items: center;
             gap: 8px;
         }
-
+ 
         /* ─── APPLICATIONS LIST ──────────────────────────────── */
         .card {
             background: var(--clr-white);
@@ -246,17 +246,17 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
         }
-
+ 
         .table-responsive {
             overflow-x: auto;
         }
-
+ 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
         }
-
+ 
         th {
             background: var(--clr-surface);
             color: var(--clr-mid);
@@ -267,7 +267,7 @@
             padding: 16px 24px;
             border-bottom: 1.5px solid var(--clr-line);
         }
-
+ 
         td {
             padding: 18px 24px;
             border-bottom: 1px solid var(--clr-line);
@@ -275,17 +275,17 @@
             color: var(--clr-ink);
             vertical-align: middle;
         }
-
+ 
         tr:last-child td {
             border-bottom: none;
         }
-
+ 
         .app-num {
             font-family: 'DM Mono', monospace;
             font-weight: 600;
             color: var(--clr-blue);
         }
-
+ 
         .badge-status {
             display: inline-flex;
             align-items: center;
@@ -296,7 +296,7 @@
             border-radius: 20px;
             color: white;
         }
-
+ 
         .btn-view {
             color: var(--clr-blue);
             text-decoration: none;
@@ -310,7 +310,7 @@
         .btn-view:hover {
             color: var(--clr-blue-dk);
         }
-
+ 
         /* ─── EMPTY STATE ───────────────────────────────────── */
         .empty-state {
             padding: 60px 40px;
@@ -320,7 +320,7 @@
             align-items: center;
             justify-content: center;
         }
-
+ 
         .empty-icon {
             width: 64px;
             height: 64px;
@@ -339,14 +339,14 @@
             stroke: currentColor;
             stroke-width: 2;
         }
-
+ 
         .empty-state h3 {
             font-size: 16px;
             font-weight: 800;
             margin-bottom: 8px;
             color: var(--clr-ink);
         }
-
+ 
         .empty-state p {
             font-size: 13.5px;
             color: var(--clr-mid);
@@ -357,7 +357,7 @@
     </style>
 </head>
 <body>
-
+ 
     <!-- Header -->
     <header>
         <div class="container">
@@ -373,7 +373,7 @@
                         <span>Portal Pelaku Usaha</span>
                     </div>
                 </a>
-
+ 
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
                     <a href="{{ route('dashboard') }}" class="nav-link active">Dashboard</a>
@@ -392,7 +392,7 @@
                             <span>{{ Auth::user()->phone_number }}</span>
                         </div>
                     </div>
-
+ 
                     <form action="{{ route('logout') }}" method="POST" style="margin-left: 8px;">
                         @csrf
                         <button type="submit" class="btn-logout">
@@ -404,37 +404,37 @@
             </div>
         </div>
     </header>
-
+ 
     <!-- Main -->
     <main>
         <div class="container">
-
+ 
             @if(session('success'))
                 <div class="alert-success">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     {{ session('success') }}
                 </div>
             @endif
-
+ 
             <div class="page-header">
                 <div>
                     <h1 class="page-title">
                         @if(Auth::user()->isPelakuUsaha())
-                            Permohonan PPKPR Non Berusaha Anda
+                            Permohonan Kebijakan Khusus Anda
                         @else
-                            Daftar Permohonan PPKPR Non Berusaha
+                            Daftar Permohonan Kebijakan Khusus
                         @endif
                     </h1>
                 </div>
                 
                 @if(Auth::user()->isPelakuUsaha())
-                    <a href="{{ route('non-berusaha.create') }}" class="btn-primary">
+                    <a href="{{ route('kebijakan.create') }}" class="btn-primary">
                         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                         Buat Permohonan Baru
                     </a>
                 @endif
             </div>
-
+ 
             <div class="card">
                 @if($applications->isEmpty())
                     <div class="empty-state">
@@ -444,13 +444,13 @@
                         <h3>Belum Ada Permohonan</h3>
                         <p>
                             @if(Auth::user()->isPelakuUsaha())
-                                Anda belum mengajukan permohonan kesesuaian kegiatan pemanfaatan ruang (PPKPR) Non Berusaha.
+                                Anda belum mengajukan permohonan Kebijakan Khusus penataan ruang.
                             @else
-                                Saat ini tidak ada antrean berkas permohonan yang menunggu verifikasi Anda.
+                                Saat ini tidak ada antrean berkas permohonan Kebijakan Khusus yang terdaftar.
                             @endif
                         </p>
                         @if(Auth::user()->isPelakuUsaha())
-                            <a href="{{ route('non-berusaha.create') }}" class="btn-primary">Ajukan Sekarang</a>
+                            <a href="{{ route('kebijakan.create') }}" class="btn-primary">Ajukan Sekarang</a>
                         @endif
                     </div>
                 @else
@@ -482,7 +482,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="{{ route('non-berusaha.show', $app->id) }}" class="btn-view">
+                                            <a href="{{ route('kebijakan.show', $app->id) }}" class="btn-view">
                                                 Detail / Lacak
                                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                             </a>
@@ -494,9 +494,9 @@
                     </div>
                 @endif
             </div>
-
+ 
         </div>
     </main>
-
+ 
 </body>
 </html>

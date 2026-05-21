@@ -25,11 +25,9 @@ class PpkprNonBerusahaController extends Controller
             return view('non-berusaha.index', compact('applications'));
         }
 
-        // Jika BPN, tampilkan permohonan yang menunggu verifikasi BPN
+        // Jika BPN, tampilkan semua permohonan agar dapat dipantau riwayatnya
         if ($user->isBpn()) {
-            $applications = PpkprApplication::where('status', 'menunggu_bpn')
-                ->orderBy('created_at', 'asc')
-                ->get();
+            $applications = PpkprApplication::orderBy('created_at', 'desc')->get();
             return view('non-berusaha.index', compact('applications'));
         }
 
@@ -135,33 +133,141 @@ class PpkprNonBerusahaController extends Controller
     {
         $application = PpkprApplication::findOrFail($id);
         $user = Auth::user();
+        $step = $request->input('step');
 
+        // ==========================================
+        // SUB-ALUR BPN (4 LANGKAH BERTURUT-TURUT)
+        // ==========================================
+
+        // BPN Langkah 1: Verifikasi Berkas Awal
+        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $step === 'bpn_berkas') {
+            $request->validate([
+                'action' => 'required|in:approve,reject',
+                'notes' => 'required|string|max:1000',
+            ], [
+                'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
+            ]);
+
+            $action = $request->input('action');
+            $notes = $request->input('notes');
+
+            $application->bpn_notes = $notes;
+            if ($action === 'approve') {
+                $application->bpn_berkas_status = 'diterima';
+                $msg = 'Berkas persyaratan berhasil diterima. Langkah selanjutnya adalah menentukan Jadwal Cek Lokasi.';
+            } else {
+                $application->bpn_berkas_status = 'ditolak';
+                $application->status = 'ditolak';
+                $msg = 'Berkas persyaratan ditolak dan permohonan ditutup.';
+            }
+            $application->save();
+
+            // Kirim notifikasi WA
+            $this->sendCustomWhatsappNotification($application, 'berkas_verifikasi');
+
+            return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
+        }
+
+        // BPN Langkah 2: Jadwal Cek Lokasi (Fleksibel, bisa diubah berulang kali)
+        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $step === 'bpn_cek_lokasi') {
+            $request->validate([
+                'bpn_cek_lokasi_dt' => 'required|date',
+                'bpn_cek_lokasi_cp' => 'required|string|max:255',
+            ], [
+                'bpn_cek_lokasi_dt.required' => 'Tanggal & Waktu cek lokasi wajib diisi.',
+                'bpn_cek_lokasi_cp.required' => 'Kontak Person Petugas wajib diisi.',
+            ]);
+
+            $isUpdate = !is_null($application->bpn_cek_lokasi_dt);
+            $dt = \Carbon\Carbon::parse($request->input('bpn_cek_lokasi_dt'));
+            $application->bpn_cek_lokasi_dt   = $dt;
+            $application->bpn_cek_lokasi_date = $dt->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+            $application->bpn_cek_lokasi_cp   = $request->input('bpn_cek_lokasi_cp');
+            $application->save();
+
+            // Kirim notifikasi WA
+            $this->sendCustomWhatsappNotification($application, $isUpdate ? 'cek_lokasi_ubah' : 'cek_lokasi');
+
+            $successMsg = $isUpdate ? 'Jadwal cek lokasi berhasil diubah dan dikirim ulang via WhatsApp!' : 'Jadwal cek lokasi berhasil disimpan dan dikirim ke pemohon via WhatsApp!';
+            return redirect()->route('non-berusaha.show', $id)->with('success', $successMsg);
+        }
+
+        // BPN Langkah 3: Jadwal Rapat (Fleksibel, bisa diubah berulang kali)
+        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $step === 'bpn_rapat') {
+            $request->validate([
+                'bpn_rapat_dt' => 'required|date',
+            ], [
+                'bpn_rapat_dt.required' => 'Tanggal & Waktu Rapat Koordinasi wajib diisi.',
+            ]);
+
+            $isUpdate = !is_null($application->bpn_rapat_dt);
+            $dt = \Carbon\Carbon::parse($request->input('bpn_rapat_dt'));
+            $application->bpn_rapat_dt   = $dt;
+            $application->bpn_rapat_date = $dt->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+            $application->save();
+
+            // Kirim notifikasi WA
+            $this->sendCustomWhatsappNotification($application, $isUpdate ? 'rapat_ubah' : 'rapat');
+
+            $successMsg = $isUpdate ? 'Jadwal rapat berhasil diubah dan dikirim ulang via WhatsApp!' : 'Jadwal rapat koordinasi berhasil disimpan dan dikirim ke pemohon via WhatsApp!';
+            return redirect()->route('non-berusaha.show', $id)->with('success', $successMsg);
+        }
+
+        // BPN Langkah 4: Penerbitan Pertek Akhir
+        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $step === 'bpn_pertek') {
+            $request->validate([
+                'action' => 'required|in:approve,reject',
+                'notes' => 'required|string|max:1000',
+                'bpn_pertek_document' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            ], [
+                'notes.required' => 'Catatan rekomendasi teknis wajib diisi.',
+                'bpn_pertek_document.mimes' => 'Dokumen Pertek Pertanahan harus berformat PDF, DOC, atau DOCX.',
+                'bpn_pertek_document.max' => 'Ukuran berkas Pertek maksimal adalah 10MB.',
+            ]);
+
+            $action = $request->input('action');
+            $notes = $request->input('notes');
+
+            $application->bpn_notes = $notes;
+            if ($action === 'approve') {
+                if (!$request->hasFile('bpn_pertek_document')) {
+                    return redirect()->back()->withErrors(['bpn_pertek_document' => 'Dokumen Pertek Pertanahan wajib diunggah saat menyetujui.']);
+                }
+                
+                $path = $request->file('bpn_pertek_document')->store('bpn_perteks', 'public');
+                $application->bpn_pertek_document = $path;
+                $application->status = 'disetujui';
+                $msg = 'Dokumen Pertek Pertanahan berhasil diterbitkan. Permohonan PPKPR Non-Berusaha selesai dan disetujui!';
+            } else {
+                $application->status = 'ditolak';
+                $msg = 'Permohonan ditolak pada tahap rekomendasi teknis BPN.';
+            }
+            $application->save();
+
+            // Kirim Notifikasi WhatsApp khusus Pertek
+            $this->sendCustomWhatsappNotification($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak');
+
+            return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
+        }
+
+        // ==========================================
+        // ALUR DINAS PU & SATU PINTU
+        // ==========================================
         $request->validate([
             'action' => 'required|in:approve,reject',
             'notes' => 'required|string|max:1000',
-            'approval_document' => 'nullable|file|mimes:pdf|max:4096', // khusus Satu Pintu
+            'approval_document' => 'nullable|file|mimes:pdf|max:10240', // Satu Pintu
         ], [
             'notes.required' => 'Catatan verifikasi wajib diisi.',
             'approval_document.mimes' => 'Dokumen PPKPR harus berformat PDF.',
-            'approval_document.max' => 'Ukuran maksimal berkas dokumen adalah 4MB.',
+            'approval_document.max' => 'Ukuran berkas dokumen PPKPR maksimal adalah 10MB.',
         ]);
 
         $action = $request->input('action');
         $notes = $request->input('notes');
 
-        // 1. Verifikasi oleh BPN
-        if ($user->isBpn() && $application->status === 'menunggu_bpn') {
-            $application->bpn_notes = $notes;
-            if ($action === 'approve') {
-                $application->status = 'menunggu_dinas_pu';
-                $msg = 'Permohonan disetujui BPN. Berkas diteruskan ke Dinas PU.';
-            } else {
-                $application->status = 'ditolak';
-                $msg = 'Permohonan ditolak oleh BPN.';
-            }
-        }
         // 2. Verifikasi oleh Dinas PU
-        elseif ($user->isDinasPu() && $application->status === 'menunggu_dinas_pu') {
+        if ($user->isDinasPu() && $application->status === 'menunggu_dinas_pu') {
             $application->dinas_pu_notes = $notes;
             if ($action === 'approve') {
                 $application->status = 'menunggu_satu_pintu';
@@ -198,6 +304,119 @@ class PpkprNonBerusahaController extends Controller
         $this->sendWhatsappNotification($application, $application->status_label, $notes);
 
         return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
+    }
+
+    /**
+     * Kirim Notifikasi WhatsApp khusus sub-langkah BPN.
+     */
+    private function sendCustomWhatsappNotification($application, $type)
+    {
+        $settings = $this->getWhatsappSettings();
+        if (!$settings['connected']) {
+            return;
+        }
+
+        $url = route('non-berusaha.show', $application->id);
+        $namaPemohon = $application->nama_pengaju ?: ($application->user->name ?? $application->user->username);
+
+        if ($type === 'berkas_verifikasi') {
+            if ($application->bpn_berkas_status === 'diterima') {
+                $message = "Halo {$namaPemohon}, dokumen persyaratan Permohonan PPKPR Non Berusaha Anda ({$application->application_number}) telah Diterima & Lolos verifikasi berkas awal oleh BPN.\n\n"
+                         . "Selanjutnya, petugas BPN akan menentukan jadwal peninjauan lokasi offline. Pantau detail pengajuan Anda di: {$url}";
+            } else {
+                $message = "Halo {$namaPemohon}, dokumen persyaratan Permohonan PPKPR Non Berusaha Anda ({$application->application_number}) Ditolak oleh BPN dengan alasan:\n"
+                         . "{$application->bpn_notes}\n\n"
+                         . "Lacak permohonan Anda di: {$url}";
+            }
+        } elseif ($type === 'cek_lokasi') {
+            $message = "Halo {$namaPemohon}, permohonan PPKPR Non Berusaha Anda ({$application->application_number}) dijadwalkan untuk Peninjauan Cek Lokasi Offline oleh Petugas BPN.\n\n"
+                     . "Jadwal Cek: {$application->bpn_cek_lokasi_date}\n"
+                     . "Kontak Person Petugas: {$application->bpn_cek_lokasi_cp}\n\n"
+                     . "Harap mempersiapkan diri di lokasi sesuai jadwal. Lacak detail permohonan di: {$url}";
+        } elseif ($type === 'cek_lokasi_ubah') {
+            $message = "Halo {$namaPemohon}, [PERUBAHAN JADWAL] Jadwal Peninjauan Cek Lokasi Offline untuk permohonan PPKPR Non Berusaha Anda ({$application->application_number}) telah disesuaikan menjadi:\n\n"
+                     . "Jadwal Baru: {$application->bpn_cek_lokasi_date}\n"
+                     . "Kontak Person Petugas: {$application->bpn_cek_lokasi_cp}\n\n"
+                     . "Lacak detail permohonan di: {$url}";
+        } elseif ($type === 'rapat') {
+            $message = "Halo {$namaPemohon}, permohonan PPKPR Non Berusaha Anda ({$application->application_number}) dijadwalkan untuk Sidang/Rapat Koordinasi Pertanahan BPN.\n\n"
+                     . "Jadwal Rapat: {$application->bpn_rapat_date}\n\n"
+                     . "Pantau detail permohonan Anda di: {$url}";
+        } elseif ($type === 'rapat_ubah') {
+            $message = "Halo {$namaPemohon}, [PERUBAHAN JADWAL] Jadwal Rapat Koordinasi BPN untuk permohonan PPKPR Non Berusaha Anda ({$application->application_number}) telah disesuaikan menjadi:\n\n"
+                     . "Jadwal Baru: {$application->bpn_rapat_date}\n\n"
+                     . "Pantau detail permohonan Anda di: {$url}";
+        } elseif ($type === 'pertek_terbit') {
+            $message = "Halo {$namaPemohon}, Rekomendasi Teknis / Pertek Pertanahan untuk permohonan PPKPR Non Berusaha Anda ({$application->application_number}) telah DITERBITKAN oleh Kantor Pertanahan (BPN).\n\n"
+                     . "Catatan/Rekomendasi BPN: {$application->bpn_notes}\n\n"
+                     . "Dengan terbitnya dokumen ini, permohonan PPKPR Anda dinyatakan SELESAI dan DISETUJUI. Silakan buka dashboard untuk memantau detail dan mengunduh dokumen hasil akhir Anda di: {$url}";
+        } elseif ($type === 'pertek_tolak') {
+            $message = "Halo {$namaPemohon}, permohonan PPKPR Non Berusaha Anda ({$application->application_number}) DITOLAK oleh Kantor Pertanahan (BPN) pada tahap Rekomendasi Teknis dengan alasan:\n\n"
+                     . "Catatan BPN: {$application->bpn_notes}\n\n"
+                     . "Pantau detail pengajuan Anda di: {$url}";
+        }
+
+        $statusText = 'Simulasi';
+        $fonnteResponse = null;
+
+        if (!empty($settings['fonnte_token'])) {
+            $recipient = $application->user->phone_number;
+            $recipientClean = preg_replace('/[^0-9]/', '', $recipient);
+            if (str_starts_with($recipientClean, '0')) {
+                $recipientClean = '62' . substr($recipientClean, 1);
+            }
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.fonnte.com/send',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 20,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => array(
+                    'target' => $recipientClean,
+                    'message' => $message,
+                ),
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: ' . $settings['fonnte_token']
+                ),
+            ));
+            
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if (!$err) {
+                $fonnteResponse = json_decode($response, true);
+                if (isset($fonnteResponse['status']) && $fonnteResponse['status'] == true) {
+                    $statusText = 'Terkirim (Fonnte API)';
+                } else {
+                    $statusText = 'Gagal (Fonnte: ' . ($fonnteResponse['reason'] ?? 'Kesalahan Token') . ')';
+                }
+            } else {
+                $statusText = 'Gagal (Koneksi API Error)';
+            }
+        }
+
+        $logPath = storage_path('app/whatsapp_logs.json');
+        $logs = [];
+        if (file_exists($logPath)) {
+            $logs = json_decode(file_get_contents($logPath), true) ?: [];
+        }
+
+        $newLog = [
+            'id' => uniqid(),
+            'recipient' => $application->user->phone_number,
+            'message' => $message,
+            'timestamp' => now()->format('d M Y, H:i:s'),
+            'status' => $statusText,
+        ];
+
+        array_unshift($logs, $newLog);
+        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
 
     /**

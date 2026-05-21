@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PpkprNonBerusahaController;
+use App\Http\Controllers\KebijakanController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman utama / Landing Page
@@ -33,6 +34,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'store'])->name('non-berusaha.store');
     Route::get('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'show'])->name('non-berusaha.show');
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
+
+    // Kebijakan Khusus (Pelaku Usaha & Petugas Verifikasi)
+    Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
+    Route::get('/kebijakan/baru', [KebijakanController::class, 'create'])->name('kebijakan.create');
+    Route::post('/kebijakan/baru', [KebijakanController::class, 'store'])->name('kebijakan.store');
+    Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
+    Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
     
     // WhatsApp Gateway Settings (DPN / Super Admin)
     Route::get('/dpn/whatsapp', [PpkprNonBerusahaController::class, 'whatsappSettings'])->name('dpn.whatsapp');

@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layanan PPKPR Non Berusaha — PATENPAKMIKO</title>
+    <title>Form Pengajuan Kebijakan Khusus — PATENPAKMIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
+ 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
         :root {
             --clr-blue:    #1393CC;
             --clr-blue-dk: #0f7bb0;
@@ -30,7 +30,7 @@
             --radius-lg:   16px;
             --radius-xl:   24px;
         }
-
+ 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--clr-surface);
@@ -38,13 +38,13 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
-
+ 
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 0 24px;
         }
-
+ 
         /* ─── HEADER ─────────────────────────────────────────── */
         header {
             background: var(--clr-white);
@@ -53,14 +53,14 @@
             top: 0;
             z-index: 10;
         }
-
+ 
         .header-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
             height: 72px;
         }
-
+ 
         .logo-wrap {
             display: flex;
             align-items: center;
@@ -104,7 +104,7 @@
             letter-spacing: .1em;
             margin-top: 3px;
         }
-
+ 
         .nav-menu {
             display: flex;
             align-items: center;
@@ -120,7 +120,7 @@
         .nav-link:hover, .nav-link.active {
             color: var(--clr-blue);
         }
-
+ 
         .btn-logout {
             background: transparent;
             border: 1px solid var(--clr-line);
@@ -141,7 +141,7 @@
             border-color: #FED7D7;
             background: #FFF5F5;
         }
-
+ 
         .user-nav {
             display: flex;
             align-items: center;
@@ -183,184 +183,187 @@
             color: var(--clr-muted);
             font-weight: 600;
         }
-
+ 
         /* ─── MAIN CONTENT ───────────────────────────────────── */
         main {
             padding: 40px 0;
         }
-
-        .page-header {
+ 
+        .card {
+            background: var(--clr-white);
+            border: 1px solid var(--clr-line);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            margin-bottom: 32px;
+        }
+ 
+        .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 1.5px solid var(--clr-surface);
         }
-        .page-title {
-            font-size: 22px;
+        .card-title {
+            font-size: 20px;
             font-weight: 800;
-            letter-spacing: -0.02em;
             color: var(--clr-ink);
+            letter-spacing: -0.02em;
         }
-
-        .btn-primary {
-            background: var(--clr-blue);
-            color: var(--clr-white);
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius-md);
-            font-family: inherit;
-            font-size: 13.5px;
+        .back-link {
+            font-size: 13px;
             font-weight: 700;
-            cursor: pointer;
+            color: var(--clr-muted);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
+            transition: color 0.15s;
+        }
+        .back-link:hover {
+            color: var(--clr-ink);
+        }
+ 
+        /* ─── FORM ELEMENTS ───────────────────────────────────── */
+        .form-section-title {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--clr-blue);
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+ 
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+ 
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--clr-ink);
+            margin-bottom: 8px;
+        }
+        .form-label .req {
+            color: #E53E3E;
+        }
+ 
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            font-family: inherit;
+            font-size: 13.5px;
+            color: var(--clr-ink);
+            background: var(--clr-white);
+            border: 1.5px solid var(--clr-line);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: all 0.15s;
+        }
+        .form-control:focus {
+            border-color: var(--clr-blue);
+            box-shadow: 0 0 0 3px rgba(19, 147, 204, 0.1);
+        }
+        .form-control::placeholder {
+            color: var(--clr-muted);
+        }
+ 
+        .file-input-wrapper {
+            background: var(--clr-surface);
+            border: 2px dashed var(--clr-line);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            position: relative;
+            cursor: pointer;
             transition: all 0.2s;
+        }
+        .file-input-wrapper:hover {
+            border-color: var(--clr-blue);
+            background: var(--clr-blue-lt);
+        }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-help {
+            display: block;
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--clr-muted);
+        }
+ 
+        .error-message {
+            font-size: 12px;
+            color: #E53E3E;
+            margin-top: 6px;
+            display: block;
+        }
+ 
+        .form-footer {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--clr-line);
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+ 
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+ 
+        .btn-cancel {
+            background: var(--clr-white);
+            color: var(--clr-mid);
+            border: 1px solid var(--clr-line);
+        }
+        .btn-cancel:hover {
+            background: var(--clr-surface);
+        }
+ 
+        .btn-primary {
+            background: var(--clr-blue);
+            color: var(--clr-white);
         }
         .btn-primary:hover {
             background: var(--clr-blue-dk);
             box-shadow: 0 4px 12px rgba(19, 147, 204, 0.2);
             transform: translateY(-0.5px);
         }
-
-        .alert-success {
-            background: #E6F4EA;
-            border: 1px solid #B8E2C8;
-            color: #137333;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            font-size: 13.5px;
-            font-weight: 600;
-            margin-bottom: 28px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* ─── APPLICATIONS LIST ──────────────────────────────── */
-        .card {
-            background: var(--clr-white);
-            border: 1px solid var(--clr-line);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th {
-            background: var(--clr-surface);
-            color: var(--clr-mid);
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 16px 24px;
-            border-bottom: 1.5px solid var(--clr-line);
-        }
-
-        td {
-            padding: 18px 24px;
-            border-bottom: 1px solid var(--clr-line);
-            font-size: 13.5px;
-            color: var(--clr-ink);
-            vertical-align: middle;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .app-num {
-            font-family: 'DM Mono', monospace;
-            font-weight: 600;
-            color: var(--clr-blue);
-        }
-
-        .badge-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11.5px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            color: white;
-        }
-
-        .btn-view {
-            color: var(--clr-blue);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 13px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.15s;
-        }
-        .btn-view:hover {
-            color: var(--clr-blue-dk);
-        }
-
-        /* ─── EMPTY STATE ───────────────────────────────────── */
-        .empty-state {
-            padding: 60px 40px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .empty-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: var(--clr-blue-lt);
-            color: var(--clr-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .empty-icon svg {
-            width: 32px;
-            height: 32px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
-        .empty-state h3 {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: var(--clr-ink);
-        }
-
-        .empty-state p {
-            font-size: 13.5px;
-            color: var(--clr-mid);
-            max-width: 360px;
-            line-height: 1.5;
-            margin-bottom: 24px;
-        }
     </style>
 </head>
 <body>
-
+ 
     <!-- Header -->
     <header>
-        <div class="container">
+        <div class="container" style="max-width: 1000px;">
             <div class="header-inner">
                 <a href="/dashboard" class="logo-wrap">
                     <div class="logo-icon">
@@ -373,10 +376,10 @@
                         <span>Portal Pelaku Usaha</span>
                     </div>
                 </a>
-
+ 
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
-                    <a href="{{ route('dashboard') }}" class="nav-link active">Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
                     <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
                     
                     <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
@@ -392,7 +395,7 @@
                             <span>{{ Auth::user()->phone_number }}</span>
                         </div>
                     </div>
-
+ 
                     <form action="{{ route('logout') }}" method="POST" style="margin-left: 8px;">
                         @csrf
                         <button type="submit" class="btn-logout">
@@ -404,99 +407,84 @@
             </div>
         </div>
     </header>
-
+ 
     <!-- Main -->
     <main>
         <div class="container">
-
-            @if(session('success'))
-                <div class="alert-success">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            <div class="page-header">
-                <div>
-                    <h1 class="page-title">
-                        @if(Auth::user()->isPelakuUsaha())
-                            Permohonan PPKPR Non Berusaha Anda
-                        @else
-                            Daftar Permohonan PPKPR Non Berusaha
-                        @endif
-                    </h1>
-                </div>
-                
-                @if(Auth::user()->isPelakuUsaha())
-                    <a href="{{ route('non-berusaha.create') }}" class="btn-primary">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                        Buat Permohonan Baru
-                    </a>
-                @endif
-            </div>
-
+ 
             <div class="card">
-                @if($applications->isEmpty())
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <div class="card-header">
+                    <h2 class="card-title">Permohonan Kebijakan Khusus Baru</h2>
+                    <a href="{{ route('kebijakan.index') }}" class="back-link">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                        Kembali
+                    </a>
+                </div>
+ 
+                <form action="{{ route('kebijakan.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+ 
+                    <!-- SECTION 1: DATA IDENTITAS PENGAJUAN -->
+                    <div class="form-section-title">1. Identitas Pengajuan</div>
+ 
+                    <!-- Nama Pemilik Usaha -->
+                    <div class="form-group">
+                        <label for="nama_pemilik_usaha" class="form-label">Nama Pemilik Usaha <span class="req">*</span></label>
+                        <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" placeholder="Masukkan nama pemilik usaha" value="{{ old('nama_pemilik_usaha') }}" required>
+                        @error('nama_pemilik_usaha')
+                            <span class="error-message">{{ $message }}</span>
+                        @enderror
+                    </div>
+ 
+                    <div class="form-grid-2">
+                        <!-- Nama Pengaju -->
+                        <div class="form-group">
+                            <label for="nama_pengaju" class="form-label">Nama Pengaju / Pemohon <span class="req">*</span></label>
+                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pengaju" value="{{ old('nama_pengaju', Auth::user()->name ?? Auth::user()->username) }}" required>
+                            @error('nama_pengaju')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <h3>Belum Ada Permohonan</h3>
-                        <p>
-                            @if(Auth::user()->isPelakuUsaha())
-                                Anda belum mengajukan permohonan kesesuaian kegiatan pemanfaatan ruang (PPKPR) Non Berusaha.
-                            @else
-                                Saat ini tidak ada antrean berkas permohonan yang menunggu verifikasi Anda.
-                            @endif
-                        </p>
-                        @if(Auth::user()->isPelakuUsaha())
-                            <a href="{{ route('non-berusaha.create') }}" class="btn-primary">Ajukan Sekarang</a>
-                        @endif
+ 
+                        <!-- Hubungan Pengaju / Sebagai Apa -->
+                        <div class="form-group">
+                            <label for="hubungan_pengaju" class="form-label">Hubungan Pengaju (Sebagai Apa) <span class="req">*</span></label>
+                            <input type="text" id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" placeholder="cth: Pemilik Usaha, Penerima Kuasa, Karyawan, dll" value="{{ old('hubungan_pengaju') }}" required>
+                            @error('hubungan_pengaju')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
-                @else
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>No. Registrasi</th>
-                                    <th>Username Pemohon</th>
-                                    <th>No. Telepon</th>
-                                    <th>Tgl Pengajuan</th>
-                                    <th>Status Tahap</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($applications as $app)
-                                    <tr>
-                                        <td><span class="app-num">{{ $app->application_number }}</span></td>
-                                        <td>
-                                            <div style="font-weight: 600;">{{ $app->user->username }}</div>
-                                            <div style="font-size: 11px; color: var(--clr-muted);">{{ $app->user->name ?? 'Belum melengkapi nama' }}</div>
-                                        </td>
-                                        <td>+{{ $app->user->phone_number }}</td>
-                                        <td>{{ $app->created_at->format('d/m/Y') }}</td>
-                                        <td>
-                                            <span class="badge-status" style="background-color: {{ $app->status_color }};">
-                                                {{ $app->status_label }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('non-berusaha.show', $app->id) }}" class="btn-view">
-                                                Detail / Lacak
-                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+ 
+                    <!-- SECTION 2: UNGGAH PERSYARATAN -->
+                    <div class="form-section-title">2. Unggah Berkas Persyaratan</div>
+ 
+                    <!-- File Dokumen Persyaratan -->
+                    <div class="form-group">
+                        <label for="doc_persyaratan" class="form-label">
+                            Dokumen Persyaratan Lengkap <span class="req">*</span>
+                            <a href="{{ route('templates.persyaratan') }}" target="_blank" style="margin-left: 8px; color: var(--clr-blue); text-decoration: none; font-size: 11px; font-weight: 700;">📥 Unduh Template Persyaratan</a>
+                        </label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="doc_persyaratan" name="doc_persyaratan" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar,.doc,.docx" required>
+                            <span class="file-help">Format: PDF, JPG, PNG, DOC/DOCX, ZIP/RAR. Maksimal 10MB.</span>
+                        </div>
+                        @error('doc_persyaratan')
+                            <span class="error-message">{{ $message }}</span>
+                        @enderror
                     </div>
-                @endif
+ 
+                    <!-- Footer Action Buttons -->
+                    <div class="form-footer">
+                        <a href="{{ route('kebijakan.index') }}" class="btn btn-cancel">Batal</a>
+                        <button type="submit" class="btn btn-primary">Kirim Permohonan</button>
+                    </div>
+ 
+                </form>
             </div>
-
+ 
         </div>
     </main>
-
+ 
 </body>
 </html>
