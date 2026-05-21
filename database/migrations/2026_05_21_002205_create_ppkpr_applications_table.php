@@ -9,11 +9,6 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function open()
-    {
-        // placeholder (will use up method)
-    }
-
     public function up(): void
     {
         Schema::create('ppkpr_applications', function (Blueprint $table) {
@@ -21,16 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('application_number')->unique();
             
-            // Informasi Pemohon & Tanah
-            $table->string('applicant_name');
-            $table->string('applicant_nik');
-            $table->text('location_address');
-            $table->integer('land_size'); // Luas tanah dalam m2
-            $table->string('coordinates'); // Koordinat GPS Lat, Long
-            $table->string('land_purpose'); // Rumah Tinggal, Keagamaan, Sosial, Fasilitas Umum, dll.
+            // Data Input Form Pengajuan
+            $table->string('nama_pemilik_usaha');
+            $table->string('nama_pengaju');
+            $table->string('hubungan_pengaju'); // Sebagai apa di usaha nya (cth: Pemilik, Penerima Kuasa, Direktur, dll)
             
             // Alur Kerja & Status
-            // Status: 'menunggu_bpn', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui', 'ditolak'
             $table->string('status')->default('menunggu_bpn');
             
             // Catatan Pemeriksaan tiap instansi
@@ -41,18 +32,8 @@ return new class extends Migration
             // Path Dokumen PPKPR yang diterbitkan (jika disetujui)
             $table->string('approval_document')->nullable();
             
-            // File Dokumen Lampiran (diunggah oleh Pelaku Usaha)
-            $table->string('doc_ktp');
-            $table->string('doc_sertifikat');
-            $table->string('doc_pernyataan');
-            $table->string('doc_desain');
-            $table->string('doc_foto_lapangan');
-            
-            $table->string('doc_pbb')->nullable();
-            $table->string('doc_surat_kuasa')->nullable();
-            $table->string('doc_akta_yayasan')->nullable();
-            $table->string('doc_rekomendasi_tetangga')->nullable();
-            $table->string('doc_pendukung')->nullable();
+            // Satu Dokumen Berkas Persyaratan Utama
+            $table->string('doc_persyaratan');
             
             $table->timestamps();
         });

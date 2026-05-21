@@ -459,9 +459,8 @@
                             <thead>
                                 <tr>
                                     <th>No. Registrasi</th>
-                                    <th>Pemohon</th>
-                                    <th>Rencana Peruntukan</th>
-                                    <th>Luas Tanah</th>
+                                    <th>Username Pemohon</th>
+                                    <th>No. Telepon</th>
                                     <th>Tgl Pengajuan</th>
                                     <th>Status Tahap</th>
                                     <th>Aksi</th>
@@ -472,11 +471,10 @@
                                     <tr>
                                         <td><span class="app-num">{{ $app->application_number }}</span></td>
                                         <td>
-                                            <div style="font-weight: 600;">{{ $app->applicant_name }}</div>
-                                            <div style="font-size: 11px; color: var(--clr-muted);">NIK: {{ $app->applicant_nik }}</div>
+                                            <div style="font-weight: 600;">{{ $app->user->username }}</div>
+                                            <div style="font-size: 11px; color: var(--clr-muted);">{{ $app->user->name ?? 'Belum melengkapi nama' }}</div>
                                         </td>
-                                        <td>{{ $app->land_purpose }}</td>
-                                        <td>{{ number_format($app->land_size) }} m²</td>
+                                        <td>+{{ $app->user->phone_number }}</td>
                                         <td>{{ $app->created_at->format('d/m/Y') }}</td>
                                         <td>
                                             <span class="badge-status" style="background-color: {{ $app->status_color }};">

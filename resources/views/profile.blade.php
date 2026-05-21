@@ -405,6 +405,9 @@
 
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
+                    @if(Auth::user()->isDpn())
+                        <a href="{{ route('dpn.whatsapp') }}" class="nav-link">Integrasi WhatsApp</a>
+                    @endif
                     <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
                     <a href="{{ route('profile') }}" class="nav-link active">Profil Saya</a>
                     

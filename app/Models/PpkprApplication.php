@@ -9,27 +9,15 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable([
     'user_id',
     'application_number',
-    'applicant_name',
-    'applicant_nik',
-    'location_address',
-    'land_size',
-    'coordinates',
-    'land_purpose',
+    'nama_pemilik_usaha',
+    'nama_pengaju',
+    'hubungan_pengaju',
     'status',
     'bpn_notes',
     'dinas_pu_notes',
     'satu_pintu_notes',
     'approval_document',
-    'doc_ktp',
-    'doc_sertifikat',
-    'doc_pernyataan',
-    'doc_desain',
-    'doc_foto_lapangan',
-    'doc_pbb',
-    'doc_surat_kuasa',
-    'doc_akta_yayasan',
-    'doc_rekomendasi_tetangga',
-    'doc_pendukung'
+    'doc_persyaratan'
 ])]
 class PpkprApplication extends Model
 {

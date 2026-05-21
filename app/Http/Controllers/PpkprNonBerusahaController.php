@@ -79,38 +79,20 @@ class PpkprNonBerusahaController extends Controller
         }
 
         $request->validate([
-            'applicant_name' => 'required|string|max:100',
-            'applicant_nik' => 'required|numeric|digits:16',
-            'location_address' => 'required|string|max:1000',
-            'land_size' => 'required|integer|min:1',
-            'coordinates' => 'required|string|max:100',
-            'land_purpose' => 'required|string',
-            
-            // 5 Berkas Wajib
-            'doc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_sertifikat' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_pernyataan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_desain' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_foto_lapangan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            
-            // Berkas Opsional
-            'doc_pbb' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_akta_yayasan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_rekomendasi_tetangga' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'doc_pendukung' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'nama_pemilik_usaha' => 'required|string|max:100',
+            'nama_pengaju' => 'required|string|max:100',
+            'hubungan_pengaju' => 'required|string|max:100',
+            'doc_persyaratan' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar,doc,docx|max:10240',
         ], [
-            'applicant_nik.digits' => 'NIK harus tepat terdiri dari 16 digit.',
-            'applicant_nik.numeric' => 'NIK harus berupa angka.',
-            'doc_ktp.required' => 'Dokumen KTP wajib diunggah.',
-            'doc_sertifikat.required' => 'Dokumen Sertifikat Tanah wajib diunggah.',
-            'doc_pernyataan.required' => 'Surat Pernyataan Kebenaran wajib diunggah.',
-            'doc_desain.required' => 'Dokumen Rencana Pembangunan/Desain wajib diunggah.',
-            'doc_foto_lapangan.required' => 'Foto Lapangan wajib diunggah.',
+            'nama_pemilik_usaha.required' => 'Nama pemilik usaha wajib diisi.',
+            'nama_pengaju.required' => 'Nama pengaju wajib diisi.',
+            'hubungan_pengaju.required' => 'Hubungan pengaju / sebagai apa wajib diisi.',
+            'doc_persyaratan.required' => 'Dokumen Persyaratan wajib diunggah.',
+            'doc_persyaratan.max' => 'Ukuran berkas persyaratan maksimal 10MB.',
         ]);
 
         $data = $request->only([
-            'applicant_name', 'applicant_nik', 'location_address', 'land_size', 'coordinates', 'land_purpose'
+            'nama_pemilik_usaha', 'nama_pengaju', 'hubungan_pengaju'
         ]);
 
         $data['user_id'] = Auth::id();
@@ -119,24 +101,13 @@ class PpkprNonBerusahaController extends Controller
         // Generate Nomor Permohonan
         $data['application_number'] = 'PPKPR-NON-' . date('Ymd') . '-' . strtoupper(Str::random(5));
 
-        // Upload Berkas Wajib
-        $data['doc_ktp'] = $request->file('doc_ktp')->store('ppkpr_docs', 'public');
-        $data['doc_sertifikat'] = $request->file('doc_sertifikat')->store('ppkpr_docs', 'public');
-        $data['doc_pernyataan'] = $request->file('doc_pernyataan')->store('ppkpr_docs', 'public');
-        $data['doc_desain'] = $request->file('doc_desain')->store('ppkpr_docs', 'public');
-        $data['doc_foto_lapangan'] = $request->file('doc_foto_lapangan')->store('ppkpr_docs', 'public');
+        // Upload Berkas Persyaratan Utama
+        $data['doc_persyaratan'] = $request->file('doc_persyaratan')->store('ppkpr_docs', 'public');
 
-        // Upload Berkas Opsional
-        $optionalDocs = [
-            'doc_pbb', 'doc_surat_kuasa', 'doc_akta_yayasan', 'doc_rekomendasi_tetangga', 'doc_pendukung'
-        ];
-        foreach ($optionalDocs as $docName) {
-            if ($request->hasFile($docName)) {
-                $data[$docName] = $request->file($docName)->store('ppkpr_docs', 'public');
-            }
-        }
-
-        PpkprApplication::create($data);
+        $app = PpkprApplication::create($data);
+        
+        // Kirim Notifikasi WhatsApp
+        $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan baru berhasil diajukan oleh pemohon.');
 
         return redirect()->route('non-berusaha.index')->with('success', 'Permohonan PPKPR Non Berusaha Anda berhasil diajukan! Silakan pantau proses verifikasi.');
     }
@@ -223,6 +194,159 @@ class PpkprNonBerusahaController extends Controller
 
         $application->save();
 
+        // Kirim Notifikasi WhatsApp
+        $this->sendWhatsappNotification($application, $application->status_label, $notes);
+
         return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
+    }
+
+    /**
+     * Tampilkan halaman pengaturan WhatsApp (Hanya DPN / Super Admin).
+     */
+    public function whatsappSettings()
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan. Hanya DPN / Super Admin yang dapat mengakses halaman ini.');
+        }
+
+        $settings = $this->getWhatsappSettings();
+
+        // Ambil Log WhatsApp
+        $logPath = storage_path('app/whatsapp_logs.json');
+        $logs = [];
+        if (file_exists($logPath)) {
+            $logs = json_decode(file_get_contents($logPath), true) ?: [];
+        }
+
+        return view('dpn.whatsapp', compact('settings', 'logs'));
+    }
+
+    /**
+     * Simpan template WhatsApp.
+     */
+    public function saveWhatsappSettings(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $request->validate([
+            'template' => 'required|string|max:2000',
+        ]);
+
+        $settings = $this->getWhatsappSettings();
+        $settings['template'] = $request->input('template');
+        $this->saveSettings($settings);
+
+        return redirect()->back()->with('success', 'Template pesan WhatsApp berhasil diperbarui!');
+    }
+
+    /**
+     * Hubungkan atau Putuskan Koneksi WhatsApp (Simulasi).
+     */
+    public function toggleWhatsappConnection(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $settings = $this->getWhatsappSettings();
+        $settings['connected'] = !$settings['connected'];
+        
+        if ($settings['connected']) {
+            $settings['phone_number'] = $request->input('phone_number') ?: '081234567894';
+        }
+
+        $this->saveSettings($settings);
+
+        $msg = $settings['connected'] ? 'WhatsApp Gateway berhasil dihubungkan!' : 'WhatsApp Gateway berhasil diputuskan!';
+        return redirect()->back()->with('success', $msg);
+    }
+
+    /**
+     * Helper: Mendapatkan pengaturan WhatsApp dari berkas JSON.
+     */
+    private function getWhatsappSettings()
+    {
+        $path = storage_path('app/whatsapp_settings.json');
+        if (!file_exists($path)) {
+            $default = [
+                'connected' => false,
+                'phone_number' => '081234567894',
+                'template' => "Halo {nama_pemohon}, permohonan PPKPR Non Berusaha Anda ({nomor_registrasi}) saat ini memasuki tahap: {status_sekarang}.\n\nCatatan Pemeriksa: {catatan_terakhir}\n\nPantau detail pengajuan Anda di: {tautan_detail}"
+            ];
+            file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT));
+            return $default;
+        }
+        return json_decode(file_get_contents($path), true);
+    }
+
+    /**
+     * Helper: Menyimpan pengaturan WhatsApp ke berkas JSON.
+     */
+    private function saveSettings($settings)
+    {
+        $path = storage_path('app/whatsapp_settings.json');
+        file_put_contents($path, json_encode($settings, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Helper: Menyimulasikan pengiriman notifikasi WhatsApp dan mencatatnya ke log.
+     */
+    private function sendWhatsappNotification($application, $statusLabel, $notes)
+    {
+        $settings = $this->getWhatsappSettings();
+        if (!$settings['connected']) {
+            return; // Jangan kirim log jika status tidak terhubung
+        }
+
+        $template = $settings['template'];
+        $url = route('non-berusaha.show', $application->id);
+        
+        $message = str_replace(
+            ['{nama_pemohon}', '{nomor_registrasi}', '{status_sekarang}', '{catatan_terakhir}', '{tautan_detail}'],
+            [$application->nama_pengaju ?: ($application->user->name ?? $application->user->username), $application->application_number, $statusLabel, $notes ?: '-', $url],
+            $template
+        );
+
+        $logPath = storage_path('app/whatsapp_logs.json');
+        $logs = [];
+        if (file_exists($logPath)) {
+            $logs = json_decode(file_get_contents($logPath), true) ?: [];
+        }
+
+        $newLog = [
+            'id' => uniqid(),
+            'recipient' => $application->user->phone_number,
+            'message' => $message,
+            'timestamp' => now()->format('d M Y, H:i:s'),
+        ];
+
+        array_unshift($logs, $newLog);
+        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Tampilkan template Formulir Berkas Persyaratan PPKPR Non-Berusaha (Siap Cetak).
+     */
+    public function templatePersyaratan()
+    {
+        return view('templates.persyaratan');
+    }
+
+    /**
+     * Tampilkan template Surat Pernyataan Kebenaran Dokumen (Siap Cetak).
+     */
+    public function templatePernyataan()
+    {
+        return view('templates.pernyataan');
+    }
+
+    /**
+     * Tampilkan template Surat Kuasa (Siap Cetak).
+     */
+    public function templateKuasa()
+    {
+        return view('templates.kuasa');
     }
 }

@@ -540,6 +540,9 @@
 
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
+                    @if(Auth::user()->isDpn())
+                        <a href="{{ route('dpn.whatsapp') }}" class="nav-link">Integrasi WhatsApp</a>
+                    @endif
                     <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
                     <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
                     
@@ -695,36 +698,30 @@
                 <div>
                     <!-- Data Permohonan -->
                     <div class="card">
-                        <h2 class="card-title">Data Permohonan & Tanah</h2>
+                        <h2 class="card-title">Informasi Identitas Pengajuan</h2>
                         <div class="data-list">
                             <div class="data-item">
-                                <span class="data-label">Nama Pemilik / Pemohon</span>
-                                <span class="data-val">{{ $application->applicant_name }}</span>
+                                <span class="data-label">Nama Pemilik Usaha</span>
+                                <span class="data-val">{{ $application->nama_pemilik_usaha }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">NIK Pemohon</span>
-                                <span class="data-val mono">{{ $application->applicant_nik }}</span>
+                                <span class="data-label">Nama Pengaju / Pemohon</span>
+                                <span class="data-val">{{ $application->nama_pengaju }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">Alamat Lokasi Tanah</span>
-                                <span class="data-val">{{ $application->location_address }}</span>
-                            </div>
-                            <div style="display: flex; gap: 24px;">
-                                <div class="data-item" style="flex: 1;">
-                                    <span class="data-label">Luas Tanah</span>
-                                    <span class="data-val">{{ number_format($application->land_size) }} m²</span>
-                                </div>
-                                <div class="data-item" style="flex: 1;">
-                                    <span class="data-label">Titik Koordinat GPS</span>
-                                    <span class="data-val mono">{{ $application->coordinates }}</span>
-                                </div>
+                                <span class="data-label">Hubungan Pengaju (Sebagai Apa)</span>
+                                <span class="data-val">{{ $application->hubungan_pengaju }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">Rencana Penggunaan</span>
-                                <span class="data-val">{{ $application->land_purpose }}</span>
+                                <span class="data-label">Akun Pemohon (Username)</span>
+                                <span class="data-val">{{ $application->user->username }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">Tanggal Masuk Pengajuan</span>
+                                <span class="data-label">Nomor Telepon Gateway / HP</span>
+                                <span class="data-val mono">+{{ $application->user->phone_number }}</span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-label">Tanggal Pengajuan Berkas</span>
                                 <span class="data-val">{{ $application->created_at->format('d F Y (H:i)') }}</span>
                             </div>
                         </div>
@@ -732,108 +729,17 @@
 
                     <!-- Dokumen Lampiran -->
                     <div class="card">
-                        <h2 class="card-title">Dokumen Lampiran Berkas</h2>
+                        <h2 class="card-title">Dokumen Berkas Persyaratan</h2>
                         <div class="doc-list">
                             
-                            <!-- 1. KTP -->
-                            <a href="{{ asset('storage/' . $application->doc_ktp) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">1. Fotokopi KTP Pemohon</span>
+                            <!-- Persyaratan Utama -->
+                            <a href="{{ asset('storage/' . $application->doc_persyaratan) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">Dokumen Persyaratan Lengkap</span>
                                 <span class="doc-status">
-                                    Unduh/Lihat
+                                    Unduh/Lihat Berkas
                                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                                 </span>
                             </a>
-
-                            <!-- 2. Sertifikat -->
-                            <a href="{{ asset('storage/' . $application->doc_sertifikat) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">2. Fotokopi Sertifikat Kepemilikan / SHM</span>
-                                <span class="doc-status">
-                                    Unduh/Lihat
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                </span>
-                            </a>
-
-                            <!-- 3. Pernyataan -->
-                            <a href="{{ asset('storage/' . $application->doc_pernyataan) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">3. Surat Pernyataan Kebenaran (Bermaterai)</span>
-                                <span class="doc-status">
-                                    Unduh/Lihat
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                </span>
-                            </a>
-
-                            <!-- 4. Desain -->
-                            <a href="{{ asset('storage/' . $application->doc_desain) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">4. Rencana Desain Pembangunan / Sketsa Denah</span>
-                                <span class="doc-status">
-                                    Unduh/Lihat
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                </span>
-                            </a>
-
-                            <!-- 5. Foto Lapangan -->
-                            <a href="{{ asset('storage/' . $application->doc_foto_lapangan) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">5. Foto Kondisi Aktual Lapangan</span>
-                                <span class="doc-status">
-                                    Unduh/Lihat
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                </span>
-                            </a>
-
-                            <!-- Dokumen PBB (jika ada) -->
-                            @if($application->doc_pbb)
-                                <a href="{{ asset('storage/' . $application->doc_pbb) }}" target="_blank" class="doc-item">
-                                    <span class="doc-name">6. Bukti Pembayaran PBB</span>
-                                    <span class="doc-status">
-                                        Unduh/Lihat
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                    </span>
-                                </a>
-                            @endif
-
-                            <!-- Dokumen Surat Kuasa (jika ada) -->
-                            @if($application->doc_surat_kuasa)
-                                <a href="{{ asset('storage/' . $application->doc_surat_kuasa) }}" target="_blank" class="doc-item">
-                                    <span class="doc-name">7. Surat Kuasa & KTP Penerima Kuasa</span>
-                                    <span class="doc-status">
-                                        Unduh/Lihat
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                    </span>
-                                </a>
-                            @endif
-
-                            <!-- Dokumen Akta Yayasan (jika ada) -->
-                            @if($application->doc_akta_yayasan)
-                                <a href="{{ asset('storage/' . $application->doc_akta_yayasan) }}" target="_blank" class="doc-item">
-                                    <span class="doc-name">8. Akta Pendirian Badan Hukum / Yayasan</span>
-                                    <span class="doc-status">
-                                        Unduh/Lihat
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                    </span>
-                                </a>
-                            @endif
-
-                            <!-- Rekomendasi Tetangga (jika ada) -->
-                            @if($application->doc_rekomendasi_tetangga)
-                                <a href="{{ asset('storage/' . $application->doc_rekomendasi_tetangga) }}" target="_blank" class="doc-item">
-                                    <span class="doc-name">9. Rekomendasi / Persetujuan Tetangga</span>
-                                    <span class="doc-status">
-                                        Unduh/Lihat
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                    </span>
-                                </a>
-                            @endif
-
-                            <!-- Dokumen Pendukung Lain (jika ada) -->
-                            @if($application->doc_pendukung)
-                                <a href="{{ asset('storage/' . $application->doc_pendukung) }}" target="_blank" class="doc-item">
-                                    <span class="doc-name">10. Dokumen Pendukung Lainnya</span>
-                                    <span class="doc-status">
-                                        Unduh/Lihat
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                    </span>
-                                </a>
-                            @endif
 
                         </div>
                     </div>
@@ -850,7 +756,7 @@
                             <div class="timeline-step completed">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">Berkas Berhasil Diajukan</div>
-                                <div class="timeline-desc">Pelaku usaha berhasil mengunggah data dan 5 dokumen wajib secara lengkap ke portal PATENPAKMIKO.</div>
+                                <div class="timeline-desc">Pelaku usaha berhasil mengunggah berkas persyaratan secara lengkap ke portal PATENPAKMIKO.</div>
                             </div>
 
                             <!-- STEP 2: BPN -->

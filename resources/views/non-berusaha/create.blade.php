@@ -373,6 +373,9 @@
 
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
+                    @if(Auth::user()->isDpn())
+                        <a href="{{ route('dpn.whatsapp') }}" class="nav-link">Integrasi WhatsApp</a>
+                    @endif
                     <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
                     <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
                     
@@ -418,183 +421,54 @@
                 <form action="{{ route('non-berusaha.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <!-- SECTION 1: PEMOHON & TANAH -->
-                    <div class="form-section-title">1. Informasi Pemohon & Tanah</div>
+                    <!-- SECTION 1: DATA IDENTITAS PENGAJUAN -->
+                    <div class="form-section-title">1. Identitas Pengajuan</div>
 
-                    <div class="form-grid-2">
-                        <!-- Nama Lengkap Pemohon -->
-                        <div class="form-group">
-                            <label for="applicant_name" class="form-label">Nama Pemohon <span class="req">*</span></label>
-                            <input type="text" id="applicant_name" name="applicant_name" class="form-control" placeholder="Nama sesuai KTP" value="{{ old('applicant_name', Auth::user()->name ?? Auth::user()->username) }}" required>
-                            @error('applicant_name')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        <!-- NIK Pemohon -->
-                        <div class="form-group">
-                            <label for="applicant_nik" class="form-label">NIK Pemohon <span class="req">*</span></label>
-                            <input type="text" id="applicant_nik" name="applicant_nik" class="form-control" placeholder="16 digit nomor NIK" value="{{ old('applicant_nik') }}" required maxlength="16">
-                            @error('applicant_nik')
-                                <span class="error-message">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Alamat Tanah -->
+                    <!-- Nama Pemilik Usaha -->
                     <div class="form-group">
-                        <label for="location_address" class="form-label">Alamat Lokasi Pemanfaatan Ruang / Tanah <span class="req">*</span></label>
-                        <textarea id="location_address" name="location_address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap tanah yang diajukan" style="resize: none;" required>{{ old('location_address') }}</textarea>
-                        @error('location_address')
+                        <label for="nama_pemilik_usaha" class="form-label">Nama Pemilik Usaha <span class="req">*</span></label>
+                        <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" placeholder="Masukkan nama pemilik usaha" value="{{ old('nama_pemilik_usaha') }}" required>
+                        @error('nama_pemilik_usaha')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div class="form-grid-2">
-                        <!-- Luas Tanah -->
+                        <!-- Nama Pengaju -->
                         <div class="form-group">
-                            <label for="land_size" class="form-label">Luas Tanah (m²) <span class="req">*</span></label>
-                            <input type="number" id="land_size" name="land_size" class="form-control" placeholder="Luas tanah dalam angka" value="{{ old('land_size') }}" required min="1">
-                            @error('land_size')
+                            <label for="nama_pengaju" class="form-label">Nama Pengaju / Pemohon <span class="req">*</span></label>
+                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pengaju" value="{{ old('nama_pengaju', Auth::user()->name ?? Auth::user()->username) }}" required>
+                            @error('nama_pengaju')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
                         </div>
 
-                        <!-- Koordinat GPS -->
+                        <!-- Hubungan Pengaju / Sebagai Apa -->
                         <div class="form-group">
-                            <label for="coordinates" class="form-label">Titik Koordinat Lokasi <span class="req">*</span></label>
-                            <input type="text" id="coordinates" name="coordinates" class="form-control" placeholder="cth: -6.91474, 107.60981" value="{{ old('coordinates') }}" required>
-                            @error('coordinates')
+                            <label for="hubungan_pengaju" class="form-label">Hubungan Pengaju (Sebagai Apa) <span class="req">*</span></label>
+                            <input type="text" id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" placeholder="cth: Pemilik Usaha, Penerima Kuasa, Karyawan, dll" value="{{ old('hubungan_pengaju') }}" required>
+                            @error('hubungan_pengaju')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
-                    <!-- Rencana Peruntukan/Penggunaan -->
+                    <!-- SECTION 2: UNGGAH PERSYARATAN -->
+                    <div class="form-section-title">2. Unggah Berkas Persyaratan</div>
+
+                    <!-- File Dokumen Persyaratan -->
                     <div class="form-group">
-                        <label for="land_purpose" class="form-label">Rencana Penggunaan Tanah <span class="req">*</span></label>
-                        <select id="land_purpose" name="land_purpose" class="form-control" required style="font-weight: 500;">
-                            <option value="" disabled selected>Pilih Rencana Penggunaan</option>
-                            <option value="Rumah Tinggal / Hunian" {{ old('land_purpose') === 'Rumah Tinggal / Hunian' ? 'selected' : '' }}>Rumah Tinggal / Hunian</option>
-                            <option value="Sarana Peribadatan / Keagamaan" {{ old('land_purpose') === 'Sarana Peribadatan / Keagamaan' ? 'selected' : '' }}>Sarana Peribadatan / Keagamaan</option>
-                            <option value="Fasilitas Sosial (Panti Asuhan, Yayasan)" {{ old('land_purpose') === 'Fasilitas Sosial (Panti Asuhan, Yayasan)' ? 'selected' : '' }}>Fasilitas Sosial (Panti Asuhan, Yayasan)</option>
-                            <option value="Fasilitas Umum / Pendidikan" {{ old('land_purpose') === 'Fasilitas Umum / Pendidikan' ? 'selected' : '' }}>Fasilitas Umum / Pendidikan</option>
-                            <option value="Kegiatan Non-Bisnis Lainnya" {{ old('land_purpose') === 'Kegiatan Non-Bisnis Lainnya' ? 'selected' : '' }}>Kegiatan Non-Bisnis Lainnya</option>
-                        </select>
-                        @error('land_purpose')
+                        <label for="doc_persyaratan" class="form-label">
+                            Dokumen Persyaratan Lengkap <span class="req">*</span>
+                            <a href="{{ route('templates.persyaratan') }}" target="_blank" style="margin-left: 8px; color: var(--clr-blue); text-decoration: none; font-size: 11px; font-weight: 700;">📥 Unduh Template Persyaratan</a>
+                        </label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="doc_persyaratan" name="doc_persyaratan" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar,.doc,.docx" required>
+                            <span class="file-help">Format: PDF, JPG, PNG, DOC/DOCX, ZIP/RAR. Maksimal 10MB.</span>
+                        </div>
+                        @error('doc_persyaratan')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
-                    </div>
-
-                    <!-- SECTION 2: DOKUMEN WAJIB -->
-                    <div class="form-section-title">2. Unggah Dokumen Wajib (Mandatory)</div>
-
-                    <!-- 1. Fotokopi KTP Pemohon -->
-                    <div class="form-group">
-                        <label for="doc_ktp" class="form-label">Fotokopi KTP Pemohon <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_ktp" name="doc_ktp" accept="application/pdf,image/*" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
-                        @error('doc_ktp')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- 2. Sertifikat Kepemilikan Tanah / Bukti Kepemilikan -->
-                    <div class="form-group">
-                        <label for="doc_sertifikat" class="form-label">Fotokopi Sertifikat Kepemilikan Tanah / SHM <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_sertifikat" name="doc_sertifikat" accept="application/pdf,image/*" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
-                        @error('doc_sertifikat')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- 3. Surat Pernyataan Kebenaran Dokumen -->
-                    <div class="form-group">
-                        <label for="doc_pernyataan" class="form-label">Surat Pernyataan Kebenaran Dokumen (Bermaterai) <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_pernyataan" name="doc_pernyataan" accept="application/pdf,image/*" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
-                        @error('doc_pernyataan')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- 4. Rencana Desain Pembangunan -->
-                    <div class="form-group">
-                        <label for="doc_desain" class="form-label">Gambar Rencana Desain Pembangunan / Sketsa Denah <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_desain" name="doc_desain" accept="application/pdf,image/*" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
-                        @error('doc_desain')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- 5. Foto Kondisi Lapangan -->
-                    <div class="form-group">
-                        <label for="doc_foto_lapangan" class="form-label">Foto Kondisi Aktual Lapangan / Lokasi <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_foto_lapangan" name="doc_foto_lapangan" accept="application/pdf,image/*" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
-                        @error('doc_foto_lapangan')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- SECTION 3: DOKUMEN OPSIONAL -->
-                    <div class="form-section-title">3. Unggah Dokumen Pendukung (Opsional)</div>
-
-                    <!-- Bukti Pembayaran PBB -->
-                    <div class="form-group">
-                        <label for="doc_pbb" class="form-label">Bukti Pembayaran PBB Tahun Terakhir</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_pbb" name="doc_pbb" accept="application/pdf,image/*">
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
-                    </div>
-
-                    <!-- Surat Kuasa -->
-                    <div class="form-group">
-                        <label for="doc_surat_kuasa" class="form-label">Surat Kuasa & KTP Penerima Kuasa (Jika dikuasakan)</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_surat_kuasa" name="doc_surat_kuasa" accept="application/pdf">
-                            <span class="file-help">Format: PDF. Maksimal 2MB.</span>
-                        </div>
-                    </div>
-
-                    <!-- Akta Pendirian -->
-                    <div class="form-group">
-                        <label for="doc_akta_yayasan" class="form-label">Akta Pendirian Badan Hukum / Yayasan (Jika atas nama Badan)</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_akta_yayasan" name="doc_akta_yayasan" accept="application/pdf">
-                            <span class="file-help">Format: PDF. Maksimal 2MB.</span>
-                        </div>
-                    </div>
-
-                    <!-- Persetujuan Tetangga -->
-                    <div class="form-group">
-                        <label for="doc_rekomendasi_tetangga" class="form-label">Rekomendasi / Persetujuan Tetangga Sekitar</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_rekomendasi_tetangga" name="doc_rekomendasi_tetangga" accept="application/pdf,image/*">
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
-                    </div>
-
-                    <!-- Dokumen Pendukung Lain -->
-                    <div class="form-group">
-                        <label for="doc_pendukung" class="form-label">Dokumen Pendukung Lainnya</label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="doc_pendukung" name="doc_pendukung" accept="application/pdf,image/*">
-                            <span class="file-help">Format: PDF, JPG, PNG. Maksimal 2MB.</span>
-                        </div>
                     </div>
 
                     <!-- Footer Action Buttons -->
