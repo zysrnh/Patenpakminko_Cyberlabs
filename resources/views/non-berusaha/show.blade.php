@@ -602,15 +602,75 @@
             <!-- BUTTON DOWNLOAD DOKUMEN PPKPR SELESAI -->
             @if($application->status === 'disetujui')
                 @if($application->bpn_pertek_document)
-                    <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:linear-gradient(135deg,#38a169,#276749);">
+                    <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:linear-gradient(135deg,#38a169,#276749); margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         Unduh Dokumen Pertek Pertanahan Resmi (BPN)
                     </a>
                 @elseif($application->approval_document)
-                    <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-download-cert">
+                    <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         Unduh Dokumen PPKPR Resmi (PDF)
                     </a>
+                @endif
+ 
+                <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
+                @php
+                    $review = \App\Models\Review::where('user_id', Auth::id())
+                        ->where('module_type', 'non_berusaha')
+                        ->where('module_id', $application->id)
+                        ->first();
+                @endphp
+ 
+                @if(Auth::user()->isPelakuUsaha())
+                    <div class="verify-card" style="border-color: #CBD5E0; background: #F8FAFC; margin-bottom: 24px; padding: 24px; border-radius: 12px; border: 1.5px solid var(--clr-line);">
+                        <h3 class="verify-title" style="color: var(--clr-blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px;">
+                            ⭐ Ulasan & Penilaian Layanan
+                        </h3>
+ 
+                        @if($review)
+                            <div style="background: #FFFFFF; border: 1.5px solid var(--clr-line); padding: 16px; border-radius: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="color: var(--clr-yellow); font-size: 16px; font-weight: 700;">
+                                        {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }} 
+                                        <span style="color: var(--clr-ink); font-size: 13px; font-weight: 800; margin-left: 6px;">({{ $review->rating_label }})</span>
+                                    </span>
+                                    @if($review->is_approved)
+                                        <span style="font-size: 11px; background: #EBF8FF; color: #2B6CB0; padding: 3px 10px; border-radius: 100px; font-weight: 700;">Telah Dipublikasikan</span>
+                                    @else
+                                        <span style="font-size: 11px; background: #E2E8F0; color: #4A5568; padding: 3px 10px; border-radius: 100px; font-weight: 700;">Menunggu Moderasi Admin</span>
+                                    @endif
+                                </div>
+                                <p style="font-style: italic; font-size: 13px; color: var(--clr-muted);">"{{ $review->comment }}"</p>
+                            </div>
+                        @else
+                            <p style="font-size: 12.5px; color: var(--clr-muted); margin-bottom: 16px;">Silakan berikan ulasan Anda terkait efisiensi pelaporan dan pelayanan kami untuk membantu kami meningkatkan kualitas sistem.</p>
+                            <form action="{{ route('review.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="module_type" value="non_berusaha">
+                                <input type="hidden" name="module_id" value="{{ $application->id }}">
+                                
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label for="rating" style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Penilaian Anda</label>
+                                    <select name="rating" id="rating" style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--clr-line); font-size:13.5px;" required>
+                                        <option value="5">⭐⭐⭐⭐⭐ Sangat Baik</option>
+                                        <option value="4">⭐⭐⭐⭐ Baik</option>
+                                        <option value="3">⭐⭐⭐ Cukup Baik</option>
+                                        <option value="2">⭐⭐ Kurang</option>
+                                        <option value="1">⭐ Sangat Kurang</option>
+                                    </select>
+                                </div>
+ 
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label for="comment" style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Catatan Ulasan / Feedback</label>
+                                    <textarea name="comment" id="comment" style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--clr-line); font-size:13.5px; resize:none;" rows="2" placeholder="Tuliskan saran atau ulasan singkat Anda..." required></textarea>
+                                </div>
+ 
+                                <button type="submit" style="background: var(--clr-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer;">
+                                    Kirim Ulasan Layanan
+                                </button>
+                            </form>
+                        @endif
+                    </div>
                 @endif
             @endif
 

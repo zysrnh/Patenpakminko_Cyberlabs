@@ -451,6 +451,106 @@
         .footer-legal a { font-size: 12.5px; color: rgba(255,255,255,.25); text-decoration: none; transition: color .2s; }
         .footer-legal a:hover { color: rgba(255,255,255,.6); }
 
+        /* ─── TESTIMONIAL / REVIEWS SECTION ────────────────── */
+        .reviews-section {
+            padding: 80px 0;
+            background: #FFFFFF;
+            border-top: 1px solid var(--clr-line);
+        }
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+        @media (max-width: 1023px) {
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 639px) {
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .review-card {
+            background: #F8FAFC;
+            border: 1.5px solid var(--clr-line);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            transition: all .3s ease;
+            position: relative;
+        }
+        .review-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(19, 147, 204, 0.08);
+            border-color: var(--clr-blue);
+        }
+        .review-card-stars {
+            color: #D69E2E;
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+        .review-card-label {
+            font-size: 12.5px;
+            font-weight: 800;
+            color: var(--clr-ink);
+            margin-left: 6px;
+        }
+        .review-card-comment {
+            font-size: 13.5px;
+            color: var(--clr-mid);
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .review-card-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-top: 1px solid var(--clr-line);
+            padding-top: 16px;
+        }
+        .review-author-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--clr-blue-lt);
+            color: var(--clr-blue);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            border: 1.5px solid var(--clr-blue);
+        }
+        .review-author-info strong {
+            display: block;
+            font-size: 13px;
+            color: var(--clr-ink);
+            font-weight: 700;
+        }
+        .review-author-info span {
+            display: block;
+            font-size: 11px;
+            color: var(--clr-muted);
+            font-weight: 600;
+        }
+        .review-card-module {
+            display: inline-block;
+            background: rgba(19, 147, 204, 0.06);
+            color: var(--clr-blue-dk);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+ 
         /* ─── REVEAL ANIMATION ───────────────────────────────── */
         .reveal {
             opacity: 0; transform: translateY(24px);
@@ -749,6 +849,47 @@
                 <p class="step-desc">Pantau status permohonan secara real-time dan unduh sertifikat persetujuan resmi digital.</p>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════ REVIEWS ══ -->
+<section class="reviews-section" id="ulasan" aria-label="Ulasan Layanan">
+    <div class="container">
+        <div style="text-align: center; max-width: 600px; margin: 0 auto 48px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--clr-blue); letter-spacing: 0.1em; text-transform: uppercase;">Testimoni Pelaku Usaha</span>
+            <h2 style="font-size: 28px; font-weight: 800; color: var(--clr-ink); margin-top: 8px; letter-spacing: -0.02em;">Apa Kata Mereka Tentang Kami?</h2>
+            <p style="font-size: 14.5px; color: var(--clr-mid); margin-top: 10px;">Ulasan jujur dari para pelaku usaha mengenai kemudahan, transparansi, dan kecepatan proses perizinan PKKPR di PATENPAKMIKO.</p>
+        </div>
+
+        @if($reviews->isEmpty())
+            <div style="text-align: center; padding: 48px; background: #F8FAFC; border: 1.5px dashed var(--clr-line); border-radius: var(--radius-lg); color: var(--clr-muted);">
+                <p style="font-size: 14px; font-weight: 600;">Belum ada ulasan yang dipublikasikan saat ini.</p>
+            </div>
+        @else
+            <div class="reviews-grid">
+                @foreach($reviews as $review)
+                    <div class="review-card reveal">
+                        <div class="review-card-stars">
+                            {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
+                            <span class="review-card-label">{{ $review->rating_label }}</span>
+                        </div>
+                        <p class="review-card-comment">
+                            "{{ $review->comment }}"
+                        </p>
+                        <div class="review-card-author">
+                            <div class="review-author-avatar">
+                                {{ strtoupper(substr($review->user->username ?? 'PU', 0, 2)) }}
+                            </div>
+                            <div class="review-author-info">
+                                <strong>{{ $review->user->name ?? $review->user->username }}</strong>
+                                <span>{{ $review->created_at->format('d M Y') }}</span>
+                                <span class="review-card-module">{{ $review->module_label }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 </section>
 

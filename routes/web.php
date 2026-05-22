@@ -3,13 +3,22 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PpkprNonBerusahaController;
 use App\Http\Controllers\KebijakanController;
+use App\Http\Controllers\PpkprBerusahaController;
+use App\Http\Controllers\LapolpaController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Review;
+ 
 // Halaman utama / Landing Page
 Route::get('/', function () {
-    return view('welcome');
+    $reviews = Review::with('user')
+        ->where('is_approved', true)
+        ->latest()
+        ->take(6)
+        ->get();
+    return view('welcome', compact('reviews'));
 });
-
+ 
 // Rute untuk tamu (Guest Only)
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -18,7 +27,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
-
+ 
 // Rute untuk pengguna yang sudah login (Authenticated)
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
@@ -34,14 +43,33 @@ Route::middleware('auth')->group(function () {
     Route::post('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'store'])->name('non-berusaha.store');
     Route::get('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'show'])->name('non-berusaha.show');
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
-
+ 
     // Kebijakan Khusus (Pelaku Usaha & Petugas Verifikasi)
     Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
     Route::get('/kebijakan/baru', [KebijakanController::class, 'create'])->name('kebijakan.create');
     Route::post('/kebijakan/baru', [KebijakanController::class, 'store'])->name('kebijakan.store');
     Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
+ 
+    // PPKPR Berusaha (Pelaku Usaha, BPN, Dinas PU, & Satu Pintu)
+    Route::get('/berusaha', [PpkprBerusahaController::class, 'index'])->name('berusaha.index');
+    Route::get('/berusaha/baru', [PpkprBerusahaController::class, 'create'])->name('berusaha.create');
+    Route::post('/berusaha/baru', [PpkprBerusahaController::class, 'store'])->name('berusaha.store');
+    Route::get('/berusaha/{id}', [PpkprBerusahaController::class, 'show'])->name('berusaha.show');
+    Route::post('/berusaha/{id}/verifikasi', [PpkprBerusahaController::class, 'verify'])->name('berusaha.verify');
     
+    // LAPOLPA (Layanan Pelaporan / Booking Jadwal Pelaporan)
+    Route::get('/lapolpa', [LapolpaController::class, 'index'])->name('lapolpa.index');
+    Route::post('/lapolpa', [LapolpaController::class, 'store'])->name('lapolpa.store');
+    Route::put('/lapolpa/{id}', [LapolpaController::class, 'updateStatus'])->name('lapolpa.update');
+ 
+    // Fitur Ulasan (Review)
+    Route::get('/ulasan', [ReviewController::class, 'index'])->name('ulasan.index');
+    Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::get('/admin/reviews', [ReviewController::class, 'adminIndex'])->name('admin.reviews.index');
+    Route::post('/admin/reviews/{id}/approve', [ReviewController::class, 'approve'])->name('admin.reviews.approve');
+    Route::delete('/admin/reviews/{id}', [ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+ 
     // WhatsApp Gateway Settings (DPN / Super Admin)
     Route::get('/dpn/whatsapp', [PpkprNonBerusahaController::class, 'whatsappSettings'])->name('dpn.whatsapp');
     Route::post('/dpn/whatsapp/save', [PpkprNonBerusahaController::class, 'saveWhatsappSettings'])->name('dpn.whatsapp.save');

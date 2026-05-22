@@ -388,6 +388,7 @@
                     <a href="/" class="nav-link">Beranda</a>
                     @if(Auth::user()->isDpn())
                         <a href="{{ route('dpn.whatsapp') }}" class="nav-link">Integrasi WhatsApp</a>
+                        <a href="{{ route('admin.reviews.index') }}" class="nav-link">Kelola Ulasan</a>
                     @endif
                     <a href="{{ route('dashboard') }}" class="nav-link active">Dashboard</a>
                     <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
@@ -474,18 +475,19 @@
                     </a>
 
                     <!-- 2. PPKPR Berusaha -->
-                    <a href="#" class="service-item service-locked">
+                    <a href="{{ route('berusaha.index') }}" class="service-item">
                         <div class="service-info">
                             <div class="service-icon yellow">
                                 <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                             </div>
                             <div class="service-text">
-                                <h3>PPKPR Berusaha (Segera Hadir)</h3>
+                                <h3>PPKPR Berusaha</h3>
                                 <p>Untuk perizinan pemanfaatan ruang dengan skala bisnis mikro, kecil, menengah, dan besar.</p>
                             </div>
                         </div>
-                        <span class="service-action" style="color: var(--clr-muted)">
-                            Terkunci
+                        <span class="service-action">
+                            Buka Layanan
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </span>
                     </a>
 
@@ -505,7 +507,41 @@
                             <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </span>
                     </a>
-
+ 
+                    <!-- 4. LAPOLPA -->
+                    <a href="{{ route('lapolpa.index') }}" class="service-item">
+                        <div class="service-info">
+                            <div class="service-icon red" style="background-color: rgba(229, 62, 62, 0.1); color: var(--clr-red);">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                            </div>
+                            <div class="service-text">
+                                <h3>LAPOLPA (Layanan Pelaporan)</h3>
+                                <p>Pemesanan jadwal konsultasi & pelaporan pemanfaatan ruang pelaku usaha secara teratur.</p>
+                            </div>
+                        </div>
+                        <span class="service-action" style="color: var(--clr-red);">
+                            Buka Layanan
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                    </a>
+ 
+                    <!-- 5. Ulasan Layanan -->
+                    <a href="{{ route('ulasan.index') }}" class="service-item">
+                        <div class="service-info">
+                            <div class="service-icon blue" style="background-color: rgba(214, 158, 46, 0.1); color: #D69E2E;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            </div>
+                            <div class="service-text">
+                                <h3>Ulasan Layanan & Feedback</h3>
+                                <p>Berikan ulasan, bintang penilaian, dan catatan saran mengenai kualitas pelayanan kami.</p>
+                            </div>
+                        </div>
+                        <span class="service-action" style="color: #D69E2E;">
+                            Berikan Ulasan
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                    </a>
+ 
                 </div>
             </div>
 
