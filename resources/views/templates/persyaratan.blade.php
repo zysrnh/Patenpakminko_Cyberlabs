@@ -29,7 +29,7 @@
         }
 
         .btn-print {
-            background: #1393CC;
+            background: #218AC9;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -41,11 +41,11 @@
             text-decoration: none;
         }
         .btn-print:hover {
-            background: #0f7bb0;
+            background: #003B64;
         }
 
         .btn-back {
-            color: #4B5A6A;
+            color: #2C5272;
             text-decoration: none;
             font-size: 14px;
             font-weight: bold;
@@ -212,33 +212,38 @@
             <tbody>
                 <tr>
                     <td class="center">[  ]</td>
-                    <td><strong>Fotokopi KTP Pemohon</strong></td>
-                    <td>KTP yang masih berlaku dari pengaju berkas.</td>
+                    <td><strong>Peta/sketsa lokasi yang dimohon</strong></td>
+                    <td>Peta atau sketsa lokasi aktual.</td>
                 </tr>
                 <tr>
                     <td class="center">[  ]</td>
-                    <td><strong>Fotokopi Sertifikat Tanah</strong></td>
-                    <td>Sertifikat Kepemilikan Tanah / SHM / Bukti kepemilikan sah.</td>
+                    <td><strong>Surat kuasa (apabila dikuasakan)</strong></td>
+                    <td>Surat kuasa bermaterai jika pengajuan diwakilkan.</td>
                 </tr>
                 <tr>
                     <td class="center">[  ]</td>
-                    <td><strong>Surat Pernyataan Kebenaran</strong></td>
-                    <td>Surat pernyataan bermaterai Rp. 10.000 (sesuai template).</td>
+                    <td><strong>Fotokopi KTP</strong></td>
+                    <td>KTP pengaju atau pemilik yang masih berlaku.</td>
                 </tr>
                 <tr>
                     <td class="center">[  ]</td>
-                    <td><strong>Gambar Rencana Desain</strong></td>
-                    <td>Gambar sketsa denah pembangunan atau rencana penggunaan ruang.</td>
+                    <td><strong>Fotokopi NPWP</strong></td>
+                    <td>NPWP Pribadi atau NPWP Badan.</td>
                 </tr>
                 <tr>
                     <td class="center">[  ]</td>
-                    <td><strong>Foto Kondisi Lapangan</strong></td>
-                    <td>Foto kondisi aktual tanah/bangunan di lapangan saat ini.</td>
+                    <td><strong>Fotokopi Akta Pendirian dan Pengesahan</strong></td>
+                    <td>Hanya untuk Badan Hukum / Yayasan.</td>
                 </tr>
                 <tr>
                     <td class="center">[  ]</td>
-                    <td><strong>Dokumen Pendukung Lain (Opsional)</strong></td>
-                    <td>Bukti PBB, Surat Kuasa (bila dikuasakan), akta yayasan, dll.</td>
+                    <td><strong>Rencana Penggunaan dan Pemanfaatan Tanah</strong></td>
+                    <td>Dokumen penjelasan rencana penggunaan ruang/tanah.</td>
+                </tr>
+                <tr>
+                    <td class="center">[  ]</td>
+                    <td><strong>Persyaratan lainnya yang diperlukan</strong></td>
+                    <td>Dokumen tambahan pendukung sesuai arahan petugas (opsional).</td>
                 </tr>
             </tbody>
         </table>

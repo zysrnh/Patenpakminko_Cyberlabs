@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -70,7 +70,7 @@
         .logo-icon {
             width: 38px;
             height: 38px;
-            background: linear-gradient(135deg, var(--clr-accent), var(--clr-primary-light));
+            background: var(--clr-blue);
             border-radius: 10px;
             display: flex;
             align-items: center;

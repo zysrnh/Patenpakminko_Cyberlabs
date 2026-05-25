@@ -14,16 +14,16 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --clr-blue:    #1393CC;
-            --clr-blue-dk: #0f7bb0;
-            --clr-blue-lt: #E8F5FB;
-            --clr-yellow:  #F2CC05;
-            --clr-green:   #95B93E;
-            --clr-ink:     #0B1420;
-            --clr-mid:     #4B5A6A;
-            --clr-muted:   #8A98A8;
-            --clr-line:    #E3E8EF;
-            --clr-surface: #F6F9FC;
+            --clr-blue:    #218AC9;
+            --clr-blue-dk: #003B64;
+            --clr-blue-lt: #E3F0F9;
+            --clr-yellow:  #FFCB05;
+            --clr-green:   #85C341;
+            --clr-ink:     #003B64;
+            --clr-mid:     #2C5272;
+            --clr-muted:   #7A9BB5;
+            --clr-line:    #D6E4EF;
+            --clr-surface: #F0F6FB;
             --clr-white:   #FFFFFF;
             --radius-sm:   6px;
             --radius-md:   10px;
@@ -602,7 +602,7 @@
             <!-- BUTTON DOWNLOAD DOKUMEN PPKPR SELESAI -->
             @if($application->status === 'disetujui')
                 @if($application->bpn_pertek_document)
-                    <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:linear-gradient(135deg,#38a169,#276749); margin-bottom: 20px;">
+                    <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:#79A73A; margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         Unduh Dokumen Pertek Pertanahan Resmi (BPN)
                     </a>
@@ -810,7 +810,7 @@
                                                 value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}"
                                                 style="background:white;" required>
                                         </div>
-                                        <button type="submit" class="btn-verify-submit" style="background:linear-gradient(135deg,#3182ce,#2b6cb0);font-size:13px;padding:10px 20px;">
+                                        <button type="submit" class="btn-verify-submit" style="background:#218AC9;font-size:13px;padding:10px 20px;">
                                             {{ $application->bpn_rapat_dt ? '🔄 Ubah Jadwal Rapat & Kirim WA' : '📅 Simpan Jadwal Rapat & Blast WA' }}
                                         </button>
                                     </form>
@@ -849,7 +849,7 @@
                                             <textarea name="notes" class="form-control" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required></textarea>
                                             @error('notes')<span class="error-message">{{ $message }}</span>@enderror
                                         </div>
-                                        <button type="submit" class="btn-verify-submit" style="background:linear-gradient(135deg,#38a169,#276749);">📄 Terbitkan Pertek & Blast WA Pemohon</button>
+                                        <button type="submit" class="btn-verify-submit" style="background:#79A73A;">📄 Terbitkan Pertek & Blast WA Pemohon</button>
                                     </form>
                                     <script>
                                         function togglePertekUpload(show) {
@@ -945,13 +945,54 @@
                         <div class="doc-list">
                             
                             <!-- Persyaratan Utama -->
-                            <a href="{{ asset('storage/' . $application->doc_persyaratan) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">Dokumen Persyaratan Lengkap</span>
-                                <span class="doc-status">
-                                    Unduh/Lihat Berkas
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                </span>
+                            @if($application->peta_lokasi)
+                            <a href="{{ asset('storage/' . $application->peta_lokasi) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">1. Peta Lokasi</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
                             </a>
+                            @endif
+
+                            @if($application->surat_kuasa)
+                            <a href="{{ asset('storage/' . $application->surat_kuasa) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">2. Surat Kuasa</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
+                            @if($application->fc_ktp)
+                            <a href="{{ asset('storage/' . $application->fc_ktp) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">3. FC KTP</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
+                            @if($application->fc_npwp)
+                            <a href="{{ asset('storage/' . $application->fc_npwp) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">4. FC NPWP</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
+                            @if($application->fc_akta_pendirian)
+                            <a href="{{ asset('storage/' . $application->fc_akta_pendirian) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">5. FC Akta Pendirian</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
+                            @if($application->rencana_penggunaan_tanah)
+                            <a href="{{ asset('storage/' . $application->rencana_penggunaan_tanah) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">6. Rencana Penggunaan Tanah</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
+                            @if($application->persyaratan_lainnya)
+                            <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">7. Persyaratan Lainnya</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
 
                             <!-- Pertek Pertanahan (Jika sudah diterbitkan) -->
                             @if($application->bpn_pertek_document)

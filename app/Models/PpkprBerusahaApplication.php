@@ -28,7 +28,15 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'satu_pintu_tanggal_terbit',
     'satu_pintu_document',
     'satu_pintu_notes',
-    'doc_persyaratan',
+    'peta_lokasi',
+    'surat_kuasa',
+    'fc_ktp',
+    'fc_npwp',
+    'fc_akta_pendirian',
+    'rencana_penggunaan_tanah',
+    'nib',
+    'kbli',
+    'proposal_kegiatan',
 ])]
 class PpkprBerusahaApplication extends Model
 {

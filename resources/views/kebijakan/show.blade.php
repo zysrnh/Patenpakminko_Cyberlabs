@@ -14,18 +14,18 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
         :root {
-            --clr-blue:    #1393CC;
-            --clr-blue-dk: #0f7bb0;
-            --clr-blue-lt: #E8F5FB;
-            --clr-yellow:  #F2CC05;
-            --clr-green:   #95B93E;
-            --clr-green-dk:#7fa030;
-            --clr-green-lt:#F0F7E4;
-            --clr-ink:     #0B1420;
-            --clr-mid:     #4B5A6A;
-            --clr-muted:   #8A98A8;
-            --clr-line:    #E3E8EF;
-            --clr-surface: #F6F9FC;
+            --clr-blue:    #218AC9;
+            --clr-blue-dk: #003B64;
+            --clr-blue-lt: #E3F0F9;
+            --clr-yellow:  #FFCB05;
+            --clr-green:   #85C341;
+            --clr-green-dk:#79A73A;
+            --clr-green-lt:#EEF7E2;
+            --clr-ink:     #003B64;
+            --clr-mid:     #2C5272;
+            --clr-muted:   #7A9BB5;
+            --clr-line:    #D6E4EF;
+            --clr-surface: #F0F6FB;
             --clr-white:   #FFFFFF;
             --radius-sm:   6px;
             --radius-md:   10px;
@@ -874,14 +874,57 @@
                                 <span class="detail-label">Tanggal Pengajuan</span>
                                 <span class="detail-val">{{ $application->created_at->translatedFormat('d F Y, H:i') }} WIB</span>
                             </li>
-                            <li class="detail-item">
-                                <span class="detail-label">Berkas Lampiran Persyaratan</span>
-                                <span class="detail-val">
-                                    <a href="{{ asset('storage/' . $application->doc_persyaratan) }}" target="_blank" class="btn-doc">
-                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                                        Buka Berkas Lampiran
-                                    </a>
-                                </span>
+                            <li class="detail-item" style="display: flex; flex-direction: column; gap: 8px;">
+                                <span class="detail-label" style="border-bottom: 1px solid var(--clr-line); padding-bottom: 8px; margin-bottom: 4px;">Berkas Lampiran Persyaratan</span>
+                                
+                                @if($application->peta_lokasi)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">1. Peta Lokasi</span>
+                                    <a href="{{ asset('storage/' . $application->peta_lokasi) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->surat_kuasa)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">2. Surat Kuasa</span>
+                                    <a href="{{ asset('storage/' . $application->surat_kuasa) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_ktp)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">3. FC KTP</span>
+                                    <a href="{{ asset('storage/' . $application->fc_ktp) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_npwp)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">4. FC NPWP</span>
+                                    <a href="{{ asset('storage/' . $application->fc_npwp) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_akta_pendirian)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">5. FC Akta Pendirian</span>
+                                    <a href="{{ asset('storage/' . $application->fc_akta_pendirian) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->rencana_penggunaan_tanah)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">6. Rencana Penggunaan Tanah</span>
+                                    <a href="{{ asset('storage/' . $application->rencana_penggunaan_tanah) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->persyaratan_lainnya)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">7. Persyaratan Lainnya</span>
+                                    <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
                             </li>
                         </ul>
                     </div>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +26,7 @@
         }
 
         .btn-print {
-            background: #1393CC;
+            background: #218AC9;
             color: #fff;
             border: none;
             padding: 10px 20px;
@@ -38,11 +38,11 @@
             text-decoration: none;
         }
         .btn-print:hover {
-            background: #0f7bb0;
+            background: #003B64;
         }
 
         .btn-back {
-            color: #4B5A6A;
+            color: #2C5272;
             text-decoration: none;
             font-size: 14px;
             font-weight: bold;

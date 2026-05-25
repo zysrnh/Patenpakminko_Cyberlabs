@@ -14,16 +14,16 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --clr-blue:    #1393CC;
-            --clr-blue-dk: #0f7bb0;
-            --clr-blue-lt: #E8F5FB;
-            --clr-yellow:  #F2CC05;
-            --clr-green:   #95B93E;
-            --clr-ink:     #0B1420;
-            --clr-mid:     #4B5A6A;
-            --clr-muted:   #8A98A8;
-            --clr-line:    #E3E8EF;
-            --clr-surface: #F6F9FC;
+            --clr-blue:    #218AC9;
+            --clr-blue-dk: #003B64;
+            --clr-blue-lt: #E3F0F9;
+            --clr-yellow:  #FFCB05;
+            --clr-green:   #85C341;
+            --clr-ink:     #003B64;
+            --clr-mid:     #2C5272;
+            --clr-muted:   #7A9BB5;
+            --clr-line:    #D6E4EF;
+            --clr-surface: #F0F6FB;
             --clr-white:   #FFFFFF;
             --radius-sm:   6px;
             --radius-md:   10px;
@@ -348,7 +348,7 @@
         }
         .btn-primary:hover {
             background: var(--clr-blue-dk);
-            box-shadow: 0 4px 12px rgba(19, 147, 204, 0.2);
+            box-shadow: 0 4px 12px rgba(33, 138, 201, 0.2);
             transform: translateY(-0.5px);
         }
     </style>
@@ -456,19 +456,74 @@
                     <!-- SECTION 2: UNGGAH PERSYARATAN -->
                     <div class="form-section-title">2. Unggah Berkas Persyaratan</div>
 
-                    <!-- File Dokumen Persyaratan -->
+                    <!-- 1. Peta / Sketsa Lokasi -->
                     <div class="form-group">
-                        <label for="doc_persyaratan" class="form-label">
-                            Dokumen Persyaratan Lengkap <span class="req">*</span>
-                            <a href="{{ route('templates.persyaratan') }}" target="_blank" style="margin-left: 8px; color: var(--clr-blue); text-decoration: none; font-size: 11px; font-weight: 700;">📥 Unduh Template Persyaratan</a>
-                        </label>
+                        <label for="peta_lokasi" class="form-label">1. Peta/sketsa lokasi yang dimohon <span class="req">*</span></label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="doc_persyaratan" name="doc_persyaratan" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar,.doc,.docx" required>
-                            <span class="file-help">Format: PDF, JPG, PNG, DOC/DOCX, ZIP/RAR. Maksimal 10MB.</span>
+                            <input type="file" id="peta_lokasi" name="peta_lokasi" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
                         </div>
-                        @error('doc_persyaratan')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
+                        @error('peta_lokasi')<span class="error-message">{{ $message }}</span>@enderror
+                    </div>
+
+                    <!-- 2. Surat Kuasa -->
+                    <div class="form-group">
+                        <label for="surat_kuasa" class="form-label">2. Surat kuasa (Opsional, apabila dikuasakan)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="surat_kuasa" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png">
+                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                        </div>
+                        @error('surat_kuasa')<span class="error-message">{{ $message }}</span>@enderror
+                    </div>
+
+                    <!-- 3. FC KTP -->
+                    <div class="form-group">
+                        <label for="fc_ktp" class="form-label">3. Fotokopi KTP <span class="req">*</span></label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="fc_ktp" name="fc_ktp" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                        </div>
+                        @error('fc_ktp')<span class="error-message">{{ $message }}</span>@enderror
+                    </div>
+
+                    <!-- 4. FC NPWP -->
+                    <div class="form-group">
+                        <label for="fc_npwp" class="form-label">4. Fotokopi NPWP <span class="req">*</span></label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="fc_npwp" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                        </div>
+                        @error('fc_npwp')<span class="error-message">{{ $message }}</span>@enderror
+                    </div>
+
+                    <!-- 5. Akta Pendirian -->
+                    <div class="form-group">
+                        <label for="fc_akta_pendirian" class="form-label">5. Fotokopi Akta Pendirian & Pengesahan (Opsional, khusus Badan Hukum)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png">
+                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB.</span>
+                        </div>
+                        @error('fc_akta_pendirian')<span class="error-message">{{ $message }}</span>@enderror
+                    </div>
+
+                    <!-- 6. Rencana Penggunaan Tanah -->
+                    <div class="form-group">
+                        <label for="rencana_penggunaan_tanah" class="form-label">6. Rencana Penggunaan & Pemanfaatan Tanah <span class="req">*</span></label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="rencana_penggunaan_tanah" name="rencana_penggunaan_tanah" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB.</span>
+                        </div>
+                        @error('rencana_penggunaan_tanah')<span class="error-message">{{ $message }}</span>@enderror
+                    </div>
+
+                    <!-- 7. Persyaratan Lainnya -->
+                    <div class="form-group">
+                        <label for="persyaratan_lainnya" class="form-label">7. Persyaratan lainnya yang diperlukan (Opsional)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="persyaratan_lainnya" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar">
+                            <span class="file-help">Format: PDF, JPG, PNG, ZIP, RAR. Maks. 10MB.</span>
+                        </div>
+                        @error('persyaratan_lainnya')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
                     <!-- Footer Action Buttons -->

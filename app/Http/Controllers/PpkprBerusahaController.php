@@ -56,13 +56,19 @@ class PpkprBerusahaController extends Controller
             'nama_pemilik_usaha' => 'required|string|max:100',
             'nama_pengaju' => 'required|string|max:100',
             'hubungan_pengaju' => 'required|string|max:100',
-            'doc_persyaratan' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar,doc,docx|max:10240',
+            'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'nib' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'kbli' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'proposal_kegiatan' => 'required|file|mimes:pdf,doc,docx|max:10240',
         ], [
             'nama_pemilik_usaha.required' => 'Nama pemilik usaha wajib diisi.',
             'nama_pengaju.required' => 'Nama pengaju wajib diisi.',
             'hubungan_pengaju.required' => 'Hubungan pengaju wajib diisi.',
-            'doc_persyaratan.required' => 'Dokumen persyaratan wajib diunggah.',
-            'doc_persyaratan.max' => 'Ukuran berkas persyaratan maksimal 10MB.',
         ]);
  
         $data = $request->only([
@@ -76,7 +82,18 @@ class PpkprBerusahaController extends Controller
  
         // Generate nomor registrasi BERUSAHA
         $data['application_number'] = 'BERUSAHA-' . date('Ymd') . '-' . strtoupper(Str::random(5));
-        $data['doc_persyaratan'] = $request->file('doc_persyaratan')->store('berusaha_docs', 'public');
+        
+        $filesToStore = [
+            'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
+            'fc_akta_pendirian', 'rencana_penggunaan_tanah',
+            'nib', 'kbli', 'proposal_kegiatan'
+        ];
+
+        foreach ($filesToStore as $fileKey) {
+            if ($request->hasFile($fileKey)) {
+                $data[$fileKey] = $request->file($fileKey)->store('berusaha_docs', 'public');
+            }
+        }
  
         $app = PpkprBerusahaApplication::create($data);
  
@@ -310,11 +327,28 @@ class PpkprBerusahaController extends Controller
         // Pelaku Usaha mengupload ulang berkas jika tidak sesuai
         if ($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'tidak_sesuai' && $step === 'reupload') {
             $request->validate([
-                'doc_persyaratan' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar,doc,docx|max:10240',
+                'peta_lokasi' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'fc_ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'fc_npwp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+                'rencana_penggunaan_tanah' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+                'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
             ]);
- 
-            $path = $request->file('doc_persyaratan')->store('berusaha_docs', 'public');
-            $application->doc_persyaratan = $path;
+
+            $filesToStore = [
+                'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
+                'fc_akta_pendirian', 'rencana_penggunaan_tanah',
+                'nib', 'kbli', 'proposal_kegiatan'
+            ];
+
+            foreach ($filesToStore as $fileKey) {
+                if ($request->hasFile($fileKey)) {
+                    $application->$fileKey = $request->file($fileKey)->store('berusaha_docs', 'public');
+                }
+            }
             
             // Reset status berkas agar dicek ulang oleh BPN
             $application->bpn_berkas_status = 'menunggu';

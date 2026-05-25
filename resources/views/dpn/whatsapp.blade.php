@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -14,18 +14,18 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --clr-blue:    #1393CC;
-            --clr-blue-dk: #0f7bb0;
-            --clr-blue-lt: #E8F5FB;
-            --clr-yellow:  #F2CC05;
-            --clr-green:   #95B93E;
-            --clr-green-dk:#7fa030;
-            --clr-green-lt:#F0F7E4;
-            --clr-ink:     #0B1420;
-            --clr-mid:     #4B5A6A;
-            --clr-muted:   #8A98A8;
-            --clr-line:    #E3E8EF;
-            --clr-surface: #F6F9FC;
+            --clr-blue:    #218AC9;
+            --clr-blue-dk: #003B64;
+            --clr-blue-lt: #E3F0F9;
+            --clr-yellow:  #FFCB05;
+            --clr-green:   #85C341;
+            --clr-green-dk:#79A73A;
+            --clr-green-lt:#EEF7E2;
+            --clr-ink:     #003B64;
+            --clr-mid:     #2C5272;
+            --clr-muted:   #7A9BB5;
+            --clr-line:    #D6E4EF;
+            --clr-surface: #F0F6FB;
             --clr-white:   #FFFFFF;
             --radius-sm:   6px;
             --radius-md:   10px;
@@ -592,7 +592,7 @@
                                         <!-- Inline SVG QR Code Mock -->
                                         <svg viewBox="0 0 100 100" shape-rendering="crispEdges">
                                             <path fill="#ffffff" d="M0,0h100v100h-100z"/>
-                                            <path fill="#0b1420" d="M0,0h30v30h-30z M70,0h30v30h-30z M0,70h30v30h-30z M10,10h10v10h-10z M80,10h10v10h-10z M10,80h10v10h-10z M35,5h5v5h-5z M45,5h10v5h-10z M60,5h5v15h-5z M40,15h10v5h-10z M35,25h10v5h-10z M55,25h10v5h-10z M90,35h5v10h-5z M75,40h5v10h-5z M85,45h5v10h-5z M95,55h5v5h-5z M80,60h10v5h-10z M85,75h10v5h-10z M70,85h5v10h-5z M90,85h5v5h-5z M45,35h5v25h-5z M35,45h5v5h-5z M55,45h5v5h-5z M60,55h5v10h-5z M35,65h20v5h-20z M40,75h10v5h-10z M55,75h5v10h-5z M35,85h5v10h-5z M45,90h15v5h-15z M65,90h5v5h-5z M65,70h10v5h-10z M70,75h5v5h-5z M65,80h5v10h-5z"/>
+                                            <path fill="#003B64" d="M0,0h30v30h-30z M70,0h30v30h-30z M0,70h30v30h-30z M10,10h10v10h-10z M80,10h10v10h-10z M10,80h10v10h-10z M35,5h5v5h-5z M45,5h10v5h-10z M60,5h5v15h-5z M40,15h10v5h-10z M35,25h10v5h-10z M55,25h10v5h-10z M90,35h5v10h-5z M75,40h5v10h-5z M85,45h5v10h-5z M95,55h5v5h-5z M80,60h10v5h-10z M85,75h10v5h-10z M70,85h5v10h-5z M90,85h5v5h-5z M45,35h5v25h-5z M35,45h5v5h-5z M55,45h5v5h-5z M60,55h5v10h-5z M35,65h20v5h-20z M40,75h10v5h-10z M55,75h5v10h-5z M35,85h5v10h-5z M45,90h15v5h-15z M65,90h5v5h-5z M65,70h10v5h-10z M70,75h5v5h-5z M65,80h5v10h-5z"/>
                                         </svg>
                                     </div>
                                     <p style="font-size: 11px; color: var(--clr-muted); line-height: 1.4;">Scan QR Code di atas menggunakan WhatsApp di ponsel Anda melalui tautan <strong>Perangkat Tertaut</strong>.</p>

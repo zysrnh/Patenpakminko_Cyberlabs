@@ -80,13 +80,17 @@ class PpkprNonBerusahaController extends Controller
             'nama_pemilik_usaha' => 'required|string|max:100',
             'nama_pengaju' => 'required|string|max:100',
             'hubungan_pengaju' => 'required|string|max:100',
-            'doc_persyaratan' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar,doc,docx|max:10240',
+            'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
         ], [
             'nama_pemilik_usaha.required' => 'Nama pemilik usaha wajib diisi.',
             'nama_pengaju.required' => 'Nama pengaju wajib diisi.',
             'hubungan_pengaju.required' => 'Hubungan pengaju / sebagai apa wajib diisi.',
-            'doc_persyaratan.required' => 'Dokumen Persyaratan wajib diunggah.',
-            'doc_persyaratan.max' => 'Ukuran berkas persyaratan maksimal 10MB.',
         ]);
 
         $data = $request->only([
@@ -99,8 +103,16 @@ class PpkprNonBerusahaController extends Controller
         // Generate Nomor Permohonan
         $data['application_number'] = 'PPKPR-NON-' . date('Ymd') . '-' . strtoupper(Str::random(5));
 
-        // Upload Berkas Persyaratan Utama
-        $data['doc_persyaratan'] = $request->file('doc_persyaratan')->store('ppkpr_docs', 'public');
+        $filesToStore = [
+            'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
+            'fc_akta_pendirian', 'rencana_penggunaan_tanah', 'persyaratan_lainnya'
+        ];
+
+        foreach ($filesToStore as $fileKey) {
+            if ($request->hasFile($fileKey)) {
+                $data[$fileKey] = $request->file($fileKey)->store('ppkpr_docs', 'public');
+            }
+        }
 
         $app = PpkprApplication::create($data);
         

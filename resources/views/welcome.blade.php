@@ -16,16 +16,18 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --clr-blue:    #1393CC;
-            --clr-blue-dk: #0f7bb0;
-            --clr-blue-lt: #E8F5FB;
-            --clr-yellow:  #F2CC05;
-            --clr-green:   #95B93E;
-            --clr-ink:     #0B1420;
-            --clr-mid:     #4B5A6A;
-            --clr-muted:   #8A98A8;
-            --clr-line:    #E3E8EF;
-            --clr-surface: #F6F9FC;
+            --clr-blue:    #218AC9;
+            --clr-blue-dk: #003B64;
+            --clr-blue-lt: #E3F0F9;
+            --clr-yellow:  #FFCB05;
+            --clr-brown:   #D37324;
+            --clr-green:   #85C341;
+            --clr-green-dk:#79A73A;
+            --clr-ink:     #003B64;
+            --clr-mid:     #2C5272;
+            --clr-muted:   #7A9BB5;
+            --clr-line:    #D6E4EF;
+            --clr-surface: #F0F6FB;
             --clr-white:   #FFFFFF;
             --radius-sm:   6px;
             --radius-md:   10px;
@@ -135,7 +137,7 @@
         .hero::before {
             content: '';
             position: absolute; inset: 0;
-            background: radial-gradient(ellipse 800px 600px at 70% 50%, rgba(19,147,204,.05) 0%, transparent 70%);
+            background: none;
             pointer-events: none;
         }
         .hero-grid {
@@ -189,8 +191,8 @@
         }
         .vis-main {
             inset: 0; display: flex; flex-direction: column;
-            background: linear-gradient(145deg, #EDF6FB 0%, #F6F9FC 100%);
-            border: 1px solid #D2E8F2;
+            background: var(--clr-surface);
+            border: 1px solid var(--clr-line);
         }
         .vis-header {
             display: flex; align-items: center; justify-content: space-between;
@@ -235,7 +237,7 @@
 
         /* ─── STATS BAND ─────────────────────────────────────── */
         .stats-band {
-            background: var(--clr-ink); padding: 28px 0;
+            background: var(--clr-ink); padding: 32px 0;
         }
         .stats-inner {
             display: grid; grid-template-columns: repeat(4, 1fr);
@@ -310,10 +312,10 @@
         .card-icon svg { width: 22px; height: 22px; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; fill: none; }
         .service-card.blue  .card-icon { background: var(--clr-blue-lt); }
         .service-card.blue  .card-icon svg { stroke: var(--clr-blue); }
-        .service-card.green .card-icon { background: rgba(149,185,62,.12); }
-        .service-card.green .card-icon svg { stroke: var(--clr-green); }
-        .service-card.yellow .card-icon { background: rgba(242,204,5,.12); }
-        .service-card.yellow .card-icon svg { stroke: #B8990A; }
+        .service-card.green .card-icon { background: rgba(133,195,65,.12); }
+        .service-card.green .card-icon svg { stroke: var(--clr-green-dk); }
+        .service-card.yellow .card-icon { background: rgba(255,203,5,.12); }
+        .service-card.yellow .card-icon svg { stroke: #D37324; }
 
         .service-card:hover .card-icon { transform: scale(1.08); }
 
@@ -325,8 +327,8 @@
             font-size: 13px; font-weight: 700; text-decoration: none;
         }
         .service-card.blue  .card-cta { color: var(--clr-blue); }
-        .service-card.green .card-cta { color: var(--clr-green); }
-        .service-card.yellow .card-cta { color: #B8990A; }
+        .service-card.green .card-cta { color: var(--clr-green-dk); }
+        .service-card.yellow .card-cta { color: #D37324; }
         .card-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
         .service-card:hover .card-cta svg { transform: translateX(4px); }
 
@@ -379,17 +381,14 @@
         }
         .cta-band::before {
             content: ''; position: absolute;
-            top: -120px; right: -80px;
-            width: 480px; height: 480px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(19,147,204,.15) 0%, transparent 70%);
+            top: 0; right: 0;
+            width: 4px; height: 100%;
+            background: var(--clr-yellow);
             pointer-events: none;
         }
         .cta-band::after {
-            content: ''; position: absolute;
-            bottom: -100px; left: 15%;
-            width: 320px; height: 320px; border-radius: 50%;
-            background: radial-gradient(circle, rgba(242,204,5,.08) 0%, transparent 70%);
-            pointer-events: none;
+            content: ''; 
+            display: none;
         }
         .cta-inner {
             display: flex; align-items: center; justify-content: space-between; gap: 32px;
@@ -411,7 +410,7 @@
 
         /* ─── FOOTER ─────────────────────────────────────────── */
         .site-footer {
-            background: #0B1420; padding: 72px 0 32px;
+            background: var(--clr-ink); padding: 72px 0 32px;
         }
         .footer-grid {
             display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px;
@@ -483,7 +482,7 @@
         }
         .review-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(19, 147, 204, 0.08);
+            box-shadow: 0 12px 28px rgba(33, 138, 201, 0.10);
             border-color: var(--clr-blue);
         }
         .review-card-stars {
@@ -540,8 +539,8 @@
         }
         .review-card-module {
             display: inline-block;
-            background: rgba(19, 147, 204, 0.06);
-            color: var(--clr-blue-dk);
+            background: rgba(33, 138, 201, 0.08);
+            color: var(--clr-blue);
             font-size: 10px;
             font-weight: 700;
             padding: 2px 8px;
@@ -606,7 +605,7 @@
             <div>
                 <div class="hero-eyebrow">
                     <span class="label-tag">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#1393CC" opacity=".3"/><circle cx="5" cy="5" r="2.5" fill="#1393CC"/></svg>
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#218AC9" opacity=".3"/><circle cx="5" cy="5" r="2.5" fill="#218AC9"/></svg>
                         Portal Pelayanan Terpadu ATR/BPN
                     </span>
                 </div>
@@ -664,27 +663,27 @@
                             <rect width="420" height="240" fill="#F6F9FC"/>
                             <rect width="420" height="240" fill="url(#grid)"/>
                             <!-- Zone polygons -->
-                            <polygon points="40,40 120,30 150,90 100,110 50,95" fill="rgba(19,147,204,.12)" stroke="#1393CC" stroke-width="1.5"/>
-                            <polygon points="160,25 240,20 260,75 200,95 150,70" fill="rgba(149,185,62,.12)" stroke="#95B93E" stroke-width="1.5"/>
-                            <polygon points="100,120 180,110 200,165 140,185 90,165" fill="rgba(242,204,5,.1)" stroke="#F2CC05" stroke-width="1.5"/>
-                            <polygon points="210,90 300,80 330,140 270,160 210,145" fill="rgba(19,147,204,.08)" stroke="#1393CC" stroke-width="1" stroke-dasharray="4,3"/>
-                            <polygon points="280,30 380,25 390,80 340,100 270,75" fill="rgba(149,185,62,.08)" stroke="#95B93E" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="40,40 120,30 150,90 100,110 50,95" fill="rgba(33,138,201,.12)" stroke="#218AC9" stroke-width="1.5"/>
+                            <polygon points="160,25 240,20 260,75 200,95 150,70" fill="rgba(133,195,65,.12)" stroke="#85C341" stroke-width="1.5"/>
+                            <polygon points="100,120 180,110 200,165 140,185 90,165" fill="rgba(255,203,5,.1)" stroke="#FFCB05" stroke-width="1.5"/>
+                            <polygon points="210,90 300,80 330,140 270,160 210,145" fill="rgba(33,138,201,.08)" stroke="#218AC9" stroke-width="1" stroke-dasharray="4,3"/>
+                            <polygon points="280,30 380,25 390,80 340,100 270,75" fill="rgba(133,195,65,.08)" stroke="#85C341" stroke-width="1" stroke-dasharray="4,3"/>
                             <!-- Roads -->
                             <line x1="0" y1="100" x2="420" y2="95" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
                             <line x1="200" y1="0" x2="195" y2="240" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
                             <!-- Points of interest -->
-                            <circle cx="85" cy="70" r="5" fill="#1393CC"/>
-                            <circle cx="85" cy="70" r="10" fill="rgba(19,147,204,.2)"/>
-                            <circle cx="195" cy="50" r="4" fill="#95B93E"/>
-                            <circle cx="195" cy="50" r="8" fill="rgba(149,185,62,.2)"/>
-                            <circle cx="135" cy="145" r="4" fill="#F2CC05"/>
-                            <circle cx="135" cy="145" r="8" fill="rgba(242,204,5,.2)"/>
+                            <circle cx="85" cy="70" r="5" fill="#218AC9"/>
+                            <circle cx="85" cy="70" r="10" fill="rgba(33,138,201,.2)"/>
+                            <circle cx="195" cy="50" r="4" fill="#85C341"/>
+                            <circle cx="195" cy="50" r="8" fill="rgba(133,195,65,.2)"/>
+                            <circle cx="135" cy="145" r="4" fill="#FFCB05"/>
+                            <circle cx="135" cy="145" r="8" fill="rgba(255,203,5,.2)"/>
                             <!-- Legend -->
-                            <rect x="10" y="200" width="10" height="10" rx="2" fill="rgba(19,147,204,.6)"/>
+                            <rect x="10" y="200" width="10" height="10" rx="2" fill="rgba(33,138,201,.6)"/>
                             <text x="25" y="209" font-family="system-ui" font-size="9" fill="#94A3B8">Perumahan</text>
-                            <rect x="90" y="200" width="10" height="10" rx="2" fill="rgba(149,185,62,.6)"/>
+                            <rect x="90" y="200" width="10" height="10" rx="2" fill="rgba(133,195,65,.6)"/>
                             <text x="105" y="209" font-family="system-ui" font-size="9" fill="#94A3B8">Pertanian</text>
-                            <rect x="165" y="200" width="10" height="10" rx="2" fill="rgba(242,204,5,.6)"/>
+                            <rect x="165" y="200" width="10" height="10" rx="2" fill="rgba(255,203,5,.6)"/>
                             <text x="180" y="209" font-family="system-ui" font-size="9" fill="#94A3B8">Komersial</text>
                         </svg>
                     </div>
