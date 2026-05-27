@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PATENPAKMIKO — Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -16,559 +15,650 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --clr-blue:    #218AC9;
-            --clr-blue-dk: #003B64;
-            --clr-blue-lt: #E3F0F9;
-            --clr-yellow:  #FFCB05;
-            --clr-brown:   #D37324;
-            --clr-green:   #85C341;
-            --clr-green-dk:#79A73A;
-            --clr-ink:     #003B64;
-            --clr-mid:     #2C5272;
-            --clr-muted:   #7A9BB5;
-            --clr-line:    #D6E4EF;
-            --clr-surface: #F0F6FB;
-            --clr-white:   #FFFFFF;
-            --radius-sm:   6px;
-            --radius-md:   10px;
-            --radius-lg:   16px;
-            --radius-xl:   24px;
+            --blue:      #218AC9;
+            --blue-dk:   #003B64;
+            --blue-lt:   #E3F0F9;
+            --blue-md:   #B3D4EC;
+            --yellow:    #FFCB05;
+            --yellow-lt: #FFF8D6;
+            --brown:     #D37324;
+            --green:     #85C341;
+            --green-dk:  #79A73A;
+            --green-lt:  #EEF7E2;
+            --ink:       #003B64;
+            --mid:       #2C5272;
+            --muted:     #7A9BB5;
+            --line:      #D6E4EF;
+            --surface:   #F0F6FB;
+            --white:     #FFFFFF;
+            --r-sm:  6px;
+            --r-md:  10px;
+            --r-lg:  16px;
+            --r-xl:  24px;
         }
 
         html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--clr-white);
-            color: var(--clr-ink);
+            background: var(--white);
+            color: var(--ink);
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* ─── UTILITIES ─────────────────────────────────────── */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        @media (min-width: 1024px) { .container { padding: 0 48px; } }
+        .container { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
 
-        .label-tag {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 11px; font-weight: 700; letter-spacing: .1em;
-            text-transform: uppercase; color: var(--clr-blue);
-            background: var(--clr-blue-lt);
-            padding: 5px 12px; border-radius: 100px;
-        }
-
-        /* ─── HEADER ─────────────────────────────────────────── */
+        /* ─── HEADER ──────────────────────────────────────── */
         #site-header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(255,255,255,.92);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--clr-line);
+            background: rgba(255,255,255,.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--line);
             transition: box-shadow .3s;
         }
-        #site-header.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.06); }
-
+        #site-header.scrolled {
+            box-shadow: 0 4px 32px rgba(0,59,100,.07);
+        }
         .header-inner {
             display: flex; align-items: center; justify-content: space-between;
-            height: 72px;
+            height: 70px;
         }
-
-        .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-wrap {
+            display: flex; align-items: center; gap: 12px; text-decoration: none;
+        }
         .logo-icon {
-            width: 40px; height: 40px; border-radius: var(--radius-md);
-            background: var(--clr-blue); display: flex; align-items: center;
-            justify-content: center;
+            width: 38px; height: 38px; border-radius: var(--r-md);
+            background: var(--blue-dk);
+            display: flex; align-items: center; justify-content: center;
         }
-        .logo-icon svg { width: 20px; height: 20px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .logo-text { display: flex; flex-direction: column; line-height: 1; }
-        .logo-text strong { font-size: 16px; font-weight: 800; color: var(--clr-ink); letter-spacing: -.02em; }
-        .logo-text span { font-size: 10px; font-weight: 600; color: var(--clr-muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 3px; }
+        .logo-icon svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .logo-text strong { display: block; font-size: 15px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
+        .logo-text span   { display: block; font-size: 9.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 2px; }
 
-        .site-nav { display: flex; align-items: center; gap: 32px; }
-        .site-nav a {
-            font-size: 13.5px; font-weight: 500; color: var(--clr-mid);
-            text-decoration: none; transition: color .2s;
+        .site-nav {
+            display: flex; align-items: center; gap: 4px;
         }
-        .site-nav a:hover { color: var(--clr-blue); }
-        .nav-divider { width: 1px; height: 20px; background: var(--clr-line); }
+        .nav-link {
+            font-size: 13.5px; font-weight: 500; color: var(--mid);
+            text-decoration: none; padding: 6px 12px;
+            border-radius: var(--r-md); transition: all .18s;
+        }
+        .nav-link:hover { color: var(--blue); background: var(--blue-lt); }
 
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-            font-family: inherit; font-weight: 600; font-size: 13.5px;
-            border-radius: var(--radius-md); cursor: pointer;
-            text-decoration: none; border: none; transition: all .2s;
-        }
-        .btn-primary {
-            background: var(--clr-blue); color: #fff;
-            padding: 10px 20px;
-        }
-        .btn-primary:hover { background: var(--clr-blue-dk); box-shadow: 0 4px 16px rgba(19,147,204,.28); transform: translateY(-1px); }
-        .btn-lg { padding: 14px 28px; font-size: 14.5px; border-radius: var(--radius-md); }
-        .btn-outline-lg {
-            background: transparent; color: var(--clr-blue);
-            border: 1.5px solid var(--clr-blue);
-            padding: 13px 28px; font-size: 14.5px;
-            border-radius: var(--radius-md);
-        }
-        .btn-outline-lg:hover { background: var(--clr-blue); color: #fff; transform: translateY(-1px); }
+        .nav-sep { width: 1px; height: 20px; background: var(--line); margin: 0 8px; }
 
-        .mobile-toggle {
-            display: none; background: none; border: none; cursor: pointer; padding: 8px;
+        .btn-nav {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: var(--blue-dk); color: #fff;
+            padding: 9px 18px; border-radius: var(--r-md);
+            font-family: inherit; font-size: 13px; font-weight: 700;
+            text-decoration: none; border: none; cursor: pointer;
+            transition: all .2s;
         }
+        .btn-nav svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .btn-nav:hover { background: var(--blue); box-shadow: 0 4px 20px rgba(33,138,201,.35); transform: translateY(-1px); }
 
-        @media (max-width: 767px) {
-            .site-nav, .nav-divider, #btn-nav { display: none; }
-            .mobile-toggle { display: flex; flex-direction: column; gap: 5px; }
-            .mobile-toggle span { display: block; width: 22px; height: 2px; background: var(--clr-ink); border-radius: 2px; }
-        }
-
-        /* ─── COLOR BAR ──────────────────────────────────────── */
         .color-bar { height: 3px; display: flex; }
-        .color-bar span { flex: 1; }
-        .color-bar span:nth-child(1) { background: var(--clr-blue); }
-        .color-bar span:nth-child(2) { background: var(--clr-yellow); }
-        .color-bar span:nth-child(3) { background: var(--clr-green); }
+        .color-bar span:nth-child(1) { flex: 3; background: var(--blue-dk); }
+        .color-bar span:nth-child(2) { flex: 1; background: var(--yellow); }
+        .color-bar span:nth-child(3) { flex: 1; background: var(--green); }
 
-        /* ─── HERO ───────────────────────────────────────────── */
+        /* ─── HERO ────────────────────────────────────────── */
         .hero {
-            padding: 96px 0 80px;
-            background: var(--clr-white);
+            padding: 80px 0 0;
+            background: var(--white);
             overflow: hidden;
             position: relative;
         }
-        .hero::before {
-            content: '';
-            position: absolute; inset: 0;
-            background: none;
+        .hero-bg-shape {
+            position: absolute;
+            top: -80px; right: -120px;
+            width: 700px; height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 60% 40%, var(--blue-lt) 0%, transparent 70%);
+            opacity: .55;
             pointer-events: none;
         }
         .hero-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 64px;
+            gap: 72px;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
-        @media (max-width: 1023px) {
-            .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-            .hero-visual { display: none; }
-        }
-
-        .hero-eyebrow { margin-bottom: 20px; }
-        .hero-heading {
-            font-size: clamp(34px, 4vw, 52px);
-            font-weight: 800;
-            line-height: 1.12;
-            letter-spacing: -.03em;
-            color: var(--clr-ink);
-            margin-bottom: 20px;
-        }
-        .hero-heading .accent { color: var(--clr-blue); display: block; }
-        .hero-sub {
-            font-size: 16px; font-weight: 400; line-height: 1.75;
-            color: var(--clr-mid); max-width: 480px; margin-bottom: 36px;
-        }
-        .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-
-        .hero-trust {
-            display: flex; align-items: center; gap: 16px; margin-top: 48px;
-            padding-top: 36px; border-top: 1px solid var(--clr-line);
-        }
-        .trust-item { display: flex; flex-direction: column; }
-        .trust-num {
-            font-size: 24px; font-weight: 800; color: var(--clr-ink);
-            font-family: 'DM Mono', monospace; line-height: 1;
-        }
-        .trust-num .unit { font-size: 16px; color: var(--clr-blue); }
-        .trust-label { font-size: 11px; font-weight: 500; color: var(--clr-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
-        .trust-sep { width: 1px; height: 40px; background: var(--clr-line); }
-
-        /* ─── HERO VISUAL ────────────────────────────────────── */
-        .hero-visual { position: relative; height: 480px; }
-        .vis-card {
-            position: absolute; background: var(--clr-white);
-            border: 1px solid var(--clr-line);
-            border-radius: var(--radius-lg);
-            box-shadow: 0 8px 32px rgba(0,0,0,.08);
-            padding: 20px 24px;
-        }
-        .vis-main {
-            inset: 0; display: flex; flex-direction: column;
-            background: var(--clr-surface);
-            border: 1px solid var(--clr-line);
-        }
-        .vis-header {
-            display: flex; align-items: center; justify-content: space-between;
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 11px; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase; color: var(--blue);
+            background: var(--blue-lt); border: 1px solid var(--blue-md);
+            padding: 5px 12px; border-radius: 100px;
             margin-bottom: 24px;
         }
-        .vis-dots { display: flex; gap: 6px; }
-        .vis-dots span { width: 10px; height: 10px; border-radius: 50%; }
+        .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+        .hero-heading {
+            font-size: clamp(32px, 3.8vw, 50px);
+            font-weight: 800; line-height: 1.1;
+            letter-spacing: -.03em; color: var(--ink);
+            margin-bottom: 20px;
+        }
+        .hero-heading .line-accent {
+            color: var(--blue);
+            display: block;
+            position: relative;
+        }
+        .hero-heading .line-accent::after {
+            content: '';
+            position: absolute; left: 0; bottom: -4px;
+            height: 3px; width: 60%;
+            background: var(--yellow);
+            border-radius: 2px;
+        }
+        .hero-sub {
+            font-size: 15.5px; line-height: 1.8; color: var(--mid);
+            max-width: 460px; margin-bottom: 36px;
+        }
+        .hero-cta-row {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            margin-bottom: 52px;
+        }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--blue-dk); color: #fff;
+            padding: 13px 24px; border-radius: var(--r-md);
+            font-family: inherit; font-size: 14px; font-weight: 700;
+            text-decoration: none; border: none; cursor: pointer;
+            transition: all .22s;
+        }
+        .btn-primary svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .btn-primary:hover { background: var(--blue); box-shadow: 0 6px 24px rgba(33,138,201,.38); transform: translateY(-1px); }
+
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: transparent; color: var(--mid);
+            padding: 12px 22px; border-radius: var(--r-md);
+            font-family: inherit; font-size: 14px; font-weight: 600;
+            text-decoration: none;
+            border: 1.5px solid var(--line);
+            cursor: pointer; transition: all .22s;
+        }
+        .btn-outline:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+
+        /* trust pills */
+        .hero-trust {
+            display: flex; align-items: center; gap: 0;
+            padding: 18px 0;
+            border-top: 1px solid var(--line);
+        }
+        .trust-item { display: flex; flex-direction: column; padding: 0 24px 0 0; }
+        .trust-item:first-child { padding-left: 0; }
+        .trust-num {
+            font-size: 26px; font-weight: 800; color: var(--ink);
+            font-family: 'DM Mono', monospace; line-height: 1;
+            letter-spacing: -.03em;
+        }
+        .trust-num em { font-size: 16px; font-style: normal; color: var(--blue); }
+        .trust-label { font-size: 11px; font-weight: 500; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .07em; }
+        .trust-sep { width: 1px; height: 36px; background: var(--line); margin-right: 24px; flex-shrink: 0; }
+
+        /* ─── HERO VISUAL ─────────────────────────────────── */
+        .hero-visual {
+            position: relative; height: 500px;
+        }
+        /* Main dashboard mockup card */
+        .vis-shell {
+            position: absolute; inset: 0;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--r-xl);
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,59,100,.1), 0 2px 8px rgba(0,0,0,.04);
+        }
+        .vis-chrome {
+            height: 40px;
+            background: var(--white);
+            border-bottom: 1px solid var(--line);
+            display: flex; align-items: center; gap: 8px;
+            padding: 0 16px;
+        }
+        .vis-dots { display: flex; gap: 5px; }
+        .vis-dots span { width: 9px; height: 9px; border-radius: 50%; }
         .vis-dots span:nth-child(1) { background: #FFB3AE; }
         .vis-dots span:nth-child(2) { background: #FFD67A; }
         .vis-dots span:nth-child(3) { background: #76D59F; }
-        .vis-title { font-size: 11px; font-weight: 600; color: var(--clr-mid); letter-spacing: .06em; text-transform: uppercase; }
-        .vis-map {
-            flex: 1; background: var(--clr-white);
-            border-radius: var(--radius-md); border: 1px solid var(--clr-line);
-            overflow: hidden; position: relative;
+        .vis-url {
+            flex: 1; height: 24px; background: var(--surface);
+            border: 1px solid var(--line); border-radius: 6px;
+            font-family: 'DM Mono', monospace; font-size: 10px;
+            color: var(--muted); display: flex; align-items: center;
+            padding: 0 10px;
         }
-        .vis-map svg { width: 100%; height: 100%; }
+        .vis-body {
+            display: grid; grid-template-columns: 56px 1fr; height: calc(100% - 40px);
+        }
+        /* mini sidebar */
+        .vis-sidebar {
+            background: var(--blue-dk);
+            padding: 12px 8px;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .vis-sb-logo {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: var(--blue); margin: 0 auto 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .vis-sb-item {
+            height: 28px; border-radius: 6px;
+            background: rgba(255,255,255,.07);
+            margin-bottom: 2px;
+        }
+        .vis-sb-item.active { background: var(--yellow); }
+        /* mini content */
+        .vis-content {
+            padding: 14px;
+            overflow: hidden;
+        }
+        .vis-welcome {
+            background: var(--blue-dk);
+            border-radius: 10px;
+            height: 70px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--yellow);
+            padding: 12px;
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .vis-wl1 { height: 10px; width: 55%; background: rgba(255,255,255,.4); border-radius: 4px; }
+        .vis-wl2 { height: 8px; width: 75%; background: rgba(255,255,255,.18); border-radius: 4px; }
+        .vis-kpi-row {
+            display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
+            margin-bottom: 12px;
+        }
+        .vis-kpi {
+            background: var(--white); border: 1px solid var(--line);
+            border-radius: 8px; padding: 10px 8px;
+            display: flex; flex-direction: column; gap: 5px;
+        }
+        .vis-kpi-bar { height: 7px; border-radius: 3px; }
+        .vis-kpi-bar.b1 { background: var(--blue-lt); width: 70%; }
+        .vis-kpi-bar.b2 { background: var(--yellow-lt); width: 50%; }
+        .vis-kpi-bar.b3 { background: var(--green-lt); width: 85%; }
+        .vis-kpi-bar.b4 { background: #FFF5F5; width: 30%; }
+        .vis-kpi-num { height: 14px; width: 60%; background: var(--line); border-radius: 4px; }
+        .vis-kpi-lbl { height: 6px; width: 80%; background: var(--surface); border-radius: 3px; }
+        .vis-grid2 { display: grid; grid-template-columns: 1fr 100px; gap: 8px; }
+        .vis-panel {
+            background: var(--white); border: 1px solid var(--line);
+            border-radius: 8px; overflow: hidden;
+        }
+        .vis-ph {
+            height: 28px; background: var(--surface);
+            border-bottom: 1px solid var(--line);
+            display: flex; align-items: center; padding: 0 10px; gap: 6px;
+        }
+        .vis-ph-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-md); }
+        .vis-ph-txt { height: 7px; width: 50%; background: var(--line); border-radius: 3px; }
+        .vis-rows { padding: 8px; display: flex; flex-direction: column; gap: 5px; }
+        .vis-row { height: 22px; border-radius: 5px; background: var(--surface); display: flex; align-items: center; padding: 0 8px; gap: 6px; }
+        .vis-rdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+        .vis-rtxt { height: 6px; flex: 1; background: var(--line); border-radius: 3px; }
+        .vis-rbadge { height: 12px; width: 28px; border-radius: 10px; }
 
-        .vis-badge {
-            bottom: 24px; right: -16px;
-            padding: 14px 18px; border-radius: var(--radius-lg);
-            display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 12px 40px rgba(0,0,0,.12);
+        /* Floating cards */
+        .vis-float {
+            position: absolute;
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--r-lg);
+            box-shadow: 0 12px 40px rgba(0,0,0,.1);
+            padding: 14px 16px;
         }
-        .badge-icon {
-            width: 40px; height: 40px; border-radius: var(--radius-md);
-            background: var(--clr-blue); display: flex; align-items: center; justify-content: center;
+        .vis-float-check {
+            right: -20px; bottom: 80px;
+            display: flex; align-items: center; gap: 10px;
         }
-        .badge-icon svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .badge-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--clr-ink); }
-        .badge-text span { font-size: 11px; color: var(--clr-muted); }
+        .fc-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: var(--green-lt); display: flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .fc-icon svg { width: 17px; height: 17px; fill: none; stroke: var(--green-dk); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .fc-text strong { display: block; font-size: 12px; font-weight: 700; color: var(--ink); }
+        .fc-text span { font-size: 10.5px; color: var(--muted); }
 
-        .vis-pill {
-            top: 32px; right: -24px;
-            padding: 10px 16px; border-radius: 100px;
+        .vis-float-status {
+            top: 40px; right: -28px;
             display: flex; align-items: center; gap: 8px;
-            font-size: 12px; font-weight: 600;
-            box-shadow: 0 6px 20px rgba(0,0,0,.1);
         }
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--clr-green); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+        .status-pulse {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--green); flex-shrink: 0;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(133,195,65,.4)} 50%{opacity:.8;box-shadow:0 0 0 6px rgba(133,195,65,0)} }
+        .vis-float-status span { font-size: 11.5px; font-weight: 600; color: var(--ink); }
 
-        /* ─── STATS BAND ─────────────────────────────────────── */
+        /* ─── STATS BAND ──────────────────────────────────── */
         .stats-band {
-            background: var(--clr-ink); padding: 32px 0;
+            background: var(--blue-dk);
+            padding: 0;
+            margin-top: 72px;
+            position: relative;
+        }
+        .stats-band::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue) 60%, var(--yellow) 80%, var(--green) 100%);
         }
         .stats-inner {
-            display: grid; grid-template-columns: repeat(4, 1fr);
-            gap: 0; divide: var(--clr-line);
+            display: grid; grid-template-columns: repeat(4,1fr);
         }
-        @media (max-width: 767px) { .stats-inner { grid-template-columns: repeat(2,1fr); } }
         .stat-item {
-            padding: 16px 32px; text-align: center;
-            border-right: 1px solid rgba(255,255,255,.1);
+            padding: 32px 28px; text-align: center;
+            border-right: 1px solid rgba(255,255,255,.07);
+            position: relative;
         }
         .stat-item:last-child { border-right: none; }
-        .stat-num {
-            font-size: 28px; font-weight: 800; color: #fff;
-            font-family: 'DM Mono', monospace; line-height: 1;
+        .stat-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: rgba(255,255,255,.08);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px;
         }
-        .stat-num sup { font-size: 16px; color: var(--clr-blue); vertical-align: super; }
-        .stat-num sub { font-size: 14px; color: var(--clr-yellow); }
-        .stat-label { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.45); margin-top: 6px; text-transform: uppercase; letter-spacing: .08em; }
+        .stat-icon svg { width: 17px; height: 17px; fill: none; stroke: var(--blue-md); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+        .stat-num {
+            font-size: 30px; font-weight: 800; color: #fff;
+            font-family: 'DM Mono', monospace; line-height: 1;
+            letter-spacing: -.03em;
+        }
+        .stat-num em { font-style: normal; color: var(--yellow); }
+        .stat-label { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.38); margin-top: 6px; text-transform: uppercase; letter-spacing: .08em; }
 
-        /* ─── SECTION SHARED ─────────────────────────────────── */
+        /* ─── SECTION BASE ────────────────────────────────── */
         .section { padding: 96px 0; }
-        .section-header { text-align: center; max-width: 560px; margin: 0 auto 64px; }
-        .section-title { font-size: clamp(26px, 3vw, 36px); font-weight: 800; letter-spacing: -.03em; color: var(--clr-ink); margin: 12px 0 16px; }
-        .section-sub { font-size: 15px; color: var(--clr-mid); line-height: 1.7; }
+        .section-eyebrow {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 700; letter-spacing: .1em;
+            text-transform: uppercase; color: var(--blue);
+            margin-bottom: 12px;
+        }
+        .section-eyebrow::before {
+            content: ''; display: block;
+            width: 16px; height: 2px;
+            background: var(--blue); border-radius: 2px;
+        }
+        .section-title { font-size: clamp(24px,3vw,34px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); margin-bottom: 14px; }
+        .section-sub  { font-size: 15px; color: var(--mid); line-height: 1.75; max-width: 560px; }
+        .section-header { margin-bottom: 52px; }
+        .section-header-center { text-align: center; }
+        .section-header-center .section-eyebrow { margin-left: auto; margin-right: auto; }
+        .section-header-center .section-sub { margin-left: auto; margin-right: auto; }
 
-        /* ─── SERVICES ───────────────────────────────────────── */
-        .services { background: var(--clr-surface); }
-        .services-grid {
+        /* ─── SERVICES ────────────────────────────────────── */
+        .services { background: var(--surface); }
+        .services-wrap {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
-        @media (max-width: 1023px) { .services-grid { grid-template-columns: repeat(2,1fr); } }
-        @media (max-width: 639px)  { .services-grid { grid-template-columns: 1fr; } }
+        .services-row2 {
+            grid-column: 1 / -1;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
 
-        .service-card {
-            background: var(--clr-white);
-            border: 1px solid var(--clr-line);
-            border-radius: var(--radius-lg);
-            padding: 32px;
+        .svc-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            border-radius: var(--r-lg);
+            padding: 28px 24px;
             text-decoration: none;
             display: flex; flex-direction: column;
-            transition: all .25s;
             position: relative; overflow: hidden;
+            transition: all .25s;
         }
-        .service-card::after {
-            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+        .svc-card::before {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0;
             height: 3px; transform: scaleX(0);
             transform-origin: left; transition: transform .3s;
         }
-        .service-card.blue::after  { background: var(--clr-blue); }
-        .service-card.green::after { background: var(--clr-green); }
-        .service-card.yellow::after { background: var(--clr-yellow); }
+        .svc-card.c-blue::before   { background: var(--blue); }
+        .svc-card.c-green::before  { background: var(--green); }
+        .svc-card.c-yellow::before { background: var(--yellow); }
+        .svc-card.c-orange::before { background: var(--brown); }
 
-        .service-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,.09);
-            border-color: transparent;
-        }
-        .service-card:hover::after { transform: scaleX(1); }
+        .svc-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,59,100,.1); border-color: transparent; }
+        .svc-card:hover::before { transform: scaleX(1); }
 
-        .card-num {
+        .svc-num {
             font-family: 'DM Mono', monospace;
-            font-size: 11px; font-weight: 500; color: var(--clr-muted);
-            letter-spacing: .1em; margin-bottom: 20px;
+            font-size: 10.5px; font-weight: 500; color: var(--muted);
+            letter-spacing: .1em; margin-bottom: 18px;
         }
-        .card-icon {
-            width: 48px; height: 48px; border-radius: var(--radius-md);
+        .svc-icon {
+            width: 46px; height: 46px; border-radius: var(--r-md);
             display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px; transition: all .25s;
+            margin-bottom: 18px; transition: transform .25s;
         }
-        .card-icon svg { width: 22px; height: 22px; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-        .service-card.blue  .card-icon { background: var(--clr-blue-lt); }
-        .service-card.blue  .card-icon svg { stroke: var(--clr-blue); }
-        .service-card.green .card-icon { background: rgba(133,195,65,.12); }
-        .service-card.green .card-icon svg { stroke: var(--clr-green-dk); }
-        .service-card.yellow .card-icon { background: rgba(255,203,5,.12); }
-        .service-card.yellow .card-icon svg { stroke: #D37324; }
+        .svc-card:hover .svc-icon { transform: scale(1.08); }
+        .svc-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+        .svc-card.c-blue   .svc-icon { background: var(--blue-lt); color: var(--blue); }
+        .svc-card.c-green  .svc-icon { background: var(--green-lt); color: var(--green-dk); }
+        .svc-card.c-yellow .svc-icon { background: var(--yellow-lt); color: var(--brown); }
+        .svc-card.c-orange .svc-icon { background: rgba(211,115,36,.1); color: var(--brown); }
 
-        .service-card:hover .card-icon { transform: scale(1.08); }
-
-        .card-title { font-size: 17px; font-weight: 700; color: var(--clr-ink); margin-bottom: 10px; letter-spacing: -.01em; }
-        .card-desc  { font-size: 13.5px; color: var(--clr-mid); line-height: 1.65; flex: 1; margin-bottom: 24px; }
-
-        .card-cta {
-            display: flex; align-items: center; gap: 6px;
-            font-size: 13px; font-weight: 700; text-decoration: none;
+        .svc-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+        .svc-desc  { font-size: 13px; color: var(--mid); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+        .svc-cta {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-size: 13px; font-weight: 700;
         }
-        .service-card.blue  .card-cta { color: var(--clr-blue); }
-        .service-card.green .card-cta { color: var(--clr-green-dk); }
-        .service-card.yellow .card-cta { color: #D37324; }
-        .card-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
-        .service-card:hover .card-cta svg { transform: translateX(4px); }
+        .svc-cta svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+        .svc-card:hover .svc-cta svg { transform: translateX(4px); }
+        .svc-card.c-blue   .svc-cta { color: var(--blue); }
+        .svc-card.c-green  .svc-cta { color: var(--green-dk); }
+        .svc-card.c-yellow .svc-cta { color: var(--brown); }
+        .svc-card.c-orange .svc-cta { color: var(--brown); }
 
-        .services-last-row {
-            grid-column: 1 / -1;
-            display: grid; grid-template-columns: repeat(2,1fr); gap: 20px;
+        /* ─── PROCESS ─────────────────────────────────────── */
+        .process { background: var(--white); }
+        .process-track {
+            display: grid; grid-template-columns: repeat(4,1fr);
+            gap: 0; position: relative;
         }
-        @media (max-width: 639px) { .services-last-row { grid-template-columns: 1fr; } }
-
-        /* ─── PROCESS ────────────────────────────────────────── */
-        .process { background: var(--clr-white); }
-        .process-steps {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
-            position: relative;
-        }
-        .process-steps::before {
+        .process-track::before {
             content: ''; position: absolute;
-            top: 28px; left: calc(12.5% + 24px); right: calc(12.5% + 24px);
-            height: 1px; background: var(--clr-line);
-            z-index: 0;
+            top: 27px; left: calc(12.5% + 20px); right: calc(12.5% + 20px);
+            height: 1px; background: var(--line); z-index: 0;
         }
-        @media (max-width: 767px) {
-            .process-steps { grid-template-columns: 1fr 1fr; }
-            .process-steps::before { display: none; }
-        }
-        @media (max-width: 479px) { .process-steps { grid-template-columns: 1fr; } }
-
-        .process-step { text-align: center; position: relative; z-index: 1; }
-        .step-num {
-            width: 56px; height: 56px; border-radius: 50%;
-            background: var(--clr-white); border: 2px solid var(--clr-line);
+        .process-step { text-align: center; padding: 0 20px; position: relative; z-index: 1; }
+        .step-circle {
+            width: 54px; height: 54px; border-radius: 50%;
+            border: 1.5px solid var(--line);
+            background: var(--white);
             margin: 0 auto 20px;
             display: flex; align-items: center; justify-content: center;
-            font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500;
-            color: var(--clr-muted); transition: all .3s;
+            font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500;
+            color: var(--muted); transition: all .3s;
         }
-        .process-step.active .step-num {
-            background: var(--clr-blue); border-color: var(--clr-blue);
+        .process-step.active .step-circle {
+            background: var(--blue-dk); border-color: var(--blue-dk);
             color: #fff;
-            box-shadow: 0 4px 16px rgba(19,147,204,.3);
+            box-shadow: 0 4px 20px rgba(33,138,201,.3);
         }
-        .step-title { font-size: 15px; font-weight: 700; color: var(--clr-ink); margin-bottom: 8px; }
-        .step-desc { font-size: 13px; color: var(--clr-mid); line-height: 1.6; }
+        .step-title { font-size: 14.5px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+        .step-desc  { font-size: 12.5px; color: var(--mid); line-height: 1.65; }
 
-        /* ─── CTA BAND ───────────────────────────────────────── */
+        /* ─── REVIEWS ─────────────────────────────────────── */
+        .reviews { background: var(--surface); }
+        .reviews-grid {
+            display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
+        }
+        .review-card {
+            background: var(--white); border: 1px solid var(--line);
+            border-radius: var(--r-lg); padding: 24px;
+            display: flex; flex-direction: column; gap: 14px;
+            transition: all .25s;
+        }
+        .review-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 36px rgba(33,138,201,.09);
+            border-color: var(--blue-md);
+        }
+        .review-stars { color: #D69E2E; font-size: 15px; letter-spacing: 1px; }
+        .review-stars span { font-size: 12px; font-weight: 700; color: var(--mid); margin-left: 6px; font-family: 'DM Mono', monospace; }
+        .review-text {
+            font-size: 13.5px; color: var(--mid); line-height: 1.7;
+            font-style: italic; flex: 1;
+        }
+        .review-text::before { content: '\201C'; }
+        .review-text::after  { content: '\201D'; }
+        .review-foot {
+            display: flex; align-items: center; gap: 12px;
+            padding-top: 14px; border-top: 1px solid var(--line);
+        }
+        .review-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--blue-lt); color: var(--blue);
+            font-weight: 700; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
+            text-transform: uppercase; border: 1.5px solid var(--blue-md);
+            flex-shrink: 0;
+        }
+        .review-info strong { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink); }
+        .review-info span   { font-size: 11px; color: var(--muted); }
+        .review-module {
+            display: inline-block; margin-top: 3px;
+            background: var(--blue-lt); color: var(--blue);
+            font-size: 10px; font-weight: 700;
+            padding: 1px 7px; border-radius: 4px;
+            text-transform: uppercase; letter-spacing: .04em;
+        }
+        .reviews-empty {
+            text-align: center; padding: 48px 24px;
+            background: var(--white); border: 1.5px dashed var(--line);
+            border-radius: var(--r-lg); color: var(--muted);
+            font-size: 14px; font-weight: 500;
+            grid-column: 1 / -1;
+        }
+
+        /* ─── CTA BAND ────────────────────────────────────── */
         .cta-band {
-            background: var(--clr-ink);
+            background: var(--blue-dk);
             padding: 72px 0;
             position: relative; overflow: hidden;
         }
-        .cta-band::before {
-            content: ''; position: absolute;
-            top: 0; right: 0;
-            width: 4px; height: 100%;
-            background: var(--clr-yellow);
+        .cta-band::after {
+            content: '';
+            position: absolute; top: 0; left: 0; bottom: 0;
+            width: 4px; background: var(--yellow);
+        }
+        .cta-deco {
+            position: absolute; right: 0; top: 0; bottom: 0;
+            width: 40%;
+            background: radial-gradient(circle at 80% 50%, rgba(33,138,201,.2) 0%, transparent 60%);
             pointer-events: none;
         }
-        .cta-band::after {
-            content: ''; 
-            display: none;
-        }
         .cta-inner {
-            display: flex; align-items: center; justify-content: space-between; gap: 32px;
-            position: relative; z-index: 1;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 40px; position: relative; z-index: 1;
         }
-        @media (max-width: 767px) { .cta-inner { flex-direction: column; text-align: center; } }
-        .cta-heading { font-size: 30px; font-weight: 800; color: #fff; letter-spacing: -.03em; line-height: 1.2; }
-        .cta-sub { font-size: 14.5px; color: rgba(255,255,255,.5); margin-top: 10px; max-width: 400px; }
+        .cta-heading {
+            font-size: clamp(22px, 3vw, 30px); font-weight: 800;
+            color: #fff; letter-spacing: -.03em; margin-bottom: 10px;
+        }
+        .cta-sub { font-size: 14.5px; color: rgba(255,255,255,.5); line-height: 1.65; max-width: 420px; }
         .btn-cta {
-            background: var(--clr-blue); color: #fff;
-            padding: 15px 32px; border-radius: var(--radius-md);
-            font-family: inherit; font-size: 14.5px; font-weight: 700;
-            border: none; cursor: pointer; text-decoration: none;
-            white-space: nowrap; transition: all .2s;
             display: inline-flex; align-items: center; gap: 8px;
+            background: var(--yellow); color: var(--blue-dk);
+            padding: 14px 28px; border-radius: var(--r-md);
+            font-family: inherit; font-size: 14px; font-weight: 800;
+            text-decoration: none; border: none; cursor: pointer;
+            white-space: nowrap; transition: all .22s; flex-shrink: 0;
         }
-        .btn-cta:hover { background: var(--clr-blue-dk); box-shadow: 0 8px 24px rgba(19,147,204,.4); transform: translateY(-1px); }
-        .btn-cta svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .btn-cta svg { width: 15px; height: 15px; fill: none; stroke: var(--blue-dk); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .btn-cta:hover { background: #fff; box-shadow: 0 8px 28px rgba(255,203,5,.35); transform: translateY(-1px); }
 
-        /* ─── FOOTER ─────────────────────────────────────────── */
-        .site-footer {
-            background: var(--clr-ink); padding: 72px 0 32px;
-        }
+        /* ─── FOOTER ──────────────────────────────────────── */
+        .site-footer { background: var(--ink); padding: 72px 0 32px; }
         .footer-grid {
-            display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px;
-            padding-bottom: 56px; border-bottom: 1px solid rgba(255,255,255,.08);
+            display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px;
+            padding-bottom: 52px; border-bottom: 1px solid rgba(255,255,255,.07);
         }
-        @media (max-width: 1023px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
-        @media (max-width: 639px)  { .footer-grid { grid-template-columns: 1fr; } }
-
-        .footer-brand .logo-text strong { color: #fff; }
-        .footer-brand .logo-text span   { color: rgba(255,255,255,.3); }
-        .footer-desc { font-size: 13.5px; color: rgba(255,255,255,.38); line-height: 1.75; margin-top: 16px; }
-        .footer-badges { display: flex; gap: 8px; margin-top: 24px; }
+        .footer-logo-text strong { color: #fff; }
+        .footer-logo-text span   { color: rgba(255,255,255,.3); }
+        .footer-desc { font-size: 13px; color: rgba(255,255,255,.35); line-height: 1.8; margin-top: 16px; }
+        .footer-badges { display: flex; gap: 8px; margin-top: 22px; flex-wrap: wrap; }
         .f-badge {
-            font-size: 10px; font-weight: 700; letter-spacing: .08em;
+            font-size: 9.5px; font-weight: 700; letter-spacing: .08em;
             text-transform: uppercase; padding: 4px 10px;
-            border-radius: 4px; border: 1px solid rgba(255,255,255,.12);
-            color: rgba(255,255,255,.35);
+            border-radius: 4px; border: 1px solid rgba(255,255,255,.1);
+            color: rgba(255,255,255,.3);
         }
+        .f-col-title { font-size: 10.5px; font-weight: 700; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 18px; }
+        .f-links { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+        .f-links a { font-size: 13px; color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s; }
+        .f-links a:hover { color: rgba(255,255,255,.85); }
 
-        .footer-col-title { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 20px; }
-        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-        .footer-links a { font-size: 13.5px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
-        .footer-links a:hover { color: rgba(255,255,255,.9); }
-
-        .footer-contact-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
-        .contact-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); background: rgba(255,255,255,.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .contact-icon svg { width: 15px; height: 15px; stroke: var(--clr-blue); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-        .contact-text { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.55; }
+        .f-contact-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+        .f-contact-icon {
+            width: 30px; height: 30px; border-radius: 7px;
+            background: rgba(255,255,255,.06);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .f-contact-icon svg { width: 13px; height: 13px; fill: none; stroke: var(--blue-md); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+        .f-contact-text { font-size: 12.5px; color: rgba(255,255,255,.38); line-height: 1.6; }
 
         .footer-bottom {
-            padding-top: 28px;
+            padding-top: 24px;
             display: flex; align-items: center; justify-content: space-between; gap: 16px;
             flex-wrap: wrap;
         }
-        .footer-copy { font-size: 12.5px; color: rgba(255,255,255,.25); }
-        .footer-legal { display: flex; gap: 20px; }
-        .footer-legal a { font-size: 12.5px; color: rgba(255,255,255,.25); text-decoration: none; transition: color .2s; }
+        .footer-copy { font-size: 12px; color: rgba(255,255,255,.22); }
+        .footer-legal { display: flex; gap: 18px; }
+        .footer-legal a { font-size: 12px; color: rgba(255,255,255,.22); text-decoration: none; transition: color .18s; }
         .footer-legal a:hover { color: rgba(255,255,255,.6); }
 
-        /* ─── TESTIMONIAL / REVIEWS SECTION ────────────────── */
-        .reviews-section {
-            padding: 80px 0;
-            background: #FFFFFF;
-            border-top: 1px solid var(--clr-line);
-        }
-        .reviews-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 40px;
-        }
-        @media (max-width: 1023px) {
-            .reviews-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 639px) {
-            .reviews-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .review-card {
-            background: #F8FAFC;
-            border: 1.5px solid var(--clr-line);
-            border-radius: var(--radius-lg);
-            padding: 28px;
-            transition: all .3s ease;
-            position: relative;
-        }
-        .review-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(33, 138, 201, 0.10);
-            border-color: var(--clr-blue);
-        }
-        .review-card-stars {
-            color: #D69E2E;
-            font-size: 16px;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-        .review-card-label {
-            font-size: 12.5px;
-            font-weight: 800;
-            color: var(--clr-ink);
-            margin-left: 6px;
-        }
-        .review-card-comment {
-            font-size: 13.5px;
-            color: var(--clr-mid);
-            line-height: 1.6;
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-        .review-card-author {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-top: 1px solid var(--clr-line);
-            padding-top: 16px;
-        }
-        .review-author-avatar {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background: var(--clr-blue-lt);
-            color: var(--clr-blue);
-            font-weight: 700;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-transform: uppercase;
-            border: 1.5px solid var(--clr-blue);
-        }
-        .review-author-info strong {
-            display: block;
-            font-size: 13px;
-            color: var(--clr-ink);
-            font-weight: 700;
-        }
-        .review-author-info span {
-            display: block;
-            font-size: 11px;
-            color: var(--clr-muted);
-            font-weight: 600;
-        }
-        .review-card-module {
-            display: inline-block;
-            background: rgba(33, 138, 201, 0.08);
-            color: var(--clr-blue);
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-top: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
- 
-        /* ─── REVEAL ANIMATION ───────────────────────────────── */
-        .reveal {
-            opacity: 0; transform: translateY(24px);
-            transition: opacity .6s ease, transform .6s ease;
-        }
+        /* ─── ANIMATIONS ──────────────────────────────────── */
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
         .reveal.visible { opacity: 1; transform: translateY(0); }
-        .reveal-delay-1 { transition-delay: .1s; }
-        .reveal-delay-2 { transition-delay: .2s; }
-        .reveal-delay-3 { transition-delay: .3s; }
-        .reveal-delay-4 { transition-delay: .4s; }
+        .reveal-d1 { transition-delay: .1s; }
+        .reveal-d2 { transition-delay: .2s; }
+        .reveal-d3 { transition-delay: .3s; }
+        .reveal-d4 { transition-delay: .4s; }
+
+        /* ─── RESPONSIVE ──────────────────────────────────── */
+        @media (max-width: 1023px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+            .hero-visual { display: none; }
+            .stats-inner { grid-template-columns: repeat(2,1fr); }
+            .stat-item:nth-child(2) { border-right: none; }
+            .services-wrap { grid-template-columns: 1fr 1fr; }
+            .process-track { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .process-track::before { display: none; }
+            .reviews-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+        }
+        @media (max-width: 767px) {
+            .site-nav .nav-link, .nav-sep, .btn-nav { display: none; }
+            .hero { padding-top: 56px; }
+            .stats-inner { grid-template-columns: repeat(2,1fr); }
+            .services-wrap { grid-template-columns: 1fr; }
+            .services-row2 { grid-template-columns: 1fr; }
+            .reviews-grid { grid-template-columns: 1fr; }
+            .cta-inner { flex-direction: column; }
+            .process-track { grid-template-columns: 1fr 1fr; }
+        }
     </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════ HEADER ══ -->
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
 <header id="site-header">
     <div class="container">
         <div class="header-inner">
-            <a href="/" class="logo-wrap" aria-label="PATENPAKMIKO Beranda">
+            <a href="/" class="logo-wrap">
                 <div class="logo-icon">
                     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 </div>
@@ -578,153 +668,211 @@
                 </div>
             </a>
 
-            <nav class="site-nav" aria-label="Navigasi Utama">
-                <a href="#">Beranda</a>
-                <a href="#modul">Layanan</a>
-                <a href="#alur">Alur Proses</a>
-                <a href="#">Panduan</a>
-                <a href="#">Kontak</a>
-                <div class="nav-divider" aria-hidden="true"></div>
-                <a href="{{ route('login') }}" class="btn btn-primary">Masuk Portal</a>
+            <nav class="site-nav">
+                <a href="#" class="nav-link">Beranda</a>
+                <a href="#modul" class="nav-link">Layanan</a>
+                <a href="#alur" class="nav-link">Alur Proses</a>
+                <a href="#ulasan" class="nav-link">Ulasan</a>
+                <div class="nav-sep"></div>
+                <a href="{{ route('login') }}" class="btn-nav">
+                    <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    Masuk Portal
+                </a>
             </nav>
-
-            <button class="mobile-toggle" aria-label="Buka Menu" id="menu-toggle">
-                <span></span><span></span><span></span>
-            </button>
         </div>
     </div>
-    <div class="color-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="color-bar"><span></span><span></span><span></span></div>
 </header>
 
-<!-- ═══════════════════════════════════════ HERO ═══ -->
-<section class="hero" aria-label="Beranda">
+<!-- ══ HERO ════════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="hero-bg-shape"></div>
     <div class="container">
         <div class="hero-grid">
 
-            <!-- Left -->
+            <!-- Copy -->
             <div>
                 <div class="hero-eyebrow">
-                    <span class="label-tag">
-                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true"><circle cx="5" cy="5" r="4" fill="#218AC9" opacity=".3"/><circle cx="5" cy="5" r="2.5" fill="#218AC9"/></svg>
-                        Portal Pelayanan Terpadu ATR/BPN
-                    </span>
+                    <span></span>
+                    Portal Pelayanan Terpadu ATR/BPN
                 </div>
                 <h1 class="hero-heading">
                     Persetujuan Kesesuaian
-                    <span class="accent">Kegiatan Pemanfaatan Ruang</span>
+                    <span class="line-accent">Pemanfaatan Ruang</span>
+                    yang Mudah & Transparan
                 </h1>
                 <p class="hero-sub">
                     Sistem informasi tata ruang dan pertanahan yang profesional, transparan, dan terintegrasi — mempercepat proses pengajuan izin pemanfaatan ruang secara digital.
                 </p>
-                <div class="hero-actions">
-                    <a href="#modul" class="btn btn-primary btn-lg">
+                <div class="hero-cta-row">
+                    <a href="#modul" class="btn-primary">
                         Lihat Modul Layanan
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-                    <a href="#" class="btn-outline-lg btn">Pelajari Panduan</a>
+                    <a href="#alur" class="btn-outline">Pelajari Alur Proses</a>
                 </div>
-
                 <div class="hero-trust">
                     <div class="trust-item">
-                        <span class="trust-num">5<span class="unit">+</span></span>
+                        <span class="trust-num">5<em>+</em></span>
                         <span class="trust-label">Modul Layanan</span>
                     </div>
-                    <div class="trust-sep" aria-hidden="true"></div>
+                    <div class="trust-sep"></div>
                     <div class="trust-item">
-                        <span class="trust-num">100<span class="unit">%</span></span>
-                        <span class="trust-label">Berbasis Digital</span>
+                        <span class="trust-num">100<em>%</em></span>
+                        <span class="trust-label">Digital</span>
                     </div>
-                    <div class="trust-sep" aria-hidden="true"></div>
+                    <div class="trust-sep"></div>
                     <div class="trust-item">
-                        <span class="trust-num">1<span class="unit"> Pintu</span></span>
-                        <span class="trust-label">Integrasi Instansi</span>
+                        <span class="trust-num">1<em> Pintu</em></span>
+                        <span class="trust-label">Integrasi</span>
+                    </div>
+                    <div class="trust-sep"></div>
+                    <div class="trust-item">
+                        <span class="trust-num">98<em>%</em></span>
+                        <span class="trust-label">Kepuasan</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right — Abstract dashboard visual -->
-            <div class="hero-visual" aria-hidden="true">
-                <div class="vis-card vis-main">
-                    <div class="vis-header">
-                        <div class="vis-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <span class="vis-title">Peta Tata Ruang — Gistaru</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--clr-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <!-- Visual Mockup -->
+            <div class="hero-visual">
+                <!-- Floating status pill -->
+                <div class="vis-float vis-float-status">
+                    <span class="status-pulse"></span>
+                    <span>Sistem Online — Aktif 24/7</span>
+                </div>
+
+                <!-- Main Shell -->
+                <div class="vis-shell">
+                    <div class="vis-chrome">
+                        <div class="vis-dots"><span></span><span></span><span></span></div>
+                        <div class="vis-url">patenpakmiko.atrbpn.go.id/dashboard</div>
                     </div>
-                    <div class="vis-map">
-                        <svg viewBox="0 0 420 240" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Grid lines -->
-                            <defs>
-                                <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-                                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#E8EEF4" stroke-width=".5"/>
-                                </pattern>
-                            </defs>
-                            <rect width="420" height="240" fill="#F6F9FC"/>
-                            <rect width="420" height="240" fill="url(#grid)"/>
-                            <!-- Zone polygons -->
-                            <polygon points="40,40 120,30 150,90 100,110 50,95" fill="rgba(33,138,201,.12)" stroke="#218AC9" stroke-width="1.5"/>
-                            <polygon points="160,25 240,20 260,75 200,95 150,70" fill="rgba(133,195,65,.12)" stroke="#85C341" stroke-width="1.5"/>
-                            <polygon points="100,120 180,110 200,165 140,185 90,165" fill="rgba(255,203,5,.1)" stroke="#FFCB05" stroke-width="1.5"/>
-                            <polygon points="210,90 300,80 330,140 270,160 210,145" fill="rgba(33,138,201,.08)" stroke="#218AC9" stroke-width="1" stroke-dasharray="4,3"/>
-                            <polygon points="280,30 380,25 390,80 340,100 270,75" fill="rgba(133,195,65,.08)" stroke="#85C341" stroke-width="1" stroke-dasharray="4,3"/>
-                            <!-- Roads -->
-                            <line x1="0" y1="100" x2="420" y2="95" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
-                            <line x1="200" y1="0" x2="195" y2="240" stroke="#CBD5E1" stroke-width="4" stroke-linecap="round"/>
-                            <!-- Points of interest -->
-                            <circle cx="85" cy="70" r="5" fill="#218AC9"/>
-                            <circle cx="85" cy="70" r="10" fill="rgba(33,138,201,.2)"/>
-                            <circle cx="195" cy="50" r="4" fill="#85C341"/>
-                            <circle cx="195" cy="50" r="8" fill="rgba(133,195,65,.2)"/>
-                            <circle cx="135" cy="145" r="4" fill="#FFCB05"/>
-                            <circle cx="135" cy="145" r="8" fill="rgba(255,203,5,.2)"/>
-                            <!-- Legend -->
-                            <rect x="10" y="200" width="10" height="10" rx="2" fill="rgba(33,138,201,.6)"/>
-                            <text x="25" y="209" font-family="system-ui" font-size="9" fill="#94A3B8">Perumahan</text>
-                            <rect x="90" y="200" width="10" height="10" rx="2" fill="rgba(133,195,65,.6)"/>
-                            <text x="105" y="209" font-family="system-ui" font-size="9" fill="#94A3B8">Pertanian</text>
-                            <rect x="165" y="200" width="10" height="10" rx="2" fill="rgba(255,203,5,.6)"/>
-                            <text x="180" y="209" font-family="system-ui" font-size="9" fill="#94A3B8">Komersial</text>
-                        </svg>
+                    <div class="vis-body">
+                        <!-- Mini sidebar -->
+                        <div class="vis-sidebar">
+                            <div class="vis-sb-logo">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </div>
+                            <div class="vis-sb-item active"></div>
+                            <div class="vis-sb-item"></div>
+                            <div class="vis-sb-item"></div>
+                            <div class="vis-sb-item"></div>
+                            <div class="vis-sb-item"></div>
+                        </div>
+                        <!-- Content area -->
+                        <div class="vis-content">
+                            <div class="vis-welcome">
+                                <div class="vis-wl1"></div>
+                                <div class="vis-wl2"></div>
+                            </div>
+                            <!-- KPI row -->
+                            <div class="vis-kpi-row">
+                                <div class="vis-kpi">
+                                    <div class="vis-kpi-num"></div>
+                                    <div class="vis-kpi-bar b1"></div>
+                                    <div class="vis-kpi-lbl"></div>
+                                </div>
+                                <div class="vis-kpi">
+                                    <div class="vis-kpi-num"></div>
+                                    <div class="vis-kpi-bar b2"></div>
+                                    <div class="vis-kpi-lbl"></div>
+                                </div>
+                                <div class="vis-kpi">
+                                    <div class="vis-kpi-num"></div>
+                                    <div class="vis-kpi-bar b3"></div>
+                                    <div class="vis-kpi-lbl"></div>
+                                </div>
+                                <div class="vis-kpi">
+                                    <div class="vis-kpi-num"></div>
+                                    <div class="vis-kpi-bar b4"></div>
+                                    <div class="vis-kpi-lbl"></div>
+                                </div>
+                            </div>
+                            <!-- Bottom grid -->
+                            <div class="vis-grid2">
+                                <div class="vis-panel">
+                                    <div class="vis-ph">
+                                        <div class="vis-ph-dot"></div>
+                                        <div class="vis-ph-txt"></div>
+                                    </div>
+                                    <div class="vis-rows">
+                                        <div class="vis-row">
+                                            <div class="vis-rdot" style="background:var(--blue)"></div>
+                                            <div class="vis-rtxt"></div>
+                                            <div class="vis-rbadge" style="background:var(--blue-lt)"></div>
+                                        </div>
+                                        <div class="vis-row">
+                                            <div class="vis-rdot" style="background:var(--green)"></div>
+                                            <div class="vis-rtxt" style="width:55%"></div>
+                                            <div class="vis-rbadge" style="background:var(--green-lt)"></div>
+                                        </div>
+                                        <div class="vis-row">
+                                            <div class="vis-rdot" style="background:var(--brown)"></div>
+                                            <div class="vis-rtxt" style="width:70%"></div>
+                                            <div class="vis-rbadge" style="background:var(--yellow-lt)"></div>
+                                        </div>
+                                        <div class="vis-row">
+                                            <div class="vis-rdot" style="background:var(--blue)"></div>
+                                            <div class="vis-rtxt" style="width:45%"></div>
+                                            <div class="vis-rbadge" style="background:var(--blue-lt)"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="vis-panel">
+                                    <div class="vis-ph">
+                                        <div class="vis-ph-dot" style="background:var(--green)"></div>
+                                        <div class="vis-ph-txt"></div>
+                                    </div>
+                                    <div class="vis-rows">
+                                        <div style="height:8px;background:var(--blue-dk);border-radius:5px;margin:8px;"></div>
+                                        <div style="height:6px;background:var(--surface);border-radius:4px;margin:0 8px;width:60%"></div>
+                                        <div style="height:6px;background:var(--green-lt);border-radius:4px;margin:6px 8px 0;width:80%"></div>
+                                        <div style="height:6px;background:var(--yellow-lt);border-radius:4px;margin:4px 8px 0;width:45%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Floating badge -->
-                <div class="vis-card vis-badge">
-                    <div class="badge-icon">
+
+                <!-- Floating verification badge -->
+                <div class="vis-float vis-float-check">
+                    <div class="fc-icon">
                         <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                     </div>
-                    <div class="badge-text">
+                    <div class="fc-text">
                         <strong>Verifikasi Selesai</strong>
-                        <span>PPKPR-2026-0421 · 14:32 WIB</span>
+                        <span>PPKPR-2026-0421 · Disetujui</span>
                     </div>
                 </div>
-                <!-- Online pill -->
-                <div class="vis-card vis-pill">
-                    <span class="status-dot" aria-hidden="true"></span>
-                    <span style="font-size:12px; font-weight:600; color: var(--clr-ink)">Sistem Online</span>
-                </div>
             </div>
+
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ STATS ══ -->
-<div class="stats-band" role="region" aria-label="Statistik Layanan">
+<!-- ══ STATS ════════════════════════════════════════════════ -->
+<div class="stats-band">
     <div class="container">
         <div class="stats-inner">
             <div class="stat-item">
-                <div class="stat-num">12<sub>k</sub></div>
+                <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="stat-num">12<em>k</em></div>
                 <div class="stat-label">Permohonan Diproses</div>
             </div>
             <div class="stat-item">
-                <div class="stat-num">98<sup>%</sup></div>
+                <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                <div class="stat-num">98<em>%</em></div>
                 <div class="stat-label">Tingkat Kepuasan</div>
             </div>
             <div class="stat-item">
-                <div class="stat-num">14</div>
-                <div class="stat-label">Hari Rata-rata Selesai</div>
+                <div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                <div class="stat-num">14<em> hari</em></div>
+                <div class="stat-label">Rata-rata Penyelesaian</div>
             </div>
             <div class="stat-item">
+                <div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
                 <div class="stat-num">5</div>
                 <div class="stat-label">Instansi Terintegrasi</div>
             </div>
@@ -732,157 +880,138 @@
     </div>
 </div>
 
-<!-- ═══════════════════════════════════════ SERVICES ══ -->
-<section id="modul" class="section services" aria-label="Modul Layanan">
+<!-- ══ SERVICES ════════════════════════════════════════════ -->
+<section id="modul" class="section services">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="label-tag">Modul Layanan</span>
+        <div class="section-header section-header-center reveal">
+            <div class="section-eyebrow">Modul Layanan</div>
             <h2 class="section-title">Pilih Jalur Permohonan</h2>
             <p class="section-sub">Setiap modul dirancang untuk peruntukan spesifik. Pilih jalur yang sesuai dengan jenis kegiatan pemanfaatan ruang Anda.</p>
         </div>
 
-        <div class="services-grid">
-            <!-- 1. LAPOR-PA -->
-            <a href="#" class="service-card blue reveal reveal-delay-1">
-                <span class="card-num">01 / KONSULTASI</span>
-                <div class="card-icon">
+        <div class="services-wrap">
+            <!-- Row 1 — 3 cards -->
+            <a href="#" class="svc-card c-blue reveal reveal-d1">
+                <span class="svc-num">01 / KONSULTASI</span>
+                <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
                 </div>
-                <h3 class="card-title">LAPOR-PA</h3>
-                <p class="card-desc">Layanan pelaporan dan penjadwalan audiensi atau konsultasi tatap muka langsung dengan petugas BPN terkait.</p>
-                <span class="card-cta">
-                    Ajukan Jadwal
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </span>
+                <h3 class="svc-title">LAPOLPA</h3>
+                <p class="svc-desc">Pemesanan jadwal konsultasi tatap muka dan pelaporan pemanfaatan ruang secara langsung dengan petugas BPN.</p>
+                <span class="svc-cta">Ajukan Jadwal <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <!-- 2. PPKPR Non Berusaha -->
-            <a href="{{ route('dashboard') }}" class="service-card green reveal reveal-delay-2">
-                <span class="card-num">02 / NON-BISNIS</span>
-                <div class="card-icon">
+            <a href="{{ route('dashboard') }}" class="svc-card c-green reveal reveal-d2">
+                <span class="svc-num">02 / NON-BISNIS</span>
+                <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <h3 class="card-title">PPKPR Non Berusaha</h3>
-                <p class="card-desc">Pengajuan kegiatan non-bisnis dengan validasi dokumen fisik secara luring di loket pelayanan BPN terdekat.</p>
-                <span class="card-cta">
-                    Mulai Proses
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </span>
+                <h3 class="svc-title">PPKPR Non Berusaha</h3>
+                <p class="svc-desc">Untuk rumah tinggal, keagamaan, sosial, fasilitas umum, dan kegiatan non-bisnis. Validasi dokumen di loket BPN terdekat.</p>
+                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <!-- 3. PPKPR Berusaha -->
-            <a href="#" class="service-card yellow reveal reveal-delay-3">
-                <span class="card-num">03 / PERIZINAN BISNIS</span>
-                <div class="card-icon">
+            <a href="{{ route('dashboard') }}" class="svc-card c-yellow reveal reveal-d3">
+                <span class="svc-num">03 / PERIZINAN BISNIS</span>
+                <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 </div>
-                <h3 class="card-title">PPKPR Berusaha</h3>
-                <p class="card-desc">Jalur terpadu perizinan skala bisnis melibatkan BPN, Dinas PU, dan Dinas PTSP (1 Pintu) beserta cek spasial Gistaru.</p>
-                <span class="card-cta">
-                    Mulai Proses
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </span>
-            </a>
-        </div>
-
-        <!-- Row 2 (2 cards centered) -->
-        <div class="services-last-row reveal reveal-delay-2" style="margin-top: 20px;">
-            <!-- 4. Kebijakan -->
-            <a href="#" class="service-card blue">
-                <span class="card-num">04 / KEBIJAKAN KHUSUS</span>
-                <div class="card-icon">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
-                </div>
-                <h3 class="card-title">Kebijakan</h3>
-                <p class="card-desc">Permohonan khusus berbasis kebijakan pemerintah, diproses eksklusif melalui jalur validasi luring dengan pendampingan teknis.</p>
-                <span class="card-cta">
-                    Pelajari Ketentuan
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </span>
+                <h3 class="svc-title">PPKPR Berusaha</h3>
+                <p class="svc-desc">Jalur terpadu perizinan skala bisnis mikro, kecil, menengah, dan besar. Melibatkan BPN, Dinas PU, dan PTSP satu pintu.</p>
+                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <!-- 5. INFORMAL -->
-            <a href="#" class="service-card green">
-                <span class="card-num">05 / AKSES PUBLIK</span>
-                <div class="card-icon">
-                    <svg viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-                </div>
-                <h3 class="card-title">INFORMAL</h3>
-                <p class="card-desc">Akses cepat peta publik. Cek mandiri detail peruntukan dan zonasi wilayah secara interaktif — tanpa login diperlukan.</p>
-                <span class="card-cta">
-                    Akses Peta Publik
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </span>
-            </a>
+            <!-- Row 2 — 2 cards centered -->
+            <div class="services-row2 reveal reveal-d2">
+                <a href="{{ route('dashboard') }}" class="svc-card c-blue">
+                    <span class="svc-num">04 / KEBIJAKAN KHUSUS</span>
+                    <div class="svc-icon">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </div>
+                    <h3 class="svc-title">Kebijakan Khusus</h3>
+                    <p class="svc-desc">Permohonan berbasis kebijakan pemerintah eksklusif, diproses melalui jalur validasi luring dengan pendampingan teknis.</p>
+                    <span class="svc-cta">Pelajari Ketentuan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                </a>
+
+                <a href="{{ route('informal.index') }}" class="svc-card c-green">
+                    <span class="svc-num">05 / AKSES PUBLIK</span>
+                    <div class="svc-icon">
+                        <svg viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+                    </div>
+                    <h3 class="svc-title">Peta Publik (Informal)</h3>
+                    <p class="svc-desc">Akses mandiri peta peruntukan dan zonasi wilayah secara interaktif melalui integrasi Gistaru — tanpa login.</p>
+                    <span class="svc-cta">Buka Peta <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ PROCESS ══ -->
-<section id="alur" class="section process" aria-label="Alur Proses">
+<!-- ══ PROCESS ══════════════════════════════════════════════ -->
+<section id="alur" class="section process">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="label-tag">Alur Pelayanan</span>
+        <div class="section-header section-header-center reveal">
+            <div class="section-eyebrow">Alur Pelayanan</div>
             <h2 class="section-title">Proses Sederhana, Empat Tahap</h2>
-            <p class="section-sub">Setiap permohonan mengikuti alur yang terstandarisasi untuk memastikan ketepatan dan transparansi proses.</p>
+            <p class="section-sub">Setiap permohonan mengikuti alur terstandarisasi untuk memastikan ketepatan, kepatuhan, dan transparansi proses.</p>
         </div>
-        <div class="process-steps">
-            <div class="process-step active reveal reveal-delay-1">
-                <div class="step-num">01</div>
+        <div class="process-track">
+            <div class="process-step active reveal reveal-d1">
+                <div class="step-circle">01</div>
                 <h3 class="step-title">Registrasi Akun</h3>
-                <p class="step-desc">Buat akun terverifikasi menggunakan NIK dan data diri yang valid melalui portal PATENPAKMIKO.</p>
+                <p class="step-desc">Buat akun terverifikasi menggunakan NIK dan data diri valid melalui portal PATENPAKMIKO.</p>
             </div>
-            <div class="process-step reveal reveal-delay-2">
-                <div class="step-num">02</div>
+            <div class="process-step reveal reveal-d2">
+                <div class="step-circle">02</div>
                 <h3 class="step-title">Pilih Modul</h3>
                 <p class="step-desc">Tentukan jenis permohonan sesuai peruntukan dan kriteria kegiatan pemanfaatan ruang Anda.</p>
             </div>
-            <div class="process-step reveal reveal-delay-3">
-                <div class="step-num">03</div>
+            <div class="process-step reveal reveal-d3">
+                <div class="step-circle">03</div>
                 <h3 class="step-title">Unggah Dokumen</h3>
-                <p class="step-desc">Lengkapi berkas persyaratan yang dibutuhkan dan unggah melalui sistem secara digital.</p>
+                <p class="step-desc">Lengkapi dan unggah berkas persyaratan melalui sistem secara digital, kapan saja dan di mana saja.</p>
             </div>
-            <div class="process-step reveal reveal-delay-4">
-                <div class="step-num">04</div>
+            <div class="process-step reveal reveal-d4">
+                <div class="step-circle">04</div>
                 <h3 class="step-title">Terima Persetujuan</h3>
-                <p class="step-desc">Pantau status permohonan secara real-time dan unduh sertifikat persetujuan resmi digital.</p>
+                <p class="step-desc">Pantau status secara real-time dan unduh sertifikat persetujuan resmi digital Anda.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ REVIEWS ══ -->
-<section class="reviews-section" id="ulasan" aria-label="Ulasan Layanan">
+<!-- ══ REVIEWS ══════════════════════════════════════════════ -->
+<section id="ulasan" class="section reviews">
     <div class="container">
-        <div style="text-align: center; max-width: 600px; margin: 0 auto 48px;">
-            <span style="font-size: 11px; font-weight: 700; color: var(--clr-blue); letter-spacing: 0.1em; text-transform: uppercase;">Testimoni Pelaku Usaha</span>
-            <h2 style="font-size: 28px; font-weight: 800; color: var(--clr-ink); margin-top: 8px; letter-spacing: -0.02em;">Apa Kata Mereka Tentang Kami?</h2>
-            <p style="font-size: 14.5px; color: var(--clr-mid); margin-top: 10px;">Ulasan jujur dari para pelaku usaha mengenai kemudahan, transparansi, dan kecepatan proses perizinan PKKPR di PATENPAKMIKO.</p>
+        <div class="section-header section-header-center reveal">
+            <div class="section-eyebrow">Testimoni</div>
+            <h2 class="section-title">Apa Kata Pelaku Usaha?</h2>
+            <p class="section-sub">Ulasan jujur dari para pelaku usaha mengenai kemudahan, transparansi, dan kecepatan proses PKKPR di PATENPAKMIKO.</p>
         </div>
 
         @if($reviews->isEmpty())
-            <div style="text-align: center; padding: 48px; background: #F8FAFC; border: 1.5px dashed var(--clr-line); border-radius: var(--radius-lg); color: var(--clr-muted);">
-                <p style="font-size: 14px; font-weight: 600;">Belum ada ulasan yang dipublikasikan saat ini.</p>
+            <div class="reviews-empty">
+                <p>Belum ada ulasan yang dipublikasikan saat ini.</p>
             </div>
         @else
             <div class="reviews-grid">
                 @foreach($reviews as $review)
                     <div class="review-card reveal">
-                        <div class="review-card-stars">
-                            {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
-                            <span class="review-card-label">{{ $review->rating_label }}</span>
+                        <div>
+                            <div class="review-stars">
+                                {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
+                                <span>{{ number_format($review->rating, 1) }}</span>
+                            </div>
                         </div>
-                        <p class="review-card-comment">
-                            "{{ $review->comment }}"
-                        </p>
-                        <div class="review-card-author">
-                            <div class="review-author-avatar">
+                        <p class="review-text">{{ $review->comment }}</p>
+                        <div class="review-foot">
+                            <div class="review-avatar">
                                 {{ strtoupper(substr($review->user->username ?? 'PU', 0, 2)) }}
                             </div>
-                            <div class="review-author-info">
+                            <div class="review-info">
                                 <strong>{{ $review->user->name ?? $review->user->username }}</strong>
                                 <span>{{ $review->created_at->format('d M Y') }}</span>
-                                <span class="review-card-module">{{ $review->module_label }}</span>
+                                <span class="review-module">{{ $review->module_label }}</span>
                             </div>
                         </div>
                     </div>
@@ -892,36 +1021,33 @@
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ CTA ══ -->
-<section class="cta-band" aria-label="Mulai Permohonan">
+<!-- ══ CTA ══════════════════════════════════════════════════ -->
+<section class="cta-band">
+    <div class="cta-deco"></div>
     <div class="container">
         <div class="cta-inner">
             <div class="reveal">
-                <h2 class="cta-heading">Mulai Permohonan<br>Anda Hari Ini</h2>
-                <p class="cta-sub">Daftarkan diri dan ajukan permohonan PKKPR secara digital. Cepat, transparan, dan terintegrasi.</p>
+                <h2 class="cta-heading">Mulai Permohonan Anda<br>Hari Ini</h2>
+                <p class="cta-sub">Daftarkan diri dan ajukan permohonan PKKPR secara digital. Cepat, transparan, dan terintegrasi dengan sistem nasional ATR/BPN.</p>
             </div>
-            <div class="reveal reveal-delay-2" style="flex-shrink:0">
-                <a href="#" class="btn-cta">
-                    Daftar Sekarang
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
+            <a href="{{ route('login') }}" class="btn-cta reveal reveal-d2">
+                Daftar & Masuk Sekarang
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
         </div>
     </div>
 </section>
 
-<!-- ═══════════════════════════════════════ FOOTER ══ -->
-<footer class="site-footer" aria-label="Footer">
+<!-- ══ FOOTER ═══════════════════════════════════════════════ -->
+<footer class="site-footer">
     <div class="container">
         <div class="footer-grid">
-
-            <!-- Brand -->
-            <div class="footer-brand">
+            <div>
                 <a href="/" class="logo-wrap" style="margin-bottom:0">
                     <div class="logo-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     </div>
-                    <div class="logo-text">
+                    <div class="logo-text footer-logo-text">
                         <strong>PATENPAKMIKO</strong>
                         <span>Badan Pertanahan Nasional</span>
                     </div>
@@ -934,58 +1060,54 @@
                 </div>
             </div>
 
-            <!-- Links 1 -->
             <div>
-                <h4 class="footer-col-title">Sistem</h4>
-                <ul class="footer-links">
+                <h4 class="f-col-title">Sistem</h4>
+                <ul class="f-links">
                     <li><a href="#">Tentang PATENPAKMIKO</a></li>
                     <li><a href="#">Panduan Registrasi</a></li>
                     <li><a href="#">Alur Pelayanan</a></li>
                     <li><a href="#">Integrasi Gistaru</a></li>
-                    <li><a href="#">Pertanyaan Umum (FAQ)</a></li>
+                    <li><a href="#">FAQ</a></li>
                 </ul>
             </div>
 
-            <!-- Links 2 -->
             <div>
-                <h4 class="footer-col-title">Modul</h4>
-                <ul class="footer-links">
-                    <li><a href="#">LAPOR-PA</a></li>
+                <h4 class="f-col-title">Modul</h4>
+                <ul class="f-links">
+                    <li><a href="#">LAPOLPA</a></li>
                     <li><a href="#">PPKPR Non Berusaha</a></li>
                     <li><a href="#">PPKPR Berusaha</a></li>
                     <li><a href="#">Kebijakan Khusus</a></li>
-                    <li><a href="#">Peta Publik (Informal)</a></li>
+                    <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>
             </div>
 
-            <!-- Contact -->
             <div>
-                <h4 class="footer-col-title">Hubungi Kami</h4>
-                <div class="footer-contact-item">
-                    <div class="contact-icon">
+                <h4 class="f-col-title">Hubungi Kami</h4>
+                <div class="f-contact-item">
+                    <div class="f-contact-icon">
                         <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     </div>
-                    <span class="contact-text">Gedung Kementerian ATR/BPN,<br>Jakarta Selatan, DKI Jakarta</span>
+                    <span class="f-contact-text">Gedung Kementerian ATR/BPN,<br>Jakarta Selatan, DKI Jakarta</span>
                 </div>
-                <div class="footer-contact-item">
-                    <div class="contact-icon">
+                <div class="f-contact-item">
+                    <div class="f-contact-icon">
                         <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                     </div>
-                    <span class="contact-text">support@patenpakmiko.go.id</span>
+                    <span class="f-contact-text">support@patenpakmiko.go.id</span>
                 </div>
-                <div class="footer-contact-item">
-                    <div class="contact-icon">
+                <div class="f-contact-item">
+                    <div class="f-contact-icon">
                         <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
                     </div>
-                    <span class="contact-text">1500-164 (Hotline Nasional)</span>
+                    <span class="f-contact-text">1500-164 (Hotline Nasional)</span>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom bar -->
         <div class="footer-bottom">
             <p class="footer-copy">&copy; 2026 Badan Pertanahan Nasional — Kementerian ATR/BPN Republik Indonesia. Seluruh hak cipta dilindungi.</p>
-            <nav class="footer-legal" aria-label="Legal">
+            <nav class="footer-legal">
                 <a href="#">Syarat &amp; Ketentuan</a>
                 <a href="#">Kebijakan Privasi</a>
                 <a href="#">Aksesibilitas</a>
@@ -995,40 +1117,19 @@
 </footer>
 
 <script>
-    // ── Sticky header shadow
     const header = document.getElementById('site-header');
     window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 20);
     }, { passive: true });
 
-    // ── Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
         entries.forEach(e => {
-            if (e.isIntersecting) {
-                e.target.classList.add('visible');
-                io.unobserve(e.target);
-            }
+            if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
         });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => io.observe(el));
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // ── Counter animation for stats
-    function animateCount(el, target, suffix) {
-        let start = 0;
-        const dur = 1800;
-        const step = (ts) => {
-            if (!step.startTime) step.startTime = ts;
-            const p = Math.min((ts - step.startTime) / dur, 1);
-            const ease = 1 - Math.pow(1 - p, 3);
-            const val = Math.round(ease * target);
-            el.setAttribute('data-val', val + suffix);
-            if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-    }
-
-    // Smooth active step highlight on scroll
+    // Step highlight on scroll
     const steps = document.querySelectorAll('.process-step');
     const stepIO = new IntersectionObserver((entries) => {
         entries.forEach(e => {

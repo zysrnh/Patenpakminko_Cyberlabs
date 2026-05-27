@@ -6,6 +6,7 @@ use App\Http\Controllers\KebijakanController;
 use App\Http\Controllers\PpkprBerusahaController;
 use App\Http\Controllers\LapolpaController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\InformalController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
@@ -18,6 +19,9 @@ Route::get('/', function () {
         ->get();
     return view('welcome', compact('reviews'));
 });
+
+// Rute Peta Publik Informal (Tanpa Login)
+Route::get('/informal', [InformalController::class, 'index'])->name('informal.index');
  
 // Rute untuk tamu (Guest Only)
 Route::middleware('guest')->group(function () {
