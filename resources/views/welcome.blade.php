@@ -641,14 +641,26 @@
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
         }
         @media (max-width: 767px) {
-            .site-nav .nav-link, .nav-sep, .btn-nav { display: none; }
-            .hero { padding-top: 56px; }
-            .stats-inner { grid-template-columns: repeat(2,1fr); }
+            .site-nav .nav-link, .nav-sep { display: none; }
+            .btn-nav { padding: 8px 14px; font-size: 12px; }
+            .logo-text span { display: none; }
+            .hero { padding-top: 40px; }
+            .hero-title { font-size: 28px; }
+            .hero-desc { font-size: 14px; }
+            .hero-cta-row { flex-direction: column; width: 100%; gap: 12px; }
+            .hero-cta-row .btn-primary, .hero-cta-row .btn-outline { width: 100%; justify-content: center; }
+            .hero-trust { flex-wrap: wrap; gap: 16px; }
+            .trust-sep { display: none; }
+            .trust-item { padding-right: 12px; }
+            .stats-band { padding: 32px 0; }
+            .stats-inner { grid-template-columns: repeat(2,1fr); gap: 24px 16px; }
             .services-wrap { grid-template-columns: 1fr; }
             .services-row2 { grid-template-columns: 1fr; }
             .reviews-grid { grid-template-columns: 1fr; }
-            .cta-inner { flex-direction: column; }
-            .process-track { grid-template-columns: 1fr 1fr; }
+            .cta-inner { flex-direction: column; text-align: center; gap: 24px; }
+            .process-track { grid-template-columns: 1fr; gap: 24px; }
+            .process-step { padding: 0; border: none !important; }
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
         }
     </style>
 </head>
