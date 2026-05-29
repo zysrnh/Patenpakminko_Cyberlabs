@@ -910,14 +910,14 @@
                 <div>
                     <!-- Data Permohonan -->
                     <div class="card">
-                        <h2 class="card-title">Informasi Identitas Pengajuan</h2>
+                        <h2 class="card-title">Informasi Identitas Pemohon / Pengguna Layanan</h2>
                         <div class="data-list">
                             <div class="data-item">
                                 <span class="data-label">Nama Pemilik Usaha</span>
                                 <span class="data-val">{{ $application->nama_pemilik_usaha }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">Nama Pengaju / Pemohon</span>
+                                <span class="data-label">Nama Pemohon / Pengguna Layanan</span>
                                 <span class="data-val">{{ $application->nama_pengaju }}</span>
                             </div>
                             <div class="data-item">

@@ -976,7 +976,7 @@
                 <!-- Left: Application Details -->
                 <div>
                     <div class="card">
-                        <h2 class="card-title">Informasi Pengajuan Permohonan</h2>
+                        <h2 class="card-title">Informasi Identitas Pemohon / Pengguna Layanan</h2>
                         
                         <ul class="detail-list">
                             <li class="detail-item">
@@ -996,7 +996,7 @@
                                 <span class="detail-val">{{ $application->nama_pemilik_usaha }}</span>
                             </li>
                             <li class="detail-item">
-                                <span class="detail-label">Nama Pemohon (Pengaju)</span>
+                                <span class="detail-label">Nama Pemohon / Pengguna Layanan</span>
                                 <span class="detail-val">{{ $application->nama_pengaju }}</span>
                             </li>
                             <li class="detail-item">

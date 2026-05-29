@@ -421,8 +421,8 @@
                 <form action="{{ route('non-berusaha.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <!-- SECTION 1: DATA IDENTITAS PENGAJUAN -->
-                    <div class="form-section-title">1. Identitas Pengajuan</div>
+                    <!-- SECTION 1: DATA IDENTITAS PEMOHON / PENGGUNA LAYANAN -->
+                    <div class="form-section-title">1. Identitas Pemohon / Pengguna Layanan</div>
 
                     <!-- Nama Pemilik Usaha -->
                     <div class="form-group">
@@ -436,8 +436,8 @@
                     <div class="form-grid-2">
                         <!-- Nama Pengaju -->
                         <div class="form-group">
-                            <label for="nama_pengaju" class="form-label">Nama Pengaju / Pemohon <span class="req">*</span></label>
-                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pengaju" value="{{ old('nama_pengaju', Auth::user()->name ?? Auth::user()->username) }}" required>
+                            <label for="nama_pengaju" class="form-label">Nama Pemohon / Pengguna Layanan <span class="req">*</span></label>
+                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pemohon / pengguna layanan" value="{{ old('nama_pengaju', Auth::user()->name ?? Auth::user()->username) }}" required>
                             @error('nama_pengaju')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
@@ -582,7 +582,7 @@
 
                     <!-- 10. Persyaratan Lainnya -->
                     <div class="form-group">
-                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan <span class="req">*</span></label>
+                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan (Sertifikat HAK / Surat Keterangan Tanah / Akta / bukti atau akta pinjam meminjam atau sewa menyewa) <span class="req">*</span></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="persyaratan_lainnya" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar" required>
                             <span class="file-help">Format: PDF, JPG, PNG, ZIP, RAR. Maks. 10MB.</span>
