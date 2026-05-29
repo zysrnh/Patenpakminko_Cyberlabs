@@ -517,9 +517,9 @@
 
                     <!-- 2. Surat Kuasa -->
                     <div class="form-group">
-                        <label for="surat_kuasa" class="form-label">2. Surat kuasa (Opsional, apabila dikuasakan)</label>
+                        <label for="surat_kuasa" class="form-label">2. Surat kuasa <span class="req">*</span></label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="surat_kuasa" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png">
+                            <input type="file" id="surat_kuasa" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png" required>
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
                         </div>
                         @error('surat_kuasa')<span class="error-message">{{ $message }}</span>@enderror
@@ -547,9 +547,9 @@
 
                     <!-- 5. Akta Pendirian -->
                     <div class="form-group">
-                        <label for="fc_akta_pendirian" class="form-label">5. Fotokopi Akta Pendirian & Pengesahan (Opsional, khusus Badan Hukum)</label>
+                        <label for="fc_akta_pendirian" class="form-label">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum <span class="req">*</span></label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png">
+                            <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB.</span>
                         </div>
                         @error('fc_akta_pendirian')<span class="error-message">{{ $message }}</span>@enderror
@@ -593,6 +593,16 @@
                             <span class="file-help">Format: PDF, DOC, DOCX. Maks. 10MB. (Memuat Latar Belakang, Permodalan, Nilai Proyek, dll)</span>
                         </div>
                         @error('proposal_kegiatan')<span class="error-message">{{ $message }}</span>@enderror
+                    </div>
+
+                    <!-- 10. Persyaratan Lainnya -->
+                    <div class="form-group">
+                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan (Opsional)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="persyaratan_lainnya" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar">
+                            <span class="file-help">Format: PDF, JPG, PNG, ZIP, RAR. Maks. 10MB.</span>
+                        </div>
+                        @error('persyaratan_lainnya')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
  
                     <!-- Footer Action Buttons -->

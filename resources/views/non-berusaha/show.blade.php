@@ -987,9 +987,30 @@
                             </a>
                             @endif
 
+                            @if($application->nib)
+                            <a href="{{ asset('storage/' . $application->nib) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">7. NIB</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
+                            @if($application->kbli)
+                            <a href="{{ asset('storage/' . $application->kbli) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">8. KBLI</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
+                            @if($application->proposal_kegiatan)
+                            <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="doc-item">
+                                <span class="doc-name">9. Proposal Kegiatan</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
+
                             @if($application->persyaratan_lainnya)
                             <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">7. Persyaratan Lainnya</span>
+                                <span class="doc-name">10. Persyaratan Lainnya</span>
                                 <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
                             </a>
                             @endif

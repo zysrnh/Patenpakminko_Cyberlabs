@@ -913,7 +913,7 @@
                             <input type="file" name="peta_lokasi" id="peta_lokasi" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
                         </div>
                         <div class="form-group-v" style="margin-bottom: 8px;">
-                            <label for="surat_kuasa">2. Surat kuasa (Opsional)</label>
+                            <label for="surat_kuasa">2. Surat kuasa</label>
                             <input type="file" name="surat_kuasa" id="surat_kuasa" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
                         </div>
                         <div class="form-group-v" style="margin-bottom: 8px;">
@@ -925,7 +925,7 @@
                             <input type="file" name="fc_npwp" id="fc_npwp" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
                         </div>
                         <div class="form-group-v" style="margin-bottom: 8px;">
-                            <label for="fc_akta_pendirian">5. FC Akta Pendirian (Opsional)</label>
+                            <label for="fc_akta_pendirian">5. FC Akta Pendirian & Pengesahan Badan Hukum</label>
                             <input type="file" name="fc_akta_pendirian" id="fc_akta_pendirian" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
                         </div>
                         <div class="form-group-v" style="margin-bottom: 8px;">
@@ -943,6 +943,10 @@
                         <div class="form-group-v" style="margin-bottom: 12px;">
                             <label for="proposal_kegiatan">9. Proposal Kegiatan</label>
                             <input type="file" name="proposal_kegiatan" id="proposal_kegiatan" class="form-control-v" accept=".pdf,.doc,.docx">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 12px;">
+                            <label for="persyaratan_lainnya">10. Persyaratan Lainnya (Opsional)</label>
+                            <input type="file" name="persyaratan_lainnya" id="persyaratan_lainnya" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar">
                         </div>
                         <button type="submit" class="btn-submit-v" style="background: #C5221F;">Kirim Berkas Perbaikan</button>
                     </form>
@@ -1110,6 +1114,12 @@
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="font-size: 13px; color: var(--clr-mid);">9. Proposal Kegiatan</span>
                                     <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+                                @if($application->persyaratan_lainnya)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">10. Persyaratan Lainnya</span>
+                                    <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="btn-doc">Buka Berkas</a>
                                 </div>
                                 @endif
                             </li>

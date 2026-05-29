@@ -81,12 +81,15 @@ class PpkprNonBerusahaController extends Controller
             'nama_pengaju' => 'required|string|max:100',
             'hubungan_pengaju' => 'required|string|max:100',
             'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'surat_kuasa' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'fc_akta_pendirian' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
+            'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            'persyaratan_lainnya' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
         ], [
             'nama_pemilik_usaha.required' => 'Nama pemilik usaha wajib diisi.',
             'nama_pengaju.required' => 'Nama pengaju wajib diisi.',
@@ -105,7 +108,8 @@ class PpkprNonBerusahaController extends Controller
 
         $filesToStore = [
             'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
-            'fc_akta_pendirian', 'rencana_penggunaan_tanah', 'persyaratan_lainnya'
+            'fc_akta_pendirian', 'rencana_penggunaan_tanah',
+            'nib', 'kbli', 'proposal_kegiatan', 'persyaratan_lainnya'
         ];
 
         $pemilik = Str::slug($data['nama_pemilik_usaha'], '_');

@@ -919,9 +919,30 @@
                                 </div>
                                 @endif
 
+                                @if($application->nib)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">7. NIB</span>
+                                    <a href="{{ asset('storage/' . $application->nib) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->kbli)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">8. KBLI</span>
+                                    <a href="{{ asset('storage/' . $application->kbli) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->proposal_kegiatan)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">9. Proposal Kegiatan</span>
+                                    <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
                                 @if($application->persyaratan_lainnya)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 13px; color: var(--clr-mid);">7. Persyaratan Lainnya</span>
+                                    <span style="font-size: 13px; color: var(--clr-mid);">10. Persyaratan Lainnya</span>
                                     <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="btn-doc">Buka Berkas</a>
                                 </div>
                                 @endif

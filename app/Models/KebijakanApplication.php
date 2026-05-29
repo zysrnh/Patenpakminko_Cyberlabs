@@ -31,6 +31,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'bpn_rapat_date',
     'bpn_rapat_dt',
     'bpn_pertek_document',
+    'nib',
+    'kbli',
+    'proposal_kegiatan',
 ])]
 class KebijakanApplication extends Model
 {
