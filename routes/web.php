@@ -22,6 +22,18 @@ Route::get('/', function () {
 
 // Rute Peta Publik Informal (Tanpa Login)
 Route::get('/informal', [InformalController::class, 'index'])->name('informal.index');
+
+// Rute Publik PTP Form
+Route::get('/permohonan-ptp', [AuthController::class, 'showPtpForm'])->name('ptp.create');
+Route::post('/permohonan-ptp', [AuthController::class, 'storePtpForm'])->name('ptp.store');
+
+// Entrypoint Publik PPKPR Baru (Guest dialihkan ke PTP form secara otomatis di Controller)
+Route::get('/berusaha/baru', [PpkprBerusahaController::class, 'create'])->name('berusaha.create');
+Route::post('/berusaha/baru', [PpkprBerusahaController::class, 'store'])->name('berusaha.store');
+Route::get('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'create'])->name('non-berusaha.create');
+Route::post('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'store'])->name('non-berusaha.store');
+Route::get('/kebijakan/baru', [KebijakanController::class, 'create'])->name('kebijakan.create');
+Route::post('/kebijakan/baru', [KebijakanController::class, 'store'])->name('kebijakan.store');
  
 // Rute untuk tamu (Guest Only)
 Route::middleware('guest')->group(function () {
@@ -50,22 +62,16 @@ Route::middleware('auth')->group(function () {
     
     // PPKPR Non-Berusaha (Pelaku Usaha & Petugas Verifikasi)
     Route::get('/non-berusaha', [PpkprNonBerusahaController::class, 'index'])->name('non-berusaha.index');
-    Route::get('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'create'])->name('non-berusaha.create');
-    Route::post('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'store'])->name('non-berusaha.store');
     Route::get('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'show'])->name('non-berusaha.show');
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
  
     // Kebijakan Khusus (Pelaku Usaha & Petugas Verifikasi)
     Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
-    Route::get('/kebijakan/baru', [KebijakanController::class, 'create'])->name('kebijakan.create');
-    Route::post('/kebijakan/baru', [KebijakanController::class, 'store'])->name('kebijakan.store');
     Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
  
     // PPKPR Berusaha (Pelaku Usaha, BPN, Dinas PU, & Satu Pintu)
     Route::get('/berusaha', [PpkprBerusahaController::class, 'index'])->name('berusaha.index');
-    Route::get('/berusaha/baru', [PpkprBerusahaController::class, 'create'])->name('berusaha.create');
-    Route::post('/berusaha/baru', [PpkprBerusahaController::class, 'store'])->name('berusaha.store');
     Route::get('/berusaha/{id}', [PpkprBerusahaController::class, 'show'])->name('berusaha.show');
     Route::post('/berusaha/{id}/verifikasi', [PpkprBerusahaController::class, 'verify'])->name('berusaha.verify');
     

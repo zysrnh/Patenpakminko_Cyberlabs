@@ -420,4 +420,111 @@ class AuthController extends Controller
         array_unshift($logs, $newLog);
         file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
+
+    /**
+     * Tampilkan form PTP awal untuk tamu/calon pemohon.
+     */
+    public function showPtpForm()
+    {
+        return view('auth.ptp-create');
+    }
+
+    /**
+     * Simpan form PTP awal, generate akun secara otomatis, loginkan, dan simpan session.
+     */
+    public function storePtpForm(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:100',
+            'nik' => 'required|numeric|digits:16',
+            'nib' => 'nullable|numeric|digits_between:9,15',
+            'phone_number' => 'required|string|min:9|max:15',
+            'alamat' => 'required|string|max:500',
+            'bertindak_atas_nama' => 'required|string|max:150',
+            'anggaran_dasar_no' => 'nullable|string|max:100',
+            'anggaran_dasar_tanggal' => 'nullable|date',
+            'jenis_permohonan' => 'required|in:berusaha,non-berusaha,kebijakan,psn,tanah-timbul',
+            'rencana_kegiatan' => 'required|string|max:500',
+            'kbli' => 'nullable|string|max:50',
+            'letak_tanah_jalan' => 'required|string|max:200',
+            'letak_tanah_kelurahan' => 'required|string|max:100',
+            'letak_tanah_kecamatan' => 'required|string|max:100',
+            'luas_tanah' => 'required|numeric|min:1',
+            'status_penguasaan' => 'required|string|max:100',
+            'penggunaan_saat_ini' => 'required|string|max:200',
+        ], [
+            'nama.required' => 'Nama Pemohon wajib diisi.',
+            'nik.required' => 'NIK wajib diisi.',
+            'nik.numeric' => 'NIK harus berupa angka.',
+            'nik.digits' => 'NIK harus terdiri dari 16 digit.',
+            'phone_number.required' => 'Nomor WhatsApp wajib diisi.',
+            'alamat.required' => 'Alamat wajib diisi.',
+            'bertindak_atas_nama.required' => 'Isian "Bertindak untuk dan atas nama" wajib diisi.',
+            'jenis_permohonan.required' => 'Silakan pilih salah satu Jenis Permohonan.',
+            'rencana_kegiatan.required' => 'Rencana Kegiatan wajib diisi.',
+            'letak_tanah_jalan.required' => 'Detail letak tanah (jalan/RT/RW) wajib diisi.',
+            'letak_tanah_kelurahan.required' => 'Kelurahan wajib diisi.',
+            'letak_tanah_kecamatan.required' => 'Kecamatan wajib diisi.',
+            'luas_tanah.required' => 'Luas tanah wajib diisi.',
+            'status_penguasaan.required' => 'Status penguasaan tanah wajib diisi.',
+            'penggunaan_saat_ini.required' => 'Penggunaan tanah saat ini wajib diisi.',
+        ]);
+
+        if (Auth::check()) {
+            $user = Auth::user();
+        } else {
+            // Deteksi jika nomor HP sudah terdaftar
+            $phoneClean = preg_replace('/[^0-9]/', '', $request->phone_number);
+            $user = User::where('phone_number', $phoneClean)->first();
+
+            if (!$user) {
+                // Buat kredensial unik berdasarkan Nama + NIB + NIK
+                $cleanName = strtolower(explode(' ', trim($request->nama))[0]);
+                $cleanName = preg_replace('/[^a-z0-9]/', '', $cleanName);
+                $nibSuffix = $request->nib ? substr($request->nib, -4) : '';
+                $nikSuffix = substr($request->nik, -4);
+                
+                $username = $cleanName . ($nibSuffix ? '_' . $nibSuffix : '') . '_' . $nikSuffix;
+                
+                // Cek keunikan username
+                $baseUsername = $username;
+                $counter = 1;
+                while (User::where('username', $username)->exists()) {
+                    $username = $baseUsername . $counter;
+                    $counter++;
+                }
+
+                // Password adalah NIK
+                $passwordText = $request->nik;
+
+                $user = User::create([
+                    'username' => $username,
+                    'phone_number' => $phoneClean,
+                    'name' => $request->nama,
+                    'address' => $request->alamat,
+                    'password' => Hash::make($passwordText),
+                    'role' => 'pelaku_usaha',
+                ]);
+            }
+
+            Auth::login($user);
+        }
+
+        // Simpan data PTP ke session
+        session(['ptp_form_data' => $request->all()]);
+
+        // Redirect sesuai jenis permohonan
+        $jenis = $request->input('jenis_permohonan');
+        if ($jenis === 'berusaha') {
+            return redirect()->route('berusaha.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Berusaha Anda!');
+        } elseif ($jenis === 'non-berusaha') {
+            return redirect()->route('non-berusaha.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Non-Berusaha Anda!');
+        } elseif ($jenis === 'psn') {
+            return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Proyek Strategis Nasional (PSN) Anda!');
+        } elseif ($jenis === 'tanah-timbul') {
+            return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Tanah Timbul Anda!');
+        } else {
+            return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Kebijakan Anda!');
+        }
+    }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Permohonan Kebijakan Khusus — PATEN PAK MIKO</title>
+    <title>Detail Permohonan {{ $application->service_name }} — PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -620,7 +620,7 @@
  
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">Pelacakan Berkas Kebijakan Khusus</h1>
+                    <h1 class="page-title">Pelacakan Berkas {{ $application->service_name }}</h1>
                 </div>
                 <a href="{{ route('kebijakan.index') }}" class="back-link">
                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -632,7 +632,7 @@
             @if($application->status === 'disetujui' && $application->bpn_pertek_document)
                 <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Unduh Surat Rekomendasi / Pertek Kebijakan Khusus (PDF)
+                    Unduh Surat Rekomendasi / Pertek {{ $application->service_name }} (PDF)
                 </a>
  
                 <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
@@ -872,7 +872,7 @@
                             </li>
                             <li class="detail-item">
                                 <span class="detail-label">Tanggal Pengajuan</span>
-                                <span class="detail-val">{{ $application->created_at->translatedFormat('d F Y, H:i') }} WIB</span>
+                                <span class="detail-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
                             </li>
                             <li class="detail-item" style="display: flex; flex-direction: column; gap: 8px;">
                                 <span class="detail-label" style="border-bottom: 1px solid var(--clr-line); padding-bottom: 8px; margin-bottom: 4px;">Berkas Lampiran Persyaratan</span>

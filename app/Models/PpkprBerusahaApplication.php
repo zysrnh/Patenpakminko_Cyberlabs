@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'kbli',
     'proposal_kegiatan',
     'persyaratan_lainnya',
+    'ptp_data',
 ])]
 class PpkprBerusahaApplication extends Model
 {

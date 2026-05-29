@@ -881,7 +881,7 @@
                         <div style="display:flex;flex-direction:column;gap:6px;">
 
                             <!-- Berusaha -->
-                            <a href="{{ route('login') }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--blue-lt)';this.style.borderColor='var(--blue)'" onmouseout="this.style.background='var(--surface)'">
+                            <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--blue-lt)';this.style.borderColor='var(--blue)'" onmouseout="this.style.background='var(--surface)'">
                                 <div style="width:34px;height:34px;border-radius:8px;background:var(--blue-dk);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                                 </div>
@@ -893,7 +893,7 @@
                             </a>
 
                             <!-- Non Berusaha -->
-                            <a href="{{ route('login') }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--green-lt)'" onmouseout="this.style.background='var(--surface)'">
+                            <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--green-lt)'" onmouseout="this.style.background='var(--surface)'">
                                 <div style="width:34px;height:34px;border-radius:8px;background:var(--green-dk);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                 </div>
@@ -905,40 +905,40 @@
                             </a>
 
                             <!-- Kebijakan -->
-                            <a href="{{ route('login') }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#E8F4FF'" onmouseout="this.style.background='var(--surface)'">
+                            <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#E8F4FF'" onmouseout="this.style.background='var(--surface)'">
                                 <div style="width:34px;height:34px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                 </div>
                                 <div style="flex:1;">
                                     <div style="font-size:13px;font-weight:700;color:var(--ink);">Kebijakan Khusus</div>
-                                    <div style="font-size:11px;color:var(--muted);">PSN, mandat kebijakan pemerintah</div>
+                                    <div style="font-size:11px;color:var(--muted);">Kebijakan penggunaan & pemanfaatan tanah</div>
                                 </div>
                                 <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
                             </a>
 
-                            <!-- PSN - Segera Hadir -->
-                            <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);opacity:.6;">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="var(--muted)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            <!-- PSN -->
+                            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#FFFDF0'" onmouseout="this.style.background='var(--surface)'">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--yellow);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#744210" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--muted);">PSN</div>
-                                    <div style="font-size:11px;color:var(--muted);">Proyek Strategis Nasional</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Proyek Strategis Nasional (PSN)</div>
+                                    <div style="font-size:11px;color:var(--muted);">Proyek pembangunan prioritas nasional</div>
                                 </div>
-                                <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Segera Hadir</span>
-                            </div>
+                                <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                            </a>
 
-                            <!-- Tanah Timbul - Segera Hadir -->
-                            <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);opacity:.6;">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="var(--muted)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <!-- Tanah Timbul -->
+                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--surface)'">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--muted);">Tanah Timbul</div>
-                                    <div style="font-size:11px;color:var(--muted);">Reklamasi & tanah timbul</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Tanah Timbul</div>
+                                    <div style="font-size:11px;color:var(--muted);">Reklamasi & tanah timbul pesisir/sungai</div>
                                 </div>
-                                <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Segera Hadir</span>
-                            </div>
+                                <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                            </a>
 
                         </div>
                     </div>
@@ -1020,7 +1020,7 @@
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <h3 class="svc-title">PPKPR Non Berusaha</h3>
+                <h3 class="svc-title">PKKPR Non Berusaha</h3>
                 <p class="svc-desc">Untuk rumah tinggal, keagamaan, sosial, fasilitas umum, dan kegiatan non-bisnis. Validasi dokumen di loket BPN terdekat.</p>
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
@@ -1030,7 +1030,7 @@
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 </div>
-                <h3 class="svc-title">PPKPR Berusaha</h3>
+                <h3 class="svc-title">PKKPR Berusaha</h3>
                 <p class="svc-desc">Jalur terpadu perizinan skala bisnis mikro, kecil, menengah, dan besar. Melibatkan BPN, Dinas PU, dan PTSP satu pintu.</p>
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Permohonan PPKPR Berusaha — PATEN PAK MIKO</title>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1005,7 +1008,7 @@
                             </li>
                             <li class="detail-item">
                                 <span class="detail-label">Tanggal Pengajuan</span>
-                                <span class="detail-val">{{ $application->created_at->translatedFormat('d F Y, H:i') }} WIB</span>
+                                <span class="detail-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
                             </li>
                             
                             <!-- BPN Info -->
@@ -1314,5 +1317,51 @@
         </div>
     </main>
  
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inisialisasi Tanggal Terbit Satu Pintu (PTSP)
+            const tanggalTerbitInput = document.getElementById('satu_pintu_tanggal_terbit');
+            if (tanggalTerbitInput) {
+                flatpickr(tanggalTerbitInput, {
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "d-m-Y",
+                    locale: "id",
+                    allowInput: true
+                });
+            }
+
+            // Inisialisasi Tanggal Cek Lokasi BPN
+            const cekLokasiInput = document.getElementById('bpn_cek_lokasi_dt');
+            if (cekLokasiInput) {
+                flatpickr(cekLokasiInput, {
+                    enableTime: true,
+                    time_24hr: true,
+                    dateFormat: "Y-m-d H:i",
+                    altInput: true,
+                    altFormat: "d-m-Y H:i",
+                    locale: "id",
+                    allowInput: true
+                });
+            }
+
+            // Inisialisasi Tanggal Rapat BPN
+            const rapatInput = document.getElementById('bpn_rapat_dt');
+            if (rapatInput) {
+                flatpickr(rapatInput, {
+                    enableTime: true,
+                    time_24hr: true,
+                    dateFormat: "Y-m-d H:i",
+                    altInput: true,
+                    altFormat: "d-m-Y H:i",
+                    locale: "id",
+                    allowInput: true
+                });
+            }
+        });
+    </script>
 </body>
 </html>

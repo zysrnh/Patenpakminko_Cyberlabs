@@ -32,14 +32,20 @@ class PpkprBerusahaController extends Controller
         return view('berusaha.index', compact('applications'));
     }
  
-    /**
-     * Tampilkan form pengajuan baru.
-     */
     public function create()
     {
+        if (!Auth::check()) {
+            return redirect()->route('ptp.create')->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
+        }
+
         if (!Auth::user()->isPelakuUsaha()) {
             abort(403, 'Hanya Pelaku Usaha yang dapat membuat pengajuan permohonan.');
         }
+
+        if (!session()->has('ptp_form_data')) {
+            return redirect()->route('ptp.create')->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
+        }
+
         return view('berusaha.create');
     }
  
@@ -48,7 +54,7 @@ class PpkprBerusahaController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::user()->isPelakuUsaha()) {
+        if (!Auth::check() || !Auth::user()->isPelakuUsaha()) {
             abort(403, 'Aksi tidak diizinkan.');
         }
  
@@ -86,6 +92,9 @@ class PpkprBerusahaController extends Controller
         $data['status'] = 'menunggu_bpn';
         $data['bpn_berkas_status'] = 'menunggu';
         $data['bpn_pembayaran_status'] = 'belum_bayar';
+        if (session()->has('ptp_form_data')) {
+            $data['ptp_data'] = json_encode(session('ptp_form_data'));
+        }
  
         // Generate nomor registrasi BERUSAHA
         $data['application_number'] = 'BERUSAHA-' . date('Ymd') . '-' . strtoupper(Str::random(5));
@@ -109,6 +118,7 @@ class PpkprBerusahaController extends Controller
         }
  
         $app = PpkprBerusahaApplication::create($data);
+        session()->forget('ptp_form_data');
  
         // Kirim Notifikasi Awal ke Pelaku Usaha
         $this->sendCustomWhatsappNotification($app, 'submit_berkas');
@@ -470,8 +480,22 @@ class PpkprBerusahaController extends Controller
                 break;
  
             case 'pembayaran_lunas':
-                // Pembayaran Lunas -> Notifikasi ke Pelaku Usaha
-                $message = "Halo {$namaPemohon}, pembayaran untuk permohonan PPKPR Berusaha {$noReg} telah diverifikasi LUNAS oleh BPN. Petugas akan segera menyusun jadwal cek lokasi lapangan. Detail: {$url}";
+                // Pembayaran Lunas -> Blast WA berisi credential login & link dashboard & arahan
+                $usernameVal = $application->user->username;
+                $nikVal = 'NIK Anda';
+                if ($application->ptp_data) {
+                    $ptpObj = json_decode($application->ptp_data, true);
+                    if (!empty($ptpObj['nik'])) {
+                        $nikVal = $ptpObj['nik'];
+                    }
+                }
+                $dashboardUrl = url('/login');
+                $message = "Halo {$namaPemohon},\n\nPembayaran untuk permohonan PPKPR Berusaha {$noReg} telah diverifikasi LUNAS oleh BPN.\n\nBerikut adalah Kredensial Login Akun Anda untuk mengakses dashboard Paten Pak Miko:\n"
+                         . "👤 Username: *{$usernameVal}*\n"
+                         . "🔑 Password: *{$nikVal}*\n\n"
+                         . "Silakan login ke dashboard melalui tautan berikut:\n"
+                         . "🔗 {$dashboardUrl}\n\n"
+                         . "Petugas BPN akan segera menyusun jadwal peninjauan lokasi lapangan. Lacak detail permohonan di: {$url}";
                 $this->executeFonnteSend($pemohonPhone, $message);
                 break;
  

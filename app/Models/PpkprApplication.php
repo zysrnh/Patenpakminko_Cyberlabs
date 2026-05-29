@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'nib',
     'kbli',
     'proposal_kegiatan',
+    'ptp_data',
 ])]
 class PpkprApplication extends Model
 {

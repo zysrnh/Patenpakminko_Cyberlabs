@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'nib',
     'kbli',
     'proposal_kegiatan',
+    'ptp_data',
 ])]
 class KebijakanApplication extends Model
 {
@@ -78,5 +79,23 @@ class KebijakanApplication extends Model
             'ditolak'             => '#E53E3E', // Red
             default               => '#718096', // Grey
         };
+    }
+
+    /**
+     * Nama Layanan Dinamis berdasarkan PTP data.
+     */
+    public function getServiceNameAttribute(): string
+    {
+        if ($this->ptp_data) {
+            $ptp = json_decode($this->ptp_data, true);
+            if (isset($ptp['jenis_permohonan'])) {
+                if ($ptp['jenis_permohonan'] === 'psn') {
+                    return 'Proyek Strategis Nasional (PSN)';
+                } elseif ($ptp['jenis_permohonan'] === 'tanah-timbul') {
+                    return 'Tanah Timbul';
+                }
+            }
+        }
+        return 'Kebijakan Khusus';
     }
 }

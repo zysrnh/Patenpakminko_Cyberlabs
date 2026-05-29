@@ -63,7 +63,10 @@
                 <tbody>
                     @foreach($applications as $app)
                         <tr>
-                            <td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);">{{ $app->application_number }}</span></td>
+                            <td>
+                                <span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);">{{ $app->application_number }}</span>
+                                <div style="font-size:11px;color:var(--muted);margin-top:2px;font-weight:600;">{{ $app->service_name }}</div>
+                            </td>
                             <td>
                                 <div style="font-weight:700;">{{ $app->user->username }}</div>
                                 <div style="font-size:11.5px;color:var(--muted);">{{ $app->user->name ?? '—' }}</div>

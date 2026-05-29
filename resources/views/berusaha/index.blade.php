@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'PPKPR Berusaha — PATEN PAK MIKO')
-@section('page-title', 'PPKPR Berusaha')
+@section('title', 'PKKPR Berusaha — PATEN PAK MIKO')
+@section('page-title', 'PKKPR Berusaha')
 
 @section('content')
 <div class="page-header">
@@ -9,7 +9,7 @@
         <div class="breadcrumb">
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <span>›</span>
-            <span>PPKPR Berusaha</span>
+            <span>PKKPR Berusaha</span>
         </div>
         <h1>
             @if(Auth::user()->isPelakuUsaha())
@@ -35,7 +35,7 @@
             <h3>Belum Ada Permohonan</h3>
             <p>
                 @if(Auth::user()->isPelakuUsaha())
-                    Anda belum mengajukan permohonan PPKPR Berusaha.
+                    Anda belum mengajukan permohonan PKKPR Berusaha.
                 @else
                     Tidak ada antrean berkas yang menunggu verifikasi.
                 @endif

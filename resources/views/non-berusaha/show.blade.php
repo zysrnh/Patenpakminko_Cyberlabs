@@ -934,7 +934,7 @@
                             </div>
                             <div class="data-item">
                                 <span class="data-label">Tanggal Pengajuan Berkas</span>
-                                <span class="data-val">{{ $application->created_at->format('d F Y (H:i)') }}</span>
+                                <span class="data-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
                             </div>
                         </div>
                     </div>

@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pengajuan Kebijakan Khusus — PATEN PAK MIKO</title>
+    @php
+        $jenisPermohonan = session('ptp_form_data.jenis_permohonan', 'kebijakan');
+        $serviceName = 'Kebijakan Khusus';
+        if ($jenisPermohonan === 'psn') {
+            $serviceName = 'Proyek Strategis Nasional (PSN)';
+        } elseif ($jenisPermohonan === 'tanah-timbul') {
+            $serviceName = 'Tanah Timbul';
+        }
+    @endphp
+    <title>Form Pengajuan {{ $serviceName }} — PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -403,7 +412,7 @@
  
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">Permohonan Kebijakan Khusus Baru</h2>
+                    <h2 class="card-title">Permohonan {{ $serviceName }} Baru</h2>
                     <a href="{{ route('kebijakan.index') }}" class="back-link">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                         Kembali
@@ -412,6 +421,21 @@
  
                 <form action="{{ route('kebijakan.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @php
+                        $ptpNama = session('ptp_form_data.nama', '');
+                        $ptpHubungan = session('ptp_form_data.bertindak_atas_nama', '');
+                        
+                        $selectedHubungan = old('hubungan_pengaju');
+                        if (!$selectedHubungan) {
+                            if ($ptpHubungan === 'Diri Sendiri') {
+                                $selectedHubungan = 'Pemilik Usaha / Pengguna Layanan';
+                            } elseif ($ptpHubungan === 'Penerima Kuasa') {
+                                $selectedHubungan = 'Penerima Kuasa';
+                            } elseif ($ptpHubungan) {
+                                $selectedHubungan = 'Lainnya';
+                            }
+                        }
+                    @endphp
  
                     <!-- SECTION 1: DATA IDENTITAS PEMOHON / PENGGUNA LAYANAN -->
                     <div class="form-section-title">1. Identitas Pemohon / Pengguna Layanan</div>
@@ -419,7 +443,7 @@
                     <!-- Nama Pemilik Usaha -->
                     <div class="form-group">
                         <label for="nama_pemilik_usaha" class="form-label">Nama Pemilik Usaha <span class="req">*</span></label>
-                        <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" placeholder="Masukkan nama pemilik usaha" value="{{ old('nama_pemilik_usaha') }}" required>
+                        <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" placeholder="Masukkan nama pemilik usaha" value="{{ old('nama_pemilik_usaha', $ptpNama) }}" required>
                         @error('nama_pemilik_usaha')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
@@ -429,7 +453,7 @@
                         <!-- Nama Pengaju -->
                         <div class="form-group">
                             <label for="nama_pengaju" class="form-label">Nama Pemohon / Pengguna Layanan <span class="req">*</span></label>
-                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pemohon / pengguna layanan" value="{{ old('nama_pengaju', Auth::user()->name ?? Auth::user()->username) }}" required>
+                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pemohon / pengguna layanan" value="{{ old('nama_pengaju', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}" required>
                             @error('nama_pengaju')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
@@ -439,14 +463,14 @@
                         <div class="form-group">
                             <label for="hubungan_pengaju" class="form-label">Hubungan Pengaju (Sebagai Apa) <span class="req">*</span></label>
                             <select id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" required style="background: white; -webkit-appearance: listbox;">
-                                <option value="" disabled {{ old('hubungan_pengaju') ? '' : 'selected' }}>Pilih Hubungan Pengaju</option>
-                                <option value="Pemilik Usaha / Pengguna Layanan" {{ old('hubungan_pengaju') == 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
-                                <option value="Penerima Kuasa" {{ old('hubungan_pengaju') == 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
-                                <option value="Lainnya" {{ old('hubungan_pengaju') == 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
+                                <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pengaju</option>
+                                <option value="Pemilik Usaha / Pengguna Layanan" {{ $selectedHubungan === 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
+                                <option value="Penerima Kuasa" {{ $selectedHubungan === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
+                                <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
                             </select>
                             
-                            <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ old('hubungan_pengaju') == 'Lainnya' ? 'block' : 'none' }}; margin-top: 8px;">
-                                <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan pengaju secara manual (cth: Instansi, PT, Karyawan, dll)" value="{{ old('hubungan_pengaju_lainnya') }}">
+                            <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ $selectedHubungan === 'Lainnya' ? 'block' : 'none' }}; margin-top: 8px;">
+                                <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan pengaju secara manual (cth: Instansi, PT, Karyawan, dll)" value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['PT / Badan Usaha', 'Instansi Pemerintah']) ? $ptpHubungan : '') }}">
                             </div>
 
                             @error('hubungan_pengaju')
