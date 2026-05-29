@@ -172,7 +172,7 @@
     <!-- Document Page -->
     <div class="document-page">
         <h2 class="title">KUMPULAN DOKUMEN PERSYARATAN PERMOHONAN PPKPR NON-BERUSAHA</h2>
-        <p class="subtitle">PORTAL PELAYANAN PATENPAKMIKO</p>
+        <p class="subtitle">PORTAL PELAYANAN PATEN PAK MIKO</p>
 
         <div class="section-header">I. Identitas Pengaju & Usaha</div>
         <table class="form-table">

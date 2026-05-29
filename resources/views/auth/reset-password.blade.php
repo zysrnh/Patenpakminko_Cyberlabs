@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setel Ulang Password — PATENPAKMIKO</title>
+    <title>Setel Ulang Password — PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -195,7 +195,7 @@
                 </svg>
             </div>
             <h1 class="auth-title">Setel Ulang Password</h1>
-            <p class="auth-subtitle">Masukkan password baru Anda untuk akun PATENPAKMIKO.</p>
+            <p class="auth-subtitle">Masukkan password baru Anda untuk akun PATEN PAK MIKO.</p>
         </div>
  
         <div class="auth-body">

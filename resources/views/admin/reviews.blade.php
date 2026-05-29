@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moderasi Ulasan Layanan — PATENPAKMIKO</title>
+    <title>Moderasi Ulasan Layanan � PATEN PAK MIKO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -323,8 +323,8 @@
                         </svg>
                     </div>
                     <div class="logo-text">
-                        <strong>PATENPAKMIKO</strong>
-                        <span>Portal Pelaku Usaha</span>
+                        <strong>PATEN PAK MIKO</strong>
+                        <span>Kantor Pertanahan Sukabumi</span>
                     </div>
                 </a>
  
@@ -352,7 +352,7 @@
             </a>
  
             <div class="page-title-section">
-                <h1 class="page-title">⭐ Moderasi Ulasan Layanan (Admin)</h1>
+                <h1 class="page-title">? Moderasi Ulasan Layanan (Admin)</h1>
                 <p class="page-subtitle">Tinjau, setujui, dan publikasikan ulasan & testimoni yang diajukan pelaku usaha.</p>
             </div>
  
@@ -366,7 +366,7 @@
  
             <!-- Table Card -->
             <div class="card">
-                <h3 class="card-title">📋 Daftar Pengajuan Ulasan</h3>
+                <h3 class="card-title">?? Daftar Pengajuan Ulasan</h3>
  
                 <div class="table-responsive">
                     @if($reviews->isEmpty())
@@ -419,7 +419,7 @@
                                                     <form action="{{ route('admin.reviews.approve', $review->id) }}" method="POST">
                                                         @csrf
                                                         <button type="submit" class="btn-action approve">
-                                                            ✓ Setujui
+                                                            ? Setujui
                                                         </button>
                                                     </form>
                                                 @endif
@@ -427,7 +427,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn-action delete">
-                                                        ✗ Hapus
+                                                        ? Hapus
                                                     </button>
                                                 </form>
                                             </div>

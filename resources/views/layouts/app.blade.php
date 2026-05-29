@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'PATENPAKMIKO')</title>
+    <title>@yield('title', 'PATEN PAK MIKO')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -280,8 +280,8 @@
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
             <div class="sidebar-logo-text">
-                <strong>PATENPAKMIKO</strong>
-                <span>Portal Pelaku Usaha</span>
+                <strong>PATEN PAK MIKO</strong>
+                <span>Kantor Pertanahan Sukabumi</span>
             </div>
         </a>
 
@@ -368,7 +368,7 @@
                 <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
                     <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
-                <span class="topbar-title">@yield('page-title', 'PATENPAKMIKO')</span>
+                <span class="topbar-title">@yield('page-title', 'PATEN PAK MIKO')</span>
             </div>
             <div class="topbar-right">
                 <span class="topbar-date" id="current-date"></span>

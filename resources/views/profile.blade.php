@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Saya — PATENPAKMIKO')
+@section('title', 'Profil Saya — PATEN PAK MIKO')
 @section('page-title', 'Profil Saya')
 
 @section('extra-styles')

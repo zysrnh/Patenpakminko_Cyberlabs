@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrasi WhatsApp Gateway — PATENPAKMIKO</title>
+    <title>Integrasi WhatsApp Gateway � PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,7 +47,7 @@
             padding: 0 24px;
         }
 
-        /* ─── HEADER ─────────────────────────────────────────── */
+        /* --- HEADER ------------------------------------------- */
         header {
             background: var(--clr-white);
             border-bottom: 1px solid var(--clr-line);
@@ -186,7 +186,7 @@
             font-weight: 600;
         }
 
-        /* ─── MAIN CONTENT ───────────────────────────────────── */
+        /* --- MAIN CONTENT ------------------------------------- */
         main {
             padding: 40px 0;
         }
@@ -244,7 +244,7 @@
             border-bottom: 1.5px solid var(--clr-line);
         }
 
-        /* ─── WA GATEWAY QR SECTION ─────────────────────────── */
+        /* --- WA GATEWAY QR SECTION --------------------------- */
         .gateway-status-badge {
             display: inline-flex;
             align-items: center;
@@ -347,7 +347,7 @@
             text-align: right;
         }
 
-        /* ─── TEMPLATE CONFIGURATION ────────────────────────── */
+        /* --- TEMPLATE CONFIGURATION -------------------------- */
         .form-label {
             display: block;
             font-size: 12px;
@@ -417,7 +417,7 @@
             background: #172436;
         }
 
-        /* ─── LOGS LIST ──────────────────────────────────────── */
+        /* --- LOGS LIST ---------------------------------------- */
         .logs-container {
             display: flex;
             flex-direction: column;
@@ -468,8 +468,8 @@
                         </svg>
                     </div>
                     <div class="logo-text">
-                        <strong>PATENPAKMIKO</strong>
-                        <span>Portal Pelaku Usaha</span>
+                        <strong>PATEN PAK MIKO</strong>
+                        <span>Kantor Pertanahan Sukabumi</span>
                     </div>
                 </a>
 

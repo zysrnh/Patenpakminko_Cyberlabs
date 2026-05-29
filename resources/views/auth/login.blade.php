@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk Portal — PATENPAKMIKO</title>
+    <title>Masuk Portal — PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -325,7 +325,7 @@
                 </svg>
             </div>
             <h1 class="auth-title">Masuk Portal</h1>
-            <p class="auth-subtitle">Gunakan kredensial akun Anda untuk mengakses sistem PATENPAKMIKO.</p>
+            <p class="auth-subtitle">Gunakan kredensial akun Anda untuk mengakses sistem PATEN PAK MIKO.</p>
         </div>
 
         <div class="auth-body">

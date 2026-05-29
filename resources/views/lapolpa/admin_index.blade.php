@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin LAPOLPA — PATENPAKMIKO</title>
+    <title>Dashboard Admin LAPOLPA � PATEN PAK MIKO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -333,8 +333,8 @@
                         </svg>
                     </div>
                     <div class="logo-text">
-                        <strong>PATENPAKMIKO</strong>
-                        <span>Portal Pelaku Usaha</span>
+                        <strong>PATEN PAK MIKO</strong>
+                        <span>Kantor Pertanahan Sukabumi</span>
                     </div>
                 </a>
  
@@ -362,7 +362,7 @@
             </a>
  
             <div class="page-title-section">
-                <h1 class="page-title">⚙️ Pengelolaan Booking LAPOLPA (Admin)</h1>
+                <h1 class="page-title">?? Pengelolaan Booking LAPOLPA (Admin)</h1>
                 <p class="page-subtitle">Kelola dan update status pendaftaran pelaporan pelaku usaha secara real-time.</p>
             </div>
  
@@ -392,7 +392,7 @@
  
             <!-- Table Card -->
             <div class="card">
-                <h3 class="card-title">📋 Daftar Pendaftar LAPOLPA</h3>
+                <h3 class="card-title">?? Daftar Pendaftar LAPOLPA</h3>
  
                 <div class="table-responsive">
                     @if($bookings->isEmpty())
@@ -423,7 +423,7 @@
                                         </td>
                                         <td>
                                             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->whatsapp_number) }}" target="_blank" style="color: var(--clr-accent); text-decoration: none; font-weight: 600;">
-                                                {{ $booking->whatsapp_number }} ↗
+                                                {{ $booking->whatsapp_number }} ?
                                             </a>
                                         </td>
                                         <td>{{ $booking->formatted_date }}</td>

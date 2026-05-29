@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pelaku Usaha — PATENPAKMIKO</title>
+    <title>Dashboard Pelaku Usaha — PATEN PAK MIKO</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -757,13 +757,13 @@
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
             <div class="sidebar-logo-text">
-                <strong>PATENPAKMIKO</strong>
+                <strong>PATEN PAK MIKO</strong>
                 <span>
-                    @if(Auth::user()->isPelakuUsaha()) Portal Pelaku Usaha
+                    @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan Sukabumi
                     @elseif(Auth::user()->isBpn()) Portal Admin BPN
                     @elseif(Auth::user()->isDinasPu()) Portal Dinas PU
                     @elseif(Auth::user()->isSatuPintu()) Portal Satu Pintu
-                    @elseif(Auth::user()->isDpn()) Portal Admin Pusat
+                    @elseif(Auth::user()->isDpn()) Kantor Pertanahan Sukabumi
                     @else Portal Manajemen @endif
                 </span>
             </div>

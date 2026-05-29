@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -147,8 +147,8 @@
 
     <!-- Action Bar (Hidden when print) -->
     <div class="action-bar">
-        <a href="javascript:history.back()" class="btn-back">← Kembali ke Form</a>
-        <button onclick="window.print()" class="btn-print">🖨️ Cetak / Simpan PDF</button>
+        <a href="javascript:history.back()" class="btn-back">? Kembali ke Form</a>
+        <button onclick="window.print()" class="btn-print">??? Cetak / Simpan PDF</button>
     </div>
 
     <!-- Document Page -->
@@ -206,7 +206,7 @@
         </table>
 
         <p class="text" style="text-indent: 30px;">
-            Secara khusus, dengan surat ini Pihak Kesatu memberikan kuasa penuh kepada Pihak Kedua untuk bertindak atas nama Pihak Kesatu dalam melakukan pengurusan pengajuan berkas permohonan Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKPR) Non-Berusaha pada sistem portal <strong>PATENPAKMIKO</strong>.
+            Secara khusus, dengan surat ini Pihak Kesatu memberikan kuasa penuh kepada Pihak Kedua untuk bertindak atas nama Pihak Kesatu dalam melakukan pengurusan pengajuan berkas permohonan Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKPR) Non-Berusaha pada sistem portal <strong>PATEN PAK MIKO</strong>.
         </p>
 
         <p class="text" style="text-indent: 30px; margin-top: 10px;">

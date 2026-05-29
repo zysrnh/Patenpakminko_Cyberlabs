@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PATENPAKMIKO — Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang</title>
+    <title>PATEN PAK MIKO — Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -675,8 +675,8 @@
                     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                 </div>
                 <div class="logo-text">
-                    <strong>PATENPAKMIKO</strong>
-                    <span>Badan Pertanahan Nasional</span>
+                    <strong>PATEN PAK MIKO</strong>
+                    <span>Kantor Pertanahan Sukabumi</span>
                 </div>
             </a>
 
@@ -971,7 +971,7 @@
             <div class="process-step active reveal reveal-d1">
                 <div class="step-circle">01</div>
                 <h3 class="step-title">Registrasi Akun</h3>
-                <p class="step-desc">Buat akun terverifikasi menggunakan NIK dan data diri valid melalui portal PATENPAKMIKO.</p>
+                <p class="step-desc">Buat akun terverifikasi menggunakan NIK dan data diri valid melalui portal PATEN PAK MIKO.</p>
             </div>
             <div class="process-step reveal reveal-d2">
                 <div class="step-circle">02</div>
@@ -998,7 +998,7 @@
         <div class="section-header section-header-center reveal">
             <div class="section-eyebrow">Testimoni</div>
             <h2 class="section-title">Apa Kata Pelaku Usaha?</h2>
-            <p class="section-sub">Ulasan jujur dari para pelaku usaha mengenai kemudahan, transparansi, dan kecepatan proses PKKPR di PATENPAKMIKO.</p>
+            <p class="section-sub">Ulasan jujur dari para pelaku usaha mengenai kemudahan, transparansi, dan kecepatan proses PKKPR di PATEN PAK MIKO.</p>
         </div>
 
         @if($reviews->isEmpty())
@@ -1060,8 +1060,8 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     </div>
                     <div class="logo-text footer-logo-text">
-                        <strong>PATENPAKMIKO</strong>
-                        <span>Badan Pertanahan Nasional</span>
+                        <strong>PATEN PAK MIKO</strong>
+                        <span>Kantor Pertanahan Sukabumi</span>
                     </div>
                 </a>
                 <p class="footer-desc">Sistem Pelayanan Terpadu & Terintegrasi Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang, dedikasi untuk efisiensi birokrasi dan transparansi publik.</p>
@@ -1075,7 +1075,7 @@
             <div>
                 <h4 class="f-col-title">Sistem</h4>
                 <ul class="f-links">
-                    <li><a href="#">Tentang PATENPAKMIKO</a></li>
+                    <li><a href="#">Tentang PATEN PAK MIKO</a></li>
                     <li><a href="#">Panduan Registrasi</a></li>
                     <li><a href="#">Alur Pelayanan</a></li>
                     <li><a href="#">Integrasi Gistaru</a></li>

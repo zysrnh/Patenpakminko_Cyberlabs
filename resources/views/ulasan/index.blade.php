@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Ulasan Layanan — PATENPAKMIKO')
+@section('title', 'Ulasan Layanan — PATEN PAK MIKO')
 @section('page-title', 'Ulasan Layanan')
 
 @section('extra-styles')
@@ -54,7 +54,7 @@
                 <div class="form-group">
                     <label class="form-label" for="module_type">Layanan Yang Diulas</label>
                     <select name="module_type" id="module_type" class="form-control" required>
-                        <option value="umum">Layanan Umum / Portal PATENPAKMIKO</option>
+                        <option value="umum">Layanan Umum / Portal PATEN PAK MIKO</option>
                         <option value="lapolpa">LAPOLPA (Layanan Pelaporan)</option>
                         <option value="berusaha">PPKPR Berusaha</option>
                         <option value="non_berusaha">PPKPR Non-Berusaha</option>
