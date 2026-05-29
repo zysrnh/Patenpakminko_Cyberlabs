@@ -53,6 +53,9 @@
                         <th>Pemohon</th>
                         <th>No. WA</th>
                         <th>Tgl Pengajuan</th>
+                        @if(!Auth::user()->isPelakuUsaha())
+                        <th>SLA (Pengendalian)</th>
+                        @endif
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -66,7 +69,34 @@
                                 <div style="font-size:11.5px;color:var(--muted);">{{ $app->user->name ?? '—' }}</div>
                             </td>
                             <td style="color:var(--mid);">{{ $app->user->phone_number }}</td>
-                            <td style="color:var(--mid);">{{ $app->created_at->format('d/m/Y') }}</td>
+                            <td style="color:var(--mid);">{{ $app->created_at->format('d-m-Y') }}</td>
+                            @if(!Auth::user()->isPelakuUsaha())
+                                @php
+                                    // Hitung umur berkas jika belum selesai
+                                    $isSelesai = in_array($app->status, ['disetujui', 'ditolak', 'terbit_pkpr']);
+                                    $hari = $isSelesai ? (int)$app->created_at->diffInDays($app->updated_at) : (int)$app->created_at->diffInDays(now());
+                                    $sisaHari = max(0, 10 - $hari);
+                                    
+                                    if($hari <= 8) {
+                                        $warnaSla = '#16A34A'; // Hijau (Aman)
+                                    } elseif($hari > 8 && $hari <= 10) {
+                                        $warnaSla = '#D97706'; // Kuning (Peringatan)
+                                    } else {
+                                        $warnaSla = '#DC2626'; // Merah (Terlambat/Batas Waktu)
+                                    }
+                                @endphp
+                                <td>
+                                    <span class="badge" style="background-color:{{ $warnaSla }};color:#fff; border:none; font-size:11.5px; white-space:nowrap; padding:4px 10px; border-radius:20px; font-weight:700; letter-spacing:.01em;">
+                                        @if($isSelesai)
+                                            ✅ {{ $hari }}H Selesai
+                                        @elseif($hari > 10)
+                                            🔴 {{ $hari }}H Melewati Batas
+                                        @else
+                                            ⏳ {{ $hari }}H · Sisa {{ $sisaHari }}H
+                                        @endif
+                                    </span>
+                                </td>
+                            @endif
                             <td>
                                 <span class="badge" style="background-color:{{ $app->status_color }}20;color:{{ $app->status_color }};">
                                     {{ $app->status_label }}

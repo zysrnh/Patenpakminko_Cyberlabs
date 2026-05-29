@@ -174,6 +174,56 @@
         .btn-primary svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
         .btn-primary:hover { background: var(--blue); box-shadow: 0 6px 24px rgba(33,138,201,.38); transform: translateY(-1px); }
 
+        /* ─── HERO SERVICE BUTTONS ───────────────────────── */
+        .hero-services {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            margin-bottom: 36px;
+        }
+        .hs-btn {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 10px 16px; border-radius: var(--r-md);
+            font-family: inherit; font-size: 13px; font-weight: 700;
+            text-decoration: none; border: 1.5px solid var(--line);
+            background: var(--white); color: var(--ink);
+            cursor: pointer; transition: all .2s; white-space: nowrap;
+        }
+        .hs-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink:0; }
+        .hs-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); transform: translateY(-1px); }
+        .hs-btn.hs-primary { background: var(--blue-dk); color: #fff; border-color: var(--blue-dk); }
+        .hs-btn.hs-primary svg { stroke: #fff; }
+        .hs-btn.hs-primary:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+        .hs-btn.hs-muted { color: var(--muted); border-style: dashed; }
+        .hs-btn.hs-muted:hover { border-color: var(--muted); color: var(--mid); background: var(--surface); }
+
+        /* PKKPR Dropdown */
+        .hs-dropdown { position: relative; display: inline-flex; }
+        .hs-dropdown-menu {
+            position: absolute; top: calc(100% + 8px); left: 0;
+            background: var(--white); border: 1.5px solid var(--line);
+            border-radius: var(--r-md); box-shadow: 0 12px 40px rgba(0,59,100,.12);
+            min-width: 220px; display: none; flex-direction: column; z-index: 200;
+            overflow: hidden; padding: 6px;
+        }
+        .hs-dropdown-menu a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; text-decoration: none; font-size: 13px;
+            font-weight: 600; color: var(--ink);
+            border-radius: 6px; transition: all 0.18s;
+        }
+        .hs-dropdown-menu a:hover { background: var(--surface); color: var(--blue); }
+        .hs-dropdown-menu .dd-num {
+            width: 22px; height: 22px; border-radius: 6px; background: var(--blue-lt);
+            color: var(--blue); font-size: 11px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; flex-shrink:0;
+        }
+        .hs-dropdown-menu .dd-num.muted { background: var(--surface); color: var(--muted); }
+        .hs-dropdown-menu .dd-badge {
+            margin-left: auto; font-size: 10px; font-weight: 700;
+            padding: 2px 7px; border-radius: 20px;
+            background: var(--yellow-lt); color: var(--brown);
+        }
+        .hs-chevron { transition: transform .2s; }
+        .hs-dropdown:hover .hs-chevron { transform: rotate(180deg); }
         .btn-outline {
             display: inline-flex; align-items: center; gap: 7px;
             background: transparent; color: var(--mid);
@@ -630,8 +680,8 @@
 
         /* ─── RESPONSIVE ──────────────────────────────────── */
         @media (max-width: 1023px) {
-            .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-            .hero-visual { display: none; }
+            .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+            .hero-visual { display: block; min-height: auto; }
             .stats-inner { grid-template-columns: repeat(2,1fr); }
             .stat-item:nth-child(2) { border-right: none; }
             .services-wrap { grid-template-columns: 1fr 1fr; }
@@ -639,6 +689,9 @@
             .process-track::before { display: none; }
             .reviews-grid { grid-template-columns: 1fr 1fr; }
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            /* Rapikan card layanan di tablet */
+            .hero-services { flex-wrap: wrap; }
+            .hs-dropdown-menu { min-width: 200px; }
         }
         @media (max-width: 767px) {
             .site-nav .nav-link, .nav-sep { display: none; }
@@ -661,6 +714,10 @@
             .process-track { grid-template-columns: 1fr; gap: 24px; }
             .process-step { padding: 0; border: none !important; }
             .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+            /* Hero mobile */
+            .hero-services { gap: 8px; }
+            .hs-btn { font-size: 12px; padding: 9px 12px; }
+            .hero-visual { margin-top: 0; }
         }
     </style>
 </head>
@@ -716,12 +773,60 @@
                 <p class="hero-sub">
                     Sistem informasi tata ruang dan pertanahan yang profesional, transparan, dan terintegrasi — mempercepat proses pengajuan izin pemanfaatan ruang secara digital.
                 </p>
-                <div class="hero-cta-row">
-                    <a href="#modul" class="btn-primary">
-                        Lihat Modul Layanan
-                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <!-- GRID TOMBOL LAYANAN DI HERO (Poin 4) -->
+                <div class="hero-services">
+
+                    <!-- PKKPR Dropdown -->
+                    <div class="hs-dropdown">
+                        <button class="hs-btn hs-primary" type="button">
+                            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            Layanan PKKPR
+                            <svg class="hs-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        <div class="hs-dropdown-menu">
+                            <a href="{{ route('login') }}">
+                                <span class="dd-num">1</span>
+                                Berusaha
+                            </a>
+                            <a href="{{ route('login') }}">
+                                <span class="dd-num">2</span>
+                                Non Berusaha
+                            </a>
+                            <a href="{{ route('login') }}">
+                                <span class="dd-num">3</span>
+                                Kebijakan
+                            </a>
+                            <a href="#">
+                                <span class="dd-num muted">4</span>
+                                PSN
+                                <span class="dd-badge">Segera Hadir</span>
+                            </a>
+                            <a href="#">
+                                <span class="dd-num muted">5</span>
+                                Tanah Timbul
+                                <span class="dd-badge">Segera Hadir</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- LAPOLPA -->
+                    <a href="{{ route('login') }}" class="hs-btn">
+                        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                        LAPOLPA
                     </a>
-                    <a href="#alur" class="btn-outline">Pelajari Alur Proses</a>
+
+                    <!-- Informal -->
+                    <a href="{{ route('login') }}" class="hs-btn">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                        Konsultasi Informal
+                    </a>
+
+                    <!-- Pelajari Alur -->
+                    <a href="#alur" class="hs-btn hs-muted">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                        Alur Proses
+                    </a>
+
                 </div>
                 <div class="hero-trust">
                     <div class="trust-item">
@@ -746,106 +851,113 @@
                 </div>
             </div>
 
-            <!-- Visual Mockup -->
-            <div class="hero-visual">
-                <!-- Floating status pill -->
-                <div class="vis-float vis-float-status">
-                    <span class="status-pulse"></span>
-                    <span>Sistem Online — Aktif 24/7</span>
-                </div>
+            <!-- Visual — Service Card Panel -->
+            <div class="hero-visual" style="position:relative; height:auto; min-height:460px; display:flex; align-items:center;">
 
-                <!-- Main Shell -->
-                <div class="vis-shell">
-                    <div class="vis-chrome">
-                        <div class="vis-dots"><span></span><span></span><span></span></div>
-                        <div class="vis-url">patenpakmiko.atrbpn.go.id/dashboard</div>
-                    </div>
-                    <div class="vis-body">
-                        <!-- Mini sidebar -->
-                        <div class="vis-sidebar">
-                            <div class="vis-sb-logo">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            </div>
-                            <div class="vis-sb-item active"></div>
-                            <div class="vis-sb-item"></div>
-                            <div class="vis-sb-item"></div>
-                            <div class="vis-sb-item"></div>
-                            <div class="vis-sb-item"></div>
+
+                <!-- Service Panel Card -->
+                <div style="
+                    width:100%; background:#fff;
+                    border:1px solid var(--line); border-radius:var(--r-xl);
+                    box-shadow: 0 20px 60px rgba(0,59,100,.1), 0 2px 8px rgba(0,0,0,.04);
+                    overflow:hidden;
+                ">
+                    <!-- Header -->
+                    <div style="background:var(--blue-dk); padding:18px 22px; display:flex; align-items:center; gap:10px;">
+                        <div style="width:32px;height:32px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         </div>
-                        <!-- Content area -->
-                        <div class="vis-content">
-                            <div class="vis-welcome">
-                                <div class="vis-wl1"></div>
-                                <div class="vis-wl2"></div>
-                            </div>
-                            <!-- KPI row -->
-                            <div class="vis-kpi-row">
-                                <div class="vis-kpi">
-                                    <div class="vis-kpi-num"></div>
-                                    <div class="vis-kpi-bar b1"></div>
-                                    <div class="vis-kpi-lbl"></div>
-                                </div>
-                                <div class="vis-kpi">
-                                    <div class="vis-kpi-num"></div>
-                                    <div class="vis-kpi-bar b2"></div>
-                                    <div class="vis-kpi-lbl"></div>
-                                </div>
-                                <div class="vis-kpi">
-                                    <div class="vis-kpi-num"></div>
-                                    <div class="vis-kpi-bar b3"></div>
-                                    <div class="vis-kpi-lbl"></div>
-                                </div>
-                                <div class="vis-kpi">
-                                    <div class="vis-kpi-num"></div>
-                                    <div class="vis-kpi-bar b4"></div>
-                                    <div class="vis-kpi-lbl"></div>
-                                </div>
-                            </div>
-                            <!-- Bottom grid -->
-                            <div class="vis-grid2">
-                                <div class="vis-panel">
-                                    <div class="vis-ph">
-                                        <div class="vis-ph-dot"></div>
-                                        <div class="vis-ph-txt"></div>
-                                    </div>
-                                    <div class="vis-rows">
-                                        <div class="vis-row">
-                                            <div class="vis-rdot" style="background:var(--blue)"></div>
-                                            <div class="vis-rtxt"></div>
-                                            <div class="vis-rbadge" style="background:var(--blue-lt)"></div>
-                                        </div>
-                                        <div class="vis-row">
-                                            <div class="vis-rdot" style="background:var(--green)"></div>
-                                            <div class="vis-rtxt" style="width:55%"></div>
-                                            <div class="vis-rbadge" style="background:var(--green-lt)"></div>
-                                        </div>
-                                        <div class="vis-row">
-                                            <div class="vis-rdot" style="background:var(--brown)"></div>
-                                            <div class="vis-rtxt" style="width:70%"></div>
-                                            <div class="vis-rbadge" style="background:var(--yellow-lt)"></div>
-                                        </div>
-                                        <div class="vis-row">
-                                            <div class="vis-rdot" style="background:var(--blue)"></div>
-                                            <div class="vis-rtxt" style="width:45%"></div>
-                                            <div class="vis-rbadge" style="background:var(--blue-lt)"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="vis-panel">
-                                    <div class="vis-ph">
-                                        <div class="vis-ph-dot" style="background:var(--green)"></div>
-                                        <div class="vis-ph-txt"></div>
-                                    </div>
-                                    <div class="vis-rows">
-                                        <div style="height:8px;background:var(--blue-dk);border-radius:5px;margin:8px;"></div>
-                                        <div style="height:6px;background:var(--surface);border-radius:4px;margin:0 8px;width:60%"></div>
-                                        <div style="height:6px;background:var(--green-lt);border-radius:4px;margin:6px 8px 0;width:80%"></div>
-                                        <div style="height:6px;background:var(--yellow-lt);border-radius:4px;margin:4px 8px 0;width:45%"></div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:-.01em;">PATEN PAK MIKO</div>
+                            <div style="font-size:10.5px;color:rgba(255,255,255,.5);font-weight:500;">Pilih modul layanan yang Anda butuhkan</div>
                         </div>
                     </div>
+
+                    <!-- PKKPR Group -->
+                    <div style="padding:16px 20px 8px;">
+                        <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">
+                            Layanan PKKPR
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:6px;">
+
+                            <!-- Berusaha -->
+                            <a href="{{ route('login') }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--blue-lt)';this.style.borderColor='var(--blue)'" onmouseout="this.style.background='var(--surface)'">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--blue-dk);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">PKKPR Berusaha</div>
+                                    <div style="font-size:11px;color:var(--muted);">Bisnis, usaha, industri</div>
+                                </div>
+                                <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                            </a>
+
+                            <!-- Non Berusaha -->
+                            <a href="{{ route('login') }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--green-lt)'" onmouseout="this.style.background='var(--surface)'">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--green-dk);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">PKKPR Non Berusaha</div>
+                                    <div style="font-size:11px;color:var(--muted);">Rumah, sosial, keagamaan</div>
+                                </div>
+                                <span style="background:var(--green-lt);color:var(--green-dk);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                            </a>
+
+                            <!-- Kebijakan -->
+                            <a href="{{ route('login') }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#E8F4FF'" onmouseout="this.style.background='var(--surface)'">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Kebijakan Khusus</div>
+                                    <div style="font-size:11px;color:var(--muted);">PSN, mandat kebijakan pemerintah</div>
+                                </div>
+                                <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                            </a>
+
+                            <!-- PSN - Segera Hadir -->
+                            <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);opacity:.6;">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="var(--muted)" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px;font-weight:700;color:var(--muted);">PSN</div>
+                                    <div style="font-size:11px;color:var(--muted);">Proyek Strategis Nasional</div>
+                                </div>
+                                <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Segera Hadir</span>
+                            </div>
+
+                            <!-- Tanah Timbul - Segera Hadir -->
+                            <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);opacity:.6;">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="var(--muted)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px;font-weight:700;color:var(--muted);">Tanah Timbul</div>
+                                    <div style="font-size:11px;color:var(--muted);">Reklamasi & tanah timbul</div>
+                                </div>
+                                <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Segera Hadir</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Other Services -->
+                    <div style="padding:8px 20px 18px;">
+                        <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Layanan Lainnya</div>
+                        <div style="display:flex;gap:8px;">
+                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
+                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--blue)" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                                <span style="font-size:12px;font-weight:700;color:var(--ink);">LAPOLPA</span>
+                            </a>
+                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
+                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--blue)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                <span style="font-size:12px;font-weight:700;color:var(--ink);">Konsultasi</span>
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Floating verification badge -->
@@ -1152,6 +1264,31 @@
         });
     }, { threshold: 0.7 });
     steps.forEach(s => stepIO.observe(s));
+
+    // ── PKKPR Dropdown Toggle ──────────────────────────────
+    const pkkprBtn = document.querySelector('.hs-dropdown button');
+    const pkkprMenu = document.querySelector('.hs-dropdown-menu');
+
+    if (pkkprBtn && pkkprMenu) {
+        // Toggle saat klik tombol
+        pkkprBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isOpen = pkkprMenu.style.display === 'flex';
+            pkkprMenu.style.display = isOpen ? 'none' : 'flex';
+            pkkprBtn.setAttribute('aria-expanded', !isOpen);
+        });
+
+        // Tutup saat klik di luar
+        document.addEventListener('click', function() {
+            pkkprMenu.style.display = 'none';
+            pkkprBtn.setAttribute('aria-expanded', false);
+        });
+
+        // Cegah menu tutup saat klik di dalam menu
+        pkkprMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
 </script>
 </body>
 </html>

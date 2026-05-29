@@ -20,7 +20,7 @@
             --yellow:    #FFCB05;
             --yellow-lt: #FFF8D6;
             --brown:     #D37324;
-            --green:     #85C341;
+            --green:     #16A34A;
             --green-dk:  #79A73A;
             --green-lt:  #EEF7E2;
             --ink:       #003B64;
@@ -281,7 +281,7 @@
             top: 7px; right: 7px;
             width: 7px; height: 7px;
             border-radius: 50%;
-            background: #E53E3E;
+            background: #DC2626;
             border: 1.5px solid var(--white);
         }
 
@@ -590,7 +590,7 @@
         .activity-dot.blue   { background: var(--blue); }
         .activity-dot.green  { background: var(--green); }
         .activity-dot.yellow { background: var(--brown); }
-        .activity-dot.red    { background: #E53E3E; }
+        .activity-dot.red    { background: #DC2626; }
         .activity-dot.gray   { background: var(--muted); }
 
         .activity-body {
@@ -652,7 +652,7 @@
         .progress-fill.blue   { background: var(--blue); }
         .progress-fill.green  { background: var(--green); }
         .progress-fill.yellow { background: var(--brown); }
-        .progress-fill.red    { background: #E53E3E; }
+        .progress-fill.red    { background: #DC2626; }
 
         /* ─── CALENDAR / SCHEDULE PANEL ─────────────────────── */
         .schedule-empty {
@@ -931,6 +931,27 @@
                 $countNonBerusaha = $totalNon;
                 $countBerusaha = $totalBerusaha;
                 $countKebijakan = $totalKebijakan;
+                
+                // --- Kalkulasi SLA Pengendalian (Hanya untuk Admin) ---
+                $slaHijau = 0; $slaKuning = 0; $slaMerah = 0;
+                if (!$user->isPelakuUsaha()) {
+                    $allPendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->get();
+                    $allPendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->get();
+                    $allPendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->get();
+                    
+                    $processSla = function($apps) use (&$slaHijau, &$slaKuning, &$slaMerah) {
+                        foreach($apps as $app) {
+                            $hari = $app->created_at->diffInDays(now());
+                            if($hari <= 8) $slaHijau++;
+                            elseif($hari > 8 && $hari <= 10) $slaKuning++;
+                            else $slaMerah++;
+                        }
+                    };
+                    
+                    $processSla($allPendingNon);
+                    $processSla($allPendingBerusaha);
+                    $processSla($allPendingKebijakan);
+                }
             @endphp
 
             <!-- Welcome Strip -->
@@ -1009,6 +1030,58 @@
                     <div class="kpi-sub"><span class="kpi-badge down">Perlu tindak lanjut</span></div>
                 </div>
             </div>
+
+            @if(!Auth::user()->isPelakuUsaha())
+            <!-- ── SLA PENGENDALIAN INTERNAL ──────────────────── -->
+            <div style="background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 24px;margin-bottom:20px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="width:32px;height:32px;border-radius:8px;background:#EEF7E2;display:flex;align-items:center;justify-content:center;">
+                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#16A34A" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size:13.5px;font-weight:700;color:var(--ink);">Pengendalian SLA — Berkas Aktif</div>
+                            <div style="font-size:11.5px;color:var(--muted);">Monitoring internal waktu proses permohonan yang sedang berjalan</div>
+                        </div>
+                    </div>
+                    <div style="font-size:11px;color:var(--muted);background:var(--surface);border-radius:6px;padding:4px 10px;">
+                        Total aktif: {{ $slaHijau + $slaKuning + $slaMerah }} berkas
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                    {{-- Hijau --}}
+                    <div style="background:#EEF7E2;border:1.5px solid #16A34A40;border-radius:var(--r-md);padding:16px 20px;display:flex;align-items:center;gap:14px;">
+                        <div style="width:42px;height:42px;border-radius:50%;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size:28px;font-weight:800;color:#16A34A;line-height:1;">{{ $slaHijau }}</div>
+                            <div style="font-size:12px;font-weight:600;color:#4a7c27;margin-top:2px;">≤ 8 Hari — Aman</div>
+                        </div>
+                    </div>
+                    {{-- Kuning --}}
+                    <div style="background:#FFFBEB;border:1.5px solid #D9770640;border-radius:var(--r-md);padding:16px 20px;display:flex;align-items:center;gap:14px;">
+                        <div style="width:42px;height:42px;border-radius:50%;background:#D97706;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size:28px;font-weight:800;color:#D97706;line-height:1;">{{ $slaKuning }}</div>
+                            <div style="font-size:12px;font-weight:600;color:#92600A;margin-top:2px;">8–10 Hari — Peringatan</div>
+                        </div>
+                    </div>
+                    {{-- Merah --}}
+                    <div style="background:#FFF5F5;border:1.5px solid #DC262640;border-radius:var(--r-md);padding:16px 20px;display:flex;align-items:center;gap:14px;">
+                        <div style="width:42px;height:42px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size:28px;font-weight:800;color:#DC2626;line-height:1;">{{ $slaMerah }}</div>
+                            <div style="font-size:12px;font-weight:600;color:#9B2C2C;margin-top:2px;">&gt; 10 Hari — Terlambat</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
 
             <!-- Two-column grid -->
             <div class="grid-2col">
