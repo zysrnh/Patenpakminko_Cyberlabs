@@ -753,8 +753,12 @@
     <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
     <aside class="sidebar" id="sidebar">
         <a href="/dashboard" class="sidebar-logo">
-            <div class="sidebar-logo-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div class="sidebar-logo-icon" style="background:transparent;padding:0;overflow:hidden;">
+                @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+                    <img src="{{ asset('storage/logo/Logo_BPN.png') }}" alt="Logo BPN" style="width:100%;height:100%;object-fit:contain;border-radius:var(--r-md);">
+                @else
+                    <img src="{{ asset('storage/logo/PatenDummy.jpg') }}" alt="Logo PATEN PAK MIKO" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
+                @endif
             </div>
             <div class="sidebar-logo-text">
                 <strong>PATEN PAK MIKO</strong>
@@ -1155,8 +1159,9 @@
 
                             <a href="{{ route('lapolpa.index') }}" class="service-card">
                                 <div class="service-card-top">
-                                    <div class="service-icon orange">
-                                        <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                                    <!-- Logo Khusus LAPOLPA (Poin 5) -->
+                                    <div class="service-icon orange" style="background:transparent;padding:0;overflow:hidden;">
+                                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPA" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
                                     </div>
                                     <div class="service-arrow">
                                         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1190,6 +1195,28 @@
                                     Berikan ulasan
                                 </span>
                             </a>
+
+                            <!-- Konsultasi Informal — Logo Khusus (Poin 5) -->
+                            @if(!Auth::user()->isPelakuUsaha())
+                            <a href="{{ route('informal.index') }}" class="service-card">
+                                <div class="service-card-top">
+                                    <div class="service-icon blue" style="background:transparent;padding:0;overflow:hidden;">
+                                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
+                                    </div>
+                                    <div class="service-arrow">
+                                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3>Konsultasi Informal</h3>
+                                    <p>Konsultasi pemanfaatan ruang non-formal.</p>
+                                </div>
+                                <span class="service-count">
+                                    <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                                    Layanan Informal
+                                </span>
+                            </a>
+                            @endif
 
                         </div>
                     </div>

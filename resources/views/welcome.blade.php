@@ -728,8 +728,8 @@
     <div class="container">
         <div class="header-inner">
             <a href="/" class="logo-wrap">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <div class="logo-logos" style="display: flex; align-items: center; gap: 8px;">
+                    <img src="{{ asset('storage/logo/Logo_BPN.png') }}" alt="Logo BPN" style="height: 38px; object-fit: contain;">
                 </div>
                 <div class="logo-text">
                     <strong>PATEN PAK MIKO</strong>
@@ -810,14 +810,14 @@
                     </div>
 
                     <!-- LAPOLPA -->
-                    <a href="{{ route('login') }}" class="hs-btn">
-                        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    <a href="{{ route('login') }}" class="hs-btn" style="padding-left: 8px;">
+                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPA" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
                         LAPOLPA
                     </a>
 
                     <!-- Informal -->
-                    <a href="{{ route('login') }}" class="hs-btn">
-                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    <a href="{{ route('login') }}" class="hs-btn" style="padding-left: 8px;">
+                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
                         Konsultasi Informal
                     </a>
 
@@ -947,30 +947,20 @@
                     <div style="padding:8px 20px 18px;">
                         <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Layanan Lainnya</div>
                         <div style="display:flex;gap:8px;">
-                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
-                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--blue)" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
+                                <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPA" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
                                 <span style="font-size:12px;font-weight:700;color:var(--ink);">LAPOLPA</span>
                             </a>
-                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
-                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--blue)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
+                                <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
                                 <span style="font-size:12px;font-weight:700;color:var(--ink);">Konsultasi</span>
                             </a>
                         </div>
                     </div>
 
                 </div>
-
-                <!-- Floating verification badge -->
-                <div class="vis-float vis-float-check">
-                    <div class="fc-icon">
-                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                    </div>
-                    <div class="fc-text">
-                        <strong>Verifikasi Selesai</strong>
-                        <span>PPKPR-2026-0421 · Disetujui</span>
-                    </div>
-                </div>
             </div>
+
 
         </div>
     </div>
@@ -1168,8 +1158,8 @@
         <div class="footer-grid">
             <div>
                 <a href="/" class="logo-wrap" style="margin-bottom:0">
-                    <div class="logo-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <div class="logo-logos" style="display: flex; align-items: center; gap: 8px;">
+                        <img src="{{ asset('storage/logo/Logo_BPN.png') }}" alt="Logo BPN" style="height: 38px; object-fit: contain;">
                     </div>
                     <div class="logo-text footer-logo-text">
                         <strong>PATEN PAK MIKO</strong>
