@@ -495,11 +495,45 @@
                         <!-- Hubungan Pengaju / Sebagai Apa -->
                         <div class="form-group">
                             <label for="hubungan_pengaju" class="form-label">Hubungan Pengaju (Sebagai Apa) <span class="req">*</span></label>
-                            <input type="text" id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" placeholder="cth: Pemilik Usaha, Penerima Kuasa, Karyawan, dll" value="{{ old('hubungan_pengaju') }}" required>
+                            <select id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" required style="background: white; -webkit-appearance: listbox;">
+                                <option value="" disabled {{ old('hubungan_pengaju') ? '' : 'selected' }}>Pilih Hubungan Pengaju</option>
+                                <option value="Pemilik Usaha / Pengguna Layanan" {{ old('hubungan_pengaju') == 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
+                                <option value="Penerima Kuasa" {{ old('hubungan_pengaju') == 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
+                                <option value="Lainnya" {{ old('hubungan_pengaju') == 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
+                            </select>
+                            
+                            <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ old('hubungan_pengaju') == 'Lainnya' ? 'block' : 'none' }}; margin-top: 8px;">
+                                <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan pengaju secara manual (cth: Instansi, PT, Karyawan, dll)" value="{{ old('hubungan_pengaju_lainnya') }}">
+                            </div>
+
                             @error('hubungan_pengaju')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
+                            @error('hubungan_pengaju_lainnya')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
                         </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const selectHubungan = document.getElementById('hubungan_pengaju');
+                                const wrapperLainnya = document.getElementById('hubungan_pengaju_lainnya_wrapper');
+                                const inputLainnya = document.getElementById('hubungan_pengaju_lainnya');
+
+                                function toggleLainnya() {
+                                    if (selectHubungan.value === 'Lainnya') {
+                                        wrapperLainnya.style.display = 'block';
+                                        inputLainnya.setAttribute('required', 'required');
+                                    } else {
+                                        wrapperLainnya.style.display = 'none';
+                                        inputLainnya.removeAttribute('required');
+                                    }
+                                }
+
+                                selectHubungan.addEventListener('change', toggleLainnya);
+                                toggleLainnya();
+                            });
+                        </script>
                     </div>
  
                     <!-- SECTION 2: UNGGAH PERSYARATAN -->

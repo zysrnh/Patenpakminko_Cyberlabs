@@ -76,6 +76,12 @@ class PpkprNonBerusahaController extends Controller
             abort(403, 'Aksi tidak diizinkan.');
         }
 
+        if ($request->input('hubungan_pengaju') === 'Lainnya') {
+            $request->merge([
+                'hubungan_pengaju' => $request->input('hubungan_pengaju_lainnya')
+            ]);
+        }
+
         $request->validate([
             'nama_pemilik_usaha' => 'required|string|max:100',
             'nama_pengaju' => 'required|string|max:100',
