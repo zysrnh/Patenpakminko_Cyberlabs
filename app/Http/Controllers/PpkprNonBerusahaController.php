@@ -108,9 +108,15 @@ class PpkprNonBerusahaController extends Controller
             'fc_akta_pendirian', 'rencana_penggunaan_tanah', 'persyaratan_lainnya'
         ];
 
+        $pemilik = Str::slug($data['nama_pemilik_usaha'], '_');
+        $timestamp = date('Ymd_His');
+
         foreach ($filesToStore as $fileKey) {
             if ($request->hasFile($fileKey)) {
-                $data[$fileKey] = $request->file($fileKey)->store('ppkpr_docs', 'public');
+                $file = $request->file($fileKey);
+                $extension = $file->getClientOriginalExtension();
+                $fileName = "{$pemilik}_{$fileKey}_{$timestamp}.{$extension}";
+                $data[$fileKey] = $file->storeAs('ppkpr_docs', $fileName, 'public');
             }
         }
 

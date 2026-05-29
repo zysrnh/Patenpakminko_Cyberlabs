@@ -44,6 +44,7 @@ class ReviewController extends Controller
  
         $user = Auth::user();
         $moduleType = $request->input('module_type');
+        $rating = (int) $request->input('rating');
         
         // Untuk module_type 'umum', module_id diisi 0. Untuk yang lain, ambil dari input (default 0 jika kosong)
         $moduleId = $moduleType === 'umum' ? 0 : (int) $request->input('module_id', 0);

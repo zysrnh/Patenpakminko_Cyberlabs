@@ -319,27 +319,16 @@
         }
  
         .file-input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
             background: var(--clr-surface);
-            border: 2px dashed var(--clr-line);
-            padding: 24px;
-            border-radius: var(--radius-lg);
-            text-align: center;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.2s;
+            border: 1px dashed var(--clr-line);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
         }
-        .file-input-wrapper:hover {
-            border-color: var(--clr-blue);
-            background: var(--clr-blue-lt);
-        }
-        .file-input-wrapper input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
+        .file-input-wrapper input {
+            font-size: 13px;
         }
         .file-help {
             display: block;

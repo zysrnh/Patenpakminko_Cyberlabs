@@ -93,9 +93,15 @@ class KebijakanController extends Controller
             'fc_akta_pendirian', 'rencana_penggunaan_tanah', 'persyaratan_lainnya'
         ];
 
+        $pemilik = Str::slug($data['nama_pemilik_usaha'], '_');
+        $timestamp = date('Ymd_His');
+
         foreach ($filesToStore as $fileKey) {
             if ($request->hasFile($fileKey)) {
-                $data[$fileKey] = $request->file($fileKey)->store('kebijakan_docs', 'public');
+                $file = $request->file($fileKey);
+                $extension = $file->getClientOriginalExtension();
+                $fileName = "{$pemilik}_{$fileKey}_{$timestamp}.{$extension}";
+                $data[$fileKey] = $file->storeAs('kebijakan_docs', $fileName, 'public');
             }
         }
  

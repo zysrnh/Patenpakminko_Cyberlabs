@@ -89,9 +89,15 @@ class PpkprBerusahaController extends Controller
             'nib', 'kbli', 'proposal_kegiatan'
         ];
 
+        $pemilik = Str::slug($data['nama_pemilik_usaha'], '_');
+        $timestamp = date('Ymd_His');
+
         foreach ($filesToStore as $fileKey) {
             if ($request->hasFile($fileKey)) {
-                $data[$fileKey] = $request->file($fileKey)->store('berusaha_docs', 'public');
+                $file = $request->file($fileKey);
+                $extension = $file->getClientOriginalExtension();
+                $fileName = "{$pemilik}_{$fileKey}_{$timestamp}.{$extension}";
+                $data[$fileKey] = $file->storeAs('berusaha_docs', $fileName, 'public');
             }
         }
  

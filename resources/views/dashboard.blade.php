@@ -722,19 +722,50 @@
         .schedule-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
         .schedule-info span { font-size: 11.5px; color: var(--muted); }
 
+        /* ─── MOBILE RESPONSIVE ────────────────────────────── */
+        .btn-menu {
+            display: none;
+            background: transparent; border: none; cursor: pointer;
+            color: var(--ink); padding: 4px;
+        }
+        .sidebar-backdrop {
+            display: none; position: fixed; inset: 0; background: rgba(0,30,50,.5);
+            z-index: 99; opacity: 0; transition: opacity .3s; pointer-events: none;
+        }
+        @media (max-width: 768px) {
+            .btn-menu { display: block; margin-right: 12px; }
+            .sidebar { transform: translateX(-100%); transition: transform .3s ease; z-index: 100; }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-backdrop.show { display: block; opacity: 1; pointer-events: auto; }
+            .main-wrap { margin-left: 0; }
+            .topbar { padding: 0 16px; }
+            .content { padding: 16px; }
+            .stat-grid { grid-template-columns: 1fr; }
+            .hero-grid { grid-template-columns: 1fr; }
+            .two-col { grid-template-columns: 1fr; }
+        }
+
     </style>
 </head>
 <body>
 
     <!-- ─── SIDEBAR ─────────────────────────────── -->
-    <aside class="sidebar">
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+    <aside class="sidebar" id="sidebar">
         <a href="/dashboard" class="sidebar-logo">
             <div class="sidebar-logo-icon">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
             <div class="sidebar-logo-text">
                 <strong>PATENPAKMIKO</strong>
-                <span>Portal Pelaku Usaha</span>
+                <span>
+                    @if(Auth::user()->isPelakuUsaha()) Portal Pelaku Usaha
+                    @elseif(Auth::user()->isBpn()) Portal Admin BPN
+                    @elseif(Auth::user()->isDinasPu()) Portal Dinas PU
+                    @elseif(Auth::user()->isSatuPintu()) Portal Satu Pintu
+                    @elseif(Auth::user()->isDpn()) Portal Admin Pusat
+                    @else Portal Manajemen @endif
+                </span>
             </div>
         </a>
 
@@ -819,7 +850,19 @@
 
         <!-- Top Bar -->
         <header class="topbar">
-            <span class="topbar-title">Dashboard Pelaku Usaha</span>
+            <div style="display:flex; align-items:center;">
+                <button class="btn-menu" id="toggle-sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <span class="topbar-title">
+                    @if(Auth::user()->isPelakuUsaha()) Dashboard Pelaku Usaha
+                    @elseif(Auth::user()->isBpn()) Dashboard Admin BPN
+                    @elseif(Auth::user()->isDinasPu()) Dashboard Dinas PU
+                    @elseif(Auth::user()->isSatuPintu()) Dashboard Satu Pintu
+                    @elseif(Auth::user()->isDpn()) Dashboard Admin Pusat
+                    @else Dashboard Utama @endif
+                </span>
+            </div>
             <div class="topbar-right">
                 <span class="topbar-date" id="current-date"></span>
                 <div class="topbar-notif">
@@ -842,17 +885,74 @@
             @php
                 $user = Auth::user();
                 $isProfileIncomplete = empty($user->name) || empty($user->email) || empty($user->address) || empty($user->business_name) || empty($user->business_role);
+                
+                // --- Kalkulasi Statistik ---
+                if ($user->isPelakuUsaha()) {
+                    $totalNon = \App\Models\PpkprApplication::where('user_id', $user->id)->count();
+                    $totalBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->count();
+                    $totalKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->count();
+                    $countLapolpa = \App\Models\LapolpaBooking::where('user_id', $user->id)->count();
+
+                    $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
+                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
+                    $pendingKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
+
+                    $disetujuiNon = \App\Models\PpkprApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
+                    $disetujuiBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
+                    $disetujuiKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
+
+                    $ditolakNon = \App\Models\PpkprApplication::where('user_id', $user->id)->where('status', 'ditolak')->count();
+                    $ditolakBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->where('status', 'ditolak')->count();
+                    $ditolakKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->where('status', 'ditolak')->count();
+                } else {
+                    $totalNon = \App\Models\PpkprApplication::count();
+                    $totalBerusaha = \App\Models\PpkprBerusahaApplication::count();
+                    $totalKebijakan = \App\Models\KebijakanApplication::count();
+                    $countLapolpa = \App\Models\LapolpaBooking::count();
+
+                    $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
+                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
+                    $pendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
+
+                    $disetujuiNon = \App\Models\PpkprApplication::where('status', 'disetujui')->count();
+                    $disetujuiBerusaha = \App\Models\PpkprBerusahaApplication::where('status', 'disetujui')->count();
+                    $disetujuiKebijakan = \App\Models\KebijakanApplication::where('status', 'disetujui')->count();
+
+                    $ditolakNon = \App\Models\PpkprApplication::where('status', 'ditolak')->count();
+                    $ditolakBerusaha = \App\Models\PpkprBerusahaApplication::where('status', 'ditolak')->count();
+                    $ditolakKebijakan = \App\Models\KebijakanApplication::where('status', 'ditolak')->count();
+                }
+
+                $totalPermohonan = $totalNon + $totalBerusaha + $totalKebijakan;
+                $totalPending = $pendingNon + $pendingBerusaha + $pendingKebijakan;
+                $totalDisetujui = $disetujuiNon + $disetujuiBerusaha + $disetujuiKebijakan;
+                $totalDitolak = $ditolakNon + $ditolakBerusaha + $ditolakKebijakan;
+                
+                $countNonBerusaha = $totalNon;
+                $countBerusaha = $totalBerusaha;
+                $countKebijakan = $totalKebijakan;
             @endphp
 
             <!-- Welcome Strip -->
             <div class="welcome-strip">
                 <div>
                     <h1>Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
-                    <p>Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.</p>
+                    <p>
+                        @if(Auth::user()->isPelakuUsaha()) Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.
+                        @else Kelola permohonan pemanfaatan ruang dan pantau status layanan secara real-time.
+                        @endif
+                    </p>
                 </div>
                 <div class="welcome-strip-badge">
                     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span>Pelaku Usaha Terverifikasi</span>
+                    <span>
+                        @if(Auth::user()->isPelakuUsaha()) Pelaku Usaha Terverifikasi
+                        @elseif(Auth::user()->isBpn()) Admin BPN
+                        @elseif(Auth::user()->isDinasPu()) Admin Dinas PU
+                        @elseif(Auth::user()->isSatuPintu()) Admin Satu Pintu
+                        @elseif(Auth::user()->isDpn()) Super Admin
+                        @else Pengguna Terverifikasi @endif
+                    </span>
                 </div>
             </div>
 
@@ -1125,6 +1225,21 @@
         const d = new Date();
         const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
         document.getElementById('current-date').textContent = d.toLocaleDateString('id-ID', opts);
+
+        // Sidebar Toggle Logic for Mobile
+        const btnToggle = document.getElementById('toggle-sidebar');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        
+        btnToggle.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            backdrop.classList.add('show');
+        });
+        
+        backdrop.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            backdrop.classList.remove('show');
+        });
     </script>
 
 </body>
