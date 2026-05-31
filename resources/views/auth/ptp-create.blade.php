@@ -327,7 +327,7 @@
                     default => 'Kegiatan Berusaha (PKKPR)'
                 };
             @endphp
-            <input type="hidden" name="jenis_permohonan" id="jenis_permohonan" value="{{ $layananActive }}">
+
 
             <div style="display: flex; gap: 16px; margin-bottom: 24px; align-items: stretch; flex-wrap: wrap;">
                 <div class="target-address" style="flex: 1.2; min-width: 280px; margin-bottom: 0;">
@@ -354,8 +354,20 @@
                 </div>
             @endif
 
+            @if($errors->any())
+                <div style="background: #FEF2F2; border-left: 4px solid #DC2626; padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 20px;">
+                    <div style="font-size: 13.5px; color: #991B1B; font-weight: 700; margin-bottom: 4px;">Terdapat kesalahan pada isian form:</div>
+                    <ul style="font-size: 12.5px; color: #B91C1C; margin-left: 16px;">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('ptp.store') }}" method="POST">
                 @csrf
+                <input type="hidden" name="jenis_permohonan" id="jenis_permohonan" value="{{ $layananActive }}">
 
                 <!-- SECTION 1 -->
                 <div class="section-title">1. Identitas Pemohon / Calon Pengguna</div>

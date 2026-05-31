@@ -7,6 +7,7 @@ use App\Http\Controllers\PpkprBerusahaController;
 use App\Http\Controllers\LapolpaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\InformalController;
+use App\Http\Controllers\PsnController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
@@ -17,11 +18,27 @@ Route::get('/', function () {
         ->latest()
         ->take(6)
         ->get();
-    return view('welcome', compact('reviews'));
+
+    // Kalkulasi rata-rata keseluruhan (Review + InformalRating)
+    $avgReview = Review::where('is_approved', true)->avg('rating') ?? 0;
+    $countReview = Review::where('is_approved', true)->count();
+    
+    $avgInformal = \App\Models\InformalRating::where('is_approved', true)->avg('rating') ?? 0;
+    $countInformal = \App\Models\InformalRating::where('is_approved', true)->count();
+    
+    $totalReviews = $countReview + $countInformal;
+    $averageRating = 0;
+    if($totalReviews > 0) {
+        $averageRating = (($avgReview * $countReview) + ($avgInformal * $countInformal)) / $totalReviews;
+    }
+    $averageRating = number_format($averageRating, 1);
+
+    return view('welcome', compact('reviews', 'averageRating'));
 });
 
 // Rute Peta Publik Informal (Tanpa Login)
 Route::get('/informal', [InformalController::class, 'index'])->name('informal.index');
+Route::post('/informal/rating', [InformalController::class, 'storeRating'])->name('informal.rating.store');
 
 // Rute Publik PTP Form
 Route::get('/permohonan-ptp', [AuthController::class, 'showPtpForm'])->name('ptp.create');
@@ -34,6 +51,8 @@ Route::get('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'create'])-
 Route::post('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'store'])->name('non-berusaha.store');
 Route::get('/kebijakan/baru', [KebijakanController::class, 'create'])->name('kebijakan.create');
 Route::post('/kebijakan/baru', [KebijakanController::class, 'store'])->name('kebijakan.store');
+Route::get('/psn/baru', [PsnController::class, 'create'])->name('psn.create');
+Route::post('/psn/baru', [PsnController::class, 'store'])->name('psn.store');
  
 // Rute untuk tamu (Guest Only)
 Route::middleware('guest')->group(function () {
@@ -65,10 +84,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'show'])->name('non-berusaha.show');
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
  
-    // Kebijakan Khusus (Pelaku Usaha & Petugas Verifikasi)
+    // Kebijakan Khusus & Tanah Timbul
     Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
     Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
+
+    // PSN (Proyek Strategis Nasional)
+    Route::get('/psn', [PsnController::class, 'index'])->name('psn.index');
+    Route::get('/psn/{id}', [PsnController::class, 'show'])->name('psn.show');
+    Route::post('/psn/{id}/verifikasi', [PsnController::class, 'verify'])->name('psn.verify');
  
     // PPKPR Berusaha (Pelaku Usaha, BPN, Dinas PU, & Satu Pintu)
     Route::get('/berusaha', [PpkprBerusahaController::class, 'index'])->name('berusaha.index');
@@ -86,11 +110,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/reviews', [ReviewController::class, 'adminIndex'])->name('admin.reviews.index');
     Route::post('/admin/reviews/{id}/approve', [ReviewController::class, 'approve'])->name('admin.reviews.approve');
     Route::delete('/admin/reviews/{id}', [ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
+    
+    // Moderasi Informal
+    Route::post('/admin/informal-reviews/{id}/approve', [ReviewController::class, 'approveInformal'])->name('admin.informal-reviews.approve');
+    Route::delete('/admin/informal-reviews/{id}', [ReviewController::class, 'destroyInformal'])->name('admin.informal-reviews.destroy');
  
     // WhatsApp Gateway Settings (DPN / Super Admin)
     Route::get('/dpn/whatsapp', [PpkprNonBerusahaController::class, 'whatsappSettings'])->name('dpn.whatsapp');
     Route::post('/dpn/whatsapp/save', [PpkprNonBerusahaController::class, 'saveWhatsappSettings'])->name('dpn.whatsapp.save');
     Route::post('/dpn/whatsapp/toggle', [PpkprNonBerusahaController::class, 'toggleWhatsappConnection'])->name('dpn.whatsapp.toggle');
+    Route::get('/dpn/contacts', [PpkprNonBerusahaController::class, 'adminContacts'])->name('dpn.contacts');
+    Route::post('/dpn/contacts/save', [PpkprNonBerusahaController::class, 'saveAdminContacts'])->name('dpn.contacts.save');
     
     // Unduhan Template Persyaratan (Pelaku Usaha)
     Route::get('/templates/berkas-persyaratan', [PpkprNonBerusahaController::class, 'templatePersyaratan'])->name('templates.persyaratan');

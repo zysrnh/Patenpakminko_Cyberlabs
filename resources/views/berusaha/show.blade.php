@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Permohonan PPKPR Berusaha — PATEN PAK MIKO</title>
+    <title>Detail Permohonan PKKPR Berusaha — PATEN PAK MIKO</title>
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
@@ -218,6 +218,43 @@
         }
         .back-link:hover {
             color: var(--clr-ink);
+        }
+ 
+        /* ─── SLA BANNER ─────────────────────────────────────── */
+        .sla-banner {
+            background: #F0F6FB;
+            border-left: 4px solid var(--clr-blue);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 28px;
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        .sla-item {
+            flex: 1;
+        }
+        .sla-item.divider {
+            border-left: 1px solid #D6E4EF;
+            padding-left: 24px;
+        }
+        .sla-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--clr-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .sla-value {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--clr-ink);
+        }
+        .sla-desc {
+            font-size: 11.5px;
+            color: var(--clr-muted);
+            margin-top: 4px;
         }
  
         .alert-success {
@@ -626,12 +663,26 @@
  
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">Pelacakan PPKPR Berusaha</h1>
+                    <h1 class="page-title">Pelacakan PKKPR Berusaha</h1>
                 </div>
                 <a href="{{ route('berusaha.index') }}" class="back-link">
                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                     Kembali ke Dashboard
                 </a>
+            </div>
+ 
+            <!-- SLA Banner -->
+            <div class="sla-banner">
+                <div class="sla-item">
+                    <div class="sla-title">SLA Tahap 1 (BPN)</div>
+                    <div class="sla-value">10 Hari Kerja</div>
+                    <div class="sla-desc">Target Terbit Pertek: <strong>{{ $application->created_at->addWeekdays(10)->format('d M Y') }}</strong></div>
+                </div>
+                <div class="sla-item divider">
+                    <div class="sla-title">SLA Tahap 2 (DPMPTSP)</div>
+                    <div class="sla-value">10 Hari Kerja</div>
+                    <div class="sla-desc">Target Terbit PKKPR: <strong>10 hari setelah Pertek diterbitkan</strong></div>
+                </div>
             </div>
  
             <!-- DOWNLOAD DOKUMEN FINAL PRODUK AKHIR (Flowchart Image 4 & 5) -->
@@ -744,27 +795,29 @@
                             <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas</button>
                         </form>
  
-                    <!-- SUB-STEP 2: Validasi Pembayaran (Setelah berkas Diterima & Blast Notif pemohon selesai) -->
-                    @elseif($application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'belum_bayar')
+                    <!-- SUB-STEP 2: Validasi Pembayaran (Setelah validasi awal Dinas PUTR diterima & status belum bayar) -->
+                    @elseif($application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar')
                         <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                             @csrf
                             <input type="hidden" name="step" value="bpn_pembayaran">
                             <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                <strong style="font-size: 13px;">Langkah 2: Cek PKKPR Gistaru & Validasi Pembayaran Retribusi</strong>
+                                <strong style="font-size: 13px;">Langkah 2: Konfirmasi Pembayaran Retribusi & Input No. Berkas</strong>
                                 <span class="verify-step-badge">Aktif</span>
                             </div>
+                            <p style="font-size: 13px; color: var(--clr-muted); margin-bottom: 16px;">
+                                Setelah pemohon melakukan pembayaran retribusi pertanahan secara offline, input <strong>Nomor Berkas</strong> di bawah lalu klik <strong>"Kirim Kredensial & Konfirmasi Lunas"</strong> untuk memverifikasi dan otomatis mengirimkan kredensial login dashboard ke WhatsApp pemohon.
+                            </p>
                             <div class="form-group-v">
-                                <label for="action">Status Validasi Pembayaran</label>
-                                <select name="action" id="action" class="form-select-v" required>
-                                    <option value="sudah_bayar">Sudah Bayar / Pembayaran Terverifikasi Lunas</option>
-                                    <option value="belum_bayar">Belum Bayar (Kirim tagihan / peringatan WA)</option>
-                                </select>
+                                <label for="no_berkas">Nomor Berkas (wajib diisi)</label>
+                                <input type="text" name="no_berkas" id="no_berkas" class="form-control-v"
+                                       placeholder="cth: BERKAS/PKKPR-B/2026/001"
+                                       value="{{ old('no_berkas') }}" required>
+                                <span style="font-size: 11px; color: var(--clr-muted);">Nomor berkas ini akan dicatat dalam sistem dan dikirim ke pemohon via WhatsApp.</span>
                             </div>
-                            <div class="form-group-v">
-                                <label for="notes">Catatan Pembayaran (Opsional)</label>
-                                <textarea name="notes" id="notes" class="form-control-v" rows="2" placeholder="Masukkan catatan transaksi..."></textarea>
-                            </div>
-                            <button type="submit" class="btn-submit-v">Simpan Status Pembayaran</button>
+                            <button type="submit" class="btn-submit-v">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                Kirim Kredensial & Konfirmasi Lunas
+                            </button>
                         </form>
  
                     <!-- SUB-STEP 3: Penjadwalan Cek Lokasi Lapangan -->
@@ -843,28 +896,63 @@
                         </form>
                     @endif
                 </div>
-            @endif
+            </div>
  
+            <!-- Success / Error Messages -->
             <!-- 2. DINAS PU PANEL -->
             @if($user->isDinasPu() && $application->status === 'menunggu_dinas_pu')
-                <div class="verify-card">
-                    <h3 class="verify-title">⚙️ Panel Penilaian — Dinas Pekerjaan Umum (PU)</h3>
-                    <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
-                        @csrf
-                        <div class="form-group-v">
-                            <label for="action">Penilaian Kepatuhan Tata Ruang</label>
-                            <select name="action" id="action" class="form-select-v" required>
-                                <option value="sesuai">Sesuai Tata Ruang (Lanjut ke Dinas Satu Pintu / PTSP)</option>
-                                <option value="belum_sesuai">Belum Sesuai Tata Ruang (Menunggu penyesuaian)</option>
-                            </select>
-                        </div>
-                        <div class="form-group-v">
-                            <label for="notes">Catatan Kajian Penilaian Tata Ruang</label>
-                            <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan justifikasi penilaian kesesuaian pemanfaatan ruang..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn-submit-v">Kirim Penilaian PU</button>
-                    </form>
-                </div>
+                @if($application->dinas_pu_status === 'menunggu_validasi_awal')
+                    <!-- TAHAP A: Validasi Permohonan Awal oleh Dinas PUTR (Stage 3) -->
+                    <div class="verify-card" style="border-color: var(--clr-blue); background: #FAFDFE;">
+                        <h3 class="verify-title">🏢 Panel Validasi Permohonan Awal — Dinas PUTR</h3>
+                        <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
+                            @csrf
+                            <div class="form-group-v">
+                                <label for="action">Hasil Validasi Permohonan</label>
+                                <select name="action" id="action" class="form-select-v" required>
+                                    <option value="approve">Lolos Validasi Awal (Teruskan ke BPN untuk Tagihan Retribusi)</option>
+                                    <option value="reject">Tidak Lolos Validasi Awal / Tolak Permohonan</option>
+                                </select>
+                            </div>
+                            <div class="form-group-v">
+                                <label for="notes">Catatan Hasil Validasi</label>
+                                <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan detail alasan/catatan validasi awal..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit-v">Kirim Validasi Awal</button>
+                        </form>
+                    </div>
+                @else
+                    <!-- TAHAP B: Penilaian PKKPR oleh Dinas PU (Stage 8) -->
+                    <div class="verify-card">
+                        <h3 class="verify-title">⚙️ Panel Penilaian PKKPR — Dinas Pekerjaan Umum (PU)</h3>
+                        <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group-v">
+                                <label for="action">Penilaian Kepatuhan Tata Ruang</label>
+                                <select name="action" id="action" class="form-select-v" required>
+                                    <option value="sesuai">Sesuai Tata Ruang (Lanjut ke Dinas Satu Pintu / PTSP)</option>
+                                    <option value="belum_sesuai">Belum Sesuai Tata Ruang (Kembali ke BPN)</option>
+                                </select>
+                            </div>
+                            <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                                <div class="form-group-v">
+                                    <label for="dinas_pu_tanggal_penilaian">Tanggal Penilaian (Wajib)</label>
+                                    <input type="date" name="dinas_pu_tanggal_penilaian" id="dinas_pu_tanggal_penilaian" class="form-control-v" required>
+                                </div>
+                                <div class="form-group-v">
+                                    <label for="dinas_pu_document">Dokumen Penilaian Tata Ruang (PDF, Opsional)</label>
+                                    <input type="file" name="dinas_pu_document" id="dinas_pu_document" class="form-control-v" accept=".pdf">
+                                    <span style="font-size: 11px; color: var(--clr-muted);">*File yang diunggah hanya dapat diakses oleh BPN.</span>
+                                </div>
+                            </div>
+                            <div class="form-group-v">
+                                <label for="notes">Catatan Kajian Penilaian Tata Ruang (Opsional)</label>
+                                <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan tambahan justifikasi kesesuaian pemanfaatan ruang..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit-v">Kirim Penilaian PU</button>
+                        </form>
+                    </div>
+                @endif
             @endif
  
             <!-- 3. DINAS SATU PINTU (PTSP) PANEL -->
@@ -1024,6 +1112,13 @@
                                     {{ str_replace('_', ' ', $application->bpn_pembayaran_status) }}
                                 </span>
                             </li>
+
+                            @if($application->no_berkas)
+                                <li class="detail-item">
+                                    <span class="detail-label">Nomor Berkas</span>
+                                    <span class="detail-val" style="font-weight: 700; color: var(--clr-blue-dk);">{{ $application->no_berkas }}</span>
+                                </li>
+                            @endif
  
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
@@ -1042,6 +1137,24 @@
                                     <span class="detail-label">Penilaian Tata Ruang (PU)</span>
                                     <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
                                         {{ str_replace('_', ' ', $application->dinas_pu_status) }}
+                                    </span>
+                                </li>
+                            @endif
+
+                            @if($application->dinas_pu_tanggal_penilaian)
+                                <li class="detail-item">
+                                    <span class="detail-label">Tanggal Penilaian PU</span>
+                                    <span class="detail-val" style="font-weight: 700;">{{ $application->dinas_pu_tanggal_penilaian->format('d-m-Y') }}</span>
+                                </li>
+                            @endif
+
+                            @if($user->isBpn() && $application->dinas_pu_document)
+                                <li class="detail-item">
+                                    <span class="detail-label">Dokumen Penilaian PU</span>
+                                    <span class="detail-val">
+                                        <a href="{{ asset('storage/' . $application->dinas_pu_document) }}" target="_blank" class="btn-doc">
+                                            Unduh Dokumen Penilaian PU
+                                        </a>
                                     </span>
                                 </li>
                             @endif
@@ -1134,17 +1247,18 @@
                 <div>
                     <div class="card">
                         <h2 class="card-title">Linimasa Pelacakan Berkas</h2>
-                        
+
                         <div class="timeline">
-                            
+
                             <!-- STEP 1: Diajukan -->
                             <div class="timeline-step completed">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">Berkas Berhasil Diajukan</div>
                                 <div class="timeline-desc">Pelaku usaha berhasil mengunggah berkas persyaratan dan formulir permohonan ke portal.</div>
                             </div>
- 
+
                             <!-- STEP 2: Verifikasi Berkas Awal BPN -->
+
                             @php
                                 $step2Status = 'active';
                                 if ($application->bpn_berkas_status === 'diterima') {
@@ -1156,100 +1270,108 @@
                             <div class="timeline-step {{ $step2Status }}">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">1. Verifikasi Berkas Awal (BPN)</div>
-                                <div class="timeline-desc">Validasi kelayakan berkas dokumen persyaratan pemohon.</div>
+                                <div class="timeline-desc">Validasi kelayakan kelengkapan berkas dokumen persyaratan pemohon oleh BPN.</div>
                                 @if($application->bpn_berkas_status === 'tidak_sesuai')
                                     <div class="timeline-notes">
                                         <strong>Catatan Koreksi BPN:</strong> {{ $application->bpn_notes }}
                                     </div>
                                 @endif
                             </div>
- 
-                            <!-- STEP 3: Pembayaran Retribusi -->
+
+                            <!-- STEP 3: Validasi Permohonan Awal - Dinas PUTR -->
                             @php
                                 $step3Status = '';
                                 if ($application->bpn_berkas_status === 'diterima') {
-                                    $step3Status = $application->bpn_pembayaran_status === 'sudah_bayar' ? 'completed' : 'active';
+                                    if ($application->dinas_pu_status === 'validasi_awal_diterima' || in_array($application->dinas_pu_status, ['sesuai', 'belum_sesuai'])) {
+                                        $step3Status = 'completed';
+                                    } elseif ($application->dinas_pu_status === 'validasi_awal_ditolak') {
+                                        $step3Status = 'rejected';
+                                    } else {
+                                        $step3Status = 'active';
+                                    }
                                 }
                             @endphp
                             <div class="timeline-step {{ $step3Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">2. Cek Gistaru & Pembayaran (BPN)</div>
-                                <div class="timeline-desc">Verifikasi data lokasi pada Gistaru dan penyelesaian retribusi pertanahan.</div>
+                                <div class="timeline-title">2. Validasi Permohonan (Dinas PUTR)</div>
+                                <div class="timeline-desc">
+                                    Pemeriksaan awal kelayakan tata ruang oleh Dinas PUTR. Notifikasi dikirim ke BPN dan Pelaku Usaha.
+                                </div>
+                                @if($application->dinas_pu_status === 'validasi_awal_ditolak')
+                                    <div class="timeline-notes">
+                                        <strong>Permohonan ditolak pada tahap validasi awal oleh Dinas PUTR.</strong>
+                                    </div>
+                                @endif
                             </div>
- 
-                            <!-- STEP 4: Cek Lokasi Lapangan BPN -->
+
+                            <!-- STEP 4: Pembayaran Retribusi (BPN, setelah PUTR lolos) -->
                             @php
                                 $step4Status = '';
-                                if ($application->bpn_pembayaran_status === 'sudah_bayar') {
-                                    if ($application->bpn_cek_lokasi_dt) {
-                                        $step4Status = 'completed';
-                                    } else {
-                                        $step4Status = 'active';
-                                    }
+                                if (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])) {
+                                    $step4Status = $application->bpn_pembayaran_status === 'sudah_bayar' ? 'completed' : 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step4Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">3. Cek Lokasi Lapangan (BPN)</div>
+                                <div class="timeline-title">3. Pembayaran Retribusi & Registrasi Berkas (BPN)</div>
                                 <div class="timeline-desc">
-                                    @if($application->bpn_cek_lokasi_dt)
-                                        Waktu Cek: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>
-                                        Petugas Lapangan: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
+                                    @if($application->bpn_pembayaran_status === 'sudah_bayar')
+                                        Pembayaran telah dikonfirmasi lunas. Kredensial login dashboard telah dikirimkan ke WhatsApp pemohon.
+                                        @if($application->no_berkas)
+                                            <br>No. Berkas: <strong>{{ $application->no_berkas }}</strong>
+                                        @endif
                                     @else
-                                        Menunggu input jadwal cek lokasi lapangan offline.
+                                        Menunggu konfirmasi pembayaran retribusi dan input nomor berkas oleh BPN. Jika tidak dibayar dalam 7 hari, permohonan otomatis dihapus dari sistem.
                                     @endif
                                 </div>
                             </div>
- 
-                            <!-- STEP 5: Rapat Koordinasi BPN -->
+
+                            <!-- STEP 5: Peninjauan Lapangan BPN -->
                             @php
                                 $step5Status = '';
-                                if ($application->bpn_cek_lokasi_dt) {
-                                    if ($application->bpn_rapat_dt) {
-                                        $step5Status = 'completed';
-                                    } else {
-                                        $step5Status = 'active';
-                                    }
+                                if ($application->bpn_pembayaran_status === 'sudah_bayar') {
+                                    $step5Status = $application->bpn_cek_lokasi_dt ? 'completed' : 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step5Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">4. Sidang / Rapat Koordinasi (BPN)</div>
+                                <div class="timeline-title">4. Peninjauan Lokasi Lapangan (BPN)</div>
                                 <div class="timeline-desc">
-                                    @if($application->bpn_rapat_dt)
-                                        Waktu Sidang: <strong>{{ $application->bpn_rapat_date }}</strong>
+                                    @if($application->bpn_cek_lokasi_dt)
+                                        Waktu Tinjau: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>
+                                        Petugas Lapangan: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
                                     @else
-                                        Menunggu jadwal sidang tata ruang pertanahan.
+                                        Menunggu input jadwal peninjauan lokasi lapangan dari BPN.
                                     @endif
                                 </div>
                             </div>
- 
-                            <!-- STEP 6: Penerbitan Pertek BPN -->
+
+                            <!-- STEP 6: Rapat Pembahasan Pertek BPN -->
                             @php
                                 $step6Status = '';
-                                if ($application->bpn_rapat_dt) {
-                                    $step6Status = $application->bpn_pertek_document ? 'completed' : 'active';
+                                if ($application->bpn_cek_lokasi_dt) {
+                                    $step6Status = $application->bpn_rapat_dt ? 'completed' : 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step6Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">5. Penerbitan Pertek Pertanahan</div>
+                                <div class="timeline-title">5. Rapat Pembahasan Pertek (BPN)</div>
                                 <div class="timeline-desc">
-                                    @if($application->bpn_pertek_document)
-                                        Dokumen Pertek berhasil diunggah. Permohonan diteruskan ke Dinas PU.
+                                    @if($application->bpn_rapat_dt)
+                                        Waktu Sidang: <strong>{{ $application->bpn_rapat_date }}</strong>
                                     @else
-                                        Menunggu rapat selesai untuk penerbitan surat rekomendasi teknis.
+                                        Menunggu jadwal sidang/rapat koordinasi teknis pertanahan.
                                     @endif
                                 </div>
                             </div>
- 
-                            <!-- STEP 7: Penilaian Dinas PU -->
+
+                            <!-- STEP 7: Penerbitan Pertek Pertanahan BPN -->
                             @php
                                 $step7Status = '';
-                                if ($application->status !== 'menunggu_bpn') {
-                                    if ($application->dinas_pu_status === 'sesuai') {
+                                if ($application->bpn_rapat_dt) {
+                                    if ($application->bpn_pertek_document) {
                                         $step7Status = 'completed';
-                                    } elseif ($application->dinas_pu_status === 'belum_sesuai') {
+                                    } elseif (isset($application->bpn_pertek_status) && $application->bpn_pertek_status === 'ditolak') {
                                         $step7Status = 'rejected';
                                     } else {
                                         $step7Status = 'active';
@@ -1258,29 +1380,70 @@
                             @endphp
                             <div class="timeline-step {{ $step7Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">6. Penilaian Tata Ruang (Dinas PU)</div>
-                                <div class="timeline-desc">Kesesuaian tata ruang dinilai berdasarkan dokumen Pertek BPN.</div>
-                                @if($application->dinas_pu_notes)
+                                <div class="timeline-title">6. Penerbitan Pertek Pertanahan (BPN)</div>
+                                <div class="timeline-desc">
+                                    @if($application->bpn_pertek_document)
+                                        Surat Rekomendasi Teknis (Pertek) berhasil diterbitkan dan diteruskan ke Dinas PU untuk penilaian tata ruang.
+                                    @else
+                                        Menunggu penerbitan surat rekomendasi teknis pertanahan oleh BPN.
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- STEP 8: Penilaian PKKPR oleh Dinas PU -->
+                            @php
+                                $step8Status = '';
+                                if ($application->bpn_pertek_document) {
+                                    if ($application->dinas_pu_status === 'sesuai') {
+                                        $step8Status = 'completed';
+                                    } elseif ($application->dinas_pu_status === 'belum_sesuai') {
+                                        $step8Status = 'rejected';
+                                    } elseif ($application->status === 'menunggu_dinas_pu') {
+                                        $step8Status = 'active';
+                                    }
+                                }
+                            @endphp
+                            <div class="timeline-step {{ $step8Status }}">
+                                <span class="timeline-dot"></span>
+                                <div class="timeline-title">7. Penilaian PKKPR (Dinas PU)</div>
+                                <div class="timeline-desc">
+                                    Dinas Pekerjaan Umum melakukan penilaian kesesuaian tata ruang. Notifikasi dikirim ke Pelaku Usaha, PTSP, dan BPN.
+                                </div>
+                                @if($application->dinas_pu_tanggal_penilaian)
+                                    <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
+                                        <strong>Tanggal Penilaian:</strong> {{ $application->dinas_pu_tanggal_penilaian->format('d-m-Y') }}
+                                        @if($application->dinas_pu_notes)
+                                            <br><strong>Catatan:</strong> {{ $application->dinas_pu_notes }}
+                                        @endif
+                                    </div>
+                                @elseif($application->dinas_pu_notes)
                                     <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
                                         <strong>Catatan Dinas PU:</strong> {{ $application->dinas_pu_notes }}
                                     </div>
                                 @endif
                             </div>
- 
-                            <!-- STEP 8: Penerbitan Sertifikat (Satu Pintu / PTSP) -->
+
+                            <!-- STEP 9: Penerbitan PKKPR (Dinas Satu Pintu / PTSP) -->
                             @php
-                                $step8Status = '';
+                                $step9Status = '';
                                 if ($application->dinas_pu_status === 'sesuai') {
-                                    $step8Status = $application->satu_pintu_document ? 'completed' : 'active';
+                                    $step9Status = $application->satu_pintu_document ? 'completed' : 'active';
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step8Status }}">
+                            <div class="timeline-step {{ $step9Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">7. Penerbitan Sertifikat (Satu Pintu)</div>
-                                <div class="timeline-desc">Input data legalitas dan upload dokumen produk akhir PKKPR.</div>
+                                <div class="timeline-title">8. Penerbitan PKKPR (Satu Pintu / PTSP)</div>
+                                <div class="timeline-desc">
+                                    Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) menerbitkan dokumen PKKPR Berusaha resmi.
+                                </div>
+                                @if($application->satu_pintu_no_pkkpr)
+                                    <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
+                                        <strong>No. PKKPR:</strong> {{ $application->satu_pintu_no_pkkpr }}
+                                    </div>
+                                @endif
                             </div>
- 
-                            <!-- STEP 9: Selesai / Ditolak -->
+
+                            <!-- STEP 10: Selesai / Ditolak -->
                             @php
                                 $doneStepStatus = '';
                                 if ($application->status === 'disetujui') {
@@ -1300,16 +1463,17 @@
                                 </div>
                                 <div class="timeline-desc">
                                     @if($application->status === 'ditolak')
-                                        Permohonan dihentikan/ditolak oleh Kantor Pertanahan atau Dinas PU.
+                                        Permohonan dihentikan/ditolak oleh instansi terkait (BPN, Dinas PUTR, atau Dinas PU).
                                     @elseif($application->status === 'disetujui')
-                                        Seluruh alur selesai. Sertifikat PKKPR Berusaha siap diunduh.
+                                        Seluruh alur selesai. Dokumen PKKPR Berusaha siap diunduh dari portal.
                                     @else
-                                        Menunggu seluruh tahapan selesai disetujui instansi terkait.
+                                        Menunggu seluruh tahapan selesai disetujui oleh semua instansi terkait.
                                     @endif
                                 </div>
                             </div>
- 
+
                         </div>
+
                     </div>
                 </div>
  
@@ -1322,6 +1486,18 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Inisialisasi Tanggal Penilaian Dinas PU
+            const penilaianInput = document.getElementById('dinas_pu_tanggal_penilaian');
+            if (penilaianInput) {
+                flatpickr(penilaianInput, {
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "d-m-Y",
+                    locale: "id",
+                    allowInput: true
+                });
+            }
+
             // Inisialisasi Tanggal Terbit Satu Pintu (PTSP)
             const tanggalTerbitInput = document.getElementById('satu_pintu_tanggal_terbit');
             if (tanggalTerbitInput) {

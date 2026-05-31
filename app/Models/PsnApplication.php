@@ -1,0 +1,79 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+
+#[Fillable([
+    'user_id',
+    'application_number',
+    'nama_pemilik_usaha',
+    'nama_pengaju',
+    'hubungan_pengaju',
+    'status',
+    'ptp_data',
+    'bpn_notes',
+    'dinas_pu_notes',
+    'satu_pintu_notes',
+    'approval_document',
+    'peta_lokasi',
+    'surat_kuasa',
+    'fc_ktp',
+    'fc_npwp',
+    'fc_akta_pendirian',
+    'rencana_penggunaan_tanah',
+    'proposal_kegiatan',
+    'persyaratan_lainnya',
+    'bpn_berkas_status',
+    'bpn_cek_lokasi_date',
+    'bpn_cek_lokasi_dt',
+    'bpn_cek_lokasi_cp',
+    'bpn_rapat_date',
+    'bpn_rapat_dt',
+    'bpn_pertek_document',
+    'dinas_pu_tanggal_penilaian',
+    'dinas_pu_document',
+    'satu_pintu_no_pkkpr',
+    'satu_pintu_tanggal_terbit',
+])]
+class PsnApplication extends Model
+{
+    protected $table = 'psn_applications';
+
+    protected $casts = [
+        'bpn_cek_lokasi_dt'       => 'datetime',
+        'bpn_rapat_dt'            => 'datetime',
+        'satu_pintu_tanggal_terbit' => 'date',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
+            'menunggu_dinas_pu'   => 'Penilaian PKKPR (Dinas PU)',
+            'menunggu_satu_pintu' => 'Penerbitan PKKPR (Satu Pintu)',
+            'disetujui'           => 'PKKPR PSN Diterbitkan / Selesai',
+            'ditolak'             => 'Permohonan Ditolak',
+            default               => 'Draft / Baru',
+        };
+    }
+
+    public function getStatusColorAttribute(): string
+    {
+        return match ($this->status) {
+            'menunggu_bpn'        => '#ED8936',
+            'menunggu_dinas_pu'   => '#3182CE',
+            'menunggu_satu_pintu' => '#805AD5',
+            'disetujui'           => '#38A169',
+            'ditolak'             => '#E53E3E',
+            default               => '#718096',
+        };
+    }
+}

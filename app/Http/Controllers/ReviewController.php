@@ -92,7 +92,9 @@ class ReviewController extends Controller
         }
  
         $reviews = Review::with('user')->orderBy('created_at', 'desc')->get();
-        return view('admin.reviews', compact('reviews'));
+        $informalRatings = \App\Models\InformalRating::with('user')->orderBy('created_at', 'desc')->get();
+        
+        return view('admin.reviews', compact('reviews', 'informalRatings'));
     }
  
     /**
@@ -123,6 +125,31 @@ class ReviewController extends Controller
         $review = Review::findOrFail($id);
         $review->delete();
  
-        return redirect()->route('admin.reviews.index')->with('success', 'Ulasan berhasil dihapus.');
+        return redirect()->back()->with('success', 'Ulasan berhasil dihapus.');
+    }
+ 
+    public function approveInformal($id)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+ 
+        $review = \App\Models\InformalRating::findOrFail($id);
+        $review->is_approved = true;
+        $review->save();
+ 
+        return redirect()->back()->with('success', 'Ulasan Peta Informal berhasil disetujui dan kini tampil publik.');
+    }
+ 
+    public function destroyInformal($id)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+ 
+        $review = \App\Models\InformalRating::findOrFail($id);
+        $review->delete();
+ 
+        return redirect()->back()->with('success', 'Ulasan Peta Informal berhasil dihapus.');
     }
 }

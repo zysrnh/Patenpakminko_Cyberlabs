@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pengajuan PPKPR Non Berusaha — PATEN PAK MIKO</title>
+    <title>Form Pengajuan PKKPR Non Berusaha â€” PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,7 +45,7 @@
             padding: 0 24px;
         }
 
-        /* ─── HEADER ─────────────────────────────────────────── */
+        /* â”€â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         header {
             background: var(--clr-white);
             border-bottom: 1px solid var(--clr-line);
@@ -184,7 +184,7 @@
             font-weight: 600;
         }
 
-        /* ─── MAIN CONTENT ───────────────────────────────────── */
+        /* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         main {
             padding: 40px 0;
         }
@@ -226,7 +226,7 @@
             color: var(--clr-blue);
         }
 
-        /* ─── FORM DESIGN ────────────────────────────────────── */
+        /* â”€â”€â”€ FORM DESIGN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         .form-section-title {
             font-size: 14px;
             font-weight: 800;
@@ -373,32 +373,9 @@
 
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
-                    @if(Auth::user()->isDpn())
-                        <a href="{{ route('dpn.whatsapp') }}" class="nav-link">Integrasi WhatsApp</a>
-                    @endif
-                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-                    <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
-                    
-                    <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
-                        @if(Auth::user()->profile_photo)
-                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar">
-                        @else
-                            <div class="header-avatar-placeholder">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 2)) }}
-                            </div>
-                        @endif
-                        <div class="user-badge">
-                            <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
-                            <span>{{ Auth::user()->phone_number }}</span>
-                        </div>
-                    </div>
-
                     <form action="{{ route('logout') }}" method="POST" style="margin-left: 8px;">
                         @csrf
-                        <button type="submit" class="btn-logout">
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                            Keluar
-                        </button>
+                        <button type="submit" class="btn-logout">Keluar</button>
                     </form>
                 </div>
             </div>
@@ -411,7 +388,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">Permohonan PPKPR Non Berusaha Baru</h2>
+                    <h2 class="card-title">Permohonan PKKPR Non Berusaha Baru</h2>
                     <a href="{{ route('non-berusaha.index') }}" class="back-link">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                         Kembali
@@ -620,3 +597,4 @@
 
 </body>
 </html>
+

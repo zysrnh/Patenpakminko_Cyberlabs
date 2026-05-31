@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moderasi Ulasan Layanan — PATEN PAK MIKO</title>
+    <title>Moderasi Ulasan Layanan ? PATEN PAK MIKO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -424,6 +424,80 @@
                                                     </form>
                                                 @endif
                                                 <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn-action delete">
+                                                        ? Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+            <!-- Informal Ratings Card -->
+            <div class="card" style="margin-top: 24px;">
+                <h3 class="card-title">?? Daftar Ulasan Peta Publik Informal</h3>
+ 
+                <div class="table-responsive">
+                    @if($informalRatings->isEmpty())
+                        <div class="empty-state">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499c-.191-.166-.446-.235-.69-.188a.75.75 0 00-.547.547c-.047.244.022.499.188.69l3.413 3.924a.75.75 0 11-1.127.99l-3.413-3.924a2.25 2.25 0 011.64-3.64 2.25 2.25 0 011.64.566l.7.608.7-.608A2.25 2.25 0 0118 2.25a2.25 2.25 0 011.64 3.64l-3.413 3.924a.75.75 0 11-1.127-.99l3.413-3.924c.166-.191.235-.446.188-.69a.75.75 0 00-.547-.547.75.75 0 00-.69.188l-.7.608-.7-.608z"/>
+                            </svg>
+                            <p>Belum ada ulasan informal dari publik.</p>
+                        </div>
+                    @else
+                        <table class="table-modern">
+                            <thead>
+                                <tr>
+                                    <th>Pengguna / Publik</th>
+                                    <th>Area Zonasi</th>
+                                    <th>Penilaian</th>
+                                    <th>Catatan Ulasan</th>
+                                    <th>Status Publikasi</th>
+                                    <th>Aksi Admin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($informalRatings as $rating)
+                                    <tr>
+                                        <td>
+                                            <strong>{{ $rating->name ?: 'Anonim' }}</strong>
+                                            <div style="font-size: 11px; color: var(--clr-muted);">Tgl: {{ $rating->created_at->format('d M Y, H:i') }}</div>
+                                        </td>
+                                        <td>
+                                            <span style="font-weight: 700; color: var(--clr-primary-light);">{{ strtoupper($rating->informal_type) }}</span>
+                                            <div style="font-size: 11px; color: var(--clr-muted);">Koord: {{ number_format((float)$rating->latitude, 4) }}, {{ number_format((float)$rating->longitude, 4) }}</div>
+                                        </td>
+                                        <td>
+                                            <div class="stars-yellow">{{ str_repeat('?', $rating->rating) }}{{ str_repeat('?', 5 - $rating->rating) }}</div>
+                                            <div style="font-size: 11px; font-weight: 700; color: var(--clr-primary);">Bintang {{ $rating->rating }}</div>
+                                        </td>
+                                        <td style="max-width: 250px; font-style: italic; color: #4A5568;">
+                                            "{{ $rating->comment }}"
+                                        </td>
+                                        <td>
+                                            @if($rating->is_approved)
+                                                <span class="badge-status" style="background-color: var(--clr-green);">Tampil (Approved)</span>
+                                            @else
+                                                <span class="badge-status" style="background-color: var(--clr-muted);">Menunggu Review</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="actions-wrap">
+                                                @if(!$rating->is_approved)
+                                                    <form action="{{ route('admin.informal-reviews.approve', $rating->id) }}" method="POST">
+                                                        @csrf
+                                                        <button type="submit" class="btn-action approve">
+                                                            ? Setujui
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                                <form action="{{ route('admin.informal-reviews.destroy', $rating->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn-action delete">

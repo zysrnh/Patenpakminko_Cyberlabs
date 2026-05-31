@@ -56,8 +56,8 @@
                     <select name="module_type" id="module_type" class="form-control" required>
                         <option value="umum">Layanan Umum / Portal PATEN PAK MIKO</option>
                         <option value="lapolpa">LAPOLPA (Layanan Pelaporan)</option>
-                        <option value="berusaha">PPKPR Berusaha</option>
-                        <option value="non_berusaha">PPKPR Non-Berusaha</option>
+                        <option value="berusaha">PKKPR Berusaha</option>
+                        <option value="non_berusaha">PKKPR Non-Berusaha</option>
                         <option value="kebijakan">Kebijakan Khusus</option>
                     </select>
                 </div>

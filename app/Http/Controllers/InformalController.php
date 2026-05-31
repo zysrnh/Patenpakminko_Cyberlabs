@@ -11,6 +11,31 @@ class InformalController extends Controller
      */
     public function index()
     {
-        return view('informal.index');
+        $ratings = \App\Models\InformalRating::where('is_approved', true)->latest()->get();
+        return view('informal.index', compact('ratings'));
+    }
+
+    public function storeRating(Request $request)
+    {
+        $request->validate([
+            'informal_type' => 'required|string',
+            'latitude' => 'required|string',
+            'longitude' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+            'name' => 'nullable|string',
+            'comment' => 'nullable|string'
+        ]);
+
+        \App\Models\InformalRating::create([
+            'user_id' => auth()->id(), // null jika tidak login
+            'name' => auth()->check() ? auth()->user()->name : $request->name,
+            'informal_type' => $request->informal_type,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Terima kasih atas rating Anda!']);
     }
 }

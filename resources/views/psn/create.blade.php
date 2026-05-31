@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pengajuan PKKPR Berusaha â€” PATEN PAK MIKO</title>
+    <title>Form Pengajuan PKKPR PSN (Proyek Strategis Nasional) â€” PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
- 
+
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
         :root {
             --clr-blue:    #218AC9;
             --clr-blue-dk: #003B64;
@@ -30,7 +30,7 @@
             --radius-lg:   16px;
             --radius-xl:   24px;
         }
- 
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: var(--clr-surface);
@@ -38,13 +38,13 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
- 
+
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 0 24px;
         }
- 
+
         /* â”€â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         header {
             background: var(--clr-white);
@@ -53,14 +53,14 @@
             top: 0;
             z-index: 10;
         }
- 
+
         .header-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
             height: 72px;
         }
- 
+
         .logo-wrap {
             display: flex;
             align-items: center;
@@ -104,7 +104,7 @@
             letter-spacing: .1em;
             margin-top: 3px;
         }
- 
+
         .nav-menu {
             display: flex;
             align-items: center;
@@ -120,7 +120,7 @@
         .nav-link:hover, .nav-link.active {
             color: var(--clr-blue);
         }
- 
+
         .btn-logout {
             background: transparent;
             border: 1px solid var(--clr-line);
@@ -141,7 +141,7 @@
             border-color: #FED7D7;
             background: #FFF5F5;
         }
- 
+
         .user-nav {
             display: flex;
             align-items: center;
@@ -183,12 +183,12 @@
             color: var(--clr-muted);
             font-weight: 600;
         }
- 
+
         /* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         main {
             padding: 40px 0;
         }
- 
+
         .card {
             background: var(--clr-white);
             border: 1px solid var(--clr-line);
@@ -197,127 +197,93 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.01);
             margin-bottom: 32px;
         }
- 
+
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             padding-bottom: 16px;
-            border-bottom: 1.5px solid var(--clr-surface);
+            border-bottom: 1px solid var(--clr-line);
         }
+
         .card-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--clr-ink);
-            letter-spacing: -0.02em;
         }
+
         .back-link {
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 13.5px;
+            font-weight: 600;
             color: var(--clr-muted);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            transition: color 0.15s;
+            gap: 6px;
         }
         .back-link:hover {
-            color: var(--clr-ink);
-        }
- 
-        /* â”€â”€â”€ TEMPLATES DOWNLOADS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-        .templates-card {
-            background: var(--clr-blue-lt);
-            border: 1.5px solid rgba(33, 138, 201, 0.2);
-            border-radius: var(--radius-md);
-            padding: 16px 20px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .templates-text strong {
-            font-size: 14px;
-            color: var(--clr-blue-dk);
-            display: block;
-            margin-bottom: 2px;
-        }
-        .templates-text p {
-            font-size: 11.5px;
-            color: var(--clr-mid);
-        }
-        .templates-actions {
-            display: flex;
-            gap: 12px;
-        }
-        .btn-dl {
-            background: var(--clr-white);
-            border: 1px solid var(--clr-blue);
             color: var(--clr-blue);
-            padding: 8px 14px;
-            font-size: 12px;
-            font-weight: 700;
-            border-radius: var(--radius-md);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
         }
-        .btn-dl:hover {
-            background: var(--clr-blue);
-            color: var(--clr-white);
-        }
- 
-        /* â”€â”€â”€ FORM ELEMENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+        /* â”€â”€â”€ FORM DESIGN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         .form-section-title {
             font-size: 14px;
             font-weight: 800;
+            color: var(--clr-blue);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--clr-blue);
-            margin-top: 12px;
-            margin-bottom: 20px;
+            margin: 28px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid var(--clr-blue-lt);
         }
- 
-        .form-group {
-            margin-bottom: 22px;
+        .form-section-title:first-of-type {
+            margin-top: 0;
         }
+
         .form-grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 16px;
         }
- 
+        @media (max-width: 480px) {
+            .form-grid-2 { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
         .form-label {
             display: block;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 700;
             color: var(--clr-ink);
             margin-bottom: 8px;
         }
-        .form-label .req {
+
+        .form-label span.req {
             color: #E53E3E;
         }
- 
+
         .form-control {
             width: 100%;
-            padding: 11px 14px;
+            padding: 12px 16px;
             font-family: inherit;
-            font-size: 13.5px;
+            font-size: 14px;
+            font-weight: 500;
             color: var(--clr-ink);
             background: var(--clr-white);
             border: 1.5px solid var(--clr-line);
             border-radius: var(--radius-md);
+            transition: all 0.2s;
             outline: none;
-            transition: all 0.15s;
         }
         .form-control:focus {
             border-color: var(--clr-blue);
-            box-shadow: 0 0 0 3px rgba(19, 147, 204, 0.1);
+            box-shadow: 0 0 0 3px var(--clr-blue-lt);
         }
- 
+
         .file-input-wrapper {
             display: flex;
             flex-direction: column;
@@ -331,19 +297,17 @@
             font-size: 13px;
         }
         .file-help {
-            display: block;
-            margin-top: 8px;
             font-size: 11px;
             color: var(--clr-muted);
         }
- 
+
         .error-message {
             font-size: 12px;
             color: #E53E3E;
             margin-top: 6px;
             display: block;
         }
- 
+
         .form-footer {
             margin-top: 32px;
             padding-top: 24px;
@@ -352,7 +316,7 @@
             justify-content: flex-end;
             gap: 16px;
         }
- 
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -368,7 +332,7 @@
             transition: all 0.2s;
             text-decoration: none;
         }
- 
+
         .btn-cancel {
             background: var(--clr-white);
             color: var(--clr-mid);
@@ -377,7 +341,7 @@
         .btn-cancel:hover {
             background: var(--clr-surface);
         }
- 
+
         .btn-primary {
             background: var(--clr-blue);
             color: var(--clr-white);
@@ -390,7 +354,7 @@
     </style>
 </head>
 <body>
- 
+
     <!-- Header -->
     <header>
         <div class="container" style="max-width: 1000px;">
@@ -406,7 +370,7 @@
                         <span>Kantor Pertanahan Sukabumi</span>
                     </div>
                 </a>
- 
+
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
                     <form action="{{ route('logout') }}" method="POST" style="margin-left: 8px;">
@@ -417,46 +381,29 @@
             </div>
         </div>
     </header>
- 
+
     <!-- Main -->
     <main>
         <div class="container">
- 
+
             <div class="card">
                 <div class="card-header">
-                    <h2 class="card-title">Permohonan PKKPR Berusaha Baru</h2>
-                    <a href="{{ route('berusaha.index') }}" class="back-link">
+                    <h2 class="card-title">Permohonan PKKPR Non Berusaha Baru</h2>
+                    <a href="{{ route('psn.index') }}" class="back-link">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                         Kembali
                     </a>
                 </div>
- 
-                <!-- UNDUH TEMPLATE & 11 PDF CONTOH PERSYARATAN (Flowchart Image 1) -->
-                <div class="templates-card">
-                    <div class="templates-text">
-                        <strong>ðŸ“¥ Berkas Persyaratan PKKPR Berusaha</strong>
-                        <p>Silakan unduh formulir permohonan dan berkas contoh persyaratan lengkap (11 PDF) sebelum mengisi form.</p>
-                    </div>
-                    <div class="templates-actions">
-                        <a href="{{ route('templates.persyaratan') }}" target="_blank" class="btn-dl">
-                            ðŸ“„ Formulir Permohonan
-                        </a>
-                        <a href="{{ route('templates.persyaratan') }}" target="_blank" class="btn-dl">
-                            ðŸ“š Contoh Persyaratan (11 PDF)
-                        </a>
-                    </div>
-                </div>
- 
-                <form action="{{ route('berusaha.store') }}" method="POST" enctype="multipart/form-data">
+
+                <form action="{{ route('psn.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
- 
+
                     <!-- SECTION 1: DATA IDENTITAS PEMOHON / PENGGUNA LAYANAN -->
                     <div class="form-section-title">1. Identitas Pemohon / Pengguna Layanan</div>
- 
+
                     @php
                         $ptpNama = session('ptp_form_data.nama', '');
                         $ptpHubungan = session('ptp_form_data.bertindak_atas_nama', '');
-                        $isLainnya = in_array(old('hubungan_pengaju', $ptpHubungan), ['PT / Badan Usaha', 'Instansi Pemerintah', 'Lainnya']);
                         
                         $selectedHubungan = old('hubungan_pengaju');
                         if (!$selectedHubungan) {
@@ -478,7 +425,7 @@
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
- 
+
                     <div class="form-grid-2">
                         <!-- Nama Pengaju -->
                         <div class="form-group">
@@ -488,7 +435,7 @@
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
                         </div>
- 
+
                         <!-- Hubungan Pengaju / Sebagai Apa -->
                         <div class="form-group">
                             <label for="hubungan_pengaju" class="form-label">Hubungan Pengaju (Sebagai Apa) <span class="req">*</span></label>
@@ -532,10 +479,10 @@
                             });
                         </script>
                     </div>
- 
+
                     <!-- SECTION 2: UNGGAH PERSYARATAN -->
                     <div class="form-section-title">2. Unggah Berkas Persyaratan</div>
- 
+
                     <!-- 1. Peta / Sketsa Lokasi -->
                     <div class="form-group">
                         <label for="peta_lokasi" class="form-label">1. Peta/sketsa lokasi yang dimohon <span class="req">*</span></label>
@@ -596,31 +543,31 @@
                         @error('rencana_penggunaan_tanah')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
-                    <!-- 7. NIB -->
+                    <!-- 7. NIB (Opsional) -->
                     <div class="form-group">
-                        <label for="nib" class="form-label">7. Nomor Induk Berusaha (NIB) <span class="req">*</span></label>
+                        <label for="nib" class="form-label">7. Nomor Induk Berusaha (NIB) (Opsional)</label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="nib" name="nib" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <input type="file" id="nib" name="nib" accept=".pdf,.jpg,.jpeg,.png">
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
                         </div>
                         @error('nib')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
-                    <!-- 8. KBLI -->
+                    <!-- 8. KBLI (Opsional) -->
                     <div class="form-group">
-                        <label for="kbli" class="form-label">8. Dokumen KBLI yang diajukan <span class="req">*</span></label>
+                        <label for="kbli" class="form-label">8. Dokumen KBLI yang diajukan (Opsional)</label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png">
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
                         </div>
                         @error('kbli')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
-                    <!-- 9. Proposal -->
+                    <!-- 9. Proposal (Opsional) -->
                     <div class="form-group">
-                        <label for="proposal_kegiatan" class="form-label">9. Proposal Rencana Kegiatan Berusaha <span class="req">*</span></label>
+                        <label for="proposal_kegiatan" class="form-label">9. Proposal Rencana Kegiatan Berusaha (Opsional)</label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="proposal_kegiatan" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
+                            <input type="file" id="proposal_kegiatan" name="proposal_kegiatan" accept=".pdf,.doc,.docx">
                             <span class="file-help">Format: PDF, DOC, DOCX. Maks. 10MB. (Memuat Latar Belakang, Permodalan, Nilai Proyek, dll)</span>
                         </div>
                         @error('proposal_kegiatan')<span class="error-message">{{ $message }}</span>@enderror
@@ -628,26 +575,27 @@
 
                     <!-- 10. Persyaratan Lainnya -->
                     <div class="form-group">
-                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan (Sertifikat HAK / Surat Keterangan Tanah / Akta / bukti atau akta pinjam meminjam atau sewa menyewa) (Opsional)</label>
+                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan (Sertifikat HAK / Surat Keterangan Tanah / Akta / bukti atau akta pinjam meminjam atau sewa menyewa) <span class="req">*</span></label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="persyaratan_lainnya" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar">
+                            <input type="file" id="persyaratan_lainnya" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar" required>
                             <span class="file-help">Format: PDF, JPG, PNG, ZIP, RAR. Maks. 10MB.</span>
                         </div>
                         @error('persyaratan_lainnya')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
- 
+
                     <!-- Footer Action Buttons -->
                     <div class="form-footer">
-                        <a href="{{ route('berusaha.index') }}" class="btn btn-cancel">Batal</a>
+                        <a href="{{ route('psn.index') }}" class="btn btn-cancel">Batal</a>
                         <button type="submit" class="btn btn-primary">Kirim Permohonan</button>
                     </div>
- 
+
                 </form>
             </div>
- 
+
         </div>
     </main>
- 
+
 </body>
 </html>
+
 

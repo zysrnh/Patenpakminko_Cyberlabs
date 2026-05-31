@@ -876,7 +876,14 @@
                             </li>
                             <li class="detail-item" style="display: flex; flex-direction: column; gap: 8px;">
                                 <span class="detail-label" style="border-bottom: 1px solid var(--clr-line); padding-bottom: 8px; margin-bottom: 4px;">Berkas Lampiran Persyaratan</span>
-                                
+                                @php
+                                    $jenisPermohonan = 'kebijakan';
+                                    if ($application->ptp_data) {
+                                        $ptp = json_decode($application->ptp_data, true);
+                                        $jenisPermohonan = $ptp['jenis_permohonan'] ?? 'kebijakan';
+                                    }
+                                @endphp
+
                                 @if($application->peta_lokasi)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="font-size: 13px; color: var(--clr-mid);">1. Peta Lokasi</span>
@@ -907,7 +914,15 @@
 
                                 @if($application->fc_akta_pendirian)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 13px; color: var(--clr-mid);">5. FC Akta Pendirian</span>
+                                    <span style="font-size: 13px; color: var(--clr-mid);">
+                                        @if($jenisPermohonan === 'psn')
+                                            5. Dokumen Penetapan / Rekomendasi PSN
+                                        @elseif($jenisPermohonan === 'tanah-timbul')
+                                            5. Surat Keterangan Tanah Timbul (Kades/Lurah)
+                                        @else
+                                            5. FC Akta Pendirian
+                                        @endif
+                                    </span>
                                     <a href="{{ asset('storage/' . $application->fc_akta_pendirian) }}" target="_blank" class="btn-doc">Buka Berkas</a>
                                 </div>
                                 @endif
@@ -921,21 +936,45 @@
 
                                 @if($application->nib)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 13px; color: var(--clr-mid);">7. NIB</span>
+                                    <span style="font-size: 13px; color: var(--clr-mid);">
+                                        @if($jenisPermohonan === 'psn')
+                                            7. NIB / Izin Sektoral
+                                        @elseif($jenisPermohonan === 'tanah-timbul')
+                                            7. Surat Pernyataan Penguasaan Fisik (Sporadik)
+                                        @else
+                                            7. NIB
+                                        @endif
+                                    </span>
                                     <a href="{{ asset('storage/' . $application->nib) }}" target="_blank" class="btn-doc">Buka Berkas</a>
                                 </div>
                                 @endif
 
                                 @if($application->kbli)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 13px; color: var(--clr-mid);">8. KBLI</span>
+                                    <span style="font-size: 13px; color: var(--clr-mid);">
+                                        @if($jenisPermohonan === 'psn')
+                                            8. KBLI / Klasifikasi PSN
+                                        @elseif($jenisPermohonan === 'tanah-timbul')
+                                            8. Berita Acara Peninjauan Batas
+                                        @else
+                                            8. KBLI
+                                        @endif
+                                    </span>
                                     <a href="{{ asset('storage/' . $application->kbli) }}" target="_blank" class="btn-doc">Buka Berkas</a>
                                 </div>
                                 @endif
 
                                 @if($application->proposal_kegiatan)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 13px; color: var(--clr-mid);">9. Proposal Kegiatan</span>
+                                    <span style="font-size: 13px; color: var(--clr-mid);">
+                                        @if($jenisPermohonan === 'psn')
+                                            9. Proposal / Masterplan PSN
+                                        @elseif($jenisPermohonan === 'tanah-timbul')
+                                            9. Bukti / Rencana Penggunaan Tanah
+                                        @else
+                                            9. Proposal Kegiatan
+                                        @endif
+                                    </span>
                                     <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="btn-doc">Buka Berkas</a>
                                 </div>
                                 @endif

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Permohonan {{ $application->application_number }} — PATEN PAK MIKO</title>
+    <title>Detail Permohonan {{ $application->application_number }} Ã¢â‚¬â€ PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,7 +45,7 @@
             padding: 0 24px;
         }
 
-        /* ─── HEADER ─────────────────────────────────────────── */
+        /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ HEADER Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
         header {
             background: var(--clr-white);
             border-bottom: 1px solid var(--clr-line);
@@ -184,48 +184,11 @@
             font-weight: 600;
         }
 
-        /* ─── MAIN CONTENT ───────────────────────────────────── */
+        /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ MAIN CONTENT Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
         main {
             padding: 40px 0;
         }
- 
-        /* ─── SLA BANNER ─────────────────────────────────────── */
-        .sla-banner {
-            background: #F0F6FB;
-            border-left: 4px solid var(--clr-blue);
-            padding: 16px 20px;
-            border-radius: var(--radius-md);
-            margin-bottom: 28px;
-            display: flex;
-            gap: 24px;
-            align-items: center;
-        }
-        .sla-item {
-            flex: 1;
-        }
-        .sla-item.divider {
-            border-left: 1px solid #D6E4EF;
-            padding-left: 24px;
-        }
-        .sla-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--clr-blue);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 4px;
-        }
-        .sla-value {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--clr-ink);
-        }
-        .sla-desc {
-            font-size: 11.5px;
-            color: var(--clr-muted);
-            margin-top: 4px;
-        }
- 
+
         .alert-success {
             background: #E6F4EA;
             border: 1px solid #B8E2C8;
@@ -280,7 +243,7 @@
             .grid-layout { grid-template-columns: 1fr; }
         }
 
-        /* ─── CARDS ──────────────────────────────────────────── */
+        /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ CARDS Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
         .card {
             background: var(--clr-white);
             border: 1px solid var(--clr-line);
@@ -301,7 +264,7 @@
             border-bottom: 1.5px solid var(--clr-line);
         }
 
-        /* ─── DATA LIST ──────────────────────────────────────── */
+        /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ DATA LIST Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
         .data-list {
             display: flex;
             flex-direction: column;
@@ -330,7 +293,7 @@
             color: var(--clr-blue);
         }
 
-        /* ─── DOCUMENT DOWNLOADS ────────────────────────────── */
+        /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ DOCUMENT DOWNLOADS Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
         .doc-list {
             display: flex;
             flex-direction: column;
@@ -370,7 +333,7 @@
             stroke-width: 2.5;
         }
 
-        /* ─── TIMELINE ───────────────────────────────────────── */
+        /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ TIMELINE Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
         .timeline {
             display: flex;
             flex-direction: column;
@@ -476,7 +439,7 @@
             background: #FFF5F5;
         }
 
-        /* ─── VERIFICATION PANEL ────────────────────────────── */
+        /* Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ VERIFICATION PANEL Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬ */
         .verify-card {
             background: #FFFDF0;
             border: 1.5px solid #FBE89F;
@@ -622,7 +585,7 @@
 
             <div class="page-header">
                 <div>
-                    <a href="{{ route('non-berusaha.index') }}" class="back-btn">
+                    <a href="{{ route('psn.index') }}" class="back-btn">
                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                         Kembali ke Daftar
                     </a>
@@ -653,7 +616,7 @@
                 <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
                 @php
                     $review = \App\Models\Review::where('user_id', Auth::id())
-                        ->where('module_type', 'non_berusaha')
+                        ->where('module_type', 'psn')
                         ->where('module_id', $application->id)
                         ->first();
                 @endphp
@@ -661,14 +624,14 @@
                 @if(Auth::user()->isPelakuUsaha())
                     <div class="verify-card" style="border-color: #CBD5E0; background: #F8FAFC; margin-bottom: 24px; padding: 24px; border-radius: 12px; border: 1.5px solid var(--clr-line);">
                         <h3 class="verify-title" style="color: var(--clr-blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px;">
-                            ⭐ Ulasan & Penilaian Layanan
+                            Ã¢Â­Â Ulasan & Penilaian Layanan
                         </h3>
  
                         @if($review)
                             <div style="background: #FFFFFF; border: 1.5px solid var(--clr-line); padding: 16px; border-radius: 10px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                     <span style="color: var(--clr-yellow); font-size: 16px; font-weight: 700;">
-                                        {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }} 
+                                        {{ str_repeat('Ã¢Ëœâ€¦', $review->rating) }}{{ str_repeat('Ã¢Ëœâ€ ', 5 - $review->rating) }} 
                                         <span style="color: var(--clr-ink); font-size: 13px; font-weight: 800; margin-left: 6px;">({{ $review->rating_label }})</span>
                                     </span>
                                     @if($review->is_approved)
@@ -683,17 +646,17 @@
                             <p style="font-size: 12.5px; color: var(--clr-muted); margin-bottom: 16px;">Silakan berikan ulasan Anda terkait efisiensi pelaporan dan pelayanan kami untuk membantu kami meningkatkan kualitas sistem.</p>
                             <form action="{{ route('review.store') }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="module_type" value="non_berusaha">
+                                <input type="hidden" name="module_type" value="psn">
                                 <input type="hidden" name="module_id" value="{{ $application->id }}">
                                 
                                 <div class="form-group" style="margin-bottom: 12px;">
                                     <label for="rating" style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Penilaian Anda</label>
                                     <select name="rating" id="rating" style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--clr-line); font-size:13.5px;" required>
-                                        <option value="5">⭐⭐⭐⭐⭐ Sangat Baik</option>
-                                        <option value="4">⭐⭐⭐⭐ Baik</option>
-                                        <option value="3">⭐⭐⭐ Cukup Baik</option>
-                                        <option value="2">⭐⭐ Kurang</option>
-                                        <option value="1">⭐ Sangat Kurang</option>
+                                        <option value="5">Ã¢Â­ÂÃ¢Â­ÂÃ¢Â­ÂÃ¢Â­ÂÃ¢Â­Â Sangat Baik</option>
+                                        <option value="4">Ã¢Â­ÂÃ¢Â­ÂÃ¢Â­ÂÃ¢Â­Â Baik</option>
+                                        <option value="3">Ã¢Â­ÂÃ¢Â­ÂÃ¢Â­Â Cukup Baik</option>
+                                        <option value="2">Ã¢Â­ÂÃ¢Â­Â Kurang</option>
+                                        <option value="1">Ã¢Â­Â Sangat Kurang</option>
                                     </select>
                                 </div>
  
@@ -738,17 +701,17 @@
 
             @if($canVerify)
                 <div class="verify-card">
-                    <h3 class="verify-title">📝 Panel Pemeriksaan Berkas — {{ $verifierRoleLabel }}</h3>
+                    <h3 class="verify-title">Ã°Å¸â€œÂ Panel Pemeriksaan Berkas Ã¢â‚¬â€ {{ $verifierRoleLabel }}</h3>
                     
                     @if($user->isBpn() && $application->status === 'menunggu_bpn')
 
                         {{-- ====== LANGKAH 1: VERIFIKASI BERKAS (Pertama kali masuk) ====== --}}
                         @if($application->bpn_berkas_status === 'menunggu')
-                            <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST">
+                            <form action="{{ route('psn.verify', $application->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="step" value="bpn_berkas">
                                 <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
-                                    <strong>Langkah 1 dari 4 — Verifikasi Berkas Awal:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, lalu terima atau tolak. Notifikasi WA akan terkirim otomatis.
+                                    <strong>Langkah 1 dari 4 Ã¢â‚¬â€ Verifikasi Berkas Awal:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, lalu terima atau tolak. Notifikasi WA akan terkirim otomatis.
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Pemeriksaan Berkas:</label>
@@ -779,24 +742,24 @@
 
                             {{-- Info status berkas diterima --}}
                             <div style="background:#F0FFF4;border:1px solid #9AE6B4;padding:10px 14px;border-radius:8px;font-size:12.5px;color:#276749;margin-bottom:16px;">
-                                ✅ <strong>Berkas Diterima.</strong> Catatan BPN: {{ $application->bpn_notes }}
+                                Ã¢Å“â€¦ <strong>Berkas Diterima.</strong> Catatan BPN: {{ $application->bpn_notes }}
                             </div>
 
                             {{-- ===== Form Jadwal Cek Lokasi (Selalu bisa diedit) ===== --}}
-                            <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST">
+                            <form action="{{ route('psn.verify', $application->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="step" value="bpn_cek_lokasi">
                                 <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:16px;">
-                                    <strong>Langkah 2 dari 4 — Jadwal Cek Lokasi</strong>
+                                    <strong>Langkah 2 dari 4 Ã¢â‚¬â€ Jadwal Cek Lokasi</strong>
                                     @if($application->bpn_cek_lokasi_dt)
                                         @if($cekLokasiLewat)
-                                            <span style="color:#276749;font-weight:700;"> ✅ Selesai</span> —
+                                            <span style="color:#276749;font-weight:700;"> Ã¢Å“â€¦ Selesai</span> Ã¢â‚¬â€
                                             Cek lokasi <strong>{{ $application->bpn_cek_lokasi_date }}</strong> sudah lewat. Jadwal bisa tetap diubah jika perlu.
                                         @else
-                                            — Terjadwal: <strong>{{ $application->bpn_cek_lokasi_date }}</strong> (CP: {{ $application->bpn_cek_lokasi_cp }}). Ubah jika ada perubahan.
+                                            Ã¢â‚¬â€ Terjadwal: <strong>{{ $application->bpn_cek_lokasi_date }}</strong> (CP: {{ $application->bpn_cek_lokasi_cp }}). Ubah jika ada perubahan.
                                         @endif
                                     @else
-                                        — Tentukan jadwal dan kontak person petugas lapangan.
+                                        Ã¢â‚¬â€ Tentukan jadwal dan kontak person petugas lapangan.
                                     @endif
                                 </div>
                                 <div class="form-group" style="margin-bottom:12px;">
@@ -813,7 +776,7 @@
                                     @error('bpn_cek_lokasi_cp')<span class="error-message">{{ $message }}</span>@enderror
                                 </div>
                                 <button type="submit" class="btn-verify-submit" style="font-size:13px;padding:10px 20px;">
-                                    {{ $application->bpn_cek_lokasi_dt ? '🔄 Ubah Jadwal Cek Lokasi & Kirim WA' : '📍 Simpan Jadwal Cek Lokasi & Blast WA' }}
+                                    {{ $application->bpn_cek_lokasi_dt ? 'Ã°Å¸â€â€ž Ubah Jadwal Cek Lokasi & Kirim WA' : 'Ã°Å¸â€œÂ Simpan Jadwal Cek Lokasi & Blast WA' }}
                                 </button>
                             </form>
 
@@ -822,23 +785,23 @@
                                 <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
                                 @if(!$cekLokasiLewat)
                                     <div style="background:#EDF2F7;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4A5568;display:flex;align-items:center;gap:8px;">
-                                        🕐 <span>Jadwal Rapat Koordinasi akan tersedia setelah jadwal cek lokasi (<strong>{{ $application->bpn_cek_lokasi_date }}</strong>) sudah berlalu 1 hari.</span>
+                                        Ã°Å¸â€¢Â <span>Jadwal Rapat Koordinasi akan tersedia setelah jadwal cek lokasi (<strong>{{ $application->bpn_cek_lokasi_date }}</strong>) sudah berlalu 1 hari.</span>
                                     </div>
                                 @else
-                                    <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST">
+                                    <form action="{{ route('psn.verify', $application->id) }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="step" value="bpn_rapat">
                                         <div style="background:#EBF8FF;border:1px solid #90CDF4;padding:12px 16px;border-radius:8px;font-size:13px;color:#2B6CB0;margin-bottom:16px;">
-                                            <strong>Langkah 3 dari 4 — Jadwal Rapat Koordinasi</strong>
+                                            <strong>Langkah 3 dari 4 Ã¢â‚¬â€ Jadwal Rapat Koordinasi</strong>
                                             @if($application->bpn_rapat_dt)
                                                 @if($rapatLewat)
-                                                    <span style="color:#276749;font-weight:700;"> ✅ Selesai</span> —
+                                                    <span style="color:#276749;font-weight:700;"> Ã¢Å“â€¦ Selesai</span> Ã¢â‚¬â€
                                                     Rapat <strong>{{ $application->bpn_rapat_date }}</strong> sudah lewat. Jadwal tetap bisa diubah jika diperlukan.
                                                 @else
-                                                    — Terjadwal: <strong>{{ $application->bpn_rapat_date }}</strong>. Ubah jika ada perubahan.
+                                                    Ã¢â‚¬â€ Terjadwal: <strong>{{ $application->bpn_rapat_date }}</strong>. Ubah jika ada perubahan.
                                                 @endif
                                             @else
-                                                — Cek lokasi selesai. Tentukan waktu rapat koordinasi BPN.
+                                                Ã¢â‚¬â€ Cek lokasi selesai. Tentukan waktu rapat koordinasi BPN.
                                             @endif
                                         </div>
                                         <div class="form-group" style="margin-bottom:12px;">
@@ -848,7 +811,7 @@
                                                 style="background:white;" required>
                                         </div>
                                         <button type="submit" class="btn-verify-submit" style="background:#218AC9;font-size:13px;padding:10px 20px;">
-                                            {{ $application->bpn_rapat_dt ? '🔄 Ubah Jadwal Rapat & Kirim WA' : '📅 Simpan Jadwal Rapat & Blast WA' }}
+                                            {{ $application->bpn_rapat_dt ? 'Ã°Å¸â€â€ž Ubah Jadwal Rapat & Kirim WA' : 'Ã°Å¸â€œâ€¦ Simpan Jadwal Rapat & Blast WA' }}
                                         </button>
                                     </form>
                                 @endif
@@ -859,14 +822,14 @@
                                 <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
                                 @if(!$rapatLewat)
                                     <div style="background:#EDF2F7;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4A5568;display:flex;align-items:center;gap:8px;">
-                                        🕐 <span>Penerbitan Pertek akan tersedia setelah jadwal rapat (<strong>{{ $application->bpn_rapat_date }}</strong>) sudah berlalu 1 hari.</span>
+                                        Ã°Å¸â€¢Â <span>Penerbitan Pertek akan tersedia setelah jadwal rapat (<strong>{{ $application->bpn_rapat_date }}</strong>) sudah berlalu 1 hari.</span>
                                     </div>
                                 @else
-                                    <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('psn.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="step" value="bpn_pertek">
                                         <div style="background:#F0FFF4;border:1px solid #BBF7D0;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;line-height:1.6;">
-                                            <strong>Langkah 4 dari 4 — Penerbitan Pertek Pertanahan</strong><br>
+                                            <strong>Langkah 4 dari 4 Ã¢â‚¬â€ Penerbitan Pertek Pertanahan</strong><br>
                                             Rapat telah selesai. Upload Dokumen Pertek dan beri keputusan akhir BPN.
                                         </div>
                                         <div class="form-group">
@@ -886,7 +849,7 @@
                                             <textarea name="notes" class="form-control" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required></textarea>
                                             @error('notes')<span class="error-message">{{ $message }}</span>@enderror
                                         </div>
-                                        <button type="submit" class="btn-verify-submit" style="background:#79A73A;">📄 Terbitkan Pertek & Blast WA Pemohon</button>
+                                        <button type="submit" class="btn-verify-submit" style="background:#79A73A;">Ã°Å¸â€œâ€ž Terbitkan Pertek & Blast WA Pemohon</button>
                                     </form>
                                     <script>
                                         function togglePertekUpload(show) {
@@ -904,16 +867,17 @@
                     @else
                         {{-- ====== FORM DINAS PU ====== --}}
                         @if($user->isDinasPu() && $application->status === 'menunggu_dinas_pu')
-                        <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST">
+                        <form action="{{ route('psn.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="step" value="dinas_pu_penilaian">
                             <div style="background:#EBF8FF;border:1px solid #90CDF4;padding:12px 16px;border-radius:8px;font-size:13px;color:#2B6CB0;margin-bottom:16px;">
                                 <strong>Penilaian Tata Ruang (Dinas PU):</strong> Periksa kesesuaian tata ruang berdasarkan dokumen Pertek BPN, lalu tentukan keputusan.
                             </div>
                             <div class="form-group">
                                 <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Penilaian:</label>
                                 <div class="radio-group">
-                                    <label class="radio-label"><input type="radio" name="action" value="approve" required checked> Tata Ruang Sesuai — Teruskan ke Satu Pintu</label>
-                                    <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required> Tidak Sesuai — Tolak Permohonan</label>
+                                    <label class="radio-label"><input type="radio" name="action" value="approve" required checked> Tata Ruang Sesuai Ã¢â‚¬â€ Teruskan ke Satu Pintu</label>
+                                    <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required> Tidak Sesuai Ã¢â‚¬â€ Tolak Permohonan</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -921,12 +885,23 @@
                                 <textarea id="notes_pu" name="notes" class="form-control" rows="3" placeholder="Tuliskan catatan penilaian tata ruang..." style="resize:none;background:white;" required></textarea>
                                 @error('notes')<span class="error-message">{{ $message }}</span>@enderror
                             </div>
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label class="form-label" style="font-weight:700;color:#744210;">Tanggal Penilaian <span style="color:red;">*</span></label>
+                                <input type="date" name="dinas_pu_tanggal_penilaian" class="form-control" value="{{ old('dinas_pu_tanggal_penilaian') }}" style="background:white;" required>
+                                @error('dinas_pu_tanggal_penilaian')<span class="error-message">{{ $message }}</span>@enderror
+                            </div>
+                            <div class="form-group" style="margin-bottom:12px;">
+                                <label class="form-label" style="font-weight:700;color:#744210;">Upload Dokumen Penilaian <span style="font-size:11px;color:#718096;">(opsional &mdash; hanya masuk ke BPN)</span></label>
+                                <input type="file" name="dinas_pu_document" class="form-control" accept=".pdf,.doc,.docx" style="background:white;">
+                                <span style="font-size:11.5px;color:#744210;margin-top:4px;display:block;">Format PDF/DOC, maks. 10MB. File ini hanya dapat diakses oleh BPN, tidak diteruskan ke pemohon.</span>
+                                @error('dinas_pu_document')<span class="error-message">{{ $message }}</span>@enderror
+                            </div>
                             <button type="submit" class="btn-verify-submit" style="background:#218AC9;">Kirim Keputusan Penilaian Tata Ruang</button>
                         </form>
 
                         {{-- ====== FORM SATU PINTU ====== --}}
                         @elseif($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu')
-                        <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('psn.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div style="background:#F0FFF4;border:1px solid #9AE6B4;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;">
                                 <strong>Penerbitan PKKPR (Dinas Satu Pintu / PTSP):</strong> Isi data penerbitan PKKPR resmi, lalu unggah dokumen dan kirim.
@@ -962,7 +937,7 @@
                                 <label for="notes_sp" class="form-label" style="font-weight:700;color:#744210;">Catatan / Keterangan:</label>
                                 <textarea id="notes_sp" name="notes" class="form-control" rows="3" placeholder="Catatan penerbitan PKKPR (opsional)..." style="resize:none;background:white;"></textarea>
                             </div>
-                            <button type="submit" class="btn-verify-submit" style="background:#79A73A;">📄 Terbitkan PKKPR & Blast WA Pemohon</button>
+                            <button type="submit" class="btn-verify-submit" style="background:#79A73A;">Ã°Å¸â€œâ€ž Terbitkan PKKPR & Blast WA Pemohon</button>
                         </form>
                         <script>
                             function toggleSatuPintuFields(show) {
@@ -1110,31 +1085,6 @@
 
                 <!-- Right: Staged Tracking Timeline -->
                 <div>
-                    <div class="card">
-                        <h1 class="page-title">Detail PKKPR Non-Berusaha</h1>
-                    </div>
-
-                    <!-- SLA Banner -->
-                    <style>
-                        .sla-banner { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-                        .sla-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; }
-                        .sla-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #718096; margin-bottom: 4px; }
-                        .sla-value { font-size: 16px; font-weight: 800; color: #2d3748; margin-bottom: 6px; }
-                        .sla-desc { font-size: 12px; color: #4a5568; }
-                    </style>
-                    <div class="sla-banner">
-                        <div class="sla-item">
-                            <div class="sla-title">SLA Tahap 1 (BPN)</div>
-                            <div class="sla-value">10 Hari Kerja</div>
-                            <div class="sla-desc">Target Terbit Pertek: <strong>{{ $application->created_at->addWeekdays(10)->format('d M Y') }}</strong></div>
-                        </div>
-                        <div class="sla-item">
-                            <div class="sla-title">SLA Tahap 2 (DPMPTSP)</div>
-                            <div class="sla-value">10 Hari Kerja</div>
-                            <div class="sla-desc">Target Terbit PKKPR: <strong>10 hari setelah Pertek diterbitkan</strong></div>
-                        </div>
-                    </div>
-
                     <div class="card">
                         <h2 class="card-title">Linimasa Pelacakan Berkas</h2>
                         
@@ -1305,7 +1255,7 @@
                                     @if($application->status === 'ditolak')
                                         Permohonan dihentikan/ditolak oleh instansi terkait (BPN atau Dinas PU).
                                     @elseif($application->status === 'disetujui')
-                                        Seluruh alur selesai. Dokumen PKKPR Non-Berusaha siap diunduh dari portal.
+                                        Seluruh alur selesai. Dokumen PKKPR PSN siap diunduh dari portal.
                                     @else
                                         Menunggu seluruh tahapan selesai disetujui semua instansi terkait.
                                     @endif
@@ -1322,3 +1272,4 @@
 
 </body>
 </html>
+

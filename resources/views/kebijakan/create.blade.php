@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,7 @@
             $serviceName = 'Tanah Timbul';
         }
     @endphp
-    <title>Form Pengajuan {{ $serviceName }} — PATEN PAK MIKO</title>
+    <title>Form Pengajuan {{ $serviceName }} â€” PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,7 +54,7 @@
             padding: 0 24px;
         }
  
-        /* ─── HEADER ─────────────────────────────────────────── */
+        /* â”€â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         header {
             background: var(--clr-white);
             border-bottom: 1px solid var(--clr-line);
@@ -193,7 +193,7 @@
             font-weight: 600;
         }
  
-        /* ─── MAIN CONTENT ───────────────────────────────────── */
+        /* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         main {
             padding: 40px 0;
         }
@@ -235,7 +235,7 @@
             color: var(--clr-ink);
         }
  
-        /* ─── FORM ELEMENTS ───────────────────────────────────── */
+        /* â”€â”€â”€ FORM ELEMENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
         .form-section-title {
             font-size: 14px;
             font-weight: 800;
@@ -377,29 +377,9 @@
  
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
-                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-                    <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
-                    
-                    <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
-                        @if(Auth::user()->profile_photo)
-                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar">
-                        @else
-                            <div class="header-avatar-placeholder">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 2)) }}
-                            </div>
-                        @endif
-                        <div class="user-badge">
-                            <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
-                            <span>{{ Auth::user()->phone_number }}</span>
-                        </div>
-                    </div>
- 
                     <form action="{{ route('logout') }}" method="POST" style="margin-left: 8px;">
                         @csrf
-                        <button type="submit" class="btn-logout">
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                            Keluar
-                        </button>
+                        <button type="submit" class="btn-logout">Keluar</button>
                     </form>
                 </div>
             </div>
@@ -546,13 +526,27 @@
                         @error('fc_npwp')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
-                    <!-- 5. Akta Pendirian -->
+                    <!-- 5. Akta Pendirian / Dokumen Penetapan -->
                     <div class="form-group">
-                        <label for="fc_akta_pendirian" class="form-label">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB.</span>
-                        </div>
+                        @if($jenisPermohonan === 'psn')
+                            <label for="fc_akta_pendirian" class="form-label">5. Dokumen Penetapan / Rekomendasi PSN dari Kementerian / Lembaga Teknis <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB. (Surat penetapan PSN / rekomendasi resmi)</span>
+                            </div>
+                        @elseif($jenisPermohonan === 'tanah-timbul')
+                            <label for="fc_akta_pendirian" class="form-label">5. Surat Keterangan Tanah Timbul dari Kepala Desa / Lurah <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB. (Surat resmi desa/kelurahan setempat)</span>
+                            </div>
+                        @else
+                            <label for="fc_akta_pendirian" class="form-label">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB.</span>
+                            </div>
+                        @endif
                         @error('fc_akta_pendirian')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
@@ -568,31 +562,73 @@
 
                     <!-- 7. NIB -->
                     <div class="form-group">
-                        <label for="nib" class="form-label">7. Nomor Induk Berusaha (NIB) <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="nib" name="nib" accept=".pdf,.jpg,.jpeg,.png" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
-                        </div>
+                        @if($jenisPermohonan === 'psn')
+                            <label for="nib" class="form-label">7. Nomor Induk Berusaha (NIB) / Izin Usaha Sektoral <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="nib" name="nib" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                            </div>
+                        @elseif($jenisPermohonan === 'tanah-timbul')
+                            <label for="nib" class="form-label">7. Surat Pernyataan Penguasaan Fisik Bidang Tanah (Sporadik) <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="nib" name="nib" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                            </div>
+                        @else
+                            <label for="nib" class="form-label">7. Nomor Induk Berusaha (NIB) <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="nib" name="nib" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                            </div>
+                        @endif
                         @error('nib')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
                     <!-- 8. KBLI -->
                     <div class="form-group">
-                        <label for="kbli" class="form-label">8. Dokumen KBLI yang diajukan <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png" required>
-                            <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
-                        </div>
+                        @if($jenisPermohonan === 'psn')
+                            <label for="kbli" class="form-label">8. Dokumen KBLI / Klasifikasi Lapangan Usaha PSN <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                            </div>
+                        @elseif($jenisPermohonan === 'tanah-timbul')
+                            <label for="kbli" class="form-label">8. Berita Acara Peninjauan / Rekomendasi Batas Kelurahan <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                            </div>
+                        @else
+                            <label for="kbli" class="form-label">8. Dokumen KBLI yang diajukan <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
+                            </div>
+                        @endif
                         @error('kbli')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
                     <!-- 9. Proposal -->
                     <div class="form-group">
-                        <label for="proposal_kegiatan" class="form-label">9. Proposal Rencana Kegiatan Berusaha <span class="req">*</span></label>
-                        <div class="file-input-wrapper">
-                            <input type="file" id="proposal_kegiatan" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
-                            <span class="file-help">Format: PDF, DOC, DOCX. Maks. 10MB. (Memuat Latar Belakang, Permodalan, Nilai Proyek, dll)</span>
-                        </div>
+                        @if($jenisPermohonan === 'psn')
+                            <label for="proposal_kegiatan" class="form-label">9. Proposal Rencana Kegiatan / Masterplan PSN <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="proposal_kegiatan" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
+                                <span class="file-help">Format: PDF, DOC, DOCX. Maks. 10MB. (Memuat gambaran umum, nilai investasi, tahapan proyek, dll)</span>
+                            </div>
+                        @elseif($jenisPermohonan === 'tanah-timbul')
+                            <label for="proposal_kegiatan" class="form-label">9. Dokumen Bukti / Alasan Penggunaan Tanah Timbul <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="proposal_kegiatan" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
+                                <span class="file-help">Format: PDF, DOC, DOCX. Maks. 10MB. (Memuat rencana pemanfaatan untuk pertanian/tambak/rumah tinggal)</span>
+                            </div>
+                        @else
+                            <label for="proposal_kegiatan" class="form-label">9. Proposal Rencana Kegiatan Berusaha <span class="req">*</span></label>
+                            <div class="file-input-wrapper">
+                                <input type="file" id="proposal_kegiatan" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
+                                <span class="file-help">Format: PDF, DOC, DOCX. Maks. 10MB. (Memuat Latar Belakang, Permodalan, Nilai Proyek, dll)</span>
+                            </div>
+                        @endif
                         @error('proposal_kegiatan')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
@@ -620,3 +656,4 @@
  
 </body>
 </html>
+

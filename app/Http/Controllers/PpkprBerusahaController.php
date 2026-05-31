@@ -123,7 +123,7 @@ class PpkprBerusahaController extends Controller
         // Kirim Notifikasi Awal ke Pelaku Usaha
         $this->sendCustomWhatsappNotification($app, 'submit_berkas');
  
-        return redirect()->route('berusaha.index')->with('success', 'Permohonan PPKPR Berusaha berhasil diajukan! Berkas Anda sedang diverifikasi oleh BPN.');
+        return redirect()->route('berusaha.show', $app->application_number)->with('success', 'Permohonan PPKPR Berusaha berhasil diajukan! Berkas Anda sedang diverifikasi oleh BPN.');
     }
  
     /**
@@ -131,7 +131,7 @@ class PpkprBerusahaController extends Controller
      */
     public function show($id)
     {
-        $application = PpkprBerusahaApplication::findOrFail($id);
+        $application = PpkprBerusahaApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
         $user = Auth::user();
  
         // Keamanan: Pelaku usaha hanya melihat berkas miliknya sendiri
@@ -147,7 +147,7 @@ class PpkprBerusahaController extends Controller
      */
     public function verify(Request $request, $id)
     {
-        $application = PpkprBerusahaApplication::findOrFail($id);
+        $application = PpkprBerusahaApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
         $user = Auth::user();
         $step = $request->input('step');
  
@@ -167,13 +167,16 @@ class PpkprBerusahaController extends Controller
                 $notes = $request->input('notes');
  
                 $application->bpn_notes = $notes;
-                $application->bpn_berkas_status = $action === 'approve' ? 'diterima' : 'tidak_sesuai';
                 
-                if ($action === 'reject') {
-                    // Ditolak/tidak sesuai, pelaku usaha harus upload ulang
-                    $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi.';
+                if ($action === 'approve') {
+                    $application->bpn_berkas_status = 'diterima';
+                    // Alur berlanjut ke Validasi Permohonan oleh Dinas PUTR / Dinas PU
+                    $application->status = 'menunggu_dinas_pu';
+                    $application->dinas_pu_status = 'menunggu_validasi_awal';
+                    $msg = 'Berkas persyaratan dinyatakan sesuai oleh BPN. Permohonan diteruskan ke Dinas PUTR untuk Validasi Awal.';
                 } else {
-                    $msg = 'Berkas persyaratan berhasil disetujui.';
+                    $application->bpn_berkas_status = 'tidak_sesuai';
+                    $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi.';
                 }
                 $application->save();
  
@@ -183,31 +186,23 @@ class PpkprBerusahaController extends Controller
                 return redirect()->route('berusaha.show', $id)->with('success', $msg);
             }
  
-            // BPN Langkah 2: Validasi Pembayaran
+            // BPN Langkah 2: Validasi Pembayaran & Input No. Berkas & Blast Kredensial Login WA
             if ($step === 'bpn_pembayaran') {
                 $request->validate([
-                    'action' => 'required|in:sudah_bayar,belum_bayar',
-                    'notes' => 'nullable|string|max:1000',
+                    'no_berkas' => 'required|string|max:100',
+                ], [
+                    'no_berkas.required' => 'Nomor Berkas wajib diisi sebelum mengkonfirmasi pembayaran.',
                 ]);
- 
-                $action = $request->input('action');
-                $notes = $request->input('notes');
- 
-                $application->bpn_pembayaran_status = $action;
-                if ($notes) {
-                    $application->bpn_notes = $notes;
-                }
+
+                // Simpan no berkas dan konfirmasi pembayaran
+                $application->no_berkas = $request->input('no_berkas');
+                $application->bpn_pembayaran_status = 'sudah_bayar';
                 $application->save();
- 
-                if ($action === 'belum_bayar') {
-                    $this->sendCustomWhatsappNotification($application, 'pembayaran_belum');
-                    $msg = 'Status pembayaran diatur Belum Bayar. Notifikasi tagihan telah dikirim ke pemohon.';
-                } else {
-                    $this->sendCustomWhatsappNotification($application, 'pembayaran_lunas');
-                    $msg = 'Pembayaran terverifikasi LUNAS. Silakan tentukan jadwal cek lokasi.';
-                }
- 
-                return redirect()->route('berusaha.show', $id)->with('success', $msg);
+
+                // Kirim Notifikasi Blast WA Kredensial & Tautan Dashboard ke Pelaku Usaha
+                $this->sendCustomWhatsappNotification($application, 'pembayaran_lunas');
+
+                return redirect()->route('berusaha.show', $id)->with('success', "Pembayaran Retribusi terverifikasi LUNAS! No. Berkas: {$application->no_berkas}. Kredensial login dashboard telah di-blast ke WhatsApp pemohon.");
             }
  
             // BPN Langkah 3: Penjadwalan Cek Lokasi Lapangan
@@ -271,10 +266,10 @@ class PpkprBerusahaController extends Controller
                     $path = $request->file('bpn_pertek_document')->store('bpn_perteks_berusaha', 'public');
                     $application->bpn_pertek_document = $path;
                     
-                    // Alur berlanjut ke Dinas PU
+                    // Alur berlanjut ke Dinas PU (Tahap 8: Penilaian PKKPR)
                     $application->status = 'menunggu_dinas_pu';
-                    $application->dinas_pu_status = 'menunggu';
-                    $msg = 'Rekomendasi Teknis (Pertek) berhasil diterbitkan. Permohonan diteruskan ke Dinas Pekerjaan Umum (PU).';
+                    $application->dinas_pu_status = 'menunggu_penilaian';
+                    $msg = 'Rekomendasi Teknis (Pertek) berhasil diterbitkan. Permohonan diteruskan ke Dinas Pekerjaan Umum (PU) untuk Penilaian PKKPR.';
                 } else {
                     $application->status = 'ditolak';
                     $msg = 'Permohonan ditolak oleh BPN pada tahap rekomendasi teknis.';
@@ -289,59 +284,106 @@ class PpkprBerusahaController extends Controller
         }
  
         // ==========================================
-        // 2. TAHAP DINAS PU (Penilaian Tata Ruang)
+        // 2. TAHAP DINAS PU / PUTR (Validasi Awal ATAU Penilaian Tata Ruang)
         // ==========================================
         if ($user->isDinasPu() && $application->status === 'menunggu_dinas_pu') {
-            $request->validate([
-                'action' => 'required|in:sesuai,belum_sesuai',
-                'notes' => 'required|string|max:1000',
-            ]);
- 
-            $action = $request->input('action');
-            $notes = $request->input('notes');
- 
-            $application->dinas_pu_status = $action;
-            $application->dinas_pu_notes = $notes;
- 
-            if ($action === 'sesuai') {
-                // Alur berlanjut ke Satu Pintu (PTSP)
-                $application->status = 'menunggu_satu_pintu';
-                $msg = 'Penilaian disetujui (Sesuai Tata Ruang). Permohonan dilanjutkan ke Dinas Satu Pintu (PTSP).';
-            } else {
-                // Status Belum Sesuai (kembali ke BPN / menunggu perbaikan)
-                $msg = 'Penilaian diatur Belum Sesuai Tata Ruang. Catatan penilaian telah dikirim.';
+            
+            // KASUS A: Validasi Permohonan Awal (Stage 3)
+            if ($application->dinas_pu_status === 'menunggu_validasi_awal') {
+                $request->validate([
+                    'action' => 'required|in:approve,reject',
+                    'notes' => 'required|string|max:1000',
+                ]);
+
+                $action = $request->input('action');
+                $notes = $request->input('notes');
+
+                $application->dinas_pu_notes = $notes;
+
+                if ($action === 'approve') {
+                    // Validasi sukses, status kembali ke BPN menunggu pembayaran retribusi
+                    $application->status = 'menunggu_bpn';
+                    $application->dinas_pu_status = 'validasi_awal_diterima';
+                    $application->bpn_pembayaran_status = 'belum_bayar';
+                    $msg = 'Permohonan berhasil divalidasi oleh Dinas PUTR. Notifikasi tagihan pembayaran dikirim ke pemohon.';
+                } else {
+                    // Validasi ditolak, permohonan selesai/ditolak
+                    $application->status = 'ditolak';
+                    $application->dinas_pu_status = 'validasi_awal_ditolak';
+                    $msg = 'Permohonan ditolak pada tahap validasi awal oleh Dinas PUTR.';
+                }
+                $application->save();
+
+                // Kirim notifikasi WA blast
+                $this->sendCustomWhatsappNotification($application, $action === 'approve' ? 'validasi_awal_setuju' : 'validasi_awal_tolak');
+
+                return redirect()->route('berusaha.show', $id)->with('success', $msg);
             }
-            $application->save();
+
+            // KASUS B: Penilaian PKKPR Akhir (Stage 8)
+            if ($application->dinas_pu_status === 'menunggu_penilaian') {
+                $request->validate([
+                    'action' => 'required|in:sesuai,belum_sesuai',
+                    'notes' => 'nullable|string|max:1000',
+                    'dinas_pu_tanggal_penilaian' => 'required|date',
+                    'dinas_pu_document' => 'nullable|file|mimes:pdf|max:10240',
+                ]);
  
-            // Kirim Notifikasi WA ke PTSP (jika sesuai) atau Pelaku Usaha (jika belum sesuai)
-            $this->sendCustomWhatsappNotification($application, $action === 'sesuai' ? 'pu_sesuai' : 'pu_belum_sesuai');
+                $action = $request->input('action');
+                $notes = $request->input('notes');
  
-            return redirect()->route('berusaha.show', $id)->with('success', $msg);
+                $application->dinas_pu_status = $action === 'sesuai' ? 'penilaian_sesuai' : 'penilaian_belum_sesuai';
+                $application->dinas_pu_notes = $notes;
+                $application->dinas_pu_tanggal_penilaian = Carbon::parse($request->input('dinas_pu_tanggal_penilaian'));
+
+                if ($request->hasFile('dinas_pu_document')) {
+                    $path = $request->file('dinas_pu_document')->store('dinas_pu_penilaians', 'public');
+                    $application->dinas_pu_document = $path;
+                }
+ 
+                if ($action === 'sesuai') {
+                    // Alur berlanjut ke Satu Pintu (PTSP)
+                    $application->status = 'menunggu_satu_pintu';
+                    $msg = 'Penilaian disetujui (Sesuai Tata Ruang). Permohonan dilanjutkan ke Dinas Satu Pintu (PTSP).';
+                } else {
+                    // Status Belum Sesuai (kembali ke BPN / menunggu perbaikan)
+                    $application->status = 'menunggu_bpn';
+                    $msg = 'Penilaian diatur Belum Sesuai Tata Ruang. Catatan penilaian telah dikirim.';
+                }
+                $application->save();
+ 
+                // Kirim Notifikasi WA ke PTSP (jika sesuai) atau Pelaku Usaha (jika belum sesuai)
+                $this->sendCustomWhatsappNotification($application, $action === 'sesuai' ? 'pu_sesuai' : 'pu_belum_sesuai');
+ 
+                return redirect()->route('berusaha.show', $id)->with('success', $msg);
+            }
         }
  
         // ==========================================
-        // 3. TAHAP SATU PINTU / PTSP (Penerbitan Produk Akhir)
+        // 3. TAHAP SATU PINTU / PTSP (Penerbitan Produk Akhir - Stage 9)
         // ==========================================
         if ($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu') {
             $request->validate([
                 'satu_pintu_no_pkkpr' => 'required|string|max:100',
                 'satu_pintu_tanggal_terbit' => 'required|date',
-                'satu_pintu_document' => 'required|file|mimes:pdf|max:10240',
+                'satu_pintu_document' => 'nullable|file|mimes:pdf|max:10240',
                 'notes' => 'nullable|string|max:1000',
             ]);
  
-            $path = $request->file('satu_pintu_document')->store('pkkpr_berusaha_finals', 'public');
+            if ($request->hasFile('satu_pintu_document')) {
+                $path = $request->file('satu_pintu_document')->store('pkkpr_berusaha_finals', 'public');
+                $application->satu_pintu_document = $path;
+            }
  
             $application->satu_pintu_no_pkkpr = $request->input('satu_pintu_no_pkkpr');
             $application->satu_pintu_tanggal_terbit = Carbon::parse($request->input('satu_pintu_tanggal_terbit'));
-            $application->satu_pintu_document = $path;
             $application->satu_pintu_notes = $request->input('notes');
             
             // Permohonan Selesai & Disetujui
             $application->status = 'disetujui';
             $application->save();
  
-            // Kirim Notifikasi WA Final ke BPN, Pelaku Usaha, dan Dinas PU
+            // Kirim Notifikasi WA Final ke BPN dan Pelaku Usaha (Dinas PU tidak dikirimi)
             $this->sendCustomWhatsappNotification($application, 'final_disetujui');
  
             return redirect()->route('berusaha.show', $id)->with('success', 'Produk akhir PKKPR Berusaha berhasil diterbitkan! Seluruh alur permohonan telah selesai.');
@@ -361,13 +403,13 @@ class PpkprBerusahaController extends Controller
                 'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
                 'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
             ]);
-
+ 
             $filesToStore = [
                 'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
                 'fc_akta_pendirian', 'rencana_penggunaan_tanah',
                 'nib', 'kbli', 'proposal_kegiatan', 'persyaratan_lainnya'
             ];
-
+ 
             foreach ($filesToStore as $fileKey) {
                 if ($request->hasFile($fileKey)) {
                     $application->$fileKey = $request->file($fileKey)->store('berusaha_docs', 'public');
@@ -428,36 +470,52 @@ class PpkprBerusahaController extends Controller
         $namaPemohon = $application->nama_pengaju ?: ($application->user->name ?? $application->user->username);
         $noReg = $application->application_number;
  
-        // Ambil Kontak Masing-masing Instansi untuk Blast
-        $bpnUser = User::where('role', 'bpn')->first();
-        $dinasPuUser = User::where('role', 'dinas_pu')->first();
-        $satuPintuUser = User::where('role', 'satu_pintu')->first();
- 
-        $bpnPhone = $bpnUser ? $bpnUser->phone_number : '081234567891';
-        $puDinasPhone = $dinasPuUser ? $dinasPuUser->phone_number : '081234567892';
-        $satuPintuPhone = $satuPintuUser ? $satuPintuUser->phone_number : '081234567893';
-        $pemohonPhone = $application->user->phone_number;
+        // Ambil Kontak Admin dari Settings (diatur melalui dashboard DPN â†’ Pengaturan Kontak)
+        $bpnPhone       = !empty($settings['admin_bpn'])        ? $settings['admin_bpn']        : '081234567891';
+        $putrPhone      = !empty($settings['admin_putr'])       ? $settings['admin_putr']       : '081234567892';
+        $puDinasPhone   = !empty($settings['admin_dinas_pu'])   ? $settings['admin_dinas_pu']   : '081234567893';
+        $satuPintuPhone = !empty($settings['admin_satu_pintu']) ? $settings['admin_satu_pintu'] : '081234567894';
+        $pemohonPhone   = $application->user->phone_number;
  
         switch ($type) {
             case 'submit_berkas':
                 // Notifikasi Awal ke Pelaku Usaha
-                $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda dengan nomor {$noReg} telah sukses diajukan.\n\nBerkas persyaratan Anda sedang dalam tahap verifikasi awal oleh BPN. Silakan pantau detail di: {$url}";
+                $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda dengan nomor {$noReg} telah sukses diajukan.\n\nBerkas persyaratan Anda sedang dalam tahap verifikasi awal oleh BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.";
                 $this->executeFonnteSend($pemohonPhone, $message);
                 break;
  
             case 'berkas_verifikasi':
                 if ($application->bpn_berkas_status === 'diterima') {
-                    // Berkas Valid -> Blast WA ke Pelaku Usaha (Image 2)
-                    $message = "Halo {$namaPemohon}, berkas permohonan PPKPR Berusaha Anda ({$noReg}) dinyatakan VALID oleh BPN.\n\nSilakan masuk ke dashboard dan tekan tombol \"Kirim Notifikasi\" untuk melanjutkan proses ke verifikasi pembayaran. Lacak detail di: {$url}";
+                    // Berkas Valid -> Notifikasi ke Pelaku Usaha & PUTR
+                    $message = "Halo {$namaPemohon}, berkas permohonan PKKPR Berusaha Anda ({$noReg}) dinyatakan VALID oleh BPN.\n\nPermohonan diteruskan ke Dinas PUTR untuk Validasi Awal. Kami akan menghubungi Anda kembali.";
                     $this->executeFonnteSend($pemohonPhone, $message);
+
+                    $msgPUTR = "Notifikasi Dinas PUTR: Berkas permohonan PKKPR Berusaha {$noReg} telah disetujui BPN.\n\nSilakan lakukan validasi permohonan awal di: {$url}";
+                    $this->executeFonnteSend($putrPhone, $msgPUTR);
                 } else {
                     // Berkas Tidak Sesuai -> Pesan Kesalahan ke Pelaku Usaha
                     $message = "Halo {$namaPemohon}, berkas permohonan PPKPR Berusaha Anda ({$noReg}) dinyatakan TIDAK SESUAI oleh BPN dengan alasan:\n"
-                             . "\"{$application->bpn_notes}\"\n\nMohon lakukan unggah ulang berkas perbaikan melalui tautan detail berikut: {$url}";
+                             . "\"{$application->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin BPN.";
                     $this->executeFonnteSend($pemohonPhone, $message);
                 }
                 break;
  
+            case 'validasi_awal_setuju':
+                // Dinas PUTR Validasi Sukses -> Kirim Notifikasi ke Pelaku Usaha & BPN
+                $message = "Halo {$namaPemohon},\n\nPermohonan PPKPR Berusaha Anda ({$noReg}) telah divalidasi oleh Dinas PUTR.\n\nSilakan cek instruksi pembayaran retribusi (di email atau melalui petugas). Jika pembayaran sudah diselesaikan, Anda akan menerima detail Kredensial Akun (Username & Password) untuk memantau progress di sistem.";
+                $this->executeFonnteSend($pemohonPhone, $message);
+
+                $msgBPN = "Notifikasi BPN: Permohonan PKKPR Berusaha {$noReg} telah divalidasi oleh Dinas PUTR dan siap menunggu verifikasi pembayaran.";
+                $this->executeFonnteSend($bpnPhone, $msgBPN);
+                break;
+
+            case 'validasi_awal_tolak':
+                // Dinas PUTR Validasi Ditolak
+                $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda ({$noReg}) DITOLAK pada tahap validasi awal oleh Dinas PUTR dengan alasan:\n"
+                         . "\"{$application->dinas_pu_notes}\"\n\nHarap hubungi petugas untuk informasi lebih lanjut.";
+                $this->executeFonnteSend($pemohonPhone, $message);
+                break;
+
             case 'reupload_berkas':
                 // Notifikasi ke BPN bahwa pemohon telah upload perbaikan
                 $message = "Notifikasi BPN: Pelaku Usaha {$namaPemohon} telah mengunggah ulang berkas perbaikan untuk permohonan PPKPR Berusaha {$noReg}.\n\nSilakan cek & verifikasi ulang dokumen di: {$url}";
@@ -480,7 +538,7 @@ class PpkprBerusahaController extends Controller
                 break;
  
             case 'pembayaran_lunas':
-                // Pembayaran Lunas -> Blast WA berisi credential login & link dashboard & arahan
+                // Pembayaran Lunas -> Blast WA berisi credential login, no berkas, link dashboard & arahan
                 $usernameVal = $application->user->username;
                 $nikVal = 'NIK Anda';
                 if ($application->ptp_data) {
@@ -490,35 +548,40 @@ class PpkprBerusahaController extends Controller
                     }
                 }
                 $dashboardUrl = url('/login');
-                $message = "Halo {$namaPemohon},\n\nPembayaran untuk permohonan PPKPR Berusaha {$noReg} telah diverifikasi LUNAS oleh BPN.\n\nBerikut adalah Kredensial Login Akun Anda untuk mengakses dashboard Paten Pak Miko:\n"
-                         . "👤 Username: *{$usernameVal}*\n"
-                         . "🔑 Password: *{$nikVal}*\n\n"
+                $noBerkasInfo = $application->no_berkas ? "ðŸ“ Nomor Berkas: *{$application->no_berkas}*\n" : "";
+                $message = "Halo {$namaPemohon},\n\nPembayaran untuk permohonan PKKPR Berusaha {$noReg} telah diverifikasi LUNAS oleh BPN.\n\n"
+                         . $noBerkasInfo
+                         . "Berikut adalah Kredensial Login Akun Anda untuk mengakses dashboard Paten Pak Miko:\n"
+                         . "ðŸ‘¤ Username: *{$usernameVal}*\n"
+                         . "ðŸ”‘ Password: *{$nikVal}*\n\n"
                          . "Silakan login ke dashboard melalui tautan berikut:\n"
-                         . "🔗 {$dashboardUrl}\n\n"
+                         . "ðŸ”— {$dashboardUrl}\n\n"
                          . "Petugas BPN akan segera menyusun jadwal peninjauan lokasi lapangan. Lacak detail permohonan di: {$url}";
                 $this->executeFonnteSend($pemohonPhone, $message);
                 break;
  
             case 'cek_lokasi':
                 // Jadwal Cek Lokasi -> Blast ke Pelaku Usaha berisi Jadwal & CP Admin
-                $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda ({$noReg}) dijadwalkan untuk peninjauan lokasi offline.\n\n"
-                         . "Waktu: {$application->bpn_cek_lokasi_date}\n"
-                         . "CP Lapangan/Admin: {$application->bpn_cek_lokasi_cp}\n\n"
-                         . "Harap berada di lokasi pada waktu tersebut. Detail: {$url}";
+                $waktu = \Carbon\Carbon::parse($application->bpn_cek_lokasi_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+                $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda ({$noReg}) dijadwalkan untuk peninjauan lapangan pada :\n\n"
+                         . "Waktu: {$waktu}\n"
+                         . "CP Lapangan/Admin: (atas nama) {$application->bpn_cek_lokasi_cp}\n\n"
+                         . "Harap konfirmasi kesediaan anda dengan menghubungi Contact Person petugas lapangan diatas.";
                 $this->executeFonnteSend($pemohonPhone, $message);
                 break;
  
             case 'rapat':
                 // Jadwal Rapat -> Notifikasi ke Pelaku Usaha
-                $message = "Halo {$namaPemohon}, sidang / rapat koordinasi pertanahan BPN untuk permohonan PPKPR Berusaha Anda ({$noReg}) dijadwalkan pada:\n\n"
-                         . "Waktu: {$application->bpn_rapat_date}\n\n"
+                $waktu = \Carbon\Carbon::parse($application->bpn_rapat_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+                $message = "Halo {$namaPemohon}, sidang / rapat pembahasan pertimbangan teknis pertanahan untuk permohonan PKKPR Berusaha Anda ({$noReg}) dijadwalkan pada:\n\n"
+                         . "Waktu: {$waktu}\n\n"
                          . "Pantau detail permohonan di: {$url}";
                 $this->executeFonnteSend($pemohonPhone, $message);
                 break;
  
             case 'pertek_terbit':
                 // Pertek Terbit -> Blast ke Pelaku Usaha & Dinas PU (Tata Ruang)
-                $msgPU = "Halo {$namaPemohon}, Rekomendasi Teknis / Pertek Pertanahan untuk permohonan {$noReg} telah DITERBITKAN oleh BPN. Proses dilanjutkan ke Dinas Pekerjaan Umum (PU) untuk penilaian tata ruang. Detail: {$url}";
+                $msgPU = "Halo {$namaPemohon}, Pertimbangan Teknis Pertanahan untuk PKKPR dengan no berkas... {$noReg} telah DITERBITKAN oleh kantor pertanahan kota sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PU) dan (PUTR) untuk dilakukan penilaian PKKPR Berusaha. informasi detail dapat diakases di {$url}";
                 $msgPU_Dinas = "Notifikasi Dinas PU: Pertek Pertanahan untuk permohonan PPKPR Berusaha {$noReg} telah diterbitkan oleh BPN.\n\nSilakan lakukan penilaian tata ruang atas permohonan ini di: {$url}";
                 
                 $this->executeFonnteSend($pemohonPhone, $msgPU);
@@ -532,9 +595,14 @@ class PpkprBerusahaController extends Controller
                 break;
  
             case 'pu_sesuai':
-                // Penilaian Sesuai -> Blast ke Dinas Satu Pintu (PTSP)
+                // Penilaian Sesuai -> Blast ke Pelaku Usaha, Satu Pintu, dan BPN
+                $msgPU = "Halo {$namaPemohon}, peninjauan tata ruang oleh Dinas PU untuk permohonan {$noReg} dinyatakan SESUAI TATA RUANG.\n\nProses dilanjutkan ke Dinas Satu Pintu (PTSP) untuk penerbitan PKKPR. Lacak detail di: {$url}";
                 $msgPTSP = "Notifikasi Dinas 1 Pintu (PTSP): Permohonan PPKPR Berusaha {$noReg} telah dinilai SESUAI oleh Dinas PU.\n\nSilakan lakukan input nomor PKKPR, tanggal terbit, dan unggah dokumen produk akhir (PKKPR Berusaha) di: {$url}";
+                $msgBPN = "Notifikasi BPN: Penilaian Tata Ruang untuk permohonan PPKPR Berusaha {$noReg} telah selesai dan dinilai SESUAI oleh Dinas PU.";
+
+                $this->executeFonnteSend($pemohonPhone, $msgPU);
                 $this->executeFonnteSend($satuPintuPhone, $msgPTSP);
+                $this->executeFonnteSend($bpnPhone, $msgBPN);
                 break;
  
             case 'pu_belum_sesuai':
@@ -545,21 +613,18 @@ class PpkprBerusahaController extends Controller
                 break;
  
             case 'final_disetujui':
-                // Final Disetujui -> Blast ke Pelaku Usaha, BPN, dan Dinas PU
-                $msgPU = "Selamat! Dokumen PKKPR Berusaha Anda ({$noReg}) telah DITERBITKAN oleh Dinas Satu Pintu (PTSP).\n\n"
+                // Final Disetujui -> Blast ke Pelaku Usaha, BPN (Tanpa Dinas PU!)
+                $msgPU = "Selamat! Dokumen PKKPR Berusaha Anda ({$noReg}) telah DITERBITKAN oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (PTSP).\n\n"
                        . "No. PKKPR: {$application->satu_pintu_no_pkkpr}\n"
                        . "Silakan buka dashboard untuk mengunduh produk akhir Anda di: {$url}";
                        
                 $msgBPN = "Notifikasi BPN: Dokumen PKKPR Berusaha {$noReg} telah diterbitkan oleh Dinas Satu Pintu (PTSP). Alur permohonan selesai.";
-                $msgPU_Dinas = "Notifikasi Dinas PU: Dokumen PKKPR Berusaha {$noReg} telah diterbitkan oleh Dinas Satu Pintu (PTSP). Alur permohonan selesai.";
  
                 $this->executeFonnteSend($pemohonPhone, $msgPU);
                 $this->executeFonnteSend($bpnPhone, $msgBPN);
-                $this->executeFonnteSend($puDinasPhone, $msgPU_Dinas);
-                break;
         }
     }
- 
+
     /**
      * Kirim notifikasi WA riil ke Fonnte API dan catat ke JSON log.
      */
@@ -628,3 +693,4 @@ class PpkprBerusahaController extends Controller
         file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
 }
+

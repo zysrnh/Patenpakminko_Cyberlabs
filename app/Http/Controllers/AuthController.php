@@ -426,6 +426,22 @@ class AuthController extends Controller
      */
     public function showPtpForm()
     {
+        // Jika user sudah login sebagai pelaku_usaha dan sudah punya session PTP,
+        // langsung arahkan ke form pengajuan tanpa isi ulang PTP
+        if (Auth::check() && Auth::user()->isPelakuUsaha() && session()->has('ptp_form_data')) {
+            $ptp = session('ptp_form_data');
+            $jenis = $ptp['jenis_permohonan'] ?? 'berusaha';
+            $routeMap = [
+                'berusaha'     => 'berusaha.create',
+                'non-berusaha' => 'non-berusaha.create',
+                'psn'          => 'psn.create',
+                'tanah-timbul' => 'kebijakan.create',
+                'kebijakan'    => 'kebijakan.create',
+            ];
+            return redirect()->route($routeMap[$jenis] ?? 'berusaha.create')
+                ->with('info', 'Data PTP Anda sudah tersimpan. Silakan lengkapi berkas persyaratan.');
+        }
+
         return view('auth.ptp-create');
     }
 
@@ -470,45 +486,43 @@ class AuthController extends Controller
             'penggunaan_saat_ini.required' => 'Penggunaan tanah saat ini wajib diisi.',
         ]);
 
-        if (Auth::check()) {
-            $user = Auth::user();
-        } else {
-            // Deteksi jika nomor HP sudah terdaftar
-            $phoneClean = preg_replace('/[^0-9]/', '', $request->phone_number);
-            $user = User::where('phone_number', $phoneClean)->first();
+        // Selalu buat/cari akun pelaku_usaha berdasarkan nomor HP
+        // (Jika user sudah login sebagai instansi/admin, proses tetap menggunakan akun pelaku_usaha baru)
+        $phoneClean = preg_replace('/[^0-9]/', '', $request->phone_number);
+        $user = User::where('phone_number', $phoneClean)->first();
 
-            if (!$user) {
-                // Buat kredensial unik berdasarkan Nama + NIB + NIK
-                $cleanName = strtolower(explode(' ', trim($request->nama))[0]);
-                $cleanName = preg_replace('/[^a-z0-9]/', '', $cleanName);
-                $nibSuffix = $request->nib ? substr($request->nib, -4) : '';
-                $nikSuffix = substr($request->nik, -4);
-                
-                $username = $cleanName . ($nibSuffix ? '_' . $nibSuffix : '') . '_' . $nikSuffix;
-                
-                // Cek keunikan username
-                $baseUsername = $username;
-                $counter = 1;
-                while (User::where('username', $username)->exists()) {
-                    $username = $baseUsername . $counter;
-                    $counter++;
-                }
+        if (!$user) {
+            // Buat kredensial unik berdasarkan Nama + NIB + NIK
+            $cleanName = strtolower(explode(' ', trim($request->nama))[0]);
+            $cleanName = preg_replace('/[^a-z0-9]/', '', $cleanName);
+            $nibSuffix = $request->nib ? substr($request->nib, -4) : '';
+            $nikSuffix = substr($request->nik, -4);
 
-                // Password adalah NIK
-                $passwordText = $request->nik;
+            $username = strtoupper($cleanName . $nibSuffix . $nikSuffix);
 
-                $user = User::create([
-                    'username' => $username,
-                    'phone_number' => $phoneClean,
-                    'name' => $request->nama,
-                    'address' => $request->alamat,
-                    'password' => Hash::make($passwordText),
-                    'role' => 'pelaku_usaha',
-                ]);
+            // Cek keunikan username
+            $baseUsername = $username;
+            $counter = 1;
+            while (User::where('username', $username)->exists()) {
+                $username = $baseUsername . $counter;
+                $counter++;
             }
 
-            Auth::login($user);
+            // Password adalah NIK
+            $passwordText = $request->nik;
+
+            $user = User::create([
+                'username'     => $username,
+                'phone_number' => $phoneClean,
+                'name'         => $request->nama,
+                'address'      => $request->alamat,
+                'password'     => Hash::make($passwordText),
+                'role'         => 'pelaku_usaha',
+            ]);
         }
+
+        // Login sebagai akun pelaku_usaha (gantikan session admin jika ada)
+        Auth::login($user);
 
         // Simpan data PTP ke session
         session(['ptp_form_data' => $request->all()]);
@@ -520,7 +534,7 @@ class AuthController extends Controller
         } elseif ($jenis === 'non-berusaha') {
             return redirect()->route('non-berusaha.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Non-Berusaha Anda!');
         } elseif ($jenis === 'psn') {
-            return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Proyek Strategis Nasional (PSN) Anda!');
+            return redirect()->route('psn.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan PSN Anda!');
         } elseif ($jenis === 'tanah-timbul') {
             return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Tanah Timbul Anda!');
         } else {

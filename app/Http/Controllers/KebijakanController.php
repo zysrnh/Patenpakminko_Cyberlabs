@@ -133,7 +133,7 @@ class KebijakanController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan Kebijakan Khusus baru berhasil diajukan.');
  
-        return redirect()->route('kebijakan.index')->with('success', 'Permohonan Kebijakan Khusus Anda berhasil diajukan! Silakan pantau proses verifikasi.');
+        return redirect()->route('kebijakan.show', $app->application_number)->with('success', 'Permohonan Kebijakan Khusus Anda berhasil diajukan! Silakan pantau proses verifikasi.');
     }
  
     /**
@@ -141,7 +141,7 @@ class KebijakanController extends Controller
      */
     public function show($id)
     {
-        $application = KebijakanApplication::findOrFail($id);
+        $application = KebijakanApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
         $user = Auth::user();
  
         // Keamanan: Pelaku usaha hanya boleh melihat permohonannya sendiri
@@ -157,7 +157,7 @@ class KebijakanController extends Controller
      */
     public function verify(Request $request, $id)
     {
-        $application = KebijakanApplication::findOrFail($id);
+        $application = KebijakanApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
         $user = Auth::user();
         $step = $request->input('step');
  
@@ -449,3 +449,4 @@ class KebijakanController extends Controller
         file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
 }
+

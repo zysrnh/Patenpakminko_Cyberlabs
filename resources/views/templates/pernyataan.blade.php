@@ -196,7 +196,7 @@
         
         <ol style="margin-left: 20px; padding-left: 0;">
             <li style="margin-bottom: 8px;">Seluruh data, informasi, dokumen, serta berkas persyaratan yang saya unggah dalam pengajuan permohonan Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKPR) Non-Berusaha pada sistem PATEN PAK MIKO adalah <strong>BENAR, ASLI, SAH,</strong> dan sesuai dengan kondisi faktual di lapangan.</li>
-            <li style="margin-bottom: 8px;">Apabila di kemudian hari ditemukan atau dibuktikan bahwa dokumen yang saya sampaikan tidak benar, palsu, atau hasil manipulasi, maka saya bersedia menerima sanksi administratif berupa pembatalan dokumen PPKPR yang diterbitkan, serta dituntut sesuai dengan hukum pidana/perdata yang berlaku.</li>
+            <li style="margin-bottom: 8px;">Apabila di kemudian hari ditemukan atau dibuktikan bahwa dokumen yang saya sampaikan tidak benar, palsu, atau hasil manipulasi, maka saya bersedia menerima sanksi administratif berupa pembatalan dokumen PKKPR yang diterbitkan, serta dituntut sesuai dengan hukum pidana/perdata yang berlaku.</li>
             <li style="margin-bottom: 8px;">Pernyataan ini dibuat dengan kesadaran penuh, sukarela, dan tanpa ada paksaan dari pihak manapun untuk dipergunakan sebagaimana mestinya.</li>
         </ol>
 

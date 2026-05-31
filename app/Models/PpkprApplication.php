@@ -9,12 +9,18 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable([
     'user_id',
     'application_number',
+    'no_berkas',
     'nama_pemilik_usaha',
     'nama_pengaju',
     'hubungan_pengaju',
     'status',
     'bpn_notes',
+    'putr_notes',
+    'putr_validated_at',
+    'credential_sent_at',
     'dinas_pu_notes',
+    'dinas_pu_tanggal_penilaian',
+    'dinas_pu_document',
     'satu_pintu_notes',
     'approval_document',
     'peta_lokasi',
@@ -35,12 +41,18 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'kbli',
     'proposal_kegiatan',
     'ptp_data',
+    'satu_pintu_no_pkkpr',
+    'satu_pintu_tanggal_terbit',
 ])]
 class PpkprApplication extends Model
 {
     protected $casts = [
-        'bpn_cek_lokasi_dt' => 'datetime',
-        'bpn_rapat_dt'      => 'datetime',
+        'bpn_cek_lokasi_dt'          => 'datetime',
+        'bpn_rapat_dt'               => 'datetime',
+        'satu_pintu_tanggal_terbit'  => 'date',
+        'dinas_pu_tanggal_penilaian' => 'date',
+        'putr_validated_at'          => 'datetime',
+        'credential_sent_at'         => 'datetime',
     ];
     /**
      * Relasi ke User pembuat permohonan.
@@ -57,6 +69,7 @@ class PpkprApplication extends Model
     {
         return match ($this->status) {
             'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
+            'menunggu_putr'       => 'Validasi Permohonan (Dinas PUTR)',
             'menunggu_dinas_pu'   => 'Analisis Tata Ruang (Dinas PU)',
             'menunggu_satu_pintu' => 'Penerbitan Dokumen (Satu Pintu)',
             'disetujui'           => 'Permohonan Disetujui / Selesai',
@@ -72,6 +85,7 @@ class PpkprApplication extends Model
     {
         return match ($this->status) {
             'menunggu_bpn'        => '#ED8936', // Orange
+            'menunggu_putr'       => '#D69E2E', // Yellow-dark
             'menunggu_dinas_pu'   => '#3182CE', // Blue
             'menunggu_satu_pintu' => '#805AD5', // Purple
             'disetujui'           => '#38A169', // Green

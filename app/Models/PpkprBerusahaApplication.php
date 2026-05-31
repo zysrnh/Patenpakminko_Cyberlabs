@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'status',
     'bpn_berkas_status',
     'bpn_pembayaran_status',
+    'no_berkas',
     'bpn_cek_lokasi_date',
     'bpn_cek_lokasi_dt',
     'bpn_cek_lokasi_cp',
@@ -39,6 +40,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'proposal_kegiatan',
     'persyaratan_lainnya',
     'ptp_data',
+    'dinas_pu_tanggal_penilaian',
+    'dinas_pu_document',
 ])]
 class PpkprBerusahaApplication extends Model
 {
@@ -46,6 +49,7 @@ class PpkprBerusahaApplication extends Model
         'bpn_cek_lokasi_dt' => 'datetime',
         'bpn_rapat_dt'      => 'datetime',
         'satu_pintu_tanggal_terbit' => 'date',
+        'dinas_pu_tanggal_penilaian' => 'date',
     ];
  
     /**

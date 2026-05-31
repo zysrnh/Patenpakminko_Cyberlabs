@@ -977,8 +977,8 @@
             </div>
             <div class="stat-item">
                 <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-                <div class="stat-num">98<em>%</em></div>
-                <div class="stat-label">Tingkat Kepuasan</div>
+                <div class="stat-num">{{ $averageRating }}<em>/5</em></div>
+                <div class="stat-label">Rata-rata Rating</div>
             </div>
             <div class="stat-item">
                 <div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
@@ -1005,7 +1005,7 @@
 
         <div class="services-wrap">
             <!-- Row 1 — 3 cards -->
-            <a href="#" class="svc-card c-blue reveal reveal-d1">
+            <a href="{{ route('lapolpa.index') }}" class="svc-card c-blue reveal reveal-d1">
                 <span class="svc-num">01 / KONSULTASI</span>
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -1015,7 +1015,7 @@
                 <span class="svc-cta">Ajukan Jadwal <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="{{ route('dashboard') }}" class="svc-card c-green reveal reveal-d2">
+            <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="svc-card c-green reveal reveal-d2">
                 <span class="svc-num">02 / NON-BISNIS</span>
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -1025,7 +1025,7 @@
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <a href="{{ route('dashboard') }}" class="svc-card c-yellow reveal reveal-d3">
+            <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="svc-card c-yellow reveal reveal-d3">
                 <span class="svc-num">03 / PERIZINAN BISNIS</span>
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
@@ -1035,20 +1035,41 @@
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            <!-- Row 2 — 2 cards centered -->
-            <div class="services-row2 reveal reveal-d2">
-                <a href="{{ route('dashboard') }}" class="svc-card c-blue">
-                    <span class="svc-num">04 / KEBIJAKAN KHUSUS</span>
-                    <div class="svc-icon">
-                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                    </div>
-                    <h3 class="svc-title">Kebijakan Khusus</h3>
-                    <p class="svc-desc">Permohonan berbasis kebijakan pemerintah eksklusif, diproses melalui jalur validasi luring dengan pendampingan teknis.</p>
-                    <span class="svc-cta">Pelajari Ketentuan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-                </a>
+            <!-- Row 2 — 3 cards -->
+            <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="svc-card c-blue reveal reveal-d1">
+                <span class="svc-num">04 / KEBIJAKAN KHUSUS</span>
+                <div class="svc-icon">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <h3 class="svc-title">Kebijakan Khusus</h3>
+                <p class="svc-desc">Permohonan berbasis kebijakan pemerintah eksklusif, diproses melalui jalur validasi luring dengan pendampingan teknis.</p>
+                <span class="svc-cta">Pelajari Ketentuan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
 
-                <a href="{{ route('informal.index') }}" class="svc-card c-green">
-                    <span class="svc-num">05 / AKSES PUBLIK</span>
+            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="svc-card c-yellow reveal reveal-d2">
+                <span class="svc-num">05 / PROYEK NASIONAL</span>
+                <div class="svc-icon">
+                    <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3 class="svc-title">Proyek Strategis Nasional (PSN)</h3>
+                <p class="svc-desc">Pembangunan infrastruktur prioritas strategis negara untuk menunjang konektivitas dan akselerasi pertumbuhan wilayah.</p>
+                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="svc-card c-green reveal reveal-d3">
+                <span class="svc-num">06 / REKLAMASI PESISIR</span>
+                <div class="svc-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <h3 class="svc-title">Tanah Timbul</h3>
+                <p class="svc-desc">Permohonan hak atas tanah timbul yang terbentuk secara alami di pinggiran sungai atau kawasan pesisir Sukabumi.</p>
+                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+            </a>
+
+            <!-- Row 3 — Centered 7th Card -->
+            <div style="grid-column: 1 / -1; display: flex; justify-content: center; width: 100%;">
+                <a href="{{ route('informal.index') }}" class="svc-card c-green" style="max-width: calc(33.333% - 14px); width: 100%;">
+                    <span class="svc-num">07 / AKSES PUBLIK</span>
                     <div class="svc-icon">
                         <svg viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
                     </div>
@@ -1099,8 +1120,8 @@
     <div class="container">
         <div class="section-header section-header-center reveal">
             <div class="section-eyebrow">Testimoni</div>
-            <h2 class="section-title">Apa Kata Pelaku Usaha?</h2>
-            <p class="section-sub">Ulasan jujur dari para pelaku usaha mengenai kemudahan, transparansi, dan kecepatan proses PKKPR di PATEN PAK MIKO.</p>
+            <h2 class="section-title">Apa Kata Pengguna Layanan</h2>
+            <p class="section-sub">Ulasan jujur dari para pengguna layanan/pemohon mengenai kemudahan, transparansi, dan kecepatan proses PKKPR di PATEN PAK MIKO.</p>
         </div>
 
         @if($reviews->isEmpty())
@@ -1189,8 +1210,8 @@
                 <h4 class="f-col-title">Modul</h4>
                 <ul class="f-links">
                     <li><a href="#">LAPOLPA</a></li>
-                    <li><a href="#">PPKPR Non Berusaha</a></li>
-                    <li><a href="#">PPKPR Berusaha</a></li>
+                    <li><a href="#">PKKPR Non Berusaha</a></li>
+                    <li><a href="#">PKKPR Berusaha</a></li>
                     <li><a href="#">Kebijakan Khusus</a></li>
                     <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>
