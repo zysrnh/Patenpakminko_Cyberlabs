@@ -809,7 +809,7 @@
             </a>
             <a href="{{ route('lapolpa.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-                LAPOLPA
+                LAPOLPAK
             </a>
             <a href="{{ route('ulasan.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -1167,16 +1167,16 @@
 
                             <a href="{{ route('lapolpa.index') }}" class="service-card">
                                 <div class="service-card-top">
-                                    <!-- Logo Khusus LAPOLPA (Poin 5) -->
+                                    <!-- Logo Khusus LAPOLPAK (Poin 5) -->
                                     <div class="service-icon orange" style="background:transparent;padding:0;overflow:hidden;">
-                                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPA" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
+                                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPAK" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
                                     </div>
                                     <div class="service-arrow">
                                         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3>LAPOLPA</h3>
+                                    <h3>LAPOLPAK</h3>
                                     <p>Konsultasi & pelaporan pemanfaatan ruang.</p>
                                 </div>
                                 <span class="service-count" style="background:rgba(211,115,36,.12);color:#8B4513;">

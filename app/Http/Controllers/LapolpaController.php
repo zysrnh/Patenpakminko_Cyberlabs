@@ -11,15 +11,23 @@ use Carbon\Carbon;
 class LapolpaController extends Controller
 {
     /**
-     * Tampilkan antarmuka LAPOLPA berdasarkan peran user.
+     * Tampilkan antarmuka LAPOLPAK berdasarkan peran user.
      */
     public function index()
     {
         $user = Auth::user();
  
+        // Jika Guest (Belum Login)
+        if (!$user) {
+            return view('lapolpa.public_index');
+        }
+
         // Jika Pelaku Usaha
         if ($user->isPelakuUsaha()) {
-            $booking = LapolpaBooking::where('user_id', $user->id)->first();
+            // Ambil booking terakhir
+            $booking = LapolpaBooking::where('user_id', $user->id)
+                            ->orderBy('created_at', 'desc')
+                            ->first();
             return view('lapolpa.index', compact('booking'));
         }
  
@@ -29,50 +37,54 @@ class LapolpaController extends Controller
     }
  
     /**
-     * Simpan pemesanan jadwal pelaporan LAPOLPA baru.
+     * Simpan pemesanan jadwal pelaporan LAPOLPAK baru.
      */
     public function store(Request $request)
     {
         $user = Auth::user();
  
-        if (!$user->isPelakuUsaha()) {
-            abort(403, 'Hanya Pelaku Usaha yang dapat melakukan booking LAPOLPA.');
-        }
- 
-        // Proteksi anti-spam: Cek apakah user sudah pernah booking sebelumnya
-        $existingBooking = LapolpaBooking::where('user_id', $user->id)->first();
-        if ($existingBooking) {
-            return redirect()->route('lapolpa.index')->withErrors(['spam' => 'Anda sudah pernah mendaftarkan jadwal pelaporan LAPOLPA. Anda tidak dapat mengirim laporan lebih dari sekali untuk mencegah spam.']);
+        // Proteksi anti-spam: Cek apakah user sudah punya booking yang masih aktif (booked)
+        if ($user) {
+            $existingBooking = LapolpaBooking::where('user_id', $user->id)
+                                ->where('status', 'booked')
+                                ->first();
+            if ($existingBooking) {
+                return redirect()->route('lapolpa.index')->withErrors(['spam' => 'Anda masih memiliki jadwal pelaporan LAPOLPAKK yang aktif. Silakan tunggu hingga statusnya selesai sebelum membuat jadwal baru.']);
+            }
         }
  
         $request->validate([
+            'nama_pemohon' => $user ? 'nullable' : 'required|string|max:100',
             'whatsapp_number' => 'required|string|max:20',
             'booking_date' => 'required|date|after_or_equal:today',
-            'time_start' => 'required',
-            'time_end' => 'required|after:time_start',
+            'time_range' => 'required',
         ], [
+            'nama_pemohon.required' => 'Nama pengaju wajib diisi.',
             'whatsapp_number.required' => 'Nomor WhatsApp wajib diisi.',
             'booking_date.required' => 'Tanggal booking wajib dipilih.',
             'booking_date.after_or_equal' => 'Tanggal booking tidak boleh hari kemarin.',
-            'time_start.required' => 'Jam mulai wajib diisi.',
-            'time_end.required' => 'Jam selesai wajib diisi.',
-            'time_end.after' => 'Jam selesai harus setelah jam mulai.',
+            'time_range.required' => 'Rentang waktu wajib dipilih.',
         ]);
+
+        $times = explode('-', $request->input('time_range'));
+        $timeStart = trim($times[0]);
+        $timeEnd = trim($times[1] ?? '15:00');
  
         // Simpan data booking
         $booking = LapolpaBooking::create([
-            'user_id' => $user->id,
+            'user_id' => $user ? $user->id : null,
+            'nama_pemohon' => $user ? ($user->name ?? $user->username) : $request->input('nama_pemohon'),
             'whatsapp_number' => $request->input('whatsapp_number'),
             'booking_date' => Carbon::parse($request->input('booking_date')),
-            'time_start' => $request->input('time_start'),
-            'time_end' => $request->input('time_end'),
+            'time_start' => $timeStart,
+            'time_end' => $timeEnd,
             'status' => 'booked',
         ]);
  
         // Kirim Notifikasi WhatsApp Fonnte ke Pemohon & Admin DPN
         $this->sendLapolpaNotifications($booking);
  
-        return redirect()->route('lapolpa.index')->with('success', 'Jadwal pelaporan LAPOLPA Anda berhasil didaftarkan! Detail jadwal dan panduan telah dikirimkan ke nomor WhatsApp Anda.');
+        return redirect()->route('lapolpa.index')->with('success', 'Pengajuan Anda berhasil diajukan, selanjutnya tinggal menunggu konfirmasi dari admin terkait detail waktu konsultasi atau pembuatan polygon.');
     }
  
     /**
@@ -96,7 +108,7 @@ class LapolpaController extends Controller
         // Kirim notifikasi update status ke pemohon
         $this->sendLapolpaStatusUpdateNotification($booking);
  
-        return redirect()->route('lapolpa.index')->with('success', 'Status jadwal LAPOLPA berhasil diperbarui.');
+        return redirect()->route('lapolpa.index')->with('success', 'Status jadwal LAPOLPAK berhasil diperbarui.');
     }
  
     /**
@@ -121,17 +133,17 @@ class LapolpaController extends Controller
      */
     private function sendLapolpaNotifications($booking)
     {
-        $pemohonName = $booking->user->name ?? $booking->user->username;
+        $pemohonName = $booking->nama_pemohon ?? ($booking->user ? ($booking->user->name ?? $booking->user->username) : 'Tamu');
         $tglIndo = $booking->formatted_date;
         $rentangWaktu = $booking->formatted_time_range;
         $url = route('lapolpa.index');
  
         // 1. Pesan Notifikasi & Panduan ke Pelaku Usaha (Pemohon)
-        $messagePemohon = "Halo {$pemohonName},\n\nJadwal pelaporan LAPOLPA Anda berhasil terdaftar dengan status BOOKED!\n\n"
+        $messagePemohon = "Halo {$pemohonName},\n\nJadwal pelaporan LAPOLPAK Anda berhasil terdaftar dengan status BOOKED!\n\n"
                         . "🗓️ Tanggal: {$tglIndo}\n"
                         . "⏰ Waktu: {$rentangWaktu}\n"
                         . "📱 WhatsApp terdaftar: {$booking->whatsapp_number}\n\n"
-                        . "*PANDUAN PELAPORAN LAPOLPA UTK PEMOHON*:\n"
+                        . "*PANDUAN PELAPORAN LAPOLPAK UTK PEMOHON*:\n"
                         . "1. Hadir tepat waktu sesuai jadwal yang telah Anda pilih.\n"
                         . "2. Siapkan dokumen identitas diri (KTP) asli.\n"
                         . "3. Bawa cetakan dokumen permohonan PPKPR/izin terkait.\n"
@@ -144,11 +156,11 @@ class LapolpaController extends Controller
         $admin = User::where('role', 'dpn')->first();
         $adminPhone = $admin ? $admin->phone_number : '081234567894';
         
-        $messageAdmin = "Notifikasi LAPOLPA: Pendaftaran Pelaporan Baru!\n\n"
+        $messageAdmin = "Notifikasi LAPOLPAK: Pendaftaran Pelaporan Baru!\n\n"
                       . "Pemohon: {$pemohonName}\n"
                       . "Jadwal: {$tglIndo} ({$rentangWaktu})\n"
                       . "WhatsApp: {$booking->whatsapp_number}\n\n"
-                      . "Silakan periksa dan kelola jadwal LAPOLPA di dashboard admin: {$url}";
+                      . "Silakan periksa dan kelola jadwal LAPOLPAK di dashboard admin: {$url}";
  
         $this->executeFonnteSend($adminPhone, $messageAdmin);
     }
@@ -158,12 +170,12 @@ class LapolpaController extends Controller
      */
     private function sendLapolpaStatusUpdateNotification($booking)
     {
-        $pemohonName = $booking->user->name ?? $booking->user->username;
+        $pemohonName = $booking->nama_pemohon ?? ($booking->user ? ($booking->user->name ?? $booking->user->username) : 'Tamu');
         $tglIndo = $booking->formatted_date;
         $rentangWaktu = $booking->formatted_time_range;
         $statusLabel = $booking->status_label;
  
-        $message = "Halo {$pemohonName},\n\nStatus pelaporan LAPOLPA Anda untuk tanggal {$tglIndo} ({$rentangWaktu}) telah diubah oleh petugas menjadi:\n"
+        $message = "Halo {$pemohonName},\n\nStatus pelaporan LAPOLPAK Anda untuk tanggal {$tglIndo} ({$rentangWaktu}) telah diubah oleh petugas menjadi:\n"
                  . "*{$statusLabel}*\n\n"
                  . "Terima kasih atas kerja sama Anda.\n"
                  . "Lacak detail selengkapnya di: " . route('lapolpa.index');

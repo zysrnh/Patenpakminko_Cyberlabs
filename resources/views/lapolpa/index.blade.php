@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'LAPOLPA — PATEN PAK MIKO')
-@section('page-title', 'LAPOLPA')
+@section('title', 'LAPOLPAK — PATEN PAK MIKO')
+@section('page-title', 'LAPOLPAK')
 
 @section('extra-styles')
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
@@ -30,10 +30,10 @@
         <div class="breadcrumb">
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <span>›</span>
-            <span>LAPOLPA</span>
+            <span>LAPOLPAK</span>
         </div>
-        <h1>Layanan Pelaporan (LAPOLPA)</h1>
-        <p>Pemesanan jadwal konsultasi & pelaporan pemanfaatan ruang secara teratur.</p>
+        <h1>Layanan Pelaporan (LAPOLPAK)</h1>
+        <p>Layanan ini merupakan layanan konsultasi dan pembuatan polygon gratis di kantor.</p>
     </div>
     <div class="badge badge-blue" style="padding:6px 14px;font-size:12px;">05 / Pelaporan</div>
 </div>
@@ -51,7 +51,7 @@
         <div style="width:44px;height:44px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
             <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
         </div>
-        <div style="font-size:16px;font-weight:800;color:var(--blue);margin-bottom:4px;">Jadwal Pelaporan LAPOLPA Telah Dipesan</div>
+        <div style="font-size:16px;font-weight:800;color:var(--blue);margin-bottom:4px;">Jadwal Pelaporan LAPOLPAK Telah Dipesan</div>
         <div style="font-size:13px;color:var(--muted);">Pendaftaran dibatasi satu kali untuk menghindari duplikasi data.</div>
     </div>
 
@@ -101,7 +101,7 @@
     </div>
 
     {{-- Ulasan jika selesai --}}
-    @if($booking->status === 'selesai' && Auth::user()->isPelakuUsaha())
+    @if($booking->status === 'selesai' && (Auth::check() && Auth::user()->isPelakuUsaha()))
         @php
             $review = \App\Models\Review::where('user_id', Auth::id())
                 ->where('module_type', 'lapolpa')
@@ -113,7 +113,7 @@
             <div class="panel-head">
                 <h2 style="display:flex;align-items:center;gap:8px;">
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    Ulasan Layanan LAPOLPA
+                    Ulasan Layanan LAPOLPAK
                 </h2>
             </div>
             <div class="panel-body">
@@ -162,32 +162,40 @@
         <div class="panel-head">
             <h2 style="display:flex;align-items:center;gap:8px;">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Daftarkan Jadwal Laporan LAPOLPA
+                Daftarkan Jadwal Laporan LAPOLPAK
             </h2>
         </div>
         <div class="panel-body">
             <form action="{{ route('lapolpa.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
+                    <label class="form-label" for="nama_pemohon">Nama Pengaju <span>*</span></label>
+                    <input type="text" name="nama_pemohon" id="nama_pemohon" class="form-control"
+                           value="{{ Auth::check() ? (Auth::user()->name ?? Auth::user()->username) : old('nama_pemohon') }}"
+                           {{ Auth::check() ? 'readonly style=background-color:var(--surface);cursor:not-allowed;' : 'required' }}>
+                </div>
+                
+                <div class="form-group">
                     <label class="form-label" for="whatsapp_number">Nomor WhatsApp Aktif <span>*</span></label>
                     <input type="text" name="whatsapp_number" id="whatsapp_number" class="form-control"
-                           placeholder="Contoh: 081234567890" value="{{ old('whatsapp_number', Auth::user()->phone_number) }}" required>
+                           placeholder="Contoh: 081234567890" value="{{ old('whatsapp_number', Auth::check() ? Auth::user()->phone_number : '') }}" required>
                     <div class="form-hint">Notifikasi panduan & jadwal akan dikirimkan ke nomor ini via WhatsApp.</div>
                 </div>
 
                 <div class="form-grid-3">
                     <div class="form-group">
-                        <label class="form-label" for="booking_date">Tanggal Pelaporan <span>*</span></label>
+                        <label class="form-label" for="booking_date">Tanggal Konsultasi <span>*</span></label>
                         <input type="date" name="booking_date" id="booking_date" class="form-control"
                                min="{{ date('Y-m-d') }}" value="{{ old('booking_date') }}" required>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="time_start">Jam Mulai <span>*</span></label>
-                        <input type="time" name="time_start" id="time_start" class="form-control" value="{{ old('time_start') }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="time_end">Jam Selesai <span>*</span></label>
-                        <input type="time" name="time_end" id="time_end" class="form-control" value="{{ old('time_end') }}" required>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="form-label" for="time_range">Rentang Waktu <span>*</span></label>
+                        <select name="time_range" id="time_range" class="form-control" required>
+                            <option value="">-- Pilih Waktu Konsultasi --</option>
+                            <option value="08:00 - 10:00" {{ old('time_range') == '08:00 - 10:00' ? 'selected' : '' }}>Jam 08:00 - 10:00</option>
+                            <option value="10:00 - 12:00" {{ old('time_range') == '10:00 - 12:00' ? 'selected' : '' }}>Jam 10:00 - 12:00</option>
+                            <option value="13:00 - 15:00" {{ old('time_range') == '13:00 - 15:00' ? 'selected' : '' }}>Jam 13:00 - 15:00</option>
+                        </select>
                     </div>
                 </div>
 

@@ -12,11 +12,13 @@ class LapolpaBooking extends Model
  
     protected $fillable = [
         'user_id',
+        'nama_pemohon',
         'whatsapp_number',
         'booking_date',
         'time_start',
         'time_end',
         'status',
+        'admin_note',
     ];
  
     protected $casts = [
@@ -60,6 +62,8 @@ class LapolpaBooking extends Model
         switch ($this->status) {
             case 'booked':
                 return '#3182CE'; // Blue
+            case 'diterima':
+                return '#D69E2E'; // Yellow/Gold
             case 'selesai':
                 return '#38A169'; // Green
             case 'dibatalkan':
@@ -77,6 +81,8 @@ class LapolpaBooking extends Model
         switch ($this->status) {
             case 'booked':
                 return 'Terjadwal (Booked)';
+            case 'diterima':
+                return 'Diterima';
             case 'selesai':
                 return 'Selesai';
             case 'dibatalkan':

@@ -809,10 +809,10 @@
                         </div>
                     </div>
 
-                    <!-- LAPOLPA -->
-                    <a href="{{ route('login') }}" class="hs-btn" style="padding-left: 8px;">
-                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPA" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
-                        LAPOLPA
+                    <!-- LAPOLPAK -->
+                    <a href="{{ route('lapolpa.index') }}" class="hs-btn" style="padding-left: 8px;">
+                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPAK" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
+                        LAPOLPAK
                     </a>
 
                     <!-- Informal -->
@@ -947,9 +947,9 @@
                     <div style="padding:8px 20px 18px;">
                         <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Layanan Lainnya</div>
                         <div style="display:flex;gap:8px;">
-                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
-                                <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPA" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
-                                <span style="font-size:12px;font-weight:700;color:var(--ink);">LAPOLPA</span>
+                            <a href="{{ route('lapolpa.index') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
+                                <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPAK" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
+                                <span style="font-size:12px;font-weight:700;color:var(--ink);">LAPOLPAK</span>
                             </a>
                             <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
                                 <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
@@ -1010,7 +1010,7 @@
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
                 </div>
-                <h3 class="svc-title">LAPOLPA</h3>
+                <h3 class="svc-title">LAPOLPAK</h3>
                 <p class="svc-desc">Pemesanan jadwal konsultasi tatap muka dan pelaporan pemanfaatan ruang secara langsung dengan petugas BPN.</p>
                 <span class="svc-cta">Ajukan Jadwal <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
@@ -1209,7 +1209,7 @@
             <div>
                 <h4 class="f-col-title">Modul</h4>
                 <ul class="f-links">
-                    <li><a href="#">LAPOLPA</a></li>
+                    <li><a href="{{ route('lapolpa.index') }}">LAPOLPAK</a></li>
                     <li><a href="#">PKKPR Non Berusaha</a></li>
                     <li><a href="#">PKKPR Berusaha</a></li>
                     <li><a href="#">Kebijakan Khusus</a></li>

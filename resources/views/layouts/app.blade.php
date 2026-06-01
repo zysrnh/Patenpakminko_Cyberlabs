@@ -352,13 +352,14 @@
                 @if(Auth::check() && Auth::user()->profile_photo)
                     <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="sidebar-avatar">
                 @else
-                    <div class="sidebar-avatar">{{ strtoupper(substr(Auth::user()->username ?? 'U', 0, 2)) }}</div>
+                    <div class="sidebar-avatar">{{ Auth::check() ? strtoupper(substr(Auth::user()->username ?? 'U', 0, 2)) : 'G' }}</div>
                 @endif
                 <div class="sidebar-user-info">
-                    <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
-                    <span>{{ Auth::user()->phone_number }}</span>
+                    <strong>{{ Auth::check() ? (Auth::user()->name ?? Auth::user()->username) : 'Guest / Tamu' }}</strong>
+                    <span>{{ Auth::check() ? Auth::user()->phone_number : 'Publik' }}</span>
                 </div>
             </div>
+            @if(Auth::check())
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn-logout-sidebar">
@@ -366,6 +367,11 @@
                     Keluar dari Akun
                 </button>
             </form>
+            @else
+            <a href="{{ route('login') }}" class="btn-logout-sidebar" style="color: var(--blue); border-color: var(--blue); text-decoration: none; justify-content: center;">
+                Masuk / Daftar Akun
+            </a>
+            @endif
         </div>
     </aside>
 

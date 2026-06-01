@@ -418,8 +418,8 @@
                                 @foreach($bookings as $booking)
                                     <tr>
                                         <td>
-                                            <strong>{{ $booking->user->name ?? $booking->user->username }}</strong>
-                                            <div style="font-size: 11px; color: var(--clr-muted);">Username: {{ $booking->user->username }}</div>
+                                            <strong>{{ $booking->nama_pemohon ?? ($booking->user ? ($booking->user->name ?? $booking->user->username) : 'Tamu') }}</strong>
+                                            <div style="font-size: 11px; color: var(--clr-muted);">{{ $booking->user ? 'Username: ' . $booking->user->username : 'Pendaftar Publik (Tanpa Akun)' }}</div>
                                         </td>
                                         <td>
                                             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->whatsapp_number) }}" target="_blank" style="color: var(--clr-accent); text-decoration: none; font-weight: 600;">

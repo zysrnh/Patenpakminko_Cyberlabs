@@ -38,6 +38,11 @@ Route::get('/', function () {
 
 // Rute Peta Publik Informal (Tanpa Login)
 Route::get('/informal', [InformalController::class, 'index'])->name('informal.index');
+
+// Rute LAPOLPAK (Bisa Tanpa Login & Dengan Login)
+Route::get('/lapolpak', [LapolpaController::class, 'index'])->name('lapolpa.index');
+Route::post('/lapolpak', [LapolpaController::class, 'store'])->name('lapolpa.store');
+Route::put('/lapolpak/{id}', [LapolpaController::class, 'updateStatus'])->name('lapolpa.update');
 Route::post('/informal/rating', [InformalController::class, 'storeRating'])->name('informal.rating.store');
 
 // Rute Publik PTP Form
@@ -99,11 +104,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/berusaha/{id}', [PpkprBerusahaController::class, 'show'])->name('berusaha.show');
     Route::post('/berusaha/{id}/verifikasi', [PpkprBerusahaController::class, 'verify'])->name('berusaha.verify');
     
-    // LAPOLPA (Layanan Pelaporan / Booking Jadwal Pelaporan)
-    Route::get('/lapolpa', [LapolpaController::class, 'index'])->name('lapolpa.index');
-    Route::post('/lapolpa', [LapolpaController::class, 'store'])->name('lapolpa.store');
-    Route::put('/lapolpa/{id}', [LapolpaController::class, 'updateStatus'])->name('lapolpa.update');
- 
     // Fitur Ulasan (Review)
     Route::get('/ulasan', [ReviewController::class, 'index'])->name('ulasan.index');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
