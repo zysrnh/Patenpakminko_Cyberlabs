@@ -771,7 +771,7 @@
                     yang Mudah & Transparan
                 </h1>
                 <p class="hero-sub">
-                    Sistem informasi tata ruang dan pertanahan yang profesional, transparan, dan terintegrasi — mempercepat proses pengajuan izin pemanfaatan ruang secara digital.
+                    Sistem informasi tata ruang dan pertanahan yang profesional, responsive, dan memudahkan — mempercepat proses pengajuan izin pemanfaatan ruang secara digital.
                 </p>
                 <!-- GRID TOMBOL LAYANAN DI HERO (Poin 4) -->
                 <div class="hero-services">
