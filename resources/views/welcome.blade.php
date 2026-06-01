@@ -970,26 +970,41 @@
 <div class="stats-band">
     <div class="container">
         <div class="stats-inner">
-            <div class="stat-item">
-                <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-                <div class="stat-num">12<em>k</em></div>
-                <div class="stat-label">Permohonan Diproses</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-                <div class="stat-num">{{ $averageRating }}<em>/5</em></div>
-                <div class="stat-label">Rata-rata Rating</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="stat-num">14<em> hari</em></div>
-                <div class="stat-label">Rata-rata Penyelesaian</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-                <div class="stat-num">5</div>
-                <div class="stat-label">Instansi Terintegrasi</div>
-            </div>
+            @php
+                $stats = [
+                    [
+                        'icon' => '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+                        'value' => '12',
+                        'suffix' => 'k',
+                        'label' => 'Permohonan Diproses',
+                    ],
+                    [
+                        'icon' => '<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+                        'value' => $averageRating ?? '4.0',
+                        'suffix' => '/5',
+                        'label' => 'Rata-rata Rating',
+                    ],
+                    [
+                        'icon' => '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+                        'value' => '10',
+                        'suffix' => ' hari',
+                        'label' => 'Rata-rata Penyelesaian',
+                    ],
+                    [
+                        'icon' => '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
+                        'value' => '5',
+                        'suffix' => '',
+                        'label' => 'Instansi Terintegrasi',
+                    ],
+                ];
+            @endphp
+            @foreach($stats as $stat)
+                <div class="stat-item">
+                    <div class="stat-icon">{!! $stat['icon'] !!}</div>
+                    <div class="stat-num">{{ $stat['value'] }}@if($stat['suffix'])<em>{{ $stat['suffix'] }}</em>@endif</div>
+                    <div class="stat-label">{{ $stat['label'] }}</div>
+                </div>
+            @endforeach
         </div>
     </div>
 </div>
