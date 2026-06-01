@@ -392,7 +392,7 @@
  
             <!-- Table Card -->
             <div class="card">
-                <h3 class="card-title">?? Daftar Pendaftar LAPOLPA</h3>
+                <h3 class="card-title">Daftar Pendaftar LAPOLPAK</h3>
  
                 <div class="table-responsive">
                     @if($bookings->isEmpty())
@@ -434,15 +434,19 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <form action="{{ route('lapolpa.update', $booking->id) }}" method="POST" style="display: flex; gap: 8px; align-items: center;">
+                                            <form action="{{ route('lapolpa.update', $booking->id) }}" method="POST" style="display: flex; flex-direction: column; gap: 8px;">
                                                 @csrf
                                                 @method('PUT')
-                                                <select name="status" class="status-select">
-                                                    <option value="booked" {{ $booking->status === 'booked' ? 'selected' : '' }}>Booked</option>
-                                                    <option value="selesai" {{ $booking->status === 'selesai' ? 'selected' : '' }}>Selesai</option>
-                                                    <option value="dibatalkan" {{ $booking->status === 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
-                                                </select>
-                                                <button type="submit" class="btn-update">Update</button>
+                                                <div style="display: flex; gap: 8px; align-items: center;">
+                                                    <select name="status" class="status-select">
+                                                        <option value="booked" {{ $booking->status === 'booked' ? 'selected' : '' }}>Booked</option>
+                                                        <option value="diterima" {{ $booking->status === 'diterima' ? 'selected' : '' }}>Diterima</option>
+                                                        <option value="selesai" {{ $booking->status === 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                                        <option value="dibatalkan" {{ $booking->status === 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                                                    </select>
+                                                    <button type="submit" class="btn-update">Update</button>
+                                                </div>
+                                                <input type="text" name="admin_note" placeholder="Catatan untuk pemohon (Opsional)" value="{{ $booking->admin_note }}" style="width: 100%; padding: 6px 10px; border: 1px solid var(--clr-line); border-radius: 4px; font-size: 11px;">
                                             </form>
                                         </td>
                                     </tr>

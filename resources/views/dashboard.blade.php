@@ -1296,17 +1296,31 @@
                             <h2>Jadwal Konsultasi</h2>
                             <a href="{{ route('lapolpa.index') }}" class="panel-head-link">Kelola →</a>
                         </div>
+                        @php
+                            if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->isAdmin()) {
+                                $upcomingSchedules = \App\Models\LapolpaBooking::whereIn('status', ['booked', 'diterima'])
+                                    ->orderBy('booking_date', 'asc')
+                                    ->take(5)
+                                    ->get();
+                            } else {
+                                $upcomingSchedules = \App\Models\LapolpaBooking::where('user_id', Auth::id())
+                                    ->whereIn('status', ['booked', 'diterima'])
+                                    ->orderBy('booking_date', 'asc')
+                                    ->take(5)
+                                    ->get();
+                            }
+                        @endphp
                         @if(isset($upcomingSchedules) && $upcomingSchedules->count())
                             <div class="activity-list">
                                 @foreach($upcomingSchedules as $sched)
                                     <div class="schedule-item">
                                         <div class="schedule-date-box">
-                                            <span class="day">{{ $sched->tanggal->format('d') }}</span>
-                                            <span class="month">{{ $sched->tanggal->format('M') }}</span>
+                                            <span class="day">{{ Carbon\Carbon::parse($sched->booking_date)->format('d') }}</span>
+                                            <span class="month">{{ Carbon\Carbon::parse($sched->booking_date)->format('M') }}</span>
                                         </div>
                                         <div class="schedule-info">
-                                            <h4>{{ $sched->keperluan ?? 'Konsultasi Ruang' }}</h4>
-                                            <span>{{ $sched->tanggal->format('H:i') }} WIB · {{ $sched->lokasi ?? 'Online' }}</span>
+                                            <h4>{{ $sched->nama_pemohon ?? ($sched->user->name ?? 'Tamu') }}</h4>
+                                            <span>{{ $sched->formatted_time_range }} · LAPOLPAK ({{ ucfirst($sched->status) }})</span>
                                         </div>
                                     </div>
                                 @endforeach

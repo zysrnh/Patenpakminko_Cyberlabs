@@ -99,10 +99,14 @@ class LapolpaController extends Controller
  
         $booking = LapolpaBooking::findOrFail($id);
         $request->validate([
-            'status' => 'required|in:booked,selesai,dibatalkan'
+            'status' => 'required|in:booked,diterima,selesai,dibatalkan',
+            'admin_note' => 'nullable|string'
         ]);
  
         $booking->status = $request->input('status');
+        if ($request->has('admin_note')) {
+            $booking->admin_note = $request->input('admin_note');
+        }
         $booking->save();
  
         // Kirim notifikasi update status ke pemohon
@@ -176,8 +180,13 @@ class LapolpaController extends Controller
         $statusLabel = $booking->status_label;
  
         $message = "Halo {$pemohonName},\n\nStatus pelaporan LAPOLPAK Anda untuk tanggal {$tglIndo} ({$rentangWaktu}) telah diubah oleh petugas menjadi:\n"
-                 . "*{$statusLabel}*\n\n"
-                 . "Terima kasih atas kerja sama Anda.\n"
+                 . "*{$statusLabel}*\n\n";
+
+        if ($booking->admin_note) {
+            $message .= "Catatan dari Petugas:\n_{$booking->admin_note}_\n\n";
+        }
+
+        $message .= "Terima kasih atas kerja sama Anda.\n"
                  . "Lacak detail selengkapnya di: " . route('lapolpa.index');
  
         $this->executeFonnteSend($booking->whatsapp_number, $message);
