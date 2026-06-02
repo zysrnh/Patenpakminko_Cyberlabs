@@ -8,6 +8,7 @@ use App\Http\Controllers\LapolpaController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\InformalController;
 use App\Http\Controllers\PsnController;
+use App\Http\Controllers\BerkasController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
@@ -127,5 +128,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/templates/surat-pernyataan', [PpkprNonBerusahaController::class, 'templatePernyataan'])->name('templates.pernyataan');
     Route::get('/templates/surat-kuasa', [PpkprNonBerusahaController::class, 'templateKuasa'])->name('templates.kuasa');
     
+    // Pengelolaan Berkas (BPN, PU, Super Admin)
+    Route::get('/berkas', [BerkasController::class, 'index'])->name('berkas.index');
+    Route::post('/berkas', [BerkasController::class, 'store'])->name('berkas.store');
+    Route::post('/berkas/sync', [BerkasController::class, 'sync'])->name('berkas.sync');
+    Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
+    Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
+    Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

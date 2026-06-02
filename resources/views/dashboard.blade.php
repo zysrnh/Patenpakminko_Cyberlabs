@@ -817,6 +817,16 @@
             </a>
         </div>
 
+        @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr())
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">Pemberkasan</div>
+            <a href="{{ route('berkas.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 002-2V7.5L14.5 2H6a2 2 0 00-2 2v4"/><polyline points="14 2 14 8 20 8"/><path d="M2 15h10"/><path d="M9 18l3-3-3-3"/></svg>
+                Kelola Berkas (Drive)
+            </a>
+        </div>
+        @endif
+
         @if(Auth::user()->isDpn())
         <div class="sidebar-section">
             <div class="sidebar-section-label">Admin</div>
