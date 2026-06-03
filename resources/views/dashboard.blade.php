@@ -1307,7 +1307,7 @@
                             <a href="{{ route('lapolpa.index') }}" class="panel-head-link">Kelola →</a>
                         </div>
                         @php
-                            if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->isAdmin()) {
+                            if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->role === 'admin') {
                                 $upcomingSchedules = \App\Models\LapolpaBooking::whereIn('status', ['booked', 'diterima'])
                                     ->orderBy('booking_date', 'asc')
                                     ->take(5)

@@ -77,10 +77,6 @@ class PpkprNonBerusahaController extends Controller
             abort(403, 'Hanya Pelaku Usaha yang dapat membuat pengajuan permohonan.');
         }
 
-        if (!session()->has('ptp_form_data')) {
-            return redirect()->route('ptp.create')->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
-        }
-
         return view('non-berusaha.create');
     }
 

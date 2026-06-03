@@ -1181,7 +1181,7 @@
                 <p class="cta-sub">Daftarkan diri dan ajukan permohonan PKKPR secara digital. Cepat, transparan, dan terintegrasi dengan sistem nasional ATR/BPN.</p>
             </div>
             <a href="{{ route('login') }}" class="btn-cta reveal reveal-d2">
-                Daftar & Masuk Sekarang
+                Masuk Sekarang
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
         </div>

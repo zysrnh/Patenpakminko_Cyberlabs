@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -351,6 +351,48 @@
             box-shadow: 0 4px 12px rgba(33, 138, 201, 0.2);
             transform: translateY(-0.5px);
         }
+
+        /* Slide Modal */
+        .modal-backdrop {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 999;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .modal-backdrop.show { opacity: 1; pointer-events: auto; }
+        
+        .modal-slide {
+            position: fixed; top: 0; right: -600px; width: 600px; max-width: 90%; height: 100vh;
+            background: #fff; z-index: 1000; box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;
+        }
+        .modal-slide.open { right: 0; }
+        .modal-header {
+            padding: 16px 24px; border-bottom: 1px solid var(--clr-line);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-title { font-size: 16px; font-weight: 700; color: var(--clr-ink); }
+        .btn-close {
+            background: transparent; border: none; font-size: 24px; color: var(--clr-muted);
+            cursor: pointer; line-height: 1; padding: 4px;
+        }
+        .modal-body { flex: 1; padding: 0; background: #f0f0f0; }
+        .modal-body iframe { width: 100%; height: 100%; border: none; }
+
+        .btn-contoh {
+            background: #E3F0F9; border: 1px solid #218AC9; color: #218AC9;
+            padding: 2px 8px; font-size: 11px; font-weight: 700; border-radius: 4px;
+            cursor: pointer; margin-left: 8px; font-family: inherit; display: inline-flex; align-items: center; gap: 4px;
+        }
+        .btn-contoh:hover { background: #218AC9; color: white; }
+    
+        @media (max-width: 768px) {
+            .templates-card { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .templates-actions { flex-direction: column; width: 100%; }
+            .btn-dl { width: 100%; justify-content: center; }
+            .form-grid-2 { grid-template-columns: 1fr; }
+            .modal-slide { width: 100%; right: -100%; }
+            .modal-slide.open { right: 0; }
+        }
     </style>
 </head>
 <body>
@@ -485,7 +527,7 @@
 
                     <!-- 1. Peta / Sketsa Lokasi -->
                     <div class="form-group">
-                        <label for="peta_lokasi" class="form-label">1. Peta/sketsa lokasi yang dimohon <span class="req">*</span></label>
+                        <label for="peta_lokasi" class="form-label">1. Peta/sketsa lokasi yang dimohon <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/2%20Peta%20atau%20Sketsa%20Lokasi.pdf') }}', 'Contoh Peta / Sketsa Lokasi')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="peta_lokasi" name="peta_lokasi" accept=".pdf,.jpg,.jpeg,.png" required>
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
@@ -495,7 +537,7 @@
 
                     <!-- 2. Surat Kuasa -->
                     <div class="form-group">
-                        <label for="surat_kuasa" class="form-label">2. Surat kuasa <span class="req">*</span></label>
+                        <label for="surat_kuasa" class="form-label">2. Surat kuasa <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/3%20Surat%20Kuasa.pdf') }}', 'Contoh Surat Kuasa')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="surat_kuasa" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png" required>
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
@@ -505,7 +547,7 @@
 
                     <!-- 3. FC KTP -->
                     <div class="form-group">
-                        <label for="fc_ktp" class="form-label">3. Fotokopi KTP <span class="req">*</span></label>
+                        <label for="fc_ktp" class="form-label">3. Fotokopi KTP <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/4%20KTP%20Kuasa%20dan%20Pemberi%20Kuasa.pdf') }}', 'Contoh Fotokopi KTP')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="fc_ktp" name="fc_ktp" accept=".pdf,.jpg,.jpeg,.png" required>
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
@@ -515,7 +557,7 @@
 
                     <!-- 4. FC NPWP -->
                     <div class="form-group">
-                        <label for="fc_npwp" class="form-label">4. Fotokopi NPWP <span class="req">*</span></label>
+                        <label for="fc_npwp" class="form-label">4. Fotokopi NPWP <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/5%20NPWP%20Badan%20Usaha.pdf') }}', 'Contoh Fotokopi NPWP')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="fc_npwp" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png" required>
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
@@ -525,7 +567,7 @@
 
                     <!-- 5. Akta Pendirian -->
                     <div class="form-group">
-                        <label for="fc_akta_pendirian" class="form-label">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum <span class="req">*</span></label>
+                        <label for="fc_akta_pendirian" class="form-label">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/6%20Akta%20Pendirian.pdf') }}', 'Contoh Akta Pendirian')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="fc_akta_pendirian" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 10MB.</span>
@@ -545,7 +587,7 @@
 
                     <!-- 7. NIB (Opsional) -->
                     <div class="form-group">
-                        <label for="nib" class="form-label">7. Nomor Induk Berusaha (NIB) (Opsional)</label>
+                        <label for="nib" class="form-label">7. Nomor Induk Berusaha (NIB) (Opsional) <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/8%20NIB%20(Nomor%20Induk%20Berusaha).pdf') }}', 'Contoh NIB')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="nib" name="nib" accept=".pdf,.jpg,.jpeg,.png">
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
@@ -555,7 +597,7 @@
 
                     <!-- 8. KBLI (Opsional) -->
                     <div class="form-group">
-                        <label for="kbli" class="form-label">8. Dokumen KBLI yang diajukan (Opsional)</label>
+                        <label for="kbli" class="form-label">8. Dokumen KBLI yang diajukan (Opsional) <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/9%20KBLI%20(Klasifikasi%20Baku%20Lapangan%20Usaha%20Indonesia).pdf') }}', 'Contoh Dokumen KBLI')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png">
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
@@ -565,7 +607,7 @@
 
                     <!-- 9. Proposal (Opsional) -->
                     <div class="form-group">
-                        <label for="proposal_kegiatan" class="form-label">9. Proposal Rencana Kegiatan Berusaha (Opsional)</label>
+                        <label for="proposal_kegiatan" class="form-label">9. Proposal Rencana Kegiatan Berusaha (Opsional) <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/10%20Proposal%20Rencana%20Kegiatan%20Berusaha.pdf') }}', 'Contoh Proposal Kegiatan')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="proposal_kegiatan" name="proposal_kegiatan" accept=".pdf,.doc,.docx">
                             <span class="file-help">Format: PDF, DOC, DOCX. Maks. 10MB. (Memuat Latar Belakang, Permodalan, Nilai Proyek, dll)</span>
@@ -575,7 +617,7 @@
 
                     <!-- 10. Persyaratan Lainnya -->
                     <div class="form-group">
-                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan (Sertifikat HAK / Surat Keterangan Tanah / Akta / bukti atau akta pinjam meminjam atau sewa menyewa) <span class="req">*</span></label>
+                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/11%20Sertipikat%20dan%20Bukti%20Penguasaan%20Fisik%20Lainnya.pdf') }}', 'Contoh Sertipikat / Bukti Fisik')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="persyaratan_lainnya" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar" required>
                             <span class="file-help">Format: PDF, JPG, PNG, ZIP, RAR. Maks. 10MB.</span>
@@ -595,6 +637,45 @@
         </div>
     </main>
 
+    <!-- Modal Preview -->
+    <div class="modal-backdrop" id="previewBackdrop" onclick="closePreview()"></div>
+    <div class="modal-slide" id="previewModal">
+        <div class="modal-header">
+            <div class="modal-title" id="previewTitle">Contoh Dokumen</div>
+            <button class="btn-close" onclick="closePreview()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="mobileFallback" style="padding: 20px; text-align: center; display: none; background: #fff; border-bottom: 1px solid #ddd;">
+                <p style="font-size: 13px; color: #555; margin-bottom: 12px;">Tidak dapat memuat PDF di pratinjau?</p>
+                <a id="mobileDownloadLink" href="#" target="_blank" style="background: #218AC9; color: #fff; padding: 10px 16px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; display: inline-block;">Buka / Unduh Dokumen</a>
+            </div>
+            <iframe id="previewFrame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openPreview(url, title) {
+            document.getElementById('previewTitle').innerText = title;
+            document.getElementById('previewFrame').src = url;
+            const fallbackLink = document.getElementById('mobileDownloadLink');
+            if (fallbackLink) fallbackLink.href = url;
+            
+            const fallbackDiv = document.getElementById('mobileFallback');
+            if (fallbackDiv) {
+                fallbackDiv.style.display = window.innerWidth <= 768 ? 'block' : 'none';
+            }
+            document.getElementById('previewBackdrop').classList.add('show');
+            document.getElementById('previewModal').classList.add('open');
+        }
+
+        function closePreview() {
+            document.getElementById('previewBackdrop').classList.remove('show');
+            document.getElementById('previewModal').classList.remove('open');
+            setTimeout(() => {
+                document.getElementById('previewFrame').src = '';
+            }, 300);
+        }
+    </script>
 </body>
 </html>
 

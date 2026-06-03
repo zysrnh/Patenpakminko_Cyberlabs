@@ -107,7 +107,7 @@ class SyncBerkasCommand extends Command
         $ptpData = json_decode($app->ptp_data, true);
         if (!$ptpData) return;
 
-        $fileName = 'Formulir_PTP_' . str_replace('/', '_', $app->application_number) . '.html';
+        $fileName = 'Formulir_PTP_' . str_replace('/', '_', $app->application_number) . '.docx';
         $filePath = 'ptp_forms/' . $fileName;
         $fullPath = storage_path('app/public/' . $filePath);
 
@@ -116,21 +116,36 @@ class SyncBerkasCommand extends Command
             mkdir(dirname($fullPath), 0755, true);
         }
 
-        // Jika file belum pernah di-generate, buat HTML-nya
-        if (!file_exists($fullPath)) {
-            $html = "<html><head><title>Formulir PTP - {$app->application_number}</title>";
-            $html .= "<style>body{font-family:sans-serif;padding:20px;} table{border-collapse:collapse;width:100%;max-width:800px;} th,td{border:1px solid #ddd;padding:8px;text-align:left;} th{background:#f4f4f4;width:30%;}</style>";
-            $html .= "</head><body>";
-            $html .= "<h2>Formulir PTP (Pertimbangan Teknis Pertanahan)</h2>";
-            $html .= "<p><strong>Nomor Pengajuan:</strong> {$app->application_number} ({$modulName})</p>";
-            $html .= "<table><tbody>";
-            foreach ($ptpData as $key => $value) {
-                $label = ucwords(str_replace('_', ' ', $key));
-                $html .= "<tr><th>{$label}</th><td>{$value}</td></tr>";
-            }
-            $html .= "</tbody></table></body></html>";
+        // Ambil email user jika ada
+        $email = $app->user ? $app->user->email : '-';
 
-            file_put_contents($fullPath, $html);
+        // Jika file belum pernah di-generate, buat DOCX-nya dari template
+        if (!file_exists($fullPath)) {
+            $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+
+            if (file_exists($templatePath)) {
+                $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+                $templateProcessor->setValue('nama',                   $ptpData['nama'] ?? '-');
+                $templateProcessor->setValue('nik',                    $ptpData['nik'] ?? '-');
+                $templateProcessor->setValue('nib',                    $ptpData['nib'] ?? '-');
+                $templateProcessor->setValue('alamat',                 $ptpData['alamat'] ?? '-');
+                $templateProcessor->setValue('phone_number',           $ptpData['phone_number'] ?? '-');
+                $templateProcessor->setValue('bertindak_atas_nama',    $ptpData['bertindak_atas_nama'] ?? '-');
+                $templateProcessor->setValue('anggaran_dasar_tanggal', $ptpData['anggaran_dasar_tanggal'] ?? '-');
+                $templateProcessor->setValue('anggaran_dasar_no',      $ptpData['anggaran_dasar_no'] ?? '-');
+                $templateProcessor->setValue('rencana_kegiatan',       $ptpData['rencana_kegiatan'] ?? '-');
+                $templateProcessor->setValue('kbli',                   $ptpData['kbli'] ?? '-');
+                $templateProcessor->setValue('letak_tanah_jalan',      $ptpData['letak_tanah_jalan'] ?? '-');
+                $templateProcessor->setValue('letak_tanah_kelurahan',  $ptpData['letak_tanah_kelurahan'] ?? '-');
+                $templateProcessor->setValue('letak_tanah_kecamatan',  $ptpData['letak_tanah_kecamatan'] ?? '-');
+                $templateProcessor->setValue('luas_tanah',             $ptpData['luas_tanah'] ?? '-');
+                $templateProcessor->setValue('status_penguasaan',      $ptpData['status_penguasaan'] ?? '-');
+                $templateProcessor->setValue('penggunaan_saat_ini',    $ptpData['penggunaan_saat_ini'] ?? '-');
+                $templateProcessor->setValue('email',                  $email);
+
+                $templateProcessor->saveAs($fullPath);
+            }
         }
 
         $this->createBerkasIfNotExists($app->user_id, 'Formulir PTP', $filePath, $modulName, $app->application_number);

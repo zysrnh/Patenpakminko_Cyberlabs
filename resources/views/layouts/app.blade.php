@@ -369,7 +369,7 @@
             </form>
             @else
             <a href="{{ route('login') }}" class="btn-logout-sidebar" style="color: var(--blue); border-color: var(--blue); text-decoration: none; justify-content: center;">
-                Masuk / Daftar Akun
+                Masuk ke Akun
             </a>
             @endif
         </div>

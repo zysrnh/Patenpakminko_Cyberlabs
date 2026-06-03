@@ -88,21 +88,42 @@ class BerkasController extends Controller
     {
         $berkas = Berkas::findOrFail($id);
         
-        if (Storage::disk('public')->exists($berkas->file_path)) {
-            $path = storage_path('app/public/' . $berkas->file_path);
-            $mimeType = mime_content_type($path);
-            // Default HTML mime type if not detected properly for text files
-            if ($berkas->tipe_file === 'html') {
-                $mimeType = 'text/html';
-            }
-
-            return response()->file($path, [
-                'Content-Type' => $mimeType,
-                'Content-Disposition' => 'inline; filename="' . $berkas->nama_berkas . '.' . $berkas->tipe_file . '"'
-            ]);
+        if (!Storage::disk('public')->exists($berkas->file_path)) {
+            return response()->json(['error' => 'File tidak ditemukan.'], 404);
         }
 
-        return redirect()->back()->with('error', 'File tidak ditemukan di server.');
+        $path = storage_path('app/public/' . $berkas->file_path);
+        $ext  = strtolower($berkas->tipe_file);
+
+        // Untuk DOCX: konversi ke HTML dulu pakai PhpWord, tampilkan di browser
+        if (in_array($ext, ['doc', 'docx'])) {
+            try {
+                $phpWord = \PhpOffice\PhpWord\IOFactory::load($path);
+                $writer  = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+
+                ob_start();
+                $writer->save('php://output');
+                $html = ob_get_clean();
+
+                return response($html, 200)->header('Content-Type', 'text/html');
+            } catch (\Exception $e) {
+                // Fallback: tampilkan pesan error daripada download
+                return response('<html><body style="font-family:sans-serif;padding:40px;text-align:center;"><h3>Tidak dapat menampilkan preview file ini.</h3><p style="color:#718096">Gunakan tombol <strong>Unduh</strong> untuk membuka file di Microsoft Word.</p></body></html>', 200)
+                    ->header('Content-Type', 'text/html');
+            }
+        }
+
+        // Tentukan Mime Type untuk file lainnya
+        $mimeType = 'application/octet-stream';
+        if ($ext === 'pdf')  $mimeType = 'application/pdf';
+        elseif (in_array($ext, ['jpg', 'jpeg'])) $mimeType = 'image/jpeg';
+        elseif ($ext === 'png')  $mimeType = 'image/png';
+        elseif ($ext === 'html') $mimeType = 'text/html';
+
+        return response()->file($path, [
+            'Content-Type'        => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . $berkas->nama_berkas . '.' . $ext . '"'
+        ]);
     }
 
     public function destroy($id)
