@@ -86,6 +86,22 @@
         }
         .nav-link:hover { color: var(--blue); background: var(--blue-lt); }
 
+        /* Dropdown Navbar */
+        .nav-dropdown { position: relative; display: inline-block; }
+        .nav-dropdown-content { 
+            visibility: hidden; opacity: 0; transform: translateY(10px); 
+            position: absolute; background-color: #fff; min-width: 180px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 101; 
+            border-radius: 8px; border: 1px solid var(--line); 
+            top: 100%; left: 0; padding: 6px; margin-top: 4px; 
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-dropdown:hover .nav-dropdown-content { 
+            visibility: visible; opacity: 1; transform: translateY(0); 
+        }
+        .nav-dropdown-content a { color: var(--mid); padding: 10px 12px; text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; border-radius: 6px; transition: all .18s; }
+        .nav-dropdown-content a:hover { background-color: var(--blue-lt); color: var(--blue); }
+
         .nav-sep { width: 1px; height: 20px; background: var(--line); margin: 0 8px; }
 
         .btn-nav {
@@ -739,7 +755,16 @@
 
             <nav class="site-nav">
                 <a href="#" class="nav-link">Beranda</a>
-                <a href="#modul" class="nav-link">Layanan</a>
+                <div class="nav-dropdown">
+                    <a href="javascript:void(0)" class="nav-link" style="display:flex;align-items:center;gap:4px;">Layanan <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
+                    <div class="nav-dropdown-content">
+                        <a href="{{ route('login') }}">PKKPR Berusaha</a>
+                        <a href="{{ route('login') }}">PKKPR Non Berusaha</a>
+                        <a href="{{ route('login') }}">Kebijakan Khusus</a>
+                        <a href="{{ route('lapolpa.index') }}">LAPOLPAK</a>
+                        <a href="{{ route('login') }}">Konsultasi Informal</a>
+                    </div>
+                </div>
                 <a href="#alur" class="nav-link">Alur Proses</a>
                 <a href="#ulasan" class="nav-link">Ulasan</a>
                 <div class="nav-sep"></div>
@@ -916,6 +941,7 @@
                                 <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
                             </a>
 
+                            {{--
                             <!-- PSN -->
                             <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#FFFDF0'" onmouseout="this.style.background='var(--surface)'">
                                 <div style="width:34px;height:34px;border-radius:8px;background:var(--yellow);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -939,6 +965,7 @@
                                 </div>
                                 <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
                             </a>
+                            --}}
 
                         </div>
                     </div>
@@ -1010,7 +1037,7 @@
 </div>
 
 <!-- ══ SERVICES ════════════════════════════════════════════ -->
-<section id="modul" class="section services">
+<section id="modul" class="section services" style="display: none;">
     <div class="container">
         <div class="section-header section-header-center reveal">
             <div class="section-eyebrow">Modul Layanan</div>
@@ -1061,6 +1088,7 @@
                 <span class="svc-cta">Pelajari Ketentuan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
+            {{--
             <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="svc-card c-yellow reveal reveal-d2">
                 <span class="svc-num">05 / PROYEK NASIONAL</span>
                 <div class="svc-icon">
@@ -1080,6 +1108,7 @@
                 <p class="svc-desc">Permohonan hak atas tanah timbul yang terbentuk secara alami di pinggiran sungai atau kawasan pesisir Sukabumi.</p>
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
+            --}}
 
             <!-- Row 3 — Centered 7th Card -->
             <div style="grid-column: 1 / -1; display: flex; justify-content: center; width: 100%;">
@@ -1108,8 +1137,8 @@
         <div class="process-track">
             <div class="process-step active reveal reveal-d1">
                 <div class="step-circle">01</div>
-                <h3 class="step-title">Registrasi Akun</h3>
-                <p class="step-desc">Buat akun terverifikasi menggunakan NIK dan data diri valid melalui portal PATEN PAK MIKO.</p>
+                <h3 class="step-title">Siapkan Formulir</h3>
+                <p class="step-desc">Isi formulir PTP di loket Kantor Pertanahan dan dapatkan akun resmi dari petugas layanan kami.</p>
             </div>
             <div class="process-step reveal reveal-d2">
                 <div class="step-circle">02</div>

@@ -460,19 +460,14 @@
                     @endphp
 
                     <!-- Nama Pemilik Usaha -->
-                    <div class="form-group">
-                        <label for="nama_pemilik_usaha" class="form-label">Nama Pemilik Usaha <span class="req">*</span></label>
-                        <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" placeholder="Masukkan nama pemilik usaha" value="{{ old('nama_pemilik_usaha', $ptpNama) }}" required>
-                        @error('nama_pemilik_usaha')
-                            <span class="error-message">{{ $message }}</span>
-                        @enderror
-                    </div>
+                    <!-- Nama Pemilik Usaha (Hidden) -->
+                    <input type="hidden" name="nama_pemilik_usaha" value="{{ old('nama_pemilik_usaha', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}">
 
                     <div class="form-grid-2">
                         <!-- Nama Pengaju -->
                         <div class="form-group">
                             <label for="nama_pengaju" class="form-label">Nama Pemohon / Pengguna Layanan <span class="req">*</span></label>
-                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pemohon / pengguna layanan" value="{{ old('nama_pengaju', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}" required>
+                            <input type="text" id="nama_pengaju" name="nama_pengaju" class="form-control" placeholder="Masukkan nama pemohon / pengguna layanan" value="{{ old('nama_pengaju', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}" required readonly style="background: #f0f0f0; cursor: not-allowed;">
                             @error('nama_pengaju')
                                 <span class="error-message">{{ $message }}</span>
                             @enderror
