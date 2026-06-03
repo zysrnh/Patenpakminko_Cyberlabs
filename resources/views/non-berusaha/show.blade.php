@@ -1023,6 +1023,12 @@
                         <div class="doc-list">
                             
                             <!-- Persyaratan Utama -->
+                            @if($application->ptp_data)
+                            <a href="{{ route('non-berusaha.ptp_pdf', $application->id) }}" target="_blank" class="doc-item">
+                                <span class="doc-name" style="font-weight: 700; color: var(--clr-blue-dk);">Formulir PTP (Digital)</span>
+                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
+                            </a>
+                            @endif
                             @if($application->peta_lokasi)
                             <a href="{{ asset('storage/' . $application->peta_lokasi) }}" target="_blank" class="doc-item">
                                 <span class="doc-name">1. Peta Lokasi</span>

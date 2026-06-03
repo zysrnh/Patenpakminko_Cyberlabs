@@ -884,6 +884,16 @@
                                     }
                                 @endphp
 
+                                @if($application->ptp_data)
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--clr-line);">
+                                    <span style="font-size: 13px; font-weight: 700; color: var(--clr-blue-dk);">Formulir PTP (Digital)</span>
+                                    <a href="{{ route('kebijakan.ptp_pdf', $application->id) }}" target="_blank" class="btn-doc">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                                        Buka Berkas
+                                    </a>
+                                </div>
+                                @endif
+
                                 @if($application->peta_lokasi)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="font-size: 13px; color: var(--clr-mid);">1. Peta Lokasi</span>
