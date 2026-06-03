@@ -735,6 +735,65 @@
             .hs-btn { font-size: 12px; padding: 9px 12px; }
             .hero-visual { margin-top: 0; }
         }
+        /* ─── BERITA & GALERI CAROUSEL ──────────────────── */
+        .news-carousel-wrap {
+            position: relative;
+            max-width: 100%;
+            margin-top: 40px;
+        }
+        .news-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 20px;
+            padding-bottom: 20px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .news-carousel::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        .news-card {
+            scroll-snap-align: start;
+            flex: 0 0 calc(33.333% - 14px);
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.1); }
+        .news-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .news-content {
+            padding: 20px;
+        }
+        .news-date {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .news-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .news-desc {
+            font-size: 14px;
+            color: var(--mid);
+            line-height: 1.6;
+        }
+        @media(max-width: 900px) {
+            .news-card { flex: 0 0 calc(50% - 10px); }
+        }
+        @media(max-width: 600px) {
+            .news-card { flex: 0 0 85%; }
+        }
     </style>
 </head>
 <body>
@@ -1126,6 +1185,49 @@
     </div>
 </section>
 
+<!-- ══ BERITA & GALERI ════════════════════════════════════════ -->
+<section id="galeri" class="section">
+    <div class="container">
+        <div class="section-header section-header-center reveal">
+            <div class="section-eyebrow">Berita & Galeri</div>
+            <h2 class="section-title">Informasi Seputar Tata Ruang</h2>
+            <p class="section-sub">Berita terbaru dan dokumentasi kegiatan pelayanan pertimbangan teknis pertanahan di Kota Sukabumi.</p>
+        </div>
+        
+        <div class="news-carousel-wrap reveal reveal-d2">
+            <div class="news-carousel" id="newsCarousel">
+                <!-- Card 1 -->
+                <div class="news-card">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Berita 1" class="news-img">
+                    <div class="news-content">
+                        <span class="news-date">02 Jun 2026</span>
+                        <h3 class="news-title">Sosialisasi Peraturan Baru Kesesuaian Tata Ruang</h3>
+                        <p class="news-desc">Kantor Pertanahan mengadakan sosialisasi terkait pembaruan regulasi untuk perizinan pelaku usaha skala menengah dan besar.</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="news-card">
+                    <img src="https://images.unsplash.com/photo-1541888086225-b467ec6b60c0?auto=format&fit=crop&w=800&q=80" alt="Berita 2" class="news-img">
+                    <div class="news-content">
+                        <span class="news-date">28 Mei 2026</span>
+                        <h3 class="news-title">Peninjauan Lapangan Kawasan Industri Baru</h3>
+                        <p class="news-desc">Tim lapangan BPN dan Dinas PU melakukan survei bersama untuk memastikan kelayakan lokasi kawasan industri di wilayah selatan.</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="news-card">
+                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80" alt="Berita 3" class="news-img">
+                    <div class="news-content">
+                        <span class="news-date">15 Mei 2026</span>
+                        <h3 class="news-title">Penghargaan Inovasi Pelayanan Publik 2026</h3>
+                        <p class="news-desc">Paten Pak Miko kembali mendapatkan apresiasi sebagai sistem layanan pertanahan terbaik dengan transparansi tingkat tinggi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ══ PROCESS ══════════════════════════════════════════════ -->
 <section id="alur" class="section process">
     <div class="container">
@@ -1185,12 +1287,12 @@
                         <p class="review-text">{{ $review->comment }}</p>
                         <div class="review-foot">
                             <div class="review-avatar">
-                                {{ strtoupper(substr($review->user->username ?? 'PU', 0, 2)) }}
+                                {{ $review->reviewer_initial }}
                             </div>
                             <div class="review-info">
-                                <strong>{{ $review->user->name ?? $review->user->username }}</strong>
+                                <strong>{{ $review->reviewer_name }}</strong>
                                 <span>{{ $review->created_at->format('d M Y') }}</span>
-                                <span class="review-module">{{ $review->module_label }}</span>
+                                <span class="review-module">{{ $review->module_label_display }}</span>
                             </div>
                         </div>
                     </div>
@@ -1200,7 +1302,7 @@
     </div>
 </section>
 
-<!-- ══ CTA ══════════════════════════════════════════════════ -->
+
 <section class="cta-band">
     <div class="cta-deco"></div>
     <div class="container">

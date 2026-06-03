@@ -121,6 +121,22 @@ class PsnController extends Controller
     }
 
     // â”€â”€â”€ VERIFY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    public function ptpPdf($id)
+    {
+        $application = PsnApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
+        
+        if (!$application->ptp_data) {
+            return back()->with('error', 'Data Formulir PTP tidak ditemukan untuk permohonan ini.');
+        }
+
+        $ptp = json_decode($application->ptp_data, true);
+        $ptp['app_number'] = $application->application_number;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
+        
+        return $pdf->stream('Formulir_PTP_' . $application->application_number . '.pdf');
+    }
+
     public function verify(Request $request, $id)
     {
         $application = PsnApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();

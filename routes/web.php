@@ -14,11 +14,31 @@ use App\Models\Review;
  
 // Halaman utama / Landing Page
 Route::get('/', function () {
-    $reviews = Review::with('user')
+    $formalReviews = Review::with('user')
         ->where('is_approved', true)
         ->latest()
         ->take(6)
-        ->get();
+        ->get()
+        ->map(function ($item) {
+            $item->module_label_display = $item->module_label;
+            $item->reviewer_name = $item->user->name ?? $item->user->username;
+            $item->reviewer_initial = strtoupper(substr($item->user->username ?? 'PU', 0, 2));
+            return $item;
+        });
+
+    $informalReviews = \App\Models\InformalRating::with('user')
+        ->where('is_approved', true)
+        ->latest()
+        ->take(6)
+        ->get()
+        ->map(function ($item) {
+            $item->module_label_display = 'INFORMAL - ' . strtoupper($item->informal_type);
+            $item->reviewer_name = $item->name ?? ($item->user->name ?? ($item->user->username ?? 'Publik'));
+            $item->reviewer_initial = strtoupper(substr($item->reviewer_name, 0, 2));
+            return $item;
+        });
+
+    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('created_at')->take(6);
 
     // Kalkulasi rata-rata keseluruhan (Review + InformalRating)
     $avgReview = Review::where('is_approved', true)->avg('rating') ?? 0;
@@ -88,16 +108,19 @@ Route::middleware('auth')->group(function () {
     // PPKPR Non-Berusaha (Pelaku Usaha & Petugas Verifikasi)
     Route::get('/non-berusaha', [PpkprNonBerusahaController::class, 'index'])->name('non-berusaha.index');
     Route::get('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'show'])->name('non-berusaha.show');
+    Route::get('/non-berusaha/{id}/ptp', [PpkprNonBerusahaController::class, 'ptpPdf'])->name('non-berusaha.ptp_pdf');
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
  
     // Kebijakan Khusus & Tanah Timbul
     Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
     Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
+    Route::get('/kebijakan/{id}/ptp', [KebijakanController::class, 'ptpPdf'])->name('kebijakan.ptp_pdf');
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
 
     // PSN (Proyek Strategis Nasional)
     Route::get('/psn', [PsnController::class, 'index'])->name('psn.index');
     Route::get('/psn/{id}', [PsnController::class, 'show'])->name('psn.show');
+    Route::get('/psn/{id}/ptp', [PsnController::class, 'ptpPdf'])->name('psn.ptp_pdf');
     Route::post('/psn/{id}/verifikasi', [PsnController::class, 'verify'])->name('psn.verify');
  
     // PPKPR Berusaha (Pelaku Usaha, BPN, Dinas PU, & Satu Pintu)

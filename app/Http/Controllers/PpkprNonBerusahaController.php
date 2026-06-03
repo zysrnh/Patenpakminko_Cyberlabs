@@ -172,6 +172,27 @@ class PpkprNonBerusahaController extends Controller
     }
 
     /**
+     * Download Formulir PTP dalam bentuk PDF.
+     */
+    public function ptpPdf($id)
+    {
+        $application = PpkprApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
+        
+        // Pastikan ada data PTP
+        if (!$application->ptp_data) {
+            return back()->with('error', 'Data Formulir PTP tidak ditemukan untuk permohonan ini.');
+        }
+
+        $ptp = json_decode($application->ptp_data, true);
+        $ptp['app_number'] = $application->application_number;
+
+        // Gunakan Barryvdh\DomPDF\Facade\Pdf
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
+        
+        return $pdf->stream('Formulir_PTP_' . $application->application_number . '.pdf');
+    }
+
+    /**
      * Proses Verifikasi oleh Instansi Terkait (Staged Verification).
      */
     public function verify(Request $request, $id)

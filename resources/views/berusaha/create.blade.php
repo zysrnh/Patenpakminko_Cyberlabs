@@ -473,21 +473,7 @@
                     </a>
                 </div>
  
-                <!-- UNDUH TEMPLATE & 11 PDF CONTOH PERSYARATAN (Flowchart Image 1) -->
-                <div class="templates-card">
-                    <div class="templates-text">
-                        <strong>📥 Berkas Persyaratan PKKPR Berusaha</strong>
-                        <p>Silakan unduh formulir permohonan dan berkas contoh persyaratan lengkap (11 PDF) sebelum mengisi form.</p>
-                    </div>
-                    <div class="templates-actions">
-                        <a href="{{ route('templates.persyaratan') }}" target="_blank" class="btn-dl">
-                            📄 Formulir Permohonan
-                        </a>
-                        <a href="{{ route('templates.persyaratan') }}" target="_blank" class="btn-dl">
-                            📚 Contoh Persyaratan (11 PDF)
-                        </a>
-                    </div>
-                </div>
+
  
                 <form action="{{ route('berusaha.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
