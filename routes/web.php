@@ -103,6 +103,7 @@ Route::middleware('auth')->group(function () {
     // PPKPR Berusaha (Pelaku Usaha, BPN, Dinas PU, & Satu Pintu)
     Route::get('/berusaha', [PpkprBerusahaController::class, 'index'])->name('berusaha.index');
     Route::get('/berusaha/{id}', [PpkprBerusahaController::class, 'show'])->name('berusaha.show');
+    Route::get('/berusaha/{id}/ptp', [PpkprBerusahaController::class, 'ptpPdf'])->name('berusaha.ptp_pdf');
     Route::post('/berusaha/{id}/verifikasi', [PpkprBerusahaController::class, 'verify'])->name('berusaha.verify');
     
     // Fitur Ulasan (Review)

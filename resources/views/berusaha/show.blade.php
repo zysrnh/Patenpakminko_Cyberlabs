@@ -820,8 +820,10 @@
                             </button>
                         </form>
  
+                    @endif
+ 
                     <!-- SUB-STEP 3: Penjadwalan Cek Lokasi Lapangan -->
-                    @elseif($application->bpn_pembayaran_status === 'sudah_bayar' && !$application->bpn_cek_lokasi_dt)
+                    @if($application->bpn_pembayaran_status === 'sudah_bayar' && !$application->bpn_pertek_document)
                         <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                             @csrf
                             <input type="hidden" name="step" value="bpn_cek_lokasi">
@@ -847,8 +849,10 @@
                             </button>
                         </form>
  
+                    @endif
+ 
                     <!-- SUB-STEP 4: Penjadwalan Rapat Sidang BPN -->
-                    @elseif($application->bpn_cek_lokasi_dt && !$application->bpn_rapat_dt)
+                    @if($application->bpn_cek_lokasi_dt && !$application->bpn_pertek_document)
                         <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                             @csrf
                             <input type="hidden" name="step" value="bpn_rapat">
@@ -867,8 +871,10 @@
                             </button>
                         </form>
  
+                    @endif
+ 
                     <!-- SUB-STEP 5: Penerbitan Rekomendasi Teknis / Pertek -->
-                    @elseif($application->bpn_rapat_dt && !$application->bpn_pertek_document)
+                    @if($application->bpn_rapat_dt && !$application->bpn_pertek_document)
                         <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="step" value="bpn_pertek">
@@ -896,7 +902,7 @@
                         </form>
                     @endif
                 </div>
-            </div>
+            @endif
  
             <!-- Success / Error Messages -->
             <!-- 2. DINAS PU PANEL -->
@@ -1169,6 +1175,13 @@
  
                             <li class="detail-item" style="display: flex; flex-direction: column; gap: 8px;">
                                 <span class="detail-label" style="border-bottom: 1px solid var(--clr-line); padding-bottom: 8px; margin-bottom: 4px;">Berkas Lampiran Persyaratan</span>
+                                
+                                @if($application->ptp_data)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid); font-weight: 500;">Formulir PTP</span>
+                                    <a href="{{ route('berusaha.ptp_pdf', $application->id) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
                                 
                                 @if($application->peta_lokasi)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">

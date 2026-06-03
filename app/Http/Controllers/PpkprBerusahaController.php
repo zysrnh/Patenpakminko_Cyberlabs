@@ -139,6 +139,27 @@ class PpkprBerusahaController extends Controller
     }
  
     /**
+     * Download Formulir PTP dalam bentuk PDF.
+     */
+    public function ptpPdf($id)
+    {
+        $application = PpkprBerusahaApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
+        
+        // Pastikan ada data PTP
+        if (!$application->ptp_data) {
+            return back()->with('error', 'Data Formulir PTP tidak ditemukan untuk permohonan ini.');
+        }
+
+        $ptp = json_decode($application->ptp_data, true);
+        $ptp['app_number'] = $application->application_number;
+
+        // Gunakan Barryvdh\DomPDF\Facade\Pdf
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
+        
+        return $pdf->stream('Formulir_PTP_' . $application->application_number . '.pdf');
+    }
+
+    /**
      * Aksi Verifikasi oleh Pihak Terkait (BPN, Dinas PU, Satu Pintu).
      */
     public function verify(Request $request, $id)
@@ -476,7 +497,7 @@ class PpkprBerusahaController extends Controller
         switch ($type) {
             case 'submit_berkas':
                 // Notifikasi Awal ke Pelaku Usaha
-                $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda dengan nomor {$noReg} telah sukses diajukan.\n\nBerkas persyaratan Anda sedang dalam tahap verifikasi awal oleh BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.";
+                $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda telah diajukan.\n\nBerkas persyaratan Anda sedang dalam tahap verifikasi awal oleh BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.";
                 $this->executeFonnteSend($pemohonPhone, $message);
                 break;
  
@@ -558,7 +579,7 @@ class PpkprBerusahaController extends Controller
  
             case 'cek_lokasi':
                 // Jadwal Cek Lokasi -> Blast ke Pelaku Usaha berisi Jadwal & CP Admin
-                $waktu = \Carbon\Carbon::parse($application->bpn_cek_lokasi_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+                $waktu = $application->bpn_cek_lokasi_date;
                 $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda ({$noReg}) dijadwalkan untuk peninjauan lapangan pada :\n\n"
                          . "Waktu: {$waktu}\n"
                          . "CP Lapangan/Admin: (atas nama) {$application->bpn_cek_lokasi_cp}\n\n"
@@ -568,7 +589,7 @@ class PpkprBerusahaController extends Controller
  
             case 'rapat':
                 // Jadwal Rapat -> Notifikasi ke Pelaku Usaha
-                $waktu = \Carbon\Carbon::parse($application->bpn_rapat_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+                $waktu = $application->bpn_rapat_date;
                 $message = "Halo {$namaPemohon}, sidang / rapat pembahasan pertimbangan teknis pertanahan untuk permohonan PKKPR Berusaha Anda ({$noReg}) dijadwalkan pada:\n\n"
                          . "Waktu: {$waktu}\n\n"
                          . "Pantau detail permohonan di: {$url}";

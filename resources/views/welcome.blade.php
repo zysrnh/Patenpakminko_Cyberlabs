@@ -762,7 +762,7 @@
                         <a href="{{ route('login') }}">PKKPR Non Berusaha</a>
                         <a href="{{ route('login') }}">Kebijakan Khusus</a>
                         <a href="{{ route('lapolpa.index') }}">LAPOLPAK</a>
-                        <a href="{{ route('login') }}">Konsultasi Informal</a>
+                        <a href="{{ route('informal.index') }}">INFORMAL</a>
                     </div>
                 </div>
                 <a href="#alur" class="nav-link">Alur Proses</a>
@@ -799,7 +799,7 @@
                     Sistem informasi tata ruang dan pertanahan yang profesional, responsive, dan memudahkan — mempercepat proses pengajuan izin pemanfaatan ruang secara digital.
                 </p>
                 <!-- GRID TOMBOL LAYANAN DI HERO (Poin 4) -->
-                <div class="hero-services">
+                <div class="hero-services" style="display: none;">
 
                     <!-- PKKPR Dropdown -->
                     <div class="hs-dropdown">
@@ -843,7 +843,7 @@
                     <!-- Informal -->
                     <a href="{{ route('login') }}" class="hs-btn" style="padding-left: 8px;">
                         <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
-                        Konsultasi Informal
+                        INFORMAL
                     </a>
 
                     <!-- Pelajari Alur -->
@@ -978,9 +978,9 @@
                                 <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPAK" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
                                 <span style="font-size:12px;font-weight:700;color:var(--ink);">LAPOLPAK</span>
                             </a>
-                            <a href="{{ route('login') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
+                            <a href="{{ route('informal.index') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
                                 <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
-                                <span style="font-size:12px;font-weight:700;color:var(--ink);">Konsultasi</span>
+                                <span style="font-size:12px;font-weight:700;color:var(--ink);">INFORMAL</span>
                             </a>
                         </div>
                     </div>
