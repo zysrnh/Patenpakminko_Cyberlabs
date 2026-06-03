@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PpkprNonBerusahaController;
 use App\Http\Controllers\KebijakanController;
+use App\Http\Controllers\TanahTimbulController;
 use App\Http\Controllers\PpkprBerusahaController;
 use App\Http\Controllers\LapolpaController;
 use App\Http\Controllers\ReviewController;
@@ -116,6 +117,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
     Route::get('/kebijakan/{id}/ptp', [KebijakanController::class, 'ptpPdf'])->name('kebijakan.ptp_pdf');
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
+
+    // Tanah Timbul
+    Route::get('/tanah-timbul', [TanahTimbulController::class, 'index'])->name('tanah-timbul.index');
+    Route::get('/tanah-timbul/{id}', [TanahTimbulController::class, 'show'])->name('tanah-timbul.show');
+    Route::get('/tanah-timbul/{id}/ptp', [TanahTimbulController::class, 'ptpPdf'])->name('tanah-timbul.ptp_pdf');
+    Route::post('/tanah-timbul/{id}/verifikasi', [TanahTimbulController::class, 'verify'])->name('tanah-timbul.verify');
 
     // PSN (Proyek Strategis Nasional)
     Route::get('/psn', [PsnController::class, 'index'])->name('psn.index');

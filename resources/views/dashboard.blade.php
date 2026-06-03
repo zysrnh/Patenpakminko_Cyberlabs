@@ -803,12 +803,14 @@
                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Kebijakan Khusus
             </a>
-            {{--
+            <a href="{{ route('tanah-timbul.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Tanah Timbul
+            </a>
             <a href="{{ route('psn.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
                 PSN
             </a>
-            --}}
             <a href="{{ route('lapolpa.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
                 LAPOLPAK
@@ -819,7 +821,6 @@
             </a>
         </div>
 
-        {{--
         @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr())
         <div class="sidebar-section">
             <div class="sidebar-section-label">Pemberkasan</div>
@@ -829,7 +830,6 @@
             </a>
         </div>
         @endif
-        --}}
 
         @if(Auth::user()->isDpn())
         <div class="sidebar-section">

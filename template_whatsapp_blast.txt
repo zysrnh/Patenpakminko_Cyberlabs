@@ -1,0 +1,149 @@
+TEMPLATE WHATSAPP BLAST (PATEN PAK MIKO)
+===================================================
+Berikut adalah daftar pesan notifikasi WhatsApp otomatis yang dikirimkan oleh sistem ke Pemohon maupun Admin Instansi.
+
+Keterangan Variabel:
+{nama}          : Nama Pemohon / User
+{no_reg}        : Nomor Registrasi Permohonan
+{layanan}       : Jenis Layanan (PKKPR Berusaha, Non-Berusaha, Kebijakan Khusus, dll)
+{url}           : Link menuju halaman detail permohonan
+{waktu}         : Waktu jadwal cek lokasi / rapat (contoh: Senin, 01 Jan 2026 Jam 09:00)
+{cp_admin}      : Nama Kontak Person Petugas Lapangan
+{catatan}       : Catatan penolakan / revisi dari pemeriksa
+{username}      : Username akun login
+{password}      : Password akun login (biasanya NIK)
+{no_berkas}     : Nomor Berkas BPN
+{no_pkkpr}      : Nomor dokumen PKKPR yang sudah terbit
+
+---------------------------------------------------
+A. TEMPLATE UNTUK PEMOHON (PELAKU USAHA / MASYARAKAT)
+---------------------------------------------------
+
+1. Pendaftaran Berhasil (Submit)
+Halo {nama}, permohonan {layanan} Anda dengan nomor {no_reg} berhasil diajukan.
+Berkas Anda sedang dalam verifikasi awal BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.
+
+2. Verifikasi Berkas Awal (BPN) - VALID
+Halo {nama}, berkas {layanan} {no_reg} dinyatakan VALID oleh BPN. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran. Kami akan menghubungi Anda kembali.
+
+3. Verifikasi Berkas Awal (BPN) - TIDAK SESUAI / DITOLAK
+Halo {nama}, berkas {layanan} {no_reg} dinyatakan TIDAK SESUAI / DITOLAK oleh BPN.
+Alasan: "{catatan}"
+Mohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin BPN.
+
+4. Validasi Dinas PUTR Selesai (Menunggu Pembayaran)
+Halo {nama}, permohonan {layanan} {no_reg} telah divalidasi Dinas PUTR.
+Silakan cek instruksi pembayaran retribusi (di email atau melalui petugas). Jika pembayaran sudah diselesaikan, Anda akan menerima detail Kredensial Akun (Username & Password) untuk memantau progress di sistem.
+
+5. Validasi Dinas PUTR - DITOLAK
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas PUTR.
+Catatan: {catatan}
+Harap hubungi petugas untuk informasi lebih lanjut.
+
+6. Pembayaran Lunas & Blast Kredensial (BPN)
+Halo {nama}, pembayaran {layanan} {no_reg} telah dikonfirmasi.
+
+Akun login portal PATEN PAK MIKO Anda:
+Username : {username}
+Password : {password}
+No. Berkas : {no_berkas}
+
+Login dan pantau permohonan di:
+{url_login}
+
+Bantuan: hubungi petugas BPN.
+
+7. Jadwal Cek Lokasi / Peninjauan Lapangan
+Halo {nama}, permohonan {layanan} Anda ({no_reg}) dijadwalkan untuk peninjauan lapangan pada :
+
+Waktu: {waktu}
+CP Lapangan/Admin: (atas nama) {cp_admin}
+
+Harap konfirmasi kesediaan anda dengan menghubungi Contact Person petugas lapangan diatas.
+
+8. Perubahan Jadwal Cek Lokasi
+Halo {nama}, [PERUBAHAN JADWAL] Peninjauan lokasi {layanan} {no_reg} diubah.
+
+Jadwal Baru: {waktu}
+CP Petugas: {cp_admin}
+
+Detail: {url}
+
+9. Jadwal Sidang / Rapat Koordinasi
+Halo {nama}, sidang / rapat pembahasan pertimbangan teknis pertanahan untuk permohonan {layanan} Anda ({no_reg}) dijadwalkan pada:
+
+Waktu: {waktu}
+
+Pantau detail permohonan di: {url}
+
+10. Perubahan Jadwal Sidang / Rapat
+Halo {nama}, [PERUBAHAN] Jadwal rapat {layanan} {no_reg} diubah.
+
+Jadwal Baru: {waktu}
+
+Pantau di: {url}
+
+11. Pertek (Pertimbangan Teknis) Terbit (BPN)
+Halo {nama}, Pertimbangan Teknis Pertanahan untuk PKKPR dengan no berkas... {no_reg} telah DITERBITKAN oleh kantor pertanahan kota sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PU) dan (PUTR) untuk dilakukan penilaian PKKPR. informasi detail dapat diakases di {url}
+
+12. Pertek DITOLAK (BPN)
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh BPN pada tahap Pertek.
+Catatan BPN: {catatan}
+
+Detail: {url}
+
+13. Penilaian Tata Ruang Selesai (Dinas PU)
+Halo {nama}, penilaian PKKPR {layanan} {no_reg} oleh Dinas PU selesai. Permohonan diteruskan ke Dinas Satu Pintu untuk penerbitan PKKPR resmi. Pantau di: {url}
+
+14. Penilaian Tata Ruang DITOLAK (Dinas PU)
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas PU pada tahap penilaian PKKPR.
+Catatan: {catatan}
+
+Detail: {url}
+
+15. Produk Akhir PKKPR Terbit (Dinas Satu Pintu / PTSP)
+Selamat! Dokumen PKKPR {layanan} Anda ({no_reg}) telah DITERBITKAN oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (PTSP).
+
+No. PKKPR: {no_pkkpr}
+Silakan buka dashboard untuk mengunduh produk akhir Anda di: {url}
+
+16. Produk Akhir Ditolak (Dinas Satu Pintu / PTSP)
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas Satu Pintu.
+Catatan: {catatan}
+
+Detail: {url}
+
+17. LAPOLPAK - Perubahan Status
+Halo {nama},
+Status pelaporan LAPOLPAK Anda untuk tanggal {tanggal} ({rentang_waktu}) telah diubah oleh petugas menjadi:
+*{status}*
+
+Catatan dari Petugas:
+_{catatan}_
+
+Terima kasih atas kerja sama Anda.
+Lacak detail selengkapnya di: {url_lapolpa}
+
+
+---------------------------------------------------
+B. TEMPLATE UNTUK ADMIN INSTANSI (NOTIFIKASI INTERNAL)
+---------------------------------------------------
+
+1. Notifikasi ke Admin PUTR (Saat BPN Setuju Berkas Awal)
+[PUTR] Berkas awal BPN untuk {layanan} {no_reg} telah valid. Silakan lakukan validasi pembayaran di: {url}
+
+2. Notifikasi ke Admin BPN (Saat PUTR Selesai Validasi Awal)
+[BPN] {layanan} {no_reg} telah divalidasi PUTR. Menunggu konfirmasi pembayaran pemohon. Detail: {url}
+
+3. Notifikasi ke Admin Dinas PU (Saat BPN Menerbitkan Pertek)
+Notifikasi Dinas PU: Pertek BPN untuk {layanan} {no_reg} telah terbit. Silakan lakukan penilaian PKKPR di: {url}
+
+4. Notifikasi ke Admin PTSP / Satu Pintu (Saat Dinas PU Selesai Menilai)
+Notifikasi Satu Pintu: Penilaian Dinas PU untuk {layanan} {no_reg} selesai. Silakan proses penerbitan PKKPR di: {url}
+
+5. Notifikasi Kembali ke BPN (Informasi bahwa PTSP harus segera menerbitkan)
+Notifikasi BPN: Dinas PU telah selesai menilai {layanan} {no_reg}. Menunggu penerbitan PKKPR oleh Satu Pintu.
+
+6. Notifikasi Kembali ke BPN (Pelaku Usaha Mengunggah Ulang Berkas Revisi)
+Notifikasi BPN: Pelaku Usaha {nama} telah mengunggah ulang berkas perbaikan untuk permohonan {layanan} {no_reg}.
+Silakan cek & verifikasi ulang dokumen di: {url}

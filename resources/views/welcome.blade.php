@@ -1000,31 +1000,29 @@
                                 <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
                             </a>
 
-                            {{--
+                            <!-- Tanah Timbul -->
+                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#EEF7E2'" onmouseout="this.style.background='var(--surface)'">
+                                <div style="width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                                </div>
+                                <div style="flex:1;">
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Tanah Timbul</div>
+                                    <div style="font-size:11px;color:var(--muted);">Pengurusan legalitas tanah timbul</div>
+                                </div>
+                                <span style="background:var(--green-lt);color:var(--green-dk);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                            </a>
+                            
                             <!-- PSN -->
                             <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#FFFDF0'" onmouseout="this.style.background='var(--surface)'">
                                 <div style="width:34px;height:34px;border-radius:8px;background:var(--yellow);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#744210" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Proyek Strategis Nasional (PSN)</div>
-                                    <div style="font-size:11px;color:var(--muted);">Proyek pembangunan prioritas nasional</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Proyek Strategis Nasional</div>
+                                    <div style="font-size:11px;color:var(--muted);">Proyek skala nasional (PSN)</div>
                                 </div>
                                 <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
                             </a>
-
-                            <!-- Tanah Timbul -->
-                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--surface)'">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Tanah Timbul</div>
-                                    <div style="font-size:11px;color:var(--muted);">Reklamasi & tanah timbul pesisir/sungai</div>
-                                </div>
-                                <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
-                            </a>
-                            --}}
 
                         </div>
                     </div>
@@ -1147,7 +1145,6 @@
                 <span class="svc-cta">Pelajari Ketentuan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
 
-            {{--
             <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="svc-card c-yellow reveal reveal-d2">
                 <span class="svc-num">05 / PROYEK NASIONAL</span>
                 <div class="svc-icon">
@@ -1159,15 +1156,14 @@
             </a>
 
             <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="svc-card c-green reveal reveal-d3">
-                <span class="svc-num">06 / REKLAMASI PESISIR</span>
+                <span class="svc-num">06 / TANAH TIMBUL</span>
                 <div class="svc-icon">
-                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 </div>
                 <h3 class="svc-title">Tanah Timbul</h3>
                 <p class="svc-desc">Permohonan hak atas tanah timbul yang terbentuk secara alami di pinggiran sungai atau kawasan pesisir Sukabumi.</p>
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
-            --}}
 
             <!-- Row 3 — Centered 7th Card -->
             <div style="grid-column: 1 / -1; display: flex; justify-content: center; width: 100%;">
