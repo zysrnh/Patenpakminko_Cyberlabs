@@ -793,11 +793,11 @@
             <div class="sidebar-section-label">Layanan</div>
             <a href="{{ route('non-berusaha.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                PKKPR Non Berusaha
+                Pertimbangan Teknis Pertanahan Non Berusaha
             </a>
             <a href="{{ route('berusaha.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                PKKPR Berusaha
+                Pertimbangan Teknis Pertanahan Berusaha
             </a>
             <a href="{{ route('kebijakan.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -1132,7 +1132,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3>PKKPR Non Berusaha</h3>
+                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan Non Berusaha</h3>
                                     <p>Rumah tinggal, keagamaan, sosial, & fasilitas umum.</p>
                                 </div>
                                 <span class="service-count">
@@ -1151,7 +1151,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3>PKKPR Berusaha</h3>
+                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan Berusaha</h3>
                                     <p>Skala bisnis mikro, kecil, menengah, dan besar.</p>
                                 </div>
                                 <span class="service-count" style="background:rgba(255,203,5,.12);color:#92600A;">
@@ -1218,7 +1218,7 @@
                                 </span>
                             </a>
 
-                            <!-- Konsultasi Informal — Logo Khusus (Poin 5) -->
+                            <!-- Informal — Logo Khusus (Poin 5) -->
                             @if(!Auth::user()->isPelakuUsaha())
                             <a href="{{ route('informal.index') }}" class="service-card">
                                 <div class="service-card-top">
@@ -1230,8 +1230,8 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3>Konsultasi Informal</h3>
-                                    <p>Konsultasi pemanfaatan ruang non-formal.</p>
+                                    <h3>Informal</h3>
+                                    <p>Pengecekan area pemanfaatan ruang non-formal.</p>
                                 </div>
                                 <span class="service-count">
                                     <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PATEN PAK MIKO — Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang</title>
+    <title>PATEN PAK MIKO — Pertimbangan Teknis Pertanahan</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -817,8 +817,8 @@
                 <div class="nav-dropdown">
                     <a href="javascript:void(0)" class="nav-link" style="display:flex;align-items:center;gap:4px;">Layanan <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
                     <div class="nav-dropdown-content">
-                        <a href="{{ route('login') }}">PKKPR Berusaha</a>
-                        <a href="{{ route('login') }}">PKKPR Non Berusaha</a>
+                        <a href="{{ route('login') }}">Pertimbangan Teknis Pertanahan Berusaha</a>
+                        <a href="{{ route('login') }}">Pertimbangan Teknis Pertanahan Non Berusaha</a>
                         <a href="{{ route('login') }}">Kebijakan Khusus</a>
                         <a href="{{ route('lapolpa.index') }}">LAPOLPAK</a>
                         <a href="{{ route('informal.index') }}">INFORMAL</a>
@@ -864,7 +864,7 @@
                     <div class="hs-dropdown">
                         <button class="hs-btn hs-primary" type="button">
                             <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                            Layanan PKKPR
+                            Layanan Pertimbangan Teknis Pertanahan
                             <svg class="hs-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
                         </button>
                         <div class="hs-dropdown-menu">
@@ -960,7 +960,7 @@
                     <!-- PKKPR Group -->
                     <div style="padding:16px 20px 8px;">
                         <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">
-                            Layanan PKKPR
+                            Layanan Pertimbangan Teknis Pertanahan
                         </div>
                         <div style="display:flex;flex-direction:column;gap:6px;">
 
@@ -970,7 +970,7 @@
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">PKKPR Berusaha</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Berusaha</div>
                                     <div style="font-size:11px;color:var(--muted);">Bisnis, usaha, industri</div>
                                 </div>
                                 <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
@@ -982,7 +982,7 @@
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">PKKPR Non Berusaha</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Non Berusaha</div>
                                     <div style="font-size:11px;color:var(--muted);">Rumah, sosial, keagamaan</div>
                                 </div>
                                 <span style="background:var(--green-lt);color:var(--green-dk);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
@@ -1119,7 +1119,7 @@
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <h3 class="svc-title">PKKPR Non Berusaha</h3>
+                <h3 class="svc-title">Pertimbangan Teknis Pertanahan Non Berusaha</h3>
                 <p class="svc-desc">Untuk rumah tinggal, keagamaan, sosial, fasilitas umum, dan kegiatan non-bisnis. Validasi dokumen di loket BPN terdekat.</p>
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
@@ -1129,7 +1129,7 @@
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 </div>
-                <h3 class="svc-title">PKKPR Berusaha</h3>
+                <h3 class="svc-title">Pertimbangan Teknis Pertanahan Berusaha</h3>
                 <p class="svc-desc">Jalur terpadu perizinan skala bisnis mikro, kecil, menengah, dan besar. Melibatkan BPN, Dinas PU, dan PTSP satu pintu.</p>
                 <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
@@ -1263,7 +1263,7 @@
         <div class="section-header section-header-center reveal">
             <div class="section-eyebrow">Testimoni</div>
             <h2 class="section-title">Apa Kata Pengguna Layanan</h2>
-            <p class="section-sub">Ulasan jujur dari para pengguna layanan/pemohon mengenai kemudahan, transparansi, dan kecepatan proses PKKPR di PATEN PAK MIKO.</p>
+            <p class="section-sub">Ulasan jujur dari para pengguna layanan/pemohon mengenai kemudahan, transparansi, dan kecepatan proses Pertimbangan Teknis Pertanahan di PATEN PAK MIKO.</p>
         </div>
 
         @if($reviews->isEmpty())
@@ -1305,7 +1305,7 @@
         <div class="cta-inner">
             <div class="reveal">
                 <h2 class="cta-heading">Mulai Permohonan Anda<br>Hari Ini</h2>
-                <p class="cta-sub">Daftarkan diri dan ajukan permohonan PKKPR secara digital. Cepat, transparan, dan terintegrasi dengan sistem nasional ATR/BPN.</p>
+                <p class="cta-sub">Daftarkan diri dan ajukan permohonan Pertimbangan Teknis Pertanahan secara digital. Cepat, transparan, dan terintegrasi dengan sistem nasional ATR/BPN.</p>
             </div>
             <a href="{{ route('login') }}" class="btn-cta reveal reveal-d2">
                 Masuk Sekarang
@@ -1352,8 +1352,8 @@
                 <h4 class="f-col-title">Modul</h4>
                 <ul class="f-links">
                     <li><a href="{{ route('lapolpa.index') }}">LAPOLPAK</a></li>
-                    <li><a href="#">PKKPR Non Berusaha</a></li>
-                    <li><a href="#">PKKPR Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Pertanahan Non Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Pertanahan Berusaha</a></li>
                     <li><a href="#">Kebijakan Khusus</a></li>
                     <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>

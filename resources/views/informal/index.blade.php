@@ -291,17 +291,40 @@
         <div class="rating-sidebar">
             <h2>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1c40f" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                Riwayat Ulasan
+                Ulasan Fitur Peta
             </h2>
             <div style="font-size:11px; color:var(--muted); margin-bottom:12px;">Daftar rating dari masyarakat pada area informal.</div>
             
-            <div style="margin-bottom: 12px; display:flex; gap:8px;">
-                <button onclick="fitAllMarkers()" class="btn btn-primary btn-sm" style="flex:1; padding: 6px; font-size: 11px; border-radius: 4px;">Lihat Semua Titik</button>
-            </div>
+            <form id="general-rating-form" onsubmit="submitRating(event, 'general', 'informal', null, null)" style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--line);">
+                @if(!auth()->check())
+                <div style="margin-bottom: 12px;">
+                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:4px;">Nama Anda</label>
+                    <input type="text" id="rating-name-general" class="form-control" placeholder="Tulis nama Anda..." style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px;" required>
+                </div>
+                @endif
+                <div style="margin-bottom: 12px;">
+                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:4px;">Penilaian Anda</label>
+                    <select id="rating-val-general" class="form-control" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px;" required>
+                        <option value="" disabled selected>-- Pilih Penilaian --</option>
+                        <option value="5">(5) Sangat Baik</option>
+                        <option value="4">(4) Baik</option>
+                        <option value="3">(3) Cukup Baik</option>
+                        <option value="2">(2) Kurang</option>
+                        <option value="1">(1) Sangat Kurang</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:4px;">Komentar (Opsional)</label>
+                    <textarea id="rating-comment-general" class="form-control" rows="2" placeholder="Bagaimana pengalaman Anda menggunakan peta ini?" style="width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; font-family:inherit;"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Kirim Ulasan</button>
+            </form>
+            
+            <h3 style="font-size: 13px; font-weight: 700; margin-bottom: 12px;">Riwayat Ulasan</h3>
             
             <div id="rating-list-container">
                 @forelse($ratings as $rating)
-                    <div class="rating-item" onclick="flyToMarker({{ $rating->latitude }}, {{ $rating->longitude }})">
+                    <div class="rating-item" @if($rating->latitude) onclick="flyToMarker({{ $rating->latitude }}, {{ $rating->longitude }})" @endif>
                         <div class="rating-item-head">
                             <span class="rating-item-name">{{ $rating->name ?: 'Anonim' }}</span>
                             <span class="rating-item-stars">
@@ -309,7 +332,11 @@
                             </span>
                         </div>
                         <div class="rating-item-meta">
-                            Area: {{ strtoupper($rating->informal_type) }} | Koord: {{ number_format((float)$rating->latitude, 4) }}, {{ number_format((float)$rating->longitude, 4) }}
+                            @if($rating->latitude)
+                            Koord: {{ number_format((float)$rating->latitude, 4) }}, {{ number_format((float)$rating->longitude, 4) }}
+                            @else
+                            Ulasan Umum
+                            @endif
                         </div>
                         @if($rating->comment)
                         <div style="font-style:italic; font-size:11px; color:var(--muted); margin-top:6px; padding:6px; background:var(--bg); border-radius:4px;">
@@ -495,43 +522,12 @@
                             const lat = e.latlng.lat.toFixed(6);
                             const lng = e.latlng.lng.toFixed(6);
                             
-                            // Tampilkan popup dengan nama area dan koordinat + FORM RATING
-                            let formId = lat.replace('.', '_') + '-' + lng.replace('.', '_') + '-' + Math.floor(Math.random() * 1000);
-                            
                             const popupContent = `
-                                <div style="min-width: 260px; text-align: left;">
-                                    <h4 style="font-size:14px; font-weight:800; color:var(--ink); margin:0 0 4px 0; display:flex; align-items:center; gap:6px;">
-                                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
-                                        Ulasan Area ${type.toUpperCase()}
+                                <div style="min-width: 150px; text-align: center;">
+                                    <h4 style="font-size:14px; font-weight:800; color:var(--ink); margin:0 0 4px 0;">
+                                        Area ${type.toUpperCase()}
                                     </h4>
-                                    <div style="font-size:12px; color:var(--muted); margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);">Koord: ${lat}, ${lng}</div>
-                                    
-                                    <form id="form-${formId}" onsubmit="submitRating(event, '${formId}', '${type}', '${lat}', '${lng}')">
-                                        ${!isLoggedIn ? `
-                                        <div class="form-group">
-                                            <label class="form-label">Nama Anda</label>
-                                            <input type="text" id="rating-name-${formId}" class="form-control" placeholder="Tulis nama Anda..." required>
-                                        </div>` : ''}
-                                        
-                                        <div class="form-group">
-                                            <label class="form-label">Penilaian Anda</label>
-                                            <select id="rating-val-${formId}" class="form-control" required>
-                                                <option value="" disabled selected>-- Pilih Penilaian --</option>
-                                                <option value="5">(5) Sangat Baik</option>
-                                                <option value="4">(4) Baik</option>
-                                                <option value="3">(3) Cukup Baik</option>
-                                                <option value="2">(2) Kurang</option>
-                                                <option value="1">(1) Sangat Kurang</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label class="form-label">Catatan / Feedback</label>
-                                            <textarea id="rating-comment-${formId}" class="form-control" rows="2" placeholder="Tulis ulasan singkat Anda..."></textarea>
-                                        </div>
-                                        
-                                        <button type="submit" class="btn btn-primary" style="margin-top: 4px;">Kirim Ulasan</button>
-                                    </form>
+                                    <div style="font-size:12px; color:var(--muted);">Koord: ${lat}, ${lng}</div>
                                 </div>
                             `;
                             layer.bindPopup(popupContent).openPopup(e.latlng);
@@ -628,81 +624,11 @@
             }, 800);
         });
 
-        // Tampilkan Marker untuk Rating yang Sudah Ada
-        window.ratingMarkers = {};
-        const allMarkersGroup = L.featureGroup().addTo(map);
 
-        existingRatings.forEach(r => {
-            if(r.latitude && r.longitude) {
-                // Custom Icon Pin dengan Bintang Emas di tengahnya
-                const customPin = L.divIcon({
-                    className: 'custom-rating-pin',
-                    html: `<svg viewBox="0 0 24 24" width="36" height="36" style="filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.3));">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#003B64" stroke="#FFFFFF" stroke-width="1.5"/>
-                            <polygon points="12 6 13.5 9 16.5 9.5 14 11.5 14.5 14.5 12 13 9.5 14.5 10 11.5 7.5 9.5 10.5 9" fill="#f1c40f"/>
-                           </svg>`,
-                    iconSize: [36, 36],
-                    iconAnchor: [18, 36],
-                    popupAnchor: [0, -36]
-                });
-
-                const marker = L.marker([parseFloat(r.latitude), parseFloat(r.longitude)], {
-                    icon: customPin
-                });
-                
-                let stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-                marker.bindPopup(`
-                    <div class="text-center" style="min-width: 150px;">
-                        <strong class="d-block mb-1">${r.name || 'Anonim'}</strong>
-                        <div style="color: #f1c40f; font-size: 16px; letter-spacing: 2px;">${stars}</div>
-                        <small class="text-muted d-block mt-2">Area: ${r.informal_type.toUpperCase()}</small>
-                        <small style="font-size:10px; color:#aaa; margin-bottom: 6px; display:block;">${r.latitude}, ${r.longitude}</small>
-                        ${r.comment ? `<div style="font-style:italic; font-size:10px; color:var(--muted); text-align:left; padding:4px; background:var(--bg); border-radius:4px; margin-bottom:8px;">"${r.comment}"</div>` : ''}
-                        
-                        <a href="https://www.google.com/maps?q=${r.latitude},${r.longitude}" target="_blank" class="btn btn-sm btn-outline-primary w-100" style="padding:4px; font-size:10px; display:block; margin-top:4px; text-decoration:none;">
-                            🌍 Buka di Google Maps
-                        </a>
-                    </div>
-                `);
-                
-                allMarkersGroup.addLayer(marker);
-                
-                // Simpan marker global pakai key koordinat
-                let key = parseFloat(r.latitude).toFixed(6) + '_' + parseFloat(r.longitude).toFixed(6);
-                window.ratingMarkers[key] = marker;
-            }
-        });
-
-        // Fungsi Fly To Marker
-        function flyToMarker(lat, lng) {
-            let key = parseFloat(lat).toFixed(6) + '_' + parseFloat(lng).toFixed(6);
-            if (window.ratingMarkers[key]) {
-                map.flyTo([lat, lng], 18, { duration: 1.5 });
-                setTimeout(() => {
-                    window.ratingMarkers[key].openPopup();
-                }, 1500);
-            }
-        }
-
-        function fitAllMarkers() {
-            if (allMarkersGroup.getLayers().length > 0) {
-                map.fitBounds(allMarkersGroup.getBounds(), { padding: [30, 30] });
-            } else {
-                alert('Belum ada titik ulasan yang tersedia.');
-            }
-        }
 
     </script>
     <style>
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        /* Hover effect for custom pin */
-        .custom-rating-pin svg {
-            transition: transform 0.2s ease;
-        }
-        .custom-rating-pin:hover svg {
-            transform: scale(1.15) translateY(-4px);
-        }
     </style>
 </body>
 </html>

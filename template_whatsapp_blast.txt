@@ -5,7 +5,7 @@ Berikut adalah daftar pesan notifikasi WhatsApp otomatis yang dikirimkan oleh si
 Keterangan Variabel:
 {nama}          : Nama Pemohon / User
 {no_reg}        : Nomor Registrasi Permohonan
-{layanan}       : Jenis Layanan (PKKPR Berusaha, Non-Berusaha, Kebijakan Khusus, dll)
+{layanan}       : Jenis Layanan (Pertimbangan Teknis Pertanahan Berusaha, Non-Berusaha, Kebijakan Khusus, dll)
 {url}           : Link menuju halaman detail permohonan
 {waktu}         : Waktu jadwal cek lokasi / rapat (contoh: Senin, 01 Jan 2026 Jam 09:00)
 {cp_admin}      : Nama Kontak Person Petugas Lapangan
@@ -13,7 +13,7 @@ Keterangan Variabel:
 {username}      : Username akun login
 {password}      : Password akun login (biasanya NIK)
 {no_berkas}     : Nomor Berkas BPN
-{no_pkkpr}      : Nomor dokumen PKKPR yang sudah terbit
+{no_pertek}     : Nomor dokumen Pertimbangan Teknis Pertanahan yang sudah terbit
 
 ---------------------------------------------------
 A. TEMPLATE UNTUK PEMOHON (PELAKU USAHA / MASYARAKAT)
@@ -84,7 +84,7 @@ Jadwal Baru: {waktu}
 Pantau di: {url}
 
 11. Pertek (Pertimbangan Teknis) Terbit (BPN)
-Halo {nama}, Pertimbangan Teknis Pertanahan untuk PKKPR dengan no berkas... {no_reg} telah DITERBITKAN oleh kantor pertanahan kota sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PU) dan (PUTR) untuk dilakukan penilaian PKKPR. informasi detail dapat diakases di {url}
+Halo {nama}, Pertimbangan Teknis Pertanahan dengan no berkas... {no_reg} telah DITERBITKAN oleh kantor pertanahan kota sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PU) dan (PUTR) untuk dilakukan penilaian. Informasi detail dapat diakses di {url}
 
 12. Pertek DITOLAK (BPN)
 Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh BPN pada tahap Pertek.
@@ -93,18 +93,18 @@ Catatan BPN: {catatan}
 Detail: {url}
 
 13. Penilaian Tata Ruang Selesai (Dinas PU)
-Halo {nama}, penilaian PKKPR {layanan} {no_reg} oleh Dinas PU selesai. Permohonan diteruskan ke Dinas Satu Pintu untuk penerbitan PKKPR resmi. Pantau di: {url}
+Halo {nama}, penilaian Pertimbangan Teknis Pertanahan {layanan} {no_reg} oleh Dinas PU selesai. Permohonan diteruskan ke Dinas Satu Pintu untuk penerbitan Pertimbangan Teknis Pertanahan resmi. Pantau di: {url}
 
 14. Penilaian Tata Ruang DITOLAK (Dinas PU)
-Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas PU pada tahap penilaian PKKPR.
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas PU pada tahap penilaian Pertimbangan Teknis Pertanahan.
 Catatan: {catatan}
 
 Detail: {url}
 
-15. Produk Akhir PKKPR Terbit (Dinas Satu Pintu / PTSP)
-Selamat! Dokumen PKKPR {layanan} Anda ({no_reg}) telah DITERBITKAN oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (PTSP).
+15. Produk Akhir Pertimbangan Teknis Pertanahan Terbit (Dinas Satu Pintu / PTSP)
+Selamat! Dokumen Pertimbangan Teknis Pertanahan {layanan} Anda ({no_reg}) telah DITERBITKAN oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (PTSP).
 
-No. PKKPR: {no_pkkpr}
+No. Pertimbangan Teknis Pertanahan: {no_pertek}
 Silakan buka dashboard untuk mengunduh produk akhir Anda di: {url}
 
 16. Produk Akhir Ditolak (Dinas Satu Pintu / PTSP)
@@ -136,14 +136,15 @@ B. TEMPLATE UNTUK ADMIN INSTANSI (NOTIFIKASI INTERNAL)
 [BPN] {layanan} {no_reg} telah divalidasi PUTR. Menunggu konfirmasi pembayaran pemohon. Detail: {url}
 
 3. Notifikasi ke Admin Dinas PU (Saat BPN Menerbitkan Pertek)
-Notifikasi Dinas PU: Pertek BPN untuk {layanan} {no_reg} telah terbit. Silakan lakukan penilaian PKKPR di: {url}
+Notifikasi Dinas PU: Pertek BPN untuk {layanan} {no_reg} telah terbit. Silakan lakukan penilaian Pertimbangan Teknis Pertanahan di: {url}
 
 4. Notifikasi ke Admin PTSP / Satu Pintu (Saat Dinas PU Selesai Menilai)
-Notifikasi Satu Pintu: Penilaian Dinas PU untuk {layanan} {no_reg} selesai. Silakan proses penerbitan PKKPR di: {url}
+Notifikasi Satu Pintu: Penilaian Dinas PU untuk {layanan} {no_reg} selesai. Silakan proses penerbitan Pertimbangan Teknis Pertanahan di: {url}
 
 5. Notifikasi Kembali ke BPN (Informasi bahwa PTSP harus segera menerbitkan)
-Notifikasi BPN: Dinas PU telah selesai menilai {layanan} {no_reg}. Menunggu penerbitan PKKPR oleh Satu Pintu.
+Notifikasi BPN: Dinas PU telah selesai menilai {layanan} {no_reg}. Menunggu penerbitan Pertimbangan Teknis Pertanahan oleh Satu Pintu.
 
 6. Notifikasi Kembali ke BPN (Pelaku Usaha Mengunggah Ulang Berkas Revisi)
 Notifikasi BPN: Pelaku Usaha {nama} telah mengunggah ulang berkas perbaikan untuk permohonan {layanan} {no_reg}.
 Silakan cek & verifikasi ulang dokumen di: {url}
+

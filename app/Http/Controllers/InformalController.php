@@ -19,8 +19,8 @@ class InformalController extends Controller
     {
         $request->validate([
             'informal_type' => 'required|string',
-            'latitude' => 'required|string',
-            'longitude' => 'required|string',
+            'latitude' => 'nullable|string',
+            'longitude' => 'nullable|string',
             'rating' => 'required|integer|min:1|max:5',
             'name' => 'nullable|string',
             'comment' => 'nullable|string'
