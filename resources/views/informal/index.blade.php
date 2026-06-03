@@ -546,9 +546,9 @@
         };
 
         // URL file GeoJSON yang sudah direproject
-        loadGeoJSON('/storage/shp_bpn/lp2b.geojson', 'lp2b', '#2ecc71');
-        loadGeoJSON('/storage/shp_bpn/lbs.geojson', 'lbs', '#f1c40f');
-        loadGeoJSON('/storage/shp_bpn/lsd.geojson', 'lsd', '#e74c3c');
+        loadGeoJSON('/storage/shp_bpn/lp2b.geojson', 'lp2b', '#166534'); // Hijau Tua
+        loadGeoJSON('/storage/shp_bpn/lbs.geojson', 'lbs', '#3b82f6'); // Biru
+        loadGeoJSON('/storage/shp_bpn/lsd.geojson', 'lsd', '#4ade80'); // Hijau Muda
 
         // Load Sukabumi Bounds to lock the map
         fetch('/storage/shp_bpn/sukabumi_bounds.geojson').then(res => res.json()).then(geojson => {
