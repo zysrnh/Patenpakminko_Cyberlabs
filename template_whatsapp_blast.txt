@@ -148,3 +148,4 @@ Notifikasi BPN: Dinas PU telah selesai menilai {layanan} {no_reg}. Menunggu pene
 Notifikasi BPN: Pelaku Usaha {nama} telah mengunggah ulang berkas perbaikan untuk permohonan {layanan} {no_reg}.
 Silakan cek & verifikasi ulang dokumen di: {url}
 
+ 

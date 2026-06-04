@@ -691,8 +691,10 @@
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     Unduh Document Pertimbangan Teknis Pertanahan
                 </a>
+            @endif
  
-                <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
+            <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
+            @if($application->bpn_pertek_document)
                 @php
                     $review = \App\Models\Review::where('user_id', Auth::id())
                         ->where('module_type', 'berusaha')
@@ -980,7 +982,7 @@
                         <div class="form-group-v">
                             <label for="satu_pintu_document">Dokumen Produk Akhir PKKPR (PDF)</label>
                             <input type="file" name="satu_pintu_document" id="satu_pintu_document" class="form-control-v" accept=".pdf" required>
-                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah sertifikat/SK PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
+                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen Pertek Pertanahan/SK PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
                         </div>
                         <div class="form-group-v">
                             <label for="notes">Catatan Tambahan (Opsional)</label>
@@ -1554,3 +1556,4 @@
     </script>
 </body>
 </html>
+

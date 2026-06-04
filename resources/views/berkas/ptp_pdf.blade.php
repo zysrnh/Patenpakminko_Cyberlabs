@@ -151,7 +151,7 @@
         <tr><td class="col-num">5.</td><td>Fotocopy Akta Pendirian dan Pengesahan Badan Hukum (untuk badan hukum).</td></tr>
         <tr><td class="col-num">6.</td><td>Nomor Induk Berusaha (NIB) (untuk pemohon Pelaku Usaha apabila sudah memiliki NIB) *).</td></tr>
         <tr><td class="col-num">7.</td><td>Proposal rencana kegiatan berusaha (untuk pelaku usaha).</td></tr>
-        <tr><td class="col-num">8.</td><td>Sertipikat dan Bukti Penguasaan Fisik Lainnya (Akta/Perjanjian Sewa Menyewa/Perjanjian Pinjam Pakai atau lainnya yg menerangkan penguasaan dan penggunaan tanah).</td></tr>
+        <tr><td class="col-num">8.</td><td>Dokumen Pertek Pertanahan dan Bukti Penguasaan Fisik Lainnya (Akta/Perjanjian Sewa Menyewa/Perjanjian Pinjam Pakai atau lainnya yg menerangkan penguasaan dan penggunaan tanah).</td></tr>
         <tr><td></td><td style="font-style: italic;">(Semua kelengkapan permohonan di menggunakan Kertas ukuran F4)</td></tr>
     </table>
 
@@ -271,7 +271,7 @@
         <tr><td class="text-center">8</td><td>Nomor Induk Berusaha (NIB) jika telah terdaftar dalam Sistem OSS *)</td><td></td><td></td><td></td></tr>
         <tr><td class="text-center">9</td><td>Klasifikasi Baku Lapangan Usaha Indonesia (KBLI) yang diajukan *)</td><td></td><td></td><td></td></tr>
         <tr><td class="text-center">10</td><td>Proposal Rencana Kegiatan Berusaha *)</td><td></td><td></td><td></td></tr>
-        <tr><td class="text-center">11</td><td>Sertipikat dan Bukti Penguasaan Fisik Lainnya</td><td></td><td></td><td></td></tr>
+        <tr><td class="text-center">11</td><td>Dokumen Pertek Pertanahan dan Bukti Penguasaan Fisik Lainnya</td><td></td><td></td><td></td></tr>
     </table>
 
     <table class="table-border">
@@ -304,3 +304,4 @@
 
 </body>
 </html>
+

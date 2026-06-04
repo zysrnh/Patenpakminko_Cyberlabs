@@ -52,7 +52,7 @@
         /* ─── SIDEBAR ─────────────────────────────────────── */
         .sidebar {
             width: var(--sidebar);
-            min-height: 100vh;
+            height: 100vh;
             background: var(--blue-dk);
             display: flex;
             flex-direction: column;
@@ -62,6 +62,11 @@
             z-index: 20;
             overflow-y: auto;
         }
+
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 4px; }
+        .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
         .sidebar-logo {
             display: flex;
@@ -845,6 +850,10 @@
             <a href="{{ route('admin.reviews.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 Kelola Ulasan
+            </a>
+            <a href="{{ route('admin_dpn.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                Statistik Web
             </a>
         </div>
         @endif

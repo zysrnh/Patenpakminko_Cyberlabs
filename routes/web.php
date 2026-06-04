@@ -10,6 +10,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\InformalController;
 use App\Http\Controllers\PsnController;
 use App\Http\Controllers\BerkasController;
+use App\Http\Controllers\AdminDpnController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
@@ -48,14 +49,33 @@ Route::get('/', function () {
     $avgInformal = \App\Models\InformalRating::where('is_approved', true)->avg('rating') ?? 0;
     $countInformal = \App\Models\InformalRating::where('is_approved', true)->count();
     
-    $totalReviews = $countReview + $countInformal;
+    $totalCount = $countReview + $countInformal;
     $averageRating = 0;
-    if($totalReviews > 0) {
-        $averageRating = (($avgReview * $countReview) + ($avgInformal * $countInformal)) / $totalReviews;
+    if ($totalCount > 0) {
+        $averageRating = (($avgReview * $countReview) + ($avgInformal * $countInformal)) / $totalCount;
     }
     $averageRating = number_format($averageRating, 1);
+    
+    // Hitung visitor
+    $visitorFile = 'visitor_stats.json';
+    $visitorCount = 0;
+    if (\Illuminate\Support\Facades\Storage::exists($visitorFile)) {
+        $visitorCount = json_decode(\Illuminate\Support\Facades\Storage::get($visitorFile), true)['count'] ?? 0;
+    }
+    
+    $isNewVisitor = false;
+    if (!request()->cookie('visited')) {
+        $visitorCount++;
+        \Illuminate\Support\Facades\Storage::put($visitorFile, json_encode(['count' => $visitorCount]));
+        $isNewVisitor = true;
+    }
 
-    return view('welcome', compact('reviews', 'averageRating'));
+    $response = response()->view('welcome', compact('reviews', 'averageRating', 'visitorCount'));
+    if ($isNewVisitor) {
+        $response->cookie('visited', true, 60 * 24); // 24 jam
+    }
+    
+    return $response;
 });
 
 // Rute Peta Publik Informal (Tanpa Login)
@@ -98,10 +118,13 @@ Route::middleware('guest')->group(function () {
 });
  
 // Rute untuk pengguna yang sudah login (Authenticated)
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    
+    Route::get('/admin_dpn', [AdminDpnController::class, 'index'])->name('admin_dpn.index');
+    Route::post('/admin_dpn', [AdminDpnController::class, 'update'])->name('admin_dpn.update');
     
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
     Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');

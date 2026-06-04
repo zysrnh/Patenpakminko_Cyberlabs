@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -612,8 +612,10 @@
                         Unduh Dokumen PKKPR Resmi (PDF)
                     </a>
                 @endif
+            @endif
  
-                <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
+            <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
+            @if($application->bpn_pertek_document)
                 @php
                     $review = \App\Models\Review::where('user_id', Auth::id())
                         ->where('module_type', 'psn')

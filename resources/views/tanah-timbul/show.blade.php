@@ -634,8 +634,10 @@
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                     Unduh Surat Rekomendasi / Pertek {{ $application->service_name }} (PDF)
                 </a>
+            @endif
  
-                <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
+            <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
+            @if($application->bpn_pertek_document)
                 @php
                     $review = \App\Models\Review::where('user_id', Auth::id())
                         ->where('module_type', 'tanah-timbul')
@@ -648,7 +650,7 @@
                         <h3 class="verify-title" style="color: var(--clr-blue-dk); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                             ⭐ Ulasan & Penilaian Layanan
                         </h3>
- 
+    
                         @if($review)
                             <div style="background: #FFFFFF; border: 1.5px solid var(--clr-line); padding: 16px; border-radius: 10px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -681,12 +683,12 @@
                                         <option value="1">⭐ Sangat Kurang</option>
                                     </select>
                                 </div>
- 
+    
                                 <div class="form-group-v" style="margin-bottom: 16px;">
                                     <label for="comment" style="font-weight: 700; font-size: 12px;">Catatan Ulasan / Feedback</label>
                                     <textarea name="comment" id="comment" class="form-control-v" rows="2" placeholder="Tuliskan saran atau ulasan singkat Anda..." required></textarea>
                                 </div>
- 
+    
                                 <button type="submit" class="btn-submit-v" style="width: auto; padding: 10px 20px; font-size: 12px;">
                                     Kirim Ulasan Layanan
                                 </button>
@@ -1122,7 +1124,7 @@
                                     @if($application->status === 'ditolak')
                                         Permohonan dihentikan/ditolak oleh Kantor Pertanahan (BPN).
                                     @elseif($application->status === 'disetujui')
-                                        Sertifikat / Surat Rekomendasi Tanah Timbul siap diunduh.
+                                        Dokumen Pertek Pertanahan / Surat Rekomendasi Tanah Timbul siap diunduh.
                                     @else
                                         Menunggu seluruh tahapan selesai disetujui BPN.
                                     @endif
@@ -1144,3 +1146,4 @@
  
 </body>
 </html>
+

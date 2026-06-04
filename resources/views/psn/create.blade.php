@@ -612,7 +612,7 @@
 
                     <!-- 10. Persyaratan Lainnya -->
                     <div class="form-group">
-                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan (Sertifikat HAK / Surat Keterangan Tanah / Akta / bukti atau akta pinjam meminjam atau sewa menyewa) <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/11%20Sertipikat%20dan%20Bukti%20Penguasaan%20Fisik%20Lainnya.pdf') }}', 'Contoh Sertipikat / Bukti Fisik')">Lihat Contoh</button></label>
+                        <label for="persyaratan_lainnya" class="form-label">10. Persyaratan lainnya yang diperlukan (Dokumen Pertek Pertanahan HAK / Surat Keterangan Tanah / Akta / bukti atau akta pinjam meminjam atau sewa menyewa) <span class="req">*</span> <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/11%20Dokumen Pertek Pertanahan%20dan%20Bukti%20Penguasaan%20Fisik%20Lainnya.pdf') }}', 'Contoh Dokumen Pertek Pertanahan / Bukti Fisik')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="persyaratan_lainnya" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar" required>
                             <span class="file-help">Format: PDF, JPG, PNG, ZIP, RAR. Maks. 10MB.</span>
@@ -673,5 +673,7 @@
     </script>
 </body>
 </html>
+
+
 
 

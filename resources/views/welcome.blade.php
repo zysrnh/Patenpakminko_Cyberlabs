@@ -1076,9 +1076,9 @@
                     ],
                     [
                         'icon' => '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
-                        'value' => '5',
+                        'value' => $visitorCount ?? '0',
                         'suffix' => '',
-                        'label' => 'Instansi Terintegrasi',
+                        'label' => 'Kunjungan',
                     ],
                 ];
             @endphp
@@ -1251,7 +1251,7 @@
             <div class="process-step reveal reveal-d4">
                 <div class="step-circle">04</div>
                 <h3 class="step-title">Terima Persetujuan</h3>
-                <p class="step-desc">Pantau status secara real-time dan unduh sertifikat persetujuan resmi digital Anda.</p>
+                <p class="step-desc">Pantau status secara real-time dan unduh Dokumen Pertek Pertanahan persetujuan resmi digital Anda.</p>
             </div>
         </div>
     </div>
