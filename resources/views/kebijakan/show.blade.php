@@ -747,8 +747,8 @@
                             </form>
  
                         <!-- TAHAP 2: Penjadwalan Cek Lokasi -->
-                        @elseif($application->bpn_berkas_status === 'diterima' && !$cekLokasiLewat)
-                            <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
+                        @elseif($application->bpn_berkas_status === 'diterima')
+                            <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
                                 @csrf
                                 <input type="hidden" name="step" value="bpn_cek_lokasi">
                                 <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
@@ -759,7 +759,7 @@
                                 @if($application->bpn_cek_lokasi_dt)
                                     <div style="background: var(--clr-blue-lt); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--clr-blue-dk); margin-bottom: 16px; border-left: 3px solid var(--clr-blue);">
                                         Jadwal cek lokasi saat ini sudah diatur pada: <strong>{{ $application->bpn_cek_lokasi_date }}</strong>.<br>
-                                        Anda dapat memperbarui jadwal di bawah ini jika diperlukan. Terdapat tenggang waktu verifikasi otomatis 1 hari setelah jadwal terlewati.
+                                        Anda dapat memperbarui jadwal di bawah ini jika diperlukan.
                                     </div>
                                 @endif
  
@@ -780,60 +780,64 @@
                                 </button>
                             </form>
  
-                        <!-- TAHAP 3: Penjadwalan Sidang / Rapat Koordinasi -->
-                        @elseif($cekLokasiLewat && !$rapatLewat)
-                            <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="step" value="bpn_rapat">
-                                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                    <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 3: Penjadwalan Sidang / Rapat Koordinasi BPN</strong>
-                                    <span class="verify-step-badge">Aktif</span>
-                                </div>
- 
-                                @if($application->bpn_rapat_dt)
-                                    <div style="background: var(--clr-blue-lt); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--clr-blue-dk); margin-bottom: 16px; border-left: 3px solid var(--clr-blue);">
-                                        Jadwal Rapat Koordinasi saat ini sudah diatur pada: <strong>{{ $application->bpn_rapat_date }}</strong>.<br>
-                                        Anda dapat memperbarui jadwal di bawah ini jika diperlukan. Terdapat tenggang waktu verifikasi otomatis 1 hari setelah jadwal terlewati.
+                            <!-- TAHAP 3: Penjadwalan Sidang / Rapat Koordinasi -->
+                            @if($application->bpn_cek_lokasi_dt)
+                                <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
+                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="bpn_rapat">
+                                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+                                        <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 3: Penjadwalan Sidang / Rapat Koordinasi BPN</strong>
+                                        <span class="verify-step-badge">Aktif</span>
                                     </div>
-                                @endif
  
-                                <div class="form-group-v">
-                                    <label for="bpn_rapat_dt">Waktu Sidang/Rapat Koordinasi</label>
-                                    <input type="datetime-local" name="bpn_rapat_dt" id="bpn_rapat_dt" class="form-control-v" 
-                                           value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}" required>
-                                </div>
-                                <button type="submit" class="btn-submit-v">
-                                    {{ $application->bpn_rapat_dt ? 'Sesuaikan & Kirim Rapat Baru' : 'Simpan & Kirim Jadwal Rapat Ke WhatsApp' }}
-                                </button>
-                            </form>
+                                    @if($application->bpn_rapat_dt)
+                                        <div style="background: var(--clr-blue-lt); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--clr-blue-dk); margin-bottom: 16px; border-left: 3px solid var(--clr-blue);">
+                                            Jadwal Rapat Koordinasi saat ini sudah diatur pada: <strong>{{ $application->bpn_rapat_date }}</strong>.<br>
+                                            Anda dapat memperbarui jadwal di bawah ini jika diperlukan.
+                                        </div>
+                                    @endif
  
-                        <!-- TAHAP 4: Penerbitan Surat Pertek Akhir -->
-                        @elseif($rapatLewat && !$application->bpn_pertek_document)
-                            <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" name="step" value="bpn_pertek">
-                                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                    <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 4: Unggah Dokumen Pertek Hasil Akhir</strong>
-                                    <span class="verify-step-badge">Aktif</span>
-                                </div>
-                                <div class="form-group-v">
-                                    <label for="action">Keputusan Rekomendasi Teknis</label>
-                                    <select name="action" id="action" class="form-select-v" required>
-                                        <option value="approve">Setujui & Terbitkan Surat Rekomendasi</option>
-                                        <option value="reject">Tolak Rekomendasi Pertanahan</option>
-                                    </select>
-                                </div>
-                                <div class="form-group-v">
-                                    <label for="bpn_pertek_document">Dokumen Surat Rekomendasi/Pertek (PDF)</label>
-                                    <input type="file" name="bpn_pertek_document" id="bpn_pertek_document" class="form-control-v" accept=".pdf,.doc,.docx">
-                                    <span style="font-size: 11px; color: var(--clr-muted);">*Wajib diunggah jika permohonan disetujui. Maksimal 10MB.</span>
-                                </div>
-                                <div class="form-group-v">
-                                    <label for="notes">Catatan Rekomendasi/Pertek Akhir BPN</label>
-                                    <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan ringkasan pertimbangan tata ruang BPN..." required></textarea>
-                                </div>
-                                <button type="submit" class="btn-submit-v">Tuntaskan & Terbitkan Hasil Akhir</button>
-                            </form>
+                                    <div class="form-group-v">
+                                        <label for="bpn_rapat_dt">Waktu Sidang/Rapat Koordinasi</label>
+                                        <input type="datetime-local" name="bpn_rapat_dt" id="bpn_rapat_dt" class="form-control-v" 
+                                               value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}" required>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v">
+                                        {{ $application->bpn_rapat_dt ? 'Sesuaikan & Kirim Rapat Baru' : 'Simpan & Kirim Jadwal Rapat Ke WhatsApp' }}
+                                    </button>
+                                </form>
+                            @endif
+ 
+                            <!-- TAHAP 4: Penerbitan Surat Pertek Akhir -->
+                            @if($application->bpn_rapat_dt && !$application->bpn_pertek_document)
+                                <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
+                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="step" value="bpn_pertek">
+                                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+                                        <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 4: Unggah Dokumen Pertek Hasil Akhir</strong>
+                                        <span class="verify-step-badge">Aktif</span>
+                                    </div>
+                                    <div class="form-group-v">
+                                        <label for="action">Keputusan Rekomendasi Teknis</label>
+                                        <select name="action" id="action" class="form-select-v" required>
+                                            <option value="approve">Setujui & Terbitkan Surat Rekomendasi</option>
+                                            <option value="reject">Tolak Rekomendasi Pertanahan</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-v">
+                                        <label for="bpn_pertek_document">Dokumen Surat Rekomendasi/Pertek (PDF)</label>
+                                        <input type="file" name="bpn_pertek_document" id="bpn_pertek_document" class="form-control-v" accept=".pdf,.doc,.docx">
+                                        <span style="font-size: 11px; color: var(--clr-muted);">*Wajib diunggah jika permohonan disetujui. Maksimal 10MB.</span>
+                                    </div>
+                                    <div class="form-group-v">
+                                        <label for="notes">Catatan Rekomendasi/Pertek Akhir BPN</label>
+                                        <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan ringkasan pertimbangan tata ruang BPN..." required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v">Tuntaskan & Terbitkan Hasil Akhir</button>
+                                </form>
+                            @endif
                         @endif
  
                     @endif
@@ -858,6 +862,15 @@
                                     <span class="badge-status" style="background-color: {{ $application->status_color }};">
                                         {{ $application->status_label }}
                                     </span>
+                                    @if(Auth::user()->isBpn())
+                                        <form action="{{ route('application.rollback', ['kebijakan_khusus', $application->id]) }}" method="POST" style="display: inline-block; margin-left: 8px;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan dan mengembalikan permohonan ini ke lini masa/tahap sebelumnya?')">
+                                            @csrf
+                                            <button type="submit" class="btn-rollback" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"/></svg>
+                                                Rollback Tahap
+                                            </button>
+                                        </form>
+                                    @endif
                                 </span>
                             </li>
                             <li class="detail-item">

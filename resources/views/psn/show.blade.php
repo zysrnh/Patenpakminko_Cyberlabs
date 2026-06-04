@@ -596,6 +596,15 @@
                     <span class="badge-status" style="background-color: {{ $application->status_color }}">
                         {{ $application->status_label }}
                     </span>
+                    @if(Auth::user()->isBpn())
+                        <form action="{{ route('application.rollback', ['psn', $application->id]) }}" method="POST" style="display: inline-block; margin-left: 8px;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan dan mengembalikan permohonan ini ke lini masa/tahap sebelumnya?')">
+                            @csrf
+                            <button type="submit" class="btn-rollback" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"/></svg>
+                                Rollback Tahap
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
 
@@ -752,16 +761,11 @@
                                 @csrf
                                 <input type="hidden" name="step" value="bpn_cek_lokasi">
                                 <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:16px;">
-                                    <strong>Langkah 2 dari 4 Ã¢â‚¬â€ Jadwal Cek Lokasi</strong>
+                                    <strong>Langkah 2 dari 4 — Jadwal Cek Lokasi</strong>
                                     @if($application->bpn_cek_lokasi_dt)
-                                        @if($cekLokasiLewat)
-                                            <span style="color:#276749;font-weight:700;"> Ã¢Å“â€¦ Selesai</span> Ã¢â‚¬â€
-                                            Cek lokasi <strong>{{ $application->bpn_cek_lokasi_date }}</strong> sudah lewat. Jadwal bisa tetap diubah jika perlu.
-                                        @else
-                                            Ã¢â‚¬â€ Terjadwal: <strong>{{ $application->bpn_cek_lokasi_date }}</strong> (CP: {{ $application->bpn_cek_lokasi_cp }}). Ubah jika ada perubahan.
-                                        @endif
+                                        — Terjadwal: <strong>{{ $application->bpn_cek_lokasi_date }}</strong> (CP: {{ $application->bpn_cek_lokasi_cp }}). Ubah jika ada perubahan.
                                     @else
-                                        Ã¢â‚¬â€ Tentukan jadwal dan kontak person petugas lapangan.
+                                        — Tentukan jadwal dan kontak person petugas lapangan.
                                     @endif
                                 </div>
                                 <div class="form-group" style="margin-bottom:12px;">
@@ -778,90 +782,73 @@
                                     @error('bpn_cek_lokasi_cp')<span class="error-message">{{ $message }}</span>@enderror
                                 </div>
                                 <button type="submit" class="btn-verify-submit" style="font-size:13px;padding:10px 20px;">
-                                    {{ $application->bpn_cek_lokasi_dt ? 'Ã°Å¸â€â€ž Ubah Jadwal Cek Lokasi & Kirim WA' : 'Ã°Å¸â€œÂ Simpan Jadwal Cek Lokasi & Blast WA' }}
+                                    {{ $application->bpn_cek_lokasi_dt ? '🔄 Ubah Jadwal Cek Lokasi & Kirim WA' : '📅 Simpan Jadwal Cek Lokasi & Blast WA' }}
                                 </button>
                             </form>
 
-                            {{-- ===== Form Jadwal Rapat (muncul setelah cek lokasi lewat 1 hari) ===== --}}
+                            {{-- ===== Form Jadwal Rapat (muncul setelah cek lokasi diisi) ===== --}}
                             @if($application->bpn_cek_lokasi_dt)
                                 <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
-                                @if(!$cekLokasiLewat)
-                                    <div style="background:#EDF2F7;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4A5568;display:flex;align-items:center;gap:8px;">
-                                        Ã°Å¸â€¢Â <span>Jadwal Rapat Koordinasi akan tersedia setelah jadwal cek lokasi (<strong>{{ $application->bpn_cek_lokasi_date }}</strong>) sudah berlalu 1 hari.</span>
+                                <form action="{{ route('psn.verify', $application->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="step" value="bpn_rapat">
+                                    <div style="background:#EBF8FF;border:1px solid #90CDF4;padding:12px 16px;border-radius:8px;font-size:13px;color:#2B6CB0;margin-bottom:16px;">
+                                        <strong>Langkah 3 dari 4 — Jadwal Rapat Koordinasi</strong>
+                                        @if($application->bpn_rapat_dt)
+                                            — Terjadwal: <strong>{{ $application->bpn_rapat_date }}</strong>. Ubah jika ada perubahan.
+                                        @else
+                                            — Cek lokasi selesai. Tentukan waktu rapat koordinasi BPN.
+                                        @endif
                                     </div>
-                                @else
-                                    <form action="{{ route('psn.verify', $application->id) }}" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="step" value="bpn_rapat">
-                                        <div style="background:#EBF8FF;border:1px solid #90CDF4;padding:12px 16px;border-radius:8px;font-size:13px;color:#2B6CB0;margin-bottom:16px;">
-                                            <strong>Langkah 3 dari 4 Ã¢â‚¬â€ Jadwal Rapat Koordinasi</strong>
-                                            @if($application->bpn_rapat_dt)
-                                                @if($rapatLewat)
-                                                    <span style="color:#276749;font-weight:700;"> Ã¢Å“â€¦ Selesai</span> Ã¢â‚¬â€
-                                                    Rapat <strong>{{ $application->bpn_rapat_date }}</strong> sudah lewat. Jadwal tetap bisa diubah jika diperlukan.
-                                                @else
-                                                    Ã¢â‚¬â€ Terjadwal: <strong>{{ $application->bpn_rapat_date }}</strong>. Ubah jika ada perubahan.
-                                                @endif
-                                            @else
-                                                Ã¢â‚¬â€ Cek lokasi selesai. Tentukan waktu rapat koordinasi BPN.
-                                            @endif
-                                        </div>
-                                        <div class="form-group" style="margin-bottom:12px;">
-                                            <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Rapat <span style="color:red;">*</span></label>
-                                            <input type="datetime-local" name="bpn_rapat_dt" class="form-control"
-                                                value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}"
-                                                style="background:white;" required>
-                                        </div>
-                                        <button type="submit" class="btn-verify-submit" style="background:#218AC9;font-size:13px;padding:10px 20px;">
-                                            {{ $application->bpn_rapat_dt ? 'Ã°Å¸â€â€ž Ubah Jadwal Rapat & Kirim WA' : 'Ã°Å¸â€œâ€¦ Simpan Jadwal Rapat & Blast WA' }}
-                                        </button>
-                                    </form>
-                                @endif
+                                    <div class="form-group" style="margin-bottom:12px;">
+                                        <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Rapat <span style="color:red;">*</span></label>
+                                        <input type="datetime-local" name="bpn_rapat_dt" class="form-control"
+                                            value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}"
+                                            style="background:white;" required>
+                                    </div>
+                                    <button type="submit" class="btn-verify-submit" style="background:#218AC9;font-size:13px;padding:10px 20px;">
+                                        {{ $application->bpn_rapat_dt ? '🔄 Ubah Jadwal Rapat & Kirim WA' : '📅 Simpan Jadwal Rapat & Blast WA' }}
+                                    </button>
+                                </form>
                             @endif
 
-                            {{-- ===== Form Upload Pertek (muncul setelah rapat lewat 1 hari) ===== --}}
+                            {{-- ===== Form Upload Pertek (muncul setelah rapat diisi) ===== --}}
                             @if($application->bpn_rapat_dt)
                                 <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
-                                @if(!$rapatLewat)
-                                    <div style="background:#EDF2F7;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#4A5568;display:flex;align-items:center;gap:8px;">
-                                        Ã°Å¸â€¢Â <span>Penerbitan Pertek akan tersedia setelah jadwal rapat (<strong>{{ $application->bpn_rapat_date }}</strong>) sudah berlalu 1 hari.</span>
+                                <form action="{{ route('psn.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" name="step" value="bpn_pertek">
+                                    <div style="background:#F0FFF4;border:1px solid #BBF7D0;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;line-height:1.6;">
+                                        <strong>Langkah 4 dari 4 — Penerbitan Pertek Pertanahan</strong><br>
+                                        Rapat terdaftar. Upload Dokumen Pertek dan beri keputusan akhir BPN.
                                     </div>
-                                @else
-                                    <form action="{{ route('psn.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="hidden" name="step" value="bpn_pertek">
-                                        <div style="background:#F0FFF4;border:1px solid #BBF7D0;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;line-height:1.6;">
-                                            <strong>Langkah 4 dari 4 Ã¢â‚¬â€ Penerbitan Pertek Pertanahan</strong><br>
-                                            Rapat telah selesai. Upload Dokumen Pertek dan beri keputusan akhir BPN.
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Akhir BPN:</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label"><input type="radio" name="action" value="approve" required checked onclick="togglePertekUpload(true)"> Terbitkan Pertek & Teruskan ke Dinas PU</label>
+                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="togglePertekUpload(false)"> Tolak Permohonan</label>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Akhir BPN:</label>
-                                            <div class="radio-group">
-                                                <label class="radio-label"><input type="radio" name="action" value="approve" required checked onclick="togglePertekUpload(true)"> Terbitkan Pertek & Teruskan ke Dinas PU</label>
-                                                <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="togglePertekUpload(false)"> Tolak Permohonan</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group" id="pertekUploadWrapper">
-                                            <label class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen Pertek (PDF/DOC/DOCX) <span style="color:red;">*</span></label>
-                                            <input type="file" id="bpn_pertek_document" name="bpn_pertek_document" class="form-control" accept=".pdf,.doc,.docx" style="background:white;">
-                                            @error('bpn_pertek_document')<span class="error-message">{{ $message }}</span>@enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label" style="font-weight:700;color:#744210;">Catatan / Rekomendasi Teknis BPN <span style="color:red;">*</span></label>
-                                            <textarea name="notes" class="form-control" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required></textarea>
-                                            @error('notes')<span class="error-message">{{ $message }}</span>@enderror
-                                        </div>
-                                        <button type="submit" class="btn-verify-submit" style="background:#79A73A;">Ã°Å¸â€œâ€ž Terbitkan Pertek & Blast WA Pemohon</button>
-                                    </form>
-                                    <script>
-                                        function togglePertekUpload(show) {
-                                            const w = document.getElementById('pertekUploadWrapper');
-                                            const i = document.getElementById('bpn_pertek_document');
-                                            if (w) { w.style.display = show ? 'block' : 'none'; show ? i.setAttribute('required','required') : i.removeAttribute('required'); }
-                                        }
-                                        document.addEventListener('DOMContentLoaded', () => togglePertekUpload(true));
-                                    </script>
-                                @endif
+                                    </div>
+                                    <div class="form-group" id="pertekUploadWrapper">
+                                        <label class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen Pertek (PDF/DOC/DOCX) <span style="color:red;">*</span></label>
+                                        <input type="file" id="bpn_pertek_document" name="bpn_pertek_document" class="form-control" accept=".pdf,.doc,.docx" style="background:white;">
+                                        @error('bpn_pertek_document')<span class="error-message">{{ $message }}</span>@enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" style="font-weight:700;color:#744210;">Catatan / Rekomendasi Teknis BPN <span style="color:red;">*</span></label>
+                                        <textarea name="notes" class="form-control" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required></textarea>
+                                        @error('notes')<span class="error-message">{{ $message }}</span>@enderror
+                                    </div>
+                                    <button type="submit" class="btn-verify-submit" style="background:#79A73A;">📄 Terbitkan Pertek & Blast WA Pemohon</button>
+                                </form>
+                                <script>
+                                    function togglePertekUpload(show) {
+                                        const w = document.getElementById('pertekUploadWrapper');
+                                        const i = document.getElementById('bpn_pertek_document');
+                                        if (w) { w.style.display = show ? 'block' : 'none'; show ? i.setAttribute('required','required') : i.removeAttribute('required'); }
+                                    }
+                                    document.addEventListener('DOMContentLoaded', () => togglePertekUpload(true));
+                                </script>
                             @endif
 
                         @endif {{-- end bpn_berkas_status --}}

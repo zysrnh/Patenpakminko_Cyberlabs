@@ -1084,10 +1084,19 @@
                             </li>
                             <li class="detail-item">
                                 <span class="detail-label">Status Utama</span>
-                                <span class="detail-val">
+                                <span class="detail-val" style="display: flex; align-items: center; gap: 8px;">
                                     <span class="badge-status" style="background-color: {{ $application->status_color }};">
                                         {{ $application->status_label }}
                                     </span>
+                                    @if(Auth::user()->isBpn())
+                                        <form action="{{ route('application.rollback', ['berusaha', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan dan mengembalikan permohonan ini ke lini masa/tahap sebelumnya?')">
+                                            @csrf
+                                            <button type="submit" class="btn-rollback" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"/></svg>
+                                                Rollback Tahap
+                                            </button>
+                                        </form>
+                                    @endif
                                 </span>
                             </li>
                             <li class="detail-item">

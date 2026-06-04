@@ -444,8 +444,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="kbli" class="form-label">Kode & Nama KBLI</label>
+                        <label for="kbli" class="form-label">Kode & Nama KBLI <span class="required" id="kbli-required" style="display: none; color: #DC2626;">*</span></label>
                         <input type="text" id="kbli" name="kbli" class="form-control" placeholder="Contoh: 68111 - Real Estat" value="{{ old('kbli') }}">
+                        <div id="kbli-help" style="font-size: 11.5px; color: var(--muted); margin-top: 4px; display: none;"></div>
                         @error('kbli') <span class="error-msg">{{ $message }}</span> @enderror
                     </div>
 
@@ -499,6 +500,101 @@
             locale: "id",
             allowInput: true
         });
+
+        // KBLI Dictionary
+        const kbliData = {
+            "68111": "Real Estat Yang Dimiliki Sendiri Atau Disewa (Perumahan/Ruko/Gedung)",
+            "68110": "Real Estat Yang Dimiliki Sendiri Atau Disewa",
+            "68201": "Real Estat Atas Dasar Balas Jasa (Fee) Atau Kontrak",
+            "55111": "Hotel Bintang",
+            "55112": "Hotel Non Bintang",
+            "56101": "Restoran / Rumah Makan",
+            "56102": "Warung Makan / Kedai Makanan",
+            "56103": "Penyediaan Makanan Keliling/Tempat Tidak Tetap",
+            "47111": "Perdagangan Eceran Minimarket / Supermarket",
+            "41011": "Konstruksi Gedung Hunian (Rumah, Apartemen)",
+            "41012": "Konstruksi Gedung Perkantoran",
+            "41013": "Konstruksi Gedung Industri (Pabrik, Gudang)",
+            "41014": "Konstruksi Gedung Perbelanjaan (Mall, Toko)",
+            "41015": "Konstruksi Gedung Kesehatan (Rumah Sakit, Puskesmas)",
+            "41016": "Konstruksi Gedung Pendidikan (Sekolah, Universitas)",
+            "41019": "Konstruksi Gedung Lainnya",
+            "43211": "Instalasi Listrik",
+            "46900": "Perdagangan Besar Berbagai Macam Barang (General Trader)",
+            "47190": "Perdagangan Eceran Berbagai Macam Barang (Toserba/Department Store)",
+            "52101": "Pergudangan Dan Penyimpanan",
+            "56301": "Bar",
+            "56302": "Kelab Malam atau Diskotek",
+            "68120": "Kawasan Industri",
+            "93111": "Lapangan Olahraga",
+            "93112": "Gedung Olahraga",
+            "93219": "Aktivitas Taman Rekreasi Dan Taman Hiburan Lainnya",
+            "01111": "Pertanian Padi",
+            "01112": "Pertanian Jagung",
+            "01131": "Pertanian Hortikultura Sayuran Daun",
+            "10710": "Industri Produk Roti Dan Kue",
+            "47711": "Perdagangan Eceran Pakaian",
+            "47721": "Perdagangan Eceran Kosmetik",
+            "49211": "Angkutan Orang Dengan Bus",
+            "85121": "Pendidikan Dasar Pemerintah (SD/SMP)",
+            "85122": "Pendidikan Dasar Swasta (SD/SMP)",
+            "86101": "Aktivitas Rumah Sakit Pemerintah",
+            "86102": "Aktivitas Rumah Sakit Swasta",
+            "6801": "Aktivitas Real Estat",
+            "6802": "Aktivitas Real Estat Atas Dasar Balas Jasa atau Kontrak",
+            "5630": "Penyediaan Minuman",
+            "5610": "Penyediaan Makanan",
+            "5510": "Penyediaan Akomodasi (Hotel/Penginapan)",
+            "4711": "Perdagangan Eceran Makanan/Minuman di Toko",
+            "4101": "Konstruksi Gedung"
+        };
+
+        const kbliInput = document.getElementById('kbli');
+        const kbliHelp = document.getElementById('kbli-help');
+        const kbliRequired = document.getElementById('kbli-required');
+        const jenisPermohonan = document.getElementById('jenis_permohonan').value;
+
+        // Toggle required status based on jenis_permohonan
+        if (jenisPermohonan === 'berusaha') {
+            kbliInput.required = true;
+            if (kbliRequired) kbliRequired.style.display = 'inline';
+        }
+
+        // Event listener for auto-detect KBLI
+        kbliInput.addEventListener('input', function() {
+            const val = this.value.trim();
+            // Match digits only
+            const codeMatch = val.match(/^\d+/);
+            if (codeMatch) {
+                const code = codeMatch[0];
+                if (kbliData[code]) {
+                    kbliHelp.style.display = 'block';
+                    kbliHelp.innerHTML = `<span style="color: var(--green-dk); font-weight: 700;">✔️ Terdeteksi:</span> ${code} - ${kbliData[code]} <button type="button" style="background: var(--blue); color: #fff; border: none; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-family: inherit; font-weight: 700; cursor: pointer; margin-left: 6px;" onclick="applyKbli('${code}', '${kbliData[code]}')">Terapkan</button>`;
+                    return;
+                }
+                
+                // Fallback: search for partial match
+                let found = null;
+                for (const key in kbliData) {
+                    if (key.startsWith(code) || code.startsWith(key)) {
+                        found = { code: key, desc: kbliData[key] };
+                        break;
+                    }
+                }
+                if (found) {
+                    kbliHelp.style.display = 'block';
+                    kbliHelp.innerHTML = `<span style="color: var(--brown); font-weight: 700;">💡 Saran:</span> ${found.code} - ${found.desc} <button type="button" style="background: var(--blue); color: #fff; border: none; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-family: inherit; font-weight: 700; cursor: pointer; margin-left: 6px;" onclick="applyKbli('${found.code}', '${found.desc}')">Terapkan</button>`;
+                    return;
+                }
+            }
+            kbliHelp.style.display = 'none';
+        });
+
+        window.applyKbli = function(code, desc) {
+            kbliInput.value = `${code} - ${desc}`;
+            kbliHelp.style.display = 'block';
+            kbliHelp.innerHTML = `<span style="color: var(--green-dk); font-weight: 700;">✔️ KBLI Diterapkan:</span> ${code} - ${desc}`;
+        };
     </script>
 </body>
 </html>
