@@ -37,6 +37,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'bpn_rapat_date',
     'bpn_rapat_dt',
     'bpn_pertek_document',
+    'bpn_pertek_uploaded_at',
+    'souvenir_sent_at',
     'nib',
     'kbli',
     'proposal_kegiatan',
@@ -49,6 +51,8 @@ class PpkprApplication extends Model
     protected $casts = [
         'bpn_cek_lokasi_dt'          => 'datetime',
         'bpn_rapat_dt'               => 'datetime',
+        'bpn_pertek_uploaded_at'     => 'datetime',
+        'souvenir_sent_at'           => 'datetime',
         'satu_pintu_tanggal_terbit'  => 'date',
         'dinas_pu_tanggal_penilaian' => 'date',
         'putr_validated_at'          => 'datetime',

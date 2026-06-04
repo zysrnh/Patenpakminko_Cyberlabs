@@ -287,6 +287,7 @@ class KebijakanController extends Controller
                 
                 $path = $request->file('bpn_pertek_document')->store('bpn_perteks', 'public');
                 $application->bpn_pertek_document = $path;
+                $application->bpn_pertek_uploaded_at = now();
                 $application->status = 'disetujui';
                 $msg = 'Dokumen Pertek Pertanahan berhasil diterbitkan. Permohonan Kebijakan Khusus selesai dan disetujui!';
             } else {

@@ -254,6 +254,7 @@ class PsnController extends Controller
                 }
                 $path = $request->file('bpn_pertek_document')->store('psn_perteks', 'public');
                 $application->bpn_pertek_document = $path;
+                $application->bpn_pertek_uploaded_at = now();
                 $application->status = 'menunggu_dinas_pu'; // PSN lanjut ke Dinas PU
                 $msg = 'Pertek berhasil diterbitkan. Permohonan PSN diteruskan ke Dinas PU.';
             } else {

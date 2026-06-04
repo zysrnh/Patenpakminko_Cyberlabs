@@ -386,8 +386,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="nib" class="form-label">Nomor Induk Berusaha (NIB)</label>
-                        <input type="text" id="nib" name="nib" class="form-control" placeholder="13 Digit NIB (Khusus Pelaku Usaha)" value="{{ old('nib') }}">
+                        <label for="nib" class="form-label">Nomor Induk Berusaha (NIB) <span style="font-weight: normal; color: var(--muted);">(Opsional - Jika Tersedia)</span></label>
+                        <input type="text" id="nib" name="nib" class="form-control" placeholder="13 Digit NIB (Kosongkan jika tidak tersedia)" value="{{ old('nib') }}">
                         @error('nib') <span class="error-msg">{{ $message }}</span> @enderror
                     </div>
 

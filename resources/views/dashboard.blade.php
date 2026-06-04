@@ -986,6 +986,47 @@
                     $processSla($allPendingNon);
                     $processSla($allPendingBerusaha);
                     $processSla($allPendingKebijakan);
+
+                    // --- Kalkulasi Pending Souvenirs (> 10 hari post-pertek upload, belum dikirim) ---
+                    $pendingSouvenirs = [];
+                    $souvenirModels = [
+                        'ppkpr_non_berusaha' => \App\Models\PpkprApplication::class,
+                        'ppkpr_berusaha'     => \App\Models\PpkprBerusahaApplication::class,
+                        'kebijakan_khusus'   => \App\Models\KebijakanApplication::class,
+                        'psn'                => \App\Models\PsnApplication::class,
+                        'tanah_timbul'       => \App\Models\TanahTimbulApplication::class,
+                    ];
+
+                    $typeLabels = [
+                        'ppkpr_non_berusaha' => 'PKKPR Non Berusaha',
+                        'ppkpr_berusaha'     => 'PKKPR Berusaha',
+                        'kebijakan_khusus'   => 'Kebijakan Khusus',
+                        'psn'                => 'PSN (Proyek Nasional)',
+                        'tanah_timbul'       => 'Tanah Timbul',
+                    ];
+
+                    foreach ($souvenirModels as $typeKey => $modelClass) {
+                        $apps = $modelClass::whereNotNull('bpn_pertek_document')
+                            ->whereNull('souvenir_sent_at')
+                            ->get();
+
+                        foreach ($apps as $app) {
+                            $uploadedAt = $app->bpn_pertek_uploaded_at ?? $app->updated_at;
+                            $days = (int) $uploadedAt->diffInDays(now());
+                            if ($days >= 10) {
+                                $pendingSouvenirs[] = [
+                                    'id'                 => $app->id,
+                                    'application_number' => $app->application_number,
+                                    'type_label'         => $typeLabels[$typeKey],
+                                    'type_key'           => $typeKey,
+                                    'pemilik'            => $app->nama_pemilik_usaha ?? ($app->user->name ?? $app->user->username),
+                                    'phone'              => $app->user->phone_number ?? '—',
+                                    'days'               => $days,
+                                    'uploaded_at'        => $uploadedAt,
+                                ];
+                            }
+                        }
+                    }
                 }
             @endphp
 
@@ -1011,6 +1052,57 @@
                     </span>
                 </div>
             </div>
+
+            <!-- Souvenir Alert Warning -->
+            @if(!$user->isPelakuUsaha() && count($pendingSouvenirs) > 0)
+                <div class="alert-warning" style="display: block; padding: 18px 24px; border-radius: var(--r-lg); margin-bottom: 24px; border: 1.5px solid #FBE89F; background: #FFFDF0; color: #744210;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #D97706; flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <strong style="font-size: 15px;">Peringatan Souvenir Pending (SLA > 10 Hari)</strong>
+                    </div>
+                    <p style="font-size: 13.5px; margin-bottom: 14px; line-height: 1.5;">
+                        Terdapat <strong>{{ count($pendingSouvenirs) }}</strong> permohonan yang telah melebihi 10 hari sejak dokumen Pertek Pertanahan diunggah/diterbitkan (Tahap 6), tetapi souvenir belum dikirimkan ke pemohon. Silakan hubungi pemohon dan tandai sebagai terkirim setelah diserahkan.
+                    </p>
+                    <div style="overflow-x: auto; background: rgba(255, 255, 255, 0.5); border-radius: var(--r-md); border: 1px solid rgba(217, 119, 6, 0.15);">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid rgba(217, 119, 6, 0.15);">
+                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">No. Registrasi</th>
+                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">Pemohon</th>
+                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">Layanan</th>
+                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">Durasi Pend.</th>
+                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px; text-align: right;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($pendingSouvenirs as $ps)
+                                    <tr style="border-bottom: 1px solid rgba(217, 119, 6, 0.1); background: transparent;">
+                                        <td style="padding: 10px 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: #003B64;">{{ $ps['application_number'] }}</td>
+                                        <td style="padding: 10px 14px;">
+                                            <div style="font-weight: 700;">{{ $ps['pemilik'] }}</div>
+                                            <div style="font-size: 11px; color: #8F5C2C;">{{ $ps['phone'] }}</div>
+                                        </td>
+                                        <td style="padding: 10px 14px; font-weight: 500;">{{ $ps['type_label'] }}</td>
+                                        <td style="padding: 10px 14px;">
+                                            <span style="background: #FFF5F5; color: #C53030; padding: 3px 8px; border-radius: 12px; font-weight: 700; font-size: 11px; border: 1px solid #FED7D7;">
+                                                🔴 {{ $ps['days'] }} Hari
+                                            </span>
+                                        </td>
+                                        <td style="padding: 10px 14px; text-align: right;">
+                                            <form action="{{ route('souvenir.mark_sent', [$ps['type_key'], $ps['id']]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin souvenir untuk permohonan {{ $ps['application_number'] }} telah diserahkan?')">
+                                                @csrf
+                                                <button type="submit" class="alert-link" style="padding: 6px 12px; font-size: 11px; border-radius: var(--r-sm); transition: all 0.2s;">
+                                                    Tandai Terkirim
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
 
             <!-- Profile Alert -->
             @if($isProfileIncomplete)

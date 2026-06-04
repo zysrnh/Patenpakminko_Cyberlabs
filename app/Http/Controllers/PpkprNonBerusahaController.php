@@ -337,6 +337,7 @@ class PpkprNonBerusahaController extends Controller
                 }
                 $path = $request->file('bpn_pertek_document')->store('bpn_perteks', 'public');
                 $application->bpn_pertek_document = $path;
+                $application->bpn_pertek_uploaded_at = now();
                 $application->status = 'menunggu_dinas_pu'; // diteruskan ke Dinas PU
                 $msg = 'Pertek diterbitkan. Permohonan diteruskan ke Dinas PU (Tata Ruang) untuk Penilaian PKKPR.';
             } else {

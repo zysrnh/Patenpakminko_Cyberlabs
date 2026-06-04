@@ -282,6 +282,7 @@ class PpkprBerusahaController extends Controller
  
                     $path = $request->file('bpn_pertek_document')->store('bpn_perteks_berusaha', 'public');
                     $application->bpn_pertek_document = $path;
+                    $application->bpn_pertek_uploaded_at = now();
                     
                     // Alur berlanjut ke Dinas PU (Tahap 8: Penilaian PKKPR)
                     $application->status = 'menunggu_dinas_pu';
