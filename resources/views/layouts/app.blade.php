@@ -327,7 +327,7 @@
                 <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
                 LAPOLPA
             </a>
-            @if(Auth::check() && in_array(Auth::user()->role, ['dpn', 'bpn', 'dinas_pu', 'dinas_putr']))
+            @if(Auth::check() && in_array(Auth::user()->role, ['dpn', 'bpn', 'dinas_pu', 'dinas_putr', 'satu_pintu']))
             <a href="{{ route('berkas.index') }}" class="nav-item {{ request()->routeIs('berkas.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                 Pemberkasan (Manajemen)

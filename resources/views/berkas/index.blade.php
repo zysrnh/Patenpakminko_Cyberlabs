@@ -182,22 +182,26 @@
                     </div>
                     <div class="form-group">
                         <label>Kategori (Modul)</label>
-                        <select name="kategori" class="form-control">
+                        <select name="kategori" class="form-control" required>
                             <option value="">-- Pilih Jenis Dokumen --</option>
-                            <option value="Peta Lokasi">Peta Lokasi</option>
-                            <option value="Surat Kuasa">Surat Kuasa</option>
-                            <option value="FC KTP">FC KTP / Identitas</option>
-                            <option value="FC NPWP">FC NPWP</option>
-                            <option value="FC Akta Pendirian">FC Akta Pendirian</option>
-                            <option value="Rencana Penggunaan Tanah">Rencana Penggunaan Tanah</option>
-                            <option value="NIB">NIB</option>
-                            <option value="KBLI">KBLI</option>
-                            <option value="Proposal Kegiatan">Proposal Kegiatan</option>
-                            <option value="Formulir PTP">Formulir PTP</option>
-                            <option value="Dokumen Pertek (BPN)">Dokumen Pertek (BPN)</option>
-                            <option value="Dokumen Penilaian (PU)">Dokumen Penilaian (PU)</option>
-                            <option value="Dokumen PKKPR Final (PTSP)">Dokumen PKKPR Final (PTSP)</option>
-                            <option value="Persyaratan Lainnya">Lainnya</option>
+                            @if(Auth::user()->isSatuPintu())
+                                <option value="Dokumen Pertimbangan Teknis Pertanahan">Dokumen Pertimbangan Teknis Pertanahan</option>
+                            @else
+                                <option value="Peta Lokasi">Peta Lokasi</option>
+                                <option value="Surat Kuasa">Surat Kuasa</option>
+                                <option value="FC KTP">FC KTP / Identitas</option>
+                                <option value="FC NPWP">FC NPWP</option>
+                                <option value="FC Akta Pendirian">FC Akta Pendirian</option>
+                                <option value="Rencana Penggunaan Tanah">Rencana Penggunaan Tanah</option>
+                                <option value="NIB">NIB</option>
+                                <option value="KBLI">KBLI</option>
+                                <option value="Proposal Kegiatan">Proposal Kegiatan</option>
+                                <option value="Formulir PTP">Formulir PTP</option>
+                                <option value="Dokumen Pertimbangan Teknis Pertanahan">Dokumen Pertimbangan Teknis Pertanahan</option>
+                                <option value="Dokumen Penilaian (PU)">Dokumen Penilaian (PU)</option>
+                                <option value="Dokumen PKKPR Final (PTSP)">Dokumen PKKPR Final (PTSP)</option>
+                                <option value="Persyaratan Lainnya">Lainnya</option>
+                            @endif
                         </select>
                     </div>
                 </div>
@@ -220,21 +224,25 @@
                 <form action="{{ route('berkas.index') }}" method="GET">
                     <input type="text" name="search" placeholder="Cari nama berkas..." value="{{ request('search') }}" style="flex: 1;">
                     <select name="kategori">
-                        <option value="">Semua Jenis Dokumen</option>
-                        <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
-                        <option value="FC KTP" {{ request('kategori') == 'FC KTP' ? 'selected' : '' }}>FC KTP</option>
-                        <option value="FC NPWP" {{ request('kategori') == 'FC NPWP' ? 'selected' : '' }}>FC NPWP</option>
-                        <option value="Surat Kuasa" {{ request('kategori') == 'Surat Kuasa' ? 'selected' : '' }}>Surat Kuasa</option>
-                        <option value="FC Akta Pendirian" {{ request('kategori') == 'FC Akta Pendirian' ? 'selected' : '' }}>FC Akta Pendirian</option>
-                        <option value="Rencana Penggunaan Tanah" {{ request('kategori') == 'Rencana Penggunaan Tanah' ? 'selected' : '' }}>Rencana Penggunaan Tanah</option>
-                        <option value="NIB" {{ request('kategori') == 'NIB' ? 'selected' : '' }}>NIB</option>
-                        <option value="KBLI" {{ request('kategori') == 'KBLI' ? 'selected' : '' }}>KBLI</option>
-                        <option value="Proposal Kegiatan" {{ request('kategori') == 'Proposal Kegiatan' ? 'selected' : '' }}>Proposal Kegiatan</option>
-                        <option value="Formulir PTP" {{ request('kategori') == 'Formulir PTP' ? 'selected' : '' }}>Formulir PTP</option>
-                        <option value="Dokumen Pertek (BPN)" {{ request('kategori') == 'Dokumen Pertek (BPN)' ? 'selected' : '' }}>Dokumen Pertek (BPN)</option>
-                        <option value="Dokumen Penilaian (PU)" {{ request('kategori') == 'Dokumen Penilaian (PU)' ? 'selected' : '' }}>Dokumen Penilaian (PU)</option>
-                        <option value="Dokumen PKKPR Final (PTSP)" {{ request('kategori') == 'Dokumen PKKPR Final (PTSP)' ? 'selected' : '' }}>Dokumen PKKPR Final (PTSP)</option>
-                        <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Persyaratan Lainnya</option>
+                        @if(Auth::user()->isSatuPintu())
+                            <option value="Dokumen Pertimbangan Teknis Pertanahan" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan</option>
+                        @else
+                            <option value="">Semua Jenis Dokumen</option>
+                            <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
+                            <option value="FC KTP" {{ request('kategori') == 'FC KTP' ? 'selected' : '' }}>FC KTP</option>
+                            <option value="FC NPWP" {{ request('kategori') == 'FC NPWP' ? 'selected' : '' }}>FC NPWP</option>
+                            <option value="Surat Kuasa" {{ request('kategori') == 'Surat Kuasa' ? 'selected' : '' }}>Surat Kuasa</option>
+                            <option value="FC Akta Pendirian" {{ request('kategori') == 'FC Akta Pendirian' ? 'selected' : '' }}>FC Akta Pendirian</option>
+                            <option value="Rencana Penggunaan Tanah" {{ request('kategori') == 'Rencana Penggunaan Tanah' ? 'selected' : '' }}>Rencana Penggunaan Tanah</option>
+                            <option value="NIB" {{ request('kategori') == 'NIB' ? 'selected' : '' }}>NIB</option>
+                            <option value="KBLI" {{ request('kategori') == 'KBLI' ? 'selected' : '' }}>KBLI</option>
+                            <option value="Proposal Kegiatan" {{ request('kategori') == 'Proposal Kegiatan' ? 'selected' : '' }}>Proposal Kegiatan</option>
+                            <option value="Formulir PTP" {{ request('kategori') == 'Formulir PTP' ? 'selected' : '' }}>Formulir PTP</option>
+                            <option value="Dokumen Pertimbangan Teknis Pertanahan" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan</option>
+                            <option value="Dokumen Penilaian (PU)" {{ request('kategori') == 'Dokumen Penilaian (PU)' ? 'selected' : '' }}>Dokumen Penilaian (PU)</option>
+                            <option value="Dokumen PKKPR Final (PTSP)" {{ request('kategori') == 'Dokumen PKKPR Final (PTSP)' ? 'selected' : '' }}>Dokumen PKKPR Final (PTSP)</option>
+                            <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Persyaratan Lainnya</option>
+                        @endif
                     </select>
                     <button type="submit" class="btn btn-outline" style="padding: 8px 16px;">Filter</button>
                     @if(request('search') || request('kategori'))

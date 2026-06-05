@@ -566,15 +566,13 @@ class PpkprNonBerusahaController extends Controller
 
         $request->validate([
             'template' => 'required|string|max:2000',
-            'cp_admin' => 'nullable|string|max:100',
         ]);
 
         $settings = $this->getWhatsappSettings();
         $settings['template'] = $request->input('template');
-        $settings['cp_admin'] = $request->input('cp_admin') ?: '';
         $this->saveSettings($settings);
 
-        return redirect()->back()->with('success', 'Pengaturan WhatsApp berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Template pesan WhatsApp berhasil diperbarui!');
     }
 
     /**
@@ -781,6 +779,41 @@ class PpkprNonBerusahaController extends Controller
     public function templateKuasa()
     {
         return view('templates.kuasa');
+    }
+
+    public function adminContacts()
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $settings = $this->getWhatsappSettings();
+        return view('dpn.contacts', compact('settings'));
+    }
+
+    public function saveAdminContacts(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $request->validate([
+            'admin_bpn' => 'nullable|string',
+            'admin_putr' => 'nullable|string',
+            'admin_dinas_pu' => 'nullable|string',
+            'admin_satu_pintu' => 'nullable|string',
+            'cp_admin' => 'nullable|string|max:100',
+        ]);
+
+        $settings = $this->getWhatsappSettings();
+        $settings['admin_bpn'] = $request->input('admin_bpn');
+        $settings['admin_putr'] = $request->input('admin_putr');
+        $settings['admin_dinas_pu'] = $request->input('admin_dinas_pu');
+        $settings['admin_satu_pintu'] = $request->input('admin_satu_pintu');
+        $settings['cp_admin'] = $request->input('cp_admin') ?: '';
+        $this->saveSettings($settings);
+
+        return redirect()->back()->with('success', 'Kontak instansi berhasil diperbarui!');
     }
 }
 

@@ -21,8 +21,8 @@ class BerkasController extends Controller
     {
         $user = Auth::user();
         
-        // Cek akses: DPN, BPN, Dinas PU, Dinas PUTR (Sesuai request)
-        if (!in_array($user->role, ['dpn', 'bpn', 'dinas_pu', 'dinas_putr'])) {
+        // Cek akses: DPN, BPN, Dinas PU, Dinas PUTR, Satu Pintu (Sesuai request)
+        if (!in_array($user->role, ['dpn', 'bpn', 'dinas_pu', 'dinas_putr', 'satu_pintu'])) {
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke fitur ini.');
         }
 
@@ -36,6 +36,11 @@ class BerkasController extends Controller
         // Filter pencarian nama berkas
         if ($request->has('search') && $request->search != '') {
             $query->where('nama_berkas', 'like', '%' . $request->search . '%');
+        }
+
+        // Khusus PTSP: Hanya boleh melihat kategori "Dokumen Pertimbangan Teknis Pertanahan"
+        if ($user->isSatuPintu()) {
+            $query->where('kategori', 'Dokumen Pertimbangan Teknis Pertanahan');
         }
 
         $berkas = $query->paginate(10);
