@@ -51,8 +51,10 @@ class PsnController extends Controller
             abort(403, 'Aksi tidak diizinkan.');
         }
 
-        if ($request->input('hubungan_pengaju') === 'Lainnya') {
-            $request->merge(['hubungan_pengaju' => $request->input('hubungan_pengaju_lainnya')]);
+        if (in_array($request->input('hubungan_pengaju'), ['Lainnya', 'Pemilik Usaha / Pengguna Layanan'])) {
+            $request->merge([
+                'hubungan_pengaju' => $request->input('hubungan_pengaju_lainnya') ?: $request->input('hubungan_pengaju')
+            ]);
         }
 
         $request->validate([
@@ -438,7 +440,12 @@ class PsnController extends Controller
             default => null,
         };
 
-        if ($msg) $this->executeFonnteSend($pemohon, $msg);
+        if ($msg) {
+            if (!empty($settings['cp_admin'])) {
+                $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+            }
+            $this->executeFonnteSend($pemohon, $msg);
+        }
 
         // Notif ke admin instansi sesuai tahap
         if ($type === 'berkas_verifikasi' && $app->bpn_berkas_status === 'diterima' && !empty($settings['admin_putr'])) {

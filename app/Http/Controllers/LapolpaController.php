@@ -154,6 +154,11 @@ class LapolpaController extends Controller
                         . "4. Pastikan nomor WhatsApp Anda aktif selama proses pelaporan berlangsung.\n\n"
                         . "Lacak bukti booking Anda di dashboard: {$url}";
         
+        $settings = $this->getWhatsappSettings();
+        if (!empty($settings['cp_admin'])) {
+            $messagePemohon .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+        }
+        
         $this->executeFonnteSend($booking->whatsapp_number, $messagePemohon);
  
         // 2. Pesan Notifikasi Pemberitahuan ke Admin (DPN)
@@ -188,6 +193,11 @@ class LapolpaController extends Controller
 
         $message .= "Terima kasih atas kerja sama Anda.\n"
                  . "Lacak detail selengkapnya di: " . route('lapolpa.index');
+ 
+        $settings = $this->getWhatsappSettings();
+        if (!empty($settings['cp_admin'])) {
+            $message .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+        }
  
         $this->executeFonnteSend($booking->whatsapp_number, $message);
     }

@@ -516,8 +516,8 @@
                                 <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
                             </select>
                             
-                            <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ $selectedHubungan === 'Lainnya' ? 'block' : 'none' }}; margin-top: 8px;">
-                                <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan pengaju secara manual (cth: Instansi, PT, Karyawan, dll)" value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['PT / Badan Usaha', 'Instansi Pemerintah']) ? $ptpHubungan : '') }}">
+                            <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ in_array($selectedHubungan, ['Lainnya', 'Pemilik Usaha / Pengguna Layanan']) ? 'block' : 'none' }}; margin-top: 8px;">
+                                <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['PT / Badan Usaha', 'Instansi Pemerintah']) ? $ptpHubungan : '') }}">
                             </div>
 
                             @error('hubungan_pengaju')
@@ -535,9 +535,14 @@
                                 const inputLainnya = document.getElementById('hubungan_pengaju_lainnya');
 
                                 function toggleLainnya() {
-                                    if (selectHubungan.value === 'Lainnya') {
+                                    if (selectHubungan.value === 'Lainnya' || selectHubungan.value === 'Pemilik Usaha / Pengguna Layanan') {
                                         wrapperLainnya.style.display = 'block';
                                         inputLainnya.setAttribute('required', 'required');
+                                        if (selectHubungan.value === 'Pemilik Usaha / Pengguna Layanan') {
+                                            inputLainnya.placeholder = 'Ketik pemilik usaha/layanan apa (cth: Pemilik Toko Roti, dll)';
+                                        } else {
+                                            inputLainnya.placeholder = 'Masukkan hubungan pengaju secara manual (cth: Instansi, PT, Karyawan, dll)';
+                                        }
                                     } else {
                                         wrapperLainnya.style.display = 'none';
                                         inputLainnya.removeAttribute('required');

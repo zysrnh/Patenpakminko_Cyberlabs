@@ -54,9 +54,9 @@ class PpkprBerusahaController extends Controller
             abort(403, 'Aksi tidak diizinkan.');
         }
  
-        if ($request->input('hubungan_pengaju') === 'Lainnya') {
+        if (in_array($request->input('hubungan_pengaju'), ['Lainnya', 'Pemilik Usaha / Pengguna Layanan'])) {
             $request->merge([
-                'hubungan_pengaju' => $request->input('hubungan_pengaju_lainnya')
+                'hubungan_pengaju' => $request->input('hubungan_pengaju_lainnya') ?: $request->input('hubungan_pengaju')
             ]);
         }
 
@@ -493,6 +493,7 @@ class PpkprBerusahaController extends Controller
         $url = route('berusaha.show', $application->id);
         $namaPemohon = $application->nama_pengaju ?: ($application->user->name ?? $application->user->username);
         $noReg = $application->application_number;
+        $footer = !empty($settings['cp_admin']) ? "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_" : "";
  
         // Ambil Kontak Admin dari Settings (diatur melalui dashboard DPN â†’ Pengaturan Kontak)
         $bpnPhone       = !empty($settings['admin_bpn'])        ? $settings['admin_bpn']        : '081234567891';
@@ -505,14 +506,14 @@ class PpkprBerusahaController extends Controller
             case 'submit_berkas':
                 // Notifikasi Awal ke Pelaku Usaha
                 $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda telah diajukan.\n\nBerkas persyaratan Anda sedang dalam tahap verifikasi awal oleh BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
  
             case 'berkas_verifikasi':
                 if ($application->bpn_berkas_status === 'diterima') {
                     // Berkas Valid -> Notifikasi ke Pelaku Usaha & PUTR
                     $message = "Halo {$namaPemohon}, berkas permohonan PKKPR Berusaha Anda ({$noReg}) dinyatakan VALID oleh BPN.\n\nPermohonan diteruskan ke Dinas PUTR untuk Validasi Awal. Kami akan menghubungi Anda kembali.";
-                    $this->executeFonnteSend($pemohonPhone, $message);
+                    $this->executeFonnteSend($pemohonPhone, $message . $footer);
 
                     $msgPUTR = "Notifikasi Dinas PUTR: Berkas permohonan PKKPR Berusaha {$noReg} telah disetujui BPN.\n\nSilakan lakukan validasi permohonan awal di: {$url}";
                     $this->executeFonnteSend($putrPhone, $msgPUTR);
@@ -520,14 +521,14 @@ class PpkprBerusahaController extends Controller
                     // Berkas Tidak Sesuai -> Pesan Kesalahan ke Pelaku Usaha
                     $message = "Halo {$namaPemohon}, berkas permohonan PPKPR Berusaha Anda ({$noReg}) dinyatakan TIDAK SESUAI oleh BPN dengan alasan:\n"
                              . "\"{$application->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin BPN.";
-                    $this->executeFonnteSend($pemohonPhone, $message);
+                    $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 }
                 break;
  
             case 'validasi_awal_setuju':
                 // Dinas PUTR Validasi Sukses -> Kirim Notifikasi ke Pelaku Usaha & BPN
                 $message = "Halo {$namaPemohon},\n\nPermohonan PPKPR Berusaha Anda ({$noReg}) telah divalidasi oleh Dinas PUTR.\n\nSilakan cek instruksi pembayaran retribusi (di email atau melalui petugas). Jika pembayaran sudah diselesaikan, Anda akan menerima detail Kredensial Akun (Username & Password) untuk memantau progress di sistem.";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
 
                 $msgBPN = "Notifikasi BPN: Permohonan PKKPR Berusaha {$noReg} telah divalidasi oleh Dinas PUTR dan siap menunggu verifikasi pembayaran.";
                 $this->executeFonnteSend($bpnPhone, $msgBPN);
@@ -537,7 +538,7 @@ class PpkprBerusahaController extends Controller
                 // Dinas PUTR Validasi Ditolak
                 $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda ({$noReg}) DITOLAK pada tahap validasi awal oleh Dinas PUTR dengan alasan:\n"
                          . "\"{$application->dinas_pu_notes}\"\n\nHarap hubungi petugas untuk informasi lebih lanjut.";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
 
             case 'reupload_berkas':
@@ -558,7 +559,7 @@ class PpkprBerusahaController extends Controller
             case 'pembayaran_belum':
                 // Belum Bayar -> Notifikasi ke Pelaku Usaha untuk segera membayar
                 $message = "Halo {$namaPemohon}, pembayaran untuk permohonan PPKPR Berusaha {$noReg} belum terdeteksi/valid.\n\nMohon segera melakukan pembayaran retribusi pertanahan sesuai instruksi. Lacak detail pembayaran di: {$url}";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
  
             case 'pembayaran_lunas':
@@ -581,7 +582,7 @@ class PpkprBerusahaController extends Controller
                          . "Silakan login ke dashboard melalui tautan berikut:\n"
                          . "ðŸ”— {$dashboardUrl}\n\n"
                          . "Petugas BPN akan segera menyusun jadwal peninjauan lokasi lapangan. Lacak detail permohonan di: {$url}";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
  
             case 'cek_lokasi':
@@ -591,7 +592,7 @@ class PpkprBerusahaController extends Controller
                          . "Waktu: {$waktu}\n"
                          . "CP Lapangan/Admin: (atas nama) {$application->bpn_cek_lokasi_cp}\n\n"
                          . "Harap konfirmasi kesediaan anda dengan menghubungi Contact Person petugas lapangan diatas.";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
  
             case 'rapat':
@@ -600,7 +601,7 @@ class PpkprBerusahaController extends Controller
                 $message = "Halo {$namaPemohon}, sidang / rapat pembahasan pertimbangan teknis pertanahan untuk permohonan PKKPR Berusaha Anda ({$noReg}) dijadwalkan pada:\n\n"
                          . "Waktu: {$waktu}\n\n"
                          . "Pantau detail permohonan di: {$url}";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
  
             case 'pertek_terbit':
@@ -615,7 +616,7 @@ class PpkprBerusahaController extends Controller
             case 'pertek_tolak':
                 $message = "Halo {$namaPemohon}, permohonan PPKPR Berusaha Anda ({$noReg}) ditolak oleh BPN dengan catatan:\n"
                          . "\"{$application->bpn_notes}\"\n\nLacak detail di: {$url}";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
  
             case 'pu_sesuai':
@@ -633,7 +634,7 @@ class PpkprBerusahaController extends Controller
                 // Penilaian Belum Sesuai -> Blast ke Pelaku Usaha
                 $message = "Halo {$namaPemohon}, peninjauan tata ruang oleh Dinas PU untuk permohonan {$noReg} dinyatakan BELUM SESUAI dengan catatan:\n"
                          . "\"{$application->dinas_pu_notes}\"\n\nSilakan koordinasikan atau lacak detail perbaikan di: {$url}";
-                $this->executeFonnteSend($pemohonPhone, $message);
+                $this->executeFonnteSend($pemohonPhone, $message . $footer);
                 break;
  
             case 'final_disetujui':

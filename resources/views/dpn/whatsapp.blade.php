@@ -614,6 +614,12 @@
                         <h2 class="card-title">Template Notifikasi Status</h2>
                         <form action="{{ route('dpn.whatsapp.save') }}" method="POST">
                             @csrf
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label for="cp_admin" class="form-label">Contact Person Admin (Nomor WA)</label>
+                                <input type="text" id="cp_admin" name="cp_admin" class="form-control" placeholder="cth: 08123456789 (Kosongkan jika tidak ingin disisipkan)" value="{{ $settings['cp_admin'] ?? '' }}">
+                                <span style="font-size: 11px; color: var(--clr-muted); display: block; margin-top: 4px;">Nomor ini akan otomatis ditambahkan pada akhir setiap pesan WA pemohon.</span>
+                            </div>
+
                             <div class="form-group">
                                 <label for="template" class="form-label">Format Isi Pesan Notifikasi</label>
                                 <textarea id="template" name="template" class="form-control" rows="6" required>{{ $settings['template'] }}</textarea>

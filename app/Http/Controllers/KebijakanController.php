@@ -66,9 +66,9 @@ class KebijakanController extends Controller
             abort(403, 'Aksi tidak diizinkan.');
         }
  
-        if ($request->input('hubungan_pengaju') === 'Lainnya') {
+        if (in_array($request->input('hubungan_pengaju'), ['Lainnya', 'Pemilik Usaha / Pengguna Layanan'])) {
             $request->merge([
-                'hubungan_pengaju' => $request->input('hubungan_pengaju_lainnya')
+                'hubungan_pengaju' => $request->input('hubungan_pengaju_lainnya') ?: $request->input('hubungan_pengaju')
             ]);
         }
 
@@ -343,6 +343,10 @@ class KebijakanController extends Controller
             [$application->nama_pengaju ?: ($application->user->name ?? $application->user->username), $application->application_number, $statusLabel, $notes ?: '-', $url],
             $template
         );
+
+        if (!empty($settings['cp_admin'])) {
+            $message .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+        }
  
         $this->executeFonnteSend($application->user->phone_number, $message);
     }
