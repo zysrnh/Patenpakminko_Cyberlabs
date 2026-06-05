@@ -384,6 +384,50 @@
             cursor: pointer; margin-left: 8px; font-family: inherit; display: inline-flex; align-items: center; gap: 4px;
         }
         .btn-contoh:hover { background: #218AC9; color: white; }
+
+        /* KBLI Autocomplete */
+        .kbli-wrapper {
+            position: relative;
+        }
+        .kbli-dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1.5px solid var(--clr-blue);
+            border-radius: var(--radius-md);
+            box-shadow: 0 8px 24px rgba(0,59,100,0.12);
+            z-index: 100;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+        }
+        .kbli-dropdown.show { display: block; }
+        .kbli-item {
+            padding: 10px 14px;
+            font-size: 13px;
+            color: var(--clr-ink);
+            cursor: pointer;
+            border-bottom: 1px solid var(--clr-line);
+            transition: background 0.15s;
+            line-height: 1.4;
+        }
+        .kbli-item:last-child { border-bottom: none; }
+        .kbli-item:hover, .kbli-item.active { background: var(--clr-blue-lt); }
+        .kbli-item strong { color: var(--clr-blue); margin-right: 6px; }
+        .kbli-desc {
+            display: block;
+            margin-top: 6px;
+            padding: 8px 12px;
+            background: var(--clr-blue-lt);
+            border: 1px solid var(--clr-line);
+            border-radius: var(--radius-sm);
+            font-size: 12.5px;
+            color: var(--clr-mid);
+            font-weight: 500;
+        }
+        .kbli-desc-icon { color: #38A169; margin-right: 4px; }
     
         @media (max-width: 768px) {
             .templates-card { flex-direction: column; align-items: flex-start; gap: 16px; }
@@ -459,11 +503,16 @@
                         }
                     @endphp
 
-                    <!-- Nama Pemilik Usaha -->
-                    <!-- Nama Pemilik Usaha (Hidden) -->
-                    <input type="hidden" name="nama_pemilik_usaha" value="{{ old('nama_pemilik_usaha', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}">
-
+                    <!-- Nama Pemilik Usaha / Perusahaan -->
                     <div class="form-grid-2">
+                        <!-- Nama Perusahaan / Instansi -->
+                        <div class="form-group full-width">
+                            <label for="nama_pemilik_usaha" class="form-label">Nama Perusahaan / Instansi / Pemilik Usaha <span class="req">*</span></label>
+                            <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" placeholder="Tulis nama perusahaan, instansi, atau nama pemilik usaha" value="{{ old('nama_pemilik_usaha', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}" required>
+                            @error('nama_pemilik_usaha')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <!-- Nama Pengaju -->
                         <div class="form-group">
                             <label for="nama_pengaju" class="form-label">Nama Pemohon / Pengguna Layanan <span class="req">*</span></label>
@@ -590,9 +639,31 @@
                         @error('nib')<span class="error-message">{{ $message }}</span>@enderror
                     </div>
 
-                    <!-- 8. KBLI (Opsional) -->
+                    <!-- 8a. Kode KBLI (Wajib, Autocomplete) -->
                     <div class="form-group">
-                        <label for="kbli" class="form-label">8. Dokumen KBLI yang diajukan (Opsional) <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/9%20KBLI%20(Klasifikasi%20Baku%20Lapangan%20Usaha%20Indonesia).pdf') }}', 'Contoh Dokumen KBLI')">Lihat Contoh</button></label>
+                        <label for="kbli_kode" class="form-label">8. Kode KBLI <span class="req">*</span> <span style="font-size: 11px; color: var(--clr-muted); font-weight: 500;">(sesuai yang diisi di OSS)</span></label>
+                        <div class="kbli-wrapper">
+                            <input
+                                type="text"
+                                id="kbli_kode"
+                                name="kbli_kode"
+                                class="form-control"
+                                placeholder="Ketik kode KBLI (cth: 68100) atau nama kegiatan..."
+                                value="{{ old('kbli_kode') }}"
+                                autocomplete="off"
+                                required
+                                maxlength="20"
+                            >
+                            <div class="kbli-dropdown" id="kbliDropdown"></div>
+                        </div>
+                        <div id="kbliSelectedInfo" style="display:none;"></div>
+                        @error('kbli_kode')<span class="error-message">{{ $message }}</span>@enderror
+                        <p style="font-size: 11px; color: var(--clr-muted); margin-top: 5px;">💡 Ketik minimal 2 karakter untuk melihat saran otomatis. Kode bisa juga diketik manual jika sudah tahu.</p>
+                    </div>
+
+                    <!-- 8b. Dokumen KBLI (Opsional, Upload) -->
+                    <div class="form-group">
+                        <label for="kbli" class="form-label">8b. Dokumen KBLI yang diajukan (Opsional) <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/9%20KBLI%20(Klasifikasi%20Baku%20Lapangan%20Usaha%20Indonesia).pdf') }}', 'Contoh Dokumen KBLI')">Lihat Contoh</button></label>
                         <div class="file-input-wrapper">
                             <input type="file" id="kbli" name="kbli" accept=".pdf,.jpg,.jpeg,.png">
                             <span class="file-help">Format: PDF, JPG, PNG. Maks. 5MB.</span>
@@ -670,6 +741,99 @@
                 document.getElementById('previewFrame').src = '';
             }, 300);
         }
+
+        // ─── KBLI AUTOCOMPLETE ──────────────────────────────────────────
+        (function () {
+            const input    = document.getElementById('kbli_kode');
+            const dropdown = document.getElementById('kbliDropdown');
+            const infoBox  = document.getElementById('kbliSelectedInfo');
+
+            if (!input) return;
+
+            let debounceTimer = null;
+            let activeIndex   = -1;
+            let currentItems  = [];
+
+            function showInfo(code, title) {
+                infoBox.innerHTML = `<span class="kbli-desc"><span class="kbli-desc-icon">✅</span> <strong>${code}</strong> — ${title}</span>`;
+                infoBox.style.display = 'block';
+            }
+
+            function closeDropdown() {
+                dropdown.classList.remove('show');
+                dropdown.innerHTML = '';
+                activeIndex  = -1;
+                currentItems = [];
+            }
+
+            // Pre-fill info if value already set (old input)
+            if (input.value.length >= 2) {
+                fetch(`/api/kbli/find?code=${encodeURIComponent(input.value)}`)
+                    .then(r => r.json())
+                    .then(d => { if (d && d.title) showInfo(d.code, d.title); });
+            }
+
+            input.addEventListener('input', function () {
+                clearTimeout(debounceTimer);
+                const q = this.value.trim();
+                infoBox.style.display = 'none';
+
+                if (q.length < 2) { closeDropdown(); return; }
+
+                debounceTimer = setTimeout(() => {
+                    fetch(`/api/kbli/search?q=${encodeURIComponent(q)}`)
+                        .then(r => r.json())
+                        .then(results => {
+                            closeDropdown();
+                            if (!results.length) return;
+
+                            currentItems = results;
+                            results.forEach((item, idx) => {
+                                const div = document.createElement('div');
+                                div.className = 'kbli-item';
+                                div.innerHTML = `<strong>${item.code}</strong> ${item.title}`;
+                                div.addEventListener('click', () => {
+                                    input.value = item.code;
+                                    showInfo(item.code, item.title);
+                                    closeDropdown();
+                                });
+                                dropdown.appendChild(div);
+                            });
+                            dropdown.classList.add('show');
+                            activeIndex = -1;
+                        })
+                        .catch(() => closeDropdown());
+                }, 300);
+            });
+
+            // Keyboard navigation
+            input.addEventListener('keydown', function (e) {
+                const items = dropdown.querySelectorAll('.kbli-item');
+                if (!items.length) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIndex = Math.min(activeIndex + 1, items.length - 1);
+                    items.forEach((el, i) => el.classList.toggle('active', i === activeIndex));
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIndex = Math.max(activeIndex - 1, 0);
+                    items.forEach((el, i) => el.classList.toggle('active', i === activeIndex));
+                } else if (e.key === 'Enter' && activeIndex >= 0) {
+                    e.preventDefault();
+                    items[activeIndex].click();
+                } else if (e.key === 'Escape') {
+                    closeDropdown();
+                }
+            });
+
+            // Close on outside click
+            document.addEventListener('click', function (e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+        })();
     </script>
 </body>
 </html>

@@ -83,6 +83,7 @@ class KebijakanController extends Controller
             'fc_akta_pendirian' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'nib' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'kbli_kode' => 'required|string|max:20',
             'kbli' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'proposal_kegiatan' => 'required|file|mimes:pdf,doc,docx|max:10240',
             'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
@@ -93,7 +94,7 @@ class KebijakanController extends Controller
         ]);
  
         $data = $request->only([
-            'nama_pemilik_usaha', 'nama_pengaju', 'hubungan_pengaju'
+            'nama_pemilik_usaha', 'nama_pengaju', 'hubungan_pengaju', 'kbli_kode'
         ]);
  
         $data['user_id'] = Auth::id();

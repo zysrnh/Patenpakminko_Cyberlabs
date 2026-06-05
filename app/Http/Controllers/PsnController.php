@@ -65,11 +65,12 @@ class PsnController extends Controller
             'fc_npwp'                  => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'fc_akta_pendirian'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
             'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'kbli_kode'                => 'required|string|max:20',
             'proposal_kegiatan'        => 'required|file|mimes:pdf,doc,docx|max:10240',
             'persyaratan_lainnya'      => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
         ]);
 
-        $data = $request->only(['nama_pemilik_usaha', 'nama_pengaju', 'hubungan_pengaju']);
+        $data = $request->only(['nama_pemilik_usaha', 'nama_pengaju', 'hubungan_pengaju', 'kbli_kode']);
         $data['user_id']            = Auth::id();
         $data['status']             = 'menunggu_bpn';
         $data['bpn_berkas_status']  = 'menunggu';

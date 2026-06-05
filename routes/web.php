@@ -11,6 +11,7 @@ use App\Http\Controllers\InformalController;
 use App\Http\Controllers\PsnController;
 use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\AdminDpnController;
+use App\Http\Controllers\KbliController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
@@ -101,6 +102,10 @@ Route::post('/kebijakan/baru', [KebijakanController::class, 'store'])->name('keb
 Route::get('/psn/baru', [PsnController::class, 'create'])->name('psn.create');
 Route::post('/psn/baru', [PsnController::class, 'store'])->name('psn.store');
  
+// KBLI Autocomplete AJAX (publik, tidak perlu login)
+Route::get('/api/kbli/search', [KbliController::class, 'search'])->name('kbli.search');
+Route::get('/api/kbli/find', [KbliController::class, 'findByCode'])->name('kbli.find');
+
 // Rute untuk tamu (Guest Only)
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
