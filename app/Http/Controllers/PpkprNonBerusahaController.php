@@ -576,6 +576,37 @@ class PpkprNonBerusahaController extends Controller
     }
 
     /**
+     * Simpan konfigurasi Provider WA (Fonnte / Twilio).
+     */
+    public function saveProviderSettings(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $request->validate([
+            'provider'           => 'required|in:fonnte,twilio',
+            'fonnte_token'       => 'nullable|string|max:500',
+            'twilio_account_sid' => 'nullable|string|max:100',
+            'twilio_auth_token'  => 'nullable|string|max:200',
+            'twilio_from_number' => 'nullable|string|max:50',
+            'twilio_channel'     => 'nullable|in:whatsapp,sms',
+        ]);
+
+        $settings = $this->getWhatsappSettings();
+        $settings['provider']           = $request->input('provider', 'fonnte');
+        $settings['fonnte_token']       = $request->input('fonnte_token') ?: ($settings['fonnte_token'] ?? '');
+        $settings['twilio_account_sid'] = $request->input('twilio_account_sid') ?: ($settings['twilio_account_sid'] ?? '');
+        $settings['twilio_auth_token']  = $request->input('twilio_auth_token') ?: ($settings['twilio_auth_token'] ?? '');
+        $settings['twilio_from_number'] = $request->input('twilio_from_number') ?: ($settings['twilio_from_number'] ?? '');
+        $settings['twilio_channel']     = $request->input('twilio_channel', 'whatsapp');
+        $this->saveSettings($settings);
+
+        $providerLabel = $settings['provider'] === 'twilio' ? 'Twilio' : 'Fonnte';
+        return redirect()->back()->with('success', "Provider notifikasi berhasil diubah ke {$providerLabel}!");
+    }
+
+    /**
      * Hubungkan atau Putuskan Koneksi WhatsApp (Simulasi).
      */
     public function toggleWhatsappConnection(Request $request)

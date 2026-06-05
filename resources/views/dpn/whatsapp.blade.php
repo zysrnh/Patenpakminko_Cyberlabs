@@ -609,6 +609,77 @@
 
                 <!-- KANAN: Pengaturan Template & Log Notifikasi -->
                 <div>
+
+                    <!-- --- PROVIDER NOTIFIKASI ------------------- -->
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h2 class="card-title">Provider Notifikasi WA/SMS</h2>
+                        <form action="{{ route('dpn.whatsapp.save-provider') }}" method="POST">
+                            @csrf
+                            <p style="font-size: 13px; color: var(--clr-muted); margin-bottom: 16px; line-height: 1.5;">
+                                Pilih layanan pengiriman notifikasi yang akan digunakan. Konfigurasi yang sudah tersimpan tidak akan hilang saat ganti provider.
+                            </p>
+
+                            {{-- Provider Selector --}}
+                            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                                <label id="label-fonnte" style="flex: 1; border: 2px solid {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? '#218AC9' : '#D6E4EF' }}; border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.2s; background: {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? '#E3F0F9' : '#fff' }};">
+                                    <input type="radio" name="provider" value="fonnte" onchange="switchProvider('fonnte')" {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? 'checked' : '' }} style="display:none;">
+                                    <div style="font-weight: 800; font-size: 14px; color: #003B64; margin-bottom: 4px;">?? Fonnte</div>
+                                    <div style="font-size: 11.5px; color: #7A9BB5; line-height: 1.4;">Token tunggal, hubungkan HP pribadi via WA Web. Cocok untuk penggunaan lokal.</div>
+                                </label>
+                                <label id="label-twilio" style="flex: 1; border: 2px solid {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? '#218AC9' : '#D6E4EF' }}; border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.2s; background: {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? '#E3F0F9' : '#fff' }};">
+                                    <input type="radio" name="provider" value="twilio" onchange="switchProvider('twilio')" {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? 'checked' : '' }} style="display:none;">
+                                    <div style="font-weight: 800; font-size: 14px; color: #003B64; margin-bottom: 4px;">?? Twilio</div>
+                                    <div style="font-size: 11.5px; color: #7A9BB5; line-height: 1.4;">API cloud global resmi, cocok untuk produksi & volume tinggi. Dukung WA Business & SMS.</div>
+                                </label>
+                            </div>
+
+                            {{-- FONNTE CONFIG --}}
+                            <div id="section-fonnte" style="display: {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? 'block' : 'none' }};">
+                                <div class="form-group" style="margin-bottom: 14px;">
+                                    <label class="form-label">Fonnte API Token</label>
+                                    <input type="text" name="fonnte_token" class="form-control" placeholder="Masukkan token API Fonnte Anda" value="{{ $settings['fonnte_token'] ?? '' }}">
+                                    <span style="font-size: 11px; color: var(--clr-muted); display: block; margin-top: 4px;">Dapatkan token di <strong>fonnte.com</strong> ? My Account ? API Key. Kosongkan untuk mode simulasi.</span>
+                                </div>
+                            </div>
+
+                            {{-- TWILIO CONFIG --}}
+                            <div id="section-twilio" style="display: {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? 'block' : 'none' }};">
+                                <div style="background: #FFFDF0; border: 1.5px solid #FBE89F; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 12.5px; color: #744210; line-height: 1.5;">
+                                    ?? <strong>Twilio memerlukan nomor resmi.</strong> Pastikan sudah mendaftar di <strong>twilio.com</strong>, mengaktifkan WhatsApp Sandbox atau Business API, dan memiliki nomor Twilio yang aktif.
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                                    <div class="form-group">
+                                        <label class="form-label">Account SID</label>
+                                        <input type="text" name="twilio_account_sid" class="form-control" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" value="{{ $settings['twilio_account_sid'] ?? '' }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Auth Token</label>
+                                        <input type="password" name="twilio_auth_token" class="form-control" placeholder="••••••••••••••••••••••••••••••••" value="{{ $settings['twilio_auth_token'] ?? '' }}">
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <div class="form-group">
+                                        <label class="form-label">Nomor Pengirim (From Number)</label>
+                                        <input type="text" name="twilio_from_number" class="form-control" placeholder="+14155238886" value="{{ $settings['twilio_from_number'] ?? '' }}">
+                                        <span style="font-size: 11px; color: var(--clr-muted); margin-top: 4px; display:block;">Nomor Twilio dengan format internasional (misal: <code>+14155238886</code>)</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Channel Pengiriman</label>
+                                        <select name="twilio_channel" class="form-control">
+                                            <option value="whatsapp" {{ ($settings['twilio_channel'] ?? 'whatsapp') === 'whatsapp' ? 'selected' : '' }}>WhatsApp Business</option>
+                                            <option value="sms" {{ ($settings['twilio_channel'] ?? 'whatsapp') === 'sms' ? 'selected' : '' }}>SMS Biasa</option>
+                                        </select>
+                                        <span style="font-size: 11px; color: var(--clr-muted); margin-top: 4px; display:block;">Pilih WhatsApp jika nomor Twilio sudah didaftarkan ke WA Business API.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-submit" style="margin-top: 8px;">
+                                Simpan Konfigurasi Provider
+                            </button>
+                        </form>
+                    </div>
+
                     <!-- Template Notifikasi -->
                     <div class="card">
                         <h2 class="card-title">Template Notifikasi Status</h2>
