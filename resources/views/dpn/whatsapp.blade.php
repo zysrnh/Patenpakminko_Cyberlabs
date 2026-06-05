@@ -680,17 +680,56 @@
                         </form>
                     </div>
 
-                    <!-- Template Notifikasi -->
+                    <!-- Template Notifikasi Per-Modul -->
                     <div class="card">
                         <h2 class="card-title">Template Notifikasi Status</h2>
+                        <p style="font-size: 12.5px; color: var(--clr-muted); margin-bottom: 16px; line-height: 1.5;">
+                            Setiap modul dapat memiliki template pesan berbeda. Klik tab modul di bawah untuk mengedit. Jika dikosongkan, sistem akan menggunakan Template Default.
+                        </p>
+
+                        {{-- Tab Navigasi Modul --}}
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; border-bottom: 2px solid var(--clr-line); padding-bottom: 12px;">
+                            @php
+                                $modulTabs = [
+                                    'default'      => 'Default Umum',
+                                    'non_berusaha' => 'Non Berusaha',
+                                    'berusaha'     => 'Berusaha',
+                                    'kebijakan'    => 'Kebijakan',
+                                    'tanah_timbul' => 'Tanah Timbul',
+                                    'psn'          => 'PSN',
+                                    'lapolpa'      => 'Lapolpa',
+                                ];
+                            @endphp
+                            @foreach($modulTabs as $key => $label)
+                                <button type="button" id="tab-btn-{{ $key }}"
+                                    onclick="switchTab('{{ $key }}')"
+                                    style="padding: 7px 14px; font-size: 12px; font-weight: 700; border-radius: 7px; border: 1.5px solid var(--clr-line); background: #fff; color: var(--clr-muted); cursor: pointer; transition: all 0.15s; font-family: inherit;">
+                                    {{ $label }}
+                                </button>
+                            @endforeach
+                        </div>
+
                         <form action="{{ route('dpn.whatsapp.save') }}" method="POST">
                             @csrf
-                            <div class="form-group">
-                                <label for="template" class="form-label">Format Isi Pesan Notifikasi</label>
-                                <textarea id="template" name="template" class="form-control" rows="6" required>{{ $settings['template'] }}</textarea>
-                            </div>
+                            {{-- Konten per tab --}}
+                            @foreach($modulTabs as $key => $label)
+                                @php
+                                    $templateKey = $key === 'default' ? 'template' : 'template_' . $key;
+                                    $templateVal = $settings[$templateKey] ?? ($key === 'default' ? '' : '');
+                                @endphp
+                                <div id="tab-content-{{ $key }}" style="display: {{ $key === 'default' ? 'block' : 'none' }};">
+                                    <div class="form-group">
+                                        <label class="form-label">Template — {{ $label }}
+                                            @if($key !== 'default')
+                                                <span style="font-weight: 500; color: var(--clr-muted); text-transform: none;">(Kosongkan untuk pakai Default)</span>
+                                            @endif
+                                        </label>
+                                        <textarea name="{{ $templateKey }}" class="form-control" rows="7" placeholder="{{ $key === 'default' ? 'Tulis template utama di sini...' : 'Kosongkan untuk menggunakan Template Default...' }}">{{ $templateVal }}</textarea>
+                                    </div>
+                                </div>
+                            @endforeach
 
-                            <button type="submit" class="btn-submit">Simpan Template</button>
+                            <button type="submit" class="btn-submit">Simpan Semua Template</button>
                         </form>
 
                         <h3 style="font-size: 12px; font-weight: 800; color: var(--clr-mid); margin: 20px 0 8px; text-transform: uppercase;">Variabel Dinamis (Placeholders)</h3>

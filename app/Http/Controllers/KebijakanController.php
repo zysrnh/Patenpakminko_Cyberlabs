@@ -335,7 +335,7 @@ class KebijakanController extends Controller
             return;
         }
  
-        $template = $settings['template'];
+        $template = !empty($settings['template_kebijakan']) ? $settings['template_kebijakan'] : ($settings['template'] ?? '');
         $url = route('kebijakan.show', $application->id);
         
         $message = str_replace(

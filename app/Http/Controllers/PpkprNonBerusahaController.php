@@ -565,14 +565,29 @@ class PpkprNonBerusahaController extends Controller
         }
 
         $request->validate([
-            'template' => 'required|string|max:2000',
+            'template'            => 'nullable|string|max:3000',
+            'template_non_berusaha' => 'nullable|string|max:3000',
+            'template_berusaha'   => 'nullable|string|max:3000',
+            'template_kebijakan'  => 'nullable|string|max:3000',
+            'template_tanah_timbul' => 'nullable|string|max:3000',
+            'template_psn'        => 'nullable|string|max:3000',
+            'template_lapolpa'    => 'nullable|string|max:3000',
         ]);
 
         $settings = $this->getWhatsappSettings();
-        $settings['template'] = $request->input('template');
+
+        // Simpan semua template per-modul
+        $templateKeys = ['template', 'template_non_berusaha', 'template_berusaha', 'template_kebijakan', 'template_tanah_timbul', 'template_psn', 'template_lapolpa'];
+        foreach ($templateKeys as $key) {
+            $val = $request->input($key);
+            if ($val !== null) {
+                $settings[$key] = $val;
+            }
+        }
+
         $this->saveSettings($settings);
 
-        return redirect()->back()->with('success', 'Template pesan WhatsApp berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Template notifikasi berhasil diperbarui!');
     }
 
     /**
@@ -708,7 +723,9 @@ class PpkprNonBerusahaController extends Controller
             return; // Jangan kirim log jika status tidak terhubung
         }
 
-        $template = $settings['template'];
+        $template = !empty($settings['template_non_berusaha'])
+            ? $settings['template_non_berusaha']
+            : ($settings['template'] ?? '');
         $url = route('non-berusaha.show', $application->id);
         
         $message = str_replace(

@@ -335,7 +335,7 @@ class TanahTimbulController extends Controller
             return;
         }
  
-        $template = $settings['template'];
+        $template = !empty($settings['template_tanah_timbul']) ? $settings['template_tanah_timbul'] : ($settings['template'] ?? '');
         $url = route('tanah-timbul.show', $application->id);
         
         $message = str_replace(
