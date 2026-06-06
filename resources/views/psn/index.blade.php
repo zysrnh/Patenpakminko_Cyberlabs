@@ -68,8 +68,8 @@
                                 <div style="font-size:11px;color:var(--muted);margin-top:2px;font-weight:600;">{{ $app->service_name }}</div>
                             </td>
                             <td>
-                                <div style="font-weight:700;">{{ $app->user->username }}</div>
-                                <div style="font-size:11.5px;color:var(--muted);">{{ $app->user->name ?? 'â€”' }}</div>
+                                <div style="font-weight:700; color:#003B64;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
+                                <div style="font-size:11px; color:var(--muted);">Akun: {{ $app->user->username }}</div>
                             </td>
                             <td style="color:var(--mid);">{{ $app->user->phone_number }}</td>
                             <td style="color:var(--mid);">{{ $app->created_at->format('d-m-Y') }}</td>

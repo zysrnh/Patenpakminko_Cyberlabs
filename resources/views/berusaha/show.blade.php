@@ -786,11 +786,25 @@
                             <div class="form-group-v">
                                 <label for="action">Tindakan Pemeriksaan Berkas</label>
                                 <select name="action" id="action" class="form-select-v" required>
-                                    <option value="approve">Berkas Sesuai & Valid (Pelaku Usaha dapat melakukan blast notif)</option>
-                                    <option value="reject">Berkas Tidak Sesuai (Kirim catatan kesalahan)</option>
+                                    <option value="approve">Disetujui</option>
+                                    <option value="reject">Tidak Disetujui</option>
                                 </select>
                             </div>
-                            <div class="form-group-v">
+                            
+                            <div id="revisi-berkas-container" style="display:none; margin-bottom: 12px; background: #fff5f5; padding: 12px; border: 1px solid #fed7d7; border-radius: 6px;">
+                                <label style="font-weight: 600; font-size: 12px; color: #c53030; margin-bottom: 8px; display: block;">Tandai Berkas yang Tidak Valid / Kurang Lengkap (Otomatis masuk ke catatan):</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
+                                    <label><input type="checkbox" class="cb-revisi" value="Formulir PTP"> Formulir PTP</label>
+                                    <label><input type="checkbox" class="cb-revisi" value="Peta Lokasi / Sketsa"> Peta Lokasi / Sketsa</label>
+                                    <label><input type="checkbox" class="cb-revisi" value="KTP Pemohon"> KTP Pemohon</label>
+                                    <label><input type="checkbox" class="cb-revisi" value="NPWP"> NPWP</label>
+                                    <label><input type="checkbox" class="cb-revisi" value="Surat Kuasa"> Surat Kuasa</label>
+                                    <label><input type="checkbox" class="cb-revisi" value="NIB / KBLI"> NIB / KBLI</label>
+                                    <label><input type="checkbox" class="cb-revisi" value="Akta Pendirian"> Akta Pendirian</label>
+                                    <label><input type="checkbox" class="cb-revisi" value="Proposal Kegiatan"> Proposal Kegiatan</label>
+                                </div>
+                            </div>
+<div class="form-group-v">
                                 <label for="notes">Catatan Pemeriksaan</label>
                                 <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan atau instruksi perbaikan..." required></textarea>
                             </div>
@@ -803,11 +817,11 @@
                             @csrf
                             <input type="hidden" name="step" value="bpn_pembayaran">
                             <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                <strong style="font-size: 13px;">Langkah 2: Konfirmasi Pembayaran Retribusi & Input No. Berkas</strong>
+                                <strong style="font-size: 13px;">Langkah 2: Konfirmasi Pembayaran PTN & Input No. Berkas</strong>
                                 <span class="verify-step-badge">Aktif</span>
                             </div>
                             <p style="font-size: 13px; color: var(--clr-muted); margin-bottom: 16px;">
-                                Setelah pemohon melakukan pembayaran retribusi pertanahan secara offline, input <strong>Nomor Berkas</strong> di bawah lalu klik <strong>"Kirim Kredensial & Konfirmasi Lunas"</strong> untuk memverifikasi dan otomatis mengirimkan kredensial login dashboard ke WhatsApp pemohon.
+                                Setelah pemohon melakukan pembayaran PTN pertanahan secara offline, input <strong>Nomor Berkas</strong> di bawah lalu klik <strong>"Kirim Kredensial & Konfirmasi Lunas"</strong> untuk memverifikasi dan otomatis mengirimkan kredensial login dashboard ke WhatsApp pemohon.
                             </p>
                             <div class="form-group-v">
                                 <label for="no_berkas">Nomor Berkas (wajib diisi)</label>
@@ -887,8 +901,8 @@
                             <div class="form-group-v">
                                 <label for="action">Tindakan Rekomendasi Teknis</label>
                                 <select name="action" id="action" class="form-select-v" required>
-                                    <option value="approve">Setujui & Terbitkan Surat Pertek (Diteruskan ke Dinas PU)</option>
-                                    <option value="reject">Tolak Permohonan Berusaha</option>
+                                    <option value="approve">Disetujui</option>
+                                    <option value="reject">Tidak Disetujui</option>
                                 </select>
                             </div>
                             <div class="form-group-v">
@@ -918,8 +932,8 @@
                             <div class="form-group-v">
                                 <label for="action">Hasil Validasi Permohonan</label>
                                 <select name="action" id="action" class="form-select-v" required>
-                                    <option value="approve">Lolos Validasi Awal (Teruskan ke BPN untuk Tagihan Retribusi)</option>
-                                    <option value="reject">Tidak Lolos Validasi Awal / Tolak Permohonan</option>
+                                    <option value="approve">Disetujui</option>
+                                    <option value="reject">Tidak Disetujui</option>
                                 </select>
                             </div>
                             <div class="form-group-v">
@@ -1089,13 +1103,24 @@
                                         {{ $application->status_label }}
                                     </span>
                                     @if(Auth::user()->isBpn())
-                                        <form action="{{ route('application.rollback', ['berusaha', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan dan mengembalikan permohonan ini ke lini masa/tahap sebelumnya?')">
-                                            @csrf
-                                            <button type="submit" class="btn-rollback" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"/></svg>
-                                                Rollback Tahap
-                                            </button>
-                                        </form>
+                                        
+                                        <div style="display: inline-flex; gap: 4px; margin-left: 8px;">
+                                            <form action="{{ route('application.rollback', ['berusaha', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan ke tahap sebelumnya?')">
+                                                @csrf
+                                                <button type="submit" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                                                    Prev
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('application.forward', ['berusaha', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Bypass ke tahap selanjutnya?')">
+                                                @csrf
+                                                <button type="submit" style="background: #48BB78; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                    Next
+                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                                </button>
+                                            </form>
+                                        </div>
+
                                     @endif
                                 </span>
                             </li>
@@ -1328,7 +1353,7 @@
                                 @endif
                             </div>
 
-                            <!-- STEP 4: Pembayaran Retribusi (BPN, setelah PUTR lolos) -->
+                            <!-- STEP 4: Pembayaran PTN (BPN, setelah PUTR lolos) -->
                             @php
                                 $step4Status = '';
                                 if (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])) {
@@ -1337,7 +1362,7 @@
                             @endphp
                             <div class="timeline-step {{ $step4Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">3. Pembayaran Retribusi & Registrasi Berkas (BPN)</div>
+                                <div class="timeline-title">3. Pembayaran PTN & Registrasi Berkas (BPN)</div>
                                 <div class="timeline-desc">
                                     @if($application->bpn_pembayaran_status === 'sudah_bayar')
                                         Pembayaran telah dikonfirmasi lunas. Kredensial login dashboard telah dikirimkan ke WhatsApp pemohon.
@@ -1345,7 +1370,7 @@
                                             <br>No. Berkas: <strong>{{ $application->no_berkas }}</strong>
                                         @endif
                                     @else
-                                        Menunggu konfirmasi pembayaran retribusi dan input nomor berkas oleh BPN. Jika tidak dibayar dalam 7 hari, permohonan otomatis dihapus dari sistem.
+                                        Menunggu konfirmasi pembayaran PTN dan input nomor berkas oleh BPN. Jika tidak dibayar dalam 7 hari, permohonan otomatis dihapus dari sistem.
                                     @endif
                                 </div>
                             </div>
@@ -1566,3 +1591,46 @@
 </body>
 </html>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const actionInputs = document.querySelectorAll("select[name='action'], input[type='radio'][name='action']");
+    const revisiContainer = document.getElementById("revisi-berkas-container");
+    const notesField = document.getElementById("notes");
+    const checkboxes = document.querySelectorAll(".cb-revisi");
+
+    function updateRevisiVisibility() {
+        let isReject = false;
+        actionInputs.forEach(input => {
+            if (input.tagName === "SELECT" && input.value === "reject") isReject = true;
+            if (input.tagName === "INPUT" && input.checked && input.value === "reject") isReject = true;
+        });
+        if (revisiContainer) {
+            revisiContainer.style.display = isReject ? "block" : "none";
+            if(!isReject) {
+                checkboxes.forEach(cb => cb.checked = false);
+            }
+        }
+    }
+
+    actionInputs.forEach(input => {
+        input.addEventListener("change", updateRevisiVisibility);
+    });
+    
+    // Initial check
+    updateRevisiVisibility();
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", function() {
+            let selected = Array.from(checkboxes).filter(i => i.checked).map(i => "- " + i.value);
+            let currentNote = notesField.value.replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+\n\n/g, "").replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+/g, "").trim();
+            
+            if (selected.length > 0) {
+                notesField.value = "Berkas yang harus diperbaiki:\n" + selected.join("\n") + "\n\n" + currentNote;
+            } else {
+                notesField.value = currentNote;
+            }
+        });
+    });
+});
+</script>

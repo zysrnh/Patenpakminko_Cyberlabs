@@ -153,6 +153,14 @@ class PpkprBerusahaController extends Controller
 
         $ptp = json_decode($application->ptp_data, true);
         $ptp['app_number'] = $application->application_number;
+        $ptp = array_merge([
+            "nama" => "-", "nik" => "-", "nib" => "-", "alamat" => "-", "phone_number" => "-", 
+            "email" => "-", "bertindak_atas_nama" => "-", "anggaran_dasar_tanggal" => "-", 
+            "anggaran_dasar_no" => "-", "rencana_kegiatan" => "-", "kbli" => "-", 
+            "letak_tanah_jalan" => "-", "letak_tanah_kelurahan" => "-", "letak_tanah_kecamatan" => "-", 
+            "luas_tanah" => "-", "status_penguasaan" => "-", "penggunaan_saat_ini" => "-"
+        ], $ptp);
+
 
         // Gunakan Barryvdh\DomPDF\Facade\Pdf
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);

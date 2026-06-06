@@ -222,4 +222,81 @@ class AdminDpnController extends Controller
 
         return redirect()->route($redirectRoutes[$type], $id)->with('success', $msg);
     }
+
+    public function forwardStatus($type, $id)
+    {
+        if (!\Illuminate\Support\Facades\Auth::user()->isBpn()) {
+            abort(403, "Hanya petugas BPN yang berwenang untuk melakukan bypass status.");
+        }
+
+        $models = [
+            "ppkpr_non_berusaha" => \App\Models\PpkprApplication::class,
+            "ppkpr_berusaha" => \App\Models\PpkprBerusahaApplication::class,
+            "berusaha" => \App\Models\PpkprBerusahaApplication::class,
+            "kebijakan_khusus" => \App\Models\KebijakanApplication::class,
+            "psn" => \App\Models\PsnApplication::class,
+            "tanah_timbul" => \App\Models\TanahTimbulApplication::class,
+            "tanah-timbul" => \App\Models\TanahTimbulApplication::class,
+        ];
+
+        if (!array_key_exists($type, $models)) {
+            return redirect()->back()->with("error", "Tipe permohonan tidak valid.");
+        }
+
+        $modelClass = $models[$type];
+        $application = $modelClass::findOrFail($id);
+        $msg = "Permohonan di-forward ke tahap selanjutnya.";
+
+        if ($type === "ppkpr_berusaha" || $type === "berusaha") {
+            if ($application->status === "menunggu_bpn") {
+                if ($application->bpn_berkas_status !== "diterima") {
+                    $application->bpn_berkas_status = "diterima";
+                } elseif ($application->bpn_pembayaran_status !== "sudah_bayar") {
+                    $application->bpn_pembayaran_status = "sudah_bayar";
+                    $application->no_berkas = "BYPASS-" . time();
+                } elseif (!$application->bpn_cek_lokasi_dt) {
+                    $application->bpn_cek_lokasi_dt = now();
+                    $application->bpn_cek_lokasi_date = now()->format("Y-m-d\TH:i");
+                    $application->bpn_cek_lokasi_cp = "Bypass CP";
+                } elseif (!$application->bpn_rapat_dt) {
+                    $application->bpn_rapat_dt = now();
+                    $application->bpn_rapat_date = now()->format("Y-m-d\TH:i");
+                } else {
+                    $application->status = "menunggu_putr";
+                    $application->dinas_pu_status = "menunggu_validasi_awal";
+                }
+            } elseif ($application->status === "menunggu_putr") {
+                $application->status = "menunggu_dinas_pu";
+            } elseif ($application->status === "menunggu_dinas_pu") {
+                $application->status = "menunggu_satu_pintu";
+            } elseif ($application->status === "menunggu_satu_pintu") {
+                $application->status = "disetujui";
+            }
+        } else {
+            if ($application->status === "menunggu_bpn") {
+                if ($application->bpn_berkas_status !== "diterima") {
+                    $application->bpn_berkas_status = "diterima";
+                } elseif ($application->bpn_pembayaran_status !== "sudah_bayar") {
+                    $application->bpn_pembayaran_status = "sudah_bayar";
+                    $application->no_berkas = "BYPASS-" . time();
+                } elseif (!$application->bpn_cek_lokasi_dt) {
+                    $application->bpn_cek_lokasi_dt = now();
+                    $application->bpn_cek_lokasi_date = now()->format("Y-m-d\TH:i");
+                    $application->bpn_cek_lokasi_cp = "Bypass CP";
+                } elseif (!$application->bpn_rapat_dt) {
+                    $application->bpn_rapat_dt = now();
+                    $application->bpn_rapat_date = now()->format("Y-m-d\TH:i");
+                } else {
+                    $application->status = "menunggu_dinas_pu";
+                }
+            } elseif ($application->status === "menunggu_dinas_pu") {
+                $application->status = "menunggu_satu_pintu";
+            } elseif ($application->status === "menunggu_satu_pintu") {
+                $application->status = "disetujui";
+            }
+        }
+
+        $application->save();
+        return redirect()->back()->with("success", $msg);
+    }
 }

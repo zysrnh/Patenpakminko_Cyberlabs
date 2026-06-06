@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrasi WhatsApp Gateway — PATEN PAK MIKO</title>
+    <title>Integrasi WhatsApp Gateway â€” PATEN PAK MIKO</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -622,13 +622,13 @@
                             {{-- Provider Selector --}}
                             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                                 <label id="label-fonnte" style="flex: 1; border: 2px solid {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? '#218AC9' : '#D6E4EF' }}; border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.2s; background: {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? '#E3F0F9' : '#fff' }};">
-                                    <input type="radio" name="provider" value="fonnte" onchange="switchProvider('fonnte')" {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? 'checked' : '' }} style="display:none;">
-                                    <div style="font-weight: 800; font-size: 14px; color: #003B64; margin-bottom: 4px;">?? Fonnte</div>
+                                    <input type="radio" name="provider" value="fonnte" onchange="switchProvider('fonnte')" {{ ($settings['provider'] ?? 'fonnte') === 'fonnte' ? 'checked' : '' }} style="position: absolute; opacity: 0;">
+                                    <div style="font-weight: 800; font-size: 14px; color: #003B64; margin-bottom: 4px;">Fonnte API</div>
                                     <div style="font-size: 11.5px; color: #7A9BB5; line-height: 1.4;">Token tunggal, hubungkan HP pribadi via WA Web. Cocok untuk penggunaan lokal.</div>
                                 </label>
                                 <label id="label-twilio" style="flex: 1; border: 2px solid {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? '#218AC9' : '#D6E4EF' }}; border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.2s; background: {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? '#E3F0F9' : '#fff' }};">
-                                    <input type="radio" name="provider" value="twilio" onchange="switchProvider('twilio')" {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? 'checked' : '' }} style="display:none;">
-                                    <div style="font-weight: 800; font-size: 14px; color: #003B64; margin-bottom: 4px;">?? Twilio</div>
+                                    <input type="radio" name="provider" value="twilio" onchange="switchProvider('twilio')" {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? 'checked' : '' }} style="position: absolute; opacity: 0;">
+                                    <div style="font-weight: 800; font-size: 14px; color: #003B64; margin-bottom: 4px;">Twilio API</div>
                                     <div style="font-size: 11.5px; color: #7A9BB5; line-height: 1.4;">API cloud global resmi, cocok untuk produksi & volume tinggi. Dukung WA Business & SMS.</div>
                                 </label>
                             </div>
@@ -638,14 +638,14 @@
                                 <div class="form-group" style="margin-bottom: 14px;">
                                     <label class="form-label">Fonnte API Token</label>
                                     <input type="text" name="fonnte_token" class="form-control" placeholder="Masukkan token API Fonnte Anda" value="{{ $settings['fonnte_token'] ?? '' }}">
-                                    <span style="font-size: 11px; color: var(--clr-muted); display: block; margin-top: 4px;">Dapatkan token di <strong>fonnte.com</strong> ? My Account ? API Key. Kosongkan untuk mode simulasi.</span>
+                                    <span style="font-size: 11px; color: var(--clr-muted); display: block; margin-top: 4px;">Dapatkan token di <strong>fonnte.com</strong> -> My Account -> API Key. Kosongkan untuk mode simulasi.</span>
                                 </div>
                             </div>
 
                             {{-- TWILIO CONFIG --}}
                             <div id="section-twilio" style="display: {{ ($settings['provider'] ?? 'fonnte') === 'twilio' ? 'block' : 'none' }};">
                                 <div style="background: #FFFDF0; border: 1.5px solid #FBE89F; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; font-size: 12.5px; color: #744210; line-height: 1.5;">
-                                    ?? <strong>Twilio memerlukan nomor resmi.</strong> Pastikan sudah mendaftar di <strong>twilio.com</strong>, mengaktifkan WhatsApp Sandbox atau Business API, dan memiliki nomor Twilio yang aktif.
+                                    <strong>Twilio memerlukan nomor resmi.</strong> Pastikan sudah mendaftar di <strong>twilio.com</strong>, mengaktifkan WhatsApp Sandbox atau Business API, dan memiliki nomor Twilio yang aktif.
                                 </div>
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
                                     <div class="form-group">
@@ -654,7 +654,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Auth Token</label>
-                                        <input type="password" name="twilio_auth_token" class="form-control" placeholder="••••••••••••••••••••••••••••••••" value="{{ $settings['twilio_auth_token'] ?? '' }}">
+                                        <input type="password" name="twilio_auth_token" class="form-control" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" value="{{ $settings['twilio_auth_token'] ?? '' }}">
                                     </div>
                                 </div>
                                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -719,7 +719,7 @@
                                 @endphp
                                 <div id="tab-content-{{ $key }}" style="display: {{ $key === 'default' ? 'block' : 'none' }};">
                                     <div class="form-group">
-                                        <label class="form-label">Template — {{ $label }}
+                                        <label class="form-label">Template â€” {{ $label }}
                                             @if($key !== 'default')
                                                 <span style="font-weight: 500; color: var(--clr-muted); text-transform: none;">(Kosongkan untuk pakai Default)</span>
                                             @endif
@@ -745,10 +745,6 @@
                                     <tr>
                                         <td><span class="placeholder-tag">{nama_pemohon}</span></td>
                                         <td>Nama lengkap pemilik permohonan.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="placeholder-tag">{nomor_registrasi}</span></td>
-                                        <td>Nomor registrasi unik PPKPR.</td>
                                     </tr>
                                     <tr>
                                         <td><span class="placeholder-tag">{status_sekarang}</span></td>
@@ -796,5 +792,50 @@
         </div>
     </main>
 
+    <script>
+        // Switch template tab
+        const allTabs = ['default','non_berusaha','berusaha','kebijakan','tanah_timbul','psn','lapolpa'];
+        function switchTab(key) {
+            allTabs.forEach(t => {
+                const content = document.getElementById('tab-content-' + t);
+                const btn     = document.getElementById('tab-btn-' + t);
+                if (!content || !btn) return;
+                const active = (t === key);
+                content.style.display = active ? 'block' : 'none';
+                btn.style.background     = active ? '#003B64' : '#fff';
+                btn.style.color          = active ? '#fff'    : 'var(--clr-muted)';
+                btn.style.borderColor    = active ? '#003B64' : 'var(--clr-line)';
+            });
+        }
+        // Init active tab
+        switchTab('default');
+
+        // Switch provider UI
+        function switchProvider(val) {
+            const sections = ['fonnte', 'twilio'];
+            sections.forEach(p => {
+                const sec = document.getElementById('section-' + p);
+                const lbl = document.getElementById('label-' + p);
+                if (p === val) {
+                    if (sec) sec.style.display = 'block';
+                    if (lbl) {
+                        lbl.style.borderColor = '#218AC9';
+                        lbl.style.background = '#E3F0F9';
+                    }
+                } else {
+                    if (sec) sec.style.display = 'none';
+                    if (lbl) {
+                        lbl.style.borderColor = '#D6E4EF';
+                        lbl.style.background = '#fff';
+                    }
+                }
+            });
+            // Update hidden input if it exists
+            const providerInput = document.getElementById('provider-input');
+            if (providerInput) {
+                providerInput.value = val;
+            }
+        }
+    </script>
 </body>
 </html>

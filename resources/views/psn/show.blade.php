@@ -597,13 +597,24 @@
                         {{ $application->status_label }}
                     </span>
                     @if(Auth::user()->isBpn())
-                        <form action="{{ route('application.rollback', ['psn', $application->id]) }}" method="POST" style="display: inline-block; margin-left: 8px;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan dan mengembalikan permohonan ini ke lini masa/tahap sebelumnya?')">
-                            @csrf
-                            <button type="submit" class="btn-rollback" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0019 16V8a1 1 0 00-1.6-.8l-5.334 4zM4.066 11.2a1 1 0 000 1.6l5.334 4A1 1 0 0011 16V8a1 1 0 00-1.6-.8l-5.334 4z"/></svg>
-                                Rollback Tahap
-                            </button>
-                        </form>
+                        
+                                        <div style="display: inline-flex; gap: 4px; margin-left: 8px;">
+                                            <form action="{{ route('application.rollback', ['psn', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan ke tahap sebelumnya?')">
+                                                @csrf
+                                                <button type="submit" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                                                    Prev
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('application.forward', ['psn', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Bypass ke tahap selanjutnya?')">
+                                                @csrf
+                                                <button type="submit" style="background: #48BB78; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                                    Next
+                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                                </button>
+                                            </form>
+                                        </div>
+
                     @endif
                 </div>
             </div>
@@ -727,8 +738,8 @@
                                 <div class="form-group">
                                     <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Pemeriksaan Berkas:</label>
                                     <div class="radio-group">
-                                        <label class="radio-label"><input type="radio" name="action" value="approve" required checked> Berkas Diterima & Lolos Verifikasi</label>
-                                        <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required> Berkas Ditolak (Permohonan Ditutup)</label>
+                                        <label class="radio-label"><input type="radio" name="action" value="approve" required checked> Disetujui</label>
+                                        <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required> Tidak Disetujui</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -825,8 +836,8 @@
                                     <div class="form-group">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Akhir BPN:</label>
                                         <div class="radio-group">
-                                            <label class="radio-label"><input type="radio" name="action" value="approve" required checked onclick="togglePertekUpload(true)"> Terbitkan Pertek & Teruskan ke Dinas PU</label>
-                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="togglePertekUpload(false)"> Tolak Permohonan</label>
+                                            <label class="radio-label"><input type="radio" name="action" value="approve" required checked onclick="togglePertekUpload(true)"> Disetujui</label>
+                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="togglePertekUpload(false)"> Tidak Disetujui</label>
                                         </div>
                                     </div>
                                     <div class="form-group" id="pertekUploadWrapper">
@@ -865,8 +876,8 @@
                             <div class="form-group">
                                 <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Penilaian:</label>
                                 <div class="radio-group">
-                                    <label class="radio-label"><input type="radio" name="action" value="approve" required checked> Tata Ruang Sesuai Ã¢â‚¬â€ Teruskan ke Satu Pintu</label>
-                                    <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required> Tidak Sesuai Ã¢â‚¬â€ Tolak Permohonan</label>
+                                    <label class="radio-label"><input type="radio" name="action" value="approve" required checked> Disetujui</label>
+                                    <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required> Tidak Disetujui</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -898,8 +909,8 @@
                             <div class="form-group">
                                 <label class="form-label" style="font-weight:700;color:#744210;">Keputusan:</label>
                                 <div class="radio-group">
-                                    <label class="radio-label"><input type="radio" name="action" value="approve" required checked onclick="toggleSatuPintuFields(true)"> Terbitkan PKKPR Resmi</label>
-                                    <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="toggleSatuPintuFields(false)"> Tolak Permohonan</label>
+                                    <label class="radio-label"><input type="radio" name="action" value="approve" required checked onclick="toggleSatuPintuFields(true)"> Disetujui</label>
+                                    <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="toggleSatuPintuFields(false)"> Tidak Disetujui</label>
                                 </div>
                             </div>
                             <div id="satuPintuFieldsWrapper">
@@ -1262,3 +1273,46 @@
 </body>
 </html>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const actionInputs = document.querySelectorAll("select[name='action'], input[type='radio'][name='action']");
+    const revisiContainer = document.getElementById("revisi-berkas-container");
+    const notesField = document.getElementById("notes");
+    const checkboxes = document.querySelectorAll(".cb-revisi");
+
+    function updateRevisiVisibility() {
+        let isReject = false;
+        actionInputs.forEach(input => {
+            if (input.tagName === "SELECT" && input.value === "reject") isReject = true;
+            if (input.tagName === "INPUT" && input.checked && input.value === "reject") isReject = true;
+        });
+        if (revisiContainer) {
+            revisiContainer.style.display = isReject ? "block" : "none";
+            if(!isReject) {
+                checkboxes.forEach(cb => cb.checked = false);
+            }
+        }
+    }
+
+    actionInputs.forEach(input => {
+        input.addEventListener("change", updateRevisiVisibility);
+    });
+    
+    // Initial check
+    updateRevisiVisibility();
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", function() {
+            let selected = Array.from(checkboxes).filter(i => i.checked).map(i => "- " + i.value);
+            let currentNote = notesField.value.replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+\n\n/g, "").replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+/g, "").trim();
+            
+            if (selected.length > 0) {
+                notesField.value = "Berkas yang harus diperbaiki:\n" + selected.join("\n") + "\n\n" + currentNote;
+            } else {
+                notesField.value = currentNote;
+            }
+        });
+    });
+});
+</script>

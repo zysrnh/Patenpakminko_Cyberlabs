@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'PKKPR Non Berusaha — PATEN PAK MIKO')
 @section('page-title', 'PKKPR Non Berusaha')
@@ -65,8 +65,8 @@
                         <tr>
                             <td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);">{{ $app->application_number }}</span></td>
                             <td>
-                                <div style="font-weight:700;">{{ $app->user->username }}</div>
-                                <div style="font-size:11.5px;color:var(--muted);">{{ $app->user->name ?? '—' }}</div>
+                                <div style="font-weight:700; color:#003B64;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
+                                <div style="font-size:11px; color:var(--muted);">Akun: {{ $app->user->username }}</div>
                             </td>
                             <td style="color:var(--mid);">{{ $app->user->phone_number }}</td>
                             <td style="color:var(--mid);">{{ $app->created_at->format('d-m-Y') }}</td>

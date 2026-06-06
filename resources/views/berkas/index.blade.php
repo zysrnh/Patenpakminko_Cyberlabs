@@ -258,7 +258,7 @@
                             <th>Nama Berkas</th>
                             <th>Kategori</th>
                             <th>Informasi File</th>
-                            <th>Diunggah Oleh</th>
+                            <th>Pengaju / Pengunggah</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
@@ -277,7 +277,36 @@
                                 <span class="badge" style="background:#EBF8FF;color:#2B6CB0;border:none;">{{ strtoupper($item->tipe_file) }}</span>
                                 <span style="font-size:12px;color:var(--clr-muted);margin-left:6px;">{{ $item->ukuran_file }}</span>
                             </td>
-                            <td>{{ $item->user->name ?? 'Admin' }}</td>
+                                                        @php
+                                $pengajuInfo = null;
+                                if (strpos($item->nama_berkas, '[') === 0 && strpos($item->nama_berkas, '] ') !== false) {
+                                    $parts = explode('] ', $item->nama_berkas);
+                                    if (count($parts) >= 2) {
+                                        $appNo = trim($parts[1]);
+                                        if (strpos($appNo, 'BERUSAHA-') === 0) {
+                                            $app = \App\Models\PpkprBerusahaApplication::where('application_number', $appNo)->first();
+                                            $pengajuInfo = $app ? ($app->nama_pengaju ?: $app->nama_pemilik_usaha) : null;
+                                        } elseif (strpos($appNo, 'NON-BERUSAHA-') === 0) {
+                                            $app = \App\Models\PpkprNonBerusahaApplication::where('application_number', $appNo)->first();
+                                            $pengajuInfo = $app ? $app->nama_pengaju : null;
+                                        } elseif (strpos($appNo, 'PSN-') === 0) {
+                                            $app = \App\Models\PsnApplication::where('application_number', $appNo)->first();
+                                            $pengajuInfo = $app ? $app->nama_pengaju : null;
+                                        } elseif (strpos($appNo, 'TANAH-TIMBUL-') === 0) {
+                                            $app = \App\Models\TanahTimbulApplication::where('application_number', $appNo)->first();
+                                            $pengajuInfo = $app ? $app->nama_pengaju : null;
+                                        } elseif (strpos($appNo, 'KEBIJAKAN-') === 0) {
+                                            $app = \App\Models\KebijakanApplication::where('application_number', $appNo)->first();
+                                            $pengajuInfo = $app ? $app->nama_pengaju : null;
+                                        }
+                                    }
+                                }
+                                $finalName = $pengajuInfo ?: ($item->user->name ?? 'Admin');
+                            @endphp
+                            <td>
+                                <span style="font-weight: 500; color: #003B64;">{{ $finalName }}</span><br>
+                                <span style="font-size: 11px; color: var(--clr-muted);">(Akun: {{ $item->user->username ?? 'Sistem' }})</span>
+                            </td>
                             <td>{{ $item->created_at->format('d M Y, H:i') }}</td>
                             <td>
                                 <div style="display: flex; gap: 6px;">

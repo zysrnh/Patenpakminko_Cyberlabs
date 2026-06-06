@@ -808,7 +808,7 @@
                 </div>
                 <div class="logo-text">
                     <strong>PATEN PAK MIKO</strong>
-                    <span>Kantor Pertanahan Sukabumi</span>
+                    <span>Kantor Pertanahan Kota Sukabumi</span>
                 </div>
             </a>
 
@@ -819,7 +819,7 @@
                     <div class="nav-dropdown-content">
                         <a href="{{ route('login') }}">Pertimbangan Teknis Pertanahan Berusaha</a>
                         <a href="{{ route('login') }}">Pertimbangan Teknis Pertanahan Non Berusaha</a>
-                        <a href="{{ route('login') }}">Kebijakan Khusus</a>
+                        <a href="{{ route('login') }}">Kebijakan</a>
                         <a href="{{ route('lapolpa.index') }}">LAPOLPAK</a>
                         <a href="{{ route('informal.index') }}">INFORMAL</a>
                     </div>
@@ -850,12 +850,12 @@
                     Portal Pelayanan Terpadu ATR/BPN
                 </div>
                 <h1 class="hero-heading">
-                    Persetujuan Kesesuaian
-                    <span class="line-accent">Pemanfaatan Ruang</span>
-                    yang Mudah & Transparan
+                    Pertimbangan Teknis 
+                    <span class="line-accent">Pertanahan</span>
+                    yang Terkoneksi Kantor Pertanahan Sukabumi Kota
                 </h1>
                 <p class="hero-sub">
-                    Sistem informasi tata ruang dan pertanahan yang profesional, responsive, dan memudahkan — mempercepat proses pengajuan izin pemanfaatan ruang secara digital.
+                    PATEN Pak Miko hadir sebagai inovasi pelayanan yang memberikan kemudahan bagi pemohon dalam memperoleh layanan pertanahan secara lebih cepat, jelas, dan transparan. PATEN Pak Miko diharapkan mampu meningkatkan kepercayaan pemohon sekaligus memberikan pengalaman layanan yang lebih profesional, responsif, dan memudahkan.
                 </p>
                 <!-- GRID TOMBOL LAYANAN DI HERO (Poin 4) -->
                 <div class="hero-services" style="display: none;">
@@ -970,7 +970,7 @@
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Berusaha</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Untuk  PKKPR Berusaha</div>
                                     <div style="font-size:11px;color:var(--muted);">Bisnis, usaha, industri</div>
                                 </div>
                                 <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
@@ -982,7 +982,7 @@
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Non Berusaha</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Untuk PKKPR Non Berusaha</div>
                                     <div style="font-size:11px;color:var(--muted);">Rumah, sosial, keagamaan</div>
                                 </div>
                                 <span style="background:var(--green-lt);color:var(--green-dk);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
@@ -994,7 +994,7 @@
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Kebijakan Khusus</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Kebijakan</div>
                                     <div style="font-size:11px;color:var(--muted);">Kebijakan penggunaan & pemanfaatan tanah</div>
                                 </div>
                                 <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
@@ -1006,7 +1006,7 @@
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Tanah Timbul</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Tanah Timbul</div>
                                     <div style="font-size:11px;color:var(--muted);">Pengurusan legalitas tanah timbul</div>
                                 </div>
                                 <span style="background:var(--green-lt);color:var(--green-dk);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
@@ -1018,7 +1018,7 @@
                                     <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#744210" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                                 </div>
                                 <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Proyek Strategis Nasional</div>
+                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Untuk Proyek Strategis Nasional</div>
                                     <div style="font-size:11px;color:var(--muted);">Proyek skala nasional (PSN)</div>
                                 </div>
                                 <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
@@ -1136,11 +1136,11 @@
 
             <!-- Row 2 — 3 cards -->
             <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="svc-card c-blue reveal reveal-d1">
-                <span class="svc-num">04 / KEBIJAKAN KHUSUS</span>
+                <span class="svc-num">04 / KEBIJAKAN </span>
                 <div class="svc-icon">
                     <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 </div>
-                <h3 class="svc-title">Kebijakan Khusus</h3>
+                <h3 class="svc-title">Kebijakan</h3>
                 <p class="svc-desc">Permohonan berbasis kebijakan pemerintah eksklusif, diproses melalui jalur validasi luring dengan pendampingan teknis.</p>
                 <span class="svc-cta">Pelajari Ketentuan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
             </a>
@@ -1326,7 +1326,7 @@
                     </div>
                     <div class="logo-text footer-logo-text">
                         <strong>PATEN PAK MIKO</strong>
-                        <span>Kantor Pertanahan Sukabumi</span>
+                        <span></span>
                     </div>
                 </a>
                 <p class="footer-desc">Sistem Pelayanan Terpadu & Terintegrasi Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang, dedikasi untuk efisiensi birokrasi dan transparansi publik.</p>
@@ -1354,7 +1354,7 @@
                     <li><a href="{{ route('lapolpa.index') }}">LAPOLPAK</a></li>
                     <li><a href="#">Pertimbangan Teknis Pertanahan Non Berusaha</a></li>
                     <li><a href="#">Pertimbangan Teknis Pertanahan Berusaha</a></li>
-                    <li><a href="#">Kebijakan Khusus</a></li>
+                    <li><a href="#">Kebijakan</a></li>
                     <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>
             </div>
