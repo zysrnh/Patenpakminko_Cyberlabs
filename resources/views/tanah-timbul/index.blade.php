@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Tanah Timbul — PATEN PAK MIKO')
 @section('page-title', 'Tanah Timbul')
@@ -21,7 +21,7 @@
         <p>Permohonan berbasis mandat Tanah Timbul pemerintah.</p>
     </div>
     @if(Auth::user()->isPelakuUsaha())
-        <a href="{{ route('tanah-timbul.create') }}" class="btn btn-primary">
+        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Buat Permohonan Baru
         </a>
@@ -41,7 +41,7 @@
                 @endif
             </p>
             @if(Auth::user()->isPelakuUsaha())
-                <a href="{{ route('tanah-timbul.create') }}" class="btn btn-primary">Ajukan Sekarang</a>
+                <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="btn btn-primary">Ajukan Sekarang</a>
             @endif
         </div>
     @else

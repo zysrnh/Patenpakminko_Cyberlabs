@@ -575,16 +575,16 @@
                     <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
                     
                     <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
-                        @if(Auth::user()->profile_photo)
-                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar">
+                        @if($application->user && $application->user->profile_photo)
+                            <img src="{{ asset('storage/' . $application->user->profile_photo) }}" alt="Foto Profil" class="header-avatar">
                         @else
                             <div class="header-avatar-placeholder">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 2)) }}
+                                {{ strtoupper(substr($application->nama_pengaju, 0, 2)) }}
                             </div>
                         @endif
                         <div class="user-badge">
-                            <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
-                            <span>{{ Auth::user()->phone_number }}</span>
+                            <strong>{{ $application->nama_pengaju }}</strong>
+                            <span>{{ $application->user->phone_number ?? '' }}</span>
                         </div>
                     </div>
  

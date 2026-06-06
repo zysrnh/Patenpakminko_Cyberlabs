@@ -57,7 +57,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h1>Layanan LAPOLPAK</h1>
+            <h1>LAPOLPAK</h1>
             <p>Layanan konsultasi dan pembuatan polygon gratis di kantor. Silakan isi form di bawah untuk membuat jadwal.</p>
         </div>
 

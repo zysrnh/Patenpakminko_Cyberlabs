@@ -618,16 +618,16 @@
                     <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
                     
                     <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
-                        @if(Auth::user()->profile_photo)
-                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar">
+                        @if($application->user && $application->user->profile_photo)
+                            <img src="{{ asset('storage/' . $application->user->profile_photo) }}" alt="Foto Profil" class="header-avatar">
                         @else
                             <div class="header-avatar-placeholder">
-                                {{ strtoupper(substr(Auth::user()->username, 0, 2)) }}
+                                {{ strtoupper(substr($application->nama_pengaju, 0, 2)) }}
                             </div>
                         @endif
                         <div class="user-badge">
-                            <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
-                            <span>{{ Auth::user()->phone_number }}</span>
+                            <strong>{{ $application->nama_pengaju }}</strong>
+                            <span>{{ $application->user->phone_number ?? '' }}</span>
                         </div>
                     </div>
  
@@ -678,12 +678,7 @@
                     <div class="sla-value">10 Hari Kerja</div>
                     <div class="sla-desc">Target Terbit Pertek: <strong>{{ $application->created_at->addWeekdays(10)->format('d M Y') }}</strong></div>
                 </div>
-                <div class="sla-item divider">
-                    <div class="sla-title">SLA Tahap 2 (DPMPTSP)</div>
-                    <div class="sla-value">10 Hari Kerja</div>
-                    <div class="sla-desc">Target Terbit PKKPR: <strong>10 hari setelah Pertek diterbitkan</strong></div>
                 </div>
-            </div>
  
             <!-- DOWNLOAD DOKUMEN FINAL PRODUK AKHIR (Flowchart Image 4 & 5) -->
             @if($application->status === 'disetujui' && $application->satu_pintu_document)

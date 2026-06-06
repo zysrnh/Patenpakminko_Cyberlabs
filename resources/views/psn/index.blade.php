@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Proyek Strategis Nasional (PSN) â€” PATEN PAK MIKO')
 @section('page-title', 'Proyek Strategis Nasional (PSN)')
@@ -21,7 +21,7 @@
         <p>Permohonan berbasis mandat Proyek Strategis Nasional (PSN) pemerintah.</p>
     </div>
     @if(Auth::user()->isPelakuUsaha())
-        <a href="{{ route('psn.create') }}" class="btn btn-primary">
+        <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="btn btn-primary">
             <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Buat Permohonan Baru
         </a>
@@ -41,7 +41,7 @@
                 @endif
             </p>
             @if(Auth::user()->isPelakuUsaha())
-                <a href="{{ route('psn.create') }}" class="btn btn-primary">Ajukan Sekarang</a>
+                <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="btn btn-primary">Ajukan Sekarang</a>
             @endif
         </div>
     @else

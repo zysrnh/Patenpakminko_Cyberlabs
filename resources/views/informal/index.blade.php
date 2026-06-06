@@ -274,15 +274,21 @@
             </div>
             
             <div style="margin-top: 16px;">
-                <h3 style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 8px;">Layer Peta:</h3>
+                <h3 style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 8px;">Layer Peta & Keterangan Warna:</h3>
                 <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 4px; cursor: pointer;">
-                    <input type="checkbox" id="layer-lp2b" checked> LP2B (Lahan Pertanian Pangan Berkelanjutan)
+                    <input type="checkbox" id="layer-lp2b" checked> 
+                    <span style="display:inline-block; width:12px; height:12px; background-color:#064e3b; border-radius:2px; border: 1px solid rgba(0,0,0,0.2);"></span>
+                    LP2B (Lahan Pertanian Pangan Berkelanjutan)
                 </label>
                 <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 4px; cursor: pointer;">
-                    <input type="checkbox" id="layer-lbs" checked> LBS (Lahan Baku Sawah)
+                    <input type="checkbox" id="layer-lbs" checked> 
+                    <span style="display:inline-block; width:12px; height:12px; background-color:#3b82f6; border-radius:2px; border: 1px solid rgba(0,0,0,0.2);"></span>
+                    LBS (Lahan Baku Sawah)
                 </label>
                 <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 4px; cursor: pointer;">
-                    <input type="checkbox" id="layer-lsd" checked> LSD (Lahan Sawah Dilindungi)
+                    <input type="checkbox" id="layer-lsd" checked> 
+                    <span style="display:inline-block; width:12px; height:12px; background-color:#4ade80; border-radius:2px; border: 1px solid rgba(0,0,0,0.2);"></span>
+                    LSD (Lahan Sawah Dilindungi)
                 </label>
             </div>
         </div>
@@ -542,9 +548,9 @@
         };
 
         // URL file GeoJSON yang sudah direproject
-        loadGeoJSON('/storage/shp_bpn/lp2b.geojson', 'lp2b', '#166534'); // Hijau Tua
-        loadGeoJSON('/storage/shp_bpn/lbs.geojson', 'lbs', '#3b82f6'); // Biru
-        loadGeoJSON('/storage/shp_bpn/lsd.geojson', 'lsd', '#4ade80'); // Hijau Muda
+        loadGeoJSON('/storage/shp_bpn/lp2b.geojson', 'lp2b', '#064e3b', 0.65); // Hijau Sangat Tua & Opacity Ditebelin
+        loadGeoJSON('/storage/shp_bpn/lbs.geojson', 'lbs', '#3b82f6', 0.5); // Biru
+        loadGeoJSON('/storage/shp_bpn/lsd.geojson', 'lsd', '#4ade80', 0.5); // Hijau Muda
 
         // Load Sukabumi Bounds to lock the map
         fetch('/storage/shp_bpn/sukabumi_bounds.geojson').then(res => res.json()).then(geojson => {

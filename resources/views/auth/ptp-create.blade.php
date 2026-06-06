@@ -343,12 +343,12 @@
             @php
                 $layananActive = old('jenis_permohonan', request('layanan', 'berusaha'));
                 $layananName = match($layananActive) {
-                    'berusaha' => 'Kegiatan Berusaha (PKKPR)',
-                    'non-berusaha' => 'Non-Berusaha (PKKPR)',
-                    'kebijakan' => 'Kebijakan Tanah',
-                    'psn' => 'Proyek Strategis Nasional (PSN)',
-                    'tanah-timbul' => 'Tanah Timbul',
-                    default => 'Kegiatan Berusaha (PKKPR)'
+                    'berusaha' => 'PTP PKKPR Berusaha',
+                    'non-berusaha' => 'PTP PKKPR Non Berusaha',
+                    'kebijakan' => 'PTP Kebijakan',
+                    'psn' => 'PTP PSN',
+                    'tanah-timbul' => 'PTP Tanah Timbul',
+                    default => 'PTP PKKPR Berusaha'
                 };
             @endphp
 

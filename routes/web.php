@@ -92,6 +92,12 @@ Route::post('/informal/rating', [InformalController::class, 'storeRating'])->nam
 Route::get('/permohonan-ptp', [AuthController::class, 'showPtpForm'])->name('ptp.create');
 Route::post('/permohonan-ptp', [AuthController::class, 'storePtpForm'])->name('ptp.store');
 
+// Rute Portal Revisi Publik
+Route::get("/revisi-berkas", [\App\Http\Controllers\RevisiController::class, "index"])->name("revisi.index");
+Route::post("/revisi-berkas/track", [\App\Http\Controllers\RevisiController::class, "track"])->name("revisi.track");
+Route::post("/revisi-berkas/upload/{type}/{id}", [\App\Http\Controllers\RevisiController::class, "upload"])->name("revisi.upload");
+
+
 // Entrypoint Publik PPKPR Baru (Guest dialihkan ke PTP form secara otomatis di Controller)
 Route::get('/berusaha/baru', [PpkprBerusahaController::class, 'create'])->name('berusaha.create');
 Route::post('/berusaha/baru', [PpkprBerusahaController::class, 'store'])->name('berusaha.store');

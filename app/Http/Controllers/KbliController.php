@@ -18,7 +18,7 @@ class KbliController extends Controller
             return response()->json([]);
         }
 
-        $path = storage_path('app/kbli.json');
+        $path = public_path('storage/kbli2025/kbli_2025.json');
 
         if (!file_exists($path)) {
             return response()->json(['error' => 'Data KBLI tidak tersedia.'], 500);
@@ -31,13 +31,13 @@ class KbliController extends Controller
 
         foreach ($data as $item) {
             $codeMatch  = str_starts_with($item['code'], $query);
-            $titleMatch = str_contains(strtolower($item['title']), $queryLower);
+            $titleMatch = str_contains(strtolower($item['name']), $queryLower);
 
             if ($codeMatch || $titleMatch) {
                 $results[] = [
                     'code'  => $item['code'],
-                    'title' => $item['title'],
-                    'label' => $item['code'] . ' — ' . $item['title'],
+                    'title' => $item['name'],
+                    'label' => $item['code'] . ' — ' . $item['name'],
                 ];
                 if (count($results) >= 10) break;
             }
@@ -57,7 +57,7 @@ class KbliController extends Controller
             return response()->json(null);
         }
 
-        $path = storage_path('app/kbli.json');
+        $path = public_path('storage/kbli2025/kbli_2025.json');
 
         if (!file_exists($path)) {
             return response()->json(null, 500);
@@ -69,7 +69,7 @@ class KbliController extends Controller
             if ($item['code'] === $code) {
                 return response()->json([
                     'code'  => $item['code'],
-                    'title' => $item['title'],
+                    'title' => $item['name'] ?? '',
                 ]);
             }
         }
