@@ -25,16 +25,16 @@
             --green:     #85C341;
             --green-dk:  #79A73A;
             --green-lt:  #EEF7E2;
-            --ink:       #003B64;
-            --mid:       #2C5272;
-            --muted:     #7A9BB5;
-            --line:      #D6E4EF;
-            --surface:   #F0F6FB;
+            --ink:       #1a1a2e;
+            --mid:       #4a5568;
+            --muted:     #8a9bb5;
+            --line:      #e8edf2;
+            --surface:   #F7F9FC;
             --white:     #FFFFFF;
-            --r-sm:  6px;
-            --r-md:  10px;
-            --r-lg:  16px;
-            --r-xl:  24px;
+            --r-sm:  4px;
+            --r-md:  8px;
+            --r-lg:  12px;
+            --r-xl:  14px;
         }
 
         html { scroll-behavior: smooth; }
@@ -47,73 +47,106 @@
             overflow-x: hidden;
         }
 
-        .container { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
 
         /* ─── HEADER ──────────────────────────────────────── */
         #site-header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(255,255,255,.95);
+            background: rgba(255,255,255,.97);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--line);
             transition: box-shadow .3s;
         }
-        #site-header.scrolled {
-            box-shadow: 0 4px 32px rgba(0,59,100,.07);
-        }
+        #site-header.scrolled { box-shadow: 0 4px 24px rgba(0,59,100,.08); }
+
         .header-inner {
             display: flex; align-items: center; justify-content: space-between;
-            height: 70px;
+            height: 68px;
         }
-        .logo-wrap {
-            display: flex; align-items: center; gap: 12px; text-decoration: none;
-        }
-        .logo-icon {
-            width: 38px; height: 38px; border-radius: var(--r-md);
-            background: var(--blue-dk);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .logo-icon svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .logo-text strong { display: block; font-size: 15px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
-        .logo-text span   { display: block; font-size: 9.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-top: 2px; }
 
-        .site-nav {
-            display: flex; align-items: center; gap: 4px;
+        /* Logo */
+        .logo-wrap {
+            display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0;
         }
+        .logo-img {
+            width: 52px; height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--line);
+        }
+        .logo-text strong {
+            display: block; font-size: 15px; font-weight: 800;
+            color: var(--ink); letter-spacing: -.02em;
+        }
+        .logo-text span {
+            display: block; font-size: 10px; font-weight: 500;
+            color: var(--muted); margin-top: 1px;
+        }
+
+        /* Nav */
+        .site-nav { display: flex; align-items: center; gap: 2px; }
         .nav-link {
             font-size: 13.5px; font-weight: 500; color: var(--mid);
-            text-decoration: none; padding: 6px 12px;
+            text-decoration: none; padding: 7px 14px;
             border-radius: var(--r-md); transition: all .18s;
+            white-space: nowrap;
         }
-        .nav-link:hover { color: var(--blue); background: var(--blue-lt); }
+        .nav-link:hover { color: var(--blue-dk); background: var(--blue-lt); }
 
         /* Dropdown Navbar */
         .nav-dropdown { position: relative; display: inline-block; }
-        .nav-dropdown-content { 
-            visibility: hidden; opacity: 0; transform: translateY(10px); 
-            position: absolute; background-color: #fff; min-width: 180px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 101; 
-            border-radius: 8px; border: 1px solid var(--line); 
-            top: 100%; left: 0; padding: 6px; margin-top: 4px; 
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        .nav-dropdown-trigger {
+            display: flex; align-items: center; gap: 4px;
+            font-size: 13.5px; font-weight: 500; color: var(--mid);
+            padding: 7px 14px; border-radius: var(--r-md);
+            text-decoration: none; cursor: pointer;
+            transition: all .18s; background: none; border: none;
+            font-family: inherit;
         }
-        .nav-dropdown:hover .nav-dropdown-content { 
-            visibility: visible; opacity: 1; transform: translateY(0); 
+        .nav-dropdown-trigger:hover { color: var(--blue-dk); background: var(--blue-lt); }
+        .nav-dropdown-trigger svg { width: 14px; height: 14px; transition: transform .2s; }
+        .nav-dropdown:hover .nav-dropdown-trigger svg { transform: rotate(180deg); }
+
+        .nav-dropdown-content {
+            visibility: hidden; opacity: 0; transform: translateY(8px);
+            position: absolute; background: #fff;
+            min-width: 260px; box-shadow: 0 8px 32px rgba(0,0,0,.12);
+            z-index: 101; border-radius: var(--r-lg);
+            border: 1px solid var(--line);
+            top: calc(100% + 6px); left: 0;
+            padding: 6px;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .nav-dropdown-content a { color: var(--mid); padding: 10px 12px; text-decoration: none; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; border-radius: 6px; transition: all .18s; }
-        .nav-dropdown-content a:hover { background-color: var(--blue-lt); color: var(--blue); }
+        .nav-dropdown:hover .nav-dropdown-content {
+            visibility: visible; opacity: 1; transform: translateY(0);
+        }
+        .nav-dropdown-content a {
+            color: var(--mid); padding: 9px 12px; text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 13px; font-weight: 500; border-radius: 8px;
+            transition: all .15s;
+        }
+        .nav-dropdown-content a:hover { background: var(--surface); color: var(--blue-dk); }
+        .nav-dd-icon {
+            width: 28px; height: 28px; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; overflow: hidden;
+        }
+        .nav-dd-icon img { width: 100%; height: 100%; object-fit: cover; }
 
-        .nav-sep { width: 1px; height: 20px; background: var(--line); margin: 0 8px; }
+        .nav-sep { width: 1px; height: 20px; background: var(--line); margin: 0 6px; flex-shrink: 0; }
 
+        /* CTA Button */
         .btn-nav {
-            display: inline-flex; align-items: center; gap: 7px;
+            display: inline-flex; align-items: center; gap: 8px;
             background: var(--blue-dk); color: #fff;
-            padding: 9px 18px; border-radius: var(--r-md);
+            padding: 9px 20px; border-radius: 10px;
             font-family: inherit; font-size: 13px; font-weight: 700;
             text-decoration: none; border: none; cursor: pointer;
-            transition: all .2s;
+            transition: all .2s; white-space: nowrap; flex-shrink: 0;
         }
-        .btn-nav svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-        .btn-nav:hover { background: var(--blue); box-shadow: 0 4px 20px rgba(33,138,201,.35); transform: translateY(-1px); }
+        .btn-nav svg { width: 14px; height: 14px; fill: var(--yellow); stroke: none; }
+        .btn-nav:hover { background: #00294a; box-shadow: 0 4px 16px rgba(0,59,100,.3); transform: translateY(-1px); }
 
         .color-bar { height: 3px; display: flex; }
         .color-bar span:nth-child(1) { flex: 3; background: var(--blue-dk); }
@@ -122,324 +155,270 @@
 
         /* ─── HERO ────────────────────────────────────────── */
         .hero {
-            padding: 80px 0 0;
+            padding: 72px 0 80px;
             background: var(--white);
-            overflow: hidden;
             position: relative;
+            overflow: hidden;
         }
-        .hero-bg-shape {
-            position: absolute;
-            top: -80px; right: -120px;
-            width: 700px; height: 700px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 60% 40%, var(--blue-lt) 0%, transparent 70%);
-            opacity: .55;
-            pointer-events: none;
+        .hero-bg {
+            position: absolute; top: 0; right: 0; bottom: 0;
+            width: 55%; pointer-events: none;
+            background: radial-gradient(ellipse at 80% 30%, rgba(227,240,249,.7) 0%, transparent 65%);
         }
         .hero-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 72px;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 64px;
+            align-items: start;
+            position: relative; z-index: 1;
         }
+
+        /* Left copy */
         .hero-eyebrow {
             display: inline-flex; align-items: center; gap: 8px;
-            font-size: 11px; font-weight: 700; letter-spacing: .1em;
+            font-size: 11px; font-weight: 700; letter-spacing: .08em;
             text-transform: uppercase; color: var(--blue);
             background: var(--blue-lt); border: 1px solid var(--blue-md);
-            padding: 5px 12px; border-radius: 100px;
+            padding: 5px 14px 5px 10px; border-radius: 4px;
             margin-bottom: 24px;
         }
-        .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+        .hero-eyebrow .eyebrow-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--blue); flex-shrink: 0;
+        }
+
         .hero-heading {
             font-size: clamp(32px, 3.8vw, 50px);
             font-weight: 800; line-height: 1.1;
             letter-spacing: -.03em; color: var(--ink);
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
-        .hero-heading .line-accent {
+        .hero-heading .accent {
             color: var(--blue);
-            display: block;
+            display: inline-block;
             position: relative;
         }
-        .hero-heading .line-accent::after {
+        .hero-heading .accent::after {
             content: '';
-            position: absolute; left: 0; bottom: -4px;
-            height: 3px; width: 60%;
+            position: absolute; left: 0; bottom: -3px;
+            height: 3px; width: 65%;
             background: var(--yellow);
             border-radius: 2px;
         }
+        .hero-heading .strong-line { font-weight: 800; }
+
         .hero-sub {
-            font-size: 15.5px; line-height: 1.8; color: var(--mid);
-            max-width: 460px; margin-bottom: 36px;
+            font-size: 14.5px; line-height: 1.8; color: var(--mid);
+            max-width: 460px; margin-bottom: 38px;
         }
+
         .hero-cta-row {
             display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-            margin-bottom: 52px;
         }
         .btn-primary {
             display: inline-flex; align-items: center; gap: 8px;
             background: var(--blue-dk); color: #fff;
-            padding: 13px 24px; border-radius: var(--r-md);
+            padding: 13px 26px; border-radius: 10px;
             font-family: inherit; font-size: 14px; font-weight: 700;
             text-decoration: none; border: none; cursor: pointer;
             transition: all .22s;
         }
         .btn-primary svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-        .btn-primary:hover { background: var(--blue); box-shadow: 0 6px 24px rgba(33,138,201,.38); transform: translateY(-1px); }
+        .btn-primary:hover { background: var(--blue); box-shadow: 0 6px 24px rgba(33,138,201,.35); transform: translateY(-1px); }
 
-        /* ─── HERO SERVICE BUTTONS ───────────────────────── */
-        .hero-services {
-            display: flex; flex-wrap: wrap; gap: 10px;
-            margin-bottom: 36px;
-        }
-        .hs-btn {
-            display: inline-flex; align-items: center; gap: 7px;
-            padding: 10px 16px; border-radius: var(--r-md);
-            font-family: inherit; font-size: 13px; font-weight: 700;
-            text-decoration: none; border: 1.5px solid var(--line);
-            background: var(--white); color: var(--ink);
-            cursor: pointer; transition: all .2s; white-space: nowrap;
-        }
-        .hs-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink:0; }
-        .hs-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); transform: translateY(-1px); }
-        .hs-btn.hs-primary { background: var(--blue-dk); color: #fff; border-color: var(--blue-dk); }
-        .hs-btn.hs-primary svg { stroke: #fff; }
-        .hs-btn.hs-primary:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
-        .hs-btn.hs-muted { color: var(--muted); border-style: dashed; }
-        .hs-btn.hs-muted:hover { border-color: var(--muted); color: var(--mid); background: var(--surface); }
-
-        /* PKKPR Dropdown */
-        .hs-dropdown { position: relative; display: inline-flex; }
-        .hs-dropdown-menu {
-            position: absolute; top: calc(100% + 8px); left: 0;
-            background: var(--white); border: 1.5px solid var(--line);
-            border-radius: var(--r-md); box-shadow: 0 12px 40px rgba(0,59,100,.12);
-            min-width: 220px; display: none; flex-direction: column; z-index: 200;
-            overflow: hidden; padding: 6px;
-        }
-        .hs-dropdown-menu a {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 12px; text-decoration: none; font-size: 13px;
-            font-weight: 600; color: var(--ink);
-            border-radius: 6px; transition: all 0.18s;
-        }
-        .hs-dropdown-menu a:hover { background: var(--surface); color: var(--blue); }
-        .hs-dropdown-menu .dd-num {
-            width: 22px; height: 22px; border-radius: 6px; background: var(--blue-lt);
-            color: var(--blue); font-size: 11px; font-weight: 700;
-            display: flex; align-items: center; justify-content: center; flex-shrink:0;
-        }
-        .hs-dropdown-menu .dd-num.muted { background: var(--surface); color: var(--muted); }
-        .hs-dropdown-menu .dd-badge {
-            margin-left: auto; font-size: 10px; font-weight: 700;
-            padding: 2px 7px; border-radius: 20px;
-            background: var(--yellow-lt); color: var(--brown);
-        }
-        .hs-chevron { transition: transform .2s; }
-        .hs-dropdown:hover .hs-chevron { transform: rotate(180deg); }
         .btn-outline {
             display: inline-flex; align-items: center; gap: 7px;
             background: transparent; color: var(--mid);
-            padding: 12px 22px; border-radius: var(--r-md);
+            padding: 12px 22px; border-radius: 10px;
             font-family: inherit; font-size: 14px; font-weight: 600;
-            text-decoration: none;
-            border: 1.5px solid var(--line);
+            text-decoration: none; border: 1.5px solid var(--line);
             cursor: pointer; transition: all .22s;
         }
-        .btn-outline:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+        .btn-outline svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .btn-outline:hover { border-color: var(--blue-dk); color: var(--blue-dk); background: var(--blue-lt); }
 
-        /* trust pills */
-        .hero-trust {
-            display: flex; align-items: center; gap: 0;
-            padding: 18px 0;
-            border-top: 1px solid var(--line);
-        }
-        .trust-item { display: flex; flex-direction: column; padding: 0 24px 0 0; }
-        .trust-item:first-child { padding-left: 0; }
-        .trust-num {
-            font-size: 26px; font-weight: 800; color: var(--ink);
-            font-family: 'DM Mono', monospace; line-height: 1;
-            letter-spacing: -.03em;
-        }
-        .trust-num em { font-size: 16px; font-style: normal; color: var(--blue); }
-        .trust-label { font-size: 11px; font-weight: 500; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .07em; }
-        .trust-sep { width: 1px; height: 36px; background: var(--line); margin-right: 24px; flex-shrink: 0; }
-
-        /* ─── HERO VISUAL ─────────────────────────────────── */
-        .hero-visual {
-            position: relative; height: 500px;
-        }
-        /* Main dashboard mockup card */
-        .vis-shell {
-            position: absolute; inset: 0;
-            background: var(--surface);
+        /* ─── SERVICE PANEL (Right side) ─────────────────── */
+        .service-panel {
+            background: #fff;
             border: 1px solid var(--line);
-            border-radius: var(--r-xl);
+            border-radius: 6px;
+            box-shadow:
+                0 4px 12px rgba(0,0,0,.03),
+                0 16px 40px rgba(0,59,100,.08);
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,59,100,.1), 0 2px 8px rgba(0,0,0,.04);
         }
-        .vis-chrome {
-            height: 40px;
-            background: var(--white);
-            border-bottom: 1px solid var(--line);
-            display: flex; align-items: center; gap: 8px;
-            padding: 0 16px;
+
+        /* Panel header bar */
+        .sp-header {
+            background: #002845; /* Darker blue to match example */
+            padding: 20px 24px;
+            display: flex; align-items: center; gap: 14px;
         }
-        .vis-dots { display: flex; gap: 5px; }
-        .vis-dots span { width: 9px; height: 9px; border-radius: 50%; }
-        .vis-dots span:nth-child(1) { background: #FFB3AE; }
-        .vis-dots span:nth-child(2) { background: #FFD67A; }
-        .vis-dots span:nth-child(3) { background: #76D59F; }
-        .vis-url {
-            flex: 1; height: 24px; background: var(--surface);
-            border: 1px solid var(--line); border-radius: 6px;
-            font-family: 'DM Mono', monospace; font-size: 10px;
-            color: var(--muted); display: flex; align-items: center;
-            padding: 0 10px;
+        .sp-header-icon {
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .vis-body {
-            display: grid; grid-template-columns: 56px 1fr; height: calc(100% - 40px);
+        .sp-header-icon svg { width: 22px; height: 22px; fill: none; stroke: var(--yellow); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .sp-header-text strong { display: block; font-size: 14px; font-weight: 700; color: #fff; }
+        .sp-header-text span { font-size: 11px; color: rgba(255,255,255,.5); font-weight: 500; display: none; } /* Hide span in header if any */
+
+        /* Section label */
+        .sp-section-label {
+            font-size: 10px; font-weight: 800; color: var(--mid);
+            text-transform: uppercase; letter-spacing: .08em;
+            padding: 20px 24px 10px;
+            display: flex; align-items: center; justify-content: space-between;
         }
-        /* mini sidebar */
-        .vis-sidebar {
-            background: var(--blue-dk);
-            padding: 12px 8px;
-            display: flex; flex-direction: column; gap: 4px;
+
+        /* PKKPR service rows */
+        .sp-rows { 
+            padding: 0 20px 10px; display: flex; flex-direction: row; gap: 14px; 
+            overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+            -ms-overflow-style: none; scrollbar-width: none;
         }
-        .vis-sb-logo {
-            width: 32px; height: 32px; border-radius: 8px;
-            background: var(--blue); margin: 0 auto 10px;
+        .sp-rows::-webkit-scrollbar { display: none; }
+
+        .sp-slide {
+            display: flex; flex-direction: column; gap: 14px;
+            min-width: 100%; flex-shrink: 0; scroll-snap-align: start;
+        }
+
+        .sp-row {
+            display: flex; align-items: center; gap: 20px;
+            padding: 20px 24px;
+            border-radius: 4px;
+            background: #F4F7FA;
+            text-decoration: none;
+            transition: all .2s;
+            border: 1px solid transparent;
+        }
+        .sp-row:hover {
+            background: #fff;
+            border-color: var(--blue-md);
+            box-shadow: 0 8px 24px rgba(33,138,201,.08);
+            transform: translateY(-2px);
+        }
+        .sp-row-logo {
+            width: 90px; height: 90px;
+            overflow: hidden; flex-shrink: 0;
+            background: transparent;
             display: flex; align-items: center; justify-content: center;
         }
-        .vis-sb-item {
-            height: 28px; border-radius: 6px;
-            background: rgba(255,255,255,.07);
-            margin-bottom: 2px;
+        .sp-row-logo img { width: 100%; height: 100%; object-fit: contain; transform: scale(1.15); }
+        .sp-row-info { flex: 1; min-width: 0; }
+        .sp-row-info strong {
+            display: block; font-size: 17px; font-weight: 800;
+            color: #003B64; margin-bottom: 4px;
+            white-space: normal; overflow: visible; text-overflow: unset;
+            line-height: 1.3;
         }
-        .vis-sb-item.active { background: var(--yellow); }
-        /* mini content */
-        .vis-content {
-            padding: 14px;
-            overflow: hidden;
+        .sp-row-info span { font-size: 12px; color: var(--mid); font-weight: 500; }
+        
+        .sp-row-cta {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 12px; font-weight: 700; color: var(--blue);
+            background: var(--blue-lt);
+            padding: 8px 16px; border-radius: 20px;
+            white-space: nowrap; flex-shrink: 0;
+            transition: all .2s;
         }
-        .vis-welcome {
-            background: var(--blue-dk);
-            border-radius: 10px;
-            height: 70px;
-            margin-bottom: 12px;
-            border-left: 4px solid var(--yellow);
-            padding: 12px;
-            display: flex; flex-direction: column; gap: 6px;
-        }
-        .vis-wl1 { height: 10px; width: 55%; background: rgba(255,255,255,.4); border-radius: 4px; }
-        .vis-wl2 { height: 8px; width: 75%; background: rgba(255,255,255,.18); border-radius: 4px; }
-        .vis-kpi-row {
-            display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
-            margin-bottom: 12px;
-        }
-        .vis-kpi {
-            background: var(--white); border: 1px solid var(--line);
-            border-radius: 8px; padding: 10px 8px;
-            display: flex; flex-direction: column; gap: 5px;
-        }
-        .vis-kpi-bar { height: 7px; border-radius: 3px; }
-        .vis-kpi-bar.b1 { background: var(--blue-lt); width: 70%; }
-        .vis-kpi-bar.b2 { background: var(--yellow-lt); width: 50%; }
-        .vis-kpi-bar.b3 { background: var(--green-lt); width: 85%; }
-        .vis-kpi-bar.b4 { background: #FFF5F5; width: 30%; }
-        .vis-kpi-num { height: 14px; width: 60%; background: var(--line); border-radius: 4px; }
-        .vis-kpi-lbl { height: 6px; width: 80%; background: var(--surface); border-radius: 3px; }
-        .vis-grid2 { display: grid; grid-template-columns: 1fr 100px; gap: 8px; }
-        .vis-panel {
-            background: var(--white); border: 1px solid var(--line);
-            border-radius: 8px; overflow: hidden;
-        }
-        .vis-ph {
-            height: 28px; background: var(--surface);
-            border-bottom: 1px solid var(--line);
-            display: flex; align-items: center; padding: 0 10px; gap: 6px;
-        }
-        .vis-ph-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-md); }
-        .vis-ph-txt { height: 7px; width: 50%; background: var(--line); border-radius: 3px; }
-        .vis-rows { padding: 8px; display: flex; flex-direction: column; gap: 5px; }
-        .vis-row { height: 22px; border-radius: 5px; background: var(--surface); display: flex; align-items: center; padding: 0 8px; gap: 6px; }
-        .vis-rdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-        .vis-rtxt { height: 6px; flex: 1; background: var(--line); border-radius: 3px; }
-        .vis-rbadge { height: 12px; width: 28px; border-radius: 10px; }
+        .sp-row:hover .sp-row-cta { background: var(--blue); color: #fff; }
+        .sp-row-cta svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* Floating cards */
-        .vis-float {
-            position: absolute;
-            background: var(--white);
+        /* Coming soon badge */
+        .sp-badge-soon {
+            font-size: 10px; font-weight: 700; padding: 2px 8px;
+            border-radius: 20px; background: var(--yellow-lt); color: var(--brown);
+            white-space: nowrap; flex-shrink: 0;
+        }
+
+        /* Slider Nav */
+        .slider-nav {
+            display: flex; gap: 8px; padding: 0 20px 10px; justify-content: flex-end;
+        }
+        .btn-slider {
+            width: 32px; height: 32px; border-radius: 6px;
+            background: #F4F7FA; border: 1px solid var(--line);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--blue-dk); transition: all .2s;
+        }
+        .btn-slider:hover { background: var(--blue-lt); border-color: var(--blue-dk); }
+        .btn-slider svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* Divider */
+        .sp-divider { height: 1px; background: transparent; margin: 0; }
+
+        /* Layanan lainnya — 2 col */
+        .sp-others { padding: 10px 20px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .sp-other-card {
+            display: flex; align-items: center; gap: 16px;
+            padding: 20px;
+            border-radius: 6px;
+            background: #fff;
+            text-decoration: none;
             border: 1px solid var(--line);
-            border-radius: var(--r-lg);
-            box-shadow: 0 12px 40px rgba(0,0,0,.1);
-            padding: 14px 16px;
+            transition: all .2s;
         }
-        .vis-float-check {
-            right: -20px; bottom: 80px;
-            display: flex; align-items: center; gap: 10px;
+        .sp-other-card:hover {
+            border-color: var(--blue-md);
+            box-shadow: 0 8px 24px rgba(33,138,201,.08);
+            transform: translateY(-2px);
         }
-        .fc-icon {
-            width: 36px; height: 36px; border-radius: 10px;
-            background: var(--green-lt); display: flex;
-            align-items: center; justify-content: center; flex-shrink: 0;
+        .sp-other-logo {
+            width: 80px; height: 80px;
+            overflow: hidden; flex-shrink: 0; background: transparent;
         }
-        .fc-icon svg { width: 17px; height: 17px; fill: none; stroke: var(--green-dk); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .fc-text strong { display: block; font-size: 12px; font-weight: 700; color: var(--ink); }
-        .fc-text span { font-size: 10.5px; color: var(--muted); }
-
-        .vis-float-status {
-            top: 40px; right: -28px;
-            display: flex; align-items: center; gap: 8px;
+        .sp-other-logo img { width: 100%; height: 100%; object-fit: contain; transform: scale(1.15); }
+        .sp-other-name {
+            font-size: 13px; font-weight: 800; color: var(--ink); flex: 1;
         }
-        .status-pulse {
-            width: 8px; height: 8px; border-radius: 50%;
-            background: var(--green); flex-shrink: 0;
-            animation: pulse-dot 2s ease-in-out infinite;
+        .sp-other-arrow {
+            width: 26px; height: 26px; border-radius: 50%;
+            background: var(--line); display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all .2s;
         }
-        @keyframes pulse-dot { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(133,195,65,.4)} 50%{opacity:.8;box-shadow:0 0 0 6px rgba(133,195,65,0)} }
-        .vis-float-status span { font-size: 11.5px; font-weight: 600; color: var(--ink); }
+        .sp-other-card:hover .sp-other-arrow { background: var(--blue-dk); }
+        .sp-other-arrow svg { width: 12px; height: 12px; fill: none; stroke: var(--mid); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .2s; }
+        .sp-other-card:hover .sp-other-arrow svg { stroke: #fff; }
 
         /* ─── STATS BAND ──────────────────────────────────── */
         .stats-band {
-            background: var(--blue-dk);
-            padding: 0;
-            margin-top: 72px;
+            background: #113454;
+            padding: 48px 0;
             position: relative;
         }
-        .stats-band::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--blue) 60%, var(--yellow) 80%, var(--green) 100%);
+        /* Override container khusus untuk stats agar bisa lebih lebar */
+        .stats-band .container {
+            max-width: 1400px;
+            width: 100%;
         }
         .stats-inner {
-            display: grid; grid-template-columns: repeat(4,1fr);
+            display: flex; justify-content: space-around; flex-wrap: wrap;
+            width: 100%; margin: 0 auto; gap: 20px;
         }
         .stat-item {
-            padding: 32px 28px; text-align: center;
-            border-right: 1px solid rgba(255,255,255,.07);
-            position: relative;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            flex: 1; min-width: 200px;
         }
-        .stat-item:last-child { border-right: none; }
         .stat-icon {
-            width: 36px; height: 36px; border-radius: 10px;
-            background: rgba(255,255,255,.08);
+            width: 80px; height: 80px; border-radius: 14px;
+            background: #1C517C;
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 12px;
+            margin: 0 auto 16px;
         }
-        .stat-icon svg { width: 17px; height: 17px; fill: none; stroke: var(--blue-md); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+        .stat-icon svg, .stat-icon img { width: 38px; height: 38px; object-fit: contain; }
+        .stat-icon svg { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
         .stat-num {
-            font-size: 30px; font-weight: 800; color: #fff;
-            font-family: 'DM Mono', monospace; line-height: 1;
-            letter-spacing: -.03em;
+            font-size: 38px; font-weight: 800; color: #F5A623;
+            font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.2;
+            margin-bottom: 6px;
         }
-        .stat-num em { font-style: normal; color: var(--yellow); }
-        .stat-label { font-size: 11px; font-weight: 500; color: rgba(255,255,255,.38); margin-top: 6px; text-transform: uppercase; letter-spacing: .08em; }
+        .stat-num em { font-style: normal; }
+        .stat-label { 
+            font-size: 14px; font-weight: 500; color: #fff; 
+            text-transform: none; letter-spacing: 0.02em; 
+        }
 
         /* ─── SECTION BASE ────────────────────────────────── */
         .section { padding: 96px 0; }
@@ -461,71 +440,7 @@
         .section-header-center .section-eyebrow { margin-left: auto; margin-right: auto; }
         .section-header-center .section-sub { margin-left: auto; margin-right: auto; }
 
-        /* ─── SERVICES ────────────────────────────────────── */
-        .services { background: var(--surface); }
-        .services-wrap {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        .services-row2 {
-            grid-column: 1 / -1;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-        }
 
-        .svc-card {
-            background: var(--white);
-            border: 1px solid var(--line);
-            border-radius: var(--r-lg);
-            padding: 28px 24px;
-            text-decoration: none;
-            display: flex; flex-direction: column;
-            position: relative; overflow: hidden;
-            transition: all .25s;
-        }
-        .svc-card::before {
-            content: '';
-            position: absolute; bottom: 0; left: 0; right: 0;
-            height: 3px; transform: scaleX(0);
-            transform-origin: left; transition: transform .3s;
-        }
-        .svc-card.c-blue::before   { background: var(--blue); }
-        .svc-card.c-green::before  { background: var(--green); }
-        .svc-card.c-yellow::before { background: var(--yellow); }
-        .svc-card.c-orange::before { background: var(--brown); }
-
-        .svc-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,59,100,.1); border-color: transparent; }
-        .svc-card:hover::before { transform: scaleX(1); }
-
-        .svc-num {
-            font-family: 'DM Mono', monospace;
-            font-size: 10.5px; font-weight: 500; color: var(--muted);
-            letter-spacing: .1em; margin-bottom: 18px;
-        }
-        .svc-icon {
-            width: 46px; height: 46px; border-radius: var(--r-md);
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 18px; transition: transform .25s;
-        }
-        .svc-card:hover .svc-icon { transform: scale(1.08); }
-        .svc-icon svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
-        .svc-card.c-blue   .svc-icon { background: var(--blue-lt); color: var(--blue); }
-        .svc-card.c-green  .svc-icon { background: var(--green-lt); color: var(--green-dk); }
-        .svc-card.c-yellow .svc-icon { background: var(--yellow-lt); color: var(--brown); }
-        .svc-card.c-orange .svc-icon { background: rgba(211,115,36,.1); color: var(--brown); }
-
-        .svc-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
-        .svc-desc  { font-size: 13px; color: var(--mid); line-height: 1.65; flex: 1; margin-bottom: 20px; }
-        .svc-cta {
-            display: inline-flex; align-items: center; gap: 5px;
-            font-size: 13px; font-weight: 700;
-        }
-        .svc-cta svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
-        .svc-card:hover .svc-cta svg { transform: translateX(4px); }
-        .svc-card.c-blue   .svc-cta { color: var(--blue); }
-        .svc-card.c-green  .svc-cta { color: var(--green-dk); }
-        .svc-card.c-yellow .svc-cta { color: var(--brown); }
-        .svc-card.c-orange .svc-cta { color: var(--brown); }
 
         /* ─── PROCESS ─────────────────────────────────────── */
         .process { background: var(--white); }
@@ -558,9 +473,7 @@
 
         /* ─── REVIEWS ─────────────────────────────────────── */
         .reviews { background: var(--surface); }
-        .reviews-grid {
-            display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
-        }
+        .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
         .review-card {
             background: var(--white); border: 1px solid var(--line);
             border-radius: var(--r-lg); padding: 24px;
@@ -574,10 +487,7 @@
         }
         .review-stars { color: #D69E2E; font-size: 15px; letter-spacing: 1px; }
         .review-stars span { font-size: 12px; font-weight: 700; color: var(--mid); margin-left: 6px; font-family: 'DM Mono', monospace; }
-        .review-text {
-            font-size: 13.5px; color: var(--mid); line-height: 1.7;
-            font-style: italic; flex: 1;
-        }
+        .review-text { font-size: 13.5px; color: var(--mid); line-height: 1.7; font-style: italic; flex: 1; }
         .review-text::before { content: '\201C'; }
         .review-text::after  { content: '\201D'; }
         .review-foot {
@@ -666,7 +576,6 @@
         .f-links { list-style: none; display: flex; flex-direction: column; gap: 11px; }
         .f-links a { font-size: 13px; color: rgba(255,255,255,.4); text-decoration: none; transition: color .2s; }
         .f-links a:hover { color: rgba(255,255,255,.85); }
-
         .f-contact-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
         .f-contact-icon {
             width: 30px; height: 30px; border-radius: 7px;
@@ -675,7 +584,6 @@
         }
         .f-contact-icon svg { width: 13px; height: 13px; fill: none; stroke: var(--blue-md); stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
         .f-contact-text { font-size: 12.5px; color: rgba(255,255,255,.38); line-height: 1.6; }
-
         .footer-bottom {
             padding-top: 24px;
             display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -685,6 +593,27 @@
         .footer-legal { display: flex; gap: 18px; }
         .footer-legal a { font-size: 12px; color: rgba(255,255,255,.22); text-decoration: none; transition: color .18s; }
         .footer-legal a:hover { color: rgba(255,255,255,.6); }
+
+        /* ─── NEWS CAROUSEL ───────────────────────────────── */
+        .news-carousel-wrap { position: relative; max-width: 100%; margin-top: 40px; }
+        .news-carousel {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            gap: 20px; padding-bottom: 20px; scrollbar-width: none;
+        }
+        .news-carousel::-webkit-scrollbar { display: none; }
+        .news-card {
+            scroll-snap-align: start;
+            flex: 0 0 calc(33.333% - 14px);
+            background: #fff; border: 1px solid var(--line);
+            border-radius: var(--r-md); overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,.05); transition: transform .3s;
+        }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,.1); }
+        .news-img { width: 100%; height: 200px; object-fit: cover; }
+        .news-content { padding: 20px; }
+        .news-date { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; display: block; }
+        .news-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.4; }
+        .news-desc { font-size: 14px; color: var(--mid); line-height: 1.6; }
 
         /* ─── ANIMATIONS ──────────────────────────────────── */
         .reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
@@ -696,8 +625,7 @@
 
         /* ─── RESPONSIVE ──────────────────────────────────── */
         @media (max-width: 1023px) {
-            .hero-grid { grid-template-columns: 1fr; gap: 36px; }
-            .hero-visual { display: block; min-height: auto; }
+            .hero-grid { grid-template-columns: 1fr; gap: 40px; }
             .stats-inner { grid-template-columns: repeat(2,1fr); }
             .stat-item:nth-child(2) { border-right: none; }
             .services-wrap { grid-template-columns: 1fr 1fr; }
@@ -705,93 +633,22 @@
             .process-track::before { display: none; }
             .reviews-grid { grid-template-columns: 1fr 1fr; }
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-            /* Rapikan card layanan di tablet */
-            .hero-services { flex-wrap: wrap; }
-            .hs-dropdown-menu { min-width: 200px; }
         }
         @media (max-width: 767px) {
-            .site-nav .nav-link, .nav-sep { display: none; }
+            .site-nav .nav-link, .nav-sep, .site-nav .nav-dropdown { display: none; }
             .btn-nav { padding: 8px 14px; font-size: 12px; }
             .logo-text span { display: none; }
-            .hero { padding-top: 40px; }
-            .hero-title { font-size: 28px; }
-            .hero-desc { font-size: 14px; }
-            .hero-cta-row { flex-direction: column; width: 100%; gap: 12px; }
+            .hero { padding: 40px 0 60px; }
+            .hero-grid { gap: 32px; }
+            .hero-cta-row { flex-direction: column; }
             .hero-cta-row .btn-primary, .hero-cta-row .btn-outline { width: 100%; justify-content: center; }
-            .hero-trust { flex-wrap: wrap; gap: 16px; }
-            .trust-sep { display: none; }
-            .trust-item { padding-right: 12px; }
-            .stats-band { padding: 32px 0; }
-            .stats-inner { grid-template-columns: repeat(2,1fr); gap: 24px 16px; }
+            .stats-inner { grid-template-columns: repeat(2,1fr); gap: 0; }
             .services-wrap { grid-template-columns: 1fr; }
-            .services-row2 { grid-template-columns: 1fr; }
             .reviews-grid { grid-template-columns: 1fr; }
-            .cta-inner { flex-direction: column; text-align: center; gap: 24px; }
+            .cta-inner { flex-direction: column; text-align: center; }
             .process-track { grid-template-columns: 1fr; gap: 24px; }
-            .process-step { padding: 0; border: none !important; }
-            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-            /* Hero mobile */
-            .hero-services { gap: 8px; }
-            .hs-btn { font-size: 12px; padding: 9px 12px; }
-            .hero-visual { margin-top: 0; }
-        }
-        /* ─── BERITA & GALERI CAROUSEL ──────────────────── */
-        .news-carousel-wrap {
-            position: relative;
-            max-width: 100%;
-            margin-top: 40px;
-        }
-        .news-carousel {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 20px;
-            padding-bottom: 20px;
-            scrollbar-width: none; /* Firefox */
-        }
-        .news-carousel::-webkit-scrollbar { display: none; } /* Chrome/Safari */
-        .news-card {
-            scroll-snap-align: start;
-            flex: 0 0 calc(33.333% - 14px);
-            background: #fff;
-            border: 1px solid var(--line);
-            border-radius: var(--r-md);
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        .news-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.1); }
-        .news-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .news-content {
-            padding: 20px;
-        }
-        .news-date {
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: block;
-        }
-        .news-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--ink);
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        .news-desc {
-            font-size: 14px;
-            color: var(--mid);
-            line-height: 1.6;
-        }
-        @media(max-width: 900px) {
-            .news-card { flex: 0 0 calc(50% - 10px); }
-        }
-        @media(max-width: 600px) {
+            .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+            .sp-others { grid-template-columns: 1fr; }
             .news-card { flex: 0 0 85%; }
         }
     </style>
@@ -802,34 +659,66 @@
 <header id="site-header">
     <div class="container">
         <div class="header-inner">
+            <!-- Logo -->
             <a href="/" class="logo-wrap">
-                <div class="logo-logos" style="display: flex; align-items: center; gap: 8px;">
-                    <img src="{{ asset('storage/logo/Logo_BPN.png') }}" alt="Logo BPN" style="height: 38px; object-fit: contain;">
-                </div>
+                <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" class="logo-img">
                 <div class="logo-text">
                     <strong>PATEN PAK MIKO</strong>
                     <span>Kantor Pertanahan Kota Sukabumi</span>
                 </div>
             </a>
 
+            <!-- Nav -->
             <nav class="site-nav">
                 <a href="#" class="nav-link">Beranda</a>
+
                 <div class="nav-dropdown">
-                    <a href="javascript:void(0)" class="nav-link" style="display:flex;align-items:center;gap:4px;">Layanan <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
+                    <button class="nav-dropdown-trigger">
+                        Layanan
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
                     <div class="nav-dropdown-content">
-                        <a href="{{ route('login') }}">Pertimbangan Teknis Pertanahan Berusaha</a>
-                        <a href="{{ route('login') }}">Pertimbangan Teknis Pertanahan Non Berusaha</a>
-                        <a href="{{ route('login') }}">Kebijakan</a>
-                        <a href="{{ route('lapolpa.index') }}">LAPOLPAK</a>
-                        <a href="{{ route('informal.index') }}">INFORMAL</a>
+                        <a href="{{ route('login') }}">
+                            <span class="nav-dd-icon" style="background:var(--blue-lt);">
+                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="PKKPR">
+                            </span>
+                            Pertimbangan Teknis Pertanahan Berusaha
+                        </a>
+                        <a href="{{ route('login') }}">
+                            <span class="nav-dd-icon" style="background:var(--green-lt);">
+                                <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="PKKPR Non">
+                            </span>
+                            Pertimbangan Teknis Pertanahan Non Berusaha
+                        </a>
+                        <a href="{{ route('login') }}">
+                            <span class="nav-dd-icon" style="background:var(--yellow-lt);">
+                                <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="Kebijakan">
+                            </span>
+                            Kebijakan
+                        </a>
+                        <a href="{{ route('lapolpa.index') }}">
+                            <span class="nav-dd-icon" style="background:var(--surface);">
+                                <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="LAPOLPAK">
+                            </span>
+                            LAPOLPAK
+                        </a>
+                        <a href="{{ route('informal.index') }}">
+                            <span class="nav-dd-icon" style="background:var(--surface);">
+                                <img src="{{ asset('storage/logo/Informal.png') }}" alt="Informal">
+                            </span>
+                            INFORMAL
+                        </a>
                     </div>
                 </div>
+
                 <a href="#alur" class="nav-link">Alur Proses</a>
                 <a href="#ulasan" class="nav-link">Ulasan</a>
+
                 <div class="nav-sep"></div>
-                <a href="{{ route('login') }}" class="btn-nav">
-                    <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-                    Masuk Portal
+
+                <a href="tel:1500164" class="btn-nav">
+                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--yellow);flex-shrink:0;"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+                    Kontak Kami
                 </a>
             </nav>
         </div>
@@ -839,212 +728,176 @@
 
 <!-- ══ HERO ════════════════════════════════════════════════ -->
 <section class="hero">
-    <div class="hero-bg-shape"></div>
+    <div class="hero-bg"></div>
     <div class="container">
         <div class="hero-grid">
 
-            <!-- Copy -->
+            <!-- Left: Copy -->
             <div>
                 <div class="hero-eyebrow">
-                    <span></span>
-                    Portal Pelayanan Terpadu ATR/BPN
+                    <span class="eyebrow-dot"></span>
+                    Portal Layanan Masyarakat
                 </div>
+
                 <h1 class="hero-heading">
-                    Pertimbangan Teknis 
-                    <span class="line-accent">Pertanahan</span>
-                    yang Terkoneksi Kantor Pertanahan Sukabumi Kota
+                    Pertimbangan Teknis<br>
+                    <span class="accent">Pertanahan</span><br>
+                    <span class="strong-line">yang Terkoneksi Kantor<br>Pertanahan Sukabumi Kota</span>
                 </h1>
+
                 <p class="hero-sub">
                     PATEN Pak Miko hadir sebagai inovasi pelayanan yang memberikan kemudahan bagi pemohon dalam memperoleh layanan pertanahan secara lebih cepat, jelas, dan transparan. PATEN Pak Miko diharapkan mampu meningkatkan kepercayaan pemohon sekaligus memberikan pengalaman layanan yang lebih profesional, responsif, dan memudahkan.
                 </p>
-                <!-- GRID TOMBOL LAYANAN DI HERO (Poin 4) -->
-                <div class="hero-services" style="display: none;">
 
-                    <!-- PKKPR Dropdown -->
-                    <div class="hs-dropdown">
-                        <button class="hs-btn hs-primary" type="button">
-                            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                            Layanan Pertimbangan Teknis Pertanahan
-                            <svg class="hs-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-                        </button>
-                        <div class="hs-dropdown-menu">
-                            <a href="{{ route('login') }}">
-                                <span class="dd-num">1</span>
-                                Berusaha
-                            </a>
-                            <a href="{{ route('login') }}">
-                                <span class="dd-num">2</span>
-                                Non Berusaha
-                            </a>
-                            <a href="{{ route('login') }}">
-                                <span class="dd-num">3</span>
-                                Kebijakan
-                            </a>
-                            <a href="#">
-                                <span class="dd-num muted">4</span>
-                                PSN
-                                <span class="dd-badge">Segera Hadir</span>
-                            </a>
-                            <a href="#">
-                                <span class="dd-num muted">5</span>
-                                Tanah Timbul
-                                <span class="dd-badge">Segera Hadir</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- LAPOLPAK -->
-                    <a href="{{ route('lapolpa.index') }}" class="hs-btn" style="padding-left: 8px;">
-                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPAK" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
-                        LAPOLPAK
+                <div class="hero-cta-row">
+                    <a href="tel:1500164" class="btn-primary">
+                        Hubungi Kami
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-
-                    <!-- Informal -->
-                    <a href="{{ route('login') }}" class="hs-btn" style="padding-left: 8px;">
-                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
-                        INFORMAL
+                    <a href="#modul" class="btn-outline">
+                        Pelajari Layanan Kami
+                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-
-                    <!-- Pelajari Alur -->
-                    <a href="#alur" class="hs-btn hs-muted">
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                        Alur Proses
-                    </a>
-
-                </div>
-                <div class="hero-trust">
-                    <div class="trust-item">
-                        <span class="trust-num">5<em>+</em></span>
-                        <span class="trust-label">Modul Layanan</span>
-                    </div>
-                    <div class="trust-sep"></div>
-                    <div class="trust-item">
-                        <span class="trust-num">100<em>%</em></span>
-                        <span class="trust-label">Digital</span>
-                    </div>
-                    <div class="trust-sep"></div>
-                    <div class="trust-item">
-                        <span class="trust-num">1<em> Pintu</em></span>
-                        <span class="trust-label">Integrasi</span>
-                    </div>
-                    <div class="trust-sep"></div>
-                    <div class="trust-item">
-                        <span class="trust-num">98<em>%</em></span>
-                        <span class="trust-label">Kepuasan</span>
-                    </div>
                 </div>
             </div>
 
-            <!-- Visual — Service Card Panel -->
-            <div class="hero-visual" style="position:relative; height:auto; min-height:460px; display:flex; align-items:center;">
-
-
-                <!-- Service Panel Card -->
-                <div style="
-                    width:100%; background:#fff;
-                    border:1px solid var(--line); border-radius:var(--r-xl);
-                    box-shadow: 0 20px 60px rgba(0,59,100,.1), 0 2px 8px rgba(0,0,0,.04);
-                    overflow:hidden;
-                ">
+            <!-- Right: Service Panel -->
+            <div>
+                <div class="service-panel">
                     <!-- Header -->
-                    <div style="background:var(--blue-dk); padding:18px 22px; display:flex; align-items:center; gap:10px;">
-                        <div style="width:32px;height:32px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <div class="sp-header">
+                        <div class="sp-header-icon">
+                            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         </div>
-                        <div>
-                            <div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:-.01em;">PATEN PAK MIKO</div>
-                            <div style="font-size:10.5px;color:rgba(255,255,255,.5);font-weight:500;">Pilih modul layanan yang Anda butuhkan</div>
+                        <div class="sp-header-text">
+                            <strong>Pilih Modul Layanan yang Anda Butuhkan</strong>
                         </div>
                     </div>
 
-                    <!-- PKKPR Group -->
-                    <div style="padding:16px 20px 8px;">
-                        <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">
-                            Layanan Pertimbangan Teknis Pertanahan
+                    <!-- PKKPR Section -->
+                    <div class="sp-section-label">
+                        <span>Layanan Pertimbangan Teknis Pertanahan</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button type="button" class="btn-slider" style="width: 28px; height: 28px;" onclick="document.querySelector('.sp-rows').scrollBy({left: -400, behavior: 'smooth'})">
+                                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            <button type="button" class="btn-slider" style="width: 28px; height: 28px;" onclick="document.querySelector('.sp-rows').scrollBy({left: 400, behavior: 'smooth'})">
+                                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M9 18l6-6-6-6"/></svg>
+                            </button>
                         </div>
-                        <div style="display:flex;flex-direction:column;gap:6px;">
-
+                    </div>
+                    <div class="sp-rows">
+                        <!-- Slide 1 (3 Items) -->
+                        <div class="sp-slide">
                             <!-- Berusaha -->
-                            <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--blue-lt)';this.style.borderColor='var(--blue)'" onmouseout="this.style.background='var(--surface)'">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--blue-dk);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+                            <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="sp-row">
+                                <div class="sp-row-logo">
+                                    <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="PKKPR Berusaha">
                                 </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Untuk  PKKPR Berusaha</div>
-                                    <div style="font-size:11px;color:var(--muted);">Bisnis, usaha, industri</div>
+                                <div class="sp-row-info">
+                                    <strong>Pertimbangan Teknis Pertanahan Berusaha</strong>
+                                    <span>Bisnis, usaha, industri</span>
                                 </div>
-                                <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                                <div class="sp-row-cta">
+                                    Daftar
+                                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
                             </a>
 
                             <!-- Non Berusaha -->
-                            <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='var(--green-lt)'" onmouseout="this.style.background='var(--surface)'">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--green-dk);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="sp-row">
+                                <div class="sp-row-logo">
+                                    <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="PKKPR Non Berusaha">
                                 </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Untuk PKKPR Non Berusaha</div>
-                                    <div style="font-size:11px;color:var(--muted);">Rumah, sosial, keagamaan</div>
+                                <div class="sp-row-info">
+                                    <strong>Pertimbangan Teknis Pertanahan Non Berusaha</strong>
+                                    <span>Rumah, sosial, keagamaan</span>
                                 </div>
-                                <span style="background:var(--green-lt);color:var(--green-dk);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                                <div class="sp-row-cta">
+                                    Daftar
+                                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
                             </a>
 
                             <!-- Kebijakan -->
-                            <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#E8F4FF'" onmouseout="this.style.background='var(--surface)'">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="sp-row">
+                                <div class="sp-row-logo">
+                                    <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="Kebijakan">
                                 </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Kebijakan</div>
-                                    <div style="font-size:11px;color:var(--muted);">Kebijakan penggunaan & pemanfaatan tanah</div>
+                                <div class="sp-row-info">
+                                    <strong>Kebijakan Khusus</strong>
+                                    <span>Kebijakan pengguna &amp; pemanfaatan tanah</span>
                                 </div>
-                                <span style="background:var(--blue-lt);color:var(--blue);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                                <div class="sp-row-cta">
+                                    Daftar
+                                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
                             </a>
+                        </div>
 
+                        <!-- Slide 2 (2 Items) -->
+                        <div class="sp-slide">
                             <!-- Tanah Timbul -->
-                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#EEF7E2'" onmouseout="this.style.background='var(--surface)'">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-row">
+                                <div class="sp-row-logo" style="background:var(--green-lt); transform: none;">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green-dk)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                                 </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Tanah Timbul</div>
-                                    <div style="font-size:11px;color:var(--muted);">Pengurusan legalitas tanah timbul</div>
+                                <div class="sp-row-info">
+                                    <strong>Pertimbangan Teknis Pertanahan Tanah Timbul</strong>
+                                    <span>Pengurusan legalitas tanah timbul</span>
                                 </div>
-                                <span style="background:var(--green-lt);color:var(--green-dk);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
+                                <div class="sp-row-cta">
+                                    Daftar
+                                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
                             </a>
-                            
+
                             <!-- PSN -->
-                            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--r-md);background:var(--surface);text-decoration:none;transition:all .2s;" onmouseover="this.style.background='#FFFDF0'" onmouseout="this.style.background='var(--surface)'">
-                                <div style="width:34px;height:34px;border-radius:8px;background:var(--yellow);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#744210" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
+                                <div class="sp-row-logo" style="background:var(--yellow-lt); transform: none;">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                                 </div>
-                                <div style="flex:1;">
-                                    <div style="font-size:13px;font-weight:700;color:var(--ink);">Pertimbangan Teknis Pertanahan Untuk Proyek Strategis Nasional</div>
-                                    <div style="font-size:11px;color:var(--muted);">Proyek skala nasional (PSN)</div>
+                                <div class="sp-row-info">
+                                    <strong>Pertimbangan Teknis Pertanahan Untuk Proyek Strategis Nasional</strong>
+                                    <span>Proyek skala nasional (PSN)</span>
                                 </div>
-                                <span style="background:var(--yellow-lt);color:var(--brown);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;">Daftar →</span>
-                            </a>
-
-                        </div>
-                    </div>
-
-                    <!-- Other Services -->
-                    <div style="padding:8px 20px 18px;">
-                        <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Layanan Lainnya</div>
-                        <div style="display:flex;gap:8px;">
-                            <a href="{{ route('lapolpa.index') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)';this.style.color='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
-                                <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPAK" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
-                                <span style="font-size:12px;font-weight:700;color:var(--ink);">LAPOLPAK</span>
-                            </a>
-                            <a href="{{ route('informal.index') }}" style="flex:1;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-md);border:1.5px solid var(--line);text-decoration:none;transition:all .2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line)'">
-                                <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo Informal" style="width:20px;height:20px;object-fit:cover;border-radius:4px;flex-shrink:0;">
-                                <span style="font-size:12px;font-weight:700;color:var(--ink);">INFORMAL</span>
+                                <div class="sp-row-cta" style="color:var(--brown); background:var(--yellow-lt);">
+                                    Daftar
+                                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
                             </a>
                         </div>
                     </div>
 
+                    <div class="sp-divider"></div>
+
+                    <!-- Layanan Lainnya -->
+                    <div class="sp-section-label">Layanan Lainnya</div>
+                    <div class="sp-others">
+
+                        <a href="{{ route('lapolpa.index') }}" class="sp-other-card">
+                            <div class="sp-other-logo">
+                                <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="LAPOLPAK">
+                            </div>
+                            <span class="sp-other-name">LAPOLPAK</span>
+                            <div class="sp-other-arrow">
+                                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('informal.index') }}" class="sp-other-card">
+                            <div class="sp-other-logo">
+                                <img src="{{ asset('storage/logo/Informal.png') }}" alt="INFORMAL">
+                            </div>
+                            <span class="sp-other-name">INFORMAL</span>
+                            <div class="sp-other-arrow">
+                                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </a>
+
+                    </div>
                 </div>
             </div>
-
 
         </div>
     </div>
@@ -1057,25 +910,25 @@
             @php
                 $stats = [
                     [
-                        'icon' => '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+                        'icon' => '<img src="'.asset('storage/svg/quote-request 1.svg').'" alt="Permohonan">',
                         'value' => '12',
                         'suffix' => 'k',
                         'label' => 'Permohonan Diproses',
                     ],
                     [
-                        'icon' => '<svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+                        'icon' => '<img src="'.asset('storage/svg/tag 1.svg').'" alt="Rating">',
                         'value' => $averageRating ?? '4.0',
                         'suffix' => '/5',
                         'label' => 'Rata-rata Rating',
                     ],
                     [
-                        'icon' => '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+                        'icon' => '<img src="'.asset('storage/svg/calendar 1.svg').'" alt="Penyelesaian">',
                         'value' => '10',
                         'suffix' => ' hari',
                         'label' => 'Rata-rata Penyelesaian',
                     ],
                     [
-                        'icon' => '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>',
+                        'icon' => '<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
                         'value' => $visitorCount ?? '0',
                         'suffix' => '',
                         'label' => 'Kunjungan',
@@ -1093,106 +946,17 @@
     </div>
 </div>
 
-<!-- ══ SERVICES ════════════════════════════════════════════ -->
-<section id="modul" class="section services" style="display: none;">
-    <div class="container">
-        <div class="section-header section-header-center reveal">
-            <div class="section-eyebrow">Modul Layanan</div>
-            <h2 class="section-title">Pilih Jalur Permohonan</h2>
-            <p class="section-sub">Setiap modul dirancang untuk peruntukan spesifik. Pilih jalur yang sesuai dengan jenis kegiatan pemanfaatan ruang Anda.</p>
-        </div>
-
-        <div class="services-wrap">
-            <!-- Row 1 — 3 cards -->
-            <a href="{{ route('lapolpa.index') }}" class="svc-card c-blue reveal reveal-d1">
-                <span class="svc-num">01 / KONSULTASI</span>
-                <div class="svc-icon">
-                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                </div>
-                <h3 class="svc-title">LAPOLPAK</h3>
-                <p class="svc-desc">Pemesanan jadwal konsultasi tatap muka dan pelaporan pemanfaatan ruang secara langsung dengan petugas BPN.</p>
-                <span class="svc-cta">Ajukan Jadwal <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </a>
-
-            <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="svc-card c-green reveal reveal-d2">
-                <span class="svc-num">02 / NON-BISNIS</span>
-                <div class="svc-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <h3 class="svc-title">Pertimbangan Teknis Pertanahan Non Berusaha</h3>
-                <p class="svc-desc">Untuk rumah tinggal, keagamaan, sosial, fasilitas umum, dan kegiatan non-bisnis. Validasi dokumen di loket BPN terdekat.</p>
-                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </a>
-
-            <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="svc-card c-yellow reveal reveal-d3">
-                <span class="svc-num">03 / PERIZINAN BISNIS</span>
-                <div class="svc-icon">
-                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                </div>
-                <h3 class="svc-title">Pertimbangan Teknis Pertanahan Berusaha</h3>
-                <p class="svc-desc">Jalur terpadu perizinan skala bisnis mikro, kecil, menengah, dan besar. Melibatkan BPN, Dinas PU, dan PTSP satu pintu.</p>
-                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </a>
-
-            <!-- Row 2 — 3 cards -->
-            <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="svc-card c-blue reveal reveal-d1">
-                <span class="svc-num">04 / KEBIJAKAN </span>
-                <div class="svc-icon">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                </div>
-                <h3 class="svc-title">Kebijakan</h3>
-                <p class="svc-desc">Permohonan berbasis kebijakan pemerintah eksklusif, diproses melalui jalur validasi luring dengan pendampingan teknis.</p>
-                <span class="svc-cta">Pelajari Ketentuan <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </a>
-
-            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="svc-card c-yellow reveal reveal-d2">
-                <span class="svc-num">05 / PROYEK NASIONAL</span>
-                <div class="svc-icon">
-                    <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                </div>
-                <h3 class="svc-title">Proyek Strategis Nasional (PSN)</h3>
-                <p class="svc-desc">Pembangunan infrastruktur prioritas strategis negara untuk menunjang konektivitas dan akselerasi pertumbuhan wilayah.</p>
-                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </a>
-
-            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="svc-card c-green reveal reveal-d3">
-                <span class="svc-num">06 / TANAH TIMBUL</span>
-                <div class="svc-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </div>
-                <h3 class="svc-title">Tanah Timbul</h3>
-                <p class="svc-desc">Permohonan hak atas tanah timbul yang terbentuk secara alami di pinggiran sungai atau kawasan pesisir Sukabumi.</p>
-                <span class="svc-cta">Mulai Proses <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-            </a>
-
-            <!-- Row 3 — Centered 7th Card -->
-            <div style="grid-column: 1 / -1; display: flex; justify-content: center; width: 100%;">
-                <a href="{{ route('informal.index') }}" class="svc-card c-green" style="max-width: calc(33.333% - 14px); width: 100%;">
-                    <span class="svc-num">07 / AKSES PUBLIK</span>
-                    <div class="svc-icon">
-                        <svg viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-                    </div>
-                    <h3 class="svc-title">Peta Publik (Informal)</h3>
-                    <p class="svc-desc">Akses mandiri peta peruntukan dan zonasi wilayah secara interaktif melalui integrasi Gistaru — tanpa login.</p>
-                    <span class="svc-cta">Buka Peta <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- ══ BERITA & GALERI ════════════════════════════════════════ -->
-<section id="galeri" class="section">
+<section id="galeri" class="section" style="background: var(--white);">
     <div class="container">
         <div class="section-header section-header-center reveal">
-            <div class="section-eyebrow">Berita & Galeri</div>
+            <div class="section-eyebrow">Berita &amp; Galeri</div>
             <h2 class="section-title">Informasi Seputar Tata Ruang</h2>
             <p class="section-sub">Berita terbaru dan dokumentasi kegiatan pelayanan pertimbangan teknis pertanahan di Kota Sukabumi.</p>
         </div>
-        
+
         <div class="news-carousel-wrap reveal reveal-d2">
             <div class="news-carousel" id="newsCarousel">
-                <!-- Card 1 -->
                 <div class="news-card">
                     <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Berita 1" class="news-img">
                     <div class="news-content">
@@ -1201,7 +965,6 @@
                         <p class="news-desc">Kantor Pertanahan mengadakan sosialisasi terkait pembaruan regulasi untuk perizinan pelaku usaha skala menengah dan besar.</p>
                     </div>
                 </div>
-                <!-- Card 2 -->
                 <div class="news-card">
                     <img src="https://images.unsplash.com/photo-1541888086225-b467ec6b60c0?auto=format&fit=crop&w=800&q=80" alt="Berita 2" class="news-img">
                     <div class="news-content">
@@ -1210,7 +973,6 @@
                         <p class="news-desc">Tim lapangan BPN dan Dinas PU melakukan survei bersama untuk memastikan kelayakan lokasi kawasan industri di wilayah selatan.</p>
                     </div>
                 </div>
-                <!-- Card 3 -->
                 <div class="news-card">
                     <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80" alt="Berita 3" class="news-img">
                     <div class="news-content">
@@ -1282,9 +1044,7 @@
                         </div>
                         <p class="review-text">{{ $review->comment }}</p>
                         <div class="review-foot">
-                            <div class="review-avatar">
-                                {{ $review->reviewer_initial }}
-                            </div>
+                            <div class="review-avatar">{{ $review->reviewer_initial }}</div>
                             <div class="review-info">
                                 <strong>{{ $review->reviewer_name }}</strong>
                                 <span>{{ $review->created_at->format('d M Y') }}</span>
@@ -1298,7 +1058,7 @@
     </div>
 </section>
 
-
+<!-- ══ CTA BAND ════════════════════════════════════════════ -->
 <section class="cta-band">
     <div class="cta-deco"></div>
     <div class="container">
@@ -1321,15 +1081,13 @@
         <div class="footer-grid">
             <div>
                 <a href="/" class="logo-wrap" style="margin-bottom:0">
-                    <div class="logo-logos" style="display: flex; align-items: center; gap: 8px;">
-                        <img src="{{ asset('storage/logo/Logo_BPN.png') }}" alt="Logo BPN" style="height: 38px; object-fit: contain;">
-                    </div>
+                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" style="width:44px;height:44px;border-radius:50%;object-fit:cover;">
                     <div class="logo-text footer-logo-text">
                         <strong>PATEN PAK MIKO</strong>
-                        <span></span>
+                        <span>Kantor Pertanahan Kota Sukabumi</span>
                     </div>
                 </a>
-                <p class="footer-desc">Sistem Pelayanan Terpadu & Terintegrasi Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang, dedikasi untuk efisiensi birokrasi dan transparansi publik.</p>
+                <p class="footer-desc">Sistem Pelayanan Terpadu &amp; Terintegrasi Pertimbangan Teknis Pertanahan, dedikasi untuk efisiensi birokrasi dan transparansi publik.</p>
                 <div class="footer-badges">
                     <span class="f-badge">ATR / BPN</span>
                     <span class="f-badge">Gov 2026</span>
@@ -1352,8 +1110,8 @@
                 <h4 class="f-col-title">Modul</h4>
                 <ul class="f-links">
                     <li><a href="{{ route('lapolpa.index') }}">LAPOLPAK</a></li>
-                    <li><a href="#">Pertimbangan Teknis Pertanahan Non Berusaha</a></li>
-                    <li><a href="#">Pertimbangan Teknis Pertanahan Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Non Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Berusaha</a></li>
                     <li><a href="#">Kebijakan</a></li>
                     <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>
@@ -1394,11 +1152,31 @@
 </footer>
 
 <script>
+    // Toggle Hidden Rows
+    function toggleHiddenRows(btn) {
+        const hiddenRows = document.querySelectorAll('.sp-row-hidden');
+        const isActive = btn.classList.contains('active');
+        
+        if (isActive) {
+            // Sembunyikan
+            hiddenRows.forEach(row => row.style.display = 'none');
+            btn.classList.remove('active');
+            btn.querySelector('span').textContent = 'Tampilkan Layanan Lainnya';
+        } else {
+            // Tampilkan
+            hiddenRows.forEach(row => row.style.display = 'flex');
+            btn.classList.add('active');
+            btn.querySelector('span').textContent = 'Sembunyikan Layanan';
+        }
+    }
+
+    // Header scroll shadow
     const header = document.getElementById('site-header');
     window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 20);
     }, { passive: true });
 
+    // Reveal on scroll
     const io = new IntersectionObserver((entries) => {
         entries.forEach(e => {
             if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
@@ -1406,7 +1184,7 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-    // Step highlight on scroll
+    // Process step highlight
     const steps = document.querySelectorAll('.process-step');
     const stepIO = new IntersectionObserver((entries) => {
         entries.forEach(e => {
@@ -1417,31 +1195,6 @@
         });
     }, { threshold: 0.7 });
     steps.forEach(s => stepIO.observe(s));
-
-    // ── PKKPR Dropdown Toggle ──────────────────────────────
-    const pkkprBtn = document.querySelector('.hs-dropdown button');
-    const pkkprMenu = document.querySelector('.hs-dropdown-menu');
-
-    if (pkkprBtn && pkkprMenu) {
-        // Toggle saat klik tombol
-        pkkprBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const isOpen = pkkprMenu.style.display === 'flex';
-            pkkprMenu.style.display = isOpen ? 'none' : 'flex';
-            pkkprBtn.setAttribute('aria-expanded', !isOpen);
-        });
-
-        // Tutup saat klik di luar
-        document.addEventListener('click', function() {
-            pkkprMenu.style.display = 'none';
-            pkkprBtn.setAttribute('aria-expanded', false);
-        });
-
-        // Cegah menu tutup saat klik di dalam menu
-        pkkprMenu.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-    }
 </script>
 </body>
 </html>
