@@ -107,18 +107,7 @@
                         <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['PT / Badan Usaha', 'Instansi Pemerintah']) ? $ptpHubungan : '') }}">
                     </div>
                 </div>
-            </div>
-
-                            <!-- Kode & Nama KBLI -->
-                <div class="form-group" style="position: relative;">
-                    <label class="form-label">Kode & Nama KBLI (Kegiatan Berusaha)<span class="required">*</span></label>
-                    <div class="kbli-wrapper">
-                        <input type="text" id="kbli_text" class="form-control" placeholder="Ketik kode KBLI atau nama kegiatan..." value="{{ old('kbli_kode', session('ptp_form_data.kbli', '')) }}" autocomplete="off" required>
-                        <input type="hidden" id="kbli_kode" name="kbli_kode" value="{{ old('kbli_kode', session('ptp_form_data.kbli', '')) }}">
-                        <div class="kbli-dropdown" id="kbliDropdown"></div>
-                    </div>
-                    <div id="kbliSelectedInfo" style="display:none; margin-top: 10px;"></div>
-                </div>\n\n            <div class="ptp-divider"></div>
+            </div>            <div class="ptp-divider"></div>
 
             <!-- SECTION 2 -->
             <div class="ptp-section-title">2. UNGGAH BERKAS PERSYARATAN</div>
@@ -243,6 +232,12 @@
                     </div>
                 </div>
             </div>
+            @php
+                $fullKbli = old('kbli_kode', session('ptp_form_data.kbli', ''));
+                $kbliCode = preg_match('/^(\d+)/', $fullKbli, $m) ? $m[1] : $fullKbli;
+            @endphp
+            <input type="hidden" name="kbli_kode" value="{{ $kbliCode }}">
+
 
             <!-- ACTIONS -->
             <div class="btn-submit-wrap">

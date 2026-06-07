@@ -107,18 +107,7 @@
                         <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['PT / Badan Usaha', 'Instansi Pemerintah']) ? $ptpHubungan : '') }}">
                     </div>
                 </div>
-            </div>
-
-                            <!-- Kode & Nama KBLI -->
-                <div class="form-group" style="position: relative;">
-                    <label class="form-label">Kode & Nama KBLI (Kegiatan Berusaha)<span class="required">*</span></label>
-                    <div class="kbli-wrapper">
-                        <input type="text" id="kbli_text" class="form-control" placeholder="Ketik kode KBLI atau nama kegiatan..." value="{{ old('kbli_kode', session('ptp_form_data.kbli', '')) }}" autocomplete="off" required>
-                        <input type="hidden" id="kbli_kode" name="kbli_kode" value="{{ old('kbli_kode', session('ptp_form_data.kbli', '')) }}">
-                        <div class="kbli-dropdown" id="kbliDropdown"></div>
-                    </div>
-                    <div id="kbliSelectedInfo" style="display:none; margin-top: 10px;"></div>
-                </div>\n\n            <div class="ptp-divider"></div>
+            </div>            <div class="ptp-divider"></div>
 
             <!-- SECTION 2 -->
             <div class="ptp-section-title">2. UNGGAH BERKAS PERSYARATAN</div>
@@ -244,6 +233,12 @@
                     </div>
                 </div>
             </div>
+            @php
+                $fullKbli = old('kbli_kode', session('ptp_form_data.kbli', ''));
+                $kbliCode = preg_match('/^(\d+)/', $fullKbli, $m) ? $m[1] : $fullKbli;
+            @endphp
+            <input type="hidden" name="kbli_kode" value="{{ $kbliCode }}">
+
 
             <!-- ACTIONS -->
             <div class="btn-submit-wrap">
@@ -330,85 +325,6 @@
         document.getElementById('previewModal').classList.remove('open');
         setTimeout(() => { document.getElementById('previewFrame').src = ''; }, 300);
     }
-
-        // KBLI AUTOCOMPLETE
-    (function () {
-        const inputText = document.getElementById('kbli_text');
-        const inputHidden = document.getElementById('kbli_kode');
-        const dropdown = document.getElementById('kbliDropdown');
-        const infoBox = document.getElementById('kbliSelectedInfo');
-        if (!inputText) return;
-        
-        // Initial setup for code
-        if (inputText.value) {
-            let val = inputText.value;
-            let codeMatch = val.match(/^(\d+)/);
-            if(codeMatch) inputHidden.value = codeMatch[1];
-        }
-
-        let debounceTimer = null, activeIndex = -1;
-        function showInfo(code, title) {
-            infoBox.innerHTML = `<span class="kbli-desc" style="font-size:12px; color:#3291A8;"><span style="color:#22C55E;">✔</span> <strong>${code}</strong> — ${title}</span>`;
-            infoBox.style.display = 'block';
-        }
-        function closeDropdown() { dropdown.classList.remove('show'); dropdown.innerHTML = ''; activeIndex = -1; }
-        
-        // Fetch info for initial value if present
-        if (inputHidden.value.length >= 2) {
-            fetch(`/api/kbli/find?code=${encodeURIComponent(inputHidden.value)}`)
-                .then(r => r.json()).then(d => { if (d && d.title) showInfo(d.code, d.title); });
-        }
-        
-        inputText.addEventListener('input', function () {
-            clearTimeout(debounceTimer);
-            const q = this.value.trim();
-            infoBox.style.display = 'none';
-            // update hidden if user manually edits code
-            let codeMatch = q.match(/^(\d+)/);
-            if(codeMatch) inputHidden.value = codeMatch[1];
-            else inputHidden.value = q; // fallback
-
-            if (q.length < 2) { closeDropdown(); return; }
-            debounceTimer = setTimeout(() => {
-                fetch(`/api/kbli/search?q=${encodeURIComponent(q)}`)
-                    .then(r => r.json())
-                    .then(results => {
-                        dropdown.innerHTML = '';
-                        if (!results || !results.length) {
-                            dropdown.innerHTML = '<div style="padding:12px 16px; color:#7A9BB5; font-size:13.5px;">KBLI tidak ditemukan.</div>';
-                            dropdown.classList.add('show');
-                            return;
-                        }
-                        results.forEach((item, index) => {
-                            const div = document.createElement('div');
-                            div.className = 'kbli-item';
-                            div.innerHTML = `<strong>${item.code}</strong> - ${item.title}`;
-                            div.addEventListener('click', () => {
-                                inputText.value = `${item.code} - ${item.title}`;
-                                inputHidden.value = item.code;
-                                showInfo(item.code, item.title);
-                                closeDropdown();
-                            });
-                            dropdown.appendChild(div);
-                        });
-                        dropdown.classList.add('show');
-                    }).catch(err => console.error('KBLI Fetch Error:', err));
-            }, 300);
-        });
-        
-        inputText.addEventListener('keydown', function (e) {
-            const items = dropdown.querySelectorAll('.kbli-item');
-            if (!items.length) return;
-            if (e.key === 'ArrowDown') { e.preventDefault(); activeIndex = Math.min(activeIndex + 1, items.length - 1); items.forEach((el, i) => el.classList.toggle('active', i === activeIndex)); }
-            else if (e.key === 'ArrowUp') { e.preventDefault(); activeIndex = Math.max(activeIndex - 1, 0); items.forEach((el, i) => el.classList.toggle('active', i === activeIndex)); }
-            else if (e.key === 'Enter' && activeIndex >= 0) { e.preventDefault(); items[activeIndex].click(); }
-            else if (e.key === 'Escape') { closeDropdown(); }
-        });
-        
-        document.addEventListener('click', function (e) {
-            if (!inputText.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
-        });
-    })();
 
     // DRAG AND DROP FILE UPLOAD
     document.querySelectorAll('.file-input-wrapper').forEach(wrapper => {
