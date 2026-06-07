@@ -1,613 +1,618 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulir Permohonan PTP — PATEN PAK MIKO</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@extends('layouts.public')
 
-        :root {
-            --blue:      #218AC9;
-            --blue-dk:   #003B64;
-            --blue-lt:   #E3F0F9;
-            --blue-md:   #B3D4EC;
-            --yellow:    #FFCB05;
-            --yellow-lt: #FFF8D6;
-            --brown:     #D37324;
-            --green:     #85C341;
-            --green-dk:  #79A73A;
-            --green-lt:  #EEF7E2;
-            --ink:       #003B64;
-            --mid:       #2C5272;
-            --muted:     #7A9BB5;
-            --line:      #D6E4EF;
-            --surface:   #F0F6FB;
-            --white:     #FFFFFF;
-            --r-sm:      6px;
-            --r-md:      10px;
-            --r-lg:      16px;
-            --shadow:    0 8px 30px rgba(0, 59, 100, 0.08);
-        }
+@section('title', 'Formulir Permohonan PTP — PATEN PAK MIKO')
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--surface);
-            color: var(--ink);
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            display: flex;
+@section('content')
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    body { background-color: #F0F6FB; }
+    
+    .ptp-wrapper {
+        padding: 60px 20px;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 60px;
+    }
+
+    .ptp-container {
+        width: 100%;
+        max-width: 1140px;
+        background: #FFFFFF;
+        border-radius: 8px;
+        padding: 50px 60px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+    }
+
+    .ptp-header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 50px;
+    }
+
+    .ptp-layanan-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #7A9BB5;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 14px;
+    }
+
+    .ptp-badge {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        background: #F0F6FB;
+        border: 1.5px solid #D6EAF5;
+        border-radius: 12px;
+        padding: 20px 28px;
+    }
+
+    .ptp-logo-circle {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        border: 2px solid #D6EAF5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 16px rgba(50,145,168,0.12);
+        overflow: hidden;
+    }
+
+    .ptp-logo-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transform: scale(1.9); /* Zoom in to ignore the image's huge transparent padding */
+    }
+
+    .ptp-badge-text {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .ptp-badge-tag {
+        font-size: 11px;
+        font-weight: 700;
+        color: #3291A8;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+
+    .ptp-badge-name {
+        font-size: 21px;
+        font-weight: 800;
+        color: #1E1E2F;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    .btn-kembali {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: #00223D;
+        color: #FFFFFF;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 13.5px;
+        font-weight: 600;
+        transition: background .2s;
+        white-space: nowrap;
+        margin-top: 4px;
+    }
+    .btn-kembali:hover { background: #001526; color: #fff; }
+
+    .ptp-section-title {
+        font-size: 16.5px;
+        font-weight: 800;
+        color: #00223D;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .ptp-divider {
+        border-top: 2px dashed #E2E8F0;
+        margin: 40px 0;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .form-group.full { grid-column: span 2; }
+
+    .form-label {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #0A1C2C;
+    }
+    .form-label span.required { color: #DC2626; margin-left: 4px; }
+    .form-label span.optional { font-weight: 500; color: #7A9BB5; margin-left: 4px; font-size: 12px; }
+
+    .form-control {
+        padding: 16px 20px;
+        background: #F4F7FA;
+        border: 1px solid #E2E8F0;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 14px;
+        color: #0A1C2C;
+        outline: none;
+        transition: border .2s, background .2s;
+        font-weight: 500;
+        width: 100%;
+    }
+    .form-control:focus { border-color: #3291A8; background: #FFF; }
+    textarea.form-control { min-height: 120px; resize: vertical; line-height: 1.6; }
+
+    /* Native select styling fallback */
+    select.form-control {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233291A8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 18px;
+        padding-right: 44px;
+    }
+
+    /* Tom Select Custom Overrides */
+    .ts-wrapper { width: 100%; }
+    .ts-control {
+        padding: 16px 20px;
+        background: #F4F7FA;
+        border: 1px solid #E2E8F0;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 14px;
+        color: #0A1C2C;
+        box-shadow: none;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+    }
+    .ts-control.focus { border-color: #3291A8; background: #FFF; box-shadow: none; }
+    .ts-control input { font-size: 14px; }
+    .ts-dropdown {
+        border-radius: 6px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        margin-top: 6px;
+        border-top: none;
+    }
+    .ts-dropdown .option {
+        padding: 14px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: background 0.1s;
+    }
+    .ts-dropdown .active {
+        background-color: #F0F6FB !important;
+        color: #0A1C2C !important;
+    }
+    .ts-wrapper.single .ts-control:after {
+        border: none;
+        content: "";
+        width: 18px;
+        height: 18px;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233291A8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-size: contain;
+        background-repeat: no-repeat;
+        right: 16px;
+        margin-top: -9px;
+    }
+    .ts-wrapper.single.dropdown-active .ts-control:after {
+        transform: rotate(180deg);
+    }
+
+    .nested-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 16px;
+    }
+
+    /* KBLI Dropdown Styles */
+    .kbli-wrapper { position: relative; }
+    .kbli-dropdown {
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: #fff; border: 1px solid #E2E8F0;
+        border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        max-height: 250px; overflow-y: auto; z-index: 1000;
+        display: none; margin-top: 8px; padding: 8px;
+    }
+    .kbli-dropdown.show { display: block; }
+    .kbli-item {
+        padding: 12px 16px; cursor: pointer; border-radius: 4px;
+        font-size: 13.5px; transition: background 0.2s; margin-bottom: 4px;
+    }
+    .kbli-item:last-child { margin-bottom: 0; }
+    .kbli-item:hover, .kbli-item.active { background: #F0F6FB; color: #0A1C2C; }
+    .kbli-item strong { color: #3291A8; margin-right: 6px; }
+    .kbli-desc {
+        display: inline-flex; align-items: center; background: #E6F4EA;
+        padding: 8px 14px; border-radius: 6px;
+        font-size: 12.5px; color: #137333; margin-top: 8px; font-weight: 600;
+    }
+
+    .btn-submit-wrap {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 50px;
+    }
+    .btn-batal {
+        padding: 16px 36px;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        color: #555;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background .2s;
+    }
+    .btn-batal:hover { background: #F4F7FA; }
+    .btn-submit {
+        padding: 16px 36px;
+        background: #00223D;
+        color: #FFFFFF;
+        border: none;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background .2s;
+    }
+    .btn-submit:hover { background: #001526; }
+
+    /* Alert & Info */
+    .alert {
+        padding: 16px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 30px;
+        display: flex;
+        gap: 12px;
+    }
+    .alert-error { background: #FCE8E6; border: 1px solid #F8B4B4; color: #C5221F; }
+    .alert-info { background: #FFF8D6; border-left: 4px solid #FFCB05; color: #D37324; font-weight: 600; }
+
+    @media (max-width: 992px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .form-group.full { grid-column: span 1; }
+        .nested-grid { grid-template-columns: 1fr; }
+        .ptp-container { padding: 30px 24px; }
+        .ptp-badge-name { font-size: 17px; }
+    }
+
+    @media (max-width: 768px) {
+        .ptp-header-top {
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 850px;
-            width: 100%;
-            background: var(--white);
-            border-radius: var(--r-lg);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--line);
-            overflow: hidden;
-        }
-
-        .header {
-            background: var(--blue-dk);
-            color: var(--white);
-            padding: 32px 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        .header p {
-            font-size: 13px;
-            color: var(--blue-md);
-            font-weight: 500;
-        }
-
-        .header-logo {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .header-logo img {
-            height: 48px;
-            width: auto;
-        }
-
-        .form-body {
-            padding: 40px;
-        }
-
-        .target-address {
-            background: var(--surface);
-            border-left: 4px solid var(--blue);
-            padding: 16px 20px;
-            border-radius: 0 var(--r-md) var(--r-md) 0;
-            margin-bottom: 30px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--mid);
-        }
-
-        .target-address strong {
-            color: var(--ink);
-        }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--blue-dk);
-            border-bottom: 2px solid var(--line);
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-            margin-top: 30px;
-        }
-
-        .section-title:first-of-type {
-            margin-top: 0;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-
-        .full-width {
-            grid-column: span 2;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--ink);
-        }
-
-        .form-label span.required {
-            color: #DC2626;
-        }
-
-        .form-control {
-            font-family: inherit;
-            font-size: 14px;
-            padding: 11px 16px;
-            border-radius: var(--r-md);
-            border: 1px solid var(--line);
-            color: var(--ink);
-            background: var(--white);
-            outline: none;
-            transition: all 0.2s ease;
-        }
-
-        .form-control:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(33, 138, 201, 0.15);
-        }
-
-        textarea.form-control {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        /* Service Cards Choice */
-        .service-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .service-card {
-            border: 1px solid var(--line);
-            border-radius: var(--r-md);
-            padding: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            background: var(--white);
-        }
-
-        .service-card:hover {
-            border-color: var(--blue-md);
-            background: var(--surface);
-        }
-
-        .service-card.active {
-            border-color: var(--blue);
-            background: var(--blue-lt);
-            box-shadow: 0 0 0 1px var(--blue);
-        }
-
-        .service-card input[type="radio"] {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            accent-color: var(--blue);
-        }
-
-        .service-card-title {
-            font-size: 12.5px;
-            font-weight: 800;
-            color: var(--ink);
-            padding-right: 16px;
-            line-height: 1.3;
-        }
-
-        .service-card-desc {
-            font-size: 10.5px;
-            color: var(--muted);
-            line-height: 1.3;
-        }
-
-        /* Letak Tanah Nested Grid */
-        .nested-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 10px;
-        }
-
-        /* KBLI Autocomplete */
-        .kbli-wrapper { position: relative; }
-        .kbli-dropdown {
-            position: absolute; top: 100%; left: 0; right: 0;
-            background: var(--white); border: 1px solid var(--line);
-            border-radius: var(--r-md); box-shadow: var(--shadow);
-            max-height: 250px; overflow-y: auto; z-index: 1000;
-            display: none; margin-top: 4px;
-        }
-        .kbli-dropdown.show { display: block; }
-        .kbli-item {
-            padding: 10px 16px; cursor: pointer; border-bottom: 1px solid var(--line);
-            font-size: 13.5px; transition: background 0.2s;
-        }
-        .kbli-item:last-child { border-bottom: none; }
-        .kbli-item:hover, .kbli-item.active { background: var(--blue-lt); }
-        .kbli-item strong { color: var(--blue); margin-right: 6px; }
-        .kbli-desc {
-            display: inline-flex; align-items: center; background: var(--green-lt);
-            border: 1px solid #C6E0B4; padding: 6px 12px; border-radius: var(--r-sm);
-            font-size: 12px; color: var(--green-dk); margin-top: 6px; font-weight: 500;
-        }
-        .kbli-desc-icon { color: #38A169; margin-right: 4px; }
-
-        .btn-submit {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--blue);
-            color: var(--white);
-            font-weight: 700;
-            font-size: 15px;
-            padding: 14px 28px;
-            border-radius: var(--r-md);
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            gap: 8px;
-            margin-top: 30px;
+        .ptp-badge {
+            gap: 16px;
+            padding: 16px 20px;
             width: 100%;
         }
-
-        .btn-submit:hover {
-            background: #1978B0;
-            transform: translateY(-1px);
+        .ptp-logo-circle {
+            width: 70px;
+            height: 70px;
         }
-
-        .btn-submit svg {
-            width: 18px;
-            height: 18px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+        .ptp-logo-circle img {
+            width: 58px;
+            height: 58px;
         }
-
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--muted);
+        .ptp-badge-name { font-size: 16px; }
+        .btn-kembali { margin-top: 0; align-self: flex-start; }
+        .btn-submit-wrap {
+            flex-direction: column-reverse;
+            gap: 12px;
+            margin-top: 40px;
         }
-
-        .error-msg {
-            color: #DC2626;
-            font-size: 11.5px;
-            font-weight: 600;
-            margin-top: 4px;
+        .btn-submit-wrap button {
+            width: 100%;
+            justify-content: center;
         }
+        .form-group { gap: 8px; }
+    }
+</style>
 
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .full-width {
-                grid-column: span 1;
-            }
-            .service-cards {
-                grid-template-columns: 1fr;
-            }
-            .nested-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <!-- Flatpickr CSS CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
-</head>
-<body>
+@php
+    $layananActive = old('jenis_permohonan', request('layanan', 'berusaha'));
+    $layananName = match($layananActive) {
+        'berusaha' => 'Pertimbangan Teknis Pertanahan Berusaha',
+        'non-berusaha' => 'Pertimbangan Teknis Pertanahan Non Berusaha',
+        'kebijakan' => 'Pertimbangan Teknis Pertanahan Kebijakan',
+        'psn' => 'Pertimbangan Teknis Pertanahan PSN',
+        'tanah-timbul' => 'Pertimbangan Teknis Pertanahan Tanah Timbul',
+        default => 'Pertimbangan Teknis Pertanahan Berusaha'
+    };
 
-    <div class="container">
-        <div class="header">
-            <div class="header-logo">
-                <!-- Garuda / Logo Kantor Pertanahan -->
-                <svg viewBox="0 0 24 24" width="48" height="48" style="fill: var(--yellow);"><path d="M12 2L2 22h20L12 2zm0 3.8L19.3 19H4.7L12 5.8zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg>
+    $layananLogo = match($layananActive) {
+        'berusaha' => 'PKKPR.png',
+        'non-berusaha' => 'PKKPRNon.png',
+        'kebijakan' => 'Kebijakan.png',
+        default => 'PKKPR.png'
+    };
+@endphp
+
+<div class="ptp-wrapper">
+    <div class="ptp-container">
+
+        <!-- Header Actions -->
+        <div class="ptp-header-top">
+            <div>
+                <div class="ptp-layanan-label">Layanan Yang Dipilih:</div>
+                <div class="ptp-badge">
+                    <div class="ptp-logo-circle">
+                        <img src="{{ asset('storage/logo/' . $layananLogo) }}" alt="Logo {{ $layananActive }}">
+                    </div>
+                    <div class="ptp-badge-text">
+                        <span class="ptp-badge-tag">PTP / PKKPR</span>
+                        <span class="ptp-badge-name">{{ $layananName }}</span>
+                    </div>
+                </div>
             </div>
-            <h1>Permohonan Pertimbangan Teknis Pertanahan</h1>
-            <p>Kantor Pertanahan Kota Sukabumi — Layanan Integrasi PATEN PAK MIKO</p>
+            <a href="/" class="btn-kembali">&larr; Kembali</a>
         </div>
 
-        <div class="form-body">
-            
-            @php
-                $layananActive = old('jenis_permohonan', request('layanan', 'berusaha'));
-                $layananName = match($layananActive) {
-                    'berusaha' => 'PTP PKKPR Berusaha',
-                    'non-berusaha' => 'PTP PKKPR Non Berusaha',
-                    'kebijakan' => 'PTP Kebijakan',
-                    'psn' => 'PTP PSN',
-                    'tanah-timbul' => 'PTP Tanah Timbul',
-                    default => 'PTP PKKPR Berusaha'
-                };
-            @endphp
-
-
-            <div style="display: flex; gap: 16px; margin-bottom: 24px; align-items: stretch; flex-wrap: wrap;">
-                <div class="target-address" style="flex: 1.2; min-width: 280px; margin-bottom: 0;">
-                    Kepada Yh.<br>
-                    <strong>Kepala Kantor Pertanahan Kota Sukabumi</strong><br>
-                    di tempat.
-                </div>
-                <div style="flex: 1; min-width: 280px; background: #EBF8FF; border: 1.5px solid #BEE3F8; border-radius: var(--r-md); padding: 14px 20px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); position: relative; overflow: hidden;">
-                    <div style="position: absolute; right: -10px; top: -10px; opacity: 0.08; color: #3182CE;">
-                        <svg width="80" height="80" fill="currentColor" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    </div>
-                    <span style="font-size: 10px; font-weight: 700; color: #4A5568; text-transform: uppercase; letter-spacing: 0.05em; display: block;">Layanan Terpilih:</span>
-                    <div style="font-size: 15px; font-weight: 800; color: #2B6CB0; margin-top: 4px; display: flex; align-items: center; gap: 6px;">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        {{ $layananName }}
-                    </div>
-                    <span style="font-size: 10px; color: #718096; font-weight: 600; margin-top: 4px;">Pendaftaran Calon Pemohon PKKPR</span>
-                </div>
-            </div>
-
-            @if(session('info'))
-                <div style="background: var(--yellow-lt); border-left: 4px solid var(--yellow); padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 20px; font-size: 13.5px; color: var(--brown); font-weight: 600;">
-                    {{ session('info') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                <div style="background: #FEF2F2; border-left: 4px solid #DC2626; padding: 12px 16px; border-radius: var(--r-sm); margin-bottom: 20px;">
-                    <div style="font-size: 13.5px; color: #991B1B; font-weight: 700; margin-bottom: 4px;">Terdapat kesalahan pada isian form:</div>
-                    <ul style="font-size: 12.5px; color: #B91C1C; margin-left: 16px;">
+        <!-- Alerts -->
+        @if(session('info'))
+            <div class="alert alert-info">{{ session('info') }}</div>
+        @endif
+        @if($errors->any())
+            <div class="alert alert-error">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <div>
+                    <div style="font-weight: 700; margin-bottom: 6px;">Terdapat kesalahan pada isian form:</div>
+                    <ul style="margin-left: 16px; font-size: 13px;">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
-            @endif
+            </div>
+        @endif
 
-            <form action="{{ route('ptp.store') }}" method="POST">
-                @csrf
-                <input type="hidden" name="jenis_permohonan" id="jenis_permohonan" value="{{ $layananActive }}">
+        <form action="{{ route('ptp.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="jenis_permohonan" id="jenis_permohonan" value="{{ $layananActive }}">
 
-                <!-- SECTION 1 -->
-                <div class="section-title">1. Identitas Pemohon / Calon Pengguna</div>
-                
-                <div class="form-grid">
-                    <div class="form-group full-width">
-                        <label for="nama" class="form-label">Nama Lengkap Pemohon <span class="required">*</span></label>
-                        <input type="text" id="nama" name="nama" class="form-control" placeholder="Tulis nama lengkap sesuai KTP" value="{{ old('nama') }}" required>
-                        @error('nama') <span class="error-msg">{{ $message }}</span> @enderror
+            <!-- SECTION 1 -->
+            <div class="ptp-section-title">1. IDENTITAS PEMOHON / PENGGUNA LAYANAN</div>
+            
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label class="form-label">Nama Lengkap Pemohon<span class="required">*</span></label>
+                    <input type="text" name="nama" class="form-control" placeholder="Tulis nama lengkap sesuai KTP" value="{{ old('nama') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nomor Induk Kependudukan (NIK)<span class="required">*</span></label>
+                    <input type="text" name="nik" class="form-control" placeholder="16 Digit NIK KTP" minlength="16" maxlength="16" value="{{ old('nik') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nomor Induk Berusaha (NIB)<span class="optional">(Opsional)</span></label>
+                    <input type="text" name="nib" class="form-control" placeholder="13 Digit NIB (Kosongkan jika tidak ada)" value="{{ old('nib') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nomor WhatsApp Aktif<span class="required">*</span></label>
+                    <input type="text" name="phone_number" class="form-control" placeholder="Contoh: 0812XXXXXXXX" value="{{ old('phone_number') }}" required>
+                </div>
+
+                <div class="form-group full">
+                    <label class="form-label">Alamat Pemohon Lengkap<span class="required">*</span></label>
+                    <textarea name="alamat" class="form-control" placeholder="Tulis alamat rumah lengkap sesuai KTP" required>{{ old('alamat') }}</textarea>
+                </div>
+            </div>
+
+            <div class="ptp-divider"></div>
+
+            <!-- SECTION 2 -->
+            <div class="ptp-section-title">2. KETERANGAN KUASA & ANGGARAN DASAR</div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Hubungan Pengaju (Bertindak Sebagai)<span class="required">*</span></label>
+                    <select id="bertindak_atas_nama" name="bertindak_atas_nama" class="form-control" required placeholder="Pilih Hubungan Pengaju">
+                        <option value=""></option>
+                        <option value="Diri Sendiri" {{ old('bertindak_atas_nama') === 'Diri Sendiri' ? 'selected' : '' }}>Diri Sendiri / Pemilik Usaha</option>
+                        <option value="Penerima Kuasa" {{ old('bertindak_atas_nama') === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
+                        <option value="PT / Badan Usaha" {{ old('bertindak_atas_nama') === 'PT / Badan Usaha' ? 'selected' : '' }}>PT / Badan Usaha</option>
+                        <option value="Instansi Pemerintah" {{ old('bertindak_atas_nama') === 'Instansi Pemerintah' ? 'selected' : '' }}>Instansi Pemerintah</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nomor Anggaran Dasar Perusahaan<span class="optional">(Opsional)</span></label>
+                    <input type="text" name="anggaran_dasar_no" class="form-control" placeholder="Nomor AD/ART (Khusus PT/CV)" value="{{ old('anggaran_dasar_no') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tanggal Anggaran Dasar<span class="optional">(Opsional)</span></label>
+                    <input type="date" id="anggaran_dasar_tanggal" name="anggaran_dasar_tanggal" class="form-control bg-white" placeholder="Pilih Tanggal" value="{{ old('anggaran_dasar_tanggal') }}">
+                </div>
+            </div>
+
+            <div class="ptp-divider"></div>
+
+            <!-- SECTION 3 -->
+            <div class="ptp-section-title">3. DETAIL TANAH YANG DIMOHON</div>
+
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label class="form-label">Rencana Penggunaan & Pemanfaatan Tanah<span class="required">*</span></label>
+                    <input type="text" name="rencana_kegiatan" class="form-control" placeholder="Contoh: Pembangunan Perumahan, Ruko, Pabrik, dll" value="{{ old('rencana_kegiatan') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Kode & Nama KBLI<span class="required" id="kbli-required" style="display: none;">*</span></label>
+                    <div class="kbli-wrapper">
+                        <input type="text" id="kbli" name="kbli" class="form-control" placeholder="Ketik kode KBLI atau nama kegiatan..." value="{{ old('kbli') }}" autocomplete="off">
+                        <div class="kbli-dropdown" id="kbliDropdown"></div>
                     </div>
+                    <div id="kbliSelectedInfo" style="display:none;"></div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="nik" class="form-label">Nomor Induk Kependudukan (NIK) <span class="required">*</span></label>
-                        <input type="text" id="nik" name="nik" class="form-control" placeholder="16 Digit NIK KTP" minlength="16" maxlength="16" value="{{ old('nik') }}" required>
-                        @error('nik') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Luas Tanah yang Dimohon (m²)<span class="required">*</span></label>
+                    <input type="number" name="luas_tanah" class="form-control" placeholder="Luas dalam meter persegi" value="{{ old('luas_tanah') }}" required>
+                </div>
 
-                    <div class="form-group">
-                        <label for="nib" class="form-label">Nomor Induk Berusaha (NIB) <span style="font-weight: normal; color: var(--muted);">(Opsional - Jika Tersedia)</span></label>
-                        <input type="text" id="nib" name="nib" class="form-control" placeholder="13 Digit NIB (Kosongkan jika tidak tersedia)" value="{{ old('nib') }}">
-                        @error('nib') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone_number" class="form-label">Nomor WhatsApp Aktif <span class="required">*</span></label>
-                        <input type="text" id="phone_number" name="phone_number" class="form-control" placeholder="Contoh: 0812XXXXXXXX" value="{{ old('phone_number') }}" required>
-                        <span style="font-size: 11px; color: var(--muted);">Digunakan untuk menerima Blast WhatsApp Kredensial Login & Status.</span>
-                        @error('phone_number') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="alamat" class="form-label">Alamat Pemohon Lengkap <span class="required">*</span></label>
-                        <textarea id="alamat" name="alamat" class="form-control" placeholder="Tulis alamat rumah lengkap sesuai KTP" required>{{ old('alamat') }}</textarea>
-                        @error('alamat') <span class="error-msg">{{ $message }}</span> @enderror
+                <div class="form-group full">
+                    <label class="form-label">Letak Tanah yang Dimohon<span class="required">*</span></label>
+                    <div class="nested-grid">
+                        <input type="text" name="letak_tanah_jalan" class="form-control" placeholder="Jalan, Nomor, RT / RW" value="{{ old('letak_tanah_jalan') }}" required>
+                        <input type="text" name="letak_tanah_kelurahan" class="form-control" placeholder="Kelurahan" value="{{ old('letak_tanah_kelurahan') }}" required>
+                        <input type="text" name="letak_tanah_kecamatan" class="form-control" placeholder="Kecamatan" value="{{ old('letak_tanah_kecamatan') }}" required>
                     </div>
                 </div>
 
-                <!-- SECTION 2 -->
-                <div class="section-title">2. Keterangan Kuasa & Anggaran Dasar</div>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="bertindak_atas_nama" class="form-label">Bertindak Untuk dan Atas Nama <span class="required">*</span></label>
-                        <select id="bertindak_atas_nama" name="bertindak_atas_nama" class="form-control" required>
-                            <option value="Diri Sendiri" {{ old('bertindak_atas_nama') === 'Diri Sendiri' ? 'selected' : '' }}>Diri Sendiri</option>
-                            <option value="Penerima Kuasa" {{ old('bertindak_atas_nama') === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
-                            <option value="PT / Badan Usaha" {{ old('bertindak_atas_nama') === 'PT / Badan Usaha' ? 'selected' : '' }}>PT / Badan Usaha</option>
-                            <option value="Instansi Pemerintah" {{ old('bertindak_atas_nama') === 'Instansi Pemerintah' ? 'selected' : '' }}>Instansi Pemerintah</option>
-                        </select>
-                        @error('bertindak_atas_nama') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="anggaran_dasar_no" class="form-label">Anggaran Dasar Perusahaan (No)</label>
-                        <input type="text" id="anggaran_dasar_no" name="anggaran_dasar_no" class="form-control" placeholder="Nomor AD/ART (Khusus PT/CV)" value="{{ old('anggaran_dasar_no') }}">
-                        @error('anggaran_dasar_no') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="anggaran_dasar_tanggal" class="form-label">Tanggal Anggaran Dasar</label>
-                        <input type="date" id="anggaran_dasar_tanggal" name="anggaran_dasar_tanggal" class="form-control" value="{{ old('anggaran_dasar_tanggal') }}">
-                        @error('anggaran_dasar_tanggal') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Status Penguasaan Tanah<span class="required">*</span></label>
+                    <input type="text" name="status_penguasaan" class="form-control" placeholder="Contoh: Milik Sendiri, Sewa, Pinjam Pakai" value="{{ old('status_penguasaan') }}" required>
                 </div>
 
-                <!-- SECTION 3 -->
-                <div class="section-title">3. Detail Tanah yang Dimohon</div>
-
-                <div class="form-grid">
-                    <div class="form-group full-width">
-                        <label for="rencana_kegiatan" class="form-label">Rencana Kegiatan / Penggunaan & Pemanfaatan Tanah <span class="required">*</span></label>
-                        <input type="text" id="rencana_kegiatan" name="rencana_kegiatan" class="form-control" placeholder="Contoh: Pembangunan Perumahan, Ruko, dll" value="{{ old('rencana_kegiatan') }}" required>
-                        @error('rencana_kegiatan') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="kbli" class="form-label">Kode & Nama KBLI <span class="required" id="kbli-required" style="display: none; color: #DC2626;">*</span></label>
-                        <div class="kbli-wrapper">
-                            <input type="text" id="kbli" name="kbli" class="form-control" placeholder="Ketik kode KBLI (cth: 68100) atau nama kegiatan..." value="{{ old('kbli') }}" autocomplete="off">
-                            <div class="kbli-dropdown" id="kbliDropdown"></div>
-                        </div>
-                        <div id="kbliSelectedInfo" style="display:none;"></div>
-                        @error('kbli') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="luas_tanah" class="form-label">Luas Tanah yang Dimohon (m²) <span class="required">*</span></label>
-                        <input type="number" id="luas_tanah" name="luas_tanah" class="form-control" placeholder="Luas tanah dalam satuan meter persegi" value="{{ old('luas_tanah') }}" required>
-                        @error('luas_tanah') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label class="form-label">Letak Tanah yang Dimohon <span class="required">*</span></label>
-                        <div class="nested-grid">
-                            <input type="text" name="letak_tanah_jalan" class="form-control" placeholder="Jalan, Nomor, RT / RW" value="{{ old('letak_tanah_jalan') }}" required>
-                            <input type="text" name="letak_tanah_kelurahan" class="form-control" placeholder="Kelurahan" value="{{ old('letak_tanah_kelurahan') }}" required>
-                            <input type="text" name="letak_tanah_kecamatan" class="form-control" placeholder="Kecamatan" value="{{ old('letak_tanah_kecamatan') }}" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status_penguasaan" class="form-label">Status Penguasaan / Penguasaan Tanah <span class="required">*</span></label>
-                        <input type="text" id="status_penguasaan" name="status_penguasaan" class="form-control" placeholder="Contoh: Milik Sendiri, Sewa, Pinjam Pakai" value="{{ old('status_penguasaan') }}" required>
-                        @error('status_penguasaan') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div class="form-group">
-                        <label for="penggunaan_saat_ini" class="form-label">Penggunaan Tanah Saat Ini <span class="required">*</span></label>
-                        <input type="text" id="penggunaan_saat_ini" name="penggunaan_saat_ini" class="form-control" placeholder="Contoh: Tanah Kosong, Sawah, Kebun" value="{{ old('penggunaan_saat_ini') }}" required>
-                        @error('penggunaan_saat_ini') <span class="error-msg">{{ $message }}</span> @enderror
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Penggunaan Tanah Saat Ini<span class="required">*</span></label>
+                    <input type="text" name="penggunaan_saat_ini" class="form-control" placeholder="Contoh: Tanah Kosong, Sawah, Kebun" value="{{ old('penggunaan_saat_ini') }}" required>
                 </div>
+            </div>
 
+            <!-- ACTIONS -->
+            <div class="btn-submit-wrap">
+                <button type="button" class="btn-batal" onclick="window.history.back()">Batal</button>
                 <button type="submit" class="btn-submit">
-                    Simpan & Lanjutkan Unggah Dokumen
-                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    Simpan & Lanjutkan
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
+            </div>
 
-            </form>
-        </div>
+        </form>
     </div>
+</div>
 
-    <div class="footer">
-        &copy; 2026 PATEN PAK MIKO · Kantor Pertanahan Kota Sukabumi. All Rights Reserved.
-    </div>
+<!-- Scripts -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+    // Initialize Tom Select
+    new TomSelect('#bertindak_atas_nama', {
+        create: false,
+        sortField: {
+            field: "text",
+            direction: "asc"
+        },
+        placeholder: "Pilih Hubungan Pengaju...",
+        allowEmptyOption: true,
+        plugins: ['dropdown_input']
+    });
+    flatpickr('#anggaran_dasar_tanggal', {
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "d F Y",
+        locale: "id",
+        allowInput: true
+    });
 
-    <script>
-        // Enforce DD-MM-YYYY via Flatpickr
-        flatpickr('#anggaran_dasar_tanggal', {
-            dateFormat: "Y-m-d",
-            altInput: true,
-            altFormat: "d-m-Y",
-            locale: "id",
-            allowInput: true
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        const kbliInput = document.getElementById('kbli');
+        const kbliRequired = document.getElementById('kbli-required');
+        const jenisPermohonan = document.getElementById('jenis_permohonan').value;
+        const dropdown = document.getElementById('kbliDropdown');
+        const infoBox = document.getElementById('kbliSelectedInfo');
+        let debounceTimer;
 
-        // KBLI AUTOCOMPLETE
-        document.addEventListener("DOMContentLoaded", function() {
-            const kbliInput = document.getElementById('kbli');
-            const kbliRequired = document.getElementById('kbli-required');
-            const jenisPermohonan = document.getElementById('jenis_permohonan').value;
-            const dropdown = document.getElementById('kbliDropdown');
-            const infoBox = document.getElementById('kbliSelectedInfo');
-            let debounceTimer;
+        if (jenisPermohonan === 'berusaha') {
+            kbliInput.required = true;
+            if (kbliRequired) kbliRequired.style.display = 'inline';
+        }
 
-            // Toggle required status based on jenis_permohonan
-            if (jenisPermohonan === 'berusaha') {
-                kbliInput.required = true;
-                if (kbliRequired) kbliRequired.style.display = 'inline';
+        if (kbliInput.value) {
+            const val = kbliInput.value.trim();
+            const codeMatch = val.match(/^(\d{4,5})/);
+            if (codeMatch) {
+                const code = codeMatch[1];
+                const titleMatch = val.match(/-\s*(.+)/);
+                const title = titleMatch ? titleMatch[1] : '';
+                infoBox.style.display = 'block';
+                infoBox.innerHTML = `<span class="kbli-desc">✅ <strong>${code}</strong> — ${title}</span>`;
+            }
+        }
+
+        kbliInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const q = this.value.trim();
+            infoBox.style.display = 'none';
+
+            if (q.length < 2) {
+                dropdown.classList.remove('show');
+                return;
             }
 
-            // Validasi nilai KBLI awal jika ada (old value)
-            if (kbliInput.value) {
-                // Ekstrak kode KBLI dari format "KODE - NAMA" jika diperlukan
-                const val = kbliInput.value.trim();
-                const codeMatch = val.match(/^(\d{4,5})/);
-                if (codeMatch) {
-                    const code = codeMatch[1];
-                    const titleMatch = val.match(/-\s*(.+)/);
-                    const title = titleMatch ? titleMatch[1] : '';
-                    infoBox.style.display = 'block';
-                    infoBox.innerHTML = `<span class="kbli-desc"><span class="kbli-desc-icon">✅</span> <strong>${code}</strong> — ${title}</span>`;
-                }
-            }
-
-            kbliInput.addEventListener('input', function() {
-                clearTimeout(debounceTimer);
-                const q = this.value.trim();
-                infoBox.style.display = 'none'; // Sembunyikan info saat mengetik
-
-                if (q.length < 2) {
-                    dropdown.classList.remove('show');
-                    return;
-                }
-
-                debounceTimer = setTimeout(() => {
-                    fetch(`/api/kbli/search?q=${encodeURIComponent(q)}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            dropdown.innerHTML = '';
-                            if (data.length === 0) {
-                                dropdown.innerHTML = '<div style="padding:10px 16px; color:var(--muted); font-size:13px;">KBLI tidak ditemukan.</div>';
-                                dropdown.classList.add('show');
-                                return;
-                            }
-
-                            data.forEach(item => {
-                                const div = document.createElement('div');
-                                div.className = 'kbli-item';
-                                div.innerHTML = `<strong>${item.code}</strong> — ${item.title}`;
-                                div.addEventListener('click', () => {
-                                    // Set format input PTP "KODE - NAMA"
-                                    kbliInput.value = `${item.code} - ${item.title}`;
-                                    dropdown.classList.remove('show');
-                                    
-                                    infoBox.style.display = 'block';
-                                    infoBox.innerHTML = `<span class="kbli-desc"><span class="kbli-desc-icon">✅</span> <strong>${item.code}</strong> — ${item.title}</span>`;
-                                });
-                                dropdown.appendChild(div);
-                            });
+            debounceTimer = setTimeout(() => {
+                fetch(`/api/kbli/search?q=${encodeURIComponent(q)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        dropdown.innerHTML = '';
+                        if (data.length === 0) {
+                            dropdown.innerHTML = '<div style="padding:12px 16px; color:#7A9BB5; font-size:13.5px;">KBLI tidak ditemukan.</div>';
                             dropdown.classList.add('show');
-                        })
-                        .catch(err => {
-                            console.error('KBLI Fetch Error:', err);
-                            dropdown.classList.remove('show');
+                            return;
+                        }
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'kbli-item';
+                            div.innerHTML = `<strong>${item.code}</strong> — ${item.title}`;
+                            div.addEventListener('click', () => {
+                                kbliInput.value = `${item.code} - ${item.title}`;
+                                dropdown.classList.remove('show');
+                                infoBox.style.display = 'block';
+                                infoBox.innerHTML = `<span class="kbli-desc">✅ <strong>${item.code}</strong> — ${item.title}</span>`;
+                            });
+                            dropdown.appendChild(div);
                         });
-                }, 300);
-            });
-
-            // Close dropdown if clicked outside
-            document.addEventListener('click', function(e) {
-                if (!kbliInput.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.remove('show');
-                }
-            });
+                        dropdown.classList.add('show');
+                    })
+                    .catch(err => {
+                        console.error('KBLI Fetch Error:', err);
+                        dropdown.classList.remove('show');
+                    });
+            }, 300);
         });
-    </script>
-</body>
-</html>
+
+        document.addEventListener('click', function(e) {
+            if (!kbliInput.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    });
+</script>
+@endsection
+ 

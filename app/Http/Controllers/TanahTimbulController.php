@@ -172,10 +172,23 @@ class TanahTimbulController extends Controller
         ], $ptp);
 
 
-        // Gunakan Barryvdh\DomPDF\Facade\Pdf
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
-        
-        return $pdf->stream('Formulir_PTP_' . $application->application_number . '.pdf');
+        // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
+        $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+        if (!file_exists($templatePath)) {
+            return back()->with('error', 'Template dokumen tidak ditemukan.');
+        }
+
+        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+        foreach ($ptp as $key => $value) {
+            $templateProcessor->setValue($key, $value);
+        }
+
+        $fileName = 'Formulir_PTP_' . $application->application_number . '.docx';
+        $tempFile = tempnam(sys_get_temp_dir(), 'PTP');
+        $templateProcessor->saveAs($tempFile);
+
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
     }
 
     /**
