@@ -56,13 +56,13 @@ class LapolpaController extends Controller
         $request->validate([
             'nama_pemohon' => $user ? 'nullable' : 'required|string|max:100',
             'whatsapp_number' => 'required|string|max:20',
-            'booking_date' => 'required|date|after_or_equal:today',
+            'booking_date' => 'required|date|after:today',
             'time_range' => 'required',
         ], [
             'nama_pemohon.required' => 'Nama pengaju wajib diisi.',
             'whatsapp_number.required' => 'Nomor WhatsApp wajib diisi.',
             'booking_date.required' => 'Tanggal booking wajib dipilih.',
-            'booking_date.after_or_equal' => 'Tanggal booking tidak boleh hari kemarin.',
+            'booking_date.after' => 'Pengajuan jadwal konsultasi wajib H-1 dari jadwal yang ditentukan.',
             'time_range.required' => 'Rentang waktu wajib dipilih.',
         ]);
 
@@ -70,6 +70,14 @@ class LapolpaController extends Controller
         $timeStart = trim($times[0]);
         $timeEnd = trim($times[1] ?? '15:00');
  
+        // Cek Kuota Maksimal 6 Pengajuan / Hari
+        $bookingDate = Carbon::parse($request->input('booking_date'))->format('Y-m-d');
+        $dailyCount = LapolpaBooking::whereDate('booking_date', $bookingDate)->count();
+
+        if ($dailyCount >= 6) {
+            return redirect()->back()->withInput()->withErrors(['booking_date' => 'Mohon maaf, kuota pengajuan untuk tanggal tersebut sudah penuh (Maksimal 6 pengajuan/hari). Silakan pilih tanggal lain.']);
+        }
+
         // Simpan data booking
         $booking = LapolpaBooking::create([
             'user_id' => $user ? $user->id : null,
@@ -84,9 +92,17 @@ class LapolpaController extends Controller
         // Kirim Notifikasi WhatsApp Fonnte ke Pemohon & Admin DPN
         $this->sendLapolpaNotifications($booking);
  
-        return redirect()->route('lapolpa.index')->with('success', 'Pengajuan Anda berhasil diajukan, selanjutnya tinggal menunggu konfirmasi dari admin terkait detail waktu konsultasi atau pembuatan polygon.');
+        return redirect()->route('lapolpa.success');
     }
  
+    /**
+     * Tampilkan halaman sukses setelah booking.
+     */
+    public function success()
+    {
+        return view('lapolpa.success');
+    }
+
     /**
      * Memperbarui status booking oleh admin (Selesai/Batal).
      */

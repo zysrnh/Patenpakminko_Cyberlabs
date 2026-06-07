@@ -85,6 +85,7 @@ Route::get('/informal', [InformalController::class, 'index'])->name('informal.in
 // Rute LAPOLPAK (Bisa Tanpa Login & Dengan Login)
 Route::get('/lapolpak', [LapolpaController::class, 'index'])->name('lapolpa.index');
 Route::post('/lapolpak', [LapolpaController::class, 'store'])->name('lapolpa.store');
+Route::get('/lapolpak/success', [LapolpaController::class, 'success'])->name('lapolpa.success');
 Route::put('/lapolpak/{id}', [LapolpaController::class, 'updateStatus'])->name('lapolpa.update');
 Route::post('/informal/rating', [InformalController::class, 'storeRating'])->name('informal.rating.store');
 
