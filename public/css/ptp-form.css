@@ -19,27 +19,18 @@ body { background-color: #F0F6FB; }
 .ptp-header-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 50px;
-}
-
-.ptp-layanan-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #7A9BB5;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 14px;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
 .ptp-badge {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 24px;
-    background: #F0F6FB;
-    border: 1.5px solid #D6EAF5;
-    border-radius: 12px;
-    padding: 20px 28px;
+    gap: 8px;
+    background: #EAF3FA;
+    border-radius: 6px;
+    padding: 10px 16px;
+    color: #3291A8;
 }
 
 .ptp-logo-circle {
@@ -78,18 +69,15 @@ body { background-color: #F0F6FB; }
 }
 
 .ptp-badge-name {
-    font-size: 21px;
-    font-weight: 800;
-    color: #1E1E2F;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .btn-kembali {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 12px 24px;
+    padding: 10px 20px;
     background: #00223D;
     color: #FFFFFF;
     text-decoration: none;
@@ -98,7 +86,6 @@ body { background-color: #F0F6FB; }
     font-weight: 600;
     transition: background .2s;
     white-space: nowrap;
-    margin-top: 4px;
 }
 .btn-kembali:hover { background: #001526; color: #fff; }
 

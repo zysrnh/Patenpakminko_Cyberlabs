@@ -634,7 +634,7 @@
 <div class="help-banner-wrapper">
     <div class="help-banner">
         <div class="help-banner-img">
-            <img src="{{ asset('storage/svg/tandatanya.svg') }}" alt="Butuh Bantuan?">
+            <img src="{{ asset('storage/svg/tandatanya.svg') }}" alt="Ilustrasi Bantuan">
         </div>
         <div class="help-banner-content">
             <h2>Butuh <span>Bantuan</span><br>Pengajuan Dokumen?</h2>
