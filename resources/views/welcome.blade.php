@@ -629,8 +629,8 @@
             margin-bottom: 40px;
         }
         .art-featured {
-            position: relative; border-radius: 0; overflow: hidden;
-            min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end;
+            position: relative; border-radius: 5px; overflow: hidden;
+            min-height: 460px; display: flex; flex-direction: column; justify-content: flex-end;
             padding: 32px; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.08);
             background-size: cover; background-position: center;
         }
@@ -647,11 +647,12 @@
         .art-featured-title { font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 8px; }
         .art-featured-date { font-size: 11px; opacity: 0.8; }
         
-        .art-latest { display: flex; flex-direction: column; gap: 20px; }
-        .art-latest-title { font-size: 16px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+        .art-latest { display: flex; flex-direction: column; height: 100%; }
+        .art-latest-title { font-size: 16px; font-weight: 800; color: var(--ink); margin-bottom: 24px; }
         .art-latest-title span { color: var(--blue-dk); font-weight: 800; }
+        .art-latest-list { display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
         .art-list-item { display: flex; gap: 16px; align-items: center; }
-        .art-list-img { width: 90px; height: 90px; border-radius: 0; object-fit: cover; flex-shrink: 0; }
+        .art-list-img { width: 90px; height: 90px; border-radius: 5px; object-fit: cover; flex-shrink: 0; }
         .art-list-info { display: flex; flex-direction: column; gap: 4px; }
         .art-list-title { font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.4; }
         .art-list-date { font-size: 10px; color: var(--muted); }
@@ -663,12 +664,12 @@
         }
         .art-carousel::-webkit-scrollbar { display: none; }
         .art-card {
-            background: #fff; border-radius: 0; overflow: hidden;
+            background: #fff; border-radius: 5px; overflow: hidden;
             flex: 0 0 calc(33.333% - 14px); scroll-snap-align: start;
             box-shadow: 0 4px 12px rgba(0,0,0,.05);
             display: flex; flex-direction: column;
         }
-        .art-card-img { width: 100%; height: 180px; object-fit: cover; }
+        .art-card-img { width: 100%; height: 240px; object-fit: cover; }
         .art-card-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
         .art-card-meta { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 8px; }
         .art-card-title { font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1.4; margin-bottom: 6px; }
@@ -676,9 +677,9 @@
         .art-card-desc { font-size: 12px; color: var(--mid); line-height: 1.6; margin-bottom: 20px; flex: 1; }
         .art-card-link { font-size: 11px; font-weight: 700; color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 4px; }
         
-        .art-dots { display: flex; justify-content: center; gap: 8px; margin-top: 10px; margin-bottom: 30px; }
-        .art-dot { width: 8px; height: 8px; border-radius: 50%; background: #D9D9D9; cursor: pointer; transition: all .3s; }
-        .art-dot.active { background: #113454; }
+        .art-dots { display: flex; justify-content: center; gap: 10px; margin-top: 10px; margin-bottom: 30px; }
+        .art-dot { width: 10px; height: 10px; border-radius: 50%; background: #000; cursor: pointer; transition: all .3s; }
+        .art-dot.active { background: #F5A623; }
         .art-btn-more-wrap { text-align: center; }
         .art-btn-more {
             display: inline-flex; align-items: center; gap: 8px;
@@ -1193,27 +1194,29 @@
             <div class="art-latest">
                 <h3 class="art-latest-title">Latest <span>Post</span></h3>
                 
-                <div class="art-list-item">
-                    <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+1" alt="Panduan" class="art-list-img">
-                    <div class="art-list-info">
-                        <h4 class="art-list-title">Panduan Lengkap Upload Persyaratan Dokumen</h4>
-                        <span class="art-list-date">Senin, 27 April 2026</span>
+                <div class="art-latest-list">
+                    <div class="art-list-item">
+                        <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+1" alt="Panduan" class="art-list-img">
+                        <div class="art-list-info">
+                            <h4 class="art-list-title">Panduan Lengkap Upload Persyaratan Dokumen</h4>
+                            <span class="art-list-date">Senin, 27 April 2026</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="art-list-item">
-                    <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+2" alt="Verifikasi" class="art-list-img">
-                    <div class="art-list-info">
-                        <h4 class="art-list-title">Tahapan Verifikasi Berkas pada PATEN PAK MIKO</h4>
-                        <span class="art-list-date">Senin, 27 April 2026</span>
+                    <div class="art-list-item">
+                        <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+2" alt="Verifikasi" class="art-list-img">
+                        <div class="art-list-info">
+                            <h4 class="art-list-title">Tahapan Verifikasi Berkas pada PATEN PAK MIKO</h4>
+                            <span class="art-list-date">Senin, 27 April 2026</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="art-list-item">
-                    <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+3" alt="Tips" class="art-list-img">
-                    <div class="art-list-info">
-                        <h4 class="art-list-title">Tips Menyiapkan Dokumen Pertanahan dengan Benar</h4>
-                        <span class="art-list-date">Senin, 27 April 2026</span>
+                    <div class="art-list-item">
+                        <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+3" alt="Tips" class="art-list-img">
+                        <div class="art-list-info">
+                            <h4 class="art-list-title">Tips Menyiapkan Dokumen Pertanahan dengan Benar</h4>
+                            <span class="art-list-date">Senin, 27 April 2026</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1240,7 +1243,7 @@
 
             <!-- Dots -->
             <div class="art-dots" id="artDots">
-                @for ($i = 1; $i <= 9; $i++)
+                @for ($i = 1; $i <= 3; $i++)
                     <div class="art-dot {{ $i == 1 ? 'active' : '' }}"></div>
                 @endfor
             </div>
@@ -1287,11 +1290,12 @@
             // Update dots on scroll
             artSlider.addEventListener('scroll', () => {
                 const cardWidth = artSlider.querySelector('.art-card').offsetWidth + 20;
-                let index = Math.round(artSlider.scrollLeft / cardWidth);
-                if (index >= artDots.length) index = artDots.length - 1;
+                let cardIndex = Math.round(artSlider.scrollLeft / cardWidth);
+                let dotIndex = Math.floor(cardIndex / 3); // 3 cards per dot
+                if (dotIndex >= artDots.length) dotIndex = artDots.length - 1;
                 
                 artDots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index);
+                    dot.classList.toggle('active', i === dotIndex);
                 });
             });
 
@@ -1299,7 +1303,7 @@
             artDots.forEach((dot, i) => {
                 dot.addEventListener('click', () => {
                     const cardWidth = artSlider.querySelector('.art-card').offsetWidth + 20;
-                    artSlider.scrollTo({ left: i * cardWidth, behavior: 'smooth' });
+                    artSlider.scrollTo({ left: i * 3 * cardWidth, behavior: 'smooth' });
                 });
             });
         }
