@@ -174,9 +174,16 @@
     }
 
     /* Tom Select Custom Overrides */
+    .ts-wrapper.form-control {
+        padding: 0 !important;
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        height: auto !important;
+    }
     .ts-wrapper { width: 100%; }
     .ts-control {
-        padding: 16px 20px;
+        padding: 14px 20px;
         background: #F4F7FA;
         border: 1px solid #E2E8F0;
         border-radius: 6px;
@@ -187,6 +194,7 @@
         min-height: 52px;
         display: flex;
         align-items: center;
+        position: relative;
     }
     .ts-control.focus { border-color: #3291A8; background: #FFF; box-shadow: none; }
     .ts-control input { font-size: 14px; }
@@ -215,11 +223,40 @@
         background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233291A8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
         background-size: contain;
         background-repeat: no-repeat;
+        position: absolute;
+        top: 50%;
         right: 16px;
-        margin-top: -9px;
+        transform: translateY(-50%);
+        margin-top: 0;
+        transition: transform 0.2s;
     }
     .ts-wrapper.single.dropdown-active .ts-control:after {
-        transform: rotate(180deg);
+        transform: translateY(-50%) rotate(180deg);
+    }
+    
+    .ts-dropdown .dropdown-input-wrap {
+        padding: 10px 12px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+    .ts-dropdown .dropdown-input {
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 6px;
+        padding: 10px 14px;
+        font-size: 14px;
+        outline: none !important;
+        box-shadow: none !important;
+        width: 100%;
+        font-family: inherit;
+        background: #F4F7FA;
+        color: #0A1C2C;
+        transition: border 0.2s, background 0.2s;
+    }
+    .ts-dropdown .dropdown-input:focus {
+        border-color: #3291A8 !important;
+        background: #FFF;
+    }
+    .ts-dropdown .dropdown-input::placeholder {
+        color: #94A3B8;
     }
 
     .nested-grid {
@@ -245,11 +282,7 @@
     .kbli-item:last-child { margin-bottom: 0; }
     .kbli-item:hover, .kbli-item.active { background: #F0F6FB; color: #0A1C2C; }
     .kbli-item strong { color: #3291A8; margin-right: 6px; }
-    .kbli-desc {
-        display: inline-flex; align-items: center; background: #E6F4EA;
-        padding: 8px 14px; border-radius: 6px;
-        font-size: 12.5px; color: #137333; margin-top: 8px; font-weight: 600;
-    }
+    .kbli-item strong { color: #3291A8; margin-right: 6px; }
 
     .btn-submit-wrap {
         display: flex;
@@ -299,10 +332,11 @@
     .alert-info { background: #FFF8D6; border-left: 4px solid #FFCB05; color: #D37324; font-weight: 600; }
 
     @media (max-width: 992px) {
-        .form-grid { grid-template-columns: 1fr; }
+        .form-grid { grid-template-columns: 1fr; gap: 20px; }
         .form-group.full { grid-column: span 1; }
-        .nested-grid { grid-template-columns: 1fr; }
-        .ptp-container { padding: 30px 24px; }
+        .nested-grid { grid-template-columns: 1fr; gap: 16px; }
+        .ptp-container { padding: 30px 20px; }
+        .ptp-header { flex-direction: column; gap: 20px; align-items: flex-start; }
         .ptp-badge-name { font-size: 17px; }
     }
 
@@ -370,7 +404,6 @@
                         <img src="{{ asset('storage/logo/' . $layananLogo) }}" alt="Logo {{ $layananActive }}">
                     </div>
                     <div class="ptp-badge-text">
-                        <span class="ptp-badge-tag">PTP / PKKPR</span>
                         <span class="ptp-badge-name">{{ $layananName }}</span>
                     </div>
                 </div>
@@ -449,7 +482,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Nomor Anggaran Dasar Perusahaan<span class="optional">(Opsional)</span></label>
-                    <input type="text" name="anggaran_dasar_no" class="form-control" placeholder="Nomor AD/ART (Khusus PT/CV)" value="{{ old('anggaran_dasar_no') }}">
+                    <input type="text" id="anggaran_dasar_no" name="anggaran_dasar_no" class="form-control" placeholder="Nomor AD/ART (Khusus PT/CV)" value="{{ old('anggaran_dasar_no') }}">
                 </div>
 
                 <div class="form-group">
@@ -475,7 +508,7 @@
                         <input type="text" id="kbli" name="kbli" class="form-control" placeholder="Ketik kode KBLI atau nama kegiatan..." value="{{ old('kbli') }}" autocomplete="off">
                         <div class="kbli-dropdown" id="kbliDropdown"></div>
                     </div>
-                    <div id="kbliSelectedInfo" style="display:none;"></div>
+                    <div id="kbliSelectedInfo" style="display:none; margin-top: 10px;"></div>
                 </div>
 
                 <div class="form-group">
@@ -516,6 +549,104 @@
     </div>
 </div>
 
+<style>
+    .help-banner-wrapper {
+        background: #EAF3FA;
+        padding: 60px 20px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .help-banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1140px;
+        gap: 60px;
+    }
+    .help-banner-img {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .help-banner-img img {
+        width: 100%;
+        max-width: 480px;
+        height: auto;
+    }
+    .help-banner-content {
+        flex: 1;
+    }
+    .help-banner-content h2 {
+        font-size: 38px;
+        font-weight: 800;
+        color: #0A1C2C;
+        margin-bottom: 16px;
+        line-height: 1.2;
+    }
+    .help-banner-content h2 span {
+        color: #F59E0B;
+    }
+    .help-banner-content p {
+        font-size: 16px;
+        color: #0A1C2C;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        font-weight: 500;
+        max-width: 80%;
+    }
+    .btn-hubungi {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #00223D;
+        color: #FFFFFF;
+        padding: 14px 28px;
+        border-radius: 6px;
+        font-weight: 700;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background .2s;
+    }
+    .btn-hubungi:hover { background: #001526; color: #fff; }
+    @media (max-width: 992px) {
+        .help-banner {
+            flex-direction: column;
+            text-align: center;
+            gap: 40px;
+        }
+        .help-banner-img {
+            justify-content: center;
+        }
+        .help-banner-img img { max-width: 320px; }
+        .help-banner-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .help-banner-content p { max-width: 100%; }
+        .help-banner-content h2 { font-size: 32px; }
+    }
+</style>
+
+<div class="help-banner-wrapper">
+    <div class="help-banner">
+        <div class="help-banner-img">
+            <img src="{{ asset('storage/svg/tandatanya.svg') }}" alt="Butuh Bantuan?">
+        </div>
+        <div class="help-banner-content">
+            <h2>Butuh <span>Bantuan</span><br>Pengajuan Dokumen?</h2>
+            <p>Tim PATEN PAK MIKO siap membantu proses pelayanan pertanahan Anda.</p>
+            <a href="https://wa.me/6281200000000" target="_blank" class="btn-hubungi">
+                Hubungi Admin 
+                <svg width="18" height="18" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </a>
+        </div>
+    </div>
+</div>
+
 <!-- Scripts -->
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
@@ -523,16 +654,31 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
 <script>
     // Initialize Tom Select
-    new TomSelect('#bertindak_atas_nama', {
+    let tsBertindak = new TomSelect('#bertindak_atas_nama', {
         create: false,
-        sortField: {
-            field: "text",
-            direction: "asc"
-        },
         placeholder: "Pilih Hubungan Pengaju...",
         allowEmptyOption: true,
-        plugins: ['dropdown_input']
+        plugins: ['dropdown_input'],
+        onChange: function(value) {
+            // Optional: Interactivity based on selection
+            // Example: show/hide Anggaran Dasar if PT / Badan Usaha
+            const ptGroup1 = document.getElementById('anggaran_dasar_no').closest('.form-group');
+            const ptGroup2 = document.getElementById('anggaran_dasar_tanggal').closest('.form-group');
+            
+            if (value === 'PT / Badan Usaha') {
+                ptGroup1.style.display = 'flex';
+                ptGroup2.style.display = 'flex';
+            } else {
+                ptGroup1.style.display = 'none';
+                ptGroup2.style.display = 'none';
+                document.getElementById('anggaran_dasar_no').value = '';
+                document.getElementById('anggaran_dasar_tanggal').value = '';
+            }
+        }
     });
+
+    // Trigger initial state
+    tsBertindak.trigger('change', tsBertindak.getValue());
     flatpickr('#anggaran_dasar_tanggal', {
         dateFormat: "Y-m-d",
         altInput: true,
@@ -554,6 +700,7 @@
             if (kbliRequired) kbliRequired.style.display = 'inline';
         }
 
+        // Initialize view if old data exists
         if (kbliInput.value) {
             const val = kbliInput.value.trim();
             const codeMatch = val.match(/^(\d{4,5})/);
@@ -562,7 +709,15 @@
                 const titleMatch = val.match(/-\s*(.+)/);
                 const title = titleMatch ? titleMatch[1] : '';
                 infoBox.style.display = 'block';
-                infoBox.innerHTML = `<span class="kbli-desc">✅ <strong>${code}</strong> — ${title}</span>`;
+                infoBox.innerHTML = `
+                <div style="display: flex; align-items: flex-start; gap: 10px; background: #F0F6FB; border: 1px solid #D6E4EF; padding: 12px 16px; border-radius: 6px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#85C341" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    <div style="font-size: 13.5px; color: #0A1C2C; font-weight: 500;">
+                        <strong style="color: #3291A8;">${code}</strong> &mdash; ${title}
+                    </div>
+                </div>`;
             }
         }
 
@@ -589,12 +744,21 @@
                         data.forEach(item => {
                             const div = document.createElement('div');
                             div.className = 'kbli-item';
-                            div.innerHTML = `<strong>${item.code}</strong> — ${item.title}`;
+                            div.innerHTML = `<strong>${item.code}</strong> &mdash; ${item.title}`;
                             div.addEventListener('click', () => {
                                 kbliInput.value = `${item.code} - ${item.title}`;
                                 dropdown.classList.remove('show');
+                                
                                 infoBox.style.display = 'block';
-                                infoBox.innerHTML = `<span class="kbli-desc">✅ <strong>${item.code}</strong> — ${item.title}</span>`;
+                                infoBox.innerHTML = `
+                                <div style="display: flex; align-items: flex-start; gap: 10px; background: #F0F6FB; border: 1px solid #D6E4EF; padding: 12px 16px; border-radius: 6px;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#85C341" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                                        <path d="M20 6L9 17l-5-5"/>
+                                    </svg>
+                                    <div style="font-size: 13.5px; color: #0A1C2C; font-weight: 500;">
+                                        <strong style="color: #3291A8;">${item.code}</strong> &mdash; ${item.title}
+                                    </div>
+                                </div>`;
                             });
                             dropdown.appendChild(div);
                         });

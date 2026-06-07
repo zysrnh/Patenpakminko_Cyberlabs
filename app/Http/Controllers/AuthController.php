@@ -424,22 +424,31 @@ class AuthController extends Controller
     /**
      * Tampilkan form PTP awal untuk tamu/calon pemohon.
      */
-    public function showPtpForm()
+    public function showPtpForm(Request $request)
     {
-        // Jika user sudah login sebagai pelaku_usaha dan sudah punya session PTP,
-        // langsung arahkan ke form pengajuan tanpa isi ulang PTP
+        $requestedLayanan = $request->query('layanan');
+
+        // Jika user sudah login sebagai pelaku_usaha dan sudah punya session PTP
         if (Auth::check() && Auth::user()->isPelakuUsaha() && session()->has('ptp_form_data')) {
             $ptp = session('ptp_form_data');
             $jenis = $ptp['jenis_permohonan'] ?? 'berusaha';
-            $routeMap = [
-                'berusaha'     => 'berusaha.create',
-                'non-berusaha' => 'non-berusaha.create',
-                'psn'          => 'psn.create',
-                'tanah-timbul' => 'kebijakan.create',
-                'kebijakan'    => 'kebijakan.create',
-            ];
-            return redirect()->route($routeMap[$jenis] ?? 'berusaha.create')
-                ->with('info', 'Data PTP Anda sudah tersimpan. Silakan lengkapi berkas persyaratan.');
+
+            // Jika user secara eksplisit meminta layanan baru yang berbeda dari session
+            if ($requestedLayanan && $requestedLayanan !== $jenis) {
+                // Hapus session lama agar user mengisi form PTP untuk layanan baru
+                session()->forget('ptp_form_data');
+            } else {
+                // Jika layanan sama atau tidak ada parameter, langsung arahkan ke form pengajuan tanpa isi ulang PTP
+                $routeMap = [
+                    'berusaha'     => 'berusaha.create',
+                    'non-berusaha' => 'non-berusaha.create',
+                    'psn'          => 'psn.create',
+                    'tanah-timbul' => 'kebijakan.create',
+                    'kebijakan'    => 'kebijakan.create',
+                ];
+                return redirect()->route($routeMap[$jenis] ?? 'berusaha.create')
+                    ->with('info', 'Data PTP Anda sudah tersimpan. Silakan lengkapi berkas persyaratan.');
+            }
         }
 
         return view('auth.ptp-create');
