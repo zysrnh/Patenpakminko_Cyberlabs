@@ -130,7 +130,7 @@ class KebijakanController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan Kebijakan Khusus baru berhasil diajukan.');
  
-        return redirect()->route('kebijakan.show', $app->application_number)->with('success', 'Permohonan Kebijakan Khusus Anda berhasil diajukan! Silakan pantau proses verifikasi.');
+        return redirect()->route('pengajuan.sukses');
     }
  
     /**

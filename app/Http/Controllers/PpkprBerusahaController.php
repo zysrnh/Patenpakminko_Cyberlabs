@@ -120,7 +120,7 @@ class PpkprBerusahaController extends Controller
         // Kirim Notifikasi Awal ke Pelaku Usaha
         $this->sendCustomWhatsappNotification($app, 'submit_berkas');
  
-        return redirect()->route('berusaha.show', $app->application_number)->with('success', 'Permohonan PPKPR Berusaha berhasil diajukan! Berkas Anda sedang diverifikasi oleh BPN.');
+        return redirect()->route('pengajuan.sukses');
     }
  
     /**

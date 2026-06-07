@@ -208,3 +208,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+// Rute untuk Halaman Sukses Upload
+Route::get('/pengajuan/sukses', function () {
+    return view('auth.pengajuan-sukses');
+})->name('pengajuan.sukses');

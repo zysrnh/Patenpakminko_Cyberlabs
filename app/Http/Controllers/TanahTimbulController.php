@@ -130,7 +130,7 @@ class TanahTimbulController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan tanah-timbul Khusus baru berhasil diajukan.');
  
-        return redirect()->route('tanah-timbul.show', $app->application_number)->with('success', 'Permohonan tanah-timbul Khusus Anda berhasil diajukan! Silakan pantau proses verifikasi.');
+        return redirect()->route('pengajuan.sukses');
     }
  
     /**

@@ -106,8 +106,7 @@ class PsnController extends Controller
         // WA Notifikasi ke pemohon
         $this->sendCustomWa($app, 'submit');
 
-        return redirect()->route('psn.show', $app->application_number)
-            ->with('success', 'Permohonan PSN Anda berhasil diajukan! Silakan pantau proses verifikasi.');
+        return redirect()->route('pengajuan.sukses');
     }
 
     // â”€â”€â”€ SHOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

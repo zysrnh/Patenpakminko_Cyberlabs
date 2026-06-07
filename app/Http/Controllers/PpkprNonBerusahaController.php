@@ -153,7 +153,7 @@ class PpkprNonBerusahaController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan baru berhasil diajukan oleh pemohon.');
 
-        return redirect()->route('non-berusaha.show', $app->application_number)->with('success', 'Permohonan PPKPR Non Berusaha Anda berhasil diajukan! Silakan pantau proses verifikasi.');
+        return redirect()->route('pengajuan.sukses');
     }
 
     /**
