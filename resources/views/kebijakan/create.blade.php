@@ -20,18 +20,46 @@
             </div>
             <a href="{{ route('kebijakan.index') }}" class="btn-kembali">&larr; Kembali</a>
         </div>
-
-        @if($errors->any())
-            <div class="alert alert-error">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <div>
-                    <div style="font-weight: 700; margin-bottom: 6px;">Terdapat kesalahan pada isian form:</div>
-                    <ul style="margin-left: 16px; font-size: 13px;">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+        @if(session('success'))
+            <div class="ptp-alert ptp-alert-success" id="ptpAlertSuccess">
+                <div class="ptp-alert-content">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="#22C55E" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="ptp-alert-icon"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <div class="ptp-alert-text">
+                        <div class="ptp-alert-title">Dokumen Diterima</div>
+                        <div class="ptp-alert-desc">
+                            {{ is_string(session('success')) ? session('success') : 'Unggahan Anda telah berhasil diproses oleh sistem PATEN PAK MIKO dan akan digunakan untuk verifikasi administrasi.' }}
+                        </div>
+                    </div>
                 </div>
+                <button type="button" class="ptp-alert-close" onclick="document.getElementById('ptpAlertSuccess').style.display='none'">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        @endif
+
+        @if($errors->any() || session('error'))
+            <div class="ptp-alert ptp-alert-error" id="ptpAlertError">
+                <div class="ptp-alert-content">
+                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="#EF4444" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="ptp-alert-icon"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                    <div class="ptp-alert-text">
+                        <div class="ptp-alert-title">Gagal Mengunggah File</div>
+                        <div class="ptp-alert-desc">
+                            @if(session('error'))
+                                {{ session('error') }}
+                            @else
+                                Terjadi kesalahan saat proses upload. Pastikan file sesuai ketentuan dan koneksi internet Anda stabil.
+                                <ul style="margin-top: 4px; margin-left: 16px;">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="ptp-alert-close" onclick="document.getElementById('ptpAlertError').style.display='none'">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
             </div>
         @endif
 
@@ -81,7 +109,16 @@
                 </div>
             </div>
 
-            <div class="ptp-divider"></div>
+                            <!-- Kode & Nama KBLI -->
+                <div class="form-group" style="position: relative;">
+                    <label class="form-label">Kode & Nama KBLI (Kegiatan Berusaha)<span class="required">*</span></label>
+                    <div class="kbli-wrapper">
+                        <input type="text" id="kbli_text" class="form-control" placeholder="Ketik kode KBLI atau nama kegiatan..." value="{{ old('kbli_kode', session('ptp_form_data.kbli', '')) }}" autocomplete="off" required>
+                        <input type="hidden" id="kbli_kode" name="kbli_kode" value="{{ old('kbli_kode', session('ptp_form_data.kbli', '')) }}">
+                        <div class="kbli-dropdown" id="kbliDropdown"></div>
+                    </div>
+                    <div id="kbliSelectedInfo" style="display:none; margin-top: 10px;"></div>
+                </div>\n\n            <div class="ptp-divider"></div>
 
             <!-- SECTION 2 -->
             <div class="ptp-section-title">2. UNGGAH BERKAS PERSYARATAN</div>
@@ -207,8 +244,7 @@
                         <input type="file" name="kbli" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
                     </div>
-                    <!-- Hidden field kbli_kode to pass validation if required -->
-                    <input type="hidden" name="kbli_kode" value="{{ old('kbli_kode', session('ptp_form_data.kbli', '')) }}">
+                    
                 </div>
 
                 <!-- 9. Proposal -->
@@ -328,45 +364,72 @@
         setTimeout(() => { document.getElementById('previewFrame').src = ''; }, 300);
     }
 
-    // KBLI AUTOCOMPLETE
+        // KBLI AUTOCOMPLETE
     (function () {
-        const input = document.getElementById('kbli_kode');
+        const inputText = document.getElementById('kbli_text');
+        const inputHidden = document.getElementById('kbli_kode');
         const dropdown = document.getElementById('kbliDropdown');
         const infoBox = document.getElementById('kbliSelectedInfo');
-        if (!input) return;
+        if (!inputText) return;
+        
+        // Initial setup for code
+        if (inputText.value) {
+            let val = inputText.value;
+            let codeMatch = val.match(/^(\d+)/);
+            if(codeMatch) inputHidden.value = codeMatch[1];
+        }
+
         let debounceTimer = null, activeIndex = -1;
         function showInfo(code, title) {
-            infoBox.innerHTML = `<span class="kbli-desc"><span class="kbli-desc-icon">✅</span> <strong>${code}</strong> — ${title}</span>`;
+            infoBox.innerHTML = `<span class="kbli-desc" style="font-size:12px; color:#3291A8;"><span style="color:#22C55E;">✔</span> <strong>${code}</strong> — ${title}</span>`;
             infoBox.style.display = 'block';
         }
         function closeDropdown() { dropdown.classList.remove('show'); dropdown.innerHTML = ''; activeIndex = -1; }
-        if (input.value.length >= 2) {
-            fetch(`/api/kbli/find?code=${encodeURIComponent(input.value)}`)
+        
+        // Fetch info for initial value if present
+        if (inputHidden.value.length >= 2) {
+            fetch(`/api/kbli/find?code=${encodeURIComponent(inputHidden.value)}`)
                 .then(r => r.json()).then(d => { if (d && d.title) showInfo(d.code, d.title); });
         }
-        input.addEventListener('input', function () {
+        
+        inputText.addEventListener('input', function () {
             clearTimeout(debounceTimer);
             const q = this.value.trim();
             infoBox.style.display = 'none';
+            // update hidden if user manually edits code
+            let codeMatch = q.match(/^(\d+)/);
+            if(codeMatch) inputHidden.value = codeMatch[1];
+            else inputHidden.value = q; // fallback
+
             if (q.length < 2) { closeDropdown(); return; }
             debounceTimer = setTimeout(() => {
                 fetch(`/api/kbli/search?q=${encodeURIComponent(q)}`)
                     .then(r => r.json())
                     .then(results => {
-                        closeDropdown();
-                        if (!results.length) return;
-                        results.forEach(item => {
+                        dropdown.innerHTML = '';
+                        if (!results || !results.length) {
+                            dropdown.innerHTML = '<div style="padding:12px 16px; color:#7A9BB5; font-size:13.5px;">KBLI tidak ditemukan.</div>';
+                            dropdown.classList.add('show');
+                            return;
+                        }
+                        results.forEach((item, index) => {
                             const div = document.createElement('div');
                             div.className = 'kbli-item';
-                            div.innerHTML = `<strong>${item.code}</strong> ${item.title}`;
-                            div.addEventListener('click', () => { input.value = item.code; showInfo(item.code, item.title); closeDropdown(); });
+                            div.innerHTML = `<strong>${item.code}</strong> - ${item.title}`;
+                            div.addEventListener('click', () => {
+                                inputText.value = `${item.code} - ${item.title}`;
+                                inputHidden.value = item.code;
+                                showInfo(item.code, item.title);
+                                closeDropdown();
+                            });
                             dropdown.appendChild(div);
                         });
-                        dropdown.classList.add('show'); activeIndex = -1;
-                    }).catch(() => closeDropdown());
+                        dropdown.classList.add('show');
+                    }).catch(err => console.error('KBLI Fetch Error:', err));
             }, 300);
         });
-        input.addEventListener('keydown', function (e) {
+        
+        inputText.addEventListener('keydown', function (e) {
             const items = dropdown.querySelectorAll('.kbli-item');
             if (!items.length) return;
             if (e.key === 'ArrowDown') { e.preventDefault(); activeIndex = Math.min(activeIndex + 1, items.length - 1); items.forEach((el, i) => el.classList.toggle('active', i === activeIndex)); }
@@ -374,9 +437,35 @@
             else if (e.key === 'Enter' && activeIndex >= 0) { e.preventDefault(); items[activeIndex].click(); }
             else if (e.key === 'Escape') { closeDropdown(); }
         });
+        
         document.addEventListener('click', function (e) {
-            if (!input.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
+            if (!inputText.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
         });
     })();
+
+    // DRAG AND DROP FILE UPLOAD
+    document.querySelectorAll('.file-input-wrapper').forEach(wrapper => {
+        const input = wrapper.querySelector('input[type="file"]');
+        if (!input) return;
+        
+        wrapper.addEventListener('dragover', e => {
+            e.preventDefault();
+            wrapper.classList.add('drag-over');
+        });
+        
+        wrapper.addEventListener('dragleave', e => {
+            e.preventDefault();
+            wrapper.classList.remove('drag-over');
+        });
+        
+        wrapper.addEventListener('drop', e => {
+            e.preventDefault();
+            wrapper.classList.remove('drag-over');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                input.files = e.dataTransfer.files;
+            }
+        });
+    });
+
 </script>
 @endsection
