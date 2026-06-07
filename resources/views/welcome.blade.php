@@ -55,9 +55,10 @@
             background: rgba(255,255,255,.97);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--line);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: box-shadow .3s;
         }
-        #site-header.scrolled { box-shadow: 0 4px 24px rgba(0,59,100,.08); }
+        #site-header.scrolled { box-shadow: 0 6px 24px rgba(0, 59, 100, 0.18); }
 
         .header-inner {
             display: flex; align-items: center; justify-content: space-between;
@@ -148,10 +149,7 @@
         .btn-nav svg { width: 14px; height: 14px; fill: var(--yellow); stroke: none; }
         .btn-nav:hover { background: #00294a; box-shadow: 0 4px 16px rgba(0,59,100,.3); transform: translateY(-1px); }
 
-        .color-bar { height: 3px; display: flex; }
-        .color-bar span:nth-child(1) { flex: 3; background: var(--blue-dk); }
-        .color-bar span:nth-child(2) { flex: 1; background: var(--yellow); }
-        .color-bar span:nth-child(3) { flex: 1; background: var(--green); }
+
 
         /* ─── HERO ────────────────────────────────────────── */
         .hero {
@@ -444,79 +442,109 @@
 
         /* ─── PROCESS ─────────────────────────────────────── */
         .process { background: var(--white); }
+        .eyebrow-badge {
+            display: inline-block;
+            background: #EBF8FF;
+            color: var(--blue);
+            font-size: 11px; font-weight: 700; letter-spacing: .05em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
         .process-track {
             display: grid; grid-template-columns: repeat(4,1fr);
-            gap: 0; position: relative;
+            gap: 20px; position: relative; padding-top: 24px;
         }
-        .process-track::before {
-            content: ''; position: absolute;
-            top: 27px; left: calc(12.5% + 20px); right: calc(12.5% + 20px);
-            height: 1px; background: var(--line); z-index: 0;
+        .process-step { text-align: center; padding: 0 10px; position: relative; z-index: 1; }
+        .step-img-wrapper {
+            height: 140px; margin: 0 auto 24px;
+            display: flex; align-items: flex-end; justify-content: center;
         }
-        .process-step { text-align: center; padding: 0 20px; position: relative; z-index: 1; }
-        .step-circle {
-            width: 54px; height: 54px; border-radius: 50%;
-            border: 1.5px solid var(--line);
-            background: var(--white);
-            margin: 0 auto 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'DM Mono', monospace; font-size: 15px; font-weight: 500;
-            color: var(--muted); transition: all .3s;
-        }
-        .process-step.active .step-circle {
-            background: var(--blue-dk); border-color: var(--blue-dk);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(33,138,201,.3);
-        }
-        .step-title { font-size: 14.5px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
-        .step-desc  { font-size: 12.5px; color: var(--mid); line-height: 1.65; }
+        .step-img-wrapper img { width: 100%; max-width: 150px; max-height: 130px; object-fit: contain; }
+        .step-title { font-size: 16px; font-weight: 800; color: #113454; margin-bottom: 12px; }
+        .step-desc  { font-size: 13px; color: var(--mid); line-height: 1.6; }
 
         /* ─── REVIEWS ─────────────────────────────────────── */
-        .reviews { background: var(--surface); }
-        .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-        .review-card {
-            background: var(--white); border: 1px solid var(--line);
-            border-radius: var(--r-lg); padding: 24px;
-            display: flex; flex-direction: column; gap: 14px;
-            transition: all .25s;
+        .reviews {
+            background: #113454;
+            padding: 120px 0;
+            color: #fff;
         }
-        .review-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 36px rgba(33,138,201,.09);
-            border-color: var(--blue-md);
+        .reviews .eyebrow-badge {
+            background: #fff; color: var(--blue); margin-bottom: 20px;
         }
-        .review-stars { color: #D69E2E; font-size: 15px; letter-spacing: 1px; }
-        .review-stars span { font-size: 12px; font-weight: 700; color: var(--mid); margin-left: 6px; font-family: 'DM Mono', monospace; }
-        .review-text { font-size: 13.5px; color: var(--mid); line-height: 1.7; font-style: italic; flex: 1; }
-        .review-text::before { content: '\201C'; }
-        .review-text::after  { content: '\201D'; }
-        .review-foot {
-            display: flex; align-items: center; gap: 12px;
-            padding-top: 14px; border-top: 1px solid var(--line);
+        .reviews .section-title {
+            color: #F5A623; margin-bottom: 12px; font-weight: 800; font-size: clamp(24px, 3vw, 32px);
         }
-        .review-avatar {
-            width: 36px; height: 36px; border-radius: 50%;
-            background: var(--blue-lt); color: var(--blue);
-            font-weight: 700; font-size: 12px;
+        .reviews .section-sub {
+            color: rgba(255,255,255,.8); font-size: 14.5px;
+        }
+        .reviews-layout {
+            display: flex; align-items: flex-start; gap: 40px; margin-top: 60px;
+        }
+        .reviews-sidebar {
+            width: 200px; flex-shrink: 0; padding-top: 20px;
+        }
+        .reviews-sidebar-title {
+            font-size: 24px; font-weight: 700; color: #fff; line-height: 1.3;
+            margin-bottom: 32px;
+        }
+        .reviews-nav {
+            display: flex; gap: 12px;
+        }
+        .btn-rev-nav {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: #fff; border: none; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            text-transform: uppercase; border: 1.5px solid var(--blue-md);
-            flex-shrink: 0;
+            transition: all .2s;
         }
-        .review-info strong { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink); }
-        .review-info span   { font-size: 11px; color: var(--muted); }
-        .review-module {
-            display: inline-block; margin-top: 3px;
-            background: var(--blue-lt); color: var(--blue);
-            font-size: 10px; font-weight: 700;
-            padding: 1px 7px; border-radius: 4px;
-            text-transform: uppercase; letter-spacing: .04em;
+        .btn-rev-nav svg { width: 16px; height: 16px; fill: none; stroke: var(--blue-dk); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+        .btn-rev-nav:hover { background: #F5A623; }
+        .btn-rev-nav:hover svg { stroke: #fff; }
+        
+        .reviews-slider-wrap {
+            flex: 1; overflow: hidden; padding-bottom: 40px; position: relative;
         }
+        .reviews-slider {
+            display: flex; gap: 20px; overflow-x: auto;
+            scroll-snap-type: x mandatory; scrollbar-width: none;
+        }
+        .reviews-slider::-webkit-scrollbar { display: none; }
+        .review-card {
+            background: #fff; border-radius: 12px; padding: 28px;
+            min-width: 380px; max-width: 380px; scroll-snap-align: start;
+            display: flex; flex-direction: column; color: var(--ink);
+            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+        }
+        .review-header {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+        }
+        .review-check {
+            width: 26px; height: 26px; border-radius: 50%; border: 2px solid #F5A623;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .review-check svg { width: 12px; height: 12px; fill: none; stroke: #F5A623; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+        .review-author { flex: 1; }
+        .review-author h4 { font-size: 15px; font-weight: 800; color: var(--ink); margin: 0 0 2px; }
+        .review-author span { font-size: 12px; color: var(--muted); display: block; }
+        .review-text {
+            font-size: 13.5px; color: var(--mid); line-height: 1.6;
+            font-style: italic; margin-bottom: 24px; flex: 1;
+        }
+        .review-foot-stars {
+            display: flex; justify-content: flex-end; gap: 4px;
+        }
+        .review-foot-stars svg { width: 16px; height: 16px; fill: #F5A623; }
+        .reviews-dots {
+            display: flex; gap: 8px; position: absolute; bottom: 0; left: 0;
+        }
+        .rev-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; opacity: 0.3; cursor: pointer; transition: all .3s; }
+        .rev-dot.active { background: #F5A623; opacity: 1; width: 24px; border-radius: 4px; }
+        
         .reviews-empty {
-            text-align: center; padding: 48px 24px;
-            background: var(--white); border: 1.5px dashed var(--line);
-            border-radius: var(--r-lg); color: var(--muted);
-            font-size: 14px; font-weight: 500;
-            grid-column: 1 / -1;
+            text-align: center; padding: 48px 24px; background: rgba(255,255,255,.05); border: 1.5px dashed rgba(255,255,255,.2);
+            border-radius: var(--r-lg); color: rgba(255,255,255,.6); font-size: 14px; font-weight: 500; width: 100%;
         }
 
         /* ─── CTA BAND ────────────────────────────────────── */
@@ -594,26 +622,70 @@
         .footer-legal a { font-size: 12px; color: rgba(255,255,255,.22); text-decoration: none; transition: color .18s; }
         .footer-legal a:hover { color: rgba(255,255,255,.6); }
 
-        /* ─── NEWS CAROUSEL ───────────────────────────────── */
-        .news-carousel-wrap { position: relative; max-width: 100%; margin-top: 40px; }
-        .news-carousel {
-            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-            gap: 20px; padding-bottom: 20px; scrollbar-width: none;
+        /* ─── ARTIKEL & INFORMASI ─────────────────────────── */
+        .artikel-section { background: #F4F7F9; padding: 100px 0; }
+        .artikel-top-grid {
+            display: grid; grid-template-columns: 1.8fr 1fr; gap: 32px;
+            margin-bottom: 40px;
         }
-        .news-carousel::-webkit-scrollbar { display: none; }
-        .news-card {
-            scroll-snap-align: start;
-            flex: 0 0 calc(33.333% - 14px);
-            background: #fff; border: 1px solid var(--line);
-            border-radius: var(--r-md); overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,.05); transition: transform .3s;
+        .art-featured {
+            position: relative; border-radius: 0; overflow: hidden;
+            min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 32px; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            background-size: cover; background-position: center;
         }
-        .news-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,.1); }
-        .news-img { width: 100%; height: 200px; object-fit: cover; }
-        .news-content { padding: 20px; }
-        .news-date { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; display: block; }
-        .news-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 12px; line-height: 1.4; }
-        .news-desc { font-size: 14px; color: var(--mid); line-height: 1.6; }
+        .art-featured::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 60%);
+        }
+        .art-featured-content { position: relative; z-index: 1; }
+        .art-badge {
+            display: inline-block; background: #3291A8; color: #fff;
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            padding: 4px 10px; border-radius: 4px; margin-bottom: 12px;
+        }
+        .art-featured-title { font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 8px; }
+        .art-featured-date { font-size: 11px; opacity: 0.8; }
+        
+        .art-latest { display: flex; flex-direction: column; gap: 20px; }
+        .art-latest-title { font-size: 16px; font-weight: 800; color: var(--ink); margin-bottom: 4px; }
+        .art-latest-title span { color: var(--blue-dk); font-weight: 800; }
+        .art-list-item { display: flex; gap: 16px; align-items: center; }
+        .art-list-img { width: 90px; height: 90px; border-radius: 0; object-fit: cover; flex-shrink: 0; }
+        .art-list-info { display: flex; flex-direction: column; gap: 4px; }
+        .art-list-title { font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+        .art-list-date { font-size: 10px; color: var(--muted); }
+        
+        .art-carousel-wrap { position: relative; overflow: hidden; padding-bottom: 40px; }
+        .art-carousel {
+            display: flex; gap: 20px; overflow-x: auto;
+            scroll-snap-type: x mandatory; scrollbar-width: none;
+        }
+        .art-carousel::-webkit-scrollbar { display: none; }
+        .art-card {
+            background: #fff; border-radius: 0; overflow: hidden;
+            flex: 0 0 calc(33.333% - 14px); scroll-snap-align: start;
+            box-shadow: 0 4px 12px rgba(0,0,0,.05);
+            display: flex; flex-direction: column;
+        }
+        .art-card-img { width: 100%; height: 180px; object-fit: cover; }
+        .art-card-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+        .art-card-meta { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+        .art-card-title { font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1.4; margin-bottom: 6px; }
+        .art-card-cat { font-size: 10px; color: var(--blue); font-weight: 700; margin-bottom: 12px; }
+        .art-card-desc { font-size: 12px; color: var(--mid); line-height: 1.6; margin-bottom: 20px; flex: 1; }
+        .art-card-link { font-size: 11px; font-weight: 700; color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+        
+        .art-dots { display: flex; justify-content: center; gap: 8px; margin-top: 10px; margin-bottom: 30px; }
+        .art-dot { width: 8px; height: 8px; border-radius: 50%; background: #D9D9D9; cursor: pointer; transition: all .3s; }
+        .art-dot.active { background: #113454; }
+        .art-btn-more-wrap { text-align: center; }
+        .art-btn-more {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #113454; color: #fff; font-size: 12px; font-weight: 700;
+            padding: 10px 24px; border-radius: 6px; text-decoration: none; transition: background .2s;
+        }
+        .art-btn-more:hover { background: #0b253b; }
 
         /* ─── ANIMATIONS ──────────────────────────────────── */
         .reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
@@ -633,6 +705,8 @@
             .process-track::before { display: none; }
             .reviews-grid { grid-template-columns: 1fr 1fr; }
             .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .artikel-top-grid { grid-template-columns: 1fr; }
+            .art-card { flex: 0 0 calc(50% - 10px); }
         }
         @media (max-width: 767px) {
             .site-nav .nav-link, .nav-sep, .site-nav .nav-dropdown { display: none; }
@@ -649,7 +723,7 @@
             .process-track { grid-template-columns: 1fr; gap: 24px; }
             .footer-grid { grid-template-columns: 1fr; gap: 28px; }
             .sp-others { grid-template-columns: 1fr; }
-            .news-card { flex: 0 0 85%; }
+            .art-card { flex: 0 0 85%; }
         }
     </style>
 </head>
@@ -723,7 +797,6 @@
             </nav>
         </div>
     </div>
-    <div class="color-bar"><span></span><span></span><span></span></div>
 </header>
 
 <!-- ══ HERO ════════════════════════════════════════════════ -->
@@ -946,74 +1019,42 @@
     </div>
 </div>
 
-<!-- ══ BERITA & GALERI ════════════════════════════════════════ -->
-<section id="galeri" class="section" style="background: var(--white);">
-    <div class="container">
-        <div class="section-header section-header-center reveal">
-            <div class="section-eyebrow">Berita &amp; Galeri</div>
-            <h2 class="section-title">Informasi Seputar Tata Ruang</h2>
-            <p class="section-sub">Berita terbaru dan dokumentasi kegiatan pelayanan pertimbangan teknis pertanahan di Kota Sukabumi.</p>
-        </div>
-
-        <div class="news-carousel-wrap reveal reveal-d2">
-            <div class="news-carousel" id="newsCarousel">
-                <div class="news-card">
-                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" alt="Berita 1" class="news-img">
-                    <div class="news-content">
-                        <span class="news-date">02 Jun 2026</span>
-                        <h3 class="news-title">Sosialisasi Peraturan Baru Kesesuaian Tata Ruang</h3>
-                        <p class="news-desc">Kantor Pertanahan mengadakan sosialisasi terkait pembaruan regulasi untuk perizinan pelaku usaha skala menengah dan besar.</p>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <img src="https://images.unsplash.com/photo-1541888086225-b467ec6b60c0?auto=format&fit=crop&w=800&q=80" alt="Berita 2" class="news-img">
-                    <div class="news-content">
-                        <span class="news-date">28 Mei 2026</span>
-                        <h3 class="news-title">Peninjauan Lapangan Kawasan Industri Baru</h3>
-                        <p class="news-desc">Tim lapangan BPN dan Dinas PU melakukan survei bersama untuk memastikan kelayakan lokasi kawasan industri di wilayah selatan.</p>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80" alt="Berita 3" class="news-img">
-                    <div class="news-content">
-                        <span class="news-date">15 Mei 2026</span>
-                        <h3 class="news-title">Penghargaan Inovasi Pelayanan Publik 2026</h3>
-                        <p class="news-desc">Paten Pak Miko kembali mendapatkan apresiasi sebagai sistem layanan pertanahan terbaik dengan transparansi tingkat tinggi.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- ══ PROCESS ══════════════════════════════════════════════ -->
 <section id="alur" class="section process">
     <div class="container">
         <div class="section-header section-header-center reveal">
-            <div class="section-eyebrow">Alur Pelayanan</div>
-            <h2 class="section-title">Proses Sederhana, Empat Tahap</h2>
-            <p class="section-sub">Setiap permohonan mengikuti alur terstandarisasi untuk memastikan ketepatan, kepatuhan, dan transparansi proses.</p>
+            <div class="eyebrow-badge">Tahapan Permohonan</div>
+            <h2 class="section-title">Proses Sederhana, Hanya Empat Tahap</h2>
+            <p class="section-sub">Ikuti langkah-langkah pengajuan layanan dengan mudah, cepat, dan transparan melalui sistem PATEN PAK MIKO.</p>
         </div>
         <div class="process-track">
-            <div class="process-step active reveal reveal-d1">
-                <div class="step-circle">01</div>
-                <h3 class="step-title">Siapkan Formulir</h3>
-                <p class="step-desc">Isi formulir PTP di loket Kantor Pertanahan dan dapatkan akun resmi dari petugas layanan kami.</p>
+            <div class="process-step reveal reveal-d1">
+                <div class="step-img-wrapper">
+                    <img src="{{ asset('storage/svg/PilihLayanan.svg') }}" alt="Pilih Layanan">
+                </div>
+                <h3 class="step-title">Pilih Layanan</h3>
+                <p class="step-desc">Tentukan jenis layanan permohonan yang sesuai dengan kebutuhan dan kriteria kegiatan pemanfaatan ruang Anda.</p>
             </div>
             <div class="process-step reveal reveal-d2">
-                <div class="step-circle">02</div>
-                <h3 class="step-title">Pilih Modul</h3>
-                <p class="step-desc">Tentukan jenis permohonan sesuai peruntukan dan kriteria kegiatan pemanfaatan ruang Anda.</p>
+                <div class="step-img-wrapper">
+                    <img src="{{ asset('storage/svg/UnggahDocumen.svg') }}" alt="Unggah Dokumen">
+                </div>
+                <h3 class="step-title">Unggah Dokumen</h3>
+                <p class="step-desc">Lengkapi dan unggah berkas persyaratan permohonan melalui sistem secara digital dengan mudah dan cepat.</p>
             </div>
             <div class="process-step reveal reveal-d3">
-                <div class="step-circle">03</div>
-                <h3 class="step-title">Unggah Dokumen</h3>
-                <p class="step-desc">Lengkapi dan unggah berkas persyaratan melalui sistem secara digital, kapan saja dan di mana saja.</p>
+                <div class="step-img-wrapper">
+                    <img src="{{ asset('storage/svg/Verifikasi&Validasi.svg') }}" alt="Verifikasi dan Validasi Berkas">
+                </div>
+                <h3 class="step-title">Verifikasi dan Validasi Berkas</h3>
+                <p class="step-desc">Petugas Kantor Pertanahan akan memeriksa kelengkapan dan kesesuaian dokumen yang telah Anda unggah ke sistem.</p>
             </div>
             <div class="process-step reveal reveal-d4">
-                <div class="step-circle">04</div>
-                <h3 class="step-title">Terima Persetujuan</h3>
-                <p class="step-desc">Pantau status secara real-time dan unduh Dokumen Pertek Pertanahan persetujuan resmi digital Anda.</p>
+                <div class="step-img-wrapper">
+                    <img src="{{ asset('storage/svg/LayananBerjalan.svg') }}" alt="Layanan Berjalan">
+                </div>
+                <h3 class="step-title">Layanan Berjalan</h3>
+                <p class="step-desc">Permohonan Anda sedang diproses. Anda dapat memantau status perkembangan layanan secara real-time melalui dashboard.</p>
             </div>
         </div>
     </div>
@@ -1023,40 +1064,247 @@
 <section id="ulasan" class="section reviews">
     <div class="container">
         <div class="section-header section-header-center reveal">
-            <div class="section-eyebrow">Testimoni</div>
-            <h2 class="section-title">Apa Kata Pengguna Layanan</h2>
-            <p class="section-sub">Ulasan jujur dari para pengguna layanan/pemohon mengenai kemudahan, transparansi, dan kecepatan proses Pertimbangan Teknis Pertanahan di PATEN PAK MIKO.</p>
+            <div class="eyebrow-badge">Testimoni</div>
+            <h2 class="section-title">Pendapat dan Kepuasan Masyarakat</h2>
+            <p class="section-sub">Lihat pengalaman dan ulasan dari pengguna yang telah merasakan kemudahan layanan digital PATEN PAK MIKO.</p>
         </div>
 
-        @if($reviews->isEmpty())
-            <div class="reviews-empty">
-                <p>Belum ada ulasan yang dipublikasikan saat ini.</p>
+        <div class="reviews-layout">
+            <div class="reviews-sidebar reveal">
+                <h3 class="reviews-sidebar-title">Testimoni<br>Pengguna</h3>
+                <div class="reviews-nav">
+                    <button class="btn-rev-nav" onclick="scrollRev(-1)"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+                    <button class="btn-rev-nav" onclick="scrollRev(1)"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+                </div>
             </div>
-        @else
-            <div class="reviews-grid">
-                @foreach($reviews as $review)
-                    <div class="review-card reveal">
-                        <div>
-                            <div class="review-stars">
-                                {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
-                                <span>{{ number_format($review->rating, 1) }}</span>
-                            </div>
-                        </div>
-                        <p class="review-text">{{ $review->comment }}</p>
-                        <div class="review-foot">
-                            <div class="review-avatar">{{ $review->reviewer_initial }}</div>
-                            <div class="review-info">
-                                <strong>{{ $review->reviewer_name }}</strong>
-                                <span>{{ $review->created_at->format('d M Y') }}</span>
-                                <span class="review-module">{{ $review->module_label_display }}</span>
-                            </div>
-                        </div>
+
+            <div class="reviews-slider-wrap reveal reveal-d2">
+                @if($reviews->isEmpty())
+                    <div class="reviews-empty">
+                        <p>Belum ada ulasan yang dipublikasikan saat ini.</p>
                     </div>
-                @endforeach
+                @else
+                    <div class="reviews-slider" id="revSlider">
+                        @foreach($reviews as $review)
+                            <div class="review-card">
+                                <div class="review-header">
+                                    <div class="review-check">
+                                        <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+                                    </div>
+                                    <div class="review-author">
+                                        <h4>{{ $review->reviewer_name }}</h4>
+                                        <span>Sukabumi</span>
+                                    </div>
+                                </div>
+                                <p class="review-text">"{{ $review->comment }}"</p>
+                                <div class="review-foot-stars">
+                                    @for($i = 0; $i < 5; $i++)
+                                        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                    @endfor
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="reviews-dots" id="revDots">
+                        @foreach($reviews as $index => $review)
+                            <div class="rev-dot {{ $index === 0 ? 'active' : '' }}" onclick="goToRev({{ $index }})"></div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
-        @endif
+        </div>
     </div>
 </section>
+<script>
+    function scrollRev(dir) {
+        const slider = document.getElementById('revSlider');
+        if(slider) {
+            const cardWidth = slider.querySelector('.review-card').offsetWidth + 20;
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
+            
+            // Loop ke awal jika mentok kanan
+            if (dir === 1 && slider.scrollLeft >= maxScroll - 10) {
+                slider.scrollTo({ left: 0, behavior: 'smooth' });
+                return;
+            }
+            // Loop ke akhir jika mentok kiri
+            if (dir === -1 && slider.scrollLeft <= 10) {
+                slider.scrollTo({ left: maxScroll, behavior: 'smooth' });
+                return;
+            }
+
+            slider.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+        }
+    }
+    function goToRev(index) {
+        const slider = document.getElementById('revSlider');
+        if(slider) {
+            const cardWidth = slider.querySelector('.review-card').offsetWidth + 20;
+            slider.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+        }
+    }
+    // Update dots on scroll and auto-slide
+    document.addEventListener("DOMContentLoaded", () => {
+        const revSlider = document.getElementById('revSlider');
+        if(revSlider) {
+            let autoSlideInterval = setInterval(() => scrollRev(1), 4000);
+
+            // Pause on hover/interaction
+            revSlider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+            revSlider.addEventListener('mouseleave', () => {
+                autoSlideInterval = setInterval(() => scrollRev(1), 4000);
+            });
+            document.querySelector('.reviews-nav').addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+            document.querySelector('.reviews-nav').addEventListener('mouseleave', () => {
+                autoSlideInterval = setInterval(() => scrollRev(1), 4000);
+            });
+
+            revSlider.addEventListener('scroll', () => {
+                const cardWidth = revSlider.querySelector('.review-card').offsetWidth + 20;
+                const index = Math.round(revSlider.scrollLeft / cardWidth);
+                document.querySelectorAll('.rev-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            });
+        }
+    });
+</script>
+
+<!-- ══ ARTIKEL & INFORMASI ════════════════════════════════════ -->
+<section id="artikel" class="artikel-section">
+    <div class="container">
+        <div class="section-header section-header-center reveal">
+            <div class="eyebrow-badge" style="background:#EBF8FF; color:#3291A8;">Artikel Kami</div>
+            <h2 class="section-title" style="color:#113454;">Artikel &amp; Informasi Terbaru</h2>
+            <p class="section-sub">Temukan berbagai informasi, panduan, dan berita terbaru seputar<br>pelayanan pertanahan dan administrasi digital.</p>
+        </div>
+
+        <div class="artikel-top-grid reveal reveal-d1">
+            <!-- Featured Article -->
+            <div class="art-featured" style="background-image: url('https://dummyimage.com/1200x800/eeeeee/31343c.png&text=Featured+Article');">
+                <div class="art-featured-content">
+                    <span class="art-badge">Category</span>
+                    <h3 class="art-featured-title">Cara Mengajukan Permohonan PPKPR Secara Online</h3>
+                    <span class="art-featured-date">Senin, 27 April 2026</span>
+                </div>
+            </div>
+
+            <!-- Latest Post List -->
+            <div class="art-latest">
+                <h3 class="art-latest-title">Latest <span>Post</span></h3>
+                
+                <div class="art-list-item">
+                    <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+1" alt="Panduan" class="art-list-img">
+                    <div class="art-list-info">
+                        <h4 class="art-list-title">Panduan Lengkap Upload Persyaratan Dokumen</h4>
+                        <span class="art-list-date">Senin, 27 April 2026</span>
+                    </div>
+                </div>
+
+                <div class="art-list-item">
+                    <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+2" alt="Verifikasi" class="art-list-img">
+                    <div class="art-list-info">
+                        <h4 class="art-list-title">Tahapan Verifikasi Berkas pada PATEN PAK MIKO</h4>
+                        <span class="art-list-date">Senin, 27 April 2026</span>
+                    </div>
+                </div>
+
+                <div class="art-list-item">
+                    <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+3" alt="Tips" class="art-list-img">
+                    <div class="art-list-info">
+                        <h4 class="art-list-title">Tips Menyiapkan Dokumen Pertanahan dengan Benar</h4>
+                        <span class="art-list-date">Senin, 27 April 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel -->
+        <div class="art-carousel-wrap reveal reveal-d2">
+            <div class="art-carousel" id="artCarousel">
+                @for ($i = 1; $i <= 9; $i++)
+                <div class="art-card">
+                    <img src="https://dummyimage.com/600x400/eeeeee/31343c.png&text=Berita+{{ $i }}" alt="News {{ $i }}" class="art-card-img">
+                    <div class="art-card-body">
+                        <div class="art-card-meta">
+                            <span>Senin, 27 April 2026</span>
+                        </div>
+                        <h4 class="art-card-title">Judul Dummy Berita Ke-{{ $i }}</h4>
+                        <span class="art-card-cat">Category</span>
+                        <p class="art-card-desc">Ini adalah contoh teks dummy untuk deskripsi berita ke-{{ $i }}. Gunakan ini untuk melihat tampilan card tanpa konten asli.</p>
+                        <a href="#" class="art-card-link">Read more &rarr;</a>
+                    </div>
+                </div>
+                @endfor
+            </div>
+
+            <!-- Dots -->
+            <div class="art-dots" id="artDots">
+                @for ($i = 1; $i <= 9; $i++)
+                    <div class="art-dot {{ $i == 1 ? 'active' : '' }}"></div>
+                @endfor
+            </div>
+
+            <!-- More Button -->
+            <div class="art-btn-more-wrap">
+                <a href="#" class="art-btn-more">Baca Lebih Banyak &rarr;</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const artSlider = document.getElementById('artCarousel');
+        const artDots = document.querySelectorAll('#artDots .art-dot');
+
+        if(artSlider && artDots.length > 0) {
+            let artAutoSlide = setInterval(() => {
+                const cardWidth = artSlider.querySelector('.art-card').offsetWidth + 20;
+                const maxScroll = artSlider.scrollWidth - artSlider.clientWidth;
+                
+                if (artSlider.scrollLeft >= maxScroll - 10) {
+                    artSlider.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    artSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                }
+            }, 1000); // 1 detik auto slide
+
+            // Pause on hover
+            artSlider.addEventListener('mouseenter', () => clearInterval(artAutoSlide));
+            artSlider.addEventListener('mouseleave', () => {
+                artAutoSlide = setInterval(() => {
+                    const cardWidth = artSlider.querySelector('.art-card').offsetWidth + 20;
+                    const maxScroll = artSlider.scrollWidth - artSlider.clientWidth;
+                    if (artSlider.scrollLeft >= maxScroll - 10) {
+                        artSlider.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        artSlider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+                    }
+                }, 1000);
+            });
+
+            // Update dots on scroll
+            artSlider.addEventListener('scroll', () => {
+                const cardWidth = artSlider.querySelector('.art-card').offsetWidth + 20;
+                let index = Math.round(artSlider.scrollLeft / cardWidth);
+                if (index >= artDots.length) index = artDots.length - 1;
+                
+                artDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            });
+
+            // Dot click navigation
+            artDots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    const cardWidth = artSlider.querySelector('.art-card').offsetWidth + 20;
+                    artSlider.scrollTo({ left: i * cardWidth, behavior: 'smooth' });
+                });
+            });
+        }
+    });
+</script>
 
 <!-- ══ CTA BAND ════════════════════════════════════════════ -->
 <section class="cta-band">
@@ -1195,6 +1443,36 @@
         });
     }, { threshold: 0.7 });
     steps.forEach(s => stepIO.observe(s));
+
+    // Auto Slide for Hero Service Panel (.sp-rows)
+    document.addEventListener("DOMContentLoaded", () => {
+        const spRows = document.querySelector('.sp-rows');
+        if (spRows) {
+            let spAutoSlide = setInterval(() => {
+                const maxScroll = spRows.scrollWidth - spRows.clientWidth;
+                if (spRows.scrollLeft >= maxScroll - 10) {
+                    spRows.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    spRows.scrollBy({ left: 400, behavior: 'smooth' });
+                }
+            }, 1000);
+            
+            const spPanel = document.querySelector('.service-panel');
+            if (spPanel) {
+                spPanel.addEventListener('mouseenter', () => clearInterval(spAutoSlide));
+                spPanel.addEventListener('mouseleave', () => {
+                    spAutoSlide = setInterval(() => {
+                        const maxScroll = spRows.scrollWidth - spRows.clientWidth;
+                        if (spRows.scrollLeft >= maxScroll - 10) {
+                            spRows.scrollTo({ left: 0, behavior: 'smooth' });
+                        } else {
+                            spRows.scrollBy({ left: 400, behavior: 'smooth' });
+                        }
+                    }, 1000);
+                });
+            }
+        }
+    });
 </script>
 </body>
 </html>
