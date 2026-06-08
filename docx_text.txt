@@ -1,0 +1,433 @@
+PERMOHONAN
+PERTIMBANGAN
+TEKNIS
+PERTANAHAN
+Kepada
+Yth.
+Kepala
+Kantor
+Pertanahan
+Kota
+Sukabumi
+di
+tempat.
+Yang
+bertanda
+tangan
+di
+bawah
+ini
+</w:r><w:r><w:rPr><w:w w:val="115"/></w:rPr><w:t>:
+<w:tab w:val="left" w:pos="4289"/></w:tabs><w:spacing w:before="121"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="130"/><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="130"/></w:rPr><w:t xml:space="preserve">1. 
+Nama
+ Lengkap
+</w:r><w:r w:rsidR="00DC2F9D"><w:rPr><w:w w:val="130"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="115"/></w:rPr><w:t>:
+${nama}
+<w:tab w:val="left" w:pos="4289"/></w:tabs><w:spacing w:before="121"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="130"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/></w:rPr><w:t xml:space="preserve">2. 
+Nomor Induk
+Kependudukan
+(NIK)
+</w:r><w:r w:rsidR="00DC2F9D"><w:rPr><w:w w:val="115"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="130"/></w:rPr><w:t>:
+${nik}
+<w:tab w:val="left" w:pos="4289"/></w:tabs><w:spacing w:before="122"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="130"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/></w:rPr><w:t xml:space="preserve">3. 
+Nomor
+Induk
+Berusaha
+(NIB)
+</w:r><w:r w:rsidR="00DC2F9D"><w:rPr><w:w w:val="115"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="125"/></w:rPr><w:t>:
+${nib}
+<w:tab w:val="left" w:pos="4289"/></w:tabs><w:spacing w:before="122"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="130"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="125"/></w:rPr><w:t xml:space="preserve">4. 
+Alamat
+</w:r><w:r w:rsidR="00DC2F9D"><w:rPr><w:w w:val="125"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="125"/></w:rPr><w:t>:
+${alamat}
+<w:tab w:val="left" w:pos="4289"/></w:tabs><w:spacing w:before="122"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="130"/></w:rPr></w:pPr><w:r w:rsidRPr="00E36C8B"><w:rPr><w:rFonts w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"/><w:w w:val="130"/></w:rPr><w:t xml:space="preserve">5. 
+No. Handphone
+ (Whatsapp Aktif)
+</w:r><w:r w:rsidR="00DC2F9D"><w:rPr><w:rFonts w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"/><w:w w:val="130"/></w:rPr><w:tab/></w:r><w:r w:rsidRPr="00E36C8B"><w:rPr><w:rFonts w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"/><w:w w:val="130"/></w:rPr><w:t>:
+${phone_number}
+<w:tab w:val="left" w:pos="4289"/></w:tabs><w:spacing w:before="122"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="130"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>6
+. 
+Bertindak
+untuk dan atas
+nama
+</w:r><w:r w:rsidR="00DC2F9D"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00AF6A76"><w:rPr><w:w w:val="125"/></w:rPr><w:t xml:space="preserve">: 
+${bertindak_atas_nama}
+<w:tab w:val="left" w:pos="4289"/></w:tabs><w:spacing w:before="122"/></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>7
+. 
+Anggaran
+Dasar
+Perusahaan
+</w:r><w:r w:rsidR="00DC2F9D"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00AF6A76"><w:rPr><w:w w:val="125"/></w:rPr><w:t>: Tanggal
+${anggaran_dasar_tanggal}
+Nomor
+${anggaran_dasar_no}
+dengan
+ini
+mengajukan
+permohonan
+Pertimbangan
+Teknis
+Pertanahan
+untuk
+kegiatan
+:
+***)
+<w:tab w:val="left" w:pos="461"/></w:tabs><w:spacing w:before="118"/><w:ind w:hanging="361"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Penerbitan Kesesuaian Kegiatan Pemanfaatan Ruang; terdiri dari :
+<w:tab w:val="left" w:pos="809"/></w:tabs><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>PKKPR
+untuk
+Kegiatan
+Berusaha;
+<w:tab w:val="left" w:pos="809"/></w:tabs><w:spacing w:before="3"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>PKKPR
+untuk
+Kegiatan
+NonBerusaha;
+<w:tab w:val="left" w:pos="809"/></w:tabs><w:spacing w:before="2" w:line="254" w:lineRule="exact"/></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>PKKPR/RKKPR
+untuk
+Kegiatan
+yang
+bersifat
+Strategis
+Nasional.
+<w:tab w:val="left" w:pos="461"/></w:tabs><w:spacing w:before="0" w:line="231" w:lineRule="exact"/><w:ind w:hanging="361"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Penegasan
+Status
+dan
+Rekomendasi
+Penguasaan
+Tanah
+Timbul;
+<w:tab w:val="left" w:pos="461"/></w:tabs><w:spacing w:before="2"/><w:ind w:hanging="361"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Penyelenggaraan
+Kebijakan Penggunaan dan
+Pemanfaatan
+Tanah.
+Rencana
+Kegiatan
+/
+Penggunaan
+dan
+Pemanfaatan
+Tanah
+:
+${rencana_kegiatan}
+<w:tab w:val="left" w:pos="2849"/></w:tabs><w:spacing w:before="122"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/><w:w w:val="130"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/></w:rPr><w:t>Kode
+dan
+nama
+KBLI
+***)
+</w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="115"/><w:position w:val="5"/><w:sz w:val="13"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="115"/><w:position w:val="5"/><w:sz w:val="13"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="115"/><w:position w:val="5"/><w:sz w:val="13"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="115"/></w:rPr><w:t xml:space="preserve">: 
+${kbli}
+<w:tab w:val="left" w:pos="2849"/></w:tabs><w:spacing w:before="122"/><w:rPr><w:i/></w:rPr></w:pPr><w:r><w:rPr><w:i/><w:w w:val="115"/></w:rPr><w:t>***)
+Klasifikasi
+Baku
+Lapangan
+usaha
+Indonesia (untuk
+pemohon
+pelaku
+usaha)
+dengan
+keterangan
+sebagai
+berikut
+:
+1.
+Letak
+tanah
+yang
+dimohon
+:
+<w:tab w:val="left" w:pos="3569"/></w:tabs><w:spacing w:before="121"/><w:ind w:left="356"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>a.
+Jalan,
+nomor,
+RT
+/
+RW
+</w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="125"/></w:rPr><w:t xml:space="preserve">: 
+${letak_tanah_jalan}
+<w:tab w:val="left" w:pos="3569"/></w:tabs><w:spacing w:before="118"/><w:ind w:left="356"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>b.
+Kelurahan
+</w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="130"/></w:rPr><w:t xml:space="preserve">: 
+${letak_tanah_kelurahan}
+<w:tab w:val="left" w:pos="3569"/></w:tabs><w:spacing w:before="121"/><w:ind w:left="356"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>c.
+Kecamatan,
+Kota
+</w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="130"/></w:rPr><w:t xml:space="preserve">: 
+${letak_tanah_kecamatan}
+<w:tab w:val="left" w:pos="3569"/></w:tabs><w:spacing w:before="122"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>2.
+Luas
+tanah
+yang
+dimohon
+</w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="125"/></w:rPr><w:t>:
+${luas_tanah}
+<w:tab w:val="left" w:pos="3569"/></w:tabs><w:spacing w:before="121"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>3.
+Status
+/
+penguasaan
+tanah
+</w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="125"/></w:rPr><w:t xml:space="preserve">: 
+${status_penguasaan}
+<w:tab w:val="left" w:pos="3569"/></w:tabs><w:spacing w:before="118"/><w:rPr><w:rFonts w:ascii="Trebuchet MS" w:hAnsi="Trebuchet MS"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="120"/></w:rPr><w:t>4.
+Penggunaan
+tanah
+saat
+ini
+</w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r w:rsidR="00EC37A6"><w:rPr><w:w w:val="120"/></w:rPr><w:tab/></w:r><w:r><w:rPr><w:w w:val="125"/></w:rPr><w:t xml:space="preserve">: 
+${penggunaan_saat_ini}
+Sebagai
+kelengkapan
+permohonan,
+bersama
+ini
+kami
+lampirkan
+:
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:spacing w:before="118"/><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Peta
+atau
+S
+ketsa
+okasi
+yang
+dimohon;
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Surat
+Kuasa
+(apabila
+dikuasakan)
+;
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:spacing w:before="2" w:line="233" w:lineRule="exact"/><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Fotocopy
+Kartu Tanda
+Penduduk
+ (KTP)
+;
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:spacing w:before="0" w:line="233" w:lineRule="exact"/><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="110"/><w:sz w:val="20"/></w:rPr><w:t>Fotocopy
+Nomor
+Pokok
+Wajib
+Pajak
+ (NPWP)
+;
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Fotocopy
+Akta
+Pendirian
+dan
+Pengesahan
+Badan
+Hukum
+(untuk
+badan
+hukum);
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:spacing w:before="2"/><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Nomor
+Induk
+Berusaha
+(NIB)
+(untuk
+pemohon
+Pelaku
+Usaha
+apabila
+sudah
+memiliki
+NIB)
+;
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr><w:r><w:rPr><w:w w:val="115"/><w:sz w:val="20"/></w:rPr><w:t>Proposal rencana kegiatan
+berusaha
+(untuk
+pelaku
+usaha)
+;
+<w:tab w:val="left" w:pos="353"/></w:tabs><w:ind w:hanging="253"/><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr></w:pPr><w:r w:rsidRPr="00E80477"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t xml:space="preserve">Sertipikat 
+dan
+ Bukti Penguasaan Fisik 
+Lainnya (Akta/Perjanjian Sewa Menyewa/Perjanjian Pinjam Pakai atau lainnya yg menerangkan pengusaan
+ dan penggunaan tanah
+)
+(Semua kelengkapan permohonan di menggunakan Kertas ukuran F4)
+*)
+untuk
+pemohon
+Pelaku
+Usaha
+yang
+sudah
+memiliki
+NIB
+**)
+khusus
+untuk
+pemohon
+badan
+hukum
+***)
+pilih
+salah
+satu
+****)
+Klasifikasi
+Baku
+Lapangan
+Usaha
+Indonesia
+(untuk
+pemohon
+pelaku
+usaha)
+Demikian
+permohonan
+ini
+kami
+sampaikan,
+kami
+bertanggung
+jawab
+atas
+kebenaran
+persyaratan yg dilampirkan di atas, dan kami menyatakan akan mematuhi semua ketentuan dan
+persyaratan
+yang
+ditetapkan
+dalam
+pertimbangan
+teknis
+pertanahan.
+Sukabumi
+, 
+.........................
+Pemohon,
+(  
+................................
+)
+RINGKASA
+N
+ KELENGKAPAN BERKAS PERMOHONAN
+PERTIMBANGAN TEKNIS PERTANAHAN DALAM RANGKA
+PENERBITAN PERSETUJUAN KKPR UNTUK KEGIATAN BERUSAHA
+ / 
+NON BERUSAHA / KEBIJAKAN
+Identitas Pemohon
+a. Nama
+</w:r><w:r w:rsidRPr="003647DB"><w:tab/></w:r><w:r w:rsidRPr="003647DB"><w:tab/><w:t>:
+${nama}
+b. Alamat
+</w:r><w:r w:rsidRPr="003647DB"><w:tab/></w:r><w:r w:rsidRPr="003647DB"><w:tab/><w:t>:
+${alamat}
+c. Nomor Telepon 
+</w:r><w:r w:rsidRPr="003647DB"><w:tab/><w:t>:
+${phone_number}
+d. 
+E-mail
+</w:r><w:r w:rsidRPr="003647DB"><w:tab/></w:r><w:r w:rsidRPr="003647DB"><w:tab/><w:t>:
+${email}
+Lokasi yang dimohon
+a. Jalan, Nomor, RT/RW
+</w:r><w:r w:rsidRPr="003647DB"><w:tab/><w:t>:
+${letak_tanah_jalan}
+b. Desa/Kelurahan
+</w:r><w:r w:rsidRPr="003647DB"><w:tab/><w:t>:
+${letak_tanah_kelurahan}
+c. Kecamatan
+</w:r><w:r w:rsidRPr="003647DB"><w:tab/></w:r><w:r w:rsidRPr="003647DB"><w:tab/><w:t>:
+${letak_tanah_kecamatan}
+Luas tanah yang dimohon
+<w:t>:
+${luas_tanah}
+<w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="8930" w:type="dxa"/><w:tblInd w:w="534" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="708"/><w:gridCol w:w="3544"/><w:gridCol w:w="1418"/><w:gridCol w:w="1417"/><w:gridCol w:w="1843"/></w:tblGrid><w:tr w:rsidR="003C557D" w:rsidRPr="003647DB" w14:paraId="3A520FD0" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="376"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vMerge w:val="restart"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="184081E6" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="003C557D"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="918"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>No
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/><w:vMerge w:val="restart"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="7DC41271" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="003C557D"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>Kelengkapan
+<w:tcPr><w:tcW w:w="2835" w:type="dxa"/><w:gridSpan w:val="2"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="66047A9A" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="003C557D"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">       Ceklist (
+✔
+)
+<w:tcPr><w:tcW w:w="1843" w:type="dxa"/><w:vMerge w:val="restart"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="54E04208" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="003C557D"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0"/><w:jc w:val="center"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>Keterangan
+<w:trPr><w:trHeight w:val="476"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vMerge/></w:tcPr><w:p w14:paraId="79356F68" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/><w:rPr><w:b/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="3544" w:type="dxa"/><w:vMerge/></w:tcPr><w:p w14:paraId="11FFE89D" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/><w:rPr><w:b/></w:rPr></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1418" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="218B7E04" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="00591077" w:rsidP="00591077"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="-166"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">          
+Ada
+<w:tcPr><w:tcW w:w="1417" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="7F6E3505" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="00591077" w:rsidP="003C557D"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="943"/><w:tab w:val="left" w:pos="1084"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="0" w:right="-250"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">   
+Tidak Ada
+<w:tcPr><w:tcW w:w="1843" w:type="dxa"/><w:vMerge/></w:tcPr><w:p w14:paraId="41F4EB4A" w14:textId="77777777" w:rsidR="003C557D" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="006528C3" w:rsidRPr="003647DB" w14:paraId="502DD37D" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="225"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="70ECF660" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="00E42E4A" w:rsidRDefault="006528C3" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>1
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="4DB4B7C9" w14:textId="77777777" w:rsidR="003C557D" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Surat Permohonan
+Pertimbangan Teknis Pertanahan
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="531F7F01" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="7A5831BC" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="2478FA7A" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="006528C3" w:rsidRPr="003647DB" w14:paraId="6ADB594B" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="091752F5" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="00E42E4A" w:rsidRDefault="006528C3" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>2
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="5ED62DBC" w14:textId="77777777" w:rsidR="003C557D" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t xml:space="preserve">Peta atau Sketsa Lokasi 
+yang dimohon
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="3AC6564A" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="65E927C0" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="3CA6ECE8" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="006528C3" w:rsidRPr="003647DB" w14:paraId="6A9BAEF0" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="7BFD8A5A" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>3
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="48B1A57E" w14:textId="77777777" w:rsidR="003C557D" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t xml:space="preserve">Surat kuasa apabila 
+dikuasakan
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="7F6B63B5" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="55DD01D3" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="1A9BEB39" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="006528C3" w:rsidRPr="003647DB" w14:paraId="477A58C6" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="225"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="71932718" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>4
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="354FB1DD" w14:textId="77777777" w:rsidR="006528C3" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Kartu Tanda Penduduk
+(KTP)
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="0DEAAD44" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="7F05C21F" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="1AF516DA" w14:textId="77777777" w:rsidR="006528C3" w:rsidRPr="003647DB" w:rsidRDefault="006528C3" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="003C557D" w:rsidRPr="003647DB" w14:paraId="1C63BB84" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="3BAC8AE2" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>5
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="6558C99B" w14:textId="77777777" w:rsidR="003C557D" w:rsidRDefault="003C557D" w:rsidP="00685AA8"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Nomor Pokok Wajib Pajak
+(NPWP) pemohon
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="69576BEE" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="59D4791A" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="4736CD03" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="003C557D" w:rsidRPr="003647DB" w14:paraId="5F184934" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="391D7F1C" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>6
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="3BA22BF0" w14:textId="77777777" w:rsidR="003C557D" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Fotocopy Akta Pendirian dan
+Pengesahan Badan Hukum, untuk
+Pemohon Badan Hukum
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="1152A659" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="2AC46705" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="4BB0F79E" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="003C557D" w:rsidRPr="003647DB" w14:paraId="4B904142" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="41BD43CE" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>7
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="14DF0F9A" w14:textId="77777777" w:rsidR="003C557D" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Keterangan Rencana Penggunaan
+Dan Pemanfaatan Tanah
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="0C572AD2" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="071261C8" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="673DDE91" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="003C557D" w:rsidRPr="003647DB" w14:paraId="5EF758AE" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="78245FFC" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="00E42E4A" w:rsidRDefault="003C557D" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>8
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="26832CAD" w14:textId="51B3166B" w:rsidR="003C557D" w:rsidRDefault="00B3318B" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Nomor Induk Berusaha (
+NIB
+)
+ jika telah terdaftar dalam 
+Sistem OSS *)
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="1FADC78C" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="68CD00AD" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="1B9FDD3E" w14:textId="77777777" w:rsidR="003C557D" w:rsidRPr="003647DB" w:rsidRDefault="003C557D" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w14:paraId="35CCFB92" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="5211FE26" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="00E42E4A" w:rsidRDefault="00BE0E3F" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>9
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="174FEA13" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Klasifikasi Baku Lapangan Usaha Indonesia (KBLI) yang diajukan *)
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="6FD38E73" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="220CD0C8" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="60B25DFF" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w14:paraId="2E0352A1" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="13DBD427" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="00E42E4A" w:rsidRDefault="00BE0E3F" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00E42E4A"><w:rPr><w:b/></w:rPr><w:t>10
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="736693E9" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t>Proposal Rencana Kegiatan
+Berusaha *)
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="1C30BA45" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="1466AD41" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="42115554" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRPr="003647DB" w:rsidRDefault="00BE0E3F" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00750E26" w:rsidRPr="003647DB" w14:paraId="50E7ACC2" w14:textId="77777777" w:rsidTr="00BE0E3F"><w:trPr><w:trHeight w:val="238"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="708" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="5085BF88" w14:textId="77777777" w:rsidR="00750E26" w:rsidRPr="00E42E4A" w:rsidRDefault="00750E26" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:tabs><w:tab w:val="left" w:pos="492"/></w:tabs><w:spacing w:before="1"/><w:ind w:left="-108" w:right="175" w:hanging="33"/><w:jc w:val="right"/><w:rPr><w:b/></w:rPr></w:pPr><w:r><w:rPr><w:b/></w:rPr><w:t>11
+<w:tcPr><w:tcW w:w="3544" w:type="dxa"/></w:tcPr><w:p w14:paraId="3611A477" w14:textId="77777777" w:rsidR="00750E26" w:rsidRDefault="00750E26" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr><w:r><w:t xml:space="preserve">Sertipikat 
+dan 
+Bukti Penguasaan Fisik Lainnya
+<w:tcPr><w:tcW w:w="1418" w:type="dxa"/></w:tcPr><w:p w14:paraId="5DDF3DD3" w14:textId="77777777" w:rsidR="00750E26" w:rsidRPr="003647DB" w:rsidRDefault="00750E26" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1417" w:type="dxa"/></w:tcPr><w:p w14:paraId="5853A443" w14:textId="77777777" w:rsidR="00750E26" w:rsidRPr="003647DB" w:rsidRDefault="00750E26" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1843" w:type="dxa"/></w:tcPr><w:p w14:paraId="1BD18BAA" w14:textId="77777777" w:rsidR="00750E26" w:rsidRPr="003647DB" w:rsidRDefault="00750E26" w:rsidP="003647DB"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="both"/></w:pPr></w:p></w:tc></w:tr></w:tbl><w:p w14:paraId="62DB6A90" w14:textId="77777777" w:rsidR="003647DB" w:rsidRDefault="003647DB" w:rsidP="00A378CE"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:line="120" w:lineRule="auto"/><w:ind w:left="822" w:right="420"/><w:jc w:val="both"/><w:rPr><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr></w:pPr></w:p><w:p w14:paraId="1693F938" w14:textId="77777777" w:rsidR="00BE0E3F" w:rsidRDefault="00BE0E3F" w:rsidP="00E42E4A"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="426" w:right="418"/><w:rPr><w:b/></w:rPr></w:pPr><w:r w:rsidRPr="00BE0E3F"><w:rPr><w:b/></w:rPr><w:t>*) Tambahan untuk permohonan dalam rangka Penerbitan PKKPR untuk Kegiatan Berusaha
+Sukabumi, 
+. . . . . .
+ . . . . . . . . . . . . .
+<w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="9888" w:type="dxa"/><w:tblInd w:w="426" w:type="dxa"/><w:tblLayout w:type="fixed"/><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="3935"/><w:gridCol w:w="2126"/><w:gridCol w:w="1843"/><w:gridCol w:w="1984"/></w:tblGrid><w:tr w:rsidR="00E42E4A" w:rsidRPr="00E42E4A" w14:paraId="281A852C" w14:textId="77777777" w:rsidTr="00A378CE"><w:tc><w:tcPr><w:tcW w:w="6061" w:type="dxa"/><w:gridSpan w:val="2"/></w:tcPr><w:p w14:paraId="42858CCA" w14:textId="77777777" w:rsidR="00E42E4A" w:rsidRPr="00E42E4A" w:rsidRDefault="00E42E4A" w:rsidP="00E42E4A"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr><w:r><w:t>Tim PTP dan/atau Satuan Tugas
+<w:tcPr><w:tcW w:w="3827" w:type="dxa"/><w:gridSpan w:val="2"/></w:tcPr><w:p w14:paraId="1876FED2" w14:textId="77777777" w:rsidR="00E42E4A" w:rsidRPr="00E42E4A" w:rsidRDefault="00E42E4A" w:rsidP="00E42E4A"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr><w:r><w:t>Pemohon
+<w:trPr><w:trHeight w:val="835"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3935" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="1C73BC62" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="0028595A" w:rsidRDefault="00EC2B5C" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr><w:r w:rsidRPr="0028595A"><w:t xml:space="preserve">1. 
+AHMAD FAHMI, S.E., M.I.L.
+NIP. 
+19841210 201101 1 003
+<w:tcPr><w:tcW w:w="2126" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="1253B8F3" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="30EAF049" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="4010E83A" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="005F5035"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr><w:r><w:t>1
+…………………….
+...
+<w:tcPr><w:tcW w:w="1843" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="63A9CC64" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr><w:r><w:t>1.
+<w:tcPr><w:tcW w:w="1984" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="0412F192" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00591077"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="65CA2E53" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00591077"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="18602083" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00591077" w:rsidP="00591077"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr><w:r><w:t>1
+……………………
+<w:trPr><w:trHeight w:val="864"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3935" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="411495DA" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00EC2B5C" w:rsidRDefault="00EC2B5C" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr><w:r w:rsidRPr="00EC2B5C"><w:t xml:space="preserve">2. 
+NURBELLA SRIBANON, S.H., M.KN.
+NIP. 
+19950119 202204 2 001
+<w:tcPr><w:tcW w:w="2126" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="32209D36" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="283BE88D" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="1D552B16" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr><w:r><w:t>2
+…………………….
+...
+<w:tcPr><w:tcW w:w="1843" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="6762B7DE" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="00591077"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1984" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="5134A76C" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="00591077"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w14:paraId="16B81594" w14:textId="77777777" w:rsidTr="00A378CE"><w:trPr><w:trHeight w:val="850"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3935" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="01DE48B0" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00EC2B5C" w:rsidRDefault="00EC2B5C" w:rsidP="00EC2B5C"><w:pPr><w:tabs><w:tab w:val="left" w:pos="567"/><w:tab w:val="left" w:pos="851"/><w:tab w:val="decimal" w:leader="hyphen" w:pos="1134"/><w:tab w:val="left" w:leader="hyphen" w:pos="1276"/><w:tab w:val="left" w:pos="3119"/></w:tabs><w:contextualSpacing/><w:rPr><w:rFonts w:eastAsia="Calibri" w:cs="Times New Roman"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r w:rsidRPr="00EC2B5C"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t xml:space="preserve">3. 
+WAHYUDI, 
+S.Kom
+.
+<w:tab w:val="left" w:pos="567"/><w:tab w:val="left" w:pos="851"/><w:tab w:val="decimal" w:leader="hyphen" w:pos="1134"/><w:tab w:val="left" w:leader="hyphen" w:pos="1276"/><w:tab w:val="left" w:pos="3119"/></w:tabs><w:contextualSpacing/><w:rPr><w:rFonts w:eastAsia="Calibri" w:cs="Times New Roman"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t xml:space="preserve">    
+NIP.
+ PPPK
+. 
+19880528 202321 1 017
+<w:tcPr><w:tcW w:w="2126" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="0D064342" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="444EF738" w14:textId="77777777" w:rsidR="005F5035" w:rsidRDefault="005F5035" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="246EFAAF" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr><w:r><w:t>3
+…………………….
+...
+<w:tcPr><w:tcW w:w="1843" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="5093CF29" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="00EC2B5C"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1984" w:type="dxa"/></w:tcPr><w:p w14:paraId="517F2B97" w14:textId="77777777" w:rsidR="00EC2B5C" w:rsidRPr="00E42E4A" w:rsidRDefault="00EC2B5C" w:rsidP="00BE0E3F"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="000A71E1" w:rsidRPr="00E42E4A" w14:paraId="4E6DBE7D" w14:textId="77777777" w:rsidTr="00A378CE"><w:trPr><w:trHeight w:val="850"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3935" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="2F207A73" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRPr="00227E33" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:tabs><w:tab w:val="left" w:pos="567"/><w:tab w:val="left" w:pos="851"/><w:tab w:val="decimal" w:leader="hyphen" w:pos="1134"/><w:tab w:val="left" w:leader="hyphen" w:pos="1276"/><w:tab w:val="left" w:pos="3119"/></w:tabs><w:contextualSpacing/><w:rPr><w:rFonts w:eastAsia="Calibri" w:cs="Times New Roman"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t>4
+. 
+RINALDI SURYAGRAHANA
+, S.E.
+<w:tab w:val="left" w:pos="567"/><w:tab w:val="left" w:pos="851"/><w:tab w:val="decimal" w:leader="hyphen" w:pos="1134"/><w:tab w:val="left" w:leader="hyphen" w:pos="1276"/><w:tab w:val="left" w:pos="3119"/></w:tabs><w:contextualSpacing/><w:rPr><w:rFonts w:eastAsia="Calibri" w:cs="Times New Roman"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="en-US"/></w:rPr></w:pPr><w:r w:rsidRPr="00227E33"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t xml:space="preserve">    
+NIP. 
+PPPK. 
+19880318 202321 1 018
+<w:tcPr><w:tcW w:w="2126" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="6C2990EC" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="11A9A1BA" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="33AE16F1" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRPr="00E42E4A" w:rsidRDefault="00420BD3" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr><w:r><w:t>4
+…………………….
+...
+<w:tcPr><w:tcW w:w="1843" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="38B2E222" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRPr="00E42E4A" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="1984" w:type="dxa"/></w:tcPr><w:p w14:paraId="419A103D" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRPr="00E42E4A" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr></w:p></w:tc></w:tr><w:tr w:rsidR="000A71E1" w:rsidRPr="00E42E4A" w14:paraId="464FB086" w14:textId="77777777" w:rsidTr="00A378CE"><w:trPr><w:trHeight w:val="849"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="3935" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="6331A271" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRPr="00EC2B5C" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/></w:pPr><w:r><w:t>5
+. 
+SEALVY ARIYANTI SURYANA
+NIP. 
+PPPK. 
+19910927 202521 2 065
+<w:tcPr><w:tcW w:w="2126" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p w14:paraId="468D67A1" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="39CD5752" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRDefault="000A71E1" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr></w:p><w:p w14:paraId="159BA861" w14:textId="77777777" w:rsidR="000A71E1" w:rsidRPr="00E42E4A" w:rsidRDefault="00420BD3" w:rsidP="007772D1"><w:pPr><w:pStyle w:val="BodyText"/><w:spacing w:before="1"/><w:ind w:left="0" w:right="418"/><w:jc w:val="center"/></w:pPr><w:r><w:t>5
+…………………….
+...

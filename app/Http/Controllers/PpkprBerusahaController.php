@@ -210,6 +210,7 @@ class PpkprBerusahaController extends Controller
                 
                 if ($action === 'approve') {
                     $application->bpn_berkas_status = 'diterima';
+                    $application->bpn_berkas_approved_at = now();
                     // Alur berlanjut ke Validasi Permohonan oleh Dinas PUTR / Dinas PU
                     $application->status = 'menunggu_dinas_pu';
                     $application->dinas_pu_status = 'menunggu_validasi_awal';
@@ -237,6 +238,7 @@ class PpkprBerusahaController extends Controller
                 // Simpan no berkas dan konfirmasi pembayaran
                 $application->no_berkas = $request->input('no_berkas');
                 $application->bpn_pembayaran_status = 'sudah_bayar';
+                    $application->bpn_pembayaran_approved_at = now();
                 $application->save();
                 $application->user->update(['is_active' => true]);
 

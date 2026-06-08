@@ -243,6 +243,7 @@ class PpkprNonBerusahaController extends Controller
             $application->bpn_notes = $notes;
             if ($action === 'approve') {
                 $application->bpn_berkas_status = 'diterima';
+                    $application->bpn_berkas_approved_at = now();
                 $application->bpn_pembayaran_status = 'menunggu';
                 // Tetap menunggu BPN untuk langkah pembayaran PNBP
                 $msg = 'Berkas persyaratan berhasil diterima. Menunggu proses konfirmasi pembayaran PNBP.';
@@ -264,6 +265,7 @@ class PpkprNonBerusahaController extends Controller
             $request->validate(['no_berkas' => 'required|string|max:100'], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
             $application->no_berkas          = $request->input('no_berkas');
             $application->bpn_pembayaran_status = 'sudah_bayar';
+                    $application->bpn_pembayaran_approved_at = now();
             $application->credential_sent_at = now();
             $application->save();
             

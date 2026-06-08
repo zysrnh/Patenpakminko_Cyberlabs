@@ -1100,6 +1100,75 @@
 
                 <!-- Right: Staged Tracking Timeline -->
                 <div>
+                                        <!-- SLA Banner -->
+                    <style>
+                        .sla-banner { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 20px; }
+                        .sla-item { padding: 16px; border-radius: 10px; border: 1.5px solid; display: flex; justify-content: space-between; align-items: center;}
+                        .sla-info { display: flex; flex-direction: column; }
+                        .sla-title { font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; opacity: 0.8; }
+                        .sla-value { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+                        .sla-desc { font-size: 12.5px; opacity: 0.9; }
+                        .sla-badge { padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 14px; text-align: center; }
+                    </style>
+                    @php
+                        $targetDate = $application->created_at->addWeekdays(10);
+                        $now = \Carbon\Carbon::now();
+                        
+                        $isBpnDone = ($application->bpn_pertek_document != null || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                        
+                        if ($isBpnDone) {
+                            $daysRemaining = 0;
+                            $slaColor = '#0F5132';
+                            $slaBg = '#D1E7DD';
+                            $slaBorder = '#BADBCC';
+                            $badgeText = '✅ Selesai';
+                            $badgeBg = '#198754';
+                            $badgeColor = '#FFFFFF';
+                        } else {
+                            $daysRemaining = 0;
+                            if ($now->startOfDay() <= $targetDate->startOfDay()) {
+                                $daysRemaining = $now->startOfDay()->diffInWeekdays($targetDate->startOfDay());
+                            } else {
+                                $daysRemaining = -1 * $targetDate->startOfDay()->diffInWeekdays($now->startOfDay());
+                            }
+                            
+                            if ($daysRemaining >= 4) {
+                                $slaColor = '#0F5132';
+                                $slaBg = '#D1E7DD';
+                                $slaBorder = '#BADBCC';
+                                $badgeText = '⏳ ' . $daysRemaining . ' Hari Tersisa';
+                                $badgeBg = '#198754';
+                                $badgeColor = '#FFFFFF';
+                            } elseif ($daysRemaining >= 0) {
+                                $slaColor = '#664D03';
+                                $slaBg = '#FFF3CD';
+                                $slaBorder = '#FFECB5';
+                                $badgeText = '⚠️ ' . $daysRemaining . ' Hari Tersisa';
+                                $badgeBg = '#FFC107';
+                                $badgeColor = '#000000';
+                            } else {
+                                $slaColor = '#842029';
+                                $slaBg = '#F8D7DA';
+                                $slaBorder = '#F5C2C7';
+                                $badgeText = '🚨 Terlambat ' . abs($daysRemaining) . ' Hari';
+                                $badgeBg = '#DC3545';
+                                $badgeColor = '#FFFFFF';
+                            }
+                        }
+                    @endphp
+                    <div class="sla-banner">
+                        <div class="sla-item" style="background-color: {{ $slaBg }}; border-color: {{ $slaBorder }}; color: {{ $slaColor }};">
+                            <div class="sla-info">
+                                <div class="sla-title">SLA Tahap 1 (Kantor Pertanahan)</div>
+                                <div class="sla-value">Target: {{ $targetDate->format('d M Y') }}</div>
+                                <div class="sla-desc">Batas waktu penyelesaian Pertek adalah 10 Hari Kerja.</div>
+                            </div>
+                            <div class="sla-badge" style="background-color: {{ $badgeBg }}; color: {{ $badgeColor }};">
+                                {{ $badgeText }}
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <h2 class="card-title">Linimasa Pelacakan Berkas</h2>
                         
@@ -1124,6 +1193,11 @@
                             <div class="timeline-step {{ $step2Status }}" onclick="showBpnPanel(1)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">1. Verifikasi Berkas Awal (BPN)</div>
+                                    @if($application->bpn_berkas_approved_at)
+                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
+                                        <i class="fas fa-calendar-check"></i> Disetujui: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->translatedFormat('d M Y, H:i') }}
+                                    </div>
+                                    @endif
                                 <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon oleh Kantor Pertanahan.</div>
                             </div>
 
@@ -1140,7 +1214,12 @@
                             @endphp
                             <div class="timeline-step {{ $step3Status }}" onclick="showBpnPanel(2)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">2. Peninjauan Lokasi Lapangan (BPN)</div>
+                                <div class="timeline-title">2. Peninjauan Lapangan Kantor Pertanahan</div>
+                                    @if($application->bpn_cek_lokasi_dt)
+                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
+                                        <i class="fas fa-calendar-check"></i> Jadwal Tinjauan: {{ \Carbon\Carbon::parse($application->bpn_cek_lokasi_dt)->translatedFormat('d M Y, H:i') }}
+                                    </div>
+                                    @endif
                                 <div class="timeline-desc">
                                     @if($application->bpn_cek_lokasi_dt)
                                         Dijadwalkan pada: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>
@@ -1164,7 +1243,12 @@
                             @endphp
                             <div class="timeline-step {{ $step4Status }}" onclick="showBpnPanel(3)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">3. Rapat Pembahasan Pertek (BPN)</div>
+                                <div class="timeline-title">3. Rapat Pembahasan Pertimbangan Teknis Pertanahan</div>
+                                    @if($application->bpn_rapat_dt)
+                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
+                                        <i class="fas fa-calendar-check"></i> Jadwal Rapat: {{ \Carbon\Carbon::parse($application->bpn_rapat_dt)->translatedFormat('d M Y, H:i') }}
+                                    </div>
+                                    @endif
                                 <div class="timeline-desc">
                                     @if($application->bpn_rapat_dt)
                                         Dijadwalkan pada: <strong>{{ $application->bpn_rapat_date }}</strong>
@@ -1190,6 +1274,11 @@
                             <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(4)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">4. Penerbitan Pertek Pertanahan (BPN)</div>
+                                    @if($application->bpn_pertek_uploaded_at)
+                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
+                                        <i class="fas fa-calendar-check"></i> Terbit: {{ \Carbon\Carbon::parse($application->bpn_pertek_uploaded_at)->translatedFormat('d M Y, H:i') }}
+                                    </div>
+                                    @endif
                                 <div class="timeline-desc">
                                     @if($application->bpn_pertek_document)
                                         Dokumen Pertek resmi diterbitkan. Permohonan diteruskan ke Dinas PU.
@@ -1234,7 +1323,12 @@
                             @endphp
                             <div class="timeline-step {{ $step7Status }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">6. Penerbitan PKKPR (Satu Pintu / PTSP)</div>
+                                <div class="timeline-title">6. Penerbitan PKKPR (Dinas PMPTSP)</div>
+                                    @if($application->satu_pintu_tanggal_terbit)
+                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
+                                        <i class="fas fa-calendar-check"></i> Terbit: {{ \Carbon\Carbon::parse($application->satu_pintu_tanggal_terbit)->translatedFormat('d M Y') }}
+                                    </div>
+                                    @endif
                                 <div class="timeline-desc">
                                     Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu menerbitkan dokumen PKKPR resmi.
                                 </div>
