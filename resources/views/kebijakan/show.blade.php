@@ -575,16 +575,16 @@
                     <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
                     
                     <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
-                        @if($application->user && $application->user->profile_photo)
-                            <img src="{{ asset('storage/' . $application->user->profile_photo) }}" alt="Foto Profil" class="header-avatar">
+                        @if(Auth::user()->profile_photo)
+                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar">
                         @else
                             <div class="header-avatar-placeholder">
-                                {{ strtoupper(substr($application->nama_pengaju, 0, 2)) }}
+                                {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 2)) }}
                             </div>
                         @endif
                         <div class="user-badge">
-                            <strong>{{ $application->nama_pengaju }}</strong>
-                            <span>{{ $application->user->phone_number ?? '' }}</span>
+                            <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
+                            <span>{{ Auth::user()->phone_number ?? '' }}</span>
                         </div>
                     </div>
  
@@ -725,120 +725,160 @@
  
                         <!-- TAHAP 1: Verifikasi Berkas Awal -->
                         @if($application->bpn_berkas_status === 'menunggu')
-                            <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="step" value="bpn_berkas">
-                                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                    <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 1: Verifikasi Dokumen Persyaratan Awal</strong>
-                                    <span class="verify-step-badge">Aktif</span>
-                                </div>
-                                <div class="form-group-v">
-                                    <label for="action">Tindakan Kelayakan Berkas</label>
-                                    <select name="action" id="action" class="form-select-v" required>
-                                        <option value="approve">Disetujui</option>
-                                        <option value="reject">Tidak Disetujui</option>
-                                    </select>
-                                </div>
-                                <div class="form-group-v">
-                                    <label for="notes">Catatan Kelayakan Berkas</label>
-                                    <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan pemeriksaan dokumen awal..." required></textarea>
-                                </div>
-                                <button type="submit" class="btn-submit-v">Simpan Verifikasi Tahap 1</button>
-                            </form>
- 
-                        <!-- TAHAP 2: Penjadwalan Cek Lokasi -->
-                        @elseif($application->bpn_berkas_status === 'diterima')
-                            <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
-                                @csrf
-                                <input type="hidden" name="step" value="bpn_cek_lokasi">
-                                <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                    <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 2: Penentuan Jadwal Cek Lokasi Lapangan</strong>
-                                    <span class="verify-step-badge">Aktif</span>
-                                </div>
- 
-                                @if($application->bpn_cek_lokasi_dt)
-                                    <div style="background: var(--clr-blue-lt); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--clr-blue-dk); margin-bottom: 16px; border-left: 3px solid var(--clr-blue);">
-                                        Jadwal cek lokasi saat ini sudah diatur pada: <strong>{{ $application->bpn_cek_lokasi_date }}</strong>.<br>
-                                        Anda dapat memperbarui jadwal di bawah ini jika diperlukan.
-                                    </div>
-                                @endif
- 
-                                <div class="form-grid-2">
-                                    <div class="form-group-v">
-                                        <label for="bpn_cek_lokasi_dt">Waktu Peninjauan Lapangan</label>
-                                        <input type="datetime-local" name="bpn_cek_lokasi_dt" id="bpn_cek_lokasi_dt" class="form-control-v" 
-                                               value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}" required>
-                                    </div>
-                                    <div class="form-group-v">
-                                        <label for="bpn_cek_lokasi_cp">Kontak Person Lapangan (Nama/No. HP)</label>
-                                        <input type="text" name="bpn_cek_lokasi_cp" id="bpn_cek_lokasi_cp" class="form-control-v" placeholder="cth: Budi Setiawan (08123456789)" 
-                                               value="{{ $application->bpn_cek_lokasi_cp }}" required>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn-submit-v">
-                                    {{ $application->bpn_cek_lokasi_dt ? 'Sesuaikan & Kirim Jadwal Baru' : 'Simpan & Kirim Jadwal Ke WhatsApp' }}
-                                </button>
-                            </form>
- 
-                            <!-- TAHAP 3: Penjadwalan Sidang / Rapat Koordinasi -->
-                            @if($application->bpn_cek_lokasi_dt)
-                                <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
-                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
-                                    @csrf
-                                    <input type="hidden" name="step" value="bpn_rapat">
-                                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                        <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 3: Penjadwalan Sidang / Rapat Koordinasi BPN</strong>
-                                        <span class="verify-step-badge">Aktif</span>
-                                    </div>
- 
-                                    @if($application->bpn_rapat_dt)
-                                        <div style="background: var(--clr-blue-lt); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--clr-blue-dk); margin-bottom: 16px; border-left: 3px solid var(--clr-blue);">
-                                            Jadwal Rapat Koordinasi saat ini sudah diatur pada: <strong>{{ $application->bpn_rapat_date }}</strong>.<br>
-                                            Anda dapat memperbarui jadwal di bawah ini jika diperlukan.
+                            {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
+                            <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
+                                @php $isStep1Active = ($application->bpn_berkas_status === 'menunggu'); @endphp
+                                <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
+                                    <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="step" value="bpn_berkas">
+                                        <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
+                                            <strong>Langkah 1 dari 4 — Verifikasi Berkas Awal:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, lalu terima atau tolak.
                                         </div>
-                                    @endif
- 
-                                    <div class="form-group-v">
-                                        <label for="bpn_rapat_dt">Waktu Sidang/Rapat Koordinasi</label>
-                                        <input type="datetime-local" name="bpn_rapat_dt" id="bpn_rapat_dt" class="form-control-v" 
-                                               value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}" required>
-                                    </div>
-                                    <button type="submit" class="btn-submit-v">
-                                        {{ $application->bpn_rapat_dt ? 'Sesuaikan & Kirim Rapat Baru' : 'Simpan & Kirim Jadwal Rapat Ke WhatsApp' }}
-                                    </button>
-                                </form>
-                            @endif
- 
-                            <!-- TAHAP 4: Penerbitan Surat Pertek Akhir -->
-                            @if($application->bpn_rapat_dt && !$application->bpn_pertek_document)
-                                <hr style="border:none;border-top:1px solid #edf2f7;margin:20px 0;">
-                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="step" value="bpn_pertek">
-                                    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                        <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 4: Unggah Dokumen Pertek Hasil Akhir</strong>
-                                        <span class="verify-step-badge">Aktif</span>
-                                    </div>
-                                    <div class="form-group-v">
-                                        <label for="action">Keputusan Rekomendasi Teknis</label>
-                                        <select name="action" id="action" class="form-select-v" required>
-                                            <option value="approve">Disetujui</option>
-                                            <option value="reject">Tidak Disetujui</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group-v">
-                                        <label for="bpn_pertek_document">Dokumen Surat Rekomendasi/Pertek (PDF)</label>
-                                        <input type="file" name="bpn_pertek_document" id="bpn_pertek_document" class="form-control-v" accept=".pdf,.doc,.docx">
-                                        <span style="font-size: 11px; color: var(--clr-muted);">*Wajib diunggah jika permohonan disetujui. Maksimal 10MB.</span>
-                                    </div>
-                                    <div class="form-group-v">
-                                        <label for="notes">Catatan Rekomendasi/Pertek Akhir BPN</label>
-                                        <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan ringkasan pertimbangan tata ruang BPN..." required></textarea>
-                                    </div>
-                                    <button type="submit" class="btn-submit-v">Tuntaskan & Terbitkan Hasil Akhir</button>
-                                </form>
-                            @endif
-                        @endif
+                                        <div class="form-group-v">
+                                            <label for="action">Tindakan Kelayakan Berkas</label>
+                                            <select name="action" id="action" class="form-select-v" required>
+                                                <option value="approve" {{ $application->bpn_berkas_status === 'diterima' ? 'selected' : '' }}>Disetujui</option>
+                                                <option value="reject" {{ $application->bpn_berkas_status === 'ditolak' ? 'selected' : '' }}>Tidak Disetujui</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-v">
+                                            <label for="notes">Catatan Kelayakan Berkas</label>
+                                            <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan pemeriksaan dokumen awal..." required>{{ $application->bpn_berkas_status !== 'menunggu' ? $application->bpn_notes : '' }}</textarea>
+                                        </div>
+                                        @if($isStep1Active)
+                                            <button type="submit" class="btn-submit-v">Simpan Verifikasi Tahap 1</button>
+                                        @else
+                                            <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini sudah diselesaikan / dikunci)</div>
+                                        @endif
+                                    </form>
+                                </fieldset>
+                            </div>
+
+                            <div id="bpn-panel-2" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'diterima' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
+                                @php $isStep2Active = ($application->bpn_berkas_status === 'diterima'); @endphp
+                                <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
+                                    <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
+                                        @csrf
+                                        <input type="hidden" name="step" value="bpn_cek_lokasi">
+                                        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+                                            <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 2: Penentuan Jadwal Cek Lokasi Lapangan</strong>
+                                        </div>
+                                        @if($application->bpn_cek_lokasi_dt)
+                                            <div style="background: var(--clr-blue-lt); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--clr-blue-dk); margin-bottom: 16px; border-left: 3px solid var(--clr-blue);">
+                                                Jadwal cek lokasi saat ini sudah diatur pada: <strong>{{ $application->bpn_cek_lokasi_date }}</strong>.<br>
+                                                Anda dapat memperbarui jadwal di bawah ini jika diperlukan.
+                                            </div>
+                                        @endif
+                                        <div class="form-grid-2">
+                                            <div class="form-group-v">
+                                                <label for="bpn_cek_lokasi_dt">Waktu Peninjauan Lapangan</label>
+                                                <input type="datetime-local" name="bpn_cek_lokasi_dt" id="bpn_cek_lokasi_dt" class="form-control-v" 
+                                                       value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}" required>
+                                            </div>
+                                            <div class="form-group-v">
+                                                <label for="bpn_cek_lokasi_cp">Kontak Person Lapangan (Nama/No. HP)</label>
+                                                <input type="text" name="bpn_cek_lokasi_cp" id="bpn_cek_lokasi_cp" class="form-control-v" placeholder="cth: Budi Setiawan (08123456789)" 
+                                                       value="{{ $application->bpn_cek_lokasi_cp }}" required>
+                                            </div>
+                                        </div>
+                                        @if($isStep2Active)
+                                            <button type="submit" class="btn-submit-v">
+                                                {{ $application->bpn_cek_lokasi_dt ? 'Sesuaikan & Kirim Jadwal Baru' : 'Simpan & Kirim Jadwal Ke WhatsApp' }}
+                                            </button>
+                                        @else
+                                            <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
+                                        @endif
+                                    </form>
+                                </fieldset>
+                            </div>
+
+                            <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
+                                @php $isStep3Active = ($application->bpn_cek_lokasi_dt && $cekLokasiLewat); @endphp
+                                <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
+                                    <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
+                                        @csrf
+                                        <input type="hidden" name="step" value="bpn_rapat">
+                                        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+                                            <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 3: Penjadwalan Sidang / Rapat Koordinasi BPN</strong>
+                                        </div>
+                                        @if($application->bpn_rapat_dt)
+                                            <div style="background: var(--clr-blue-lt); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--clr-blue-dk); margin-bottom: 16px; border-left: 3px solid var(--clr-blue);">
+                                                Jadwal Rapat Koordinasi saat ini sudah diatur pada: <strong>{{ $application->bpn_rapat_date }}</strong>.<br>
+                                                Anda dapat memperbarui jadwal di bawah ini jika diperlukan.
+                                            </div>
+                                        @endif
+                                        <div class="form-group-v">
+                                            <label for="bpn_rapat_dt">Waktu Sidang/Rapat Koordinasi</label>
+                                            <input type="datetime-local" name="bpn_rapat_dt" id="bpn_rapat_dt" class="form-control-v" 
+                                                   value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}" required>
+                                        </div>
+                                        @if($isStep3Active)
+                                            <button type="submit" class="btn-submit-v">
+                                                {{ $application->bpn_rapat_dt ? 'Sesuaikan & Kirim Rapat Baru' : 'Simpan & Kirim Jadwal Rapat Ke WhatsApp' }}
+                                            </button>
+                                        @else
+                                            <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
+                                        @endif
+                                    </form>
+                                </fieldset>
+                            </div>
+
+                            <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
+                                @php $isStep4Active = ($application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
+                                <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
+                                    <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="step" value="bpn_pertek">
+                                        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
+                                            <strong style="font-size: 13.5px; color: var(--clr-ink);">TAHAP 4: Unggah Dokumen Pertek Hasil Akhir</strong>
+                                        </div>
+                                        <div class="form-group-v">
+                                            <label for="action">Keputusan Rekomendasi Teknis</label>
+                                            <select name="action" id="action" class="form-select-v" required>
+                                                <option value="approve" {{ $application->bpn_pertek_document || $application->status === 'disetujui' ? 'selected' : '' }}>Disetujui</option>
+                                                <option value="reject" {{ $application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima' ? 'selected' : '' }}>Tidak Disetujui</option>
+                                            </select>
+                                        </div>
+                                        @if($application->bpn_pertek_document)
+                                            <div class="form-group-v">
+                                                <label for="bpn_pertek_document">Dokumen Pertek / Rekomendasi (PDF)</label>
+                                                <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" style="color:#218AC9; text-decoration:underline; display:block;">Lihat Dokumen Terunggah</a>
+                                            </div>
+                                        @else
+                                            <div class="form-group-v">
+                                                <label for="bpn_pertek_document">Dokumen Surat Rekomendasi/Pertek (PDF)</label>
+                                                <input type="file" name="bpn_pertek_document" id="bpn_pertek_document" class="form-control-v" accept=".pdf,.doc,.docx">
+                                                <span style="font-size: 11px; color: var(--clr-muted);">*Wajib diunggah jika permohonan disetujui. Maksimal 10MB.</span>
+                                            </div>
+                                        @endif
+                                        <div class="form-group-v">
+                                            <label for="notes">Catatan Rekomendasi/Pertek Akhir BPN</label>
+                                            <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan ringkasan pertimbangan tata ruang BPN..." required>{{ $application->status === 'disetujui' || ($application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima') ? $application->bpn_notes : '' }}</textarea>
+                                        </div>
+                                        @if($isStep4Active)
+                                            <button type="submit" class="btn-submit-v">Tuntaskan & Terbitkan Hasil Akhir</button>
+                                        @else
+                                            <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
+                                        @endif
+                                    </form>
+                                </fieldset>
+                            </div>
+                            
+                            <script>
+                                function showBpnPanel(stepNum) {
+                                    // hide all
+                                    document.querySelectorAll('.bpn-panel-step').forEach(function(el) {
+                                        el.style.display = 'none';
+                                    });
+                                    // show the selected one
+                                    var target = document.getElementById('bpn-panel-' + stepNum);
+                                    if(target) {
+                                        target.style.display = 'block';
+                                        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    }
+                                }
+                            </script>
  
                     @endif
                 </div>
@@ -862,26 +902,7 @@
                                     <span class="badge-status" style="background-color: {{ $application->status_color }};">
                                         {{ $application->status_label }}
                                     </span>
-                                    @if(Auth::user()->isBpn())
-                                        
-                                        <div style="display: inline-flex; gap: 4px; margin-left: 8px;">
-                                            <form action="{{ route('application.rollback', ['kebijakan_khusus', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan ke tahap sebelumnya?')">
-                                                @csrf
-                                                <button type="submit" style="background: #E53E3E; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-                                                    Prev
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('application.forward', ['kebijakan_khusus', $application->id]) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Bypass ke tahap selanjutnya?')">
-                                                @csrf
-                                                <button type="submit" style="background: #48BB78; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                                                    Next
-                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                                                </button>
-                                            </form>
-                                        </div>
 
-                                    @endif
                                 </span>
                             </li>
                             <li class="detail-item">
@@ -1049,7 +1070,7 @@
                                     $step2Status = 'rejected';
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step2Status }}">
+                            <div class="timeline-step {{ $step2Status }}" onclick="showBpnPanel(1)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">1. Verifikasi Berkas Awal (BPN)</div>
                                 <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon.</div>
@@ -1071,7 +1092,7 @@
                                     }
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step3Status }}">
+                            <div class="timeline-step {{ $step3Status }}" onclick="showBpnPanel(2)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">2. Cek Lokasi Lapangan (BPN)</div>
                                 <div class="timeline-desc">
@@ -1095,7 +1116,7 @@
                                     }
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step4Status }}">
+                            <div class="timeline-step {{ $step4Status }}" onclick="showBpnPanel(3)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">3. Sidang / Rapat Koordinasi (BPN)</div>
                                 <div class="timeline-desc">
@@ -1114,7 +1135,7 @@
                                     $step5Status = $application->bpn_pertek_document ? 'completed' : 'active';
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step5Status }}">
+                            <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(4)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">4. Penerbitan Pertek Pertanahan</div>
                                 <div class="timeline-desc">

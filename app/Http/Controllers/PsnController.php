@@ -106,6 +106,7 @@ class PsnController extends Controller
         // WA Notifikasi ke pemohon
         $this->sendCustomWa($app, 'submit');
 
+        Auth::logout();
         return redirect()->route('pengajuan.sukses');
     }
 

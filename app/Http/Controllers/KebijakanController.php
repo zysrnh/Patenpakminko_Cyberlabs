@@ -130,6 +130,7 @@ class KebijakanController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan Kebijakan Khusus baru berhasil diajukan.');
  
+        Auth::logout();
         return redirect()->route('pengajuan.sukses');
     }
  
@@ -224,6 +225,7 @@ class KebijakanController extends Controller
                 $msg = 'Permohonan ditolak pada verifikasi berkas awal oleh BPN.';
             } else {
                 $msg = 'Berkas awal berhasil disetujui. Silakan tentukan jadwal cek lokasi.';
+                $application->user->update(['is_active' => true]);
             }
             $application->save();
  

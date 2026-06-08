@@ -153,6 +153,7 @@ class PpkprNonBerusahaController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan baru berhasil diajukan oleh pemohon.');
 
+        Auth::logout();
         return redirect()->route('pengajuan.sukses');
     }
 
@@ -242,8 +243,9 @@ class PpkprNonBerusahaController extends Controller
             $application->bpn_notes = $notes;
             if ($action === 'approve') {
                 $application->bpn_berkas_status = 'diterima';
-                $application->status = 'menunggu_putr'; // Lanjut ke PUTR untuk validasi pembayaran
-                $msg = 'Berkas persyaratan berhasil diterima. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran.';
+                $application->bpn_pembayaran_status = 'menunggu';
+                // Tetap menunggu BPN untuk langkah pembayaran PNBP
+                $msg = 'Berkas persyaratan berhasil diterima. Menunggu proses konfirmasi pembayaran PNBP.';
             } else {
                 $application->bpn_berkas_status = 'ditolak';
                 $application->status = 'ditolak';
@@ -257,39 +259,20 @@ class PpkprNonBerusahaController extends Controller
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
 
-        // PUTR: Validasi Permohonan â†’ notif ke pemohon (cek pembayaran) & ke admin BPN
-        if ($user->isDinasPutr() && $application->status === 'menunggu_putr' && $step === 'putr_validasi') {
-            $request->validate(['action' => 'required|in:approve,reject', 'putr_notes' => 'nullable|string|max:1000']);
-            $putrNotes = $request->input('putr_notes');
-
-            if ($request->input('action') === 'approve') {
-                $application->putr_validated_at = now();
-                $application->putr_notes        = $putrNotes;
-                $application->save();
-                $this->sendCustomWhatsappNotification($application, 'putr_notif_payment'); // ke pemohon
-                $this->sendWaToAdmin('admin_bpn', $application,                           // ke BPN
-                    "[BPN] Permohonan Non-Berusaha {$application->application_number} telah divalidasi PUTR. Menunggu konfirmasi pembayaran pemohon. Detail: " . route('non-berusaha.show', $application->id));
-                return redirect()->route('non-berusaha.show', $id)
-                    ->with('success', 'Permohonan divalidasi. Notif pembayaran terkirim ke pemohon dan BPN.');
-            } else {
-                $application->status     = 'ditolak';
-                $application->putr_notes = $putrNotes;
-                $application->save();
-                $this->sendWhatsappNotification($application, 'Permohonan Ditolak (PUTR)', $putrNotes);
-                return redirect()->route('non-berusaha.show', $id)->with('success', 'Permohonan ditolak oleh Dinas PUTR.');
-            }
-        }
-
-        // BPN: Konfirmasi Pembayaran + No. Berkas â†’ Blast Credentials ke pemohon
-        if ($user->isBpn() && $application->status === 'menunggu_putr' && $step === 'bpn_konfirmasi_bayar') {
+        // BPN Langkah 2: Konfirmasi Pembayaran PNBP + No. Berkas -> Blast Credentials ke pemohon
+        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' && $step === 'bpn_konfirmasi_bayar') {
             $request->validate(['no_berkas' => 'required|string|max:100'], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
             $application->no_berkas          = $request->input('no_berkas');
+            $application->bpn_pembayaran_status = 'sudah_bayar';
             $application->credential_sent_at = now();
-            $application->status             = 'menunggu_bpn'; // lanjut ke cek lokasi dst
             $application->save();
+            
+            // Aktivasi Akun Pengguna
+            $application->user->update(['is_active' => true]);
+
             $this->sendCustomWhatsappNotification($application, 'credential_blast');
             return redirect()->route('non-berusaha.show', $id)
-                ->with('success', 'Pembayaran dikonfirmasi. Kredensial dikirim ke WA pemohon. No. Berkas: ' . $application->no_berkas);
+                ->with('success', 'Pembayaran PNBP dikonfirmasi. Kredensial telah dikirim ke WA pemohon. No. Berkas: ' . $application->no_berkas);
         }
 
         // BPN Langkah 2: Jadwal Cek Lokasi (Fleksibel, bisa diubah berulang kali)

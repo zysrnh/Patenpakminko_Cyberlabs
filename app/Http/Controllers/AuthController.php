@@ -96,6 +96,13 @@ class AuthController extends Controller
         }
 
         if (Auth::attempt([$field => $login, 'password' => $password], $request->filled('remember'))) {
+            $user = Auth::user();
+            if ($user->role === 'pelaku_usaha' && !$user->is_active) {
+                Auth::logout();
+                return redirect()->back()->withErrors([
+                    'login' => 'Akun belum aktif. Anda baru bisa login setelah permohonan Anda mencapai tahap verifikasi pembayaran (Step 3) dan kredensial dikirimkan ke WhatsApp.',
+                ])->withInput();
+            }
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'))->with('success', 'Berhasil masuk ke sistem.');
         }

@@ -2,67 +2,69 @@
 
 @section('content')
 <style>
+    body { background-color: #F0F6FB; }
+    
     .success-page-wrapper {
-        min-height: 70vh;
         display: flex;
+        flex-direction: column;
         align-items: center;
+        padding: 60px 20px;
+        flex: 1;
         justify-content: center;
-        background: #F8FAFC;
-        padding: 40px 20px;
+        background-color: #F0F6FB;
     }
     .success-container {
         background: #FFFFFF;
-        border-radius: 12px;
-        padding: 60px 40px;
-        max-width: 800px;
         width: 100%;
+        max-width: 1100px;
+        padding: 100px 40px;
         text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        box-shadow: none;
     }
     .success-img {
-        width: 180px;
+        display: block;
+        width: 220px;
         height: auto;
-        margin-bottom: 30px;
+        margin: 0 auto 30px auto;
     }
     .success-title {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 800;
-        color: #0A1C2C;
+        color: #003B64;
         margin-bottom: 16px;
     }
     .success-desc {
-        font-size: 15px;
-        color: #4A5568;
+        font-size: 13px;
+        color: #555;
         line-height: 1.6;
-        margin-bottom: 40px;
-        font-weight: 500;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
+        max-width: 550px;
+        margin: 0 auto 32px;
     }
     .btn-home {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: #00223D;
-        color: #FFFFFF;
+        justify-content: center;
+        gap: 10px;
         padding: 14px 28px;
-        border-radius: 6px;
+        background: #003B64;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-family: inherit;
+        font-size: 13px;
         font-weight: 600;
-        text-decoration: none;
-        font-size: 14.5px;
+        cursor: pointer;
         transition: background .2s, transform .2s;
+        text-decoration: none;
     }
     .btn-home:hover {
-        background: #001526;
-        color: #FFFFFF;
-        transform: translateY(-2px);
+        background: #002642;
+        transform: translateY(-1px);
     }
     
-    @media (max-width: 768px) {
-        .success-container { padding: 40px 20px; }
+    @media (max-width: 767px) {
+        .success-container { padding: 60px 24px; }
         .success-title { font-size: 24px; }
-        .success-desc { font-size: 14px; }
     }
 </style>
 
@@ -74,7 +76,7 @@
             Terima kasih, pengiriman dokumen Anda telah berhasil dikirim dan sedang menunggu proses verifikasi oleh admin kami. Detail lanjutan akan dihubungi via WhatsApp oleh admin kami.
         </p>
         <!-- The user can go to their dashboard / timeline to see the application -->
-        <a href="{{ route('home') }}" class="btn-home">
+        <a href="{{ url('/') }}" class="btn-home">
             Kembali ke Halaman Utama &rarr;
         </a>
     </div>

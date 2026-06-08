@@ -120,6 +120,7 @@ class PpkprBerusahaController extends Controller
         // Kirim Notifikasi Awal ke Pelaku Usaha
         $this->sendCustomWhatsappNotification($app, 'submit_berkas');
  
+        Auth::logout();
         return redirect()->route('pengajuan.sukses');
     }
  
@@ -237,6 +238,7 @@ class PpkprBerusahaController extends Controller
                 $application->no_berkas = $request->input('no_berkas');
                 $application->bpn_pembayaran_status = 'sudah_bayar';
                 $application->save();
+                $application->user->update(['is_active' => true]);
 
                 // Kirim Notifikasi Blast WA Kredensial & Tautan Dashboard ke Pelaku Usaha
                 $this->sendCustomWhatsappNotification($application, 'pembayaran_lunas');
