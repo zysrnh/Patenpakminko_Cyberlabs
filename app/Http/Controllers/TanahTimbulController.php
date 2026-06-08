@@ -219,6 +219,7 @@ class TanahTimbulController extends Controller
  
             $application->bpn_notes = $notes;
             $application->bpn_berkas_status = $action === 'approve' ? 'diterima' : 'ditolak';
+            if ($action === 'approve') $application->bpn_berkas_approved_at = now();
             
             if ($action === 'reject') {
                 $application->status = 'ditolak';
@@ -236,6 +237,27 @@ class TanahTimbulController extends Controller
         }
  
         // BPN Langkah 2: Input Jadwal Cek Lokasi Lapangan
+        
+        // BPN Langkah 2: Konfirmasi Pembayaran PNBP
+        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' && $step === 'bpn_konfirmasi_bayar') {
+            $request->validate(['no_berkas' => 'required|string|max:100'], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
+            $application->no_berkas          = $request->input('no_berkas');
+            $application->bpn_pembayaran_status = 'sudah_bayar';
+            $application->bpn_pembayaran_approved_at = now();
+            $application->credential_sent_at = now();
+            $application->save();
+            
+            // Aktivasi Akun Pengguna
+            $application->user->update(['is_active' => true]);
+
+            // Kirim notifikasi WA kredensial
+            $this->sendCustomWa($application, 'credential');
+
+            // Redirect route
+            $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
+            return redirect()->route($routeName, $id)->with('success', 'Pembayaran PNBP dikonfirmasi. Akun telah diaktifkan dan dikirim ke pemohon.');
+        }
+
         if ($user->isBpn() && $application->status === 'menunggu_bpn' && $step === 'bpn_cek_lokasi') {
             $request->validate([
                 'bpn_cek_lokasi_dt' => 'required|date',
@@ -494,5 +516,33 @@ class TanahTimbulController extends Controller
         array_unshift($logs, $newLog);
         file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
-}
+        // SATU PINTU Langkah 6: Upload Sertifikat Akhir (Dinas PMPTSP)
+        if ($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu' && $step === 'satu_pintu_terbit') {
+            $request->validate([
+                'approval_document' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                'satu_pintu_no_pkkpr' => 'required|string|max:100',
+                'satu_pintu_tanggal_terbit' => 'required|date',
+                'notes' => 'nullable|string|max:1000'
+            ], [
+                'approval_document.required' => 'Dokumen PKKPR Final wajib diunggah.',
+                'satu_pintu_no_pkkpr.required' => 'Nomor Surat PKKPR wajib diisi.',
+                'satu_pintu_tanggal_terbit.required' => 'Tanggal Terbit wajib diisi.'
+            ]);
 
+            $path = $request->file('approval_document')->store('pkkpr_finals', 'public');
+            
+            $application->approval_document = $path;
+            $application->satu_pintu_no_pkkpr = $request->input('satu_pintu_no_pkkpr');
+            $application->satu_pintu_tanggal_terbit = $request->input('satu_pintu_tanggal_terbit');
+            $application->satu_pintu_notes  = $request->input('notes', '');
+            $application->status = 'disetujui';
+            $application->save();
+
+            // WA Notifikasi Selesai (Diterbitkan)
+            $this->sendCustomWa($application, 'penerbitan_pkkpr');
+
+            $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
+            return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');
+        }
+
+}

@@ -76,6 +76,7 @@ class PsnController extends Controller
         $data['user_id']            = Auth::id();
         $data['status']             = 'menunggu_bpn';
         $data['bpn_berkas_status']  = 'menunggu';
+        $data['bpn_pembayaran_status'] = 'menunggu';
         $data['application_number'] = 'PSN-' . date('Ymd') . '-' . strtoupper(Str::random(5));
 
         if (session()->has('ptp_form_data')) {
@@ -179,6 +180,7 @@ class PsnController extends Controller
 
             $application->bpn_notes        = $notes;
             $application->bpn_berkas_status = $action === 'approve' ? 'diterima' : 'ditolak';
+            $application->bpn_berkas_approved_at = now();
 
             if ($action === 'reject') {
                 $application->status = 'ditolak';
@@ -228,6 +230,25 @@ class PsnController extends Controller
         }
 
         // BPN Langkah 2 â€” Jadwal Cek Lokasi
+        
+        // BPN Langkah 2: Konfirmasi Pembayaran PNBP
+        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' && $step === 'bpn_konfirmasi_bayar') {
+            $request->validate(['no_berkas' => 'required|string|max:100'], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
+            $application->no_berkas          = $request->input('no_berkas');
+            $application->bpn_pembayaran_status = 'sudah_bayar';
+            $application->bpn_pembayaran_approved_at = now();
+            $application->credential_sent_at = now();
+            $application->save();
+            
+            // Aktivasi Akun Pengguna
+            $application->user->update(['is_active' => true]);
+
+            // Kirim notifikasi WA kredensial
+            $this->sendCustomWa($application, 'credential');
+
+            return redirect()->route('psn.show', $id)->with('success', 'Pembayaran PNBP dikonfirmasi. Akun telah diaktifkan dan dikirim ke pemohon.');
+        }
+
         if ($user->isBpn() && $application->status === 'menunggu_bpn' && $step === 'bpn_cek_lokasi') {
             $request->validate([
                 'bpn_cek_lokasi_dt' => 'required|date',
@@ -394,6 +415,17 @@ class PsnController extends Controller
         $msg = match ($type) {
             'submit' =>
                 "Halo {$nama}, permohonan PKKPR PSN (Proyek Strategis Nasional) Anda dengan nomor {$noReg} berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.",
+
+            
+            'credential' => "Halo {$nama},
+
+Pembayaran PNBP untuk permohonan PSN {$noReg} telah dikonfirmasi oleh BPN.
+
+Berikut adalah akun Anda untuk mengakses portal PATEN PAK MIKO:
+*Username:* {$app->user->username}
+*Password:* {$app->user->plain_password}
+
+Silakan login untuk memantau status permohonan secara berkala.",
 
             'berkas_verifikasi' => $app->bpn_berkas_status === 'diterima'
                 ? "Halo {$nama}, berkas PSN {$noReg} dinyatakan VALID oleh BPN. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran. Kami akan menghubungi Anda kembali."

@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'bpn_notes',
     'dinas_pu_notes',
     'satu_pintu_notes',
+    'satu_pintu_no_pkkpr',
+    'satu_pintu_tanggal_terbit',
     'approval_document',
     'peta_lokasi',
     'surat_kuasa',
@@ -25,6 +27,12 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'rencana_penggunaan_tanah',
     'persyaratan_lainnya',
     'bpn_berkas_status',
+    'bpn_pembayaran_status',
+    'no_berkas',
+    'credential_sent_at',
+    'bpn_berkas_approved_at',
+    'bpn_pembayaran_approved_at',
+    'bpn_rapat_approved_at',
     'bpn_cek_lokasi_date',
     'bpn_cek_lokasi_dt',
     'bpn_cek_lokasi_cp',
@@ -45,6 +53,7 @@ class KebijakanApplication extends Model
         'bpn_rapat_dt'      => 'datetime',
         'bpn_pertek_uploaded_at' => 'datetime',
         'souvenir_sent_at'  => 'datetime',
+        'satu_pintu_tanggal_terbit' => 'date',
     ];
  
     /**
