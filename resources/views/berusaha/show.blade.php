@@ -765,13 +765,11 @@
             <!-- ==================================================== -->
  
             <!-- 1. BPN PANEL -->
-            @if($user->isBpn() && $application->status === 'menunggu_bpn')
-                <div class="verify-card">
-                    <h3 class="verify-title">🏢 Panel Pemeriksaan BPN</h3>
+            
  
                     <!-- SUB-STEP 1: Verifikasi Berkas Awal -->
                         <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
-                            @php $isStep1Active = ($application->bpn_berkas_status === 'menunggu'); @endphp
+                            @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -814,7 +812,7 @@
                         </div>
 
                         <div id="bpn-panel-2" class="bpn-panel-step" style="display: {{ $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar' ? 'block' : 'none' }};">
-                            @php $isStep2Active = ($application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar'); @endphp
+                            @php $isStep2Active = (Auth::user()->isBpn() && $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar'); @endphp
                             <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -845,7 +843,7 @@
                         </div>
 
                         <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && !$application->bpn_cek_lokasi_dt ? 'block' : 'none' }};">
-                            @php $isStep3Active = ($application->bpn_pembayaran_status === 'sudah_bayar'); @endphp
+                            @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar'); @endphp
                             <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -878,7 +876,7 @@
                         </div>
 
                         <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && !$application->bpn_rapat_dt ? 'block' : 'none' }};">
-                            @php $isStep4Active = ($application->bpn_cek_lokasi_dt && true); @endphp
+                            @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && !$application->bpn_rapat_dt); @endphp
                             <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -904,7 +902,7 @@
                         </div>
 
                         <div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && !$application->bpn_pertek_document ? 'block' : 'none' }};">
-                            @php $isStep5Active = ($application->bpn_rapat_dt && !$application->bpn_pertek_document); @endphp
+                            @php $isStep5Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && !$application->bpn_pertek_document); @endphp
                             <fieldset {{ $isStep5Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
@@ -956,10 +954,7 @@
                                 }
                             }
                         </script>
-                </div>
-            @endif
- 
-            <!-- Success / Error Messages -->
+                <!-- Success / Error Messages -->
             <!-- 2. DINAS PU PANEL -->
             @if($user->isDinasPu() && $application->status === 'menunggu_dinas_pu')
                 @if($application->dinas_pu_status === 'menunggu_validasi_awal')
@@ -1360,7 +1355,7 @@
                                     }
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step3Status }}">
+                            <div class="timeline-step {{ $step3Status }}" onclick="showBpnPanel('pu-1')" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">2. Validasi Permohonan (Dinas PUTR)</div>
                                 <div class="timeline-desc">
@@ -1472,7 +1467,7 @@
                                     }
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step8Status }}">
+                            <div class="timeline-step {{ $step8Status }}" onclick="showBpnPanel('pu-2')" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">7. Penilaian PKKPR (Dinas PU)</div>
                                 <div class="timeline-desc">
@@ -1499,7 +1494,7 @@
                                     $step9Status = $application->satu_pintu_document ? 'completed' : 'active';
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step9Status }}">
+                            <div class="timeline-step {{ $step9Status }}" onclick="showBpnPanel('satu-pintu')" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-title">8. Penerbitan PKKPR (Satu Pintu / PTSP)</div>
                                 <div class="timeline-desc">

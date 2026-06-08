@@ -717,11 +717,8 @@
                     && $now->toDateString() >= $application->bpn_rapat_dt->copy()->addDay()->toDateString();
             @endphp
  
-            @if($canVerify)
-                <div class="verify-card">
-                    <h3 class="verify-title">📝 Panel Pemeriksaan Berkas — {{ $verifierRoleLabel }}</h3>
-                    
-                    @if($user->isBpn() && $application->status === 'menunggu_bpn')
+                            <div class="verify-card">
+                    <h3 class="verify-title">📝 Panel Pemeriksaan Berkas</h3>
  
                         <!-- TAHAP 1: Verifikasi Berkas Awal -->
                         @if($application->bpn_berkas_status === 'menunggu')
@@ -734,7 +731,7 @@
                                 </div>
                             {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
                             <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
-                                @php $isStep1Active = ($application->bpn_berkas_status === 'menunggu'); @endphp
+                                @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                                 <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
                                     <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST">
                                         @csrf
@@ -763,7 +760,7 @@
                             </div>
 
                             <div id="bpn-panel-2" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'diterima' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
-                                @php $isStep2Active = ($application->bpn_berkas_status === 'diterima'); @endphp
+                                @php $isStep2Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'diterima' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat)); @endphp
                                 <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
                                     <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
                                         @csrf
@@ -801,7 +798,7 @@
                             </div>
 
                             <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
-                                @php $isStep3Active = ($application->bpn_cek_lokasi_dt && $cekLokasiLewat); @endphp
+                                @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat)); @endphp
                                 <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
                                     <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" style="margin-bottom: 24px;">
                                         @csrf
@@ -832,7 +829,7 @@
                             </div>
 
                             <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
-                                @php $isStep4Active = ($application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
+                                @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
                                 <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
                                     <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                         @csrf
@@ -887,10 +884,8 @@
                                 }
                             </script>
  
-                    @endif
-                </div>
-            @endif
- 
+                    </div>
+
             <div class="layout-grid">
                 
                 <!-- Left: Application Details -->
