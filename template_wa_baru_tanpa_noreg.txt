@@ -1,0 +1,111 @@
+TEMPLATE WHATSAPP BLAST TERBARU (PATEN PAK MIKO)
+===================================================
+
+Keterangan Variabel:
+{nama}          : Nama Pemohon / User
+{layanan}       : Jenis Layanan (Pertimbangan Teknis Pertanahan Berusaha, Non-Berusaha, Kebijakan Khusus, dll)
+{url}           : Link menuju halaman detail permohonan
+{waktu}         : Waktu jadwal cek lokasi / rapat
+{cp_admin}      : Nama Kontak Person Petugas Lapangan
+{catatan}       : Catatan penolakan / revisi dari pemeriksa
+{username}      : Username akun login
+{password}      : Password akun login
+{no_berkas}     : Nomor Berkas BPN (Baru diberikan setelah lunas)
+{no_pertek}     : Nomor dokumen Pertimbangan Teknis Pertanahan yang terbit
+
+---------------------------------------------------
+A. TEMPLATE UNTUK PEMOHON (MASYARAKAT)
+---------------------------------------------------
+
+1. Pendaftaran Berhasil (Submit)
+Halo {nama}, permohonan {layanan} Anda berhasil diajukan.
+Berkas Anda sedang dalam verifikasi awal Kantor Pertanahan. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.
+
+2. Verifikasi Berkas Awal (BPN) - VALID
+Halo {nama}, berkas {layanan} Anda dinyatakan VALID oleh Kantor Pertanahan. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran. Kami akan menghubungi Anda kembali.
+
+3. Verifikasi Berkas Awal (BPN) - TIDAK SESUAI / DITOLAK
+Halo {nama}, berkas {layanan} Anda dinyatakan TIDAK SESUAI / DITOLAK oleh Kantor Pertanahan.
+Alasan: "{catatan}"
+Mohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan.
+
+4. Validasi Dinas PUTR Selesai (Menunggu Pembayaran)
+Halo {nama}, permohonan {layanan} Anda telah divalidasi Dinas PUTR.
+Silakan cek instruksi pembayaran retribusi. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.
+
+5. Validasi Dinas PUTR - DITOLAK
+Halo {nama}, permohonan {layanan} Anda DITOLAK oleh Dinas PUTR.
+Catatan: {catatan}
+
+6. Pembayaran Lunas & Blast Kredensial (BPN) -> Mulai pakai No. Berkas
+Halo {nama}, pembayaran {layanan} Anda telah dikonfirmasi.
+
+Akun login portal PATEN PAK MIKO Anda:
+Username : {username}
+Password : {password}
+No. Berkas : {no_berkas}
+
+Login dan pantau permohonan di: {url}
+
+7. Jadwal Cek Lokasi / Peninjauan Lapangan
+Halo {nama}, permohonan {layanan} Anda (No. Berkas: {no_berkas}) dijadwalkan untuk peninjauan lapangan pada:
+Waktu: {waktu}
+CP Lapangan/Admin: (atas nama) {cp_admin}
+Harap konfirmasi kesediaan anda dengan menghubungi CP di atas.
+
+8. Perubahan Jadwal Cek Lokasi
+Halo {nama}, [PERUBAHAN JADWAL] Peninjauan lokasi {layanan} (No. Berkas: {no_berkas}) diubah.
+Jadwal Baru: {waktu}
+CP Petugas: {cp_admin}
+
+9. Jadwal Sidang / Rapat Koordinasi
+Halo {nama}, rapat pembahasan pertimbangan teknis pertanahan untuk permohonan {layanan} (No. Berkas: {no_berkas}) dijadwalkan pada:
+Waktu: {waktu}
+
+10. Perubahan Jadwal Sidang / Rapat
+Halo {nama}, [PERUBAHAN] Jadwal rapat {layanan} (No. Berkas: {no_berkas}) diubah menjadi: {waktu}.
+
+11. Pertek (Pertimbangan Teknis) Terbit (BPN)
+Halo {nama}, Pertimbangan Teknis Pertanahan untuk permohonan {layanan} (No. Berkas: {no_berkas}) telah DITERBITKAN oleh Kantor Pertanahan. Proses selanjutnya di Dinas Pekerjaan Umum (PUTR) untuk dilakukan penilaian.
+
+12. Pertek DITOLAK (BPN)
+Halo {nama}, permohonan {layanan} (No. Berkas: {no_berkas}) DITOLAK oleh Kantor Pertanahan pada tahap Pertek.
+Catatan: {catatan}
+
+13. Penilaian Tata Ruang Selesai (Dinas PU)
+Halo {nama}, penilaian {layanan} (No. Berkas: {no_berkas}) oleh Dinas PU selesai. Permohonan diteruskan ke Dinas Satu Pintu. Pantau di: {url}
+
+14. Penilaian Tata Ruang DITOLAK (Dinas PU)
+Halo {nama}, permohonan {layanan} (No. Berkas: {no_berkas}) DITOLAK oleh Dinas PU.
+Catatan: {catatan}
+
+15. Produk Akhir Terbit (Dinas Satu Pintu / PTSP)
+Selamat! Dokumen Pertimbangan Teknis Pertanahan {layanan} Anda (No. Berkas: {no_berkas}) telah DITERBITKAN oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (PTSP).
+No. PKKPR: {no_pertek}
+Silakan unduh produk akhir Anda di: {url}
+
+16. Produk Akhir Ditolak (Dinas Satu Pintu / PTSP)
+Halo {nama}, permohonan {layanan} (No. Berkas: {no_berkas}) DITOLAK oleh Dinas Satu Pintu.
+Catatan: {catatan}
+
+---------------------------------------------------
+B. TEMPLATE UNTUK ADMIN INSTANSI (NOTIFIKASI INTERNAL)
+---------------------------------------------------
+
+1. [Notif Pendaftaran Baru ke BPN]
+"Halo Admin Kantor Pertanahan, ada pengajuan permohonan baru untuk {layanan} atas nama {nama}. Silakan login untuk melakukan verifikasi berkas awal di: {url}"
+
+2. [Notif Bukti Bayar PNBP ke BPN]
+"Halo Admin Kantor Pertanahan, pemohon atas nama {nama} telah selesai melakukan pembayaran PNBP untuk layanan {layanan}. Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {url}"
+
+3. [Notif ke Admin PUTR -> Saat BPN Menerbitkan Pertek]
+"Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk {layanan} (No. Berkas: {no_berkas}) telah terbit dari Kantor Pertanahan. Silakan lakukan penilaian PKKPR di: {url}"
+
+4. [Notif ke Admin PTSP / Satu Pintu -> Saat Dinas PUTR Selesai Menilai]
+"Notifikasi Satu Pintu: Penilaian Dinas PUTR untuk {layanan} (No. Berkas: {no_berkas}) selesai. Silakan proses penerbitan PKKPR di: {url}"
+
+5. [Notif Kembali ke BPN -> Tunggu PTSP Menerbitkan]
+"Notifikasi Kantor Pertanahan: Dinas PUTR telah selesai menilai {layanan} (No. Berkas: {no_berkas}). Menunggu penerbitan PKKPR oleh DPMPTSP / Satu Pintu."
+
+6. [Notif ke BPN -> User Unggah Revisi]
+"Notifikasi Kantor Pertanahan: Pelaku Usaha {nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {layanan}. Silakan cek & verifikasi ulang dokumen di: {url}"
