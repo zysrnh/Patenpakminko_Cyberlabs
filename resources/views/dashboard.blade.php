@@ -758,21 +758,17 @@
     <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
     <aside class="sidebar" id="sidebar">
         <a href="/dashboard" class="sidebar-logo">
-            <div class="sidebar-logo-icon" style="background:transparent;padding:0;overflow:hidden;">
-                @if(Auth::user()->isBpn() || Auth::user()->isDpn())
-                    <img src="{{ asset('storage/logo/Logo_BPN.png') }}" alt="Logo BPN" style="width:100%;height:100%;object-fit:contain;border-radius:var(--r-md);">
-                @else
-                    <img src="{{ asset('storage/logo/PatenDummy.jpg') }}" alt="Logo PATEN PAK MIKO" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
-                @endif
+            <div class="sidebar-logo-icon" style="background:transparent;padding:0;overflow:hidden;width:40px;height:40px;border-radius:0;">
+                <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width:100%;height:100%;object-fit:contain;">
             </div>
             <div class="sidebar-logo-text">
                 <strong>PATEN PAK MIKO</strong>
                 <span>
-                    @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan Sukabumi
+                    @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan Kota Sukabumi
                     @elseif(Auth::user()->isBpn()) Portal Admin BPN
                     @elseif(Auth::user()->isDinasPu()) Portal Dinas PU
                     @elseif(Auth::user()->isSatuPintu()) Portal Satu Pintu
-                    @elseif(Auth::user()->isDpn()) Kantor Pertanahan Sukabumi
+                    @elseif(Auth::user()->isDpn()) Kantor Pertanahan Kota Sukabumi
                     @else Portal Manajemen @endif
                 </span>
             </div>
@@ -794,19 +790,20 @@
             </a>
         </div>
 
+                @if(!Auth::user()->isAdminBerita())
         <div class="sidebar-section">
             <div class="sidebar-section-label">Layanan</div>
-            <a href="{{ route('non-berusaha.index') }}" class="nav-item">
-                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Pertimbangan Teknis Pertanahan Non Berusaha
-            </a>
             <a href="{{ route('berusaha.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 Pertimbangan Teknis Pertanahan Berusaha
             </a>
+            <a href="{{ route('non-berusaha.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Pertimbangan Teknis Pertanahan Non Berusaha
+            </a>
             <a href="{{ route('kebijakan.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                Kebijakan Khusus
+                Kebijakan
             </a>
             <a href="{{ route('tanah-timbul.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -814,31 +811,37 @@
             </a>
             <a href="{{ route('psn.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-                PSN
+                PSN (Proyek Nasional)
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">Fasilitas & Manajemen</div>
+            <a href="{{ route('informal.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                INFORMAL
             </a>
             <a href="{{ route('lapolpa.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-                LAPOLPAK
+                LAPOL PAK
             </a>
+            @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isSatuPintu())
+            <a href="{{ route('berkas.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 002-2V7.5L14.5 2H6a2 2 0 00-2 2v4"/><polyline points="14 2 14 8 20 8"/><path d="M2 15h10"/><path d="M9 18l3-3-3-3"/></svg>
+                Pemberkasan
+            </a>
+            @endif
             <a href="{{ route('ulasan.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 Ulasan Layanan
             </a>
         </div>
-
-        @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isSatuPintu())
-        <div class="sidebar-section">
-            <div class="sidebar-section-label">Pemberkasan</div>
-            <a href="{{ route('berkas.index') }}" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 002-2V7.5L14.5 2H6a2 2 0 00-2 2v4"/><polyline points="14 2 14 8 20 8"/><path d="M2 15h10"/><path d="M9 18l3-3-3-3"/></svg>
-                Kelola Berkas (Drive)
-            </a>
-        </div>
         @endif
 
-        @if(Auth::user()->isDpn())
+        @if(Auth::user()->isDpn() || Auth::user()->isAdminBerita())
         <div class="sidebar-section">
             <div class="sidebar-section-label">Admin</div>
+            @if(Auth::user()->isDpn())
             <a href="{{ route('dpn.whatsapp') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
                 Integrasi WhatsApp
@@ -854,6 +857,11 @@
             <a href="{{ route('admin_dpn.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
                 Statistik Web
+            </a>
+            @endif
+            <a href="{{ route('admin.berita.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v10a2 2 0 01-2 2z"/></svg>
+                Kelola Berita
             </a>
         </div>
         @endif
@@ -998,9 +1006,9 @@
                     ];
 
                     $typeLabels = [
-                        'ppkpr_non_berusaha' => 'PKKPR Non Berusaha',
-                        'ppkpr_berusaha'     => 'PKKPR Berusaha',
-                        'kebijakan_khusus'   => 'Kebijakan Khusus',
+                        'ppkpr_non_berusaha' => 'Pertimbangan Teknis Pertanahan Non Berusaha',
+                        'ppkpr_berusaha'     => 'Pertimbangan Teknis Pertanahan Berusaha',
+                        'kebijakan_khusus'   => 'Kebijakan',
                         'psn'                => 'PSN (Proyek Nasional)',
                         'tanah_timbul'       => 'Tanah Timbul',
                     ];
@@ -1035,7 +1043,8 @@
                 <div>
                     <h1>Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
                     <p>
-                        @if(Auth::user()->isPelakuUsaha()) Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.
+                        @if(Auth::user()->isAdminBerita()) Kelola publikasi artikel dan informasi terbaru di sini.
+                        @elseif(Auth::user()->isPelakuUsaha()) Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.
                         @else Kelola permohonan pemanfaatan ruang dan pantau status layanan secara real-time.
                         @endif
                     </p>
@@ -1043,7 +1052,8 @@
                 <div class="welcome-strip-badge">
                     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     <span>
-                        @if(Auth::user()->isPelakuUsaha()) Pelaku Usaha Terverifikasi
+                        @if(Auth::user()->isAdminBerita()) Admin Berita
+                        @elseif(Auth::user()->isPelakuUsaha()) Pelaku Usaha Terverifikasi
                         @elseif(Auth::user()->isBpn()) Admin BPN
                         @elseif(Auth::user()->isDinasPu()) Admin Dinas PU
                         @elseif(Auth::user()->isSatuPintu()) Admin Satu Pintu
@@ -1053,6 +1063,78 @@
                 </div>
             </div>
 
+            @if(Auth::user()->isAdminBerita())
+                <!-- Dashboard Berita Admin -->
+                @php
+                    $totalBerita = \App\Models\Berita::count();
+                    $publishedBerita = \App\Models\Berita::where('is_published', true)->count();
+                    $draftBerita = \App\Models\Berita::where('is_published', false)->count();
+                    $beritasList = \App\Models\Berita::latest()->take(5)->get();
+                @endphp
+                <div class="kpi-row">
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Total Berita</span>
+                            <div class="kpi-icon blue">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v10a2 2 0 01-2 2z"/></svg>
+                            </div>
+                        </div>
+                        <div class="kpi-number">{{ $totalBerita }}</div>
+                        <div class="kpi-sub"><span class="kpi-badge neutral">Semua Berita</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Dipublikasi</span>
+                            <div class="kpi-icon green">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                        </div>
+                        <div class="kpi-number">{{ $publishedBerita }}</div>
+                        <div class="kpi-sub"><span class="kpi-badge up">Tampil Publik</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">Draft</span>
+                            <div class="kpi-icon yellow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            </div>
+                        </div>
+                        <div class="kpi-number">{{ $draftBerita }}</div>
+                        <div class="kpi-sub"><span class="kpi-badge neutral">Belum Tampil</span></div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-head">
+                        <h2>Berita Terbaru</h2>
+                        <a href="{{ route('admin.berita.index') }}" class="panel-head-link">Lihat Semua &rarr;</a>
+                    </div>
+                    <div class="activity-list">
+                        @forelse($beritasList as $beritaItem)
+                        <div class="activity-item" style="align-items: center;">
+                            @if($beritaItem->image_path)
+                                <img src="{{ asset('storage/'.$beritaItem->image_path) }}" alt="{{ $beritaItem->title }}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid var(--line);">
+                            @else
+                                <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--surface2); border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="20" height="20" fill="none" stroke="var(--muted)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                </div>
+                            @endif
+                            <div class="activity-body">
+                                <div class="activity-title" style="font-size: 14px; margin-bottom: 4px;">{{ $beritaItem->title }}</div>
+                                <div class="activity-meta">{{ $beritaItem->created_at->format('d M Y, H:i') }} • {{ $beritaItem->category ?? 'Umum' }}</div>
+                            </div>
+                            <div class="activity-status {{ $beritaItem->is_published ? 'status-approved' : 'status-pending' }}">
+                                {{ $beritaItem->is_published ? 'Dipublikasi' : 'Draft' }}
+                            </div>
+                        </div>
+                        @empty
+                        <div class="activity-item">
+                            <div class="activity-body text-center text-muted" style="font-size:13px; padding:20px;">Belum ada berita yang ditulis.</div>
+                        </div>
+                        @endforelse
+                    </div>
+                </div>
+            @else
             <!-- Souvenir Alert Warning -->
             @if(!$user->isPelakuUsaha() && count($pendingSouvenirs) > 0)
                 <div class="alert-warning" style="display: block; padding: 18px 24px; border-radius: var(--r-lg); margin-bottom: 24px; border: 1.5px solid #FBE89F; background: #FFFDF0; color: #744210;">
@@ -1223,25 +1305,6 @@
                         </div>
                         <div class="services-grid">
 
-                            <a href="{{ route('non-berusaha.index') }}" class="service-card">
-                                <div class="service-card-top">
-                                    <div class="service-icon green">
-                                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                    </div>
-                                    <div class="service-arrow">
-                                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan Non Berusaha</h3>
-                                    <p>Rumah tinggal, keagamaan, sosial, & fasilitas umum.</p>
-                                </div>
-                                <span class="service-count">
-                                    <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>
-                                    {{ $countNonBerusaha ?? 0 }} permohonan
-                                </span>
-                            </a>
-
                             <a href="{{ route('berusaha.index') }}" class="service-card">
                                 <div class="service-card-top">
                                     <div class="service-icon yellow">
@@ -1261,6 +1324,25 @@
                                 </span>
                             </a>
 
+                            <a href="{{ route('non-berusaha.index') }}" class="service-card">
+                                <div class="service-card-top">
+                                    <div class="service-icon green">
+                                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                    </div>
+                                    <div class="service-arrow">
+                                        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan Non Berusaha</h3>
+                                    <p>Rumah tinggal, keagamaan, sosial, & fasilitas umum.</p>
+                                </div>
+                                <span class="service-count">
+                                    <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>
+                                    {{ $countNonBerusaha ?? 0 }} permohonan
+                                </span>
+                            </a>
+
                             <a href="{{ route('kebijakan.index') }}" class="service-card">
                                 <div class="service-card-top">
                                     <div class="service-icon blue">
@@ -1271,7 +1353,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3>Kebijakan Khusus</h3>
+                                    <h3>Kebijakan</h3>
                                     <p>Mandat kebijakan khusus pemerintah.</p>
                                 </div>
                                 <span class="service-count">
@@ -1282,16 +1364,16 @@
 
                             <a href="{{ route('lapolpa.index') }}" class="service-card">
                                 <div class="service-card-top">
-                                    <!-- Logo Khusus LAPOLPAK (Poin 5) -->
+                                    <!-- Logo Khusus LAPOL PAK (Poin 5) -->
                                     <div class="service-icon orange" style="background:transparent;padding:0;overflow:hidden;">
-                                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOLPAK" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
+                                        <img src="{{ asset('storage/logo/Dummy.jpg') }}" alt="Logo LAPOL PAK" style="width:100%;height:100%;object-fit:cover;border-radius:var(--r-md);">
                                     </div>
                                     <div class="service-arrow">
                                         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3>LAPOLPAK</h3>
+                                    <h3>LAPOL PAK</h3>
                                     <p>Konsultasi & pelaporan pemanfaatan ruang.</p>
                                 </div>
                                 <span class="service-count" style="background:rgba(211,115,36,.12);color:#8B4513;">
@@ -1435,7 +1517,7 @@
                                         </div>
                                         <div class="schedule-info">
                                             <h4>{{ $sched->nama_pemohon ?? ($sched->user->name ?? 'Tamu') }}</h4>
-                                            <span>{{ $sched->formatted_time_range }} · LAPOLPAK ({{ ucfirst($sched->status) }})</span>
+                                            <span>{{ $sched->formatted_time_range }} · LAPOL PAK ({{ ucfirst($sched->status) }})</span>
                                         </div>
                                     </div>
                                 @endforeach
@@ -1454,6 +1536,7 @@
 
                 </div>
             </div>
+            @endif
 
         </div><!-- /content -->
     </div><!-- /main-wrap -->

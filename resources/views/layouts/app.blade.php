@@ -284,12 +284,23 @@
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <a href="{{ route('dashboard') }}" class="sidebar-logo">
-            <div class="sidebar-logo-icon">
-                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div class="sidebar-logo-icon" style="background:transparent;padding:0;overflow:hidden;width:40px;height:40px;border-radius:0;">
+                <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width:100%;height:100%;object-fit:contain;">
             </div>
             <div class="sidebar-logo-text">
                 <strong>PATEN PAK MIKO</strong>
-                <span>Kantor Pertanahan Sukabumi</span>
+                <span>
+                    @if(Auth::check())
+                        @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan Kota Sukabumi
+                        @elseif(Auth::user()->isBpn()) Portal Admin BPN
+                        @elseif(Auth::user()->isDinasPu()) Portal Dinas PU
+                        @elseif(Auth::user()->isSatuPintu()) Portal Satu Pintu
+                        @elseif(Auth::user()->isDpn()) Super Admin
+                        @else Portal Manajemen @endif
+                    @else
+                        Kantor Pertanahan Kota Sukabumi
+                    @endif
+                </span>
             </div>
         </a>
 
@@ -309,19 +320,20 @@
             </a>
         </div>
 
+        @if(!Auth::check() || !Auth::user()->isAdminBerita())
         <div class="sidebar-section">
             <div class="sidebar-section-label">Layanan</div>
-            <a href="{{ route('non-berusaha.index') }}" class="nav-item {{ request()->routeIs('non-berusaha.*') ? 'active' : '' }}">
-                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                PKKPR Non Berusaha
-            </a>
             <a href="{{ route('berusaha.index') }}" class="nav-item {{ request()->routeIs('berusaha.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                PKKPR Berusaha
+                Pertimbangan Teknis Pertanahan Berusaha
+            </a>
+            <a href="{{ route('non-berusaha.index') }}" class="nav-item {{ request()->routeIs('non-berusaha.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Pertimbangan Teknis Pertanahan Non Berusaha
             </a>
             <a href="{{ route('kebijakan.index') }}" class="nav-item {{ request()->routeIs('kebijakan.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                Kebijakan Khusus
+                Kebijakan
             </a>
             <a href="{{ route('tanah-timbul.index') }}" class="nav-item {{ request()->routeIs('tanah-timbul.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -331,14 +343,22 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
                 PSN (Proyek Nasional)
             </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">Fasilitas & Manajemen</div>
+            <a href="{{ route('informal.index') }}" class="nav-item {{ request()->routeIs('informal.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                INFORMAL
+            </a>
             <a href="{{ route('lapolpa.index') }}" class="nav-item {{ request()->routeIs('lapolpa.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-                LAPOLPA
+                LAPOL PAK
             </a>
             @if(Auth::check() && in_array(Auth::user()->role, ['dpn', 'bpn', 'dinas_pu', 'dinas_putr', 'satu_pintu']))
             <a href="{{ route('berkas.index') }}" class="nav-item {{ request()->routeIs('berkas.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-                Pemberkasan (Manajemen)
+                Pemberkasan
             </a>
             @endif
             <a href="{{ route('ulasan.index') }}" class="nav-item {{ request()->routeIs('ulasan.*') ? 'active' : '' }}">
@@ -346,10 +366,13 @@
                 Ulasan Layanan
             </a>
         </div>
+        @endif
 
-        @if(Auth::check() && Auth::user()->isDpn())
+        @if(Auth::check() && (Auth::user()->isDpn() || Auth::user()->isAdminBerita()))
         <div class="sidebar-section">
             <div class="sidebar-section-label">Admin</div>
+            
+            @if(Auth::user()->isDpn())
             <a href="{{ route('dpn.whatsapp') }}" class="nav-item {{ request()->routeIs('dpn.whatsapp') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
                 Integrasi WhatsApp
@@ -362,6 +385,14 @@
                 <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 Kelola Ulasan
             </a>
+            @endif
+
+            @if(Auth::user()->isDpn() || Auth::user()->isAdminBerita())
+            <a href="{{ route('admin.berita.index') }}" class="nav-item {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v10a2 2 0 01-2 2z"/></svg>
+                Kelola Berita
+            </a>
+            @endif
         </div>
         @endif
 

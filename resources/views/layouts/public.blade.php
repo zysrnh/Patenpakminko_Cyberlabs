@@ -1783,7 +1783,7 @@
 
             <!-- Desktop Nav -->
             <nav class="site-nav" aria-label="Main navigation">
-                <a href="#" class="nav-link">Beranda</a>
+                <a href="{{ url('/') }}" class="nav-link">Beranda</a>
 
                 <div class="nav-dropdown">
                     <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
@@ -1793,19 +1793,19 @@
                         </svg>
                     </button>
                     <div class="nav-dropdown-content" role="menu">
-                        <a href="{{ route('login') }}" role="menuitem">
+                        <a href="{{ Auth::check() ? route('berusaha.create') : route('login') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--blue-lt);">
                                 <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="">
                             </span>
                             Pertimbangan Teknis Pertanahan Berusaha
                         </a>
-                        <a href="{{ route('login') }}" role="menuitem">
+                        <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--green-lt);">
                                 <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="">
                             </span>
                             Pertimbangan Teknis Pertanahan Non Berusaha
                         </a>
-                        <a href="{{ route('login') }}" role="menuitem">
+                        <a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--yellow-lt);">
                                 <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="">
                             </span>
@@ -1831,14 +1831,32 @@
 
                 <div class="nav-sep" aria-hidden="true"></div>
 
-                <a href="{{ route('login') }}" class="btn-nav">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                        <polyline points="10 17 15 12 10 7"></polyline>
-                        <line x1="15" y1="12" x2="3" y2="12"></line>
-                    </svg>
-                    Login
-                </a>
+                @auth
+                    @if(Auth::user()->isAdminBerita())
+                        <a href="{{ route('admin.berita.index') }}" class="btn-nav">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                            </svg>
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('dashboard') }}" class="btn-nav">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                            </svg>
+                            Dashboard
+                        </a>
+                    @endif
+                @else
+                    <a href="{{ route('login') }}" class="btn-nav">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        Login
+                    </a>
+                @endauth
             </nav>
 
             <!-- Hamburger (Mobile) -->
@@ -1867,24 +1885,42 @@
         </button>
     </div>
     <div class="mobile-nav-body">
-        <a href="#" onclick="closeMobileNav()">Beranda</a>
+        <a href="{{ url('/') }}" onclick="closeMobileNav()">Beranda</a>
         <span class="mobile-section-label">Layanan</span>
-        <a href="{{ route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Berusaha</a>
-        <a href="{{ route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Non Berusaha</a>
-        <a href="{{ route('login') }}" onclick="closeMobileNav()">Kebijakan</a>
+        <a href="{{ Auth::check() ? route('berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Berusaha</a>
+        <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Non Berusaha</a>
+        <a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}" onclick="closeMobileNav()">Kebijakan</a>
         <a href="{{ route('lapolpa.index') }}" onclick="closeMobileNav()">LAPOL PAK</a>
         <a href="{{ route('informal.index') }}" onclick="closeMobileNav()">INFORMAL</a>
         <span class="mobile-section-label">Navigasi</span>
         <a href="#alur" onclick="closeMobileNav()">Alur Proses</a>
         <a href="#ulasan" onclick="closeMobileNav()">Ulasan</a>
-        <a href="{{ route('login') }}" class="mobile-cta" onclick="closeMobileNav()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                <polyline points="10 17 15 12 10 7"></polyline>
-                <line x1="15" y1="12" x2="3" y2="12"></line>
-            </svg>
-            Login
-        </a>
+        @auth
+            @if(Auth::user()->isAdminBerita())
+                <a href="{{ route('admin.berita.index') }}" class="mobile-cta" onclick="closeMobileNav()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    Dashboard
+                </a>
+            @else
+                <a href="{{ route('dashboard') }}" class="mobile-cta" onclick="closeMobileNav()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    Dashboard
+                </a>
+            @endif
+        @else
+            <a href="{{ route('login') }}" class="mobile-cta" onclick="closeMobileNav()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                Login
+            </a>
+        @endauth
     </div>
 </div>
 
@@ -1912,7 +1948,7 @@
             <div>
                 <h4 class="f-col-title">Menu</h4>
                 <ul class="f-links">
-                    <li><a href="#">Beranda</a></li>
+                    <li><a href="{{ url('/') }}">Beranda</a></li>
                     <li><a href="#">Tentang Kami</a></li>
                     <li><a href="#">Layanan</a></li>
                     <li><a href="#">Artikel</a></li>

@@ -71,13 +71,19 @@ Route::get('/', function () {
         $isNewVisitor = true;
     }
 
-    $response = response()->view('welcome', compact('reviews', 'averageRating', 'visitorCount'));
+    // Berita / Artikel
+    $beritas = \App\Models\Berita::where('is_published', true)->latest()->take(10)->get();
+
+    $response = response()->view('welcome', compact('reviews', 'averageRating', 'visitorCount', 'beritas'));
     if ($isNewVisitor) {
         $response->cookie('visited', true, 60 * 24); // 24 jam
     }
     
     return $response;
 });
+
+// Route Berita Publik
+Route::get('/berita/{slug}', [\App\Http\Controllers\BeritaController::class, 'showPublic'])->name('berita.show');
 
 // Rute Peta Publik Informal (Tanpa Login)
 Route::get('/informal', [InformalController::class, 'index'])->name('informal.index');
@@ -205,6 +211,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
     Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
     Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
+
+    // Admin Berita
+    Route::get('/admin/berita', [\App\Http\Controllers\BeritaController::class, 'index'])->name('admin.berita.index');
+    Route::get('/admin/berita/create', [\App\Http\Controllers\BeritaController::class, 'create'])->name('admin.berita.create');
+    Route::post('/admin/berita', [\App\Http\Controllers\BeritaController::class, 'store'])->name('admin.berita.store');
+    Route::post('/admin/berita/upload', [\App\Http\Controllers\BeritaController::class, 'upload'])->name('admin.berita.upload');
+    Route::get('/admin/berita/{beritum}/edit', [\App\Http\Controllers\BeritaController::class, 'edit'])->name('admin.berita.edit');
+    Route::put('/admin/berita/{beritum}', [\App\Http\Controllers\BeritaController::class, 'update'])->name('admin.berita.update');
+    Route::delete('/admin/berita/{beritum}', [\App\Http\Controllers\BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

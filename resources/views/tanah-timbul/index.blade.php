@@ -69,7 +69,7 @@
                             </td>
                             <td>
                                 <div style="font-weight:700; color:#003B64;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
-                                <div style="font-size:11px; color:var(--muted);">Akun: {{ $app->user->username }}</div>
+                                <div style="font-size:11px; color:var(--muted);">Akun: PMH{{ str_pad($app->user->id, 3, '0', STR_PAD_LEFT) }}</div>
                             </td>
                             <td style="color:var(--mid);">{{ $app->user->phone_number }}</td>
                             <td style="color:var(--mid);">{{ $app->created_at->format('d-m-Y') }}</td>

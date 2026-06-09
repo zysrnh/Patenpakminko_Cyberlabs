@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin LAPOLPA — PATEN PAK MIKO</title>
+    <title>Dashboard Admin LAPOLPA  PATEN PAK MIKO</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -394,7 +394,7 @@
             </a>
  
             <div class="page-title-section">
-                <h1 class="page-title">Pengelolaan Booking LAPOLPAK (Admin)</h1>
+                <h1 class="page-title">Pengelolaan Booking LAPOL PAK (Admin)</h1>
                 <p class="page-subtitle">Kelola dan update status pendaftaran pelaporan pelaku usaha secara real-time.</p>
             </div>
  
@@ -424,7 +424,7 @@
  
             <!-- Table Card -->
 
-            {{-- KALENDER JADWAL LAPOLPAK --}}
+            {{-- KALENDER JADWAL LAPOL PAK --}}
             @php
                 use Carbon\Carbon;
                 $allBookings = $bookings;
@@ -595,7 +595,7 @@
             </script>
 
             <div class="card">
-                <h3 class="card-title">Daftar Pendaftar LAPOLPAK</h3>
+                <h3 class="card-title">Daftar Pendaftar LAPOL PAK</h3>
  
                 <div class="table-responsive">
                     @if($bookings->isEmpty())

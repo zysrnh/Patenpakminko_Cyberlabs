@@ -1,0 +1,39 @@
+================================================
+DATA AKUN SEEDER PATEN PAK MIKO
+================================================
+Setiap akun sekarang memiliki password unik.
+
+------------------------------------------------
+1. AKUN PEMOHON / PENGGUNA LAYANAN
+------------------------------------------------
+- Pelaku Usaha
+  Username : pelaku_usaha
+  Password : Paten_pu@2026
+  Nama     : Budi Pelaku Usaha
+
+------------------------------------------------
+2. AKUN INSTANSI PEMERINTAH (ADMIN)
+------------------------------------------------
+A. Kantor Pertanahan (BPN)
+   - Username : bpn1 | Password: Paten_bpn1@2026 (Petugas BPN 1)
+   - Username : bpn2 | Password: Paten_bpn2@2026 (Petugas BPN 2)
+   - Username : bpn3 | Password: Paten_bpn3@2026 (Petugas BPN 3)
+
+B. Dinas PU (Tata Ruang)
+   - Username : pu1 | Password: Paten_pu1@2026 (Verifikator Dinas PU 1)
+   - Username : pu2 | Password: Paten_pu2@2026 (Verifikator Dinas PU 2)
+   - Username : pu3 | Password: Paten_pu3@2026 (Verifikator Dinas PU 3)
+
+C. Dinas PMPTSP (Satu Pintu)
+   - Username : satupintu1 | Password: Paten_satupintu1@2026 (Petugas Satu Pintu 1)
+   - Username : satupintu2 | Password: Paten_satupintu2@2026 (Petugas Satu Pintu 2)
+   - Username : satupintu3 | Password: Paten_satupintu3@2026 (Petugas Satu Pintu 3)
+
+D. Super Admin / DPN
+   - Username : dpn1 | Password: Paten_dpn1@2026 (Super Admin DPN 1)
+   - Username : dpn2 | Password: Paten_dpn2@2026 (Super Admin DPN 2)
+   - Username : dpn3 | Password: Paten_dpn3@2026 (Super Admin DPN 3)
+
+E. Admin Berita
+   - Username : admin_berita | Password: Paten_berita@2026 (Admin Berita)
+================================================

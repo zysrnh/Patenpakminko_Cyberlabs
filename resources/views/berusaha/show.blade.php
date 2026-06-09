@@ -680,6 +680,124 @@
                 </div>
                 </div>
  
+            <!-- INFORMASI PEMOHON -->
+            <div class="card">
+                <h2 class="card-title">Informasi Pemohon</h2>
+                <ul class="detail-list">
+                    <li class="detail-item">
+                        <span class="detail-label">No. Registrasi</span>
+                        <span class="detail-val app-num">{{ $application->application_number }}</span>
+                    </li>
+                    <li class="detail-item">
+                        <span class="detail-label">Nama Pemohon / Usaha</span>
+                        <span class="detail-val">{{ $application->nama_pemilik_usaha }}</span>
+                    </li>
+                    <li class="detail-item">
+                        <span class="detail-label">Nama Pengaju</span>
+                        <span class="detail-val">{{ $application->nama_pengaju }}</span>
+                    </li>
+                    <li class="detail-item">
+                        <span class="detail-label">Hubungan Pengaju</span>
+                        <span class="detail-val">{{ $application->hubungan_pengaju }}</span>
+                    </li>
+                    <li class="detail-item">
+                        <span class="detail-label">Kode KBLI</span>
+                        <span class="detail-val">{{ $application->kbli_kode ?? '-' }}</span>
+                    </li>
+                    <li class="detail-item">
+                        <span class="detail-label">Akun Pemohon</span>
+                        <span class="detail-val">PMH{{ str_pad($application->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</span>
+                    </li>
+                    <li class="detail-item">
+                        <span class="detail-label">No. WA / Kontak</span>
+                        <span class="detail-val">{{ $application->user->phone_number ?? '-' }}</span>
+                    </li>
+                    @if($application->no_berkas)
+                    <li class="detail-item">
+                        <span class="detail-label">No. Berkas</span>
+                        <span class="detail-val app-num">{{ $application->no_berkas }}</span>
+                    </li>
+                    @endif
+                    <li class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-val"><span class="badge-status" style="background-color:{{ $application->status_color }}">{{ $application->status_label }}</span></span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- DOKUMEN BERKAS PERMOHONAN -->
+            <div class="card">
+                <h2 class="card-title">Dokumen Berkas Permohonan</h2>
+                <ul class="detail-list" style="list-style:none;">
+                    @if($application->ptp_data)
+                    <li class="detail-item">
+                        <span class="detail-label">Formulir PTP</span>
+                        <a href="{{ route('berusaha.ptp_pdf', $application->id) }}" target="_blank" class="btn-doc">Cetak / Unduh</a>
+                    </li>
+                    @endif
+                    @if($application->peta_lokasi)
+                    <li class="detail-item">
+                        <span class="detail-label">1. Peta / Sketsa Lokasi</span>
+                        <a href="{{ asset('storage/' . $application->peta_lokasi) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->surat_kuasa)
+                    <li class="detail-item">
+                        <span class="detail-label">2. Surat Kuasa</span>
+                        <a href="{{ asset('storage/' . $application->surat_kuasa) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->fc_ktp)
+                    <li class="detail-item">
+                        <span class="detail-label">3. Fotokopi KTP</span>
+                        <a href="{{ asset('storage/' . $application->fc_ktp) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->fc_npwp)
+                    <li class="detail-item">
+                        <span class="detail-label">4. Fotokopi NPWP</span>
+                        <a href="{{ asset('storage/' . $application->fc_npwp) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->fc_akta_pendirian)
+                    <li class="detail-item">
+                        <span class="detail-label">5. Akta Pendirian</span>
+                        <a href="{{ asset('storage/' . $application->fc_akta_pendirian) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->rencana_penggunaan_tanah)
+                    <li class="detail-item">
+                        <span class="detail-label">6. Rencana Penggunaan Tanah</span>
+                        <a href="{{ asset('storage/' . $application->rencana_penggunaan_tanah) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->nib)
+                    <li class="detail-item">
+                        <span class="detail-label">7. Dokumen NIB</span>
+                        <a href="{{ asset('storage/' . $application->nib) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->kbli)
+                    <li class="detail-item">
+                        <span class="detail-label">8. Dokumen KBLI</span>
+                        <a href="{{ asset('storage/' . $application->kbli) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->proposal_kegiatan)
+                    <li class="detail-item">
+                        <span class="detail-label">9. Proposal Kegiatan</span>
+                        <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                    @if($application->persyaratan_lainnya)
+                    <li class="detail-item">
+                        <span class="detail-label">10. Persyaratan Lainnya</span>
+                        <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="btn-doc">Lihat</a>
+                    </li>
+                    @endif
+                </ul>
+            </div>
+ 
             <!-- DOWNLOAD DOKUMEN FINAL PRODUK AKHIR (Flowchart Image 4 & 5) -->
             @if($application->status === 'disetujui' && $application->satu_pintu_document)
                 <a href="{{ asset('storage/' . $application->satu_pintu_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">

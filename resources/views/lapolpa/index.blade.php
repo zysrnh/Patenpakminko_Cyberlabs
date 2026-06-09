@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'LAPOLPAK — PATEN PAK MIKO')
-@section('page-title', 'LAPOLPAK')
+@section('title', 'LAPOL PAK — PATEN PAK MIKO')
+@section('page-title', 'LAPOL PAK')
 
 @section('extra-styles')
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
@@ -30,9 +30,9 @@
         <div class="breadcrumb">
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <span>›</span>
-            <span>LAPOLPAK</span>
+            <span>LAPOL PAK</span>
         </div>
-        <h1>Layanan Pelaporan (LAPOLPAK)</h1>
+        <h1>Layanan Pelaporan (LAPOL PAK)</h1>
         <p>Layanan ini merupakan layanan konsultasi dan pembuatan polygon gratis di kantor.</p>
     </div>
     <div class="badge badge-blue" style="padding:6px 14px;font-size:12px;">05 / Pelaporan</div>
@@ -51,7 +51,7 @@
         <div style="width:44px;height:44px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
             <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
         </div>
-        <div style="font-size:16px;font-weight:800;color:var(--blue);margin-bottom:4px;">Jadwal Pelaporan LAPOLPAK Telah Dipesan</div>
+        <div style="font-size:16px;font-weight:800;color:var(--blue);margin-bottom:4px;">Jadwal Pelaporan LAPOL PAK Telah Dipesan</div>
         <div style="font-size:13px;color:var(--muted);">Pendaftaran dibatasi satu kali untuk menghindari duplikasi data.</div>
     </div>
 
@@ -113,7 +113,7 @@
             <div class="panel-head">
                 <h2 style="display:flex;align-items:center;gap:8px;">
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    Ulasan LAPOLPAK
+                    Ulasan LAPOL PAK
                 </h2>
             </div>
             <div class="panel-body">
@@ -162,7 +162,7 @@
         <div class="panel-head">
             <h2 style="display:flex;align-items:center;gap:8px;">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Daftarkan Jadwal Laporan LAPOLPAK
+                Daftarkan Jadwal Laporan LAPOL PAK
             </h2>
         </div>
         <div class="panel-body">

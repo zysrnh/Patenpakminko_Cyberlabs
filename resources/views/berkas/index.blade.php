@@ -305,7 +305,7 @@
                             @endphp
                             <td>
                                 <span style="font-weight: 500; color: #003B64;">{{ $finalName }}</span><br>
-                                <span style="font-size: 11px; color: var(--clr-muted);">(Akun: {{ $item->user->username ?? 'Sistem' }})</span>
+                                <span style="font-size: 11px; color: var(--clr-muted);">(Akun: PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }})</span>
                             </td>
                             <td>{{ $item->created_at->format('d M Y, H:i') }}</td>
                             <td>

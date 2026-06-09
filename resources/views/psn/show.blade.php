@@ -1064,7 +1064,7 @@
                             </div>
                             <div class="data-item">
                                 <span class="data-label">Akun Pemohon (Username)</span>
-                                <span class="data-val">{{ $application->user->username }}</span>
+                                <span class="data-val">PMH{{ str_pad($application->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</span>
                             </div>
                             <div class="data-item">
                                 <span class="data-label">Nomor Telepon Gateway / HP</span>
@@ -1312,7 +1312,7 @@
                             @endphp
                             <div class="timeline-step {{ $step3Status }}" onclick="showBpnPanel(3)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">3. Peninjauan Lapangan Kantor Pertanahan</div>
+                                <div class="timeline-title">3. Peninjauan Lapangan (BPN)</div>
                                     @if($application->bpn_cek_lokasi_dt)
                                     <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
                                         <i class="fas fa-calendar-check"></i> Jadwal Tinjauan: {{ \Carbon\Carbon::parse($application->bpn_cek_lokasi_dt)->translatedFormat('d M Y, H:i') }}
@@ -1341,7 +1341,7 @@
                             @endphp
                             <div class="timeline-step {{ $step4Status }}" onclick="showBpnPanel(4)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">4. Rapat Pembahasan Pertimbangan Teknis Pertanahan</div>
+                                <div class="timeline-title">4. Rapat Pembahasan (BPN)</div>
                                     @if($application->bpn_rapat_dt)
                                     <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
                                         <i class="fas fa-calendar-check"></i> Jadwal Rapat: {{ \Carbon\Carbon::parse($application->bpn_rapat_dt)->translatedFormat('d M Y, H:i') }}
@@ -1371,7 +1371,7 @@
                             @endphp
                             <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(5)" style="display: none; cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">Penerbitan Pertek Pertanahan (Kantor Pertanahan)</div>
+                                <div class="timeline-title">Penerbitan Pertek Pertanahan (BPN)</div>
                                     @if($application->bpn_pertek_uploaded_at)
                                     <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
                                         <i class="fas fa-calendar-check"></i> Terbit: {{ \Carbon\Carbon::parse($application->bpn_pertek_uploaded_at)->translatedFormat('d M Y, H:i') }}

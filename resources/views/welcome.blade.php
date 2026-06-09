@@ -151,7 +151,7 @@
                     <div class="sp-others">
                         <a href="{{ route('lapolpa.index') }}" class="sp-other-card">
                             <div class="sp-other-logo">
-                                <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="LAPOLPAK">
+                                <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="LAPOL PAK">
                             </div>
                             <span class="sp-other-name">LAPOL PAK</span>
                             <div class="sp-other-arrow">
@@ -338,72 +338,67 @@
             <p class="section-sub">Temukan berbagai informasi, panduan, dan berita terbaru seputar pelayanan pertanahan dan administrasi digital.</p>
         </div>
 
+        @if($beritas->isEmpty())
+        <div class="text-center py-5">
+            <p class="text-muted">Belum ada artikel atau berita yang dipublikasikan.</p>
+        </div>
+        @else
         <div class="artikel-top-grid reveal reveal-d1">
-            <!-- Featured -->
-            <div class="art-featured" style="background-image: url('https://dummyimage.com/1200x800/eeeeee/31343c.png&text=Featured+Article');">
+            <!-- Featured (Latest 1) -->
+            @php $featured = $beritas->first(); @endphp
+            <div class="art-featured" style="background-image: url('{{ $featured->image_path ? Storage::url($featured->image_path) : 'https://dummyimage.com/1200x800/eeeeee/31343c.png&text=Paten+Pak+Miko' }}');">
                 <div class="art-featured-content">
-                    <span class="art-badge">Category</span>
-                    <h3 class="art-featured-title">Cara Mengajukan Permohonan PPKPR Secara Online</h3>
-                    <span class="art-featured-date">Senin, 27 April 2026</span>
+                    <span class="art-badge">{{ $featured->category ?? 'Umum' }}</span>
+                    <h3 class="art-featured-title">{{ $featured->title }}</h3>
+                    <span class="art-featured-date">{{ $featured->created_at->format('l, d F Y') }}</span>
+                    <a href="{{ route('berita.show', $featured->slug) }}" class="btn btn-sm btn-primary mt-3" style="width: fit-content;">Baca Artikel</a>
                 </div>
             </div>
 
-            <!-- Latest List -->
+            <!-- Latest List (Next 3) -->
             <div class="art-latest">
                 <h3 class="art-latest-title">Latest <span>Post</span></h3>
                 <div class="art-latest-list">
+                    @foreach($beritas->slice(1, 3) as $post)
                     <div class="art-list-item">
-                        <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+1" alt="" class="art-list-img" loading="lazy">
+                        <img src="{{ $post->image_path ? Storage::url($post->image_path) : 'https://dummyimage.com/180x180/eeeeee/31343c.png&text=News' }}" alt="{{ $post->title }}" class="art-list-img" loading="lazy">
                         <div class="art-list-info">
-                            <h4 class="art-list-title">Panduan Lengkap Upload Persyaratan Dokumen</h4>
-                            <span class="art-list-date">Senin, 27 April 2026</span>
+                            <h4 class="art-list-title">
+                                <a href="{{ route('berita.show', $post->slug) }}" style="color: inherit; text-decoration: none;">{{ $post->title }}</a>
+                            </h4>
+                            <span class="art-list-date">{{ $post->created_at->format('l, d F Y') }}</span>
                         </div>
                     </div>
-                    <div class="art-list-item">
-                        <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+2" alt="" class="art-list-img" loading="lazy">
-                        <div class="art-list-info">
-                            <h4 class="art-list-title">Tahapan Verifikasi Berkas pada PATEN PAK MIKO</h4>
-                            <span class="art-list-date">Senin, 27 April 2026</span>
-                        </div>
-                    </div>
-                    <div class="art-list-item">
-                        <img src="https://dummyimage.com/180x180/eeeeee/31343c.png&text=Post+3" alt="" class="art-list-img" loading="lazy">
-                        <div class="art-list-info">
-                            <h4 class="art-list-title">Tips Menyiapkan Dokumen Pertanahan dengan Benar</h4>
-                            <span class="art-list-date">Senin, 27 April 2026</span>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
 
-        <!-- Carousel -->
-        <div class="art-carousel-wrap reveal reveal-d2">
+        <!-- Carousel (All others or duplicates for carousel effect) -->
+        <div class="art-carousel-wrap reveal reveal-d2 mt-5">
             <div class="art-carousel" id="artCarousel">
-                @for ($i = 1; $i <= 9; $i++)
+                @foreach($beritas as $berita)
                 <div class="art-card">
-                    <img src="https://dummyimage.com/600x400/eeeeee/31343c.png&text=Berita+{{ $i }}" alt="Berita {{ $i }}" class="art-card-img" loading="lazy">
+                    <img src="{{ $berita->image_path ? Storage::url($berita->image_path) : 'https://dummyimage.com/600x400/eeeeee/31343c.png&text=News' }}" alt="{{ $berita->title }}" class="art-card-img" loading="lazy">
                     <div class="art-card-body">
                         <div class="art-card-meta">
-                            <span>Senin, 27 April 2026</span>
+                            <span>{{ $berita->created_at->format('d M Y') }}</span>
                         </div>
-                        <h4 class="art-card-title">Judul Berita Ke-{{ $i }}</h4>
-                        <span class="art-card-cat">Category</span>
-                        <p class="art-card-desc">Contoh teks deskripsi berita ke-{{ $i }}. Gunakan ini untuk melihat tampilan card tanpa konten asli.</p>
-                        <a href="#" class="art-card-link">Baca selengkapnya &rarr;</a>
+                        <h4 class="art-card-title">{{ $berita->title }}</h4>
+                        <span class="art-card-cat">{{ $berita->category ?? 'Umum' }}</span>
+                        <p class="art-card-desc">{{ Str::limit(strip_tags($berita->content), 100) }}</p>
+                        <a href="{{ route('berita.show', $berita->slug) }}" class="art-card-link">Baca selengkapnya &rarr;</a>
                     </div>
                 </div>
-                @endfor
+                @endforeach
             </div>
             <div class="art-dots" id="artDots" role="tablist">
-                @for ($i = 1; $i <= 3; $i++)
+                @for ($i = 1; $i <= min(3, ceil($beritas->count() / 3)); $i++)
                 <div class="art-dot {{ $i == 1 ? 'active' : '' }}" role="tab" aria-label="Halaman {{ $i }}"></div>
                 @endfor
             </div>
-            <div class="art-btn-more-wrap">
-                <a href="#" class="art-btn-more">Baca Lebih Banyak &rarr;</a>
-            </div>
         </div>
+        @endif
     </div>
 </section>
 
