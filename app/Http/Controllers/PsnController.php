@@ -12,6 +12,10 @@ use Carbon\Carbon;
 
 class PsnController extends Controller
 {
+    use \App\Traits\WaBlastHelper;
+
+    use \App\Traits\WaBlastHelper;
+
     // â”€â”€â”€ INDEX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function index()
     {
@@ -399,125 +403,53 @@ class PsnController extends Controller
         return $s;
     }
 
-    private function sendCustomWa(PsnApplication $app, string $type): void
+    private function sendCustomWa($app, $type)
     {
         $settings = $this->getWhatsappSettings();
         if (!($settings['connected'] ?? false)) return;
 
-        $url        = route('psn.show', $app->id);
-        $nama       = $app->nama_pengaju ?: ($app->user->name ?? $app->user->username);
-        $noReg      = $app->application_number;
-        $pemohon    = $app->user->phone_number;
-        $bpnPhone   = !empty($settings['admin_bpn'])        ? $settings['admin_bpn']        : '';
-        $puPhone    = !empty($settings['admin_dinas_pu'])   ? $settings['admin_dinas_pu']   : '';
-        $spPhone    = !empty($settings['admin_satu_pintu']) ? $settings['admin_satu_pintu'] : '';
+        $url = url('/dashboard');
+        if(method_exists($app, 'id')) {
+            $routeName = strtolower(str_replace('Controller', '', class_basename($this)));
+            if ($routeName === 'ppkprberusaha') $routeName = 'berusaha';
+            if ($routeName === 'ppkprnonberusaha') $routeName = 'non_berusaha';
+            if ($routeName === 'tanahtimbul') $routeName = 'tanah_timbul';
+            $url = route($routeName . '.show', $app->id);
+        }
 
-        $msg = match ($type) {
-            'submit' =>
-                "Halo {$nama}, permohonan PKKPR PSN (Proyek Strategis Nasional) Anda dengan nomor {$noReg} berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.",
+        $msg = $this->generateWaMessage($type, $app, 'PSN (Proyek Strategis Nasional)', $url);
+        
+        $pemohon = $app->user->phone_number ?? '';
 
-            
-            'credential' => "Halo {$nama},
-
-Pembayaran PNBP untuk permohonan PSN {$noReg} telah dikonfirmasi oleh BPN.
-
-Berikut adalah akun Anda untuk mengakses portal PATEN PAK MIKO:
-*Username:* {$app->user->username}
-*Password:* {$app->user->plain_password}
-
-Silakan login untuk memantau status permohonan secara berkala.",
-
-            'berkas_verifikasi' => $app->bpn_berkas_status === 'diterima'
-                ? "Halo {$nama}, berkas PSN {$noReg} dinyatakan VALID oleh BPN. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran. Kami akan menghubungi Anda kembali."
-                : "Halo {$nama}, berkas PSN {$noReg} dinyatakan TIDAK SESUAI oleh BPN.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin BPN.",
-
-            'cek_lokasi' => (function() use ($app, $nama, $noReg) {
-                $waktu = \Carbon\Carbon::parse($app->bpn_cek_lokasi_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
-                return "Halo {$nama}, permohonan PPKPR PSN Anda ({$noReg}) dijadwalkan untuk peninjauan lapangan pada :\n\n"
-                     . "Waktu: {$waktu}\n"
-                     . "CP Lapangan/Admin: (atas nama) {$app->bpn_cek_lokasi_cp}\n\n"
-                     . "Harap konfirmasi kesediaan anda dengan menghubungi Contact Person petugas lapangan diatas.";
-            })(),
-
-            'cek_lokasi_ubah' =>
-                "Halo {$nama}, [PERUBAHAN JADWAL] Peninjauan lokasi PSN {$noReg} diubah.\n\nJadwal Baru: {$app->bpn_cek_lokasi_date}\nCP Petugas: {$app->bpn_cek_lokasi_cp}\n\nDetail: {$url}",
-
-            'rapat' => (function() use ($app, $nama, $noReg, $url) {
-                $waktu = \Carbon\Carbon::parse($app->bpn_rapat_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
-                return "Halo {$nama}, sidang / rapat pembahasan pertimbangan teknis pertanahan untuk permohonan PKKPR PSN Anda ({$noReg}) dijadwalkan pada:\n\n"
-                     . "Waktu: {$waktu}\n\n"
-                     . "Pantau detail permohonan di: {$url}";
-            })(),
-
-            'rapat_ubah' =>
-                "Halo {$nama}, [PERUBAHAN] Jadwal rapat PSN {$noReg} diubah.\n\nJadwal Baru: {$app->bpn_rapat_date}\n\nPantau di: {$url}",
-
-            'pertek_terbit' =>
-                "Halo {$nama}, Pertimbangan Teknis Pertanahan untuk PKKPR dengan no berkas... {$noReg} telah DITERBITKAN oleh kantor pertanahan kota sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PU) dan (PUTR) untuk dilakukan penilaian PKKPR PSN. informasi detail dapat diakases di {$url}",
-
-            'pertek_tolak' =>
-                "Halo {$nama}, permohonan PSN {$noReg} DITOLAK oleh BPN pada tahap Pertek.\nCatatan BPN: {$app->bpn_notes}\n\nDetail: {$url}",
-
-            'putr_notif_payment' =>
-                "Halo {$nama}, permohonan PKKPR PSN {$noReg} telah divalidasi Dinas PUTR.\n\nSilakan cek instruksi pembayaran retribusi (di email atau melalui petugas). Jika pembayaran sudah diselesaikan, Anda akan menerima detail Kredensial Akun (Username & Password) untuk memantau progress di sistem.",
-
-            'putr_tolak' =>
-                "Halo {$nama}, permohonan PSN {$noReg} DITOLAK oleh Dinas PUTR.\nCatatan: {$app->putr_notes}\n\nHarap hubungi petugas untuk informasi lebih lanjut.",
-
-            'credential_blast' => (function() use ($app, $nama, $noReg) {
-                $ptpData  = json_decode($app->ptp_data, true) ?? [];
-                $nik      = $ptpData['nik'] ?? '';
-                $username = $app->user->username ?? '-';
-                $password = $nik ?: 'NIK Anda';
-                return "Halo {$nama}, pembayaran PSN {$noReg} telah dikonfirmasi.\n\n"
-                     . "Akun login portal PATEN PAK MIKO Anda:\n"
-                     . "Username : {$username}\n"
-                     . "Password : {$password}\n"
-                     . "No. Berkas : {$app->no_berkas}\n\n"
-                     . "Login dan pantau permohonan di:\n" . url('/dashboard') . "\n\nBantuan: hubungi petugas BPN.";
-            })(),
-
-            'putr_notif_bpn' => null, // Ditangani di bawah (kirim ke BPN, bukan pemohon)
-
-            'pu_selesai' =>
-                "Halo {$nama}, penilaian PKKPR PSN {$noReg} oleh Dinas PU selesai. Permohonan diteruskan ke Dinas Satu Pintu untuk penerbitan PKKPR resmi. Pantau di: {$url}",
-
-            'pu_tolak' =>
-                "Halo {$nama}, permohonan PSN {$noReg} DITOLAK oleh Dinas PU pada tahap penilaian PKKPR.\nCatatan: {$app->dinas_pu_notes}\n\nDetail: {$url}",
-
-            'pkkpr_terbit' =>
-                "Selamat! Dokumen PKKPR PSN Anda ({$noReg}) telah DITERBITKAN oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (PTSP).\n\nNo. PKKPR: {$app->satu_pintu_no_pkkpr}\nSilakan buka dashboard untuk mengunduh produk akhir Anda di: {$url}",
-
-            'pkkpr_tolak' =>
-                "Halo {$nama}, permohonan PSN {$noReg} DITOLAK oleh Dinas Satu Pintu.\nCatatan: {$app->satu_pintu_notes}\n\nDetail: {$url}",
-
-            default => null,
-        };
-
-        if ($msg) {
+        if ($msg && $pemohon) {
             if (!empty($settings['cp_admin'])) {
                 $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
             }
             $this->executeFonnteSend($pemohon, $msg);
         }
 
-        // Notif ke admin instansi sesuai tahap
-        if ($type === 'berkas_verifikasi' && $app->bpn_berkas_status === 'diterima' && !empty($settings['admin_putr'])) {
-            $this->executeFonnteSend($settings['admin_putr'],
-                "[PUTR] Berkas awal BPN untuk PSN {$noReg} telah valid. Silakan lakukan validasi pembayaran di: {$url}");
+        // Notifikasi Internal Antar Instansi
+        $no_berkas_text = !empty($app->no_berkas) ? " (No. Berkas: {$app->no_berkas})" : "";
+        $nama = $app->nama_pengaju ?: ($app->user->name ?? ($app->user->username ?? ''));
+        
+        $adminBpn = $settings['admin_bpn'] ?? '';
+        $adminPutr = $settings['admin_putr'] ?? '';
+        $adminPtsp = $settings['admin_satu_pintu'] ?? '';
+
+        if (($type === 'submit' || $type === 'submit_berkas') && $adminBpn) {
+            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, ada pengajuan permohonan baru untuk PSN (Proyek Strategis Nasional) atas nama {$nama}. Silakan login untuk melakukan verifikasi berkas awal di: {$url}");
         }
-        if ($type === 'putr_notif_bpn' && !empty($settings['admin_bpn'])) {
-            $this->executeFonnteSend($settings['admin_bpn'],
-                "[BPN] PSN {$noReg} telah divalidasi PUTR. Menunggu konfirmasi pembayaran pemohon. Detail: {$url}");
+        if ($type === 'credential' && $adminBpn) {
+            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan PSN (Proyek Strategis Nasional). Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}");
         }
-        if ($type === 'pertek_terbit' && $puPhone) {
-            $this->executeFonnteSend($puPhone, "Notifikasi Dinas PU: Pertek BPN untuk PSN {$noReg} telah terbit. Silakan lakukan penilaian PKKPR di: {$url}");
+        if ($type === 'pertek_terbit' && $adminPutr) {
+            $this->executeFonnteSend($adminPutr, "Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk PSN (Proyek Strategis Nasional){$no_berkas_text} telah terbit dari Kantor Pertanahan Kota Sukabumi. Silakan lakukan penilaian PKKPR di: {$url}");
         }
-        if ($type === 'pu_selesai' && $spPhone) {
-            $this->executeFonnteSend($spPhone, "Notifikasi Satu Pintu: Penilaian Dinas PU untuk PSN {$noReg} selesai. Silakan proses penerbitan PKKPR di: {$url}");
+        if ($type === 'pu_selesai' && $adminPtsp) {
+            $this->executeFonnteSend($adminPtsp, "Notifikasi Satu Pintu: Penilaian Dinas PUTR untuk PSN (Proyek Strategis Nasional){$no_berkas_text} selesai. Silakan proses penerbitan PKKPR di: {$url}");
         }
-        if ($type === 'pu_selesai' && $bpnPhone) {
-            $this->executeFonnteSend($bpnPhone, "Notifikasi BPN: Dinas PU telah selesai menilai PSN {$noReg}. Menunggu penerbitan PKKPR oleh Satu Pintu.");
+        if ($type === 'pu_selesai' && $adminBpn) {
+            $this->executeFonnteSend($adminBpn, "Notifikasi Kantor Pertanahan Kota Sukabumi: Dinas PUTR telah selesai menilai PSN (Proyek Strategis Nasional){$no_berkas_text}. Menunggu penerbitan PKKPR oleh DPMPTSP / Satu Pintu.");
         }
     }
 

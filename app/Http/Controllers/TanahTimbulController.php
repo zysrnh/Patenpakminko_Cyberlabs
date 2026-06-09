@@ -11,6 +11,8 @@ use Carbon\Carbon;
  
 class TanahTimbulController extends Controller
 {
+    use \App\Traits\WaBlastHelper;
+
     /**
      * Tampilkan daftar pengajuan tanah-timbul Khusus.
      */
@@ -348,6 +350,35 @@ class TanahTimbulController extends Controller
             return redirect()->route('tanah-timbul.show', $id)->with('success', $msg);
         }
  
+        // SATU PINTU Langkah 6: Upload Sertifikat Akhir (Dinas PMPTSP)
+        if ($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu' && $step === 'satu_pintu_terbit') {
+            $request->validate([
+                'approval_document' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                'satu_pintu_no_pkkpr' => 'required|string|max:100',
+                'satu_pintu_tanggal_terbit' => 'required|date',
+                'notes' => 'nullable|string|max:1000'
+            ], [
+                'approval_document.required' => 'Dokumen PKKPR Final wajib diunggah.',
+                'satu_pintu_no_pkkpr.required' => 'Nomor Surat PKKPR wajib diisi.',
+                'satu_pintu_tanggal_terbit.required' => 'Tanggal Terbit wajib diisi.'
+            ]);
+
+            $path = $request->file('approval_document')->store('pkkpr_finals', 'public');
+            
+            $application->approval_document = $path;
+            $application->satu_pintu_no_pkkpr = $request->input('satu_pintu_no_pkkpr');
+            $application->satu_pintu_tanggal_terbit = $request->input('satu_pintu_tanggal_terbit');
+            $application->satu_pintu_notes  = $request->input('notes', '');
+            $application->status = 'disetujui';
+            $application->save();
+
+            // WA Notifikasi Selesai (Diterbitkan)
+            $this->sendCustomWa($application, 'penerbitan_pkkpr');
+
+            $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
+            return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');
+        }
+
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');
     }
  
@@ -399,59 +430,56 @@ class TanahTimbulController extends Controller
     /**
      * Kirim Notifikasi WhatsApp khusus sub-langkah BPN.
      */
-    private function sendCustomWhatsappNotification($application, $type)
+    private function sendCustomWhatsappNotification($app, $type)
     {
         $settings = $this->getWhatsappSettings();
-        if (!$settings['connected']) {
-            return;
+        if (!($settings['connected'] ?? false)) return;
+
+        $url = url('/dashboard');
+        if(method_exists($app, 'id')) {
+            $routeName = strtolower(str_replace('Controller', '', class_basename($this)));
+            if ($routeName === 'ppkprberusaha') $routeName = 'berusaha';
+            if ($routeName === 'ppkprnonberusaha') $routeName = 'non_berusaha';
+            if ($routeName === 'tanahtimbul') $routeName = 'tanah_timbul';
+            $url = route($routeName . '.show', $app->id);
         }
- 
-        $url = route('tanah-timbul.show', $application->id);
-        $namaPemohon = $application->nama_pengaju ?: ($application->user->name ?? $application->user->username);
- 
-        if ($type === 'berkas_verifikasi') {
-            if ($application->bpn_berkas_status === 'diterima') {
-                $message = "Halo {$namaPemohon}, dokumen persyaratan Permohonan tanah-timbul Khusus Anda ({$application->application_number}) telah Diterima & Lolos verifikasi berkas awal oleh BPN.\n\n"
-                         . "Selanjutnya, petugas BPN akan menentukan jadwal peninjauan lokasi offline. Pantau detail pengajuan Anda di: {$url}";
-            } else {
-                $message = "Halo {$namaPemohon}, dokumen persyaratan Permohonan tanah-timbul Khusus Anda ({$application->application_number}) Ditolak oleh BPN dengan alasan:\n"
-                         . "{$application->bpn_notes}\n\n"
-                         . "Lacak permohonan Anda di: {$url}";
+
+        $msg = $this->generateWaMessage($type, $app, 'Tanah Timbul', $url);
+        
+        $pemohon = $app->user->phone_number ?? '';
+
+        if ($msg && $pemohon) {
+            if (!empty($settings['cp_admin'])) {
+                $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
             }
-        } elseif ($type === 'cek_lokasi') {
-            $message = "Halo {$namaPemohon}, permohonan tanah-timbul Khusus Anda ({$application->application_number}) dijadwalkan untuk Peninjauan Cek Lokasi Offline oleh Petugas BPN.\n\n"
-                     . "Jadwal Cek: {$application->bpn_cek_lokasi_date}\n"
-                     . "Kontak Person Petugas: {$application->bpn_cek_lokasi_cp}\n\n"
-                     . "Harap mempersiapkan diri di lokasi sesuai jadwal. Lacak detail permohonan di: {$url}";
-        } elseif ($type === 'cek_lokasi_ubah') {
-            $message = "Halo {$namaPemohon}, [PERUBAHAN JADWAL] Jadwal Peninjauan Cek Lokasi Offline untuk permohonan tanah-timbul Khusus Anda ({$application->application_number}) telah disesuaikan menjadi:\n\n"
-                     . "Jadwal Baru: {$application->bpn_cek_lokasi_date}\n"
-                     . "Kontak Person Petugas: {$application->bpn_cek_lokasi_cp}\n\n"
-                     . "Lacak detail permohonan di: {$url}";
-        } elseif ($type === 'rapat') {
-            $message = "Halo {$namaPemohon}, permohonan tanah-timbul Khusus Anda ({$application->application_number}) dijadwalkan untuk Sidang/Rapat Koordinasi Pertanahan BPN.\n\n"
-                     . "Jadwal Rapat: {$application->bpn_rapat_date}\n\n"
-                     . "Pantau detail permohonan Anda di: {$url}";
-        } elseif ($type === 'rapat_ubah') {
-            $message = "Halo {$namaPemohon}, [PERUBAHAN JADWAL] Jadwal Rapat Koordinasi BPN untuk permohonan tanah-timbul Khusus Anda ({$application->application_number}) telah disesuaikan menjadi:\n\n"
-                     . "Jadwal Baru: {$application->bpn_rapat_date}\n\n"
-                     . "Pantau detail permohonan Anda di: {$url}";
-        } elseif ($type === 'pertek_terbit') {
-            $message = "Halo {$namaPemohon}, Rekomendasi Teknis / Pertek Pertanahan untuk permohonan tanah-timbul Khusus Anda ({$application->application_number}) telah DITERBITKAN oleh Kantor Pertanahan (BPN).\n\n"
-                     . "Catatan/Rekomendasi BPN: {$application->bpn_notes}\n\n"
-                     . "Dengan terbitnya dokumen ini, permohonan tanah-timbul Khusus Anda dinyatakan SELESAI dan DISETUJUI. Silakan buka dashboard untuk memantau detail dan mengunduh dokumen hasil akhir Anda di: {$url}";
-        } elseif ($type === 'pertek_tolak') {
-            $message = "Halo {$namaPemohon}, permohonan tanah-timbul Khusus Anda ({$application->application_number}) DITOLAK oleh Kantor Pertanahan (BPN) pada tahap Rekomendasi Teknis dengan alasan:\n\n"
-                     . "Catatan BPN: {$application->bpn_notes}\n\n"
-                     . "Pantau detail pengajuan Anda di: {$url}";
+            $this->executeFonnteSend($pemohon, $msg);
         }
- 
-        $this->executeFonnteSend($application->user->phone_number, $message);
+
+        // Notifikasi Internal Antar Instansi
+        $no_berkas_text = !empty($app->no_berkas) ? " (No. Berkas: {$app->no_berkas})" : "";
+        $nama = $app->nama_pengaju ?: ($app->user->name ?? ($app->user->username ?? ''));
+        
+        $adminBpn = $settings['admin_bpn'] ?? '';
+        $adminPutr = $settings['admin_putr'] ?? '';
+        $adminPtsp = $settings['admin_satu_pintu'] ?? '';
+
+        if (($type === 'submit' || $type === 'submit_berkas') && $adminBpn) {
+            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, ada pengajuan permohonan baru untuk Tanah Timbul atas nama {$nama}. Silakan login untuk melakukan verifikasi berkas awal di: {$url}");
+        }
+        if ($type === 'credential' && $adminBpn) {
+            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan Tanah Timbul. Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}");
+        }
+        if ($type === 'pertek_terbit' && $adminPutr) {
+            $this->executeFonnteSend($adminPutr, "Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk Tanah Timbul{$no_berkas_text} telah terbit dari Kantor Pertanahan Kota Sukabumi. Silakan lakukan penilaian PKKPR di: {$url}");
+        }
+        if ($type === 'pu_selesai' && $adminPtsp) {
+            $this->executeFonnteSend($adminPtsp, "Notifikasi Satu Pintu: Penilaian Dinas PUTR untuk Tanah Timbul{$no_berkas_text} selesai. Silakan proses penerbitan PKKPR di: {$url}");
+        }
+        if ($type === 'pu_selesai' && $adminBpn) {
+            $this->executeFonnteSend($adminBpn, "Notifikasi Kantor Pertanahan Kota Sukabumi: Dinas PUTR telah selesai menilai Tanah Timbul{$no_berkas_text}. Menunggu penerbitan PKKPR oleh DPMPTSP / Satu Pintu.");
+        }
     }
- 
-    /**
-     * Eksekusi curl fonnte untuk mengirim pesan WA dan log.
-     */
+
     private function executeFonnteSend($phone, $message)
     {
         $settings = $this->getWhatsappSettings();
@@ -516,33 +544,5 @@ class TanahTimbulController extends Controller
         array_unshift($logs, $newLog);
         file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
-        // SATU PINTU Langkah 6: Upload Sertifikat Akhir (Dinas PMPTSP)
-        if ($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu' && $step === 'satu_pintu_terbit') {
-            $request->validate([
-                'approval_document' => 'required|file|mimes:pdf,doc,docx|max:10240',
-                'satu_pintu_no_pkkpr' => 'required|string|max:100',
-                'satu_pintu_tanggal_terbit' => 'required|date',
-                'notes' => 'nullable|string|max:1000'
-            ], [
-                'approval_document.required' => 'Dokumen PKKPR Final wajib diunggah.',
-                'satu_pintu_no_pkkpr.required' => 'Nomor Surat PKKPR wajib diisi.',
-                'satu_pintu_tanggal_terbit.required' => 'Tanggal Terbit wajib diisi.'
-            ]);
-
-            $path = $request->file('approval_document')->store('pkkpr_finals', 'public');
-            
-            $application->approval_document = $path;
-            $application->satu_pintu_no_pkkpr = $request->input('satu_pintu_no_pkkpr');
-            $application->satu_pintu_tanggal_terbit = $request->input('satu_pintu_tanggal_terbit');
-            $application->satu_pintu_notes  = $request->input('notes', '');
-            $application->status = 'disetujui';
-            $application->save();
-
-            // WA Notifikasi Selesai (Diterbitkan)
-            $this->sendCustomWa($application, 'penerbitan_pkkpr');
-
-            $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
-            return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');
-        }
 
 }

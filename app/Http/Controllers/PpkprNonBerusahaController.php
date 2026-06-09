@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 
 class PpkprNonBerusahaController extends Controller
 {
+    use \App\Traits\WaBlastHelper;
+
     /**
      * Tampilkan daftar pengajuan PPKPR.
      */
