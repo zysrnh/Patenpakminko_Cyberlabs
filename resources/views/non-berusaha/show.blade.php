@@ -1059,7 +1059,7 @@
                                 <span class="data-val">{{ $application->nama_pengaju }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">Hubungan Pengaju (Sebagai Apa)</span>
+                                <span class="data-label">Status Pemohon / Pengguna Layanan (Sebagai Apa)</span>
                                 <span class="data-val">{{ $application->hubungan_pengaju }}</span>
                             </div>
                             <div class="data-item">
@@ -1239,7 +1239,7 @@
                     <div class="sla-banner">
                         <div class="sla-item" style="background-color: {{ $slaBg }}; border-color: {{ $slaBorder }}; color: {{ $slaColor }};">
                             <div class="sla-info">
-                                <div class="sla-title">SLA Tahap 1 (Kantor Pertanahan)</div>
+                                <div class="sla-title">Batas Waktu (Kantor Pertanahan)</div>
                                 <div class="sla-value">Target: {{ $targetDate->format('d M Y') }}</div>
                                 <div class="sla-desc">Batas waktu penyelesaian Pertek adalah 10 Hari Kerja.</div>
                             </div>

@@ -93,11 +93,11 @@
                     <input type="hidden" name="nama_pengaju" value="{{ old('nama_pengaju', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}">
                 </div>
 
-                <!-- Hubungan Pengaju -->
+                <!-- Status Pemohon / Pengguna Layanan -->
                 <div class="form-group">
-                    <label class="form-label">Hubungan Pengaju (Sebagai Apa)<span class="required">*</span></label>
+                    <label class="form-label">Status Pemohon / Pengguna Layanan (Sebagai Apa)<span class="required">*</span></label>
                     <select id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" required>
-                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pengaju...</option>
+                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Status Pemohon / Pengguna Layanan...</option>
                         <option value="Pemilik Usaha / Pengguna Layanan" {{ $selectedHubungan === 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
                         <option value="Penerima Kuasa" {{ $selectedHubungan === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
                         <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>

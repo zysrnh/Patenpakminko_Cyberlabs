@@ -730,7 +730,7 @@
                     <div class="sla-banner">
                         <div class="sla-item" style="background-color: {{ $slaBg }}; border-color: {{ $slaBorder }}; color: {{ $slaColor }};">
                             <div class="sla-info">
-                                <div class="sla-title">SLA Tahap 1 (Kantor Pertanahan)</div>
+                                <div class="sla-title">Batas Waktu (Kantor Pertanahan)</div>
                                 <div class="sla-value">Target: {{ $targetDate->format('d M Y') }}</div>
                                 <div class="sla-desc">Batas waktu penyelesaian Pertek adalah 10 Hari Kerja.</div>
                             </div>
