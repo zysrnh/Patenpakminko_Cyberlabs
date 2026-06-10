@@ -22,7 +22,7 @@ trait WaBlastHelper
 
             'berkas_verifikasi' => $app->bpn_berkas_status === 'diterima'
                 ? "Halo {$nama}, berkas {$layanan} Anda dinyatakan VALID oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran. Kami akan menghubungi Anda kembali."
-                : "Halo {$nama}, berkas {$layanan} Anda dinyatakan TIDAK SESUAI / DITOLAK oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.",
+                : "Halo {$nama}, berkas {$layanan} Anda dinyatakan TIDAK SESUAI / DITOLAK oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas'),
 
             'berkas_revisi_bpn' =>
                 "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layanan}. Silakan cek & verifikasi ulang dokumen di: {$url}",
@@ -31,7 +31,7 @@ trait WaBlastHelper
                 "Halo {$nama}, permohonan {$layanan} Anda telah divalidasi Dinas PUTR.\n\nSilakan cek instruksi pembayaran retribusi. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.",
 
             'putr_tolak' =>
-                "Halo {$nama}, permohonan {$layanan} Anda DITOLAK oleh Dinas PUTR.\nCatatan: {$app->putr_notes}",
+                "Halo {$nama}, permohonan {$layanan} Anda DITOLAK oleh Dinas PUTR.\nCatatan: {$app->putr_notes}\n\nDetail: {$url}",
 
             'credential_blast', 'credential' => (function() use ($app, $nama, $layanan, $url) {
                 $ptpData  = json_decode($app->ptp_data, true) ?? [];
@@ -70,13 +70,13 @@ trait WaBlastHelper
                 "Halo {$nama}, Pertimbangan Teknis Pertanahan untuk permohonan {$layanan}{$no_berkas_text} telah DITERBITKAN oleh Kantor Pertanahan Kota Sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PUTR) untuk dilakukan penilaian.",
 
             'pertek_tolak' =>
-                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Kantor Pertanahan Kota Sukabumi pada tahap Pertek.\nCatatan: {$app->bpn_notes}",
+                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Kantor Pertanahan Kota Sukabumi pada tahap Pertek.\nCatatan: {$app->bpn_notes}\n\nDetail: {$url}",
 
             'pu_selesai' =>
                 "Halo {$nama}, penilaian {$layanan}{$no_berkas_text} oleh Dinas PU selesai. Permohonan diteruskan ke Dinas Satu Pintu. Pantau di: {$url}",
 
             'pu_tolak' =>
-                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Dinas PU.\nCatatan: {$app->dinas_pu_notes}",
+                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Dinas PU.\nCatatan: {$app->dinas_pu_notes}\n\nDetail: {$url}",
 
             'pkkpr_terbit' =>
                 "Selamat! Dokumen Pertimbangan Teknis Pertanahan {$layanan} Anda{$no_berkas_text} telah DITERBITKAN oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (PTSP).\n\n"
@@ -84,7 +84,7 @@ trait WaBlastHelper
               . "Silakan unduh produk akhir Anda di: {$url}",
 
             'pkkpr_tolak' =>
-                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Dinas Satu Pintu.\nCatatan: {$app->satu_pintu_notes}",
+                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Dinas Satu Pintu.\nCatatan: {$app->satu_pintu_notes}\n\nDetail: {$url}",
 
             default => null,
         };

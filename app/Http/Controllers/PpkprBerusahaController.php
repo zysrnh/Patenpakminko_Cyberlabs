@@ -484,7 +484,14 @@ class PpkprBerusahaController extends Controller
             
             return redirect()->route('berusaha.show', $id)->with('success', 'Notifikasi WhatsApp blast berhasil dikirim ke Pelaku Usaha dan BPN!');
         }
- 
+
+        // Resend Notifikasi WA (Admin Action)
+        if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
+            $type = $request->input('wa_type', 'berkas_verifikasi');
+            $this->sendCustomWhatsappNotification($application, $type);
+            return redirect()->route('berusaha.show', $id)->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
+        }
+
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');
     }
  

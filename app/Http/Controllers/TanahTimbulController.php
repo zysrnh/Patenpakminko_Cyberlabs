@@ -379,6 +379,14 @@ class TanahTimbulController extends Controller
             return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');
         }
 
+        
+        // Resend Notifikasi WA (Admin Action)
+        if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
+            $type = $request->input('wa_type', 'berkas_verifikasi');
+            $this->sendCustomWhatsappNotification($application, $type);
+            return redirect()->back()->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
+        }
+
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');
     }
  

@@ -32,7 +32,7 @@
             padding: 10px 20px;
             font-size: 14px;
             font-weight: bold;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             border-radius: 6px;
             cursor: pointer;
             text-decoration: none;
@@ -46,7 +46,7 @@
             text-decoration: none;
             font-size: 14px;
             font-weight: bold;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         .document-page {

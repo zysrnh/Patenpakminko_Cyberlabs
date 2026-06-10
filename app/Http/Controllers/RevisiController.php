@@ -9,9 +9,11 @@ use App\Models\PsnApplication;
 use App\Models\KebijakanApplication;
 use App\Models\TanahTimbulApplication;
 use App\Models\User;
+use App\Traits\WaBlastHelper;
 
 class RevisiController extends Controller
 {
+    use WaBlastHelper;
     public function index()
     {
         return view("revisi.index");
@@ -35,26 +37,26 @@ class RevisiController extends Controller
         $application = null;
         $type = "";
         
-        $berusaha = PpkprBerusahaApplication::where("user_id", $user->id)->where("status", "ditolak")->latest()->first();
+        $berusaha = PpkprBerusahaApplication::where("user_id", $user->id)->where(function($q) { $q->where("status", "ditolak")->orWhere("bpn_berkas_status", "tidak_sesuai"); })->latest()->first();
         if($berusaha) { $application = $berusaha; $type = "berusaha"; }
         
         if(!$application) {
-            $non = PpkprApplication::where("user_id", $user->id)->where("status", "ditolak")->latest()->first();
+            $non = PpkprApplication::where("user_id", $user->id)->where(function($q) { $q->where("status", "ditolak")->orWhere("bpn_berkas_status", "tidak_sesuai"); })->latest()->first();
             if($non) { $application = $non; $type = "non_berusaha"; }
         }
         
         if(!$application) {
-            $psn = PsnApplication::where("user_id", $user->id)->where("status", "ditolak")->latest()->first();
+            $psn = PsnApplication::where("user_id", $user->id)->where(function($q) { $q->where("status", "ditolak")->orWhere("bpn_berkas_status", "tidak_sesuai"); })->latest()->first();
             if($psn) { $application = $psn; $type = "psn"; }
         }
         
         if(!$application) {
-            $kebijakan = KebijakanApplication::where("user_id", $user->id)->where("status", "ditolak")->latest()->first();
+            $kebijakan = KebijakanApplication::where("user_id", $user->id)->where(function($q) { $q->where("status", "ditolak")->orWhere("bpn_berkas_status", "tidak_sesuai"); })->latest()->first();
             if($kebijakan) { $application = $kebijakan; $type = "kebijakan"; }
         }
         
         if(!$application) {
-            $timbul = TanahTimbulApplication::where("user_id", $user->id)->where("status", "ditolak")->latest()->first();
+            $timbul = TanahTimbulApplication::where("user_id", $user->id)->where(function($q) { $q->where("status", "ditolak")->orWhere("bpn_berkas_status", "tidak_sesuai"); })->latest()->first();
             if($timbul) { $application = $timbul; $type = "tanah_timbul"; }
         }
 
@@ -131,9 +133,10 @@ class RevisiController extends Controller
                 
                 // Simpan ke kolom aplikasi atau requirements
                 // Karena kita tidak yakin kolomnya ada di tabel atau tidak, kita masukkan semua ke persyaratan_lainnya jika error
-                try {
+                // Cek apakah kolom benar-benar ada di tabel sebelum diset
+                if (\Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), $dbColumn)) {
                     $application->$dbColumn = $path;
-                } catch (\Exception $e) {
+                } else {
                     $application->persyaratan_lainnya = $path;
                 }
                 $uploadedCount++;
@@ -145,7 +148,11 @@ class RevisiController extends Controller
             $application->bpn_berkas_status = "menunggu";
             $application->bpn_notes = "Telah Direvisi Pemohon. " . $application->bpn_notes;
             $application->save();
-            return redirect()->route("revisi.index")->with("success", "Berkas perbaikan berhasil diunggah! Status permohonan kembali Menunggu Pemeriksaan BPN.");
+
+            // Blast WA ke Admin BPN bahwa pemohon telah mengunggah revisi
+            $this->sendWaNotification($application, 'berkas_revisi_bpn', url('/dashboard'));
+
+            return redirect()->route("pengajuan.sukses")->with("success", "Berkas perbaikan berhasil diunggah! Status permohonan kembali Menunggu Pemeriksaan BPN.");
         }
 
         return redirect()->back()->with("error", "Tidak ada file yang diunggah.");

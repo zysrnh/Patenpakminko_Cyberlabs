@@ -386,6 +386,14 @@ class PsnController extends Controller
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
+        
+        // Resend Notifikasi WA (Admin Action)
+        if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
+            $type = $request->input('wa_type', 'berkas_verifikasi');
+            $this->sendCustomWa($application, $type);
+            return redirect()->back()->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
+        }
+
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');
     }
 

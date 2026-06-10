@@ -111,6 +111,14 @@ class BeritaController extends Controller
             $request->file('upload')->storeAs('public/berita/images', $fileName);
     
             $url = '/storage/berita/images/' . $fileName;
+            
+            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+            if ($CKEditorFuncNum) {
+                $msg = 'Gambar berhasil diupload';
+                return response("<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg');</script>")
+                    ->header('Content-Type', 'text/html');
+            }
+
             return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url' => $url]);
         }
         return response()->json(['uploaded'=> 0, 'error' => ['message' => 'Upload failed']]);

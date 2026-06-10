@@ -8,7 +8,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,14 +25,14 @@
             --clr-line:    #D6E4EF;
             --clr-surface: #F0F6FB;
             --clr-white:   #FFFFFF;
-            --radius-sm:   6px;
-            --radius-md:   10px;
-            --radius-lg:   16px;
-            --radius-xl:   24px;
+            --radius-sm:   5px;
+            --radius-md:   5px;
+            --radius-lg:   5px;
+            --radius-xl:   5px;
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--clr-surface);
             color: var(--clr-ink);
             min-height: 100vh;
@@ -590,7 +590,7 @@
             <div class="header-inner">
                 <a href="/dashboard" class="logo-wrap">
                     <div class="logo-icon" style="background: transparent;">
-                        <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                        <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
                     </div>
                     <div class="logo-text">
                         <strong>PATEN PAK MIKO</strong>
@@ -794,6 +794,17 @@
                                     @endif
                                 </form>
                             </fieldset>
+                            @if(Auth::user()->isBpn() && in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']))
+                                <form action="{{ route('non_berusaha.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="berkas_verifikasi">
+                                    <button type="submit" class="btn-verify-submit" style="background: var(--clr-green); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Notifikasi WhatsApp (Revisi Berkas)
+                                    </button>
+                                </form>
+                            @endif
                         </div>
 
                         <div id="bpn-panel-2" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' ? 'block' : 'none' }};">

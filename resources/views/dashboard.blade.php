@@ -7,7 +7,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -42,7 +42,7 @@
         }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background: var(--surface);
             color: var(--ink);
             -webkit-font-smoothing: antialiased;
@@ -1111,16 +1111,16 @@
                     </div>
                     <div class="activity-list">
                         @forelse($beritasList as $beritaItem)
-                        <div class="activity-item" style="align-items: center;">
+                        <div class="activity-item" style="align-items: center; padding: 20px 24px;">
                             @if($beritaItem->image_path)
-                                <img src="{{ asset('storage/'.$beritaItem->image_path) }}" alt="{{ $beritaItem->title }}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid var(--line);">
+                                <img src="{{ asset('storage/'.$beritaItem->image_path) }}" alt="{{ $beritaItem->title }}" style="width: 220px; height: 130px; object-fit: cover; border-radius: 16px; flex-shrink: 0; border: 1px solid var(--line);">
                             @else
-                                <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--surface2); border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                    <svg width="20" height="20" fill="none" stroke="var(--muted)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <div style="width: 220px; height: 130px; border-radius: 16px; background: var(--surface2); border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="36" height="36" fill="none" stroke="var(--muted)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                 </div>
                             @endif
-                            <div class="activity-body">
-                                <div class="activity-title" style="font-size: 14px; margin-bottom: 4px;">{{ $beritaItem->title }}</div>
+                            <div class="activity-body" style="margin-left: 18px;">
+                                <div class="activity-title" style="font-size: 15px; margin-bottom: 6px;">{{ $beritaItem->title }}</div>
                                 <div class="activity-meta">{{ $beritaItem->created_at->format('d M Y, H:i') }} • {{ $beritaItem->category ?? 'Umum' }}</div>
                             </div>
                             <div class="activity-status {{ $beritaItem->is_published ? 'status-approved' : 'status-pending' }}">

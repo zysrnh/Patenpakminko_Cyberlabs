@@ -156,7 +156,7 @@
         box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important;
         border: 1px solid #E2E8F0 !important;
         border-radius: 8px !important;
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Poppins', sans-serif !important;
         margin-top: 8px !important;
     }
     .flatpickr-calendar.arrowTop:before, .flatpickr-calendar.arrowTop:after,
