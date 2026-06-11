@@ -757,9 +757,9 @@
                 // Logika Waktu Untuk Staged Timeline & Penentuan Form Aktif BPN
                 $now = \Carbon\Carbon::now();
                 $cekLokasiLewat = $application->bpn_cek_lokasi_dt
-                    && $now->toDateString() >= $application->bpn_cek_lokasi_dt->copy()->addDay()->toDateString();
+                    && $now >= $application->bpn_cek_lokasi_dt;
                 $rapatLewat = $application->bpn_rapat_dt
-                    && $now->toDateString() >= $application->bpn_rapat_dt->copy()->addDay()->toDateString();
+                    && $now >= $application->bpn_rapat_dt;
             @endphp
 
                             <div class="verify-card">
@@ -799,6 +799,10 @@
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
+                                    <div class="form-group-v" style="margin-top: 12px; margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
                                     <button type="submit" class="btn-verify-submit" style="background: var(--clr-green); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Kirim Ulang Notifikasi WhatsApp (Revisi Berkas)
@@ -832,7 +836,7 @@
                         </div>
 
                         <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
-                            @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar'); @endphp
+                            @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat)); @endphp
                             <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
                                 <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -852,9 +856,12 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:12px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Cek Lokasi <span style="color:red;">*</span></label>
-                                        <input type="datetime-local" name="bpn_cek_lokasi_dt" class="form-control"
-                                            value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}"
-                                            style="background:white;" required>
+                                        <div style="display:flex; gap:8px;">
+                                            <input type="datetime-local" id="bpn_cek_lokasi_dt" name="bpn_cek_lokasi_dt" class="form-control"
+                                                value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}"
+                                                style="background:white; flex-grow:1;" required>
+                                            <button type="button" onclick="document.getElementById('bpn_cek_lokasi_dt').value = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0,16);" style="background:#e2e8f0; border:1px solid #cbd5e1; padding:0 12px; border-radius:6px; font-size:11px; font-weight:700; color:#475569; cursor:pointer;" title="Set ke waktu saat ini untuk test skip">📍 Sekarang</button>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Kontak Person Petugas Lapangan <span style="color:red;">*</span></label>
@@ -871,9 +878,24 @@
                                     @endif
                                 </form>
                             </fieldset>
-                        </div>
 
-                        <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
+                            @if(Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt)
+                                <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="cek_lokasi">
+                                    <div class="form-group-v" style="margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Jadwal Cek Lokasi (WhatsApp)
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+<div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
                             @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat)); @endphp
                             <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
                                 <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST">
@@ -889,9 +911,12 @@
                                     </div>
                                     <div class="form-group" style="margin-bottom:12px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Rapat <span style="color:red;">*</span></label>
-                                        <input type="datetime-local" name="bpn_rapat_dt" class="form-control"
-                                            value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}"
-                                            style="background:white;" required>
+                                        <div style="display:flex; gap:8px;">
+                                            <input type="datetime-local" id="bpn_rapat_dt" name="bpn_rapat_dt" class="form-control"
+                                                value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}"
+                                                style="background:white; flex-grow:1;" required>
+                                            <button type="button" onclick="document.getElementById('bpn_rapat_dt').value = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0,16);" style="background:#e2e8f0; border:1px solid #cbd5e1; padding:0 12px; border-radius:6px; font-size:11px; font-weight:700; color:#475569; cursor:pointer;" title="Set ke waktu saat ini untuk test skip">📍 Sekarang</button>
+                                        </div>
                                     </div>
                                     @if($isStep4Active)
                                         <button type="submit" class="btn-verify-submit" style="background:#218AC9;font-size:13px;padding:10px 20px;">
@@ -902,9 +927,24 @@
                                     @endif
                                 </form>
                             </fieldset>
-                        </div>
 
-                        <div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
+                            @if(Auth::user()->isBpn() && $application->bpn_rapat_dt)
+                                <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="rapat">
+                                    <div class="form-group-v" style="margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Jadwal Rapat (WhatsApp)
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+<div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
                             @php $isStep5Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
                             <fieldset {{ $isStep5Active ? '' : 'disabled' }}>
                                 <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -943,9 +983,24 @@
                                     @endif
                                 </form>
                             </fieldset>
+
+                            @if(Auth::user()->isBpn() && $application->bpn_pertek_document)
+                                <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="{{ $application->status === 'ditolak' ? 'pertek_tolak' : 'pertek_terbit' }}">
+                                    <div class="form-group-v" style="margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Notifikasi Pertek (WhatsApp)
+                                    </button>
+                                </form>
+                            @endif
                         </div>
-                        
-                        <script>
+<script>
                             function showBpnPanel(stepNum) {
                                 // hide all
                                 document.querySelectorAll('.bpn-panel-step').forEach(function(el) {
@@ -1260,16 +1315,36 @@
                         </div>
                     </div>
 
-                    <div class="card">
-                        <h2 class="card-title">Linimasa Pelacakan Berkas</h2>
+                    <div class="card" style="position: sticky; top: 88px;">
+                        <!-- ── SERVICE IDENTIFIER HEADER ── -->
+                        <div class="timeline-card-header">
+                            <img
+                                src="{{ asset('storage/logo/TanahTimbul.png') }}"
+                                alt="Logo Tanah Timbul"
+                                class="timeline-service-logo"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                            >
+                            <!-- Fallback jika logo tidak ditemukan -->
+                            <div style="display:none; width:56px; height:56px; border-radius:10px; background:var(--clr-blue); align-items:center; justify-content:center; flex-shrink:0;">
+                                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </div>
+                            <div class="timeline-service-meta">
+                                <div class="timeline-service-label">Pelacakan Permohonan</div>
+                                <div class="timeline-service-title">Tanah Timbul</div>
+                                <div class="timeline-step-count">7 Tahapan · BPN & DPMPTSP</div>
+                            </div>
+                        </div>
                         
                         <div class="timeline">
                             
                             <!-- STEP 1: Diajukan -->
                             <div class="timeline-step completed">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">Berkas Berhasil Diajukan</div>
-                                <div class="timeline-desc">Pelaku usaha berhasil mengunggah berkas persyaratan secara lengkap ke portal PATEN PAK MIKO.</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">Berkas Berhasil Diajukan</div>
+                                    <div class="timeline-desc">Pelaku usaha berhasil mengunggah berkas persyaratan secara lengkap ke portal PATEN PAK MIKO.</div>
+                                    <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ $application->created_at->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
+                                </div>
                             </div>
 
                             <!-- STEP 2: Verifikasi & Validasi -->
@@ -1283,8 +1358,16 @@
                             @endphp
                             <div class="timeline-step {{ $step2Status }}" onclick="showBpnPanel(1)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">1. Verifikasi & Validasi</div>
-                                <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon.</div>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        1. Verifikasi & Validasi
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
+                                    </div>
+                                    <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon.</div>
+                                    @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;">✅ Disetujui pada: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->format('d M Y, H:i') }} WIB</div>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- STEP 2: Pembayaran PNBP -->
@@ -1300,14 +1383,22 @@
                             @endphp
                             <div class="timeline-step {{ $step2bStatus }}" onclick="showBpnPanel(2)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">2. Pembayaran PNBP</div>
-                                <div class="timeline-desc">Pembayaran biaya PNBP & aktivasi akun.</div>
-                                @if($application->bpn_pembayaran_status === 'sudah_bayar')
-                                    <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
-                                        <strong>No. Berkas:</strong> {{ $application->no_berkas }}<br>
-                                        Status: <strong>LUNAS</strong>. Akun telah dikirim ke WA.
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        2. Pembayaran PNBP
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
                                     </div>
-                                @endif
+                                    <div class="timeline-desc">Pembayaran biaya PNBP & aktivasi akun.</div>
+                                    @if($application->bpn_pembayaran_status === 'sudah_bayar')
+                                        <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
+                                            <strong>No. Berkas:</strong> {{ $application->no_berkas }}<br>
+                                            Status: <strong>LUNAS</strong>. Akun telah dikirim ke WA.
+                                        </div>
+                                    @endif
+                                    @if($application->bpn_pembayaran_status === 'sudah_bayar' && $application->bpn_pembayaran_approved_at)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- STEP 3: Peninjauan Lokasi Lapangan (Kantor Pertanahan) -->
@@ -1323,18 +1414,21 @@
                             @endphp
                             <div class="timeline-step {{ $step3Status }}" onclick="showBpnPanel(3)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">3. Peninjauan Lapangan (BPN)</div>
-                                    @if($application->bpn_cek_lokasi_dt)
-                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
-                                        <i class="fas fa-calendar-check"></i> Jadwal Tinjauan: {{ \Carbon\Carbon::parse($application->bpn_cek_lokasi_dt)->translatedFormat('d M Y, H:i') }}
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        3. Peninjauan Lapangan (BPN)
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
                                     </div>
-                                    @endif
-                                <div class="timeline-desc">
+                                    <div class="timeline-desc">
+                                        @if($application->bpn_cek_lokasi_dt)
+                                            Dijadwalkan pada: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>
+                                            CP Lapangan: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
+                                        @else
+                                            Menunggu penentuan jadwal peninjauan lapangan offline.
+                                        @endif
+                                    </div>
                                     @if($application->bpn_cek_lokasi_dt)
-                                        Dijadwalkan pada: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>
-                                        CP Lapangan: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
-                                    @else
-                                        Menunggu penentuan jadwal peninjauan lapangan offline.
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Dijadwalkan: {{ \Carbon\Carbon::parse($application->bpn_cek_lokasi_dt)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
                                     @endif
                                 </div>
                             </div>
@@ -1352,17 +1446,20 @@
                             @endphp
                             <div class="timeline-step {{ $step4Status }}" onclick="showBpnPanel(4)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">4. Rapat Pembahasan (BPN)</div>
-                                    @if($application->bpn_rapat_dt)
-                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
-                                        <i class="fas fa-calendar-check"></i> Jadwal Rapat: {{ \Carbon\Carbon::parse($application->bpn_rapat_dt)->translatedFormat('d M Y, H:i') }}
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        4. Rapat Pembahasan
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
                                     </div>
-                                    @endif
-                                <div class="timeline-desc">
+                                    <div class="timeline-desc">
+                                        @if($application->bpn_rapat_dt)
+                                            Dijadwalkan pada: <strong>{{ $application->bpn_rapat_date }}</strong>
+                                        @else
+                                            Menunggu penentuan jadwal rapat koordinasi pertanahan.
+                                        @endif
+                                    </div>
                                     @if($application->bpn_rapat_dt)
-                                        Dijadwalkan pada: <strong>{{ $application->bpn_rapat_date }}</strong>
-                                    @else
-                                        Menunggu penentuan jadwal rapat koordinasi pertanahan.
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Dijadwalkan: {{ \Carbon\Carbon::parse($application->bpn_rapat_dt)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
                                     @endif
                                 </div>
                             </div>
@@ -1382,17 +1479,20 @@
                             @endphp
                             <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(5)" style="display: none; cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">5. Penerbitan Pertek Pertanahan</div>
-                                    @if($application->bpn_pertek_uploaded_at)
-                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
-                                        <i class="fas fa-calendar-check"></i> Terbit: {{ \Carbon\Carbon::parse($application->bpn_pertek_uploaded_at)->translatedFormat('d M Y, H:i') }}
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        5. Penerbitan Pertek Pertanahan
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
                                     </div>
-                                    @endif
-                                <div class="timeline-desc">
-                                    @if($application->bpn_pertek_document)
-                                        Dokumen Pertek resmi diterbitkan. Permohonan diteruskan ke Dinas PUTR.
-                                    @else
-                                        Menunggu rapat selesai untuk penerbitan rekomendasi teknis.
+                                    <div class="timeline-desc">
+                                        @if($application->bpn_pertek_document)
+                                            Dokumen Pertek resmi diterbitkan. Permohonan diteruskan ke instansi selanjutnya.
+                                        @else
+                                            Menunggu rapat selesai untuk penerbitan rekomendasi teknis.
+                                        @endif
+                                    </div>
+                                    @if($application->bpn_pertek_uploaded_at)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ \Carbon\Carbon::parse($application->bpn_pertek_uploaded_at)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
                                     @endif
                                 </div>
                             </div>
@@ -1406,23 +1506,23 @@
                             @endphp
                             <div class="timeline-step {{ $step7Status }}" onclick="showBpnPanel('satu-pintu')" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">6. Penerbitan PKKPR (Dinas PMPTSP)</div>
-                                    @if($application->satu_pintu_tanggal_terbit)
-                                    <div style="font-size: 11px; color: #1393cc; margin-top: 4px; margin-bottom: 6px; font-weight: 700;">
-                                        <i class="fas fa-calendar-check"></i> Terbit: {{ \Carbon\Carbon::parse($application->satu_pintu_tanggal_terbit)->translatedFormat('d M Y') }}
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        6. Penerbitan PKKPR
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PMPTSP</span>
                                     </div>
+                                    <div class="timeline-desc">
+                                        Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu menerbitkan dokumen PKKPR resmi.
+                                    </div>
+                                    @if($application->satu_pintu_no_pkkpr)
+                                        <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
+                                            <strong>No. PKKPR:</strong> {{ $application->satu_pintu_no_pkkpr }}
+                                        </div>
                                     @endif
-                                <div class="timeline-desc">
-                                    Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu menerbitkan dokumen PKKPR resmi.
+                                    @if($application->satu_pintu_tanggal_terbit)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Terbit: {{ \Carbon\Carbon::parse($application->satu_pintu_tanggal_terbit)->locale('id')->translatedFormat('l, d M Y') }}</div>
+                                    @endif
                                 </div>
-                                @if($application->satu_pintu_no_pkkpr)
-                                    <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
-                                        <strong>No. PKKPR:</strong> {{ $application->satu_pintu_no_pkkpr }}
-                                        @if($application->satu_pintu_tanggal_terbit)
-                                            <br><strong>Tanggal Terbit:</strong> {{ $application->satu_pintu_tanggal_terbit->format('d-m-Y') }}
-                                        @endif
-                                    </div>
-                                @endif
                             </div>
 
                             <!-- STEP 8: Selesai / Ditolak -->
@@ -1436,21 +1536,23 @@
                             @endphp
                             <div class="timeline-step {{ $doneStepStatus }}">
                                 <span class="timeline-dot"></span>
-                                <div class="timeline-title">
-                                    @if($application->status === 'ditolak')
-                                        Permohonan Ditolak
-                                    @else
-                                        Permohonan Selesai & Disetujui
-                                    @endif
-                                </div>
-                                <div class="timeline-desc">
-                                    @if($application->status === 'ditolak')
-                                        Permohonan dihentikan/ditolak oleh instansi terkait (BPN atau Dinas PU).
-                                    @elseif($application->status === 'disetujui')
-                                        Seluruh alur selesai. Dokumen Tanah Timbul siap diunduh dari portal.
-                                    @else
-                                        Menunggu seluruh tahapan selesai disetujui semua instansi terkait.
-                                    @endif
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        @if($application->status === 'ditolak')
+                                            Permohonan Ditolak
+                                        @else
+                                            Permohonan Selesai & Disetujui
+                                        @endif
+                                    </div>
+                                    <div class="timeline-desc">
+                                        @if($application->status === 'ditolak')
+                                            Permohonan dihentikan/ditolak oleh instansi terkait (BPN atau Dinas PU).
+                                        @elseif($application->status === 'disetujui')
+                                            Seluruh alur selesai. Dokumen Tanah Timbul siap diunduh dari portal.
+                                        @else
+                                            Menunggu seluruh tahapan selesai disetujui semua instansi terkait.
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
 
@@ -1461,6 +1563,143 @@
             </div>
         </div>
     </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textareas = document.querySelectorAll('textarea[name="custom_wa_message"]');
+    textareas.forEach(ta => {
+        const form = ta.closest('form');
+        let waTypeInput = form.querySelector('input[name="wa_type"]');
+        let waTypeValue = waTypeInput ? waTypeInput.value : null;
+
+        if (!waTypeValue) {
+            const stepInput = form.querySelector('input[name="step"]');
+            if (stepInput) {
+                const step = stepInput.value;
+                if (step === 'berkas_verifikasi') waTypeValue = 'berkas_verifikasi';
+                else if (step === 'pembayaran_lunas') waTypeValue = 'credential';
+                else if (step === 'cek_lokasi') waTypeValue = 'cek_lokasi';
+                else if (step === 'rapat') waTypeValue = 'rapat';
+                else if (step === 'pertek') waTypeValue = 'pertek_terbit';
+                else if (step === 'putr') waTypeValue = 'putr_validasi';
+                else if (step === 'pu') waTypeValue = 'pu_selesai';
+                else if (step === 'pkkpr') waTypeValue = 'pkkpr_terbit';
+            }
+        }
+
+        if (!waTypeValue) {
+            const html = form.innerHTML;
+            if (html.includes('name="bpn_berkas_notes"') || html.includes('Simpan Verifikasi Berkas')) waTypeValue = 'berkas_verifikasi';
+            else if (html.includes('name="sps_bpn"') || html.includes('Kirim Kredensial')) waTypeValue = 'credential';
+            else if (html.includes('name="bpn_lokasi_notes"') || html.includes('Kirimkan Jadwal Cek Lokasi')) waTypeValue = 'cek_lokasi';
+            else if (html.includes('name="bpn_rapat_notes"') || html.includes('Simpan Hasil Rapat')) waTypeValue = 'rapat';
+            else if (html.includes('name="pertek_notes"') || html.includes('Kirim Pertek Pertanahan')) waTypeValue = 'pertek_terbit';
+            else if (html.includes('name="dinas_pu_notes"') || html.includes('Kirim Validasi Awal')) waTypeValue = 'putr_validasi';
+            else if (html.includes('name="dinas_pu_penilaian_notes"') || html.includes('Kirim Penilaian PU')) waTypeValue = 'pu_selesai';
+            else if (html.includes('name="ptsp_notes"') || html.includes('Terbitkan PKKPR')) waTypeValue = 'pkkpr_terbit';
+            else waTypeValue = 'berkas_verifikasi';
+        }
+
+        if (waTypeValue) {
+            ta.readOnly = true;
+            ta.disabled = true; // Disable so it doesn't send the prefilled text if not manually edited
+            ta.style.backgroundColor = '#f4f7f9';
+            ta.style.color = '#555';
+            ta.rows = 7;
+            ta.style.minHeight = '160px';
+            
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn-edit-wa';
+            btn.innerHTML = '✏️ Rubah Pesan WA';
+            btn.style.cssText = 'display:inline-block; margin-bottom:8px; background:#3291A8; color:#fff; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:600; cursor:pointer;';
+            
+            ta.parentNode.insertBefore(btn, ta);
+            
+            btn.addEventListener('click', function() {
+                ta.readOnly = false;
+                ta.disabled = false; // Re-enable for submission
+                ta.style.backgroundColor = '#fff';
+                ta.style.color = '#000';
+                ta.focus();
+                btn.style.display = 'none'; 
+            });
+            
+            let type = '';
+            if(window.location.pathname.includes('berusaha')) type = 'berusaha';
+            if(window.location.pathname.includes('non-berusaha')) type = 'non_berusaha';
+            if(window.location.pathname.includes('kebijakan')) type = 'kebijakan';
+            if(window.location.pathname.includes('tanah-timbul')) type = 'tanah_timbul';
+            if(window.location.pathname.includes('psn')) type = 'psn';
+            
+            const appId = window.location.pathname.split('/').pop();
+            
+            const fetchTemplate = (actionOverride = null) => {
+                if(type && appId && !isNaN(appId)) {
+                    let url = `/api/wa-template?type=${type}&id=${appId}&wa_type=${waTypeValue}`;
+                    if (actionOverride) {
+                        url += `&action=${actionOverride}`;
+                    }
+                    fetch(url)
+                        .then(res => res.json())
+                        .then(data => {
+                            if(data.template) {
+                                ta.value = data.template;
+                            }
+                        })
+                        .catch(err => console.error('Gagal fetch template', err));
+                }
+            };
+
+            // Fetch initial
+            let initialAction = null;
+            const checkedRadio = form.querySelector('input[type="radio"][name="action"]:checked');
+            const selectedSelect = form.querySelector('select[name="action"]');
+            if (checkedRadio) {
+                initialAction = checkedRadio.value;
+            } else if (selectedSelect) {
+                initialAction = selectedSelect.value;
+            }
+            fetchTemplate(initialAction);
+
+            // Listen to radio changes
+            const actionRadios = form.querySelectorAll('input[type="radio"][name="action"]');
+            actionRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    fetchTemplate(this.value);
+                });
+            });
+
+            // Listen to select changes
+            const actionSelects = form.querySelectorAll('select[name="action"]');
+            actionSelects.forEach(sel => {
+                sel.addEventListener('change', function() {
+                    fetchTemplate(this.value);
+                });
+            });
+        }
+    });
+});
+</script>
 
 </body>
 </html>

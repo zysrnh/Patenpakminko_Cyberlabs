@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Mailbox;
  
 class LapolpaController extends Controller
 {
@@ -174,8 +175,33 @@ class LapolpaController extends Controller
         if (!empty($settings['cp_admin'])) {
             $messagePemohon .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
         }
-        
-        $this->executeFonnteSend($booking->whatsapp_number, $messagePemohon);
+        $wa_links = [];
+        $mailboxes = [];
+
+        $formatPhone = function($phone) {
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
+            return $phone;
+        };
+
+        if ($booking->whatsapp_number) {
+            $wa_links[] = [
+                'target' => 'Pemohon (' . $pemohonName . ')',
+                'url' => 'https://wa.me/' . $formatPhone($booking->whatsapp_number) . '?text=' . urlencode($messagePemohon)
+            ];
+            
+            if ($booking->user_id) {
+                $mailboxes[] = [
+                    'target_user_id' => $booking->user_id,
+                    'target_role' => null,
+                    'title' => 'Notifikasi Pemohon - LAPOLPAK',
+                    'message' => $messagePemohon,
+                    'link' => $url,
+                ];
+            }
+        }
  
         // 2. Pesan Notifikasi Pemberitahuan ke Admin (DPN)
         $admin = User::where('role', 'dpn')->first();
@@ -187,7 +213,33 @@ class LapolpaController extends Controller
                       . "WhatsApp: {$booking->whatsapp_number}\n\n"
                       . "Silakan periksa dan kelola jadwal LAPOLPAK di dashboard admin: {$url}";
  
-        $this->executeFonnteSend($adminPhone, $messageAdmin);
+        $wa_links[] = [
+            'target' => 'Admin DPN',
+            'url' => 'https://wa.me/' . $formatPhone($adminPhone) . '?text=' . urlencode($messageAdmin)
+        ];
+        
+        $mailboxes[] = [
+            'target_user_id' => null,
+            'target_role' => 'dpn',
+            'title' => 'Pendaftaran LAPOLPAK Baru',
+            'message' => $messageAdmin,
+            'link' => $url,
+        ];
+
+        if (count($wa_links) > 0) {
+            session()->flash('wa_links', $wa_links);
+        }
+
+        foreach ($mailboxes as $box) {
+            \App\Models\Mailbox::create([
+                'target_user_id' => $box['target_user_id'],
+                'target_role' => $box['target_role'],
+                'title' => $box['title'],
+                'message' => $box['message'],
+                'link' => $box['link'],
+                'is_read' => false,
+            ]);
+        }
     }
  
     /**
@@ -215,74 +267,34 @@ class LapolpaController extends Controller
             $message .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
         }
  
-        $this->executeFonnteSend($booking->whatsapp_number, $message);
-    }
- 
-    /**
-     * Kirim notifikasi WA ke Fonnte API dan catat ke JSON log.
-     */
-    private function executeFonnteSend($phone, $message)
-    {
-        $settings = $this->getWhatsappSettings();
-        $statusText = 'Simulasi';
-        $fonnteResponse = null;
- 
-        if (!empty($settings['fonnte_token'])) {
-            $recipientClean = preg_replace('/[^0-9]/', '', $phone);
-            if (str_starts_with($recipientClean, '0')) {
-                $recipientClean = '62' . substr($recipientClean, 1);
+        $formatPhone = function($phone) {
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
             }
- 
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.fonnte.com/send',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 20,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array(
-                    'target' => $recipientClean,
-                    'message' => $message,
-                ),
-                CURLOPT_HTTPHEADER => array(
-                    'Authorization: ' . $settings['fonnte_token']
-                ),
-            ));
+            return $phone;
+        };
+
+        $wa_links = [];
+        if ($booking->whatsapp_number) {
+            $wa_links[] = [
+                'target' => 'Pemohon (' . $pemohonName . ')',
+                'url' => 'https://wa.me/' . $formatPhone($booking->whatsapp_number) . '?text=' . urlencode($message)
+            ];
             
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
- 
-            if (!$err) {
-                $fonnteResponse = json_decode($response, true);
-                if (isset($fonnteResponse['status']) && $fonnteResponse['status'] == true) {
-                    $statusText = 'Terkirim (Fonnte API)';
-                } else {
-                    $statusText = 'Gagal (Fonnte: ' . ($fonnteResponse['reason'] ?? 'Kesalahan Token') . ')';
-                }
-            } else {
-                $statusText = 'Gagal (Koneksi API Error)';
+            if ($booking->user_id) {
+                \App\Models\Mailbox::create([
+                    'target_user_id' => $booking->user_id,
+                    'target_role' => null,
+                    'title' => 'Update Status LAPOLPAK',
+                    'message' => $message,
+                    'link' => route('lapolpa.index'),
+                    'is_read' => false,
+                ]);
             }
+            session()->flash('wa_links', $wa_links);
         }
- 
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs = [];
-        if (file_exists($logPath)) {
-            $logs = json_decode(file_get_contents($logPath), true) ?: [];
-        }
- 
-        $newLog = [
-            'id' => uniqid(),
-            'recipient' => $phone,
-            'message' => $message,
-            'timestamp' => now()->format('d M Y, H:i:s'),
-            'status' => $statusText,
-        ];
- 
-        array_unshift($logs, $newLog);
-        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
+ 
 }
+

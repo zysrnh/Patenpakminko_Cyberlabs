@@ -315,9 +315,10 @@
                 Dashboard
             </a>
             <a href="{{ route('profile') }}" class="nav-item {{ request()->routeIs('profile') ? 'active' : '' }}">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 Profil Saya
             </a>
+
         </div>
 
         @if(!Auth::check() || !Auth::user()->isAdminBerita())
@@ -408,6 +409,30 @@
                     <span>{{ Auth::check() ? Auth::user()->phone_number : 'Publik' }}</span>
                 </div>
             </div>
+            <div class="header-date">
+                    {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+                </div>
+                @php
+                    $unreadCount = 0;
+                    if(Auth::check()) {
+                        $u = Auth::user();
+                        if ($u->isPelakuUsaha()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_user_id', $u->id)->where('is_read', false)->count();
+                        } elseif ($u->isBpn()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_role', 'bpn')->where('is_read', false)->count();
+                        } elseif ($u->isDinasPu()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_role', 'dinas_pu')->where('is_read', false)->count();
+                        } elseif ($u->isSatuPintu()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_role', 'satu_pintu')->where('is_read', false)->count();
+                        }
+                    }
+                @endphp
+                <a href="{{ route('mailbox.index') }}" class="notification-btn" style="position:relative; display:flex; align-items:center;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                    @if($unreadCount > 0)
+                        <span class="notification-badge" style="position:absolute; top:-2px; right:-4px; background:#DC2626; color:#fff; font-size:10px; padding:2px 5px; border-radius:10px; font-weight:bold;">{{ $unreadCount }}</span>
+                    @endif
+                </a>
             @if(Auth::check())
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -434,6 +459,28 @@
                 <span class="topbar-title">@yield('page-title', 'PATEN PAK MIKO')</span>
             </div>
             <div class="topbar-right">
+                @php
+                    $unreadCount = 0;
+                    if(Auth::check()) {
+                        $u = Auth::user();
+                        if ($u->isPelakuUsaha()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_user_id', $u->id)->where('is_read', false)->count();
+                        } elseif ($u->isBpn()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_role', 'bpn')->where('is_read', false)->count();
+                        } elseif ($u->isDinasPu()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_role', 'dinas_pu')->where('is_read', false)->count();
+                        } elseif ($u->isSatuPintu()) {
+                            $unreadCount = \App\Models\Mailbox::where('target_role', 'satu_pintu')->where('is_read', false)->count();
+                        }
+                    }
+                @endphp
+                <a href="{{ route('mailbox.index') }}" class="notification-btn" style="position:relative; display:flex; align-items:center; color: var(--ink); text-decoration: none; margin-right: 12px;" title="Kotak Masuk">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                    @if($unreadCount > 0)
+                        <span class="notification-badge" style="position:absolute; display: flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 10px; font-size: 10px; font-weight: 700; top: -8px; right: -8px; background:#DC2626; color:#fff; line-height: 1; border: 2px solid var(--white); box-sizing: border-box;">{{ $unreadCount }}</span>
+                    @endif
+                </a>
+
                 <span class="topbar-date" id="current-date"></span>
             </div>
         </header>
@@ -441,8 +488,30 @@
         <div class="content">
             @if(session('success'))
                 <div class="alert alert-success">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                     {{ session('success') }}
+                    
+                    @if(session('wa_links'))
+                        <div style="margin-top: 12px; border-top: 1px solid rgba(0,100,0,0.1); padding-top: 12px;">
+                            <strong style="display:block; margin-bottom: 8px; color: #0F5132;">Kirim Notifikasi WhatsApp (Manual):</strong>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                @foreach(session('wa_links') as $index => $link)
+                                    <a href="{{ $link['url'] }}" target="_blank" class="btn" style="background: #25D366; color: #fff; border:none; padding: 6px 12px; font-size: 12px; width: auto; text-decoration: none; margin: 0; display: inline-flex; align-items: center;" id="wa-link-layout-{{ $index }}">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim ke {{ $link['target'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                            <script>
+                                setTimeout(function() {
+                                    var firstWaLink = document.getElementById('wa-link-layout-0');
+                                    if(firstWaLink) {
+                                        window.open(firstWaLink.href, '_blank');
+                                    }
+                                }, 500);
+                            </script>
+                        </div>
+                    @endif
                 </div>
             @endif
             @if(session('error'))
@@ -473,5 +542,61 @@
         }
     </script>
     @yield('scripts')
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textareas = document.querySelectorAll('textarea[name="custom_wa_message"]');
+    textareas.forEach(ta => {
+        const form = ta.closest('form');
+        const waTypeInput = form.querySelector('input[name="wa_type"]');
+        if (waTypeInput) {
+            ta.readOnly = true;
+            ta.style.backgroundColor = '#f4f7f9';
+            ta.style.color = '#555';
+            
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn-edit-wa';
+            btn.innerHTML = '✏️ Rubah Pesan WA';
+            btn.style.cssText = 'display:inline-block; margin-bottom:8px; background:#3291A8; color:#fff; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:600; cursor:pointer;';
+            
+            ta.parentNode.insertBefore(btn, ta);
+            
+            btn.addEventListener('click', function() {
+                ta.readOnly = false;
+                ta.style.backgroundColor = '#fff';
+                ta.style.color = '#000';
+                ta.focus();
+                btn.style.display = 'none'; 
+            });
+            
+            const pathParts = window.location.pathname.split('/');
+            // /layanan/berusaha/123 -> pathParts[1] is 'layanan', [2] is 'berusaha', [3] is id
+            // Let's find the type dynamically.
+            let type = '';
+            if(window.location.pathname.includes('berusaha')) type = 'berusaha';
+            if(window.location.pathname.includes('non-berusaha')) type = 'non_berusaha';
+            if(window.location.pathname.includes('kebijakan')) type = 'kebijakan';
+            if(window.location.pathname.includes('tanah-timbul')) type = 'tanah_timbul';
+            if(window.location.pathname.includes('psn')) type = 'psn';
+            
+            // Extract ID from URL
+            const appId = window.location.pathname.split('/').pop();
+            
+            if(type && appId && !isNaN(appId)) {
+                fetch(`/api/wa-template?type=${type}&id=${appId}&wa_type=${waTypeInput.value}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.template) {
+                            ta.value = data.template;
+                        }
+                    })
+                    .catch(err => console.error('Gagal fetch template', err));
+            }
+        }
+    });
+});
+</script>
+
 </body>
 </html>

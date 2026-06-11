@@ -109,7 +109,7 @@ class PsnController extends Controller
         session()->forget('ptp_form_data');
 
         // WA Notifikasi ke pemohon
-        $this->sendCustomWa($app, 'submit');
+        $this->sendNotificationWithMailbox($app, 'submit', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
 
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -195,7 +195,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendCustomWa($application, 'berkas_verifikasi');
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -208,15 +208,15 @@ class PsnController extends Controller
                 $application->putr_validated_at = now();
                 $application->putr_notes        = $putrNotes;
                 $application->save();
-                $this->sendCustomWa($application, 'putr_notif_payment');
-                $this->sendCustomWa($application, 'putr_notif_bpn');
+                $this->sendNotificationWithMailbox($application, 'putr_notif_payment', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, 'putr_notif_bpn', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
                 return redirect()->route('psn.show', $id)
                     ->with('success', 'Permohonan divalidasi PUTR. Notif pembayaran terkirim ke pemohon dan BPN.');
             } else {
                 $application->status     = 'ditolak';
                 $application->putr_notes = $putrNotes;
                 $application->save();
-                $this->sendCustomWa($application, 'putr_tolak');
+                $this->sendNotificationWithMailbox($application, 'putr_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
                 return redirect()->route('psn.show', $id)->with('success', 'Permohonan PSN ditolak oleh Dinas PUTR.');
             }
         }
@@ -228,7 +228,7 @@ class PsnController extends Controller
             $application->credential_sent_at = now();
             $application->status             = 'menunggu_bpn'; // lanjut cek lokasi dst
             $application->save();
-            $this->sendCustomWa($application, 'credential_blast');
+            $this->sendNotificationWithMailbox($application, 'credential_blast', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)
                 ->with('success', 'Pembayaran dikonfirmasi. Kredensial dikirim ke WA pemohon. No. Berkas: ' . $application->no_berkas);
         }
@@ -248,7 +248,7 @@ class PsnController extends Controller
             $application->user->update(['is_active' => true]);
 
             // Kirim notifikasi WA kredensial
-            $this->sendCustomWa($application, 'credential');
+            $this->sendNotificationWithMailbox($application, 'credential', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
 
             return redirect()->route('psn.show', $id)->with('success', 'Pembayaran PNBP dikonfirmasi. Akun telah diaktifkan dan dikirim ke pemohon.');
         }
@@ -268,7 +268,7 @@ class PsnController extends Controller
             $application->bpn_cek_lokasi_cp    = $request->input('bpn_cek_lokasi_cp');
             $application->save();
 
-            $this->sendCustomWa($application, $isReschedule ? 'cek_lokasi_ubah' : 'cek_lokasi');
+            $this->sendNotificationWithMailbox($application, $isReschedule ? 'cek_lokasi_ubah' : 'cek_lokasi', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', 'Jadwal cek lokasi disimpan & di-blast ke WA pemohon.');
         }
 
@@ -284,7 +284,7 @@ class PsnController extends Controller
             $application->bpn_rapat_date = $dateLabel;
             $application->save();
 
-            $this->sendCustomWa($application, $isReschedule ? 'rapat_ubah' : 'rapat');
+            $this->sendNotificationWithMailbox($application, $isReschedule ? 'rapat_ubah' : 'rapat', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', 'Jadwal rapat disimpan & di-blast ke WA pemohon.');
         }
 
@@ -313,7 +313,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendCustomWa($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak');
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -346,7 +346,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendCustomWa($application, $action === 'approve' ? 'pu_selesai' : 'pu_tolak');
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pu_selesai' : 'pu_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -382,7 +382,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendCustomWa($application, $action === 'approve' ? 'pkkpr_terbit' : 'pkkpr_tolak');
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pkkpr_terbit' : 'pkkpr_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -390,119 +390,11 @@ class PsnController extends Controller
         // Resend Notifikasi WA (Admin Action)
         if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
             $type = $request->input('wa_type', 'berkas_verifikasi');
-            $this->sendCustomWa($application, $type);
+            $this->sendNotificationWithMailbox($application, $type, 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->back()->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
         }
 
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');
     }
 
-    // â”€â”€â”€ WA HELPER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    private function getWhatsappSettings(): array
-    {
-        $path = storage_path('app/whatsapp_settings.json');
-        if (!file_exists($path)) {
-            return ['connected' => false, 'fonnte_token' => '', 'admin_bpn' => '', 'admin_putr' => '', 'admin_dinas_pu' => '', 'admin_satu_pintu' => ''];
-        }
-        $s = json_decode(file_get_contents($path), true);
-        foreach (['fonnte_token', 'admin_bpn', 'admin_putr', 'admin_dinas_pu', 'admin_satu_pintu'] as $k) {
-            if (!isset($s[$k])) $s[$k] = '';
-        }
-        return $s;
-    }
-
-    private function sendCustomWa($app, $type)
-    {
-        $settings = $this->getWhatsappSettings();
-        if (!($settings['connected'] ?? false)) return;
-
-        $url = url('/dashboard');
-        if(method_exists($app, 'id')) {
-            $routeName = strtolower(str_replace('Controller', '', class_basename($this)));
-            if ($routeName === 'ppkprberusaha') $routeName = 'berusaha';
-            if ($routeName === 'ppkprnonberusaha') $routeName = 'non_berusaha';
-            if ($routeName === 'tanahtimbul') $routeName = 'tanah_timbul';
-            $url = route($routeName . '.show', $app->id);
-        }
-
-        $msg = $this->generateWaMessage($type, $app, 'PSN (Proyek Strategis Nasional)', $url);
-        
-        $pemohon = $app->user->phone_number ?? '';
-
-        if ($msg && $pemohon) {
-            if (!empty($settings['cp_admin'])) {
-                $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
-            }
-            $this->executeFonnteSend($pemohon, $msg);
-        }
-
-        // Notifikasi Internal Antar Instansi
-        $no_berkas_text = !empty($app->no_berkas) ? " (No. Berkas: {$app->no_berkas})" : "";
-        $nama = $app->nama_pengaju ?: ($app->user->name ?? ($app->user->username ?? ''));
-        
-        $adminBpn = $settings['admin_bpn'] ?? '';
-        $adminPutr = $settings['admin_putr'] ?? '';
-        $adminPtsp = $settings['admin_satu_pintu'] ?? '';
-
-        if (($type === 'submit' || $type === 'submit_berkas') && $adminBpn) {
-            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, ada pengajuan permohonan baru untuk PSN (Proyek Strategis Nasional) atas nama {$nama}. Silakan login untuk melakukan verifikasi berkas awal di: {$url}");
-        }
-        if ($type === 'credential' && $adminBpn) {
-            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan PSN (Proyek Strategis Nasional). Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}");
-        }
-        if ($type === 'pertek_terbit' && $adminPutr) {
-            $this->executeFonnteSend($adminPutr, "Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk PSN (Proyek Strategis Nasional){$no_berkas_text} telah terbit dari Kantor Pertanahan Kota Sukabumi. Silakan lakukan penilaian PKKPR di: {$url}");
-        }
-        if ($type === 'pu_selesai' && $adminPtsp) {
-            $this->executeFonnteSend($adminPtsp, "Notifikasi Satu Pintu: Penilaian Dinas PUTR untuk PSN (Proyek Strategis Nasional){$no_berkas_text} selesai. Silakan proses penerbitan PKKPR di: {$url}");
-        }
-        if ($type === 'pu_selesai' && $adminBpn) {
-            $this->executeFonnteSend($adminBpn, "Notifikasi Kantor Pertanahan Kota Sukabumi: Dinas PUTR telah selesai menilai PSN (Proyek Strategis Nasional){$no_berkas_text}. Menunggu penerbitan PKKPR oleh DPMPTSP / Satu Pintu.");
-        }
-    }
-
-    private function executeFonnteSend(string $phone, string $message): void
-    {
-        $settings   = $this->getWhatsappSettings();
-        $statusText = 'Simulasi';
-
-        if (!empty($settings['fonnte_token'])) {
-            $clean = preg_replace('/[^0-9]/', '', $phone);
-            if (str_starts_with($clean, '0')) $clean = '62' . substr($clean, 1);
-
-            $curl = curl_init();
-            curl_setopt_array($curl, [
-                CURLOPT_URL            => 'https://api.fonnte.com/send',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT        => 20,
-                CURLOPT_CUSTOMREQUEST  => 'POST',
-                CURLOPT_POSTFIELDS     => ['target' => $clean, 'message' => $message],
-                CURLOPT_HTTPHEADER     => ['Authorization: ' . $settings['fonnte_token']],
-            ]);
-            $response = curl_exec($curl);
-            $err      = curl_error($curl);
-            curl_close($curl);
-
-            if (!$err) {
-                $decoded    = json_decode($response, true);
-                $statusText = ($decoded['status'] ?? false) ? 'Terkirim (Fonnte API)' : 'Gagal (Fonnte: ' . ($decoded['reason'] ?? 'Token Error') . ')';
-            } else {
-                $statusText = 'Gagal (Koneksi API Error)';
-            }
-        }
-
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs    = file_exists($logPath) ? (json_decode(file_get_contents($logPath), true) ?: []) : [];
-
-        array_unshift($logs, [
-            'id'        => uniqid(),
-            'recipient' => $phone,
-            'message'   => $message,
-            'timestamp' => now()->format('d M Y, H:i:s'),
-            'status'    => $statusText,
-        ]);
-
-        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
-    }
 }
-

@@ -12,9 +12,13 @@ use App\Http\Controllers\PsnController;
 use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\AdminDpnController;
 use App\Http\Controllers\KbliController;
+use App\Http\Controllers\WaTemplateController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
+// Internal API for WA Templates
+Route::get("/api/wa-template", [WaTemplateController::class, "getTemplate"])->name("api.wa-template");
+
 // Halaman utama / Landing Page
 Route::get('/', function () {
     $formalReviews = Review::with('user')
@@ -102,6 +106,7 @@ Route::post('/permohonan-ptp', [AuthController::class, 'storePtpForm'])->name('p
 // Rute Portal Revisi Publik
 Route::get("/revisi-berkas", [\App\Http\Controllers\RevisiController::class, "index"])->name("revisi.index");
 Route::post("/revisi-berkas/track", [\App\Http\Controllers\RevisiController::class, "track"])->name("revisi.track");
+Route::post("/revisi-berkas/detail", [\App\Http\Controllers\RevisiController::class, "trackDetail"])->name("revisi.track.detail");
 Route::post("/revisi-berkas/upload/{type}/{id}", [\App\Http\Controllers\RevisiController::class, "upload"])->name("revisi.upload");
 
 
@@ -222,6 +227,12 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/berita/{beritum}', [\App\Http\Controllers\BeritaController::class, 'destroy'])->name('admin.berita.destroy');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Mailbox Routes
+    Route::get('/mailbox', [App\Http\Controllers\MailboxController::class, 'index'])->name('mailbox.index');
+    Route::get('/mailbox/{id}/read', [App\Http\Controllers\MailboxController::class, 'read'])->name('mailbox.read');
+    Route::post('/mailbox/read-all', [App\Http\Controllers\MailboxController::class, 'markAllAsRead'])->name('mailbox.read_all');
+
 });
 
 // Rute untuk Halaman Sukses Upload

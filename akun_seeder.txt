@@ -32,7 +32,8 @@ C. Dinas PMPTSP (Satu Pintu)
 D. Super Admin / DPN
    - Username : dpn1 | Password: Paten_dpn1@2026 (Super Admin DPN 1)
    - Username : dpn2 | Password: Paten_dpn2@2026 (Super Admin DPN 2)
-   - Username : dpn3 | Password: Paten_dpn3@2026 (Super Admin DPN 3)
+   - Username : dpn3 | Password: 
+    (Super Admin DPN 3)
 
 E. Admin Berita
    - Username : admin_berita | Password: Paten_berita@2026 (Admin Berita)

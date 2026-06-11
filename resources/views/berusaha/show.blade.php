@@ -757,6 +757,26 @@
                     <span>{{ session('success') }}</span>
                 </div>
             @endif
+
+            @if(session('wa_links') && count(session('wa_links')) > 0)
+                <div style="background:#E8F5E9;border:1.5px solid #A5D6A7;border-radius:8px;padding:16px 20px;margin-bottom:20px;">
+                    <div style="font-size:13px;font-weight:700;color:#1B5E20;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                        Kirim Notifikasi WhatsApp Manual
+                    </div>
+                    <div style="font-size:12px;color:#2E7D32;margin-bottom:12px;">Klik tombol di bawah untuk membuka WhatsApp dan kirim notifikasi ke pihak terkait:</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        @foreach(session('wa_links') as $link)
+                            <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer"
+                               style="display:inline-flex;align-items:center;gap:6px;background:#25D366;color:#fff;padding:9px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:700;transition:all 0.2s;"
+                               onmouseover="this.style.background='#1EBE5A'" onmouseout="this.style.background='#25D366'">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                Kirim ke {{ $link['target'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
  
             @if($errors->any())
                 <div class="alert-error">
@@ -852,9 +872,9 @@
                 $user = Auth::user();
                 $now = \Carbon\Carbon::now();
                 $cekLokasiLewat = $application->bpn_cek_lokasi_dt
-                    && $now->toDateString() >= $application->bpn_cek_lokasi_dt->copy()->addDay()->toDateString();
+                    && $now >= $application->bpn_cek_lokasi_dt;
                 $rapatLewat = $application->bpn_rapat_dt
-                    && $now->toDateString() >= $application->bpn_rapat_dt->copy()->addDay()->toDateString();
+                    && $now >= $application->bpn_rapat_dt;
             @endphp
  
             <!-- ==================================================== -->
@@ -902,7 +922,12 @@
                                         <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan atau instruksi perbaikan..." required>{{ $application->bpn_berkas_status !== 'menunggu' ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     @if($isStep1Active)
-                                        <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas</button>
+                                        
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas</button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini sudah diselesaikan / dikunci)</div>
                                     @endif
@@ -941,19 +966,35 @@
                                         <span style="font-size: 11px; color: var(--clr-muted);">Nomor berkas ini akan dicatat dalam sistem dan dikirim ke pemohon via WhatsApp.</span>
                                     </div>
                                     @if($isStep2Active)
+                                        
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
                                         <button type="submit" class="btn-submit-v">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                             Kirim Kredensial & Konfirmasi Lunas
                                         </button>
                                     @else
-                                        <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
+                                        <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini sudah diselesaikan)</div>
                                     @endif
                                 </form>
                             </fieldset>
+                            @if(Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar')
+                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="credential">
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Notifikasi Kredensial & No. Berkas (WhatsApp)
+                                    </button>
+                                </form>
+                            @endif
                         </div>
 
-                        <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && !$application->bpn_cek_lokasi_dt ? 'block' : 'none' }};">
-                            @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar'); @endphp
+                        <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
+                            @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat)); @endphp
                             <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -964,8 +1005,11 @@
                                     <div class="form-grid-2">
                                         <div class="form-group-v">
                                             <label for="bpn_cek_lokasi_dt">Tanggal & Waktu Peninjauan</label>
-                                            <input type="datetime-local" name="bpn_cek_lokasi_dt" id="bpn_cek_lokasi_dt" class="form-control-v" 
-                                                   value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}" required>
+                                            <div style="display:flex; gap:8px;">
+                                                <input type="datetime-local" name="bpn_cek_lokasi_dt" id="bpn_cek_lokasi_dt" class="form-control-v" 
+                                                       value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}" style="flex-grow:1;" required>
+                                                <button type="button" onclick="let d = new Date(); if(document.getElementById('bpn_cek_lokasi_dt')._flatpickr) document.getElementById('bpn_cek_lokasi_dt')._flatpickr.setDate(d); else document.getElementById('bpn_cek_lokasi_dt').value = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().slice(0,16);" style="background:#e2e8f0; border:1px solid #cbd5e1; padding:0 12px; border-radius:6px; font-size:11px; font-weight:700; color:#475569; cursor:pointer;" title="Set ke waktu saat ini untuk test skip">📍 Sekarang</button>
+                                            </div>
                                         </div>
                                         <div class="form-group-v">
                                             <label for="bpn_cek_lokasi_cp">Kontak CP Admin / Petugas</label>
@@ -974,19 +1018,37 @@
                                         </div>
                                     </div>
                                     @if($isStep3Active)
-                                        <button type="submit" class="btn-submit-v">
+                                        
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
+                                        <button type="submit" class="btn-submit-v" style="background: {{ $application->bpn_cek_lokasi_dt ? '#D69E2E' : 'var(--clr-blue)' }};">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                            Kirimkan Jadwal Cek Lokasi
+                                            {{ $application->bpn_cek_lokasi_dt ? 'Rubah Jadwal & Kirim WA' : 'Kirimkan Jadwal Cek Lokasi' }}
                                         </button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
                                     @endif
                                 </form>
                             </fieldset>
+                            @if(!$isStep3Active && Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt)
+                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="cek_lokasi">
+                                    <div style="margin-bottom: 8px;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                </form>
+                            @endif
                         </div>
 
-                        <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && !$application->bpn_rapat_dt ? 'block' : 'none' }};">
-                            @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && !$application->bpn_rapat_dt); @endphp
+                        <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
+                            @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat)); @endphp
                             <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -996,23 +1058,46 @@
                                     </div>
                                     <div class="form-group-v">
                                         <label for="bpn_rapat_dt">Tanggal & Waktu Rapat</label>
-                                        <input type="datetime-local" name="bpn_rapat_dt" id="bpn_rapat_dt" class="form-control-v" 
-                                               value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}" required>
+                                        <div style="display:flex; gap:8px;">
+                                            <input type="datetime-local" name="bpn_rapat_dt" id="bpn_rapat_dt" class="form-control-v" 
+                                                   value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}" style="flex-grow:1;" required>
+                                            <button type="button" onclick="let d = new Date(); if(document.getElementById('bpn_rapat_dt')._flatpickr) document.getElementById('bpn_rapat_dt')._flatpickr.setDate(d); else document.getElementById('bpn_rapat_dt').value = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().slice(0,16);" style="background:#e2e8f0; border:1px solid #cbd5e1; padding:0 12px; border-radius:6px; font-size:11px; font-weight:700; color:#475569; cursor:pointer;" title="Set ke waktu saat ini untuk test skip">📍 Sekarang</button>
+                                        </div>
                                     </div>
                                     @if($isStep4Active)
-                                        <button type="submit" class="btn-submit-v">
+                                        
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
+                                        <button type="submit" class="btn-submit-v" style="background: {{ $application->bpn_rapat_dt ? '#D69E2E' : 'var(--clr-blue)' }};">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                            Kirimkan Jadwal Rapat
+                                            {{ $application->bpn_rapat_dt ? 'Rubah Jadwal Rapat & Kirim WA' : 'Kirimkan Jadwal Rapat' }}
                                         </button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
                                     @endif
                                 </form>
                             </fieldset>
+                            @if(!$isStep4Active && Auth::user()->isBpn() && $application->bpn_rapat_dt)
+                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="rapat">
+                                    <div style="margin-bottom: 8px;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Jadwal Sidang/Rapat (WhatsApp)
+                                    </button>
+                                </form>
+                            @endif
                         </div>
 
-                        <div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && !$application->bpn_pertek_document ? 'block' : 'none' }};">
-                            @php $isStep5Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && !$application->bpn_pertek_document); @endphp
+                        <div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
+                            @php $isStep5Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
                             <fieldset {{ $isStep5Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
@@ -1044,7 +1129,12 @@
                                         <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan ringkasan kajian tata ruang pertanahan..." required>{{ $application->status === 'disetujui' || ($application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima') ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     @if($isStep5Active)
-                                        <button type="submit" class="btn-submit-v">Kirim Pertek Pertanahan</button>
+                                        
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v">Kirim Pertek Pertanahan</button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
                                     @endif
@@ -1083,6 +1173,11 @@
                                 <label for="notes">Catatan Hasil Validasi</label>
                                 <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan detail alasan/catatan validasi awal..." required></textarea>
                             </div>
+                            
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
                             <button type="submit" class="btn-submit-v">Kirim Validasi Awal</button>
                         </form>
                     </div>
@@ -1113,6 +1208,11 @@
                                 <label for="notes">Catatan Kajian Penilaian Tata Ruang (Opsional)</label>
                                 <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan tambahan justifikasi kesesuaian pemanfaatan ruang..."></textarea>
                             </div>
+                            
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
                             <button type="submit" class="btn-submit-v">Kirim Penilaian PU</button>
                         </form>
                     </div>
@@ -1144,6 +1244,11 @@
                             <label for="notes">Catatan Tambahan (Opsional)</label>
                             <textarea name="notes" id="notes" class="form-control-v" rows="2" placeholder="Masukkan keterangan tambahan jika ada..."></textarea>
                         </div>
+                        
+                                    <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
+                                        <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
+                                    </div>
                         <button type="submit" class="btn-submit-v">
                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                             Kirim & Tuntaskan Permohonan
@@ -1501,6 +1606,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">Berkas Berhasil Diajukan</div>
                                     <div class="timeline-desc">Berkas persyaratan dan formulir permohonan berhasil diunggah ke portal.</div>
+                                    <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ $application->created_at->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
                                 </div>
                             </div>
 
@@ -1521,6 +1627,9 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
                                     </div>
                                     <div class="timeline-desc">Validasi kelengkapan berkas dokumen persyaratan pemohon.</div>
+                                    @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;">✅ Disetujui pada: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->format('d M Y, H:i') }} WIB</div>
+                                    @endif
                                     @if($application->bpn_berkas_status === 'tidak_sesuai')
                                         <div class="timeline-notes">
                                             <strong>Catatan Koreksi:</strong> {{ $application->bpn_notes }}
@@ -1533,7 +1642,7 @@
                             @php
                                 $step3Status = '';
                                 if ($application->bpn_berkas_status === 'diterima') {
-                                    if ($application->dinas_pu_status === 'validasi_awal_diterima' || in_array($application->dinas_pu_status, ['sesuai', 'belum_sesuai'])) {
+                                    if ($application->dinas_pu_status === 'validasi_awal_diterima' || in_array($application->dinas_pu_status, ['menunggu_penilaian', 'sesuai', 'belum_sesuai'])) {
                                         $step3Status = 'completed';
                                     } elseif ($application->dinas_pu_status === 'validasi_awal_ditolak') {
                                         $step3Status = 'rejected';
@@ -1550,6 +1659,9 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PUTR</span>
                                     </div>
                                     <div class="timeline-desc">Pemeriksaan awal kelayakan tata ruang. Notifikasi dikirim ke BPN dan Pelaku Usaha.</div>
+                                    @if(in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai']) && $application->dinas_pu_approved_at)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;">✅ Disetujui pada: {{ \Carbon\Carbon::parse($application->dinas_pu_approved_at)->format('d M Y, H:i') }} WIB</div>
+                                    @endif
                                     @if($application->dinas_pu_status === 'validasi_awal_ditolak')
                                         <div class="timeline-notes">
                                             <strong>Ditolak pada tahap validasi awal oleh Dinas PUTR.</strong>
@@ -1582,6 +1694,9 @@
                                             Menunggu konfirmasi pembayaran PTN dan input nomor berkas oleh BPN.
                                         @endif
                                     </div>
+                                    @if($application->bpn_pembayaran_status === 'sudah_bayar' && $application->bpn_pembayaran_approved_at)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -1589,7 +1704,7 @@
                             @php
                                 $step5Status = '';
                                 if ($application->bpn_pembayaran_status === 'sudah_bayar') {
-                                    $step5Status = $application->bpn_cek_lokasi_dt ? 'completed' : 'active';
+                                    $step5Status = $application->bpn_cek_lokasi_dt ? ($cekLokasiLewat ? 'completed' : 'active') : 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(3)" style="cursor:pointer;">
@@ -1601,19 +1716,22 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_cek_lokasi_dt)
-                                            Tinjau: <strong>{{ $application->bpn_cek_lokasi_date }}</strong> · Petugas: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
+                                            Tinjau: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>Petugas: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
                                         @else
                                             Menunggu jadwal peninjauan lokasi lapangan dari BPN.
                                         @endif
                                     </div>
+                                    @if($application->bpn_cek_lokasi_dt)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Dijadwalkan: {{ \Carbon\Carbon::parse($application->bpn_cek_lokasi_dt)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
+                                    @endif
                                 </div>
                             </div>
 
                             <!-- STEP 5: Rapat Pembahasan Pertek -->
                             @php
                                 $step6Status = '';
-                                if ($application->bpn_cek_lokasi_dt) {
-                                    $step6Status = $application->bpn_rapat_dt ? 'completed' : 'active';
+                                if ($cekLokasiLewat) {
+                                    $step6Status = $application->bpn_rapat_dt ? ($rapatLewat ? 'completed' : 'active') : 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step6Status }}" onclick="showBpnPanel(4)" style="cursor:pointer;">
@@ -1630,6 +1748,9 @@
                                             Menunggu jadwal sidang/rapat koordinasi teknis pertanahan.
                                         @endif
                                     </div>
+                                    @if($application->bpn_rapat_dt)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Dijadwalkan: {{ \Carbon\Carbon::parse($application->bpn_rapat_dt)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -1660,6 +1781,9 @@
                                             Menunggu penerbitan surat rekomendasi teknis pertanahan.
                                         @endif
                                     </div>
+                                    @if($application->bpn_pertek_uploaded_at)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ \Carbon\Carbon::parse($application->bpn_pertek_uploaded_at)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
+                                    @endif
                                 </div>
                             </div>
 
@@ -1718,6 +1842,9 @@
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
                                             <strong>No. PKKPR:</strong> {{ $application->satu_pintu_no_pkkpr }}
                                         </div>
+                                    @endif
+                                    @if($application->satu_pintu_tanggal_terbit)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Terbit: {{ \Carbon\Carbon::parse($application->satu_pintu_tanggal_terbit)->locale('id')->translatedFormat('l, d M Y') }}</div>
                                     @endif
                                 </div>
                             </div>
@@ -1857,5 +1984,122 @@
         });
     });
     </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const textareas = document.querySelectorAll('textarea[name="custom_wa_message"]');
+    textareas.forEach(ta => {
+        const form = ta.closest('form');
+        let waTypeInput = form.querySelector('input[name="wa_type"]');
+        let waTypeValue = waTypeInput ? waTypeInput.value : null;
+
+        if (!waTypeValue) {
+            const stepInput = form.querySelector('input[name="step"]');
+            if (stepInput) {
+                const step = stepInput.value;
+                if (step === 'berkas_verifikasi') waTypeValue = 'berkas_verifikasi';
+                else if (step === 'pembayaran_lunas') waTypeValue = 'credential';
+                else if (step === 'cek_lokasi') waTypeValue = 'cek_lokasi';
+                else if (step === 'rapat') waTypeValue = 'rapat';
+                else if (step === 'pertek') waTypeValue = 'pertek_terbit';
+                else if (step === 'putr') waTypeValue = 'putr_validasi';
+                else if (step === 'pu') waTypeValue = 'pu_selesai';
+                else if (step === 'pkkpr') waTypeValue = 'pkkpr_terbit';
+            }
+        }
+
+        if (!waTypeValue) {
+            const html = form.innerHTML;
+            if (html.includes('name="bpn_berkas_notes"') || html.includes('Simpan Verifikasi Berkas')) waTypeValue = 'berkas_verifikasi';
+            else if (html.includes('name="sps_bpn"') || html.includes('Kirim Kredensial')) waTypeValue = 'credential';
+            else if (html.includes('name="bpn_lokasi_notes"') || html.includes('Kirimkan Jadwal Cek Lokasi')) waTypeValue = 'cek_lokasi';
+            else if (html.includes('name="bpn_rapat_notes"') || html.includes('Simpan Hasil Rapat')) waTypeValue = 'rapat';
+            else if (html.includes('name="pertek_notes"') || html.includes('Kirim Pertek Pertanahan')) waTypeValue = 'pertek_terbit';
+            else if (html.includes('name="dinas_pu_notes"') || html.includes('Kirim Validasi Awal')) waTypeValue = 'putr_validasi';
+            else if (html.includes('name="dinas_pu_penilaian_notes"') || html.includes('Kirim Penilaian PU')) waTypeValue = 'pu_selesai';
+            else if (html.includes('name="ptsp_notes"') || html.includes('Terbitkan PKKPR')) waTypeValue = 'pkkpr_terbit';
+            else waTypeValue = 'berkas_verifikasi';
+        }
+
+        if (waTypeValue) {
+            ta.readOnly = true;
+            ta.disabled = true; // Disable so it doesn't send the prefilled text if not manually edited
+            ta.style.backgroundColor = '#f4f7f9';
+            ta.style.color = '#555';
+            ta.rows = 7;
+            ta.style.minHeight = '160px';
+            
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn-edit-wa';
+            btn.innerHTML = '✏️ Rubah Pesan WA';
+            btn.style.cssText = 'display:inline-block; margin-bottom:8px; background:#3291A8; color:#fff; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:600; cursor:pointer;';
+            
+            ta.parentNode.insertBefore(btn, ta);
+            
+            btn.addEventListener('click', function() {
+                ta.readOnly = false;
+                ta.disabled = false; // Re-enable for submission
+                ta.style.backgroundColor = '#fff';
+                ta.style.color = '#000';
+                ta.focus();
+                btn.style.display = 'none'; 
+            });
+            
+            let type = '';
+            if(window.location.pathname.includes('berusaha')) type = 'berusaha';
+            if(window.location.pathname.includes('non-berusaha')) type = 'non_berusaha';
+            if(window.location.pathname.includes('kebijakan')) type = 'kebijakan';
+            if(window.location.pathname.includes('tanah-timbul')) type = 'tanah_timbul';
+            if(window.location.pathname.includes('psn')) type = 'psn';
+            
+            const appId = window.location.pathname.split('/').pop();
+            
+            const fetchTemplate = (actionOverride = null) => {
+                if(type && appId && !isNaN(appId)) {
+                    let url = `/api/wa-template?type=${type}&id=${appId}&wa_type=${waTypeValue}`;
+                    if (actionOverride) {
+                        url += `&action=${actionOverride}`;
+                    }
+                    fetch(url)
+                        .then(res => res.json())
+                        .then(data => {
+                            if(data.template) {
+                                ta.value = data.template;
+                            }
+                        })
+                        .catch(err => console.error('Gagal fetch template', err));
+                }
+            };
+
+            // Fetch initial
+            let initialAction = null;
+            const checkedRadio = form.querySelector('input[type="radio"][name="action"]:checked');
+            const selectedSelect = form.querySelector('select[name="action"]');
+            if (checkedRadio) {
+                initialAction = checkedRadio.value;
+            } else if (selectedSelect) {
+                initialAction = selectedSelect.value;
+            }
+            fetchTemplate(initialAction);
+
+            // Listen to radio changes
+            const actionRadios = form.querySelectorAll('input[type="radio"][name="action"]');
+            actionRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    fetchTemplate(this.value);
+                });
+            });
+
+            // Listen to select changes
+            const actionSelects = form.querySelectorAll('select[name="action"]');
+            actionSelects.forEach(sel => {
+                sel.addEventListener('change', function() {
+                    fetchTemplate(this.value);
+                });
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>

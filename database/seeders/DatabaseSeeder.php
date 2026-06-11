@@ -61,6 +61,18 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        // 4.b Dinas PUTR (3 Akun)
+        for ($i = 1; $i <= 3; $i++) {
+            User::factory()->create([
+                'username' => 'putr' . $i,
+                'name' => 'Verifikator Dinas PUTR ' . $i,
+                'email' => 'putr' . $i . '@patenpakmiko.go.id',
+                'password' => bcrypt('Paten_putr' . $i . '@2026'),
+                'role' => 'dinas_putr',
+                'phone_number' => '08623456789' . $i,
+            ]);
+        }
+
         // 5. DPN / Super Admin (3 Akun)
         for ($i = 1; $i <= 3; $i++) {
             User::factory()->create([

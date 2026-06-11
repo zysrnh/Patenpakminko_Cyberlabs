@@ -400,9 +400,33 @@
  
             <!-- Success Message -->
             @if(session('success'))
-                <div class="alert-success">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>{{ session('success') }}</span>
+                <div class="alert-success" style="flex-wrap: wrap;">
+                    <div style="display: flex; align-items: flex-start; gap: 12px; width: 100%;">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>{{ session('success') }}</span>
+                    </div>
+                    
+                    @if(session('wa_links'))
+                        <div style="margin-top: 12px; border-top: 1px solid rgba(0,100,0,0.1); padding-top: 12px; width: 100%;">
+                            <strong style="display:block; margin-bottom: 8px; color: #0F5132;">Kirim Notifikasi WhatsApp (Manual):</strong>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                @foreach(session('wa_links') as $index => $link)
+                                    <a href="{{ $link['url'] }}" target="_blank" style="background: #25D366; color: #fff; border:none; padding: 6px 12px; font-size: 12px; text-decoration: none; display: inline-flex; align-items: center; border-radius: 6px;" id="wa-link-layout-{{ $index }}">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim ke {{ $link['target'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                            <script>
+                                setTimeout(function() {
+                                    var firstWaLink = document.getElementById('wa-link-layout-0');
+                                    if(firstWaLink) {
+                                        window.open(firstWaLink.href, '_blank');
+                                    }
+                                }, 500);
+                            </script>
+                        </div>
+                    @endif
                 </div>
             @endif
  

@@ -130,7 +130,7 @@ class KebijakanController extends Controller
         session()->forget('ptp_form_data');
         
         // Kirim Notifikasi WhatsApp
-        $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan Kebijakan Khusus baru berhasil diajukan.');
+        $this->sendNotificationWithMailbox($app, 'submit', 'Kebijakan Khusus', 'kebijakan.show', $request->input('custom_wa_message'));
  
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -233,7 +233,7 @@ class KebijakanController extends Controller
             $application->save();
  
             // Kirim Notifikasi WhatsApp
-            $this->sendCustomWhatsappNotification($application, 'berkas_verifikasi');
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Kebijakan Nasional', 'kebijakan.show', $request->input('custom_wa_message'));
  
             return redirect()->route('kebijakan.show', $id)->with('success', $msg);
         }
@@ -253,7 +253,7 @@ class KebijakanController extends Controller
             $application->user->update(['is_active' => true]);
 
             // Kirim notifikasi WA kredensial
-            $this->sendCustomWa($application, 'credential');
+            $this->sendNotificationWithMailbox($application, 'credential', 'Kebijakan Khusus', 'kebijakan.show', $request->input('custom_wa_message'));
 
             // Redirect route
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
@@ -282,7 +282,7 @@ class KebijakanController extends Controller
             $application->save();
  
             // Kirim Notifikasi WhatsApp
-            $this->sendCustomWhatsappNotification($application, $isReschedule ? 'cek_lokasi_ubah' : 'cek_lokasi');
+            $this->sendNotificationWithMailbox($application, $isReschedule ? 'cek_lokasi_ubah' : 'cek_lokasi', 'Layanan BPN', 'dashboard', $request->input('custom_wa_message'));
  
             return redirect()->route('kebijakan.show', $id)->with('success', 'Jadwal Cek Lokasi Lapangan berhasil disimpan & di-blast ke WhatsApp pemohon.');
         }
@@ -307,7 +307,7 @@ class KebijakanController extends Controller
             $application->save();
  
             // Kirim Notifikasi WhatsApp
-            $this->sendCustomWhatsappNotification($application, $isReschedule ? 'rapat_ubah' : 'rapat');
+            $this->sendNotificationWithMailbox($application, $isReschedule ? 'rapat_ubah' : 'rapat', 'Layanan BPN', 'dashboard', $request->input('custom_wa_message'));
  
             return redirect()->route('kebijakan.show', $id)->with('success', 'Jadwal Rapat Koordinasi berhasil disimpan & di-blast ke WhatsApp pemohon.');
         }
@@ -345,7 +345,7 @@ class KebijakanController extends Controller
             $application->save();
  
             // Kirim Notifikasi WhatsApp khusus Pertek
-            $this->sendCustomWhatsappNotification($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak');
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Kebijakan Khusus', 'kebijakan.show', $request->input('custom_wa_message'));
  
             return redirect()->route('kebijakan.show', $id)->with('success', $msg);
         }
@@ -373,7 +373,7 @@ class KebijakanController extends Controller
             $application->save();
 
             // WA Notifikasi Selesai (Diterbitkan)
-            $this->sendCustomWa($application, 'penerbitan_pkkpr');
+            $this->sendNotificationWithMailbox($application, 'penerbitan_pkkpr', 'Kebijakan Khusus', 'kebijakan.show', $request->input('custom_wa_message'));
 
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
             return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');
@@ -383,174 +383,16 @@ class KebijakanController extends Controller
         // Resend Notifikasi WA (Admin Action)
         if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
             $type = $request->input('wa_type', 'berkas_verifikasi');
-            $this->sendCustomWhatsappNotification($application, $type);
+            $customMsg = $request->input('custom_wa_message');
+            $this->sendNotificationWithMailbox($application, $type, 'Kebijakan Khusus', 'kebijakan.show', $customMsg);
             return redirect()->back()->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
         }
 
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');
     }
  
-    /**
-     * Helper: Mendapatkan pengaturan WhatsApp.
-     */
-    private function getWhatsappSettings()
-    {
-        $path = storage_path('app/whatsapp_settings.json');
-        if (file_exists($path)) {
-            $settings = json_decode(file_get_contents($path), true);
-        } else {
-            $settings = [
-                'connected' => true,
-                'fonnte_token' => '',
-                'template' => "Halo {nama_pemohon}, permohonan Kebijakan Khusus Anda ({nomor_registrasi}) saat ini memasuki tahap: {status_sekarang}.\n\nCatatan Pemeriksa: {catatan_terakhir}\n\nPantau detail pengajuan Anda di: {tautan_detail}",
-            ];
-            file_put_contents($path, json_encode($settings, JSON_PRETTY_PRINT));
-        }
-        return $settings;
-    }
+    // removed getWhatsappSettings
  
-    /**
-     * Helper: Menyimulasikan pengiriman notifikasi WhatsApp umum.
-     */
-    private function sendWhatsappNotification($application, $statusLabel, $notes)
-    {
-        $settings = $this->getWhatsappSettings();
-        if (!$settings['connected']) {
-            return;
-        }
- 
-        $template = !empty($settings['template_kebijakan']) ? $settings['template_kebijakan'] : ($settings['template'] ?? '');
-        $url = route('kebijakan.show', $application->id);
-        
-        $message = str_replace(
-            ['{nama_pemohon}', '{nomor_registrasi}', '{status_sekarang}', '{catatan_terakhir}', '{tautan_detail}'],
-            [$application->nama_pengaju ?: ($application->user->name ?? $application->user->username), $application->application_number, $statusLabel, $notes ?: '-', $url],
-            $template
-        );
 
-        if (!empty($settings['cp_admin'])) {
-            $message .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
-        }
- 
-        $this->executeFonnteSend($application->user->phone_number, $message);
-    }
- 
-    /**
-     * Kirim Notifikasi WhatsApp khusus sub-langkah BPN.
-     */
-    private function sendCustomWhatsappNotification($app, $type)
-    {
-        $settings = $this->getWhatsappSettings();
-        if (!($settings['connected'] ?? false)) return;
-
-        $url = url('/dashboard');
-        if(method_exists($app, 'id')) {
-            $routeName = strtolower(str_replace('Controller', '', class_basename($this)));
-            if ($routeName === 'ppkprberusaha') $routeName = 'berusaha';
-            if ($routeName === 'ppkprnonberusaha') $routeName = 'non_berusaha';
-            if ($routeName === 'tanahtimbul') $routeName = 'tanah_timbul';
-            $url = route($routeName . '.show', $app->id);
-        }
-
-        $msg = $this->generateWaMessage($type, $app, 'Kebijakan Khusus', $url);
-        
-        $pemohon = $app->user->phone_number ?? '';
-
-        if ($msg && $pemohon) {
-            if (!empty($settings['cp_admin'])) {
-                $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
-            }
-            $this->executeFonnteSend($pemohon, $msg);
-        }
-
-        // Notifikasi Internal Antar Instansi
-        $no_berkas_text = !empty($app->no_berkas) ? " (No. Berkas: {$app->no_berkas})" : "";
-        $nama = $app->nama_pengaju ?: ($app->user->name ?? ($app->user->username ?? ''));
-        
-        $adminBpn = $settings['admin_bpn'] ?? '';
-        $adminPutr = $settings['admin_putr'] ?? '';
-        $adminPtsp = $settings['admin_satu_pintu'] ?? '';
-
-        if (($type === 'submit' || $type === 'submit_berkas') && $adminBpn) {
-            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, ada pengajuan permohonan baru untuk Kebijakan Khusus atas nama {$nama}. Silakan login untuk melakukan verifikasi berkas awal di: {$url}");
-        }
-        if ($type === 'credential' && $adminBpn) {
-            $this->executeFonnteSend($adminBpn, "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan Kebijakan Khusus. Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}");
-        }
-        if ($type === 'pertek_terbit' && $adminPutr) {
-            $this->executeFonnteSend($adminPutr, "Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk Kebijakan Khusus{$no_berkas_text} telah terbit dari Kantor Pertanahan Kota Sukabumi. Silakan lakukan penilaian PKKPR di: {$url}");
-        }
-        if ($type === 'pu_selesai' && $adminPtsp) {
-            $this->executeFonnteSend($adminPtsp, "Notifikasi Satu Pintu: Penilaian Dinas PUTR untuk Kebijakan Khusus{$no_berkas_text} selesai. Silakan proses penerbitan PKKPR di: {$url}");
-        }
-        if ($type === 'pu_selesai' && $adminBpn) {
-            $this->executeFonnteSend($adminBpn, "Notifikasi Kantor Pertanahan Kota Sukabumi: Dinas PUTR telah selesai menilai Kebijakan Khusus{$no_berkas_text}. Menunggu penerbitan PKKPR oleh DPMPTSP / Satu Pintu.");
-        }
-    }
-
-    private function executeFonnteSend($phone, $message)
-    {
-        $settings = $this->getWhatsappSettings();
-        $statusText = 'Simulasi';
-        $fonnteResponse = null;
- 
-        if (!empty($settings['fonnte_token'])) {
-            $recipientClean = preg_replace('/[^0-9]/', '', $phone);
-            if (str_starts_with($recipientClean, '0')) {
-                $recipientClean = '62' . substr($recipientClean, 1);
-            }
- 
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.fonnte.com/send',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 20,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array(
-                    'target' => $recipientClean,
-                    'message' => $message,
-                ),
-                CURLOPT_HTTPHEADER => array(
-                    'Authorization: ' . $settings['fonnte_token']
-                ),
-            ));
-            
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
- 
-            if (!$err) {
-                $fonnteResponse = json_decode($response, true);
-                if (isset($fonnteResponse['status']) && $fonnteResponse['status'] == true) {
-                    $statusText = 'Terkirim (Fonnte API)';
-                } else {
-                    $statusText = 'Gagal (Fonnte: ' . ($fonnteResponse['reason'] ?? 'Kesalahan Token') . ')';
-                }
-            } else {
-                $statusText = 'Gagal (Koneksi API Error)';
-            }
-        }
- 
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs = [];
-        if (file_exists($logPath)) {
-            $logs = json_decode(file_get_contents($logPath), true) ?: [];
-        }
- 
-        $newLog = [
-            'id' => uniqid(),
-            'recipient' => $phone,
-            'message' => $message,
-            'timestamp' => now()->format('d M Y, H:i:s'),
-            'status' => $statusText,
-        ];
- 
-        array_unshift($logs, $newLog);
-        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
-    }
-
+    
 }

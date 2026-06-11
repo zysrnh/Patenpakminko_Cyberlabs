@@ -10,7 +10,7 @@ trait WaBlastHelper
      * Helper untuk mengenerate pesan WhatsApp Blast secara seragam untuk semua Modul.
      * Bebas dari {no_reg} dan disesuaikan dengan template terbaru.
      */
-    protected function generateWaMessage(string $type, $app, string $layanan, string $url): ?string
+    public static function generateWaMessage(string $type, $app, string $layanan, string $url): ?string
     {
         $nama = $app->nama_pengaju ?: ($app->user->name ?? $app->user->username);
         // Mengambil nomor berkas jika ada, jika tidak, kosongkan.
@@ -47,7 +47,7 @@ trait WaBlastHelper
             })(),
 
             'cek_lokasi' => (function() use ($app, $nama, $layanan, $no_berkas_text) {
-                $waktu = Carbon::parse($app->bpn_cek_lokasi_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+                $waktu = $app->bpn_cek_lokasi_date ?: ($app->bpn_cek_lokasi_dt ? Carbon::parse($app->bpn_cek_lokasi_dt)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B') : '-');
                 return "Halo {$nama}, permohonan {$layanan} Anda{$no_berkas_text} dijadwalkan untuk peninjauan lapangan pada:\n\n"
                      . "Waktu: {$waktu}\n"
                      . "CP Lapangan/Admin: (atas nama) {$app->bpn_cek_lokasi_cp}\n\n"
@@ -58,7 +58,7 @@ trait WaBlastHelper
                 "Halo {$nama}, [PERUBAHAN JADWAL] Peninjauan lokasi {$layanan}{$no_berkas_text} diubah.\n\nJadwal Baru: {$app->bpn_cek_lokasi_date}\nCP Petugas: {$app->bpn_cek_lokasi_cp}",
 
             'rapat' => (function() use ($app, $nama, $layanan, $no_berkas_text) {
-                $waktu = Carbon::parse($app->bpn_rapat_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
+                $waktu = $app->bpn_rapat_date ?: ($app->bpn_rapat_dt ? Carbon::parse($app->bpn_rapat_dt)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B') : '-');
                 return "Halo {$nama}, rapat pembahasan pertimbangan teknis pertanahan untuk permohonan {$layanan}{$no_berkas_text} dijadwalkan pada:\n\n"
                      . "Waktu: {$waktu}";
             })(),
@@ -88,5 +88,230 @@ trait WaBlastHelper
 
             default => null,
         };
+    }
+    public function sendNotificationWithMailbox($app, $type, $layananTitle, $routeName, $customMsg = null)
+    {
+        if ($app->exists) {
+            $app->refresh();
+        }
+        $settings = $this->getWhatsappSettings();
+        $url = route($routeName, $app->id);
+        $msg = $customMsg ?: $this->generateWaMessage($type, $app, $layananTitle, $url);
+        $pemohon = $app->user->phone_number ?? '';
+
+        $wa_links = [];
+        $mailboxes = [];
+
+        $formatPhone = function($phone) {
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
+            return $phone;
+        };
+
+        if ($msg && $pemohon) {
+            if (!empty($settings['cp_admin'])) {
+                $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+            }
+            $wa_links[] = [
+                'target' => 'Pemohon',
+                'url' => 'https://wa.me/' . $formatPhone($pemohon) . '?text=' . urlencode($msg)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => $app->user_id,
+                'target_role' => null,
+                'title' => 'Notifikasi Pemohon - ' . $layananTitle,
+                'message' => $msg,
+                'link' => $url,
+            ];
+        }
+
+        $no_berkas_text = !empty($app->no_berkas) ? " (No. Berkas: {$app->no_berkas})" : "";
+        $nama = $app->nama_pengaju ?: ($app->user->name ?? ($app->user->username ?? ''));
+        
+        $adminBpn = $settings['admin_bpn'] ?? '';
+        $adminPutr = $settings['admin_putr'] ?? '';
+        $adminPu = $settings['admin_dinas_pu'] ?? '';
+        $adminPtsp = $settings['admin_satu_pintu'] ?? '';
+
+        $infoPemohon = "Pemohon: {$nama}\nLayanan: {$layananTitle}";
+        if (!empty($app->no_berkas)) {
+            $infoPemohon .= "\nNo. Berkas: {$app->no_berkas}";
+        }
+
+        if (($type === 'submit' || $type === 'submit_berkas') && $adminBpn) {
+            $text = "Halo Admin Kantor Pertanahan Kota Sukabumi, ada pengajuan permohonan baru untuk {$layananTitle} atas nama {$nama}. Silakan login untuk melakukan verifikasi berkas awal di: {$url}";
+            $wa_links[] = [
+                'target' => 'Admin BPN',
+                'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'bpn',
+                'title' => 'Pengajuan Baru Masuk',
+                'message' => "Ada pengajuan permohonan baru yang memerlukan verifikasi berkas awal.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+
+        if ($type === 'berkas_revisi_bpn' && $adminBpn) {
+            $text = "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layananTitle}. Silakan cek dan verifikasi ulang dokumen di: {$url}";
+            $wa_links[] = [
+                'target' => 'Admin BPN',
+                'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'bpn',
+                'title' => 'Berkas Revisi Diunggah',
+                'message' => "Pelaku Usaha telah mengunggah ulang berkas revisi/perbaikan. Silakan cek dan verifikasi ulang.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+        
+        if ($type === 'berkas_verifikasi' && $app->bpn_berkas_status === 'diterima' && $adminPutr) {
+            $text = "Notifikasi Dinas PUTR: Berkas permohonan {$no_berkas_text} atas nama {$nama} telah selesai divalidasi awal oleh Kantor Pertanahan Kota Sukabumi. Silakan lakukan Validasi Awal Tata Ruang di: {$url}";
+            $wa_links[] = [
+                'target' => 'Admin PUTR',
+                'url' => 'https://wa.me/' . $formatPhone($adminPutr) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'dinas_pu',
+                'title' => 'Berkas Masuk PUTR',
+                'message' => "Berkas permohonan telah selesai divalidasi awal oleh BPN. Menunggu Validasi Awal Tata Ruang.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+        
+        if ($type === 'credential' && $adminBpn) {
+            $text = "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan {$layananTitle}. Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}";
+            $wa_links[] = [
+                'target' => 'Admin BPN',
+                'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'bpn',
+                'title' => 'Pembayaran Selesai',
+                'message' => "Pemohon telah selesai melakukan pembayaran PNBP. Silakan verifikasi bayar dan aktifkan akun.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+        
+        if ($type === 'putr_validasi' && $adminBpn) {
+            $text = "Notifikasi PUTR: Permohonan {$layananTitle}{$no_berkas_text} atas nama {$nama} telah divalidasi tata ruangnya. Silakan cek sistem untuk pendaftaran / tagihan PNBP di: {$url}";
+            $wa_links[] = [
+                'target' => 'Admin BPN',
+                'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'bpn',
+                'title' => 'Validasi PUTR Selesai',
+                'message' => "Permohonan telah divalidasi tata ruangnya oleh PUTR. Silakan buat pendaftaran / tagihan PNBP.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+
+        if ($type === 'pkkpr_terbit') {
+            // Already sent to Pemohon via $msg block above.
+            if ($adminBpn) {
+                $text = "Notifikasi PTSP: PKKPR {$layananTitle}{$no_berkas_text} atas nama {$nama} telah diterbitkan. Proses permohonan selesai. Cek di: {$url}";
+                $wa_links[] = [
+                    'target' => 'Admin BPN',
+                    'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
+                ];
+                $mailboxes[] = [
+                    'target_user_id' => null,
+                    'target_role' => 'bpn',
+                    'title' => 'PKKPR Diterbitkan',
+                    'message' => "PKKPR telah diterbitkan oleh DPMPTSP. Proses permohonan selesai.\n\n{$infoPemohon}",
+                    'link' => $url,
+                ];
+            }
+        }
+
+        if ($type === 'pertek_terbit' && $adminPutr) {
+            $text = "Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk {$layananTitle}{$no_berkas_text} telah terbit dari Kantor Pertanahan Kota Sukabumi. Silakan lakukan penilaian PKKPR di: {$url}";
+            $wa_links[] = [
+                'target' => 'Admin PUTR',
+                'url' => 'https://wa.me/' . $formatPhone($adminPutr) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'dinas_pu',
+                'title' => 'PTP Terbit (Penilaian PUTR)',
+                'message' => "Pertimbangan Teknis Pertanahan (PTP) telah terbit dari BPN. Menunggu penilaian PKKPR.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+        
+        if ($type === 'pu_selesai' && $adminPtsp) {
+            $text = "Notifikasi Satu Pintu: Penilaian Dinas PUTR untuk {$layananTitle}{$no_berkas_text} selesai. Silakan proses penerbitan PKKPR di: {$url}";
+            $wa_links[] = [
+                'target' => 'Admin Satu Pintu',
+                'url' => 'https://wa.me/' . $formatPhone($adminPtsp) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'satu_pintu',
+                'title' => 'Penilaian PUTR Selesai',
+                'message' => "Penilaian Dinas PUTR telah selesai. Menunggu proses penerbitan PKKPR.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+        
+        if ($type === 'pu_selesai' && $adminBpn) {
+            $text = "Notifikasi Kantor Pertanahan Kota Sukabumi: Dinas PUTR telah selesai menilai {$layananTitle}{$no_berkas_text}. Menunggu penerbitan PKKPR oleh DPMPTSP / Satu Pintu.";
+            $wa_links[] = [
+                'target' => 'Admin BPN',
+                'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
+            ];
+            $mailboxes[] = [
+                'target_user_id' => null,
+                'target_role' => 'bpn',
+                'title' => 'Penilaian PUTR Selesai',
+                'message' => "Dinas PUTR telah selesai melakukan penilaian. Menunggu penerbitan PKKPR oleh DPMPTSP.\n\n{$infoPemohon}",
+                'link' => $url,
+            ];
+        }
+        
+        if (count($wa_links) > 0) {
+            session()->flash('wa_links', $wa_links);
+        }
+
+        // Insert into Mailboxes
+        foreach ($mailboxes as $box) {
+            \App\Models\Mailbox::create([
+                'target_user_id' => $box['target_user_id'],
+                'target_role' => $box['target_role'],
+                'title' => $box['title'],
+                'message' => $box['message'],
+                'link' => $box['link'],
+                'is_read' => false,
+            ]);
+        }
+    }
+
+    public function getWhatsappSettings()
+    {
+        $path = storage_path('app/whatsapp_settings.json');
+        if (file_exists($path)) {
+            $settings = json_decode(file_get_contents($path), true);
+        } else {
+            $settings = [
+                'connected' => true,
+                'fonnte_token' => '',
+                'template' => 'Halo {nama_pemohon}, permohonan Anda ({nomor_registrasi}) saat ini memasuki tahap: {status_sekarang}.
+
+Catatan: {catatan_terakhir}
+
+Pantau di: {tautan_detail}',
+            ];
+            file_put_contents($path, json_encode($settings, JSON_PRETTY_PRINT));
+        }
+        return $settings;
     }
 }

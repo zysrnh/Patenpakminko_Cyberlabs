@@ -153,7 +153,7 @@ class PpkprNonBerusahaController extends Controller
         session()->forget('ptp_form_data');
         
         // Kirim Notifikasi WhatsApp
-        $this->sendWhatsappNotification($app, 'Verifikasi Dokumen (BPN)', 'Berkas permohonan baru berhasil diajukan oleh pemohon.');
+        $this->sendNotificationWithMailbox($app, 'submit_berkas', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -257,7 +257,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
 
             // Kirim notifikasi WA
-            $this->sendCustomWhatsappNotification($application, 'berkas_verifikasi');
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'PPKPR Non Berusaha', 'non_berusaha.show', $request->input('custom_wa_message'));
 
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
@@ -274,7 +274,7 @@ class PpkprNonBerusahaController extends Controller
             // Aktivasi Akun Pengguna
             $application->user->update(['is_active' => true]);
 
-            $this->sendCustomWhatsappNotification($application, 'credential_blast');
+            $this->sendNotificationWithMailbox($application, 'credential_blast', 'PPKPR Non Berusaha', 'non_berusaha.show', $request->input('custom_wa_message'));
             return redirect()->route('non-berusaha.show', $id)
                 ->with('success', 'Pembayaran PNBP dikonfirmasi. Kredensial telah dikirim ke WA pemohon. No. Berkas: ' . $application->no_berkas);
         }
@@ -297,7 +297,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
 
             // Kirim notifikasi WA
-            $this->sendCustomWhatsappNotification($application, $isUpdate ? 'cek_lokasi_ubah' : 'cek_lokasi');
+            $this->sendNotificationWithMailbox($application, $isUpdate ? 'cek_lokasi_ubah' : 'cek_lokasi', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
             $successMsg = $isUpdate ? 'Jadwal cek lokasi berhasil diubah dan dikirim ulang via WhatsApp!' : 'Jadwal cek lokasi berhasil disimpan dan dikirim ke pemohon via WhatsApp!';
             return redirect()->route('non-berusaha.show', $id)->with('success', $successMsg);
@@ -318,7 +318,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
 
             // Kirim notifikasi WA
-            $this->sendCustomWhatsappNotification($application, $isUpdate ? 'rapat_ubah' : 'rapat');
+            $this->sendNotificationWithMailbox($application, $isUpdate ? 'rapat_ubah' : 'rapat', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
             $successMsg = $isUpdate ? 'Jadwal rapat berhasil diubah dan dikirim ulang via WhatsApp!' : 'Jadwal rapat koordinasi berhasil disimpan dan dikirim ke pemohon via WhatsApp!';
             return redirect()->route('non-berusaha.show', $id)->with('success', $successMsg);
@@ -354,7 +354,7 @@ class PpkprNonBerusahaController extends Controller
                 $msg = 'Permohonan ditolak pada tahap rekomendasi teknis BPN.';
             }
             $application->save();
-            $this->sendCustomWhatsappNotification($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak');
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
 
@@ -408,8 +408,15 @@ class PpkprNonBerusahaController extends Controller
 
         $application->save();
 
+        $type = 'pu_selesai';
+        if ($user->isDinasPu()) {
+            $type = $action === 'approve' ? 'pu_selesai' : 'pu_tolak';
+        } elseif ($user->isSatuPintu()) {
+            $type = $action === 'approve' ? 'pkkpr_terbit' : 'pkkpr_tolak';
+        }
+
         // Kirim Notifikasi WhatsApp
-        $this->sendWhatsappNotification($application, $application->status_label, $notes);
+        $this->sendNotificationWithMailbox($application, $type, 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
         return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
     }
@@ -417,459 +424,5 @@ class PpkprNonBerusahaController extends Controller
     /**
      * Kirim Notifikasi WhatsApp khusus sub-langkah BPN.
      */
-    private function sendCustomWhatsappNotification($application, $type)
-    {
-        $settings = $this->getWhatsappSettings();
-        if (!$settings['connected']) {
-            return;
-        }
-
-        $url = route('non-berusaha.show', $application->id);
-        $namaPemohon = $application->nama_pengaju ?: ($application->user->name ?? $application->user->username);
-
-        if ($type === 'berkas_verifikasi') {
-            if ($application->bpn_berkas_status === 'diterima') {
-                $message = "Halo {$namaPemohon}, dokumen persyaratan Permohonan PPKPR Non Berusaha Anda ({$application->application_number}) telah Diterima & Lolos verifikasi berkas awal oleh BPN.\n\n"
-                         . "Permohonan Anda diteruskan ke Dinas PUTR untuk validasi dan proses pembayaran. Pantau detail pengajuan Anda di: {$url}";
-            } else {
-                $message = "Halo {$namaPemohon}, dokumen persyaratan Permohonan PPKPR Non Berusaha Anda ({$application->application_number}) Ditolak oleh BPN dengan alasan:\n"
-                         . "{$application->bpn_notes}\n\n"
-                         . "Lacak permohonan Anda di: {$url}";
-            }
-        } elseif ($type === 'cek_lokasi') {
-            $waktu = \Carbon\Carbon::parse($application->bpn_cek_lokasi_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
-            $message = "Halo {$namaPemohon}, permohonan PPKPR Non Berusaha Anda ({$application->application_number}) dijadwalkan untuk peninjauan lapangan pada :\n\n"
-                     . "Waktu: {$waktu}\n"
-                     . "CP Lapangan/Admin: (atas nama) {$application->bpn_cek_lokasi_cp}\n\n"
-                     . "Harap konfirmasi kesediaan anda dengan menghubungi Contact Person petugas lapangan diatas.";
-        } elseif ($type === 'cek_lokasi_ubah') {
-            $message = "Halo {$namaPemohon}, [PERUBAHAN JADWAL] Jadwal Peninjauan Cek Lokasi Offline untuk permohonan PPKPR Non Berusaha Anda ({$application->application_number}) telah disesuaikan menjadi:\n\n"
-                     . "Jadwal Baru: {$application->bpn_cek_lokasi_date}\n"
-                     . "Kontak Person Petugas: {$application->bpn_cek_lokasi_cp}\n\n"
-                     . "Lacak detail permohonan di: {$url}";
-        } elseif ($type === 'rapat') {
-            $waktu = \Carbon\Carbon::parse($application->bpn_rapat_date)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B');
-            $message = "Halo {$namaPemohon}, sidang / rapat pembahasan pertimbangan teknis pertanahan untuk permohonan PKKPR Non Berusaha Anda ({$application->application_number}) dijadwalkan pada:\n\n"
-                     . "Waktu: {$waktu}\n\n"
-                     . "Pantau detail permohonan di: {$url}";
-        } elseif ($type === 'rapat_ubah') {
-            $message = "Halo {$namaPemohon}, [PERUBAHAN JADWAL] Jadwal Rapat Koordinasi BPN untuk permohonan PPKPR Non Berusaha Anda ({$application->application_number}) telah disesuaikan menjadi:\n\n"
-                     . "Jadwal Baru: {$application->bpn_rapat_date}\n\n"
-                     . "Pantau detail permohonan Anda di: {$url}";
-        } elseif ($type === 'pertek_terbit') {
-            $message = "Halo {$namaPemohon}, Pertimbangan Teknis Pertanahan untuk PKKPR dengan no berkas... {$application->application_number} telah DITERBITKAN oleh kantor pertanahan kota sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PU) dan (PUTR) untuk dilakukan penilaian PKKPR Non Berusaha. informasi detail dapat diakases di {$url}";
-        } elseif ($type === 'pertek_tolak') {
-            $message = "Halo {$namaPemohon}, permohonan Non-Berusaha Anda ({$application->application_number}) DITOLAK BPN (tahap Pertek).\n\n"
-                     . "Alasan: {$application->bpn_notes}\n\nPantau di: {$url}";
-        } elseif ($type === 'putr_notif_payment') {
-            $message = "Halo {$namaPemohon}, permohonan PPKPR Non-Berusaha Anda ({$application->application_number}) telah divalidasi Dinas PUTR.\n\n"
-                     . "Silakan lakukan pembayaran retribusi sesuai informasi yang dikirim via email resmi kami.\n\n"
-                     . "Setelah pembayaran dikonfirmasi BPN, Anda akan menerima WA berisi akun login dashboard. Pantau di: {$url}";
-        } elseif ($type === 'credential_blast') {
-            $ptpData  = json_decode($application->ptp_data, true) ?? [];
-            $nik      = $ptpData['nik'] ?? '';
-            $user     = $application->user;
-            $username = $user->username ?? '-';
-            $password = $nik ?: 'NIK Anda';
-            $message  = "Halo {$namaPemohon}, pembayaran permohonan Non-Berusaha Anda ({$application->application_number}) telah dikonfirmasi.\n\n"
-                      . "Berikut akun login portal PATEN PAK MIKO Anda:\n"
-                      . "Username : {$username}\n"
-                      . "Password : {$password}\n"
-                      . "No. Berkas : {$application->no_berkas}\n\n"
-                      . "Login dan pantau permohonan Anda di:\n" . url('/dashboard') . "\n\nBantuan: hubungi petugas BPN.";
-        }
-
-        $statusText = 'Simulasi';
-        $fonnteResponse = null;
-
-        if (!empty($settings['fonnte_token'])) {
-            $recipient = $application->user->phone_number;
-            $recipientClean = preg_replace('/[^0-9]/', '', $recipient);
-            if (str_starts_with($recipientClean, '0')) {
-                $recipientClean = '62' . substr($recipientClean, 1);
-            }
-
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.fonnte.com/send',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 20,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array(
-                    'target' => $recipientClean,
-                    'message' => $message,
-                ),
-                CURLOPT_HTTPHEADER => array(
-                    'Authorization: ' . $settings['fonnte_token']
-                ),
-            ));
-            
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
-
-            if (!$err) {
-                $fonnteResponse = json_decode($response, true);
-                if (isset($fonnteResponse['status']) && $fonnteResponse['status'] == true) {
-                    $statusText = 'Terkirim (Fonnte API)';
-                } else {
-                    $statusText = 'Gagal (Fonnte: ' . ($fonnteResponse['reason'] ?? 'Kesalahan Token') . ')';
-                }
-            } else {
-                $statusText = 'Gagal (Koneksi API Error)';
-            }
-        }
-
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs = [];
-        if (file_exists($logPath)) {
-            $logs = json_decode(file_get_contents($logPath), true) ?: [];
-        }
-
-        $newLog = [
-            'id' => uniqid(),
-            'recipient' => $application->user->phone_number,
-            'message' => $message,
-            'timestamp' => now()->format('d M Y, H:i:s'),
-            'status' => $statusText,
-        ];
-
-        array_unshift($logs, $newLog);
-        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
-    }
-
-    /**
-     * Tampilkan halaman pengaturan WhatsApp (Hanya DPN / Super Admin).
-     */
-    public function whatsappSettings()
-    {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan. Hanya DPN / Super Admin yang dapat mengakses halaman ini.');
-        }
-
-        $settings = $this->getWhatsappSettings();
-
-        // Ambil Log WhatsApp
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs = [];
-        if (file_exists($logPath)) {
-            $logs = json_decode(file_get_contents($logPath), true) ?: [];
-        }
-
-        return view('dpn.whatsapp', compact('settings', 'logs'));
-    }
-
-    /**
-     * Simpan template WhatsApp.
-     */
-    public function saveWhatsappSettings(Request $request)
-    {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan.');
-        }
-
-        $request->validate([
-            'template'            => 'nullable|string|max:3000',
-            'template_non_berusaha' => 'nullable|string|max:3000',
-            'template_berusaha'   => 'nullable|string|max:3000',
-            'template_kebijakan'  => 'nullable|string|max:3000',
-            'template_tanah_timbul' => 'nullable|string|max:3000',
-            'template_psn'        => 'nullable|string|max:3000',
-            'template_lapolpa'    => 'nullable|string|max:3000',
-        ]);
-
-        $settings = $this->getWhatsappSettings();
-
-        // Simpan semua template per-modul
-        $templateKeys = ['template', 'template_non_berusaha', 'template_berusaha', 'template_kebijakan', 'template_tanah_timbul', 'template_psn', 'template_lapolpa'];
-        foreach ($templateKeys as $key) {
-            $val = $request->input($key);
-            if ($val !== null) {
-                $settings[$key] = $val;
-            }
-        }
-
-        $this->saveSettings($settings);
-
-        return redirect()->back()->with('success', 'Template notifikasi berhasil diperbarui!');
-    }
-
-    /**
-     * Simpan konfigurasi Provider WA (Fonnte / Twilio).
-     */
-    public function saveProviderSettings(Request $request)
-    {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan.');
-        }
-
-        $request->validate([
-            'provider'           => 'required|in:fonnte,twilio',
-            'fonnte_token'       => 'nullable|string|max:500',
-            'twilio_account_sid' => 'nullable|string|max:100',
-            'twilio_auth_token'  => 'nullable|string|max:200',
-            'twilio_from_number' => 'nullable|string|max:50',
-            'twilio_channel'     => 'nullable|in:whatsapp,sms',
-        ]);
-
-        $settings = $this->getWhatsappSettings();
-        $settings['provider']           = $request->input('provider', 'fonnte');
-        $settings['fonnte_token']       = $request->input('fonnte_token') ?: ($settings['fonnte_token'] ?? '');
-        $settings['twilio_account_sid'] = $request->input('twilio_account_sid') ?: ($settings['twilio_account_sid'] ?? '');
-        $settings['twilio_auth_token']  = $request->input('twilio_auth_token') ?: ($settings['twilio_auth_token'] ?? '');
-        $settings['twilio_from_number'] = $request->input('twilio_from_number') ?: ($settings['twilio_from_number'] ?? '');
-        $settings['twilio_channel']     = $request->input('twilio_channel', 'whatsapp');
-        $this->saveSettings($settings);
-
-        $providerLabel = $settings['provider'] === 'twilio' ? 'Twilio' : 'Fonnte';
-        return redirect()->back()->with('success', "Provider notifikasi berhasil diubah ke {$providerLabel}!");
-    }
-
-    /**
-     * Hubungkan atau Putuskan Koneksi WhatsApp (Simulasi).
-     */
-    public function toggleWhatsappConnection(Request $request)
-    {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan.');
-        }
-
-        $settings = $this->getWhatsappSettings();
-        $settings['connected'] = !$settings['connected'];
-        
-        if ($settings['connected']) {
-            $settings['phone_number'] = $request->input('phone_number') ?: '081234567894';
-            $settings['fonnte_token'] = $request->input('fonnte_token') ?: '';
-        }
-
-        $this->saveSettings($settings);
-
-        $msg = $settings['connected'] ? 'WhatsApp Gateway berhasil dihubungkan!' : 'WhatsApp Gateway berhasil diputuskan!';
-        return redirect()->back()->with('success', $msg);
-    }
-
-    /**
-     * Helper: Mendapatkan pengaturan WhatsApp dari berkas JSON.
-     */
-    private function getWhatsappSettings()
-    {
-        $path = storage_path('app/whatsapp_settings.json');
-        if (!file_exists($path)) {
-            $default = [
-                'connected' => false,
-                'phone_number' => '081234567894',
-                'fonnte_token' => '',
-                'template' => "Halo {nama_pemohon}, permohonan PPKPR Non Berusaha Anda ({nomor_registrasi}) saat ini memasuki tahap: {status_sekarang}.\n\nCatatan Pemeriksa: {catatan_terakhir}\n\nPantau detail pengajuan Anda di: {tautan_detail}"
-            ];
-            file_put_contents($path, json_encode($default, JSON_PRETTY_PRINT));
-            return $default;
-        }
-        $settings = json_decode(file_get_contents($path), true);
-        if (!isset($settings['fonnte_token'])) {
-            $settings['fonnte_token'] = '';
-        }
-        return $settings;
-    }
-
-    /**
-     * Helper: Menyimpan pengaturan WhatsApp ke berkas JSON.
-     */
-    private function saveSettings($settings)
-    {
-        $path = storage_path('app/whatsapp_settings.json');
-        file_put_contents($path, json_encode($settings, JSON_PRETTY_PRINT));
-    }
-
-    /**
-     * Kirim WA ke nomor admin instansi berdasarkan key di settings (misal 'admin_bpn').
-     */
-    private function sendWaToAdmin(string $adminKey, $application, string $message): void
-    {
-        $settings = $this->getWhatsappSettings();
-        if (!$settings['connected'] || empty($settings[$adminKey])) return;
-
-        $numberClean = preg_replace('/[^0-9]/', '', $settings[$adminKey]);
-        if (str_starts_with($numberClean, '0')) {
-            $numberClean = '62' . substr($numberClean, 1);
-        }
-
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://api.fonnte.com/send',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 20,
-            CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => ['target' => $numberClean, 'message' => $message],
-            CURLOPT_HTTPHEADER     => ['Authorization: ' . $settings['fonnte_token']],
-        ]);
-        curl_exec($curl);
-        curl_close($curl);
-
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs    = file_exists($logPath) ? (json_decode(file_get_contents($logPath), true) ?: []) : [];
-        array_unshift($logs, [
-            'id'        => uniqid(),
-            'recipient' => $settings[$adminKey] . ' (' . $adminKey . ')',
-            'message'   => $message,
-            'timestamp' => now()->format('d M Y, H:i:s'),
-            'status'    => 'Terkirim ke admin',
-        ]);
-        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
-    }
-
-    /**
-     * Helper: Menyimulasikan pengiriman notifikasi WhatsApp dan mencatatnya ke log.
-     */
-    private function sendWhatsappNotification($application, $statusLabel, $notes)
-    {
-        $settings = $this->getWhatsappSettings();
-        if (!$settings['connected']) {
-            return; // Jangan kirim log jika status tidak terhubung
-        }
-
-        $template = !empty($settings['template_non_berusaha'])
-            ? $settings['template_non_berusaha']
-            : ($settings['template'] ?? '');
-        $url = route('non-berusaha.show', $application->id);
-        
-        $message = str_replace(
-            ['{nama_pemohon}', '{nomor_registrasi}', '{status_sekarang}', '{catatan_terakhir}', '{tautan_detail}'],
-            [$application->nama_pengaju ?: ($application->user->name ?? $application->user->username), $application->application_number, $statusLabel, $notes ?: '-', $url],
-            $template
-        );
-
-        if (!empty($settings['cp_admin'])) {
-            $message .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
-        }
-
-        $statusText = 'Simulasi';
-        $fonnteResponse = null;
-
-        // Kirim via Fonnte jika token diisi
-        if (!empty($settings['fonnte_token'])) {
-            $recipient = $application->user->phone_number;
-            
-            // Bersihkan format nomor telepon agar sesuai standar Fonnte (hanya angka)
-            $recipientClean = preg_replace('/[^0-9]/', '', $recipient);
-            if (str_starts_with($recipientClean, '0')) {
-                // Konversi 08xxx menjadi format 628xxx
-                $recipientClean = '62' . substr($recipientClean, 1);
-            }
-
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.fonnte.com/send',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 20,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array(
-                    'target' => $recipientClean,
-                    'message' => $message,
-                ),
-                CURLOPT_HTTPHEADER => array(
-                    'Authorization: ' . $settings['fonnte_token']
-                ),
-            ));
-            
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
-
-            if (!$err) {
-                $fonnteResponse = json_decode($response, true);
-                if (isset($fonnteResponse['status']) && $fonnteResponse['status'] == true) {
-                    $statusText = 'Terkirim (Fonnte API)';
-                } else {
-                    $statusText = 'Gagal (Fonnte: ' . ($fonnteResponse['reason'] ?? 'Kesalahan Token') . ')';
-                }
-            } else {
-                $statusText = 'Gagal (Koneksi API Error)';
-            }
-        }
-
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs = [];
-        if (file_exists($logPath)) {
-            $logs = json_decode(file_get_contents($logPath), true) ?: [];
-        }
-
-        $newLog = [
-            'id' => uniqid(),
-            'recipient' => $application->user->phone_number,
-            'message' => $message,
-            'timestamp' => now()->format('d M Y, H:i:s'),
-            'status' => $statusText,
-        ];
-
-        array_unshift($logs, $newLog);
-        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
-    }
-
-    /**
-     * Tampilkan template Formulir Berkas Persyaratan PPKPR Non-Berusaha (Siap Cetak).
-     */
-    public function templatePersyaratan()
-    {
-        return view('templates.persyaratan');
-    }
-
-    /**
-     * Tampilkan template Surat Pernyataan Kebenaran Dokumen (Siap Cetak).
-     */
-    public function templatePernyataan()
-    {
-        return view('templates.pernyataan');
-    }
-
-    /**
-     * Tampilkan template Surat Kuasa (Siap Cetak).
-     */
-    public function templateKuasa()
-    {
-        return view('templates.kuasa');
-    }
-
-    public function adminContacts()
-    {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan.');
-        }
-
-        $settings = $this->getWhatsappSettings();
-        return view('dpn.contacts', compact('settings'));
-    }
-
-    public function saveAdminContacts(Request $request)
-    {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan.');
-        }
-
-        $request->validate([
-            'admin_bpn' => 'nullable|string',
-            'admin_putr' => 'nullable|string',
-            'admin_dinas_pu' => 'nullable|string',
-            'admin_satu_pintu' => 'nullable|string',
-            'cp_admin' => 'nullable|string|max:100',
-        ]);
-
-        $settings = $this->getWhatsappSettings();
-        $settings['admin_bpn'] = $request->input('admin_bpn');
-        $settings['admin_putr'] = $request->input('admin_putr');
-        $settings['admin_dinas_pu'] = $request->input('admin_dinas_pu');
-        $settings['admin_satu_pintu'] = $request->input('admin_satu_pintu');
-        $settings['cp_admin'] = $request->input('cp_admin') ?: '';
-        $this->saveSettings($settings);
-
-        return redirect()->back()->with('success', 'Kontak instansi berhasil diperbarui!');
-    }
+    
 }
-
