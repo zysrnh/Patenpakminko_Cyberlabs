@@ -1115,7 +1115,10 @@
                                     @if($application->bpn_pertek_document)
                                         <div class="form-group-v">
                                             <label for="bpn_pertek_document">Dokumen Pertek / Rekomendasi (PDF)</label>
-                                            <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" style="color:#218AC9; text-decoration:underline; display:block;">Lihat Dokumen Terunggah</a>
+                                            <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#0f172a; font-size:13px; font-weight:600; text-decoration:none; margin-top:4px; transition:all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                Lihat Dokumen Terunggah
+                                            </a>
                                         </div>
                                     @else
                                         <div class="form-group-v">
@@ -1808,17 +1811,19 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PU</span>
                                     </div>
                                     <div class="timeline-desc">Penilaian kesesuaian tata ruang oleh Dinas Pekerjaan Umum.</div>
-                                    @if($application->dinas_pu_tanggal_penilaian)
-                                        <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
-                                            <strong>Tanggal Penilaian:</strong> {{ $application->dinas_pu_tanggal_penilaian->format('d-m-Y') }}
-                                            @if($application->dinas_pu_notes)
-                                                <br><strong>Catatan:</strong> {{ $application->dinas_pu_notes }}
-                                            @endif
-                                        </div>
-                                    @elseif($application->dinas_pu_notes)
-                                        <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
-                                            <strong>Catatan Dinas PU:</strong> {{ $application->dinas_pu_notes }}
-                                        </div>
+                                    @if(in_array($application->dinas_pu_status, ['sesuai', 'belum_sesuai']))
+                                        @if($application->dinas_pu_tanggal_penilaian)
+                                            <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
+                                                <strong>Tanggal Penilaian:</strong> {{ $application->dinas_pu_tanggal_penilaian->format('d-m-Y') }}
+                                                @if($application->dinas_pu_notes)
+                                                    <br><strong>Catatan:</strong> {{ $application->dinas_pu_notes }}
+                                                @endif
+                                            </div>
+                                        @elseif($application->dinas_pu_notes)
+                                            <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
+                                                <strong>Catatan Dinas PU:</strong> {{ $application->dinas_pu_notes }}
+                                            </div>
+                                        @endif
                                     @endif
                                 </div>
                             </div>

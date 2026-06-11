@@ -1073,7 +1073,10 @@
                                         <div class="form-group" style="margin-bottom:12px;">
                                             @if($application->approval_document)
                                                 <label class="form-label" style="font-weight:700;color:#744210;">Dokumen PKKPR</label>
-                                                <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" style="color:#218AC9; text-decoration:underline; display:block;">Lihat Dokumen Terunggah</a>
+                                                <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#0f172a; font-size:13px; font-weight:600; text-decoration:none; margin-top:4px; transition:all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                    Lihat Dokumen Terunggah
+                                                </a>
                                             @else
                                                 <label for="approval_document" class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen PKKPR (opsional)</label>
                                                 <input type="file" id="approval_document" name="approval_document" class="form-control" accept="application/pdf" style="background:white;">
