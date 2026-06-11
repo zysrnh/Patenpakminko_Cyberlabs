@@ -101,17 +101,17 @@ class PpkprNonBerusahaController extends Controller
             'nama_pemilik_usaha' => 'required|string|max:100',
             'nama_pengaju' => 'required|string|max:100',
             'hubungan_pengaju' => 'required|string|max:100',
-            'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'surat_kuasa' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_akta_pendirian' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'surat_kuasa' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_akta_pendirian' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
             'kbli_kode' => 'required|string|max:20',
-            'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
-            'persyaratan_lainnya' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
+            'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+            'persyaratan_lainnya' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
         ], [
             'nama_pemilik_usaha.required' => 'Nama pemilik usaha wajib diisi.',
             'nama_pengaju.required' => 'Nama pengaju wajib diisi.',
@@ -329,7 +329,7 @@ class PpkprNonBerusahaController extends Controller
             $request->validate([
                 'action'              => 'required|in:approve,reject',
                 'notes'               => 'required|string|max:1000',
-                'bpn_pertek_document' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+                'bpn_pertek_document' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
             ], [
                 'notes.required'            => 'Catatan rekomendasi teknis wajib diisi.',
                 'bpn_pertek_document.mimes' => 'Dokumen Pertek harus berformat PDF, DOC, atau DOCX.',
@@ -364,7 +364,7 @@ class PpkprNonBerusahaController extends Controller
         $request->validate([
             'action' => 'required|in:approve,reject',
             'notes' => 'required|string|max:1000',
-            'approval_document' => 'nullable|file|mimes:pdf|max:10240', // Satu Pintu
+            'approval_document' => 'nullable|file|mimes:pdf|max:102400', // Satu Pintu
         ], [
             'notes.required' => 'Catatan verifikasi wajib diisi.',
             'approval_document.mimes' => 'Dokumen PPKPR harus berformat PDF.',

@@ -78,17 +78,17 @@ class TanahTimbulController extends Controller
             'nama_pemilik_usaha' => 'required|string|max:100',
             'nama_pengaju' => 'required|string|max:100',
             'hubungan_pengaju' => 'required|string|max:100',
-            'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'surat_kuasa' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_akta_pendirian' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'nib' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'surat_kuasa' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_akta_pendirian' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'nib' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
             'kbli_kode' => 'required|string|max:20',
-            'kbli' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'proposal_kegiatan' => 'required|file|mimes:pdf,doc,docx|max:10240',
-            'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
+            'kbli' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'proposal_kegiatan' => 'required|file|mimes:pdf,doc,docx|max:102400',
+            'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
         ], [
             'nama_pemilik_usaha.required' => 'Nama pemilik usaha wajib diisi.',
             'nama_pengaju.required' => 'Nama pengaju wajib diisi.',
@@ -317,7 +317,7 @@ class TanahTimbulController extends Controller
             $request->validate([
                 'action' => 'required|in:approve,reject',
                 'notes' => 'required|string|max:1000',
-                'bpn_pertek_document' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+                'bpn_pertek_document' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
             ], [
                 'notes.required' => 'Catatan rekomendasi teknis wajib diisi.',
                 'bpn_pertek_document.mimes' => 'Dokumen Pertek Pertanahan harus berformat PDF, DOC, atau DOCX.',
@@ -353,7 +353,7 @@ class TanahTimbulController extends Controller
         // SATU PINTU Langkah 6: Upload Sertifikat Akhir (Dinas PMPTSP)
         if ($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu' && $step === 'satu_pintu_terbit') {
             $request->validate([
-                'approval_document' => 'required|file|mimes:pdf,doc,docx|max:10240',
+                'approval_document' => 'required|file|mimes:pdf,doc,docx|max:102400',
                 'satu_pintu_no_pkkpr' => 'required|string|max:100',
                 'satu_pintu_tanggal_terbit' => 'required|date',
                 'notes' => 'nullable|string|max:1000'

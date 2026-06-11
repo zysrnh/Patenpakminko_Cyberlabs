@@ -65,15 +65,15 @@ class PsnController extends Controller
             'nama_pemilik_usaha'       => 'required|string|max:100',
             'nama_pengaju'             => 'required|string|max:100',
             'hubungan_pengaju'         => 'required|string|max:100',
-            'peta_lokasi'              => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'surat_kuasa'              => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_ktp'                   => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_npwp'                  => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'fc_akta_pendirian'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
-            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'peta_lokasi'              => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'surat_kuasa'              => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_ktp'                   => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_npwp'                  => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'fc_akta_pendirian'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
             'kbli_kode'                => 'required|string|max:20',
-            'proposal_kegiatan'        => 'required|file|mimes:pdf,doc,docx|max:10240',
-            'persyaratan_lainnya'      => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:10240',
+            'proposal_kegiatan'        => 'required|file|mimes:pdf,doc,docx|max:102400',
+            'persyaratan_lainnya'      => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
         ]);
 
         $data = $request->only(['nama_pemilik_usaha', 'nama_pengaju', 'hubungan_pengaju', 'kbli_kode']);
@@ -293,7 +293,7 @@ class PsnController extends Controller
             $request->validate([
                 'action'              => 'required|in:approve,reject',
                 'notes'               => 'required|string|max:1000',
-                'bpn_pertek_document' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+                'bpn_pertek_document' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
             ]);
 
             $application->bpn_notes = $notes;
@@ -322,7 +322,7 @@ class PsnController extends Controller
             $request->validate([
                 'action'                    => 'required|in:approve,reject',
                 'dinas_pu_tanggal_penilaian'=> 'required|date',
-                'dinas_pu_document'         => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+                'dinas_pu_document'         => 'nullable|file|mimes:pdf,doc,docx|max:102400',
                 'notes'                     => 'nullable|string|max:1000',
             ], [
                 'dinas_pu_tanggal_penilaian.required' => 'Tanggal penilaian wajib diisi.',
@@ -356,7 +356,7 @@ class PsnController extends Controller
                 'action'                    => 'required|in:approve,reject',
                 'satu_pintu_no_pkkpr'       => 'required_if:action,approve|nullable|string|max:100',
                 'satu_pintu_tanggal_terbit' => 'required_if:action,approve|nullable|date',
-                'approval_document'         => 'nullable|file|mimes:pdf|max:10240',
+                'approval_document'         => 'nullable|file|mimes:pdf|max:102400',
                 'notes'                     => 'nullable|string|max:1000',
             ], [
                 'satu_pintu_no_pkkpr.required_if'       => 'Nomor PKKPR wajib diisi saat menerbitkan.',
