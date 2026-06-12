@@ -33,9 +33,21 @@ class BerkasController extends Controller
             $query->where('kategori', $request->kategori);
         }
 
-        // Filter pencarian nama berkas
+        // Filter pencarian nama berkas atau nama pengunggah
         if ($request->has('search') && $request->search != '') {
-            $query->where('nama_berkas', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_berkas', 'like', '%' . $search . '%')
+                  ->orWhereHas('user', function($qUser) use ($search) {
+                      $qUser->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('business_name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        // Filter berdasarkan pemohon
+        if ($request->has('user_id') && $request->user_id != '') {
+            $query->where('user_id', $request->user_id);
         }
 
         // Khusus PTSP: Hanya boleh melihat kategori "Dokumen Pertimbangan Teknis Pertanahan"
@@ -44,8 +56,12 @@ class BerkasController extends Controller
         }
 
         $berkas = $query->paginate(10);
+        
+        // Ambil daftar pemohon yang sudah ada berkasnya untuk dropdown
+        $userIds = Berkas::select('user_id')->distinct()->pluck('user_id');
+        $pemohonList = \App\Models\User::whereIn('id', $userIds)->get();
 
-        return view('berkas.index', compact('berkas'));
+        return view('berkas.index', compact('berkas', 'pemohonList'));
     }
 
     public function store(Request $request)

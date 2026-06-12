@@ -257,7 +257,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
 
             // Kirim notifikasi WA
-            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'PPKPR Non Berusaha', 'non_berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
@@ -274,7 +274,7 @@ class PpkprNonBerusahaController extends Controller
             // Aktivasi Akun Pengguna
             $application->user->update(['is_active' => true]);
 
-            $this->sendNotificationWithMailbox($application, 'credential_blast', 'PPKPR Non Berusaha', 'non_berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'credential_blast', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
             return redirect()->route('non-berusaha.show', $id)
                 ->with('success', 'Pembayaran PNBP dikonfirmasi. Kredensial telah dikirim ke WA pemohon. No. Berkas: ' . $application->no_berkas);
         }
@@ -358,6 +358,62 @@ class PpkprNonBerusahaController extends Controller
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
 
+        // Pelaku Usaha mengupload ulang berkas jika tidak sesuai
+        if ($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']) && $step === 'reupload') {
+            $request->validate([
+                'peta_lokasi' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_npwp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'rencana_penggunaan_tanah' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'kbli_kode' => 'nullable|string|max:20',
+                'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+                'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
+            ]);
+ 
+            $filesToStore = [
+                'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
+                'fc_akta_pendirian', 'rencana_penggunaan_tanah',
+                'nib', 'kbli', 'proposal_kegiatan', 'persyaratan_lainnya'
+            ];
+ 
+            foreach ($filesToStore as $fileKey) {
+                if ($request->hasFile($fileKey)) {
+                    $application->$fileKey = $request->file($fileKey)->store('ppkpr_docs', 'public');
+                }
+            }
+
+            if ($request->filled('kbli_kode')) {
+                $application->kbli_kode = $request->input('kbli_kode');
+            }
+            
+            // Reset status berkas agar dicek ulang oleh BPN
+            $application->bpn_berkas_status = 'menunggu';
+            $application->status = 'menunggu_bpn';
+            $application->save();
+ 
+            // Notifikasi BPN ada berkas perbaikan masuk
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+ 
+            return redirect()->route('non-berusaha.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
+        }
+
+        // Resend Notifikasi WA (Admin Action)
+        if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
+            $type = $request->input('wa_type', 'berkas_verifikasi');
+            
+            if ($type === 'credential' && $application->user) {
+                $application->user->update(['is_active' => true]);
+            }
+
+            $customMsg = $request->input('custom_wa_message');
+            $this->sendNotificationWithMailbox($application, $type, 'PPKPR Non Berusaha', 'non-berusaha.show', $customMsg);
+            return redirect()->route('non-berusaha.show', $id)->with('success', 'Tautan kirim ulang WhatsApp manual berhasil dimunculkan.');
+        }
+
         // ==========================================
         // ALUR DINAS PU & SATU PINTU
         // ==========================================
@@ -421,8 +477,26 @@ class PpkprNonBerusahaController extends Controller
         return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
     }
 
-    /**
-     * Kirim Notifikasi WhatsApp khusus sub-langkah BPN.
-     */
-    
+    public function adminContacts()
+    {
+        $settings = [];
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+
+        return view('dpn.contacts', compact('settings'));
+    }
+
+    public function saveAdminContacts(Request $request)
+    {
+        $data = $request->except('_token');
+        $settings = [];
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+        $settings = array_merge($settings, $data);
+        \Illuminate\Support\Facades\Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
+
+        return redirect()->back()->with('success', 'Kontak Admin Instansi berhasil disimpan!');
+    }
 }

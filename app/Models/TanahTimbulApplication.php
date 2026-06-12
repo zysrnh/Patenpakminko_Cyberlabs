@@ -105,10 +105,10 @@ class TanahTimbulApplication extends Model
                 if ($ptp['jenis_permohonan'] === 'psn') {
                     return 'Proyek Strategis Nasional (PSN)';
                 } elseif ($ptp['jenis_permohonan'] === 'tanah-timbul') {
-                    return 'Tanah Timbul';
+                    return 'TANAH TIMBUL';
                 }
             }
         }
-        return 'Kebijakan Khusus';
+        return 'TANAH TIMBUL';
     }
 }

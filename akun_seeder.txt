@@ -38,3 +38,4 @@ D. Super Admin / DPN
 E. Admin Berita
    - Username : admin_berita | Password: Paten_berita@2026 (Admin Berita)
 ================================================
+

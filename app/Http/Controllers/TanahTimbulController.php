@@ -106,7 +106,7 @@ class TanahTimbulController extends Controller
         }
         
         // Generate Nomor Permohonan tanah-timbul
-        $data['application_number'] = 'tanah-timbul-' . date('Ymd') . '-' . strtoupper(Str::random(5));
+        $data['application_number'] = 'TANAH-TIMBUL-' . date('Ymd') . '-' . strtoupper(Str::random(5));
  
         $filesToStore = [
             'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
@@ -130,7 +130,7 @@ class TanahTimbulController extends Controller
         session()->forget('ptp_form_data');
         
         // Kirim Notifikasi WhatsApp
-        $this->sendNotificationWithMailbox($app, 'submit', 'Tanah Timbul', 'tanah-timbul.show', $request->input('custom_wa_message'));
+        $this->sendNotificationWithMailbox($app, 'submit', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
  
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -220,20 +220,19 @@ class TanahTimbulController extends Controller
             $notes = $request->input('notes');
  
             $application->bpn_notes = $notes;
-            $application->bpn_berkas_status = $action === 'approve' ? 'diterima' : 'ditolak';
-            if ($action === 'approve') $application->bpn_berkas_approved_at = now();
-            
-            if ($action === 'reject') {
-                $application->status = 'ditolak';
-                $msg = 'Permohonan ditolak pada verifikasi berkas awal oleh BPN.';
-            } else {
-                $msg = 'Berkas awal berhasil disetujui. Silakan tentukan jadwal cek lokasi.';
+            if ($action === 'approve') {
+                $application->bpn_berkas_status = 'diterima';
+                $application->bpn_berkas_approved_at = now();
                 $application->user->update(['is_active' => true]);
+                $msg = 'Berkas awal berhasil disetujui. Silakan tentukan jadwal cek lokasi.';
+            } else {
+                $application->bpn_berkas_status = 'tidak_sesuai';
+                $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi untuk perbaikan.';
             }
             $application->save();
  
             // Kirim Notifikasi WhatsApp
-            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Tanah Timbul', 'tanah_timbul.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
  
             return redirect()->route('tanah-timbul.show', $id)->with('success', $msg);
         }
@@ -253,7 +252,7 @@ class TanahTimbulController extends Controller
             $application->user->update(['is_active' => true]);
 
             // Kirim notifikasi WA kredensial
-            $this->sendNotificationWithMailbox($application, 'credential', 'Tanah Timbul', 'tanah_timbul.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'credential', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
 
             // Redirect route
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
@@ -336,8 +335,8 @@ class TanahTimbulController extends Controller
                 $path = $request->file('bpn_pertek_document')->store('bpn_perteks', 'public');
                 $application->bpn_pertek_document = $path;
                 $application->bpn_pertek_uploaded_at = now();
-                $application->status = 'disetujui';
-                $msg = 'Dokumen Pertek Pertanahan berhasil diterbitkan. Permohonan tanah-timbul Khusus selesai dan disetujui!';
+                $application->status = 'menunggu_satu_pintu';
+                $msg = 'Dokumen Pertek Pertanahan berhasil diterbitkan. Berkas diteruskan ke Dinas PMPTSP (Satu Pintu).';
             } else {
                 $application->status = 'ditolak';
                 $msg = 'Permohonan ditolak pada tahap rekomendasi teknis BPN.';
@@ -345,7 +344,7 @@ class TanahTimbulController extends Controller
             $application->save();
  
             // Kirim Notifikasi WhatsApp khusus Pertek
-            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Tanah Timbul', 'tanah-timbul.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
  
             return redirect()->route('tanah-timbul.show', $id)->with('success', $msg);
         }
@@ -373,18 +372,60 @@ class TanahTimbulController extends Controller
             $application->save();
 
             // WA Notifikasi Selesai (Diterbitkan)
-            $this->sendNotificationWithMailbox($application, 'penerbitan_pkkpr', 'Tanah Timbul', 'tanah_timbul.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'penerbitan_pkkpr', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
 
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
             return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');
         }
 
         
+        // Pelaku Usaha mengupload ulang berkas jika tidak sesuai
+        if ($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']) && $step === 'reupload') {
+            $request->validate([
+                'peta_lokasi' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_npwp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'rencana_penggunaan_tanah' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'kbli_kode' => 'nullable|string|max:20',
+                'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+                'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
+            ]);
+ 
+            $filesToStore = [
+                'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
+                'fc_akta_pendirian', 'rencana_penggunaan_tanah',
+                'nib', 'kbli', 'proposal_kegiatan', 'persyaratan_lainnya'
+            ];
+ 
+            foreach ($filesToStore as $fileKey) {
+                if ($request->hasFile($fileKey)) {
+                    $application->$fileKey = $request->file($fileKey)->store('tanah-timbul_docs', 'public');
+                }
+            }
+
+            if ($request->filled('kbli_kode')) {
+                $application->kbli_kode = $request->input('kbli_kode');
+            }
+            
+            // Reset status berkas agar dicek ulang oleh BPN
+            $application->bpn_berkas_status = 'menunggu';
+            $application->status = 'menunggu_bpn';
+            $application->save();
+ 
+            // Notifikasi BPN ada berkas perbaikan masuk
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
+ 
+            return redirect()->route('tanah-timbul.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
+        }
         // Resend Notifikasi WA (Admin Action)
         if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
             $type = $request->input('wa_type', 'berkas_verifikasi');
             $customMsg = $request->input('custom_wa_message');
-            $this->sendNotificationWithMailbox($application, $type, 'Tanah Timbul', 'tanah-timbul.show', $customMsg);
+            $this->sendNotificationWithMailbox($application, $type, 'TANAH TIMBUL', 'tanah-timbul.show', $customMsg);
             return redirect()->back()->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
         }
 

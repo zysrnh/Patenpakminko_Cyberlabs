@@ -28,19 +28,9 @@ class KebijakanController extends Controller
             return view('kebijakan.index', compact('applications'));
         }
  
-        // Jika BPN, tampilkan semua permohonan agar dapat dipantau riwayatnya
-        if ($user->isBpn()) {
-            $applications = KebijakanApplication::orderBy('created_at', 'desc')->get();
-            return view('kebijakan.index', compact('applications'));
-        }
- 
-        // Jika DPN (Super Admin/Notifier), tampilkan semua permohonan
-        if ($user->isDpn()) {
-            $applications = KebijakanApplication::orderBy('created_at', 'desc')->get();
-            return view('kebijakan.index', compact('applications'));
-        }
- 
-        abort(403, 'Peran akun Anda tidak terdaftar dalam sistem.');
+        // Instansi lain melihat semua permohonan agar dapat dipantau riwayatnya
+        $applications = KebijakanApplication::orderBy('created_at', 'desc')->get();
+        return view('kebijakan.index', compact('applications'));
     }
  
     /**
@@ -56,7 +46,15 @@ class KebijakanController extends Controller
             abort(403, 'Hanya Pelaku Usaha yang dapat membuat pengajuan permohonan.');
         }
 
-        return view('kebijakan.create');
+        $ptp = session('ptp_form_data');
+        $jenisPermohonan = $ptp['jenis_permohonan'] ?? 'kebijakan';
+
+        $serviceName = 'Kebijakan Khusus / Lainnya';
+        if ($jenisPermohonan === 'tanah-timbul') {
+            $serviceName = 'Tanah Timbul';
+        }
+
+        return view('kebijakan.create', compact('serviceName', 'jenisPermohonan'));
     }
  
     /**
@@ -220,15 +218,14 @@ class KebijakanController extends Controller
             $notes = $request->input('notes');
  
             $application->bpn_notes = $notes;
-            $application->bpn_berkas_status = $action === 'approve' ? 'diterima' : 'ditolak';
-            if ($action === 'approve') $application->bpn_berkas_approved_at = now();
-            
-            if ($action === 'reject') {
-                $application->status = 'ditolak';
-                $msg = 'Permohonan ditolak pada verifikasi berkas awal oleh BPN.';
-            } else {
-                $msg = 'Berkas awal berhasil disetujui. Silakan tentukan jadwal cek lokasi.';
+            if ($action === 'approve') {
+                $application->bpn_berkas_status = 'diterima';
+                $application->bpn_berkas_approved_at = now();
                 $application->user->update(['is_active' => true]);
+                $msg = 'Berkas awal berhasil disetujui. Silakan tentukan jadwal cek lokasi.';
+            } else {
+                $application->bpn_berkas_status = 'tidak_sesuai';
+                $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi untuk perbaikan.';
             }
             $application->save();
  
@@ -380,12 +377,54 @@ class KebijakanController extends Controller
         }
 
         
+        // Pelaku Usaha mengupload ulang berkas jika tidak sesuai
+        if ($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']) && $step === 'reupload') {
+            $request->validate([
+                'peta_lokasi' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_npwp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'rencana_penggunaan_tanah' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'kbli_kode' => 'nullable|string|max:20',
+                'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+                'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
+            ]);
+ 
+            $filesToStore = [
+                'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
+                'fc_akta_pendirian', 'rencana_penggunaan_tanah',
+                'nib', 'kbli', 'proposal_kegiatan', 'persyaratan_lainnya'
+            ];
+ 
+            foreach ($filesToStore as $fileKey) {
+                if ($request->hasFile($fileKey)) {
+                    $application->$fileKey = $request->file($fileKey)->store('kebijakan_docs', 'public');
+                }
+            }
+
+            if ($request->filled('kbli_kode')) {
+                $application->kbli_kode = $request->input('kbli_kode');
+            }
+            
+            // Reset status berkas agar dicek ulang oleh BPN
+            $application->bpn_berkas_status = 'menunggu';
+            $application->status = 'menunggu_bpn';
+            $application->save();
+ 
+            // Notifikasi BPN ada berkas perbaikan masuk
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Kebijakan Khusus', 'kebijakan.show', $request->input('custom_wa_message'));
+ 
+            return redirect()->route('kebijakan.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
+        }
         // Resend Notifikasi WA (Admin Action)
         if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
             $type = $request->input('wa_type', 'berkas_verifikasi');
             $customMsg = $request->input('custom_wa_message');
             $this->sendNotificationWithMailbox($application, $type, 'Kebijakan Khusus', 'kebijakan.show', $customMsg);
-            return redirect()->back()->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
+            return redirect()->back()->with('success', 'Tautan kirim ulang WhatsApp manual berhasil dimunculkan.');
         }
 
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');

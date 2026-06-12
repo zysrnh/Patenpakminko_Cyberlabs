@@ -182,16 +182,16 @@ class PsnController extends Controller
                 'notes'  => 'required|string|max:1000',
             ]);
 
-            $application->bpn_notes        = $notes;
-            $application->bpn_berkas_status = $action === 'approve' ? 'diterima' : 'ditolak';
-            $application->bpn_berkas_approved_at = now();
+            $application->bpn_notes = $notes;
 
-            if ($action === 'reject') {
-                $application->status = 'ditolak';
-                $msg = 'Permohonan ditolak pada verifikasi berkas awal.';
-            } else {
+            if ($action === 'approve') {
+                $application->bpn_berkas_status = 'diterima';
+                $application->bpn_berkas_approved_at = now();
                 $application->status = 'menunggu_putr'; // Lanjut ke PUTR untuk validasi pembayaran
                 $msg = 'Berkas awal disetujui. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran.';
+            } else {
+                $application->bpn_berkas_status = 'tidak_sesuai';
+                $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi untuk perbaikan.';
             }
 
             $application->save();
@@ -386,7 +386,47 @@ class PsnController extends Controller
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
-        
+        // Pelaku Usaha mengupload ulang berkas jika tidak sesuai
+        if ($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']) && $step === 'reupload') {
+            $request->validate([
+                'peta_lokasi' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_npwp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+                'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'rencana_penggunaan_tanah' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'kbli_kode' => 'nullable|string|max:20',
+                'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+                'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
+            ]);
+ 
+            $filesToStore = [
+                'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
+                'fc_akta_pendirian', 'rencana_penggunaan_tanah',
+                'proposal_kegiatan', 'persyaratan_lainnya'
+            ];
+ 
+            foreach ($filesToStore as $fileKey) {
+                if ($request->hasFile($fileKey)) {
+                    $application->$fileKey = $request->file($fileKey)->store('psn_docs', 'public');
+                }
+            }
+
+            if ($request->filled('kbli_kode')) {
+                $application->kbli_kode = $request->input('kbli_kode');
+            }
+            
+            // Reset status berkas agar dicek ulang oleh BPN
+            $application->bpn_berkas_status = 'menunggu';
+            $application->status = 'menunggu_bpn';
+            $application->save();
+ 
+            // Notifikasi BPN ada berkas perbaikan masuk
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+ 
+            return redirect()->route('psn.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
+        }
+
         // Resend Notifikasi WA (Admin Action)
         if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
             $type = $request->input('wa_type', 'berkas_verifikasi');

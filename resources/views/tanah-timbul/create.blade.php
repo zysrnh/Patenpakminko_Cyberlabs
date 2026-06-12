@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Form Pengajuan PKKPR Tanah Timbul — PATEN PAK MIKO')
+@section('title', 'Form Pengajuan PKKPR TANAH TIMBUL — PATEN PAK MIKO')
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/ptp-form.css') }}">
@@ -16,7 +16,7 @@
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <span class="ptp-badge-name">Pertimbangan Teknis Pertanahan Tanah Timbul</span>
+                <span class="ptp-badge-name">Pertimbangan Teknis Pertanahan TANAH TIMBUL</span>
             </div>
             <a href="{{ route('tanah-timbul.index') }}" class="btn-kembali">&larr; Kembali</a>
         </div>
@@ -164,7 +164,7 @@
                 <!-- 5. Akta Pendirian / Dokumen Penetapan -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">5. Surat Keterangan Tanah Timbul dari Kepala Desa / Lurah<span class="required">*</span></span>
+                        <span class="label-text">5. Surat Keterangan TANAH TIMBUL dari Kepala Desa / Lurah<span class="required">*</span></span>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>

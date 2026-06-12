@@ -129,6 +129,7 @@
     <header>
         <div class="container header-inner">
             <a href="{{ route('dashboard') }}" class="logo-wrap">
+                <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover;">
                 <div class="logo-text">
                     <strong>PATEN PAK MIKO</strong>
                     <span>Pengelolaan Berkas Terpadu</span>
@@ -206,7 +207,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Pilih File (PDF, JPG, PNG, DOCX - Max 10MB)</label>
+                    <label>Pilih File (PDF, JPG, PNG, DOCX - Max 100MB)</label>
                     <input type="file" name="file" class="form-control" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx">
                 </div>
                 <div class="form-group">
@@ -221,9 +222,17 @@
             <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 16px;">Daftar Berkas Tersimpan</h3>
             
             <div class="filters">
-                <form action="{{ route('berkas.index') }}" method="GET">
-                    <input type="text" name="search" placeholder="Cari nama berkas..." value="{{ request('search') }}" style="flex: 1;">
-                    <select name="kategori">
+                <form action="{{ route('berkas.index') }}" method="GET" style="display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center;">
+                    <input type="text" name="search" placeholder="Cari nama berkas atau pengunggah..." value="{{ request('search') }}" style="flex: 1; min-width: 250px;">
+                    <select name="user_id" style="min-width: 180px;">
+                        <option value="">Semua Pemohon</option>
+                        @foreach($pemohonList as $pemohon)
+                            <option value="{{ $pemohon->id }}" {{ request('user_id') == $pemohon->id ? 'selected' : '' }}>
+                                {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <select name="kategori" style="min-width: 200px;">
                         @if(Auth::user()->isSatuPintu())
                             <option value="Dokumen Pertimbangan Teknis Pertanahan" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan</option>
                         @else
@@ -266,13 +275,13 @@
                     <tbody>
                         @forelse($berkas as $item)
                         <tr>
-                            <td>
+                            <td style="max-width: 250px; word-wrap: break-word;">
                                 <strong>{{ $item->nama_berkas }}</strong>
                                 @if($item->keterangan)
                                     <div style="font-size: 12px; color: var(--clr-muted); margin-top: 4px;">{{ Str::limit($item->keterangan, 50) }}</div>
                                 @endif
                             </td>
-                            <td><span class="badge">{{ $item->kategori ?? 'Umum' }}</span></td>
+                            <td style="white-space: nowrap;"><span class="badge">{{ $item->kategori ?? 'Umum' }}</span></td>
                             <td>
                                 <span class="badge" style="background:#EBF8FF;color:#2B6CB0;border:none;">{{ strtoupper($item->tipe_file) }}</span>
                                 <span style="font-size:12px;color:var(--clr-muted);margin-left:6px;">{{ $item->ukuran_file }}</span>
@@ -307,14 +316,14 @@
                                 <span style="font-weight: 500; color: #003B64;">{{ $finalName }}</span><br>
                                 <span style="font-size: 11px; color: var(--clr-muted);">(Akun: PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }})</span>
                             </td>
-                            <td>{{ $item->created_at->format('d M Y, H:i') }}</td>
-                            <td>
-                                <div style="display: flex; gap: 6px;">
+                            <td style="white-space: nowrap;">{{ $item->created_at->format('d M Y, H:i') }}</td>
+                            <td style="white-space: nowrap;">
+                                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                                     <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 12px; border-color: var(--clr-accent); color: var(--clr-accent);" onclick="openPreview('{{ route('berkas.preview', $item->id) }}', '{{ $item->nama_berkas }}')">
                                         Lihat
                                     </button>
                                     <a href="{{ route('berkas.download', $item->id) }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">Unduh</a>
-                                    <form action="{{ route('berkas.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berkas ini?');">
+                                    <form action="{{ route('berkas.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berkas ini?');" style="margin: 0;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger" style="background: transparent; border: 1.5px solid var(--clr-red); color: var(--clr-red);">Hapus</button>

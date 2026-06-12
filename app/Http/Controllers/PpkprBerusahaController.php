@@ -355,6 +355,7 @@ class PpkprBerusahaController extends Controller
                     $application->status = 'menunggu_bpn';
                     $application->dinas_pu_status = 'validasi_awal_diterima';
                     $application->bpn_pembayaran_status = 'belum_bayar';
+                    $application->dinas_pu_approved_at = now();
                     $msg = 'Permohonan berhasil divalidasi oleh Dinas PUTR. Notifikasi tagihan pembayaran dikirim ke pemohon.';
                 } else {
                     // Validasi ditolak, permohonan selesai/ditolak

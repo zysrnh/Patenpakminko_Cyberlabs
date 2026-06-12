@@ -450,7 +450,7 @@ class AuthController extends Controller
                     'berusaha'     => 'berusaha.create',
                     'non-berusaha' => 'non-berusaha.create',
                     'psn'          => 'psn.create',
-                    'tanah-timbul' => 'kebijakan.create',
+                    'tanah-timbul' => 'tanah-timbul.create',
                     'kebijakan'    => 'kebijakan.create',
                 ];
                 return redirect()->route($routeMap[$jenis] ?? 'berusaha.create')
@@ -553,7 +553,7 @@ class AuthController extends Controller
         } elseif ($jenis === 'psn') {
             return redirect()->route('psn.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan PSN Anda!');
         } elseif ($jenis === 'tanah-timbul') {
-            return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Tanah Timbul Anda!');
+            return redirect()->route('tanah-timbul.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Tanah Timbul Anda!');
         } else {
             return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Kebijakan Anda!');
         }

@@ -55,14 +55,6 @@
                     <!-- PKKPR Slider Section -->
                     <div class="sp-section-label">
                         <span>Layanan Pertimbangan Teknis Pertanahan</span>
-                        <div class="sp-section-label-nav">
-                            <button type="button" class="btn-slider" id="spPrev" aria-label="Slide sebelumnya">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-                            </button>
-                            <button type="button" class="btn-slider" id="spNext" aria-label="Slide berikutnya">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-                            </button>
-                        </div>
                     </div>
 
                     <div class="sp-rows" id="spRows">
@@ -109,39 +101,6 @@
                             </a>
                         </div>
 
-                        <!-- Slide 2 -->
-                        <div class="sp-slide">
-                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-row">
-                                <div class="sp-row-logo" style="background:var(--green-lt); border-radius:8px;">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green-dk)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                                    </svg>
-                                </div>
-                                <div class="sp-row-info">
-                                    <strong>Pertimbangan Teknis Pertanahan Tanah Timbul</strong>
-                                    <span>Pengurusan legalitas tanah timbul</span>
-                                </div>
-                                <div class="sp-row-cta">
-                                    Daftar
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </div>
-                            </a>
-                            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
-                                <div class="sp-row-logo" style="background:var(--yellow-lt); border-radius:8px;">
-                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--brown)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                                    </svg>
-                                </div>
-                                <div class="sp-row-info">
-                                    <strong>Pertimbangan Teknis Pertanahan Proyek Strategis Nasional</strong>
-                                    <span>Proyek skala nasional (PSN)</span>
-                                </div>
-                                <div class="sp-row-cta" style="color:var(--brown); background:var(--yellow-lt);">
-                                    Daftar
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </div>
-                            </a>
-                        </div>
                     </div>
 
                     <div class="sp-divider"></div>
@@ -163,6 +122,24 @@
                                 <img src="{{ asset('storage/logo/Informal.png') }}" alt="INFORMAL">
                             </div>
                             <span class="sp-other-name">INFORMAL</span>
+                            <div class="sp-other-arrow">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </a>
+                        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-other-card">
+                            <div class="sp-other-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                            </div>
+                            <span class="sp-other-name">Tanah Timbul</span>
+                            <div class="sp-other-arrow">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
+                        </a>
+                        <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-other-card">
+                            <div class="sp-other-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                            </div>
+                            <span class="sp-other-name">Proyek Strategis Nasional (PSN)</span>
                             <div class="sp-other-arrow">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </div>

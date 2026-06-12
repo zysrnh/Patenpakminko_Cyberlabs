@@ -35,7 +35,7 @@ class WaTemplateController extends Controller
         } elseif ($type === 'non-berusaha' || $type === 'non_berusaha') {
             $application = PpkprApplication::find($id);
             $layananTitle = 'PPKPR Non Berusaha';
-            $routeName = 'non_berusaha.show';
+            $routeName = 'non-berusaha.show';
         } elseif ($type === 'psn') {
             $application = PsnApplication::find($id);
             $layananTitle = 'Proyek Strategis Nasional';
@@ -47,7 +47,7 @@ class WaTemplateController extends Controller
         } elseif ($type === 'tanah-timbul' || $type === 'tanah_timbul') {
             $application = TanahTimbulApplication::find($id);
             $layananTitle = 'Tanah Timbul';
-            $routeName = 'tanah_timbul.show';
+            $routeName = 'tanah-timbul.show';
         }
 
         if (!$application) {

@@ -117,6 +117,8 @@ Route::get('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'create'])-
 Route::post('/non-berusaha/baru', [PpkprNonBerusahaController::class, 'store'])->name('non-berusaha.store');
 Route::get('/kebijakan/baru', [KebijakanController::class, 'create'])->name('kebijakan.create');
 Route::post('/kebijakan/baru', [KebijakanController::class, 'store'])->name('kebijakan.store');
+Route::get('/tanah-timbul/baru', [TanahTimbulController::class, 'create'])->name('tanah-timbul.create');
+Route::post('/tanah-timbul/baru', [TanahTimbulController::class, 'store'])->name('tanah-timbul.store');
 Route::get('/psn/baru', [PsnController::class, 'create'])->name('psn.create');
 Route::post('/psn/baru', [PsnController::class, 'store'])->name('psn.store');
  

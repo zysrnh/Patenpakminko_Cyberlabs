@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Tanah Timbul — PATEN PAK MIKO')
-@section('page-title', 'Tanah Timbul')
+@section('title', 'TANAH TIMBUL — PATEN PAK MIKO')
+@section('page-title', 'TANAH TIMBUL')
 
 @section('content')
 <div class="page-header">
@@ -9,7 +9,7 @@
         <div class="breadcrumb">
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <span>›</span>
-            <span>Tanah Timbul</span>
+            <span>TANAH TIMBUL</span>
         </div>
         <h1>
             @if(Auth::user()->isPelakuUsaha())
@@ -18,7 +18,7 @@
                 Antrean Berkas Masuk
             @endif
         </h1>
-        <p>Permohonan berbasis mandat Tanah Timbul pemerintah.</p>
+        <p>Permohonan berbasis mandat TANAH TIMBUL pemerintah.</p>
     </div>
     @if(Auth::user()->isPelakuUsaha())
         <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="btn btn-primary">
@@ -35,7 +35,7 @@
             <h3>Belum Ada Permohonan</h3>
             <p>
                 @if(Auth::user()->isPelakuUsaha())
-                    Anda belum mengajukan permohonan Tanah Timbul.
+                    Anda belum mengajukan permohonan TANAH TIMBUL.
                 @else
                     Tidak ada antrean berkas yang menunggu verifikasi.
                 @endif
