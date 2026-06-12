@@ -778,7 +778,7 @@
                 </div>
             </div>
 
-            <!-- BUTTON DOWNLOAD DOKUMEN PPKPR SELESAI -->
+            <!-- BUTTON DOWNLOAD DOKUMEN Pertimbangan Teknis Pertanahan SELESAI -->
             @if($application->status === 'disetujui')
                 @if($application->bpn_pertek_document)
                     <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:#79A73A; margin-bottom: 20px;">
@@ -788,7 +788,7 @@
                 @elseif($application->approval_document)
                     <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh Dokumen PKKPR Resmi (PDF)
+                        Unduh Dokumen Pertimbangan Teknis Pertanahan Resmi (PDF)
                     </a>
                 @endif
             @endif
@@ -1199,7 +1199,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="satu_pintu_terbit">
                                     <div style="background:#F0FFF4;border:1px solid #9AE6B4;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;">
-                                        <strong>Penerbitan PKKPR (Dinas Satu Pintu / PTSP):</strong> Isi data penerbitan PKKPR resmi, lalu unggah dokumen dan kirim.
+                                        <strong>Penerbitan Pertimbangan Teknis Pertanahan (Dinas Satu Pintu / PTSP):</strong> Isi data penerbitan Pertimbangan Teknis Pertanahan resmi, lalu unggah dokumen dan kirim.
                                     </div>
                                     <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan:</label>
@@ -1210,9 +1210,9 @@
                                     </div>
                                     <div id="satuPintuFieldsWrapper">
                                         <div class="form-group-v" style="margin-bottom:12px;">
-                                            <label for="satu_pintu_no_pkkpr" class="form-label" style="font-weight:700;color:#744210;">Nomor PKKPR (wajib) <span style="color:red;">*</span></label>
+                                            <label for="satu_pintu_no_pkkpr" class="form-label" style="font-weight:700;color:#744210;">Nomor Pertimbangan Teknis Pertanahan (wajib) <span style="color:red;">*</span></label>
                                             <input type="text" id="satu_pintu_no_pkkpr" name="satu_pintu_no_pkkpr" class="form-control-v"
-                                                   placeholder="cth: PKKPR-NB/2026/001" value="{{ $application->satu_pintu_no_pkkpr }}" style="background:white;" required>
+                                                   placeholder="cth: Pertimbangan Teknis Pertanahan-NB/2026/001" value="{{ $application->satu_pintu_no_pkkpr }}" style="background:white;" required>
                                         </div>
                                         <div class="form-group-v" style="margin-bottom:12px;">
                                             <label for="satu_pintu_tanggal_terbit" class="form-label" style="font-weight:700;color:#744210;">Tanggal Terbit (wajib) <span style="color:red;">*</span></label>
@@ -1221,13 +1221,13 @@
                                         </div>
                                         <div class="form-group-v" style="margin-bottom:12px;">
                                             @if($application->approval_document)
-                                                <label class="form-label" style="font-weight:700;color:#744210;">Dokumen PKKPR</label>
+                                                <label class="form-label" style="font-weight:700;color:#744210;">Dokumen Pertimbangan Teknis Pertanahan</label>
                                                 <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#0f172a; font-size:13px; font-weight:600; text-decoration:none; margin-top:4px; transition:all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
                                                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                                                     Lihat Dokumen Terunggah
                                                 </a>
                                             @else
-                                                <label for="approval_document" class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen PKKPR (opsional)</label>
+                                                <label for="approval_document" class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen Pertimbangan Teknis Pertanahan (opsional)</label>
                                                 <input type="file" id="approval_document" name="approval_document" class="form-control-v" accept="application/pdf" style="background:white;">
                                                 <span style="font-size:11.5px;color:#744210;margin-top:4px;display:block;">Format PDF, maks. 10MB. Dokumen ini dapat diunduh oleh pemohon.</span>
                                             @endif
@@ -1235,10 +1235,10 @@
                                     </div>
                                     <div class="form-group-v">
                                         <label for="notes_sp" class="form-label" style="font-weight:700;color:#744210;">Catatan / Keterangan:</label>
-                                        <textarea id="notes_sp" name="notes" class="form-control-v" rows="3" placeholder="Catatan penerbitan PKKPR (opsional)..." style="resize:none;background:white;">{{ $application->satu_pintu_notes }}</textarea>
+                                        <textarea id="notes_sp" name="notes" class="form-control-v" rows="3" placeholder="Catatan penerbitan Pertimbangan Teknis Pertanahan (opsional)..." style="resize:none;background:white;">{{ $application->satu_pintu_notes }}</textarea>
                                     </div>
                                     @if($isSpActive)
-                                        <button type="submit" class="btn-submit-v" style="background:#79A73A;">📄 Terbitkan PKKPR & Blast WA Pemohon</button>
+                                        <button type="submit" class="btn-submit-v" style="background:#79A73A;">📄 Terbitkan Pertimbangan Teknis Pertanahan & Blast WA Pemohon</button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif / bukan wewenang Anda / sudah diselesaikan)</div>
                                     @endif
@@ -1268,7 +1268,7 @@
                                     </div>
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                        Kirim Ulang Notifikasi PKKPR (WhatsApp)
+                                        Kirim Ulang Notifikasi Pertimbangan Teknis Pertanahan (WhatsApp)
                                     </button>
                                 </form>
                             @endif
@@ -1426,14 +1426,14 @@
                             <!-- Satu Pintu Info -->
                             @if($application->satu_pintu_no_pkkpr)
                                 <li class="detail-item">
-                                    <span class="detail-label">Nomor PKKPR</span>
+                                    <span class="detail-label">Nomor Pertimbangan Teknis Pertanahan</span>
                                     <span class="detail-val">{{ $application->satu_pintu_no_pkkpr }}</span>
                                 </li>
                             @endif
 
                             @if($application->approval_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen PKKPR Terbit</span>
+                                    <span class="detail-label">Dokumen Pertimbangan Teknis Pertanahan Terbit</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-doc">
                                             Unduh Dokumen
@@ -1755,7 +1755,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 6: Penilaian PKKPR Dinas PUTR -->
+                            <!-- STEP 6: Penilaian Pertimbangan Teknis Pertanahan Dinas PUTR -->
                             @php
                                 $step6Status = '';
                                 if ($application->bpn_pertek_document) {
@@ -1772,7 +1772,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        5. Penilaian PKKPR
+                                        5. Penilaian Pertimbangan Teknis Pertanahan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PUTR</span>
                                     </div>
                                     <div class="timeline-desc">
@@ -1789,7 +1789,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 7: Penerbitan PKKPR Satu Pintu -->
+                            <!-- STEP 7: Penerbitan Pertimbangan Teknis Pertanahan Satu Pintu -->
                             @php
                                 $step7Status = '';
                                 if (in_array($application->status, ['menunggu_satu_pintu', 'disetujui'])) {
@@ -1800,15 +1800,15 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        6. Penerbitan PKKPR
+                                        6. Penerbitan Pertimbangan Teknis Pertanahan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PMPTSP</span>
                                     </div>
                                     <div class="timeline-desc">
-                                        Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu menerbitkan dokumen PKKPR resmi.
+                                        Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu menerbitkan dokumen Pertimbangan Teknis Pertanahan resmi.
                                     </div>
                                     @if($application->satu_pintu_no_pkkpr)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
-                                            <strong>No. PKKPR:</strong> {{ $application->satu_pintu_no_pkkpr }}
+                                            <strong>No. Pertimbangan Teknis Pertanahan:</strong> {{ $application->satu_pintu_no_pkkpr }}
                                         </div>
                                     @endif
                                     @if($application->satu_pintu_tanggal_terbit)
@@ -1840,7 +1840,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan dihentikan/ditolak oleh instansi terkait (BPN atau Dinas PU).
                                         @elseif($application->status === 'disetujui')
-                                            Seluruh alur selesai. Dokumen Kebijakan Khusus siap diunduh dari portal.
+                                            Seluruh alur selesai. Dokumen Kebijakan siap diunduh dari portal.
                                         @else
                                             Menunggu seluruh tahapan selesai disetujui semua instansi terkait.
                                         @endif

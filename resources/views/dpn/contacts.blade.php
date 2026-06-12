@@ -131,11 +131,11 @@
             </tr>
             <tr>
                 <td><strong>Admin Dinas PU</strong></td>
-                <td>Saat Pertek BPN terbit (Berusaha & Non-Berusaha) — untuk penilaian PKKPR</td>
+                <td>Saat Pertek BPN terbit (Berusaha & Non-Berusaha) — untuk penilaian Pertimbangan Teknis Pertanahan</td>
             </tr>
             <tr>
                 <td><strong>Admin Satu Pintu (PTSP)</strong></td>
-                <td>Saat penilaian Dinas PU selesai — untuk penerbitan PKKPR resmi</td>
+                <td>Saat penilaian Dinas PU selesai — untuk penerbitan Pertimbangan Teknis Pertanahan resmi</td>
             </tr>
         </table>
     </div>
@@ -148,7 +148,7 @@
                 <div class="card-icon" style="background: linear-gradient(135deg, #EBF8FF, #BEE3F8);">📞</div>
                 <div>
                     <div class="card-title">Nomor HP Admin Instansi Terkait</div>
-                    <div class="card-subtitle">Atur nomor HP penerima notifikasi WhatsApp blast untuk setiap instansi yang terlibat dalam alur PKKPR.</div>
+                    <div class="card-subtitle">Atur nomor HP penerima notifikasi WhatsApp blast untuk setiap instansi yang terlibat dalam alur Pertimbangan Teknis Pertanahan.</div>
                 </div>
             </div>
 
@@ -177,7 +177,7 @@
                     <div class="contact-badge bg-putr">PUTR</div>
                     <div class="contact-info">
                         <div class="contact-label">Admin Dinas PUTR (Pekerjaan Umum & Tata Ruang)</div>
-                        <div class="contact-desc">Khusus alur PKKPR Berusaha — menerima notif saat BPN menyetujui berkas, sebagai penanda untuk melakukan validasi awal permohonan.</div>
+                        <div class="contact-desc">Khusus alur Pertimbangan Teknis Pertanahan Berusaha — menerima notif saat BPN menyetujui berkas, sebagai penanda untuk melakukan validasi awal permohonan.</div>
                         <input type="text" name="admin_putr" class="contact-input" id="admin_putr"
                                placeholder="cth: 6281234567891"
                                value="{{ old('admin_putr', $settings['admin_putr'] ?? '') }}"
@@ -194,8 +194,8 @@
                 <div class="contact-item">
                     <div class="contact-badge bg-pu">PU</div>
                     <div class="contact-info">
-                        <div class="contact-label">Admin Dinas PU (Tata Ruang & Penilaian PKKPR)</div>
-                        <div class="contact-desc">Menerima notif saat Pertek BPN terbit (Berusaha & Non-Berusaha) — sebagai trigger untuk melakukan penilaian PKKPR.</div>
+                        <div class="contact-label">Admin Dinas PU (Tata Ruang & Penilaian Pertimbangan Teknis Pertanahan)</div>
+                        <div class="contact-desc">Menerima notif saat Pertek BPN terbit (Berusaha & Non-Berusaha) — sebagai trigger untuk melakukan penilaian Pertimbangan Teknis Pertanahan.</div>
                         <input type="text" name="admin_dinas_pu" class="contact-input" id="admin_dinas_pu"
                                placeholder="cth: 6281234567892"
                                value="{{ old('admin_dinas_pu', $settings['admin_dinas_pu'] ?? '') }}"
@@ -212,8 +212,8 @@
                 <div class="contact-item">
                     <div class="contact-badge bg-ptsp">SP</div>
                     <div class="contact-info">
-                        <div class="contact-label">Admin Satu Pintu / PTSP (Penerbitan PKKPR)</div>
-                        <div class="contact-desc">Menerima notif saat penilaian Dinas PU selesai (Berusaha & Non-Berusaha) — sebagai trigger untuk menerbitkan PKKPR resmi.</div>
+                        <div class="contact-label">Admin Satu Pintu / PTSP (Penerbitan Pertimbangan Teknis Pertanahan)</div>
+                        <div class="contact-desc">Menerima notif saat penilaian Dinas PU selesai (Berusaha & Non-Berusaha) — sebagai trigger untuk menerbitkan Pertimbangan Teknis Pertanahan resmi.</div>
                         <input type="text" name="admin_satu_pintu" class="contact-input" id="admin_satu_pintu"
                                placeholder="cth: 6281234567893"
                                value="{{ old('admin_satu_pintu', $settings['admin_satu_pintu'] ?? '') }}"

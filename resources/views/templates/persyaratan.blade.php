@@ -1,12 +1,12 @@
 <?php
-// Template Berkas Persyaratan Terintegrasi PKKPR Non-Berusaha
+// Template Berkas Persyaratan Terintegrasi Pertimbangan Teknis Pertanahan Non-Berusaha
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Berkas Persyaratan PKKPR Non-Berusaha</title>
+    <title>Template Berkas Persyaratan Pertimbangan Teknis Pertanahan Non-Berusaha</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -171,7 +171,7 @@
 
     <!-- Document Page -->
     <div class="document-page">
-        <h2 class="title">KUMPULAN DOKUMEN PERSYARATAN PERMOHONAN PKKPR NON-BERUSAHA</h2>
+        <h2 class="title">KUMPULAN DOKUMEN PERSYARATAN PERMOHONAN Pertimbangan Teknis Pertanahan NON-BERUSAHA</h2>
         <p class="subtitle">PORTAL PELAYANAN PATEN PAK MIKO</p>
 
         <div class="section-header">I. Identitas Pengaju & Usaha</div>

@@ -55,10 +55,10 @@
                     <label class="form-label" for="module_type">Layanan Yang Diulas</label>
                     <select name="module_type" id="module_type" class="form-control" required>
                         <option value="umum">Layanan Umum / Portal PATEN PAK MIKO</option>
-                        <option value="lapolpa">LAPOLPA (Layanan Pelaporan)</option>
-                        <option value="berusaha">PKKPR Berusaha</option>
-                        <option value="non_berusaha">PKKPR Non-Berusaha</option>
-                        <option value="kebijakan">Kebijakan Khusus</option>
+                        <option value="lapolpa">LAPOL PAK (Layanan Pelaporan)</option>
+                        <option value="berusaha">Pertimbangan Teknis Pertanahan Berusaha</option>
+                        <option value="non_berusaha">Pertimbangan Teknis Pertanahan Non-Berusaha</option>
+                        <option value="kebijakan">Kebijakan</option>
                     </select>
                 </div>
 

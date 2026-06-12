@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <!-- PKKPR Slider Section -->
+                    <!-- Pertimbangan Teknis Pertanahan Slider Section -->
                     <div class="sp-section-label">
                         <span>Layanan Pertimbangan Teknis Pertanahan</span>
                     </div>
@@ -143,7 +143,7 @@
                     <div class="sp-others">
                         <a href="{{ route('lapolpa.index') }}" class="sp-other-card">
                             <div class="sp-other-logo">
-                                <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="LAPOL PAK">
+                                <img src="{{ asset('storage/logo/Lapol Pakk.png') }}" alt="LAPOL PAK">
                             </div>
                             <span class="sp-other-name">LAPOL PAK</span>
                             <div class="sp-other-arrow">

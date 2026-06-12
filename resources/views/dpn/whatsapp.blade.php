@@ -475,7 +475,7 @@
 
                 <div class="nav-menu">
                     <a href="/" class="nav-link">Beranda</a>
-                    <a href="{{ route('non-berusaha.index') }}" class="nav-link">PPKPR Non Berusaha</a>
+                    <a href="{{ route('non-berusaha.index') }}" class="nav-link">Pertimbangan Teknis Pertanahan Non Berusaha</a>
                     @if(Auth::user()->isDpn())
                         <a href="{{ route('dpn.whatsapp') }}" class="nav-link active">Integrasi WhatsApp</a>
                     @endif
@@ -571,7 +571,7 @@
                             </div>
 
                             <p style="font-size: 13px; color: var(--clr-mid); line-height: 1.5; margin-bottom: 20px;">
-                                Silakan hubungkan nomor telepon dinas / portal agar notifikasi status PPKPR terkirim secara otomatis kepada pemohon via WhatsApp.
+                                Silakan hubungkan nomor telepon dinas / portal agar notifikasi status Pertimbangan Teknis Pertanahan terkirim secara otomatis kepada pemohon via WhatsApp.
                             </p>
 
                             <form action="{{ route('dpn.whatsapp.toggle') }}" method="POST">
@@ -697,7 +697,7 @@
                                     'kebijakan'    => 'Kebijakan',
                                     'tanah_timbul' => 'Tanah Timbul',
                                     'psn'          => 'PSN',
-                                    'lapolpa'      => 'Lapolpa',
+                                    'lapolpa'      => 'Lapol Pak',
                                 ];
                             @endphp
                             @foreach($modulTabs as $key => $label)

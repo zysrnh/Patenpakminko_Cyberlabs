@@ -75,9 +75,9 @@
     <p style="text-align: justify; margin-bottom: 10px;">
         dengan ini mengajukan permohonan Pertimbangan Teknis Pertanahan untuk kegiatan : ***)<br>
         1. Penerbitan Kesesuaian Kegiatan Pemanfaatan Ruang; terdiri dari :<br>
-        &nbsp;&nbsp;&nbsp;a. PKKPR untuk Kegiatan Berusaha;<br>
-        &nbsp;&nbsp;&nbsp;b. PKKPR untuk Kegiatan NonBerusaha;<br>
-        &nbsp;&nbsp;&nbsp;c. PKKPR/RKKPR untuk Kegiatan yang bersifat Strategis Nasional.<br>
+        &nbsp;&nbsp;&nbsp;a. Pertimbangan Teknis Pertanahan untuk Kegiatan Berusaha;<br>
+        &nbsp;&nbsp;&nbsp;b. Pertimbangan Teknis Pertanahan untuk Kegiatan NonBerusaha;<br>
+        &nbsp;&nbsp;&nbsp;c. Pertimbangan Teknis Pertanahan/RKKPR untuk Kegiatan yang bersifat Strategis Nasional.<br>
         2. Penegasan Status dan Rekomendasi Penguasaan Tanah Timbul;<br>
         3. Penyelenggaraan Kebijakan Penggunaan dan Pemanfaatan Tanah.
     </p>

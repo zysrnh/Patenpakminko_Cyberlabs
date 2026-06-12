@@ -1801,7 +1801,7 @@
                         </a>
                         <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--green-lt);">
-                                <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="">
+                                <img src="{{ asset('storage/logo/Pertimbangan Teknis PertanahanNon.png') }}" alt="">
                             </span>
                             Pertimbangan Teknis Pertanahan Non Berusaha
                         </a>
@@ -1813,7 +1813,7 @@
                         </a>
                         <a href="{{ route('lapolpa.index') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--surface);">
-                                <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="">
+                                <img src="{{ asset('storage/logo/Lapol Pakk.png') }}" alt="">
                             </span>
                             LAPOL PAK
                         </a>
@@ -1960,8 +1960,8 @@
                 <h4 class="f-col-title">Layanan Kami</h4>
                 <ul class="f-links">
                     <li><a href="{{ route('lapolpa.index') }}">LAPOL PAK</a></li>
-                    <li><a href="#">PPKPR Non Berusaha</a></li>
-                    <li><a href="#">PPKPR Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Pertanahan Non Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Pertanahan Berusaha</a></li>
                     <li><a href="#">Kebijakan</a></li>
                     <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>

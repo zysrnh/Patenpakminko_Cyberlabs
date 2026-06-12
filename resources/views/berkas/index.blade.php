@@ -200,7 +200,7 @@
                                 <option value="Formulir PTP">Formulir PTP</option>
                                 <option value="Dokumen Pertimbangan Teknis Pertanahan">Dokumen Pertimbangan Teknis Pertanahan</option>
                                 <option value="Dokumen Penilaian (PU)">Dokumen Penilaian (PU)</option>
-                                <option value="Dokumen PKKPR Final (PTSP)">Dokumen PKKPR Final (PTSP)</option>
+                                <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)">Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
                                 <option value="Persyaratan Lainnya">Lainnya</option>
                             @endif
                         </select>
@@ -249,7 +249,7 @@
                             <option value="Formulir PTP" {{ request('kategori') == 'Formulir PTP' ? 'selected' : '' }}>Formulir PTP</option>
                             <option value="Dokumen Pertimbangan Teknis Pertanahan" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan</option>
                             <option value="Dokumen Penilaian (PU)" {{ request('kategori') == 'Dokumen Penilaian (PU)' ? 'selected' : '' }}>Dokumen Penilaian (PU)</option>
-                            <option value="Dokumen PKKPR Final (PTSP)" {{ request('kategori') == 'Dokumen PKKPR Final (PTSP)' ? 'selected' : '' }}>Dokumen PKKPR Final (PTSP)</option>
+                            <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
                             <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Persyaratan Lainnya</option>
                         @endif
                     </select>

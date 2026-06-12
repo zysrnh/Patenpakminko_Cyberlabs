@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Kebijakan Khusus — PATEN PAK MIKO')
-@section('page-title', 'Kebijakan Khusus')
+@section('title', 'Kebijakan — PATEN PAK MIKO')
+@section('page-title', 'Kebijakan')
 
 @section('content')
 <div class="page-header">
@@ -9,7 +9,7 @@
         <div class="breadcrumb">
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <span>›</span>
-            <span>Kebijakan Khusus</span>
+            <span>Kebijakan</span>
         </div>
         <h1>
             @if(Auth::user()->isPelakuUsaha())
@@ -18,7 +18,7 @@
                 Antrean Berkas Masuk
             @endif
         </h1>
-        <p>Permohonan berbasis mandat kebijakan khusus pemerintah.</p>
+        <p>Permohonan berbasis mandat kebijakan pemerintah.</p>
     </div>
     @if(Auth::user()->isPelakuUsaha())
         <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="btn btn-primary">
@@ -35,7 +35,7 @@
             <h3>Belum Ada Permohonan</h3>
             <p>
                 @if(Auth::user()->isPelakuUsaha())
-                    Anda belum mengajukan permohonan Kebijakan Khusus.
+                    Anda belum mengajukan permohonan Kebijakan.
                 @else
                     Tidak ada antrean berkas yang menunggu verifikasi.
                 @endif

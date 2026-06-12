@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Permohonan PKKPR Berusaha — PATEN PAK MIKO</title>
+    <title>Detail Permohonan Pertimbangan Teknis Pertanahan Berusaha — PATEN PAK MIKO</title>
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
@@ -787,7 +787,7 @@
  
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">Pelacakan PKKPR Berusaha</h1>
+                    <h1 class="page-title">Pelacakan Pertimbangan Teknis Pertanahan Berusaha</h1>
                 </div>
                 <a href="{{ route('berusaha.index') }}" class="back-link">
                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -961,7 +961,7 @@
                                     <div class="form-group-v">
                                         <label for="no_berkas">Nomor Berkas (wajib diisi)</label>
                                         <input type="text" name="no_berkas" id="no_berkas" class="form-control-v"
-                                               placeholder="cth: BERKAS/PKKPR-B/2026/001"
+                                               placeholder="cth: BERKAS/Pertimbangan Teknis Pertanahan-B/2026/001"
                                                value="{{ $application->no_berkas ?? old('no_berkas') }}" required>
                                         <span style="font-size: 11px; color: var(--clr-muted);">Nomor berkas ini akan dicatat dalam sistem dan dikirim ke pemohon via WhatsApp.</span>
                                     </div>
@@ -1186,7 +1186,7 @@
                     </div>
                 @else
                     <div class="verify-card">
-                        <h3 class="verify-title">⚙️ Panel Penilaian PKKPR — Dinas Pekerjaan Umum (PU)</h3>
+                        <h3 class="verify-title">⚙️ Panel Penilaian Pertimbangan Teknis Pertanahan — Dinas Pekerjaan Umum (PU)</h3>
                         <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group-v">
@@ -1230,8 +1230,8 @@
                         @csrf
                         <div class="form-grid-2">
                             <div class="form-group-v">
-                                <label for="satu_pintu_no_pkkpr">Nomor PKKPR Berusaha</label>
-                                <input type="text" name="satu_pintu_no_pkkpr" id="satu_pintu_no_pkkpr" class="form-control-v" placeholder="cth: 503/PKKPR-B/2026/XYZ" required>
+                                <label for="satu_pintu_no_pkkpr">Nomor Pertimbangan Teknis Pertanahan Berusaha</label>
+                                <input type="text" name="satu_pintu_no_pkkpr" id="satu_pintu_no_pkkpr" class="form-control-v" placeholder="cth: 503/Pertimbangan Teknis Pertanahan-B/2026/XYZ" required>
                             </div>
                             <div class="form-group-v">
                                 <label for="satu_pintu_tanggal_terbit">Tanggal Terbit</label>
@@ -1239,9 +1239,9 @@
                             </div>
                         </div>
                         <div class="form-group-v">
-                            <label for="satu_pintu_document">Dokumen Produk Akhir PKKPR (PDF)</label>
+                            <label for="satu_pintu_document">Dokumen Produk Akhir Pertimbangan Teknis Pertanahan (PDF)</label>
                             <input type="file" name="satu_pintu_document" id="satu_pintu_document" class="form-control-v" accept=".pdf" required>
-                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen Pertek Pertanahan/SK PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
+                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen Pertek Pertanahan/SK Pertimbangan Teknis Pertanahan Berusaha hasil akhir. Maksimal 10MB.</span>
                         </div>
                         <div class="form-group-v">
                             <label for="notes">Catatan Tambahan (Opsional)</label>
@@ -1434,7 +1434,7 @@
                             <!-- Satu Pintu Info -->
                             @if($application->satu_pintu_no_pkkpr)
                                 <li class="detail-item">
-                                    <span class="detail-label">Nomor PKKPR</span>
+                                    <span class="detail-label">Nomor Pertimbangan Teknis Pertanahan</span>
                                     <span class="detail-val">{{ $application->satu_pintu_no_pkkpr }}</span>
                                 </li>
                             @endif
@@ -1586,7 +1586,7 @@
                         <div class="timeline-card-header">
                             <img
                                 src="{{ asset('storage/logo/PKKPR.png') }}"
-                                alt="Logo PKKPR Berusaha"
+                                alt="Logo Pertimbangan Teknis Pertanahan Berusaha"
                                 class="timeline-service-logo"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                             >
@@ -1596,7 +1596,7 @@
                             </div>
                             <div class="timeline-service-meta">
                                 <div class="timeline-service-label">Pelacakan Permohonan</div>
-                                <div class="timeline-service-title">PKKPR Berusaha</div>
+                                <div class="timeline-service-title">Pertimbangan Teknis Pertanahan Berusaha</div>
                                 <div class="timeline-step-count">8 Tahapan · 3 Instansi</div>
                             </div>
                         </div>
@@ -1790,7 +1790,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 7: Penilaian PKKPR Dinas PU -->
+                            <!-- STEP 7: Penilaian Pertimbangan Teknis Pertanahan Dinas PU -->
                             @php
                                 $step8Status = '';
                                 if ($application->bpn_pertek_document) {
@@ -1807,7 +1807,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        7. Penilaian PKKPR
+                                        7. Penilaian Pertimbangan Teknis Pertanahan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PU</span>
                                     </div>
                                     <div class="timeline-desc">Penilaian kesesuaian tata ruang oleh Dinas Pekerjaan Umum.</div>
@@ -1828,7 +1828,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 8: Penerbitan PKKPR Satu Pintu -->
+                            <!-- STEP 8: Penerbitan Pertimbangan Teknis Pertanahan Satu Pintu -->
                             @php
                                 $step9Status = '';
                                 if ($application->dinas_pu_status === 'sesuai') {
@@ -1839,13 +1839,13 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        8. Penerbitan PKKPR
+                                        8. Penerbitan Pertimbangan Teknis Pertanahan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Satu Pintu / PTSP</span>
                                     </div>
-                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen PKKPR Berusaha resmi.</div>
+                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen Pertimbangan Teknis Pertanahan Berusaha resmi.</div>
                                     @if($application->satu_pintu_no_pkkpr)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
-                                            <strong>No. PKKPR:</strong> {{ $application->satu_pintu_no_pkkpr }}
+                                            <strong>No. Pertimbangan Teknis Pertanahan:</strong> {{ $application->satu_pintu_no_pkkpr }}
                                         </div>
                                     @endif
                                     @if($application->satu_pintu_tanggal_terbit)
@@ -1877,7 +1877,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan dihentikan oleh instansi terkait (BPN, Dinas PUTR, atau Dinas PU).
                                         @elseif($application->status === 'disetujui')
-                                            Seluruh alur selesai. Dokumen PKKPR Berusaha siap diunduh dari portal.
+                                            Seluruh alur selesai. Dokumen Pertimbangan Teknis Pertanahan Berusaha siap diunduh dari portal.
                                         @else
                                             Menunggu seluruh tahapan disetujui oleh semua instansi terkait.
                                         @endif
@@ -2021,7 +2021,7 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (html.includes('name="pertek_notes"') || html.includes('Kirim Pertek Pertanahan')) waTypeValue = 'pertek_terbit';
             else if (html.includes('name="dinas_pu_notes"') || html.includes('Kirim Validasi Awal')) waTypeValue = 'putr_validasi';
             else if (html.includes('name="dinas_pu_penilaian_notes"') || html.includes('Kirim Penilaian PU')) waTypeValue = 'pu_selesai';
-            else if (html.includes('name="ptsp_notes"') || html.includes('Terbitkan PKKPR')) waTypeValue = 'pkkpr_terbit';
+            else if (html.includes('name="ptsp_notes"') || html.includes('Terbitkan Pertimbangan Teknis Pertanahan')) waTypeValue = 'pkkpr_terbit';
             else waTypeValue = 'berkas_verifikasi';
         }
 

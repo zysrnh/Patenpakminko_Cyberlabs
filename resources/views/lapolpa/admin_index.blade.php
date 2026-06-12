@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin LAPOLPA  PATEN PAK MIKO</title>
+    <title>Dashboard Admin LAPOL PAK  PATEN PAK MIKO</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -441,7 +441,7 @@
                         <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                         </svg>
-                        <strong>Terdapat {{ $bookedCount }} Jadwal LAPOLPA Aktif (Booked) yang memerlukan tindak lanjut hari ini.</strong>
+                        <strong>Terdapat {{ $bookedCount }} Jadwal LAPOL PAK Aktif (Booked) yang memerlukan tindak lanjut hari ini.</strong>
                     </div>
                 </div>
             @endif
@@ -627,7 +627,7 @@
                             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
                             </svg>
-                            <p>Belum ada pendaftaran booking jadwal LAPOLPA dari pelaku usaha.</p>
+                            <p>Belum ada pendaftaran booking jadwal LAPOL PAK dari pelaku usaha.</p>
                         </div>
                     @else
                         <table class="table-modern">

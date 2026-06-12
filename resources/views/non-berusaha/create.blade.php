@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Form Pengajuan PKKPR Non Berusaha — PATEN PAK MIKO')
+@section('title', 'Form Pengajuan Pertimbangan Teknis Pertanahan Non Berusaha — PATEN PAK MIKO')
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/ptp-form.css') }}">

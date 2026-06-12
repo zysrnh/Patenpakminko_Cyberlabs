@@ -994,7 +994,7 @@
                     $totalNon = \App\Models\PpkprApplication::where('user_id', $user->id)->count();
                     $totalBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->count();
                     $totalKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->count();
-                    $countLapolpa = \App\Models\LapolpaBooking::where('user_id', $user->id)->count();
+                    $countLapol Pak = \App\Models\Lapol PakBooking::where('user_id', $user->id)->count();
 
                     $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
@@ -1011,7 +1011,7 @@
                     $totalNon = \App\Models\PpkprApplication::count();
                     $totalBerusaha = \App\Models\PpkprBerusahaApplication::count();
                     $totalKebijakan = \App\Models\KebijakanApplication::count();
-                    $countLapolpa = \App\Models\LapolpaBooking::count();
+                    $countLapol Pak = \App\Models\Lapol PakBooking::count();
 
                     $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
@@ -1414,7 +1414,7 @@
                                 </div>
                                 <div>
                                     <h3>Kebijakan</h3>
-                                    <p>Mandat kebijakan khusus pemerintah.</p>
+                                    <p>Mandat kebijakan pemerintah.</p>
                                 </div>
                                 <span class="service-count">
                                     <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>
@@ -1438,7 +1438,7 @@
                                 </div>
                                 <span class="service-count" style="background:rgba(211,115,36,.12);color:#8B4513;">
                                     <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13"/></svg>
-                                    {{ $countLapolpa ?? 0 }} jadwal
+                                    {{ $countLapol Pak ?? 0 }} jadwal
                                 </span>
                             </a>
 
@@ -1555,12 +1555,12 @@
                         </div>
                         @php
                             if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->role === 'admin') {
-                                $upcomingSchedules = \App\Models\LapolpaBooking::whereIn('status', ['booked', 'diterima'])
+                                $upcomingSchedules = \App\Models\Lapol PakBooking::whereIn('status', ['booked', 'diterima'])
                                     ->orderBy('booking_date', 'asc')
                                     ->take(5)
                                     ->get();
                             } else {
-                                $upcomingSchedules = \App\Models\LapolpaBooking::where('user_id', Auth::id())
+                                $upcomingSchedules = \App\Models\Lapol PakBooking::where('user_id', Auth::id())
                                     ->whereIn('status', ['booked', 'diterima'])
                                     ->orderBy('booking_date', 'asc')
                                     ->take(5)
