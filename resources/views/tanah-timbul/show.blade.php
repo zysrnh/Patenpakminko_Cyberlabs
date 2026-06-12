@@ -39,104 +39,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        fieldset {
-            border: none;
-            padding: 0;
-            margin: 0;
-            min-width: 0;
-        }
-
+        /* ─── CONTAINER: diperlebar, penuhi gap kiri kanan ──── */
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 40px;
-        }
-
-        /* ─── PANEL VERIFIKATOR ──────────────────────────────── */
-        .verify-card {
-            background: var(--clr-white);
-            border: 2px solid var(--clr-blue-lt);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 32px;
-            box-shadow: 0 4px 16px rgba(19, 147, 204, 0.04);
-        }
-        .verify-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--clr-blue-dk);
-            margin-bottom: 16px;
-        }
- 
-        .form-group-v {
-            margin-bottom: 16px;
-        }
-        .form-group-v label {
-            display: block;
-            font-size: 12.5px;
-            font-weight: 700;
-            color: var(--clr-ink);
-            margin-bottom: 6px;
-        }
-        .form-control-v {
-            width: 100%;
-            padding: 10px 12px;
-            font-family: inherit;
-            font-size: 13px;
-            border: 1.5px solid var(--clr-line);
-            border-radius: var(--radius-md);
-            outline: none;
-            transition: border-color 0.15s;
-        }
-        .form-control-v:focus {
-            border-color: var(--clr-blue);
-        }
-        .form-select-v {
-            width: 100%;
-            padding: 10px 12px;
-            font-family: inherit;
-            font-size: 13px;
-            border: 1.5px solid var(--clr-line);
-            border-radius: var(--radius-md);
-            background: var(--clr-white);
-            outline: none;
-        }
-        .btn-submit-v {
-            background: var(--clr-blue);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 13px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: background 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-submit-v:hover {
-            background: var(--clr-blue-dk);
-        }
-        /* alias — dipakai di panel BPN */
-        .btn-verify-submit {
-            background: var(--clr-blue);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 13px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: background 0.15s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-verify-submit:hover {
-            background: var(--clr-blue-dk);
         }
 
         /* ─── HEADER ─────────────────────────────────────────── */
@@ -279,35 +186,41 @@
         }
 
         /* ─── MAIN CONTENT ───────────────────────────────────── */
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+            min-width: 0;
+        }
+
         main {
             padding: 40px 0;
         }
  
         /* ─── SLA BANNER ─────────────────────────────────────── */
         .sla-banner {
-            background: #F0F6FB;
-            border-left: 4px solid var(--clr-blue);
-            padding: 16px 20px;
-            border-radius: var(--radius-md);
-            margin-bottom: 28px;
-            display: flex;
-            gap: 24px;
-            align-items: center;
+            margin-bottom: 24px;
         }
         .sla-item {
-            flex: 1;
+            background: #FFF;
+            border: 1.5px solid var(--clr-line);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
         }
-        .sla-item.divider {
-            border-left: 1px solid #D6E4EF;
-            padding-left: 24px;
+        .sla-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
         .sla-title {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: var(--clr-blue);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 4px;
         }
         .sla-value {
             font-size: 15px;
@@ -315,11 +228,21 @@
             color: var(--clr-ink);
         }
         .sla-desc {
-            font-size: 11.5px;
-            color: var(--clr-muted);
-            margin-top: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.8;
         }
- 
+        .sla-badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .alert-success {
             background: #E6F4EA;
             border: 1px solid #B8E2C8;
@@ -364,14 +287,15 @@
             letter-spacing: 0.03em;
         }
 
-        .grid-layout {
+        /* ─── GRID LAYOUT ────────────────────────────────────── */
+        .layout-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 28px;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 24px;
             align-items: start;
         }
         @media (max-width: 900px) {
-            .grid-layout { grid-template-columns: 1fr; }
+            .layout-grid { grid-template-columns: 1fr; }
         }
 
         /* ─── CARDS ──────────────────────────────────────────── */
@@ -379,89 +303,70 @@
             background: var(--clr-white);
             border: 1px solid var(--clr-line);
             border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
-            margin-bottom: 28px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            margin-bottom: 32px;
+        }
+        .card:last-child {
+            margin-bottom: 0;
         }
 
         .card-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 800;
+            letter-spacing: -0.01em;
             color: var(--clr-ink);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 1.5px solid var(--clr-line);
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid var(--clr-surface);
         }
 
-        /* ─── DATA LIST ──────────────────────────────────────── */
-        .data-list {
+        /* ─── DATA TABLE / DETAIL ────────────────────────────── */
+        .detail-list {
+            list-style: none;
+        }
+        .detail-item {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--clr-line);
+            font-size: 13.5px;
         }
-
-        .data-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        .detail-item:last-child {
+            border-bottom: none;
         }
-        .data-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--clr-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-        .data-val {
-            font-size: 14px;
+        .detail-label {
             font-weight: 600;
-            color: var(--clr-ink);
+            color: var(--clr-mid);
         }
-        .data-val.mono {
+        .detail-val {
+            font-weight: 700;
+            color: var(--clr-ink);
+            text-align: right;
+        }
+        .app-num {
+            font-family: 'DM Mono', monospace;
+            color: var(--clr-blue);
+            font-size: 14px;
+        }
+        .detail-val.mono {
             font-family: 'DM Mono', monospace;
             color: var(--clr-blue);
         }
 
-        /* ─── DOCUMENT DOWNLOADS ────────────────────────────── */
-        .doc-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .doc-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--clr-surface);
-            border: 1px solid var(--clr-line);
-            border-radius: var(--radius-md);
-            text-decoration: none;
-            color: var(--clr-ink);
-            transition: all 0.2s;
-        }
-        .doc-item:hover {
-            border-color: var(--clr-blue);
-            background: var(--clr-blue-lt);
-        }
-        .doc-name {
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .doc-status {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--clr-blue);
+        /* ─── DOCK ATTACHMENT / BUTTONS ──────────────────────── */
+        .btn-doc {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            color: var(--clr-blue);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
         }
-        .doc-status svg {
-            width: 14px;
-            height: 14px;
-            stroke-width: 2.5;
+        .btn-doc:hover {
+            color: var(--clr-blue-dk);
+            text-decoration: underline;
         }
 
         /* ─── TIMELINE CARD HEADER (service identifier) ──────── */
@@ -504,135 +409,194 @@
             font-size: 11px;
             color: var(--clr-muted);
             font-weight: 600;
+            margin-top: 3px;
         }
 
         /* ─── TIMELINE ───────────────────────────────────────── */
         .timeline {
-            display: flex;
-            flex-direction: column;
             position: relative;
-            padding-left: 28px;
-            margin-top: 10px;
+            padding-left: 38px;
         }
         .timeline::before {
             content: '';
             position: absolute;
-            left: 8px;
-            top: 4px;
-            bottom: 4px;
+            top: 12px;
+            left: 10px;
+            bottom: 12px;
             width: 2px;
-            background: var(--clr-line);
+            background: linear-gradient(to bottom, var(--clr-blue) 0%, var(--clr-line) 60%);
+            opacity: 0.35;
         }
 
         .timeline-step {
             position: relative;
-            margin-bottom: 28px;
+            margin-bottom: 10px;
         }
         .timeline-step:last-child {
             margin-bottom: 0;
         }
 
+        /* The dot marker */
         .timeline-dot {
             position: absolute;
-            left: -28px;
-            top: 2px;
-            width: 18px;
-            height: 18px;
+            left: -38px;
+            top: 10px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: var(--clr-white);
-            border: 3px solid var(--clr-line);
+            border: 2px solid var(--clr-line);
+            transition: all 0.2s;
+            z-index: 2;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s;
+            font-size: 0; /* hide ::after text from interfering */
         }
 
-        /* Timeline States */
-        .timeline-step.completed .timeline-dot {
-            border-color: var(--clr-green);
-            background: var(--clr-green);
+        /* Content bubble per step */
+        .timeline-content {
+            border-radius: 8px;
+            padding: 10px 14px;
+            transition: all 0.15s;
+            border: 1.5px solid transparent;
         }
-        .timeline-step.active .timeline-dot {
-            border-color: var(--clr-blue);
-            background: var(--clr-white);
-        }
-        .timeline-step.rejected .timeline-dot {
-            border-color: #E53E3E;
-            background: #E53E3E;
-        }
-
-        .timeline-step.completed .timeline-dot::after {
-            content: '';
-            width: 6px;
-            height: 4px;
-            border-left: 1.5px solid white;
-            border-bottom: 1.5px solid white;
-            transform: rotate(-45deg) translateY(-1px);
-        }
-
-        .timeline-step.active .timeline-dot::after {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--clr-blue);
+        .timeline-step:not(.completed):not(.active):not(.rejected) .timeline-content {
+            padding: 6px 0;
         }
 
         .timeline-title {
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 700;
-            color: var(--clr-ink);
-            margin-bottom: 4px;
+            color: var(--clr-mid);
+            margin-bottom: 2px;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .timeline-desc {
+            font-size: 11.5px;
+            color: var(--clr-muted);
+            line-height: 1.55;
+        }
+
+        /* ── COMPLETED ── */
+        .timeline-step.completed .timeline-dot {
+            background: var(--clr-green);
+            border-color: var(--clr-green);
+        }
+        .timeline-step.completed .timeline-dot::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .timeline-step.completed .timeline-content {
+            background: var(--clr-green-lt);
+            border-color: #C6E5A0;
+        }
+        .timeline-step.completed .timeline-title {
+            color: #3A6B1A;
+        }
+        .timeline-step.completed .timeline-desc {
+            color: #558B2F;
+        }
+
+        /* ── ACTIVE ── */
+        .timeline-step.active .timeline-dot {
+            border-color: var(--clr-blue);
+            background: var(--clr-white);
+            box-shadow: 0 0 0 4px rgba(33, 138, 201, 0.15);
+        }
+        .timeline-step.active .timeline-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--clr-blue);
+            display: block;
+        }
+        .timeline-step.active .timeline-content {
+            background: var(--clr-blue-lt);
+            border-color: #9ECCEA;
+            box-shadow: 0 2px 8px rgba(33, 138, 201, 0.08);
         }
         .timeline-step.active .timeline-title {
             color: var(--clr-blue);
         }
-        
-        .timeline-desc {
-            font-size: 12px;
+        .timeline-step.active .timeline-desc {
             color: var(--clr-mid);
-            line-height: 1.4;
         }
 
+        /* ── REJECTED ── */
+        .timeline-step.rejected .timeline-dot {
+            background: #E53E3E;
+            border-color: #E53E3E;
+        }
+        .timeline-step.rejected .timeline-dot::after {
+            content: '✕';
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .timeline-step.rejected .timeline-content {
+            background: #FFF5F5;
+            border-color: #FED7D7;
+        }
+        .timeline-step.rejected .timeline-title {
+            color: #C53030;
+        }
+
+        /* Notes inside timeline */
         .timeline-notes {
             margin-top: 8px;
-            padding: 8px 12px;
-            background: var(--clr-surface);
-            border-left: 3px solid var(--clr-blue);
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-size: 12px;
-            color: var(--clr-ink);
-            line-height: 1.4;
+            padding: 7px 10px;
+            background: rgba(255,255,255,0.65);
+            border-left: 3px solid #E53E3E;
+            color: #C53030;
+            font-size: 11.5px;
+            border-radius: 0 5px 5px 0;
+            line-height: 1.5;
         }
         .timeline-step.completed .timeline-notes {
-            border-color: var(--clr-green);
-        }
-        .timeline-step.rejected .timeline-notes {
-            border-color: #E53E3E;
-            background: #FFF5F5;
+            border-left-color: var(--clr-blue);
+            color: var(--clr-mid);
         }
 
-        /* ─── VERIFICATION PANEL & FORMS ────────────────────────────── */
+        /* Hover interaction on clickable steps */
+        .timeline-step[onclick]:hover .timeline-content {
+            filter: brightness(0.97);
+        }
+
+        /* ─── VERIFICATION PANEL ────────────────────────────── */
+        /* ─── PANEL VERIFIKATOR ──────────────────────────────── */
         .verify-card {
-            background: #FFFDF0;
-            border: 1.5px solid #FBE89F;
+            background: var(--clr-white);
+            border: 2px solid var(--clr-blue-lt);
             border-radius: var(--radius-lg);
             padding: 24px;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 16px rgba(19, 147, 204, 0.04);
         }
         .verify-title {
-            font-size: 14.5px;
+            font-size: 15px;
             font-weight: 800;
-            color: #744210;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: var(--clr-blue-dk);
             margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 1.5px solid #FBE89F;
         }
-
+ 
         .form-group-v {
             margin-bottom: 16px;
+        }
+        .form-group-v label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--clr-ink);
+            margin-bottom: 6px;
         }
         .form-control-v {
             width: 100%;
@@ -643,7 +607,6 @@
             border-radius: var(--radius-md);
             outline: none;
             transition: border-color 0.15s;
-            box-sizing: border-box;
         }
         .form-control-v:focus {
             border-color: var(--clr-blue);
@@ -657,7 +620,6 @@
             border-radius: var(--radius-md);
             background: var(--clr-white);
             outline: none;
-            box-sizing: border-box;
         }
         .btn-submit-v {
             background: var(--clr-blue);
@@ -679,50 +641,40 @@
         .btn-submit-v:hover {
             background: var(--clr-blue-dk);
         }
-
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 16px;
-        }
-        .radio-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
+        
+        .verify-step-badge {
+            background: var(--clr-blue-lt);
+            color: var(--clr-blue-dk);
             font-weight: 700;
-            cursor: pointer;
-            color: var(--clr-ink);
-        }
-        .radio-label input {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--clr-blue);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-left: 6px;
+            letter-spacing: 0.05em;
         }
 
         .btn-download-cert {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
             background: var(--clr-green);
-            color: white;
-            border: none;
-            padding: 12px 24px;
+            color: var(--clr-white);
+            padding: 14px;
             border-radius: var(--radius-md);
-            font-family: inherit;
             font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(149, 185, 62, 0.2);
-            width: 100%;
-            justify-content: center;
             margin-bottom: 28px;
+            box-shadow: 0 4px 14px rgba(149, 185, 62, 0.25);
+            transition: all 0.2s;
         }
         .btn-download-cert:hover {
             background: var(--clr-green-dk);
             transform: translateY(-0.5px);
+            box-shadow: 0 6px 20px rgba(149, 185, 62, 0.35);
         }
     </style>
 </head>
@@ -1363,41 +1315,180 @@
                             @endif
                         </div>
 
-            <div class="grid-layout">
+            <div class="layout-grid">
                 
                 <!-- Left: Application Details & Uploaded Files -->
                 <div>
                     <!-- Data Permohonan -->
                     <div class="card">
                         <h2 class="card-title">Informasi Identitas Pemohon / Pengguna Layanan</h2>
-                        <div class="data-list">
-                            <div class="data-item">
-                                <span class="data-label">Nama Pemilik Usaha</span>
-                                <span class="data-val">{{ $application->nama_pemilik_usaha }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Nama Pemohon / Pengguna Layanan</span>
-                                <span class="data-val">{{ $application->nama_pengaju }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Hubungan Pengaju (Sebagai Apa)</span>
-                                <span class="data-val">{{ $application->hubungan_pengaju }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Akun Pemohon (Username)</span>
-                                <span class="data-val">PMH{{ str_pad($application->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Nomor Telepon Gateway / HP</span>
-                                <span class="data-val mono">+{{ $application->user->phone_number }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Tanggal Pengajuan Berkas</span>
-                                <span class="data-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
-                            </div>
-                        </div>
-                    </div>
+                        <ul class="detail-list">
+                            <li class="detail-item">
+                                <span class="detail-label">Status Utama</span>
+                                <span class="detail-val" style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="badge-status" style="background-color: {{ $application->status_color }};">
+                                        {{ $application->status_label }}
+                                    </span>
+                                </span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Nama Pemilik Usaha</span>
+                                <span class="detail-val">{{ $application->nama_pemilik_usaha }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Nama Pemohon / Pengguna Layanan</span>
+                                <span class="detail-val">{{ $application->nama_pengaju }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Status Pemohon (Sebagai Apa)</span>
+                                <span class="detail-val">{{ $application->hubungan_pengaju }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Akun Pemohon (Username)</span>
+                                <span class="detail-val">PMH{{ str_pad($application->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Nomor Telepon Gateway / HP</span>
+                                <span class="detail-val mono">+{{ $application->user->phone_number }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Tanggal Pengajuan Berkas</span>
+                                <span class="detail-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
+                            </li>
+                            
+                            <!-- BPN Info -->
+                            <li class="detail-item">
+                                <span class="detail-label">Kelayakan Berkas (BPN)</span>
+                                <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
+                                    {{ str_replace('_', ' ', $application->bpn_berkas_status) }}
+                                </span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Status Pembayaran</span>
+                                <span class="detail-val" style="text-transform: capitalize; font-weight: 700; color: {{ $application->bpn_pembayaran_status === 'sudah_bayar' ? 'var(--clr-green)' : '#E53E3E' }}">
+                                    {{ str_replace('_', ' ', $application->bpn_pembayaran_status) }}
+                                </span>
+                            </li>
 
+                            @if($application->no_berkas)
+                                <li class="detail-item">
+                                    <span class="detail-label">Nomor Berkas</span>
+                                    <span class="detail-val" style="font-weight: 700; color: var(--clr-blue-dk);">{{ $application->no_berkas }}</span>
+                                </li>
+                            @endif
+
+                            @if($application->bpn_pertek_document)
+                                <li class="detail-item">
+                                    <span class="detail-label">Dokumen Pertek BPN</span>
+                                    <span class="detail-val">
+                                        <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
+                                            Unduh Surat Pertek
+                                        </a>
+                                    </span>
+                                </li>
+                            @endif
+
+                            <!-- Satu Pintu Info -->
+                            @if($application->satu_pintu_no_pkkpr)
+                                <li class="detail-item">
+                                    <span class="detail-label">Nomor PKKPR</span>
+                                    <span class="detail-val">{{ $application->satu_pintu_no_pkkpr }}</span>
+                                </li>
+                            @endif
+
+                            @if($application->approval_document)
+                                <li class="detail-item">
+                                    <span class="detail-label">Dokumen PKKPR Terbit</span>
+                                    <span class="detail-val">
+                                        <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-doc">
+                                            Unduh Dokumen
+                                        </a>
+                                    </span>
+                                </li>
+                            @endif
+
+                            <li class="detail-item" style="display: flex; flex-direction: column; gap: 8px;">
+                                <span class="detail-label" style="border-bottom: 1px solid var(--clr-line); padding-bottom: 8px; margin-bottom: 4px;">Berkas Lampiran Persyaratan</span>
+                                
+                                @if($application->ptp_data)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid); font-weight: 500;">Formulir PTP</span>
+                                    <a href="{{ route('tanah-timbul.ptp_pdf', $application->id) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+                                
+                                @if($application->peta_lokasi)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">1. Peta Lokasi</span>
+                                    <a href="{{ asset('storage/' . $application->peta_lokasi) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->surat_kuasa)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">2. Surat Kuasa</span>
+                                    <a href="{{ asset('storage/' . $application->surat_kuasa) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_ktp)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">3. FC KTP</span>
+                                    <a href="{{ asset('storage/' . $application->fc_ktp) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_npwp)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">4. FC NPWP</span>
+                                    <a href="{{ asset('storage/' . $application->fc_npwp) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_akta_pendirian)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">5. FC Akta Pendirian</span>
+                                    <a href="{{ asset('storage/' . $application->fc_akta_pendirian) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->rencana_penggunaan_tanah)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">6. Rencana Penggunaan Tanah</span>
+                                    <a href="{{ asset('storage/' . $application->rencana_penggunaan_tanah) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->nib)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">7. NIB</span>
+                                    <a href="{{ asset('storage/' . $application->nib) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->kbli)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">8. KBLI</span>
+                                    <a href="{{ asset('storage/' . $application->kbli) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->proposal_kegiatan)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">9. Proposal Kegiatan</span>
+                                    <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->persyaratan_lainnya)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">10. Persyaratan Lainnya</span>
+                                    <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+                            </li>
+                        </ul>
+                    </div>
                     <!-- Dokumen Lampiran -->
                     <div class="card">
                         <h2 class="card-title">Dokumen Berkas Persyaratan</h2>
@@ -1503,14 +1594,672 @@
 
                                         <!-- SLA Banner -->
                     <style>
-                        .sla-banner { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 20px; }
-                        .sla-item { padding: 16px; border-radius: 10px; border: 1.5px solid; display: flex; justify-content: space-between; align-items: center;}
-                        .sla-info { display: flex; flex-direction: column; }
-                        .sla-title { font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; opacity: 0.8; }
-                        .sla-value { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-                        .sla-desc { font-size: 12.5px; opacity: 0.9; }
-                        .sla-badge { padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 14px; text-align: center; }
-                    </style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --clr-blue:    #218AC9;
+            --clr-blue-dk: #003B64;
+            --clr-blue-lt: #E3F0F9;
+            --clr-yellow:  #FFCB05;
+            --clr-green:   #85C341;
+            --clr-ink:     #003B64;
+            --clr-mid:     #2C5272;
+            --clr-muted:   #7A9BB5;
+            --clr-line:    #D6E4EF;
+            --clr-surface: #F0F6FB;
+            --clr-white:   #FFFFFF;
+            --radius-sm:   5px;
+            --radius-md:   5px;
+            --radius-lg:   5px;
+            --radius-xl:   5px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--clr-surface);
+            color: var(--clr-ink);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── CONTAINER: diperlebar, penuhi gap kiri kanan ──── */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* ─── HEADER ─────────────────────────────────────────── */
+        header {
+            background: var(--clr-white);
+            border-bottom: 1px solid var(--clr-line);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--clr-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: #fff;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+        .logo-text strong {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--clr-ink);
+            letter-spacing: -.02em;
+        }
+        .logo-text span {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--clr-muted);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-top: 3px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .nav-link {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--clr-mid);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--clr-blue);
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--clr-line);
+            color: var(--clr-mid);
+            padding: 8px 14px;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-logout:hover {
+            color: #E53E3E;
+            border-color: #FED7D7;
+            background: #FFF5F5;
+        }
+
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid var(--clr-blue);
+        }
+        .header-avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--clr-blue-lt);
+            color: var(--clr-blue);
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid var(--clr-blue);
+            text-transform: uppercase;
+        }
+        .user-badge {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .user-badge strong {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--clr-ink);
+        }
+        .user-badge span {
+            font-size: 11px;
+            color: var(--clr-muted);
+            font-weight: 600;
+        }
+
+        /* ─── MAIN CONTENT ───────────────────────────────────── */
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+            min-width: 0;
+        }
+
+        main {
+            padding: 40px 0;
+        }
+ 
+        /* ─── SLA BANNER ─────────────────────────────────────── */
+        .sla-banner {
+            margin-bottom: 24px;
+        }
+        .sla-item {
+            background: #FFF;
+            border: 1.5px solid var(--clr-line);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .sla-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sla-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .sla-value {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--clr-ink);
+        }
+        .sla-desc {
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+        .sla-badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .alert-success {
+            background: #E6F4EA;
+            border: 1px solid #B8E2C8;
+            color: #137333;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-size: 13.5px;
+            font-weight: 600;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .back-btn {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--clr-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .back-btn:hover {
+            color: var(--clr-blue);
+        }
+
+        .badge-status {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* ─── GRID LAYOUT ────────────────────────────────────── */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .layout-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ─── CARDS ──────────────────────────────────────────── */
+        .card {
+            background: var(--clr-white);
+            border: 1px solid var(--clr-line);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            margin-bottom: 32px;
+        }
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: var(--clr-ink);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid var(--clr-surface);
+        }
+
+        /* ─── DATA TABLE / DETAIL ────────────────────────────── */
+        .detail-list {
+            list-style: none;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--clr-line);
+            font-size: 13.5px;
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: var(--clr-mid);
+        }
+        .detail-val {
+            font-weight: 700;
+            color: var(--clr-ink);
+            text-align: right;
+        }
+        .app-num {
+            font-family: 'DM Mono', monospace;
+            color: var(--clr-blue);
+            font-size: 14px;
+        }
+        .detail-val.mono {
+            font-family: 'DM Mono', monospace;
+            color: var(--clr-blue);
+        }
+
+        /* ─── DOCK ATTACHMENT / BUTTONS ──────────────────────── */
+        .btn-doc {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--clr-blue);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .btn-doc:hover {
+            color: var(--clr-blue-dk);
+            text-decoration: underline;
+        }
+
+        /* ─── TIMELINE CARD HEADER (service identifier) ──────── */
+        .timeline-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--clr-surface);
+        }
+        .timeline-service-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            background: transparent;
+            padding: 0;
+            flex-shrink: 0;
+            transform: scale(1.6);
+        }
+        .timeline-service-meta {
+            flex: 1;
+        }
+        .timeline-service-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--clr-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 3px;
+        }
+        .timeline-service-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--clr-ink);
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+        .timeline-step-count {
+            font-size: 11px;
+            color: var(--clr-muted);
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        /* ─── TIMELINE ───────────────────────────────────────── */
+        .timeline {
+            position: relative;
+            padding-left: 38px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 10px;
+            bottom: 12px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--clr-blue) 0%, var(--clr-line) 60%);
+            opacity: 0.35;
+        }
+
+        .timeline-step {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .timeline-step:last-child {
+            margin-bottom: 0;
+        }
+
+        /* The dot marker */
+        .timeline-dot {
+            position: absolute;
+            left: -38px;
+            top: 10px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--clr-white);
+            border: 2px solid var(--clr-line);
+            transition: all 0.2s;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0; /* hide ::after text from interfering */
+        }
+
+        /* Content bubble per step */
+        .timeline-content {
+            border-radius: 8px;
+            padding: 10px 14px;
+            transition: all 0.15s;
+            border: 1.5px solid transparent;
+        }
+        .timeline-step:not(.completed):not(.active):not(.rejected) .timeline-content {
+            padding: 6px 0;
+        }
+
+        .timeline-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--clr-mid);
+            margin-bottom: 2px;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .timeline-desc {
+            font-size: 11.5px;
+            color: var(--clr-muted);
+            line-height: 1.55;
+        }
+
+        /* ── COMPLETED ── */
+        .timeline-step.completed .timeline-dot {
+            background: var(--clr-green);
+            border-color: var(--clr-green);
+        }
+        .timeline-step.completed .timeline-dot::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .timeline-step.completed .timeline-content {
+            background: var(--clr-green-lt);
+            border-color: #C6E5A0;
+        }
+        .timeline-step.completed .timeline-title {
+            color: #3A6B1A;
+        }
+        .timeline-step.completed .timeline-desc {
+            color: #558B2F;
+        }
+
+        /* ── ACTIVE ── */
+        .timeline-step.active .timeline-dot {
+            border-color: var(--clr-blue);
+            background: var(--clr-white);
+            box-shadow: 0 0 0 4px rgba(33, 138, 201, 0.15);
+        }
+        .timeline-step.active .timeline-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--clr-blue);
+            display: block;
+        }
+        .timeline-step.active .timeline-content {
+            background: var(--clr-blue-lt);
+            border-color: #9ECCEA;
+            box-shadow: 0 2px 8px rgba(33, 138, 201, 0.08);
+        }
+        .timeline-step.active .timeline-title {
+            color: var(--clr-blue);
+        }
+        .timeline-step.active .timeline-desc {
+            color: var(--clr-mid);
+        }
+
+        /* ── REJECTED ── */
+        .timeline-step.rejected .timeline-dot {
+            background: #E53E3E;
+            border-color: #E53E3E;
+        }
+        .timeline-step.rejected .timeline-dot::after {
+            content: '✕';
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .timeline-step.rejected .timeline-content {
+            background: #FFF5F5;
+            border-color: #FED7D7;
+        }
+        .timeline-step.rejected .timeline-title {
+            color: #C53030;
+        }
+
+        /* Notes inside timeline */
+        .timeline-notes {
+            margin-top: 8px;
+            padding: 7px 10px;
+            background: rgba(255,255,255,0.65);
+            border-left: 3px solid #E53E3E;
+            color: #C53030;
+            font-size: 11.5px;
+            border-radius: 0 5px 5px 0;
+            line-height: 1.5;
+        }
+        .timeline-step.completed .timeline-notes {
+            border-left-color: var(--clr-blue);
+            color: var(--clr-mid);
+        }
+
+        /* Hover interaction on clickable steps */
+        .timeline-step[onclick]:hover .timeline-content {
+            filter: brightness(0.97);
+        }
+
+        /* ─── VERIFICATION PANEL ────────────────────────────── */
+        /* ─── PANEL VERIFIKATOR ──────────────────────────────── */
+        .verify-card {
+            background: var(--clr-white);
+            border: 2px solid var(--clr-blue-lt);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 16px rgba(19, 147, 204, 0.04);
+        }
+        .verify-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--clr-blue-dk);
+            margin-bottom: 16px;
+        }
+ 
+        .form-group-v {
+            margin-bottom: 16px;
+        }
+        .form-group-v label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--clr-ink);
+            margin-bottom: 6px;
+        }
+        .form-control-v {
+            width: 100%;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 1.5px solid var(--clr-line);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .form-control-v:focus {
+            border-color: var(--clr-blue);
+        }
+        .form-select-v {
+            width: 100%;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 1.5px solid var(--clr-line);
+            border-radius: var(--radius-md);
+            background: var(--clr-white);
+            outline: none;
+        }
+        .btn-submit-v {
+            background: var(--clr-blue);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 13px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            margin-bottom: 8px;
+        }
+        .btn-submit-v:hover {
+            background: var(--clr-blue-dk);
+        }
+        
+        .verify-step-badge {
+            background: var(--clr-blue-lt);
+            color: var(--clr-blue-dk);
+            font-weight: 700;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-left: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-download-cert {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: var(--clr-green);
+            color: var(--clr-white);
+            padding: 14px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 14px rgba(149, 185, 62, 0.25);
+            transition: all 0.2s;
+        }
+        .btn-download-cert:hover {
+            background: var(--clr-green-dk);
+            transform: translateY(-0.5px);
+            box-shadow: 0 6px 20px rgba(149, 185, 62, 0.35);
+        }
+    </style>
                     @php
                         $targetDate = $application->created_at->addWeekdays(10);
                         $now = \Carbon\Carbon::now();
