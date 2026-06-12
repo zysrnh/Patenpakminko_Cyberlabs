@@ -2,6 +2,13 @@
 
 @section('content')
 <!-- ══ HERO ════════════════════════════════════════════════ -->
+<style>
+    /* Compact the service panel to fit the hero height with 5 items */
+    .hero .sp-slide { gap: 8px !important; }
+    .hero .sp-row { padding: 8px 14px !important; }
+    .hero .sp-others { padding: 10px 16px 16px !important; gap: 8px !important; }
+    .hero .sp-other-card { padding: 10px 14px !important; }
+</style>
 <section class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="container">
@@ -113,8 +120,8 @@
                                 </div>
                             </a>
                             <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
-                                <div class="sp-row-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                                <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
                                     <strong>Proyek Strategis Nasional (PSN)</strong>
