@@ -28,14 +28,8 @@ class TanahTimbulController extends Controller
             return view('tanah-timbul.index', compact('applications'));
         }
  
-        // Jika BPN, tampilkan semua permohonan agar dapat dipantau riwayatnya
-        if ($user->isBpn()) {
-            $applications = TanahTimbulApplication::orderBy('created_at', 'desc')->get();
-            return view('tanah-timbul.index', compact('applications'));
-        }
- 
-        // Jika DPN (Super Admin/Notifier), tampilkan semua permohonan
-        if ($user->isDpn()) {
+        // Jika BPN, DPN (Super Admin), atau Satu Pintu, tampilkan semua permohonan
+        if ($user->isBpn() || $user->isDpn() || $user->isSatuPintu()) {
             $applications = TanahTimbulApplication::orderBy('created_at', 'desc')->get();
             return view('tanah-timbul.index', compact('applications'));
         }
@@ -372,7 +366,7 @@ class TanahTimbulController extends Controller
             $application->save();
 
             // WA Notifikasi Selesai (Diterbitkan)
-            $this->sendNotificationWithMailbox($application, 'penerbitan_pkkpr', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'pkkpr_terbit', 'TANAH TIMBUL', 'tanah-timbul.show', $request->input('custom_wa_message'));
 
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
             return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');

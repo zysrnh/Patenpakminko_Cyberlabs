@@ -370,7 +370,7 @@ class KebijakanController extends Controller
             $application->save();
 
             // WA Notifikasi Selesai (Diterbitkan)
-            $this->sendNotificationWithMailbox($application, 'penerbitan_pkkpr', 'Kebijakan Khusus', 'kebijakan.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'pkkpr_terbit', 'Kebijakan Khusus', 'kebijakan.show', $request->input('custom_wa_message'));
 
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
             return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');

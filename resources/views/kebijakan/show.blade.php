@@ -1192,11 +1192,12 @@
                     @endif
 
                     @if($user->isSatuPintu())
-                        <div id="panel-satu-pintu" class="bpn-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
+                        <div id="bpn-panel-satu-pintu" class="bpn-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
                             @php $isSpActive = (Auth::user()->isSatuPintu() && $application->status === 'menunggu_satu_pintu'); @endphp
                             <fieldset {{ $isSpActive ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
+                                    <input type="hidden" name="step" value="satu_pintu_terbit">
                                     <div style="background:#F0FFF4;border:1px solid #9AE6B4;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;">
                                         <strong>Penerbitan PKKPR (Dinas Satu Pintu / PTSP):</strong> Isi data penerbitan PKKPR resmi, lalu unggah dokumen dan kirim.
                                     </div>
@@ -1255,6 +1256,22 @@
                                     }
                                 </script>
                             </fieldset>
+
+                            @if(Auth::user()->isSatuPintu() && $application->approval_document)
+                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                                    @csrf
+                                    <input type="hidden" name="step" value="resend_wa">
+                                    <input type="hidden" name="wa_type" value="{{ $application->status === 'ditolak' ? 'pkkpr_tolak' : 'pkkpr_terbit' }}">
+                                    <div class="form-group-v" style="margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
+                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Notifikasi PKKPR (WhatsApp)
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     @endif
                 </div>

@@ -66,12 +66,11 @@
         /* ─── SIDEBAR ────────────────────────── */
         .sidebar {
             width: var(--sidebar);
-            min-height: 100vh;
             background: var(--blue-dk);
             display: flex;
             flex-direction: column;
             position: fixed;
-            top: 0; left: 0;
+            top: 0; left: 0; bottom: 0;
             z-index: 20;
             overflow-y: auto;
             transition: transform .25s ease;
