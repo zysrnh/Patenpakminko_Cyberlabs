@@ -39,10 +39,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* ─── CONTAINER: diperlebar, penuhi gap kiri kanan ──── */
         .container {
-            max-width: 1000px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 40px;
         }
 
         /* ─── HEADER ─────────────────────────────────────────── */
@@ -185,35 +186,41 @@
         }
 
         /* ─── MAIN CONTENT ───────────────────────────────────── */
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+            min-width: 0;
+        }
+
         main {
             padding: 40px 0;
         }
  
         /* ─── SLA BANNER ─────────────────────────────────────── */
         .sla-banner {
-            background: #F0F6FB;
-            border-left: 4px solid var(--clr-blue);
-            padding: 16px 20px;
-            border-radius: var(--radius-md);
-            margin-bottom: 28px;
-            display: flex;
-            gap: 24px;
-            align-items: center;
+            margin-bottom: 24px;
         }
         .sla-item {
-            flex: 1;
+            background: #FFF;
+            border: 1.5px solid var(--clr-line);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
         }
-        .sla-item.divider {
-            border-left: 1px solid #D6E4EF;
-            padding-left: 24px;
+        .sla-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
         .sla-title {
-            font-size: 11px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: var(--clr-blue);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 4px;
         }
         .sla-value {
             font-size: 15px;
@@ -221,11 +228,21 @@
             color: var(--clr-ink);
         }
         .sla-desc {
-            font-size: 11.5px;
-            color: var(--clr-muted);
-            margin-top: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            opacity: 0.8;
         }
- 
+        .sla-badge {
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 20px;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .alert-success {
             background: #E6F4EA;
             border: 1px solid #B8E2C8;
@@ -270,14 +287,15 @@
             letter-spacing: 0.03em;
         }
 
-        .grid-layout {
+        /* ─── GRID LAYOUT ────────────────────────────────────── */
+        .layout-grid {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 28px;
+            grid-template-columns: 1.55fr 1fr;
+            gap: 24px;
             align-items: start;
         }
         @media (max-width: 900px) {
-            .grid-layout { grid-template-columns: 1fr; }
+            .layout-grid { grid-template-columns: 1fr; }
         }
 
         /* ─── CARDS ──────────────────────────────────────────── */
@@ -285,300 +303,378 @@
             background: var(--clr-white);
             border: 1px solid var(--clr-line);
             border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.01);
-            margin-bottom: 28px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            margin-bottom: 32px;
+        }
+        .card:last-child {
+            margin-bottom: 0;
         }
 
         .card-title {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 800;
+            letter-spacing: -0.01em;
             color: var(--clr-ink);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 1.5px solid var(--clr-line);
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid var(--clr-surface);
         }
 
-        /* ─── DATA LIST ──────────────────────────────────────── */
-        .data-list {
+        /* ─── DATA TABLE / DETAIL ────────────────────────────── */
+        .detail-list {
+            list-style: none;
+        }
+        .detail-item {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--clr-line);
+            font-size: 13.5px;
         }
-
-        .data-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        .detail-item:last-child {
+            border-bottom: none;
         }
-        .data-label {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--clr-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-        .data-val {
-            font-size: 14px;
+        .detail-label {
             font-weight: 600;
-            color: var(--clr-ink);
+            color: var(--clr-mid);
         }
-        .data-val.mono {
+        .detail-val {
+            font-weight: 700;
+            color: var(--clr-ink);
+            text-align: right;
+        }
+        .app-num {
+            font-family: 'DM Mono', monospace;
+            color: var(--clr-blue);
+            font-size: 14px;
+        }
+        .detail-val.mono {
             font-family: 'DM Mono', monospace;
             color: var(--clr-blue);
         }
 
-        /* ─── DOCUMENT DOWNLOADS ────────────────────────────── */
-        .doc-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .doc-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--clr-surface);
-            border: 1px solid var(--clr-line);
-            border-radius: var(--radius-md);
-            text-decoration: none;
-            color: var(--clr-ink);
-            transition: all 0.2s;
-        }
-        .doc-item:hover {
-            border-color: var(--clr-blue);
-            background: var(--clr-blue-lt);
-        }
-        .doc-name {
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .doc-status {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--clr-blue);
+        /* ─── DOCK ATTACHMENT / BUTTONS ──────────────────────── */
+        .btn-doc {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            color: var(--clr-blue);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
         }
-        .doc-status svg {
-            width: 14px;
-            height: 14px;
-            stroke-width: 2.5;
+        .btn-doc:hover {
+            color: var(--clr-blue-dk);
+            text-decoration: underline;
+        }
+
+        /* ─── TIMELINE CARD HEADER (service identifier) ──────── */
+        .timeline-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--clr-surface);
+        }
+        .timeline-service-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            background: transparent;
+            padding: 0;
+            flex-shrink: 0;
+            transform: scale(1.6);
+        }
+        .timeline-service-meta {
+            flex: 1;
+        }
+        .timeline-service-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--clr-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 3px;
+        }
+        .timeline-service-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--clr-ink);
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+        .timeline-step-count {
+            font-size: 11px;
+            color: var(--clr-muted);
+            font-weight: 600;
+            margin-top: 3px;
         }
 
         /* ─── TIMELINE ───────────────────────────────────────── */
         .timeline {
-            display: flex;
-            flex-direction: column;
             position: relative;
-            padding-left: 28px;
-            margin-top: 10px;
+            padding-left: 38px;
         }
         .timeline::before {
             content: '';
             position: absolute;
-            left: 8px;
-            top: 4px;
-            bottom: 4px;
+            top: 12px;
+            left: 10px;
+            bottom: 12px;
             width: 2px;
-            background: var(--clr-line);
+            background: linear-gradient(to bottom, var(--clr-blue) 0%, var(--clr-line) 60%);
+            opacity: 0.35;
         }
 
         .timeline-step {
             position: relative;
-            margin-bottom: 28px;
+            margin-bottom: 10px;
         }
         .timeline-step:last-child {
             margin-bottom: 0;
         }
 
+        /* The dot marker */
         .timeline-dot {
             position: absolute;
-            left: -28px;
-            top: 2px;
-            width: 18px;
-            height: 18px;
+            left: -38px;
+            top: 10px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: var(--clr-white);
-            border: 3px solid var(--clr-line);
+            border: 2px solid var(--clr-line);
+            transition: all 0.2s;
+            z-index: 2;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s;
+            font-size: 0; /* hide ::after text from interfering */
         }
 
-        /* Timeline States */
-        .timeline-step.completed .timeline-dot {
-            border-color: var(--clr-green);
-            background: var(--clr-green);
+        /* Content bubble per step */
+        .timeline-content {
+            border-radius: 8px;
+            padding: 10px 14px;
+            transition: all 0.15s;
+            border: 1.5px solid transparent;
         }
-        .timeline-step.active .timeline-dot {
-            border-color: var(--clr-blue);
-            background: var(--clr-white);
-        }
-        .timeline-step.rejected .timeline-dot {
-            border-color: #E53E3E;
-            background: #E53E3E;
-        }
-
-        .timeline-step.completed .timeline-dot::after {
-            content: '';
-            width: 6px;
-            height: 4px;
-            border-left: 1.5px solid white;
-            border-bottom: 1.5px solid white;
-            transform: rotate(-45deg) translateY(-1px);
-        }
-
-        .timeline-step.active .timeline-dot::after {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--clr-blue);
+        .timeline-step:not(.completed):not(.active):not(.rejected) .timeline-content {
+            padding: 6px 0;
         }
 
         .timeline-title {
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 700;
-            color: var(--clr-ink);
-            margin-bottom: 4px;
+            color: var(--clr-mid);
+            margin-bottom: 2px;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .timeline-desc {
+            font-size: 11.5px;
+            color: var(--clr-muted);
+            line-height: 1.55;
+        }
+
+        /* ── COMPLETED ── */
+        .timeline-step.completed .timeline-dot {
+            background: var(--clr-green);
+            border-color: var(--clr-green);
+        }
+        .timeline-step.completed .timeline-dot::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .timeline-step.completed .timeline-content {
+            background: var(--clr-green-lt);
+            border-color: #C6E5A0;
+        }
+        .timeline-step.completed .timeline-title {
+            color: #3A6B1A;
+        }
+        .timeline-step.completed .timeline-desc {
+            color: #558B2F;
+        }
+
+        /* ── ACTIVE ── */
+        .timeline-step.active .timeline-dot {
+            border-color: var(--clr-blue);
+            background: var(--clr-white);
+            box-shadow: 0 0 0 4px rgba(33, 138, 201, 0.15);
+        }
+        .timeline-step.active .timeline-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--clr-blue);
+            display: block;
+        }
+        .timeline-step.active .timeline-content {
+            background: var(--clr-blue-lt);
+            border-color: #9ECCEA;
+            box-shadow: 0 2px 8px rgba(33, 138, 201, 0.08);
         }
         .timeline-step.active .timeline-title {
             color: var(--clr-blue);
         }
-        
-        .timeline-desc {
-            font-size: 12px;
+        .timeline-step.active .timeline-desc {
             color: var(--clr-mid);
-            line-height: 1.4;
         }
 
+        /* ── REJECTED ── */
+        .timeline-step.rejected .timeline-dot {
+            background: #E53E3E;
+            border-color: #E53E3E;
+        }
+        .timeline-step.rejected .timeline-dot::after {
+            content: '✕';
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .timeline-step.rejected .timeline-content {
+            background: #FFF5F5;
+            border-color: #FED7D7;
+        }
+        .timeline-step.rejected .timeline-title {
+            color: #C53030;
+        }
+
+        /* Notes inside timeline */
         .timeline-notes {
             margin-top: 8px;
-            padding: 8px 12px;
-            background: var(--clr-surface);
-            border-left: 3px solid var(--clr-blue);
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-size: 12px;
-            color: var(--clr-ink);
-            line-height: 1.4;
+            padding: 7px 10px;
+            background: rgba(255,255,255,0.65);
+            border-left: 3px solid #E53E3E;
+            color: #C53030;
+            font-size: 11.5px;
+            border-radius: 0 5px 5px 0;
+            line-height: 1.5;
         }
         .timeline-step.completed .timeline-notes {
-            border-color: var(--clr-green);
+            border-left-color: var(--clr-blue);
+            color: var(--clr-mid);
         }
-        .timeline-step.rejected .timeline-notes {
-            border-color: #E53E3E;
-            background: #FFF5F5;
+
+        /* Hover interaction on clickable steps */
+        .timeline-step[onclick]:hover .timeline-content {
+            filter: brightness(0.97);
         }
 
         /* ─── VERIFICATION PANEL ────────────────────────────── */
+        /* ─── PANEL VERIFIKATOR ──────────────────────────────── */
         .verify-card {
-            background: #FFFDF0;
-            border: 1.5px solid #FBE89F;
+            background: var(--clr-white);
+            border: 2px solid var(--clr-blue-lt);
             border-radius: var(--radius-lg);
             padding: 24px;
-            margin-bottom: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 16px rgba(19, 147, 204, 0.04);
         }
         .verify-title {
-            font-size: 14.5px;
+            font-size: 15px;
             font-weight: 800;
-            color: #744210;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 1.5px solid #FBE89F;
-        }
-
-        /* ─── FORMS ─────────────────────────────────────────── */
-        .form-group {
+            color: var(--clr-blue-dk);
             margin-bottom: 16px;
         }
-        .form-label {
+ 
+        .form-group-v {
+            margin-bottom: 16px;
+        }
+        .form-group-v label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--clr-ink);
+            margin-bottom: 6px;
         }
-        .form-control {
+        .form-control-v {
             width: 100%;
             padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
             border: 1.5px solid var(--clr-line);
             border-radius: var(--radius-md);
-            font-family: inherit;
-            font-size: 14px;
-            transition: all 0.2s;
-            box-sizing: border-box;
-        }
-        .form-control:focus {
             outline: none;
+            transition: border-color 0.15s;
+        }
+        .form-control-v:focus {
             border-color: var(--clr-blue);
-            box-shadow: 0 0 0 3px rgba(33, 138, 201, 0.1);
         }
-
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 16px;
+        .form-select-v {
+            width: 100%;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            border: 1.5px solid var(--clr-line);
+            border-radius: var(--radius-md);
+            background: var(--clr-white);
+            outline: none;
         }
-        .radio-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            color: var(--clr-ink);
-        }
-        .radio-label input {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--clr-blue);
-        }
-
-        .btn-verify-submit {
-            background: var(--clr-ink);
+        .btn-submit-v {
+            background: var(--clr-blue);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-family: inherit;
-            font-size: 13.5px;
             font-weight: 700;
+            font-size: 13px;
             border-radius: var(--radius-md);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            margin-bottom: 8px;
         }
-        .btn-verify-submit:hover {
-            background: #172436;
+        .btn-submit-v:hover {
+            background: var(--clr-blue-dk);
+        }
+        
+        .verify-step-badge {
+            background: var(--clr-blue-lt);
+            color: var(--clr-blue-dk);
+            font-weight: 700;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            margin-left: 6px;
+            letter-spacing: 0.05em;
         }
 
         .btn-download-cert {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
             background: var(--clr-green);
-            color: white;
-            border: none;
-            padding: 12px 24px;
+            color: var(--clr-white);
+            padding: 14px;
             border-radius: var(--radius-md);
-            font-family: inherit;
             font-size: 14px;
             font-weight: 700;
-            cursor: pointer;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(149, 185, 62, 0.2);
-            width: 100%;
-            justify-content: center;
             margin-bottom: 28px;
+            box-shadow: 0 4px 14px rgba(149, 185, 62, 0.25);
+            transition: all 0.2s;
         }
         .btn-download-cert:hover {
             background: var(--clr-green-dk);
             transform: translateY(-0.5px);
+            box-shadow: 0 6px 20px rgba(149, 185, 62, 0.35);
         }
     </style>
 </head>
@@ -586,7 +682,7 @@
 
     <!-- Header -->
     <header>
-        <div class="container" style="max-width: 1000px;">
+        <div class="container">
             <div class="header-inner">
                 <a href="/dashboard" class="logo-wrap">
                     <div class="logo-icon" style="background: transparent;">
@@ -640,6 +736,28 @@
                 <div class="alert-success">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     {{ session('success') }}
+                    
+                    @if(session('wa_links'))
+                        <div style="margin-top: 12px; border-top: 1px solid rgba(0,100,0,0.1); padding-top: 12px;">
+                            <strong style="display:block; margin-bottom: 8px; color: #0F5132;">Kirim Notifikasi WhatsApp (Manual):</strong>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                @foreach(session('wa_links') as $index => $link)
+                                    <a href="{{ $link['url'] }}" target="_blank" class="btn-submit-v" style="background: #25D366; color: #fff; border:none; padding: 6px 12px; font-size: 12px; width: auto; text-decoration: none; margin: 0; display: inline-flex; align-items: center;" id="wa-link-layout-{{ $index }}">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim ke {{ $link['target'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                            <script>
+                                setTimeout(function() {
+                                    var firstWaLink = document.getElementById('wa-link-layout-0');
+                                    if(firstWaLink) {
+                                        window.open(firstWaLink.href, '_blank');
+                                    }
+                                }, 500);
+                            </script>
+                        </div>
+                    @endif
                 </div>
             @endif
 
@@ -712,7 +830,7 @@
                                 <input type="hidden" name="module_type" value="kebijakan">
                                 <input type="hidden" name="module_id" value="{{ $application->id }}">
                                 
-                                <div class="form-group" style="margin-bottom: 12px;">
+                                <div class="form-group-v" style="margin-bottom: 12px;">
                                     <label for="rating" style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Penilaian Anda</label>
                                     <select name="rating" id="rating" style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--clr-line); font-size:13.5px;" required>
                                         <option value="5">⭐⭐⭐⭐⭐ Sangat Baik</option>
@@ -723,7 +841,7 @@
                                     </select>
                                 </div>
  
-                                <div class="form-group" style="margin-bottom: 16px;">
+                                <div class="form-group-v" style="margin-bottom: 16px;">
                                     <label for="comment" style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Catatan Ulasan / Feedback</label>
                                     <textarea name="comment" id="comment" style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--clr-line); font-size:13.5px; resize:none;" rows="2" placeholder="Tuliskan saran atau ulasan singkat Anda..." required></textarea>
                                 </div>
@@ -762,10 +880,11 @@
                     && $now >= $application->bpn_rapat_dt;
             @endphp
 
-                            <div class="verify-card">
+            @if($canVerify || $user->isBpn() || $user->isDinasPu() || $user->isSatuPintu())
+                <div class="verify-card">
                     <h3 class="verify-title">📝 Panel Pemeriksaan Berkas</h3>
 
-                        {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
+                    @if($user->isBpn())
                         {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
                         <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
@@ -776,34 +895,53 @@
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
                                         <strong>Langkah 1 dari 4 — Verifikasi Berkas Awal:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, lalu terima atau tolak. Notifikasi WA akan terkirim otomatis.
                                     </div>
-                                    <div class="form-group">
-                                        <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Pemeriksaan Berkas:</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label"><input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' ? '' : 'checked') }}> Disetujui</label>
-                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }}> Tidak Disetujui</label>
+                                    <div class="form-group-v" style="margin-bottom: 20px;">
+                                        <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
+                                        <div style="display: flex; gap: 20px;">
+                                            <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui
+                                            </label>
+                                            <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Disetujui / Berkas Tidak Sesuai
+                                            </label>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="notes" class="form-label" style="font-weight:700;color:#744210;">Catatan Pemeriksaan Berkas <span style="color:red;">*</span></label>
-                                        <textarea id="notes" name="notes" class="form-control" rows="3" placeholder="Tuliskan hasil pemeriksaan dokumen persyaratan..." style="resize:none;background:white;" required>{{ $application->bpn_berkas_status !== 'menunggu' ? $application->bpn_notes : '' }}</textarea>
+                                    
+                                    <div id="revisi-berkas-container" style="display:none; margin-bottom: 12px; background: #fff5f5; padding: 12px; border: 1px solid #fed7d7; border-radius: 6px;">
+                                        <label style="font-weight: 600; font-size: 12px; color: #c53030; margin-bottom: 8px; display: block;">Tandai Berkas yang Tidak Valid / Kurang Lengkap (Otomatis masuk ke catatan):</label>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
+                                            <label><input type="checkbox" class="cb-revisi" value="Formulir PTP"> Formulir PTP</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Peta Lokasi / Sketsa"> Peta Lokasi / Sketsa</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Surat Kuasa"> Surat Kuasa</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC KTP Pemohon"> FC KTP Pemohon</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC NPWP"> FC NPWP</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC Akta Pendirian"> FC Akta Pendirian</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Rencana Penggunaan Tanah"> Rencana Penggunaan Tanah</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="NIB"> NIB</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="KBLI"> KBLI</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Proposal Kegiatan"> Proposal Kegiatan</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group-v">
+                                        <label for="notes" style="display: block; font-size: 12.5px; font-weight: 700; color: var(--clr-ink); margin-bottom: 6px;">Catatan Pemeriksaan</label>
+                                        <textarea id="notes" name="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan atau instruksi perbaikan..." required>{{ $application->bpn_berkas_status !== 'menunggu' ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     @if($isStep1Active)
-                                        <button type="submit" class="btn-verify-submit">Kirim Hasil Verifikasi Berkas & Blast WA</button>
+
+                                        <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas</button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini sudah diselesaikan / dikunci)</div>
                                     @endif
                                 </form>
                             </fieldset>
-                            @if(Auth::user()->isBpn() && in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']))
+                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu')
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
-                                    <div class="form-group-v" style="margin-top: 12px; margin-bottom: 12px; text-align: left;">
-                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
-                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
-                                    </div>
-                                    <button type="submit" class="btn-verify-submit" style="background: var(--clr-green); width: 100%; justify-content: center;">
+
+                                    <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Kirim Ulang Notifikasi WhatsApp (Revisi Berkas)
                                     </button>
@@ -820,12 +958,12 @@
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:16px;">
                                         <strong>Langkah 2 — Konfirmasi Pembayaran PNBP:</strong> Berkas telah disetujui. Masukkan Nomor Berkas untuk mengkonfirmasi bahwa pembayaran PNBP telah diterima. Sistem otomatis mengirim akun ke WA pemohon.
                                     </div>
-                                    <div class="form-group" style="margin-bottom:16px;">
+                                    <div class="form-group-v" style="margin-bottom:16px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Nomor Berkas <span style="color:red;">*</span></label>
-                                        <input type="text" name="no_berkas" class="form-control" placeholder="cth: 1234/2026/BPN..." style="background:white;" value="{{ $application->no_berkas }}" required>
+                                        <input type="text" name="no_berkas" class="form-control-v" placeholder="cth: 1234/2026/BPN..." style="background:white;" value="{{ $application->no_berkas }}" required>
                                     </div>
                                     @if($isStep2Active)
-                                        <button type="submit" class="btn-verify-submit" style="font-size:13px;padding:10px 20px;">
+                                        <button type="submit" class="btn-submit-v" style="font-size:13px;padding:10px 20px;">
                                             💰 Konfirmasi Pembayaran & Blast WA Akun Pemohon
                                         </button>
                                     @else
@@ -836,7 +974,7 @@
                         </div>
 
                         <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
-                            @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat)); @endphp
+                            @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar'); @endphp
                             <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
                                     @csrf
@@ -854,23 +992,23 @@
                                             — Tentukan jadwal dan kontak person petugas lapangan.
                                         @endif
                                     </div>
-                                    <div class="form-group" style="margin-bottom:12px;">
+                                    <div class="form-group-v" style="margin-bottom:12px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Cek Lokasi <span style="color:red;">*</span></label>
                                         <div style="display:flex; gap:8px;">
-                                            <input type="datetime-local" id="bpn_cek_lokasi_dt" name="bpn_cek_lokasi_dt" class="form-control"
+                                            <input type="datetime-local" id="bpn_cek_lokasi_dt" name="bpn_cek_lokasi_dt" class="form-control-v"
                                                 value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}"
                                                 style="background:white; flex-grow:1;" required>
                                             <button type="button" onclick="document.getElementById('bpn_cek_lokasi_dt').value = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0,16);" style="background:#e2e8f0; border:1px solid #cbd5e1; padding:0 12px; border-radius:6px; font-size:11px; font-weight:700; color:#475569; cursor:pointer;" title="Set ke waktu saat ini untuk test skip">📍 Sekarang</button>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Kontak Person Petugas Lapangan <span style="color:red;">*</span></label>
-                                        <input type="text" name="bpn_cek_lokasi_cp" class="form-control"
+                                        <input type="text" name="bpn_cek_lokasi_cp" class="form-control-v"
                                             value="{{ $application->bpn_cek_lokasi_cp }}"
                                             placeholder="cth: 08511234567 (Budi - Petugas BPN)" style="background:white;" required>
                                     </div>
                                     @if($isStep3Active)
-                                        <button type="submit" class="btn-verify-submit" style="font-size:13px;padding:10px 20px;">
+                                        <button type="submit" class="btn-submit-v" style="font-size:13px;padding:10px 20px;">
                                             {{ $application->bpn_cek_lokasi_dt ? '🔄 Ubah Jadwal Cek Lokasi & Kirim WA' : '📍 Simpan Jadwal Cek Lokasi & Blast WA' }}
                                         </button>
                                     @else
@@ -884,10 +1022,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="cek_lokasi">
-                                    <div class="form-group-v" style="margin-bottom: 12px; text-align: left;">
-                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
-                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
-                                    </div>
+
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Kirim Ulang Jadwal Cek Lokasi (WhatsApp)
@@ -895,7 +1030,8 @@
                                 </form>
                             @endif
                         </div>
-<div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
+
+                        <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
                             @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat)); @endphp
                             <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
@@ -909,17 +1045,17 @@
                                             — Cek lokasi terdaftar. Tentukan waktu rapat koordinasi BPN.
                                         @endif
                                     </div>
-                                    <div class="form-group" style="margin-bottom:12px;">
+                                    <div class="form-group-v" style="margin-bottom:12px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Rapat <span style="color:red;">*</span></label>
                                         <div style="display:flex; gap:8px;">
-                                            <input type="datetime-local" id="bpn_rapat_dt" name="bpn_rapat_dt" class="form-control"
+                                            <input type="datetime-local" id="bpn_rapat_dt" name="bpn_rapat_dt" class="form-control-v"
                                                 value="{{ $application->bpn_rapat_dt ? $application->bpn_rapat_dt->format('Y-m-d\TH:i') : '' }}"
                                                 style="background:white; flex-grow:1;" required>
                                             <button type="button" onclick="document.getElementById('bpn_rapat_dt').value = new Date(Date.now() - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0,16);" style="background:#e2e8f0; border:1px solid #cbd5e1; padding:0 12px; border-radius:6px; font-size:11px; font-weight:700; color:#475569; cursor:pointer;" title="Set ke waktu saat ini untuk test skip">📍 Sekarang</button>
                                         </div>
                                     </div>
                                     @if($isStep4Active)
-                                        <button type="submit" class="btn-verify-submit" style="background:#218AC9;font-size:13px;padding:10px 20px;">
+                                        <button type="submit" class="btn-submit-v" style="background:#218AC9;font-size:13px;padding:10px 20px;">
                                             {{ $application->bpn_rapat_dt ? '🔄 Ubah Jadwal Rapat & Kirim WA' : '📅 Simpan Jadwal Rapat & Blast WA' }}
                                         </button>
                                     @else
@@ -933,10 +1069,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="rapat">
-                                    <div class="form-group-v" style="margin-bottom: 12px; text-align: left;">
-                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
-                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
-                                    </div>
+
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Kirim Ulang Jadwal Rapat (WhatsApp)
@@ -944,7 +1077,8 @@
                                 </form>
                             @endif
                         </div>
-<div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
+
+                        <div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
                             @php $isStep5Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
                             <fieldset {{ $isStep5Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -954,30 +1088,30 @@
                                         <strong>Langkah 5 dari 5 — Penerbitan Pertek Pertanahan</strong><br>
                                         Rapat terdaftar. Upload Dokumen Pertek dan beri keputusan akhir BPN.
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Akhir BPN:</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label"><input type="radio" name="action" value="approve" required {{ $application->bpn_pertek_document || $application->status === 'disetujui' || $application->status === 'menunggu_dinas_pu' || $application->status === 'menunggu_satu_pintu' ? 'checked' : 'checked' }}> Disetujui</label>
-                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ $application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima' ? 'checked' : '' }}> Tidak Disetujui</label>
+                                        <div class="radio-group" style="display: flex; gap: 20px; margin-bottom: 16px;">
+                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px;"><input type="radio" name="action" value="approve" required {{ $application->bpn_pertek_document || $application->status === 'disetujui' || $application->status === 'menunggu_dinas_pu' || $application->status === 'menunggu_satu_pintu' ? 'checked' : 'checked' }}> Disetujui</label>
+                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px; color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ $application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima' ? 'checked' : '' }}> Tidak Disetujui</label>
                                         </div>
                                     </div>
                                     @if($application->bpn_pertek_document)
-                                        <div class="form-group">
+                                        <div class="form-group-v">
                                             <label class="form-label" style="font-weight:700;color:#744210;">Dokumen Pertek yang diterbitkan:</label>
                                             <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" style="color:#218AC9; text-decoration:underline;">Lihat Dokumen Pertek</a>
                                         </div>
                                     @else
-                                        <div class="form-group" id="pertekUploadWrapper">
+                                        <div class="form-group-v" id="pertekUploadWrapper">
                                             <label class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen Pertek (PDF/DOC/DOCX) <span style="color:red;">*</span></label>
-                                            <input type="file" id="bpn_pertek_document" name="bpn_pertek_document" class="form-control" accept=".pdf,.doc,.docx" style="background:white;">
+                                            <input type="file" id="bpn_pertek_document" name="bpn_pertek_document" class="form-control-v" accept=".pdf,.doc,.docx" style="background:white;">
                                         </div>
                                     @endif
-                                    <div class="form-group">
+                                    <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Catatan / Rekomendasi Teknis BPN <span style="color:red;">*</span></label>
-                                        <textarea name="notes" class="form-control" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required>{{ $application->status === 'menunggu_dinas_pu' || $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' || ($application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima') ? $application->bpn_notes : '' }}</textarea>
+                                        <textarea name="notes" class="form-control-v" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required>{{ $application->status === 'menunggu_dinas_pu' || $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' || ($application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima') ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     @if($isStep5Active)
-                                        <button type="submit" class="btn-verify-submit" style="background:#79A73A;">📄 Terbitkan Pertek & Blast WA Pemohon</button>
+                                        <button type="submit" class="btn-submit-v" style="background:#79A73A;">📄 Terbitkan Pertek & Blast WA Pemohon</button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif atau sudah diselesaikan)</div>
                                     @endif
@@ -989,10 +1123,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="{{ $application->status === 'ditolak' ? 'pertek_tolak' : 'pertek_terbit' }}">
-                                    <div class="form-group-v" style="margin-bottom: 12px; text-align: left;">
-                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
-                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
-                                    </div>
+
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Kirim Ulang Notifikasi Pertek (WhatsApp)
@@ -1000,7 +1131,8 @@
                                 </form>
                             @endif
                         </div>
-<script>
+
+                        <script>
                             function showBpnPanel(stepNum) {
                                 // hide all
                                 document.querySelectorAll('.bpn-panel-step').forEach(function(el) {
@@ -1014,8 +1146,9 @@
                                 }
                             }
                         </script>
+                    @endif
 
-
+                    @if($user->isDinasPu())
                         <div id="panel-pu-1" class="bpn-panel-step" style="display: {{ $application->bpn_pertek_document && $application->status !== 'menunggu_satu_pintu' && $application->status !== 'disetujui' ? 'block' : 'none' }};">
                             @php $isPuActive = (Auth::user()->isDinasPu() && $application->status === 'menunggu_dinas_pu'); @endphp
                             <fieldset {{ $isPuActive ? '' : 'disabled' }}>
@@ -1024,26 +1157,28 @@
                                     <div style="background:#EBF8FF;border:1px solid #90CDF4;padding:12px 16px;border-radius:8px;font-size:13px;color:#2B6CB0;margin-bottom:16px;">
                                         <strong>Penilaian Tata Ruang (Dinas PU):</strong> Periksa kesesuaian tata ruang berdasarkan dokumen Pertek BPN, lalu tentukan keputusan.
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Penilaian:</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label"><input type="radio" name="action" value="approve" required {{ $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' ? 'checked' : 'checked' }}> Disetujui</label>
-                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ $application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr ? 'checked' : '' }}> Tidak Disetujui</label>
+                                        <div class="radio-group" style="display: flex; gap: 20px; margin-bottom: 16px;">
+                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px;"><input type="radio" name="action" value="approve" required {{ $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' ? 'checked' : 'checked' }}> Disetujui</label>
+                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px; color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ $application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr ? 'checked' : '' }}> Tidak Disetujui</label>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group-v">
                                         <label for="notes_pu" class="form-label" style="font-weight:700;color:#744210;">Catatan Dinas PU <span style="color:red;">*</span></label>
-                                        <textarea id="notes_pu" name="notes" class="form-control" rows="3" placeholder="Tuliskan catatan penilaian tata ruang..." style="resize:none;background:white;" required>{{ $application->dinas_pu_notes }}</textarea>
+                                        <textarea id="notes_pu" name="notes" class="form-control-v" rows="3" placeholder="Tuliskan catatan penilaian tata ruang..." style="resize:none;background:white;" required>{{ $application->dinas_pu_notes }}</textarea>
                                     </div>
                                     @if($isPuActive)
-                                        <button type="submit" class="btn-verify-submit" style="background:#218AC9;">Kirim Keputusan Penilaian Tata Ruang</button>
+                                        <button type="submit" class="btn-submit-v" style="background:#218AC9;">Kirim Keputusan Penilaian Tata Ruang</button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif / bukan wewenang Anda / sudah diselesaikan)</div>
                                     @endif
                                 </form>
                             </fieldset>
                         </div>
+                    @endif
 
+                    @if($user->isSatuPintu())
                         <div id="panel-satu-pintu" class="bpn-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
                             @php $isSpActive = (Auth::user()->isSatuPintu() && $application->status === 'menunggu_satu_pintu'); @endphp
                             <fieldset {{ $isSpActive ? '' : 'disabled' }}>
@@ -1052,25 +1187,25 @@
                                     <div style="background:#F0FFF4;border:1px solid #9AE6B4;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;">
                                         <strong>Penerbitan PKKPR (Dinas Satu Pintu / PTSP):</strong> Isi data penerbitan PKKPR resmi, lalu unggah dokumen dan kirim.
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan:</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label"><input type="radio" name="action" value="approve" required checked onclick="toggleSatuPintuFields(true)"> Disetujui</label>
-                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="toggleSatuPintuFields(false)"> Tidak Disetujui</label>
+                                        <div class="radio-group" style="display: flex; gap: 20px; margin-bottom: 16px;">
+                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px;"><input type="radio" name="action" value="approve" required checked onclick="toggleSatuPintuFields(true)"> Disetujui</label>
+                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px; color:#E53E3E;"><input type="radio" name="action" value="reject" required onclick="toggleSatuPintuFields(false)"> Tidak Disetujui</label>
                                         </div>
                                     </div>
                                     <div id="satuPintuFieldsWrapper">
-                                        <div class="form-group" style="margin-bottom:12px;">
+                                        <div class="form-group-v" style="margin-bottom:12px;">
                                             <label for="satu_pintu_no_pkkpr" class="form-label" style="font-weight:700;color:#744210;">Nomor PKKPR (wajib) <span style="color:red;">*</span></label>
-                                            <input type="text" id="satu_pintu_no_pkkpr" name="satu_pintu_no_pkkpr" class="form-control"
+                                            <input type="text" id="satu_pintu_no_pkkpr" name="satu_pintu_no_pkkpr" class="form-control-v"
                                                    placeholder="cth: PKKPR-NB/2026/001" value="{{ $application->satu_pintu_no_pkkpr }}" style="background:white;" required>
                                         </div>
-                                        <div class="form-group" style="margin-bottom:12px;">
+                                        <div class="form-group-v" style="margin-bottom:12px;">
                                             <label for="satu_pintu_tanggal_terbit" class="form-label" style="font-weight:700;color:#744210;">Tanggal Terbit (wajib) <span style="color:red;">*</span></label>
-                                            <input type="date" id="satu_pintu_tanggal_terbit" name="satu_pintu_tanggal_terbit" class="form-control"
+                                            <input type="date" id="satu_pintu_tanggal_terbit" name="satu_pintu_tanggal_terbit" class="form-control-v"
                                                    value="{{ $application->satu_pintu_tanggal_terbit ? $application->satu_pintu_tanggal_terbit->format('Y-m-d') : '' }}" style="background:white;" required>
                                         </div>
-                                        <div class="form-group" style="margin-bottom:12px;">
+                                        <div class="form-group-v" style="margin-bottom:12px;">
                                             @if($application->approval_document)
                                                 <label class="form-label" style="font-weight:700;color:#744210;">Dokumen PKKPR</label>
                                                 <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#0f172a; font-size:13px; font-weight:600; text-decoration:none; margin-top:4px; transition:all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
@@ -1079,17 +1214,17 @@
                                                 </a>
                                             @else
                                                 <label for="approval_document" class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen PKKPR (opsional)</label>
-                                                <input type="file" id="approval_document" name="approval_document" class="form-control" accept="application/pdf" style="background:white;">
+                                                <input type="file" id="approval_document" name="approval_document" class="form-control-v" accept="application/pdf" style="background:white;">
                                                 <span style="font-size:11.5px;color:#744210;margin-top:4px;display:block;">Format PDF, maks. 10MB. Dokumen ini dapat diunduh oleh pemohon.</span>
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group-v">
                                         <label for="notes_sp" class="form-label" style="font-weight:700;color:#744210;">Catatan / Keterangan:</label>
-                                        <textarea id="notes_sp" name="notes" class="form-control" rows="3" placeholder="Catatan penerbitan PKKPR (opsional)..." style="resize:none;background:white;">{{ $application->satu_pintu_notes }}</textarea>
+                                        <textarea id="notes_sp" name="notes" class="form-control-v" rows="3" placeholder="Catatan penerbitan PKKPR (opsional)..." style="resize:none;background:white;">{{ $application->satu_pintu_notes }}</textarea>
                                     </div>
                                     @if($isSpActive)
-                                        <button type="submit" class="btn-verify-submit" style="background:#79A73A;">📄 Terbitkan PKKPR & Blast WA Pemohon</button>
+                                        <button type="submit" class="btn-submit-v" style="background:#79A73A;">📄 Terbitkan PKKPR & Blast WA Pemohon</button>
                                     @else
                                         <div style="margin-top:12px; font-size:12.5px; color:#c53030; font-weight: 700;">(Tahap ini belum aktif / bukan wewenang Anda / sudah diselesaikan)</div>
                                     @endif
@@ -1108,157 +1243,264 @@
                                 </script>
                             </fieldset>
                         </div>
+                    @endif
                 </div>
+            @endif
 
+            <!-- PELAKU USAHA ACTION: REUPLOAD JIKA BERKAS TIDAK SESUAI -->
+            @if($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']))
+                <div class="verify-card" style="border-color: #F5C2C1; background: #FFF5F5;">
+                    <h3 class="verify-title" style="color: #C5221F;">⚠️ Perbaikan Dokumen Persyaratan Diperlukan</h3>
+                    <p style="font-size: 13px; color: #7F2321; margin-bottom: 16px;">
+                        Petugas BPN menyatakan berkas Anda belum sesuai dengan catatan: <br>
+                        <strong>"{{ $application->bpn_notes }}"</strong>
+                    </p>
+                    <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="step" value="reupload">
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="peta_lokasi">1. Peta/sketsa lokasi</label>
+                            <input type="file" name="peta_lokasi" id="peta_lokasi" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="surat_kuasa">2. Surat kuasa</label>
+                            <input type="file" name="surat_kuasa" id="surat_kuasa" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="fc_ktp">3. FC KTP</label>
+                            <input type="file" name="fc_ktp" id="fc_ktp" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="fc_npwp">4. FC NPWP</label>
+                            <input type="file" name="fc_npwp" id="fc_npwp" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="fc_akta_pendirian">5. FC Akta Pendirian & Pengesahan Badan Hukum</label>
+                            <input type="file" name="fc_akta_pendirian" id="fc_akta_pendirian" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="rencana_penggunaan_tanah">6. Rencana Penggunaan Tanah</label>
+                            <input type="file" name="rencana_penggunaan_tanah" id="rencana_penggunaan_tanah" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="nib">7. NIB</label>
+                            <input type="file" name="nib" id="nib" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="kbli">8. KBLI</label>
+                            <input type="file" name="kbli" id="kbli" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 12px;">
+                            <label for="proposal_kegiatan">9. Proposal Kegiatan</label>
+                            <input type="file" name="proposal_kegiatan" id="proposal_kegiatan" class="form-control-v" accept=".pdf,.doc,.docx">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 12px;">
+                            <label for="persyaratan_lainnya">10. Persyaratan Lainnya (Opsional)</label>
+                            <input type="file" name="persyaratan_lainnya" id="persyaratan_lainnya" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar">
+                        </div>
+                        <button type="submit" class="btn-submit-v" style="background: #C5221F;">Kirim Berkas Perbaikan</button>
+                    </form>
+                </div>
+            @endif
 
-            <div class="grid-layout">
+            <div class="layout-grid">
                 
-                <!-- Left: Application Details & Uploaded Files -->
+                <!-- Left: Application Details -->
                 <div>
-                    <!-- Data Permohonan -->
                     <div class="card">
                         <h2 class="card-title">Informasi Identitas Pemohon / Pengguna Layanan</h2>
-                        <div class="data-list">
-                            <div class="data-item">
-                                <span class="data-label">Nama Pemilik Usaha</span>
-                                <span class="data-val">{{ $application->nama_pemilik_usaha }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Nama Pemohon / Pengguna Layanan</span>
-                                <span class="data-val">{{ $application->nama_pengaju }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Hubungan Pengaju (Sebagai Apa)</span>
-                                <span class="data-val">{{ $application->hubungan_pengaju }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Akun Pemohon (Username)</span>
-                                <span class="data-val">PMH{{ str_pad($application->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Nomor Telepon Gateway / HP</span>
-                                <span class="data-val mono">+{{ $application->user->phone_number }}</span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-label">Tanggal Pengajuan Berkas</span>
-                                <span class="data-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dokumen Lampiran -->
-                    <div class="card">
-                        <h2 class="card-title">Dokumen Berkas Persyaratan</h2>
-                        <div class="doc-list">
-                            
-                            <!-- Persyaratan Utama -->
-                            @if($application->ptp_data)
-                            <a href="{{ route('kebijakan.ptp_pdf', $application->id) }}" target="_blank" class="doc-item">
-                                <span class="doc-name" style="font-weight: 700; color: var(--clr-blue-dk);">Formulir PTP (Digital)</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-                            @if($application->peta_lokasi)
-                            <a href="{{ asset('storage/' . $application->peta_lokasi) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">1. Peta Lokasi</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->surat_kuasa)
-                            <a href="{{ asset('storage/' . $application->surat_kuasa) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">2. Surat Kuasa</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->fc_ktp)
-                            <a href="{{ asset('storage/' . $application->fc_ktp) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">3. FC KTP</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->fc_npwp)
-                            <a href="{{ asset('storage/' . $application->fc_npwp) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">4. FC NPWP</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->fc_akta_pendirian)
-                            <a href="{{ asset('storage/' . $application->fc_akta_pendirian) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">5. FC Akta Pendirian</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->rencana_penggunaan_tanah)
-                            <a href="{{ asset('storage/' . $application->rencana_penggunaan_tanah) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">6. Rencana Penggunaan Tanah</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->nib)
-                            <a href="{{ asset('storage/' . $application->nib) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">7. NIB</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->kbli)
-                            <a href="{{ asset('storage/' . $application->kbli) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">8. KBLI</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->proposal_kegiatan)
-                            <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">9. Proposal Kegiatan</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            @if($application->persyaratan_lainnya)
-                            <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="doc-item">
-                                <span class="doc-name">10. Persyaratan Lainnya</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
-                            @endif
-
-                            <!-- Pertek Pertanahan (Jika sudah diterbitkan) -->
-                            @if($application->bpn_pertek_document)
-                                <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="doc-item" style="border-top: 1px solid var(--clr-line); padding-top: 12px; margin-top: 12px;">
-                                    <span class="doc-name" style="font-weight: 700; color: #1a202c;">Dokumen Pertek Pertanahan (BPN)</span>
-                                    <span class="doc-status" style="color: var(--clr-green-dk);">
-                                        Unduh Pertek
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                        
+                        <ul class="detail-list">
+                            <li class="detail-item">
+                                <span class="detail-label">Status Utama</span>
+                                <span class="detail-val" style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="badge-status" style="background-color: {{ $application->status_color }};">
+                                        {{ $application->status_label }}
                                     </span>
-                                </a>
+                                </span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Nama Pemilik Usaha</span>
+                                <span class="detail-val">{{ $application->nama_pemilik_usaha }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Nama Pemohon / Pengguna Layanan</span>
+                                <span class="detail-val">{{ $application->nama_pengaju }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Status Pemohon (Sebagai Apa)</span>
+                                <span class="detail-val">{{ $application->hubungan_pengaju }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Akun Pemohon (Username)</span>
+                                <span class="detail-val">PMH{{ str_pad($application->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Nomor Telepon Gateway / HP</span>
+                                <span class="detail-val mono">+{{ $application->user->phone_number }}</span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Tanggal Pengajuan Berkas</span>
+                                <span class="detail-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
+                            </li>
+                            
+                            <!-- BPN Info -->
+                            <li class="detail-item">
+                                <span class="detail-label">Kelayakan Berkas (BPN)</span>
+                                <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
+                                    {{ str_replace('_', ' ', $application->bpn_berkas_status) }}
+                                </span>
+                            </li>
+                            <li class="detail-item">
+                                <span class="detail-label">Status Pembayaran</span>
+                                <span class="detail-val" style="text-transform: capitalize; font-weight: 700; color: {{ $application->bpn_pembayaran_status === 'sudah_bayar' ? 'var(--clr-green)' : '#E53E3E' }}">
+                                    {{ str_replace('_', ' ', $application->bpn_pembayaran_status) }}
+                                </span>
+                            </li>
+
+                            @if($application->no_berkas)
+                                <li class="detail-item">
+                                    <span class="detail-label">Nomor Berkas</span>
+                                    <span class="detail-val" style="font-weight: 700; color: var(--clr-blue-dk);">{{ $application->no_berkas }}</span>
+                                </li>
                             @endif
 
-                        </div>
+                            @if($application->bpn_pertek_document)
+                                <li class="detail-item">
+                                    <span class="detail-label">Dokumen Pertek BPN</span>
+                                    <span class="detail-val">
+                                        <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
+                                            Unduh Surat Pertek
+                                        </a>
+                                    </span>
+                                </li>
+                            @endif
+
+                            <!-- Dinas PU Info -->
+                            @if($application->status !== 'menunggu_bpn')
+                                <li class="detail-item">
+                                    <span class="detail-label">Penilaian Tata Ruang (PU)</span>
+                                    <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
+                                        {{ str_replace('_', ' ', $application->status) === 'ditolak' && !$application->satu_pintu_no_pkkpr ? 'Belum Sesuai' : 'Sesuai' }}
+                                    </span>
+                                </li>
+                            @endif
+
+                            @if($application->dinas_pu_tanggal_penilaian)
+                                <li class="detail-item">
+                                    <span class="detail-label">Tanggal Penilaian PU</span>
+                                    <span class="detail-val" style="font-weight: 700;">{{ $application->dinas_pu_tanggal_penilaian->format('d-m-Y') }}</span>
+                                </li>
+                            @endif
+
+                            <!-- Satu Pintu Info -->
+                            @if($application->satu_pintu_no_pkkpr)
+                                <li class="detail-item">
+                                    <span class="detail-label">Nomor PKKPR</span>
+                                    <span class="detail-val">{{ $application->satu_pintu_no_pkkpr }}</span>
+                                </li>
+                            @endif
+
+                            @if($application->approval_document)
+                                <li class="detail-item">
+                                    <span class="detail-label">Dokumen PKKPR Terbit</span>
+                                    <span class="detail-val">
+                                        <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-doc">
+                                            Unduh Dokumen
+                                        </a>
+                                    </span>
+                                </li>
+                            @endif
+
+                            <li class="detail-item" style="display: flex; flex-direction: column; gap: 8px;">
+                                <span class="detail-label" style="border-bottom: 1px solid var(--clr-line); padding-bottom: 8px; margin-bottom: 4px;">Berkas Lampiran Persyaratan</span>
+                                
+                                @if($application->ptp_data)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid); font-weight: 500;">Formulir PTP</span>
+                                    <a href="{{ route('kebijakan.ptp_pdf', $application->id) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+                                
+                                @if($application->peta_lokasi)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">1. Peta Lokasi</span>
+                                    <a href="{{ asset('storage/' . $application->peta_lokasi) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->surat_kuasa)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">2. Surat Kuasa</span>
+                                    <a href="{{ asset('storage/' . $application->surat_kuasa) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_ktp)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">3. FC KTP</span>
+                                    <a href="{{ asset('storage/' . $application->fc_ktp) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_npwp)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">4. FC NPWP</span>
+                                    <a href="{{ asset('storage/' . $application->fc_npwp) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->fc_akta_pendirian)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">5. FC Akta Pendirian</span>
+                                    <a href="{{ asset('storage/' . $application->fc_akta_pendirian) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->rencana_penggunaan_tanah)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">6. Rencana Penggunaan Tanah</span>
+                                    <a href="{{ asset('storage/' . $application->rencana_penggunaan_tanah) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->nib)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">7. NIB</span>
+                                    <a href="{{ asset('storage/' . $application->nib) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->kbli)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">8. KBLI</span>
+                                    <a href="{{ asset('storage/' . $application->kbli) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->proposal_kegiatan)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">9. Proposal Kegiatan</span>
+                                    <a href="{{ asset('storage/' . $application->proposal_kegiatan) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+
+                                @if($application->persyaratan_lainnya)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 13px; color: var(--clr-mid);">10. Persyaratan Lainnya</span>
+                                    <a href="{{ asset('storage/' . $application->persyaratan_lainnya) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                </div>
+                                @endif
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
                 <!-- Right: Staged Tracking Timeline -->
                 <div>
-                    <div class="card">
-                        <h1 class="page-title">Detail Kebijakan Khusus</h1>
-                    </div>
 
                                         <!-- SLA Banner -->
-                    <style>
-                        .sla-banner { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 20px; }
-                        .sla-item { padding: 16px; border-radius: 10px; border: 1.5px solid; display: flex; justify-content: space-between; align-items: center;}
-                        .sla-info { display: flex; flex-direction: column; }
-                        .sla-title { font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; opacity: 0.8; }
-                        .sla-value { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-                        .sla-desc { font-size: 12.5px; opacity: 0.9; }
-                        .sla-badge { padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 14px; text-align: center; }
-                    </style>
+
                     @php
                         $targetDate = $application->created_at->addWeekdays(10);
                         $now = \Carbon\Carbon::now();
@@ -1319,24 +1561,7 @@
                     </div>
 
                     <div class="card" style="position: sticky; top: 88px;">
-                        <!-- ── SERVICE IDENTIFIER HEADER ── -->
-                        <div class="timeline-card-header">
-                            <img
-                                src="{{ asset('storage/logo/Kebijakan.png') }}"
-                                alt="Logo Kebijakan Khusus"
-                                class="timeline-service-logo"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                            >
-                            <!-- Fallback jika logo tidak ditemukan -->
-                            <div style="display:none; width:56px; height:56px; border-radius:10px; background:var(--clr-blue); align-items:center; justify-content:center; flex-shrink:0;">
-                                <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                            </div>
-                            <div class="timeline-service-meta">
-                                <div class="timeline-service-label">Pelacakan Permohonan</div>
-                                <div class="timeline-service-title">Kebijakan Khusus</div>
-                                <div class="timeline-step-count">7 Tahapan · BPN & DPMPTSP</div>
-                            </div>
-                        </div>
+                        <!-- Timeline Tracker -->
                         
                         <div class="timeline">
                             
@@ -1500,6 +1725,40 @@
                                 </div>
                             </div>
 
+                            <!-- STEP 6: Penilaian PKKPR Dinas PUTR -->
+                            @php
+                                $step6Status = '';
+                                if ($application->bpn_pertek_document) {
+                                    if ($application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui') {
+                                        $step6Status = 'completed';
+                                    } elseif ($application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr) {
+                                        $step6Status = 'rejected';
+                                    } elseif ($application->status === 'menunggu_dinas_pu') {
+                                        $step6Status = 'active';
+                                    }
+                                }
+                            @endphp
+                            <div class="timeline-step {{ $step6Status }}" onclick="showBpnPanel('pu-1')" style="cursor:pointer;">
+                                <span class="timeline-dot"></span>
+                                <div class="timeline-content">
+                                    <div class="timeline-title">
+                                        5. Penilaian PKKPR
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PUTR</span>
+                                    </div>
+                                    <div class="timeline-desc">
+                                        Dinas Pekerjaan Umum dan Tata Ruang menilai kesesuaian tata ruang berdasarkan dokumen Pertek. Notifikasi dikirim ke pemohon.
+                                    </div>
+                                    @if($application->dinas_pu_notes)
+                                        <div class="timeline-notes" style="border-left-color: {{ in_array($application->status, ['menunggu_satu_pintu','disetujui']) ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ in_array($application->status, ['menunggu_satu_pintu','disetujui']) ? '#F4FBF7' : '#FFF5F5' }}; color: {{ in_array($application->status, ['menunggu_satu_pintu','disetujui']) ? '#137333' : '#C53030' }}">
+                                            <strong>Catatan Dinas PUTR:</strong> {{ $application->dinas_pu_notes }}
+                                        </div>
+                                    @endif
+                                    @if($application->dinas_pu_tanggal_penilaian)
+                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Selesai: {{ \Carbon\Carbon::parse($application->dinas_pu_tanggal_penilaian)->locale('id')->translatedFormat('l, d M Y') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+
                             <!-- STEP 7: Penerbitan PKKPR Satu Pintu -->
                             @php
                                 $step7Status = '';
@@ -1566,143 +1825,6 @@
             </div>
         </div>
     </main>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const textareas = document.querySelectorAll('textarea[name="custom_wa_message"]');
-    textareas.forEach(ta => {
-        const form = ta.closest('form');
-        let waTypeInput = form.querySelector('input[name="wa_type"]');
-        let waTypeValue = waTypeInput ? waTypeInput.value : null;
-
-        if (!waTypeValue) {
-            const stepInput = form.querySelector('input[name="step"]');
-            if (stepInput) {
-                const step = stepInput.value;
-                if (step === 'berkas_verifikasi') waTypeValue = 'berkas_verifikasi';
-                else if (step === 'pembayaran_lunas') waTypeValue = 'credential';
-                else if (step === 'cek_lokasi') waTypeValue = 'cek_lokasi';
-                else if (step === 'rapat') waTypeValue = 'rapat';
-                else if (step === 'pertek') waTypeValue = 'pertek_terbit';
-                else if (step === 'putr') waTypeValue = 'putr_validasi';
-                else if (step === 'pu') waTypeValue = 'pu_selesai';
-                else if (step === 'pkkpr') waTypeValue = 'pkkpr_terbit';
-            }
-        }
-
-        if (!waTypeValue) {
-            const html = form.innerHTML;
-            if (html.includes('name="bpn_berkas_notes"') || html.includes('Simpan Verifikasi Berkas')) waTypeValue = 'berkas_verifikasi';
-            else if (html.includes('name="sps_bpn"') || html.includes('Kirim Kredensial')) waTypeValue = 'credential';
-            else if (html.includes('name="bpn_lokasi_notes"') || html.includes('Kirimkan Jadwal Cek Lokasi')) waTypeValue = 'cek_lokasi';
-            else if (html.includes('name="bpn_rapat_notes"') || html.includes('Simpan Hasil Rapat')) waTypeValue = 'rapat';
-            else if (html.includes('name="pertek_notes"') || html.includes('Kirim Pertek Pertanahan')) waTypeValue = 'pertek_terbit';
-            else if (html.includes('name="dinas_pu_notes"') || html.includes('Kirim Validasi Awal')) waTypeValue = 'putr_validasi';
-            else if (html.includes('name="dinas_pu_penilaian_notes"') || html.includes('Kirim Penilaian PU')) waTypeValue = 'pu_selesai';
-            else if (html.includes('name="ptsp_notes"') || html.includes('Terbitkan PKKPR')) waTypeValue = 'pkkpr_terbit';
-            else waTypeValue = 'berkas_verifikasi';
-        }
-
-        if (waTypeValue) {
-            ta.readOnly = true;
-            ta.disabled = true; // Disable so it doesn't send the prefilled text if not manually edited
-            ta.style.backgroundColor = '#f4f7f9';
-            ta.style.color = '#555';
-            ta.rows = 7;
-            ta.style.minHeight = '160px';
-            
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'btn-edit-wa';
-            btn.innerHTML = '✏️ Rubah Pesan WA';
-            btn.style.cssText = 'display:inline-block; margin-bottom:8px; background:#3291A8; color:#fff; border:none; padding:6px 12px; border-radius:4px; font-size:12px; font-weight:600; cursor:pointer;';
-            
-            ta.parentNode.insertBefore(btn, ta);
-            
-            btn.addEventListener('click', function() {
-                ta.readOnly = false;
-                ta.disabled = false; // Re-enable for submission
-                ta.style.backgroundColor = '#fff';
-                ta.style.color = '#000';
-                ta.focus();
-                btn.style.display = 'none'; 
-            });
-            
-            let type = '';
-            if(window.location.pathname.includes('berusaha')) type = 'berusaha';
-            if(window.location.pathname.includes('non-berusaha')) type = 'non_berusaha';
-            if(window.location.pathname.includes('kebijakan')) type = 'kebijakan';
-            if(window.location.pathname.includes('tanah-timbul')) type = 'tanah_timbul';
-            if(window.location.pathname.includes('psn')) type = 'psn';
-            
-            const appId = window.location.pathname.split('/').pop();
-            
-            const fetchTemplate = (actionOverride = null) => {
-                if(type && appId && !isNaN(appId)) {
-                    let url = `/api/wa-template?type=${type}&id=${appId}&wa_type=${waTypeValue}`;
-                    if (actionOverride) {
-                        url += `&action=${actionOverride}`;
-                    }
-                    fetch(url)
-                        .then(res => res.json())
-                        .then(data => {
-                            if(data.template) {
-                                ta.value = data.template;
-                            }
-                        })
-                        .catch(err => console.error('Gagal fetch template', err));
-                }
-            };
-
-            // Fetch initial
-            let initialAction = null;
-            const checkedRadio = form.querySelector('input[type="radio"][name="action"]:checked');
-            const selectedSelect = form.querySelector('select[name="action"]');
-            if (checkedRadio) {
-                initialAction = checkedRadio.value;
-            } else if (selectedSelect) {
-                initialAction = selectedSelect.value;
-            }
-            fetchTemplate(initialAction);
-
-            // Listen to radio changes
-            const actionRadios = form.querySelectorAll('input[type="radio"][name="action"]');
-            actionRadios.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    fetchTemplate(this.value);
-                });
-            });
-
-            // Listen to select changes
-            const actionSelects = form.querySelectorAll('select[name="action"]');
-            actionSelects.forEach(sel => {
-                sel.addEventListener('change', function() {
-                    fetchTemplate(this.value);
-                });
-            });
-        }
-    });
-});
-</script>
 
 </body>
 </html>
