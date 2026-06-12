@@ -1813,7 +1813,7 @@
                         </a>
                         <a href="{{ route('lapolpa.index') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--surface);">
-                                <img src="{{ asset('storage/logo/Lapol Pakk.png') }}" alt="">
+                                <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="">
                             </span>
                             LAPOL PAK
                         </a>
