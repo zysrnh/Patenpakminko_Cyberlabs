@@ -1801,7 +1801,7 @@
                         </a>
                         <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--green-lt);">
-                                <img src="{{ asset('storage/logo/Pertimbangan Teknis PertanahanNon.png') }}" alt="">
+                                <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="">
                             </span>
                             Pertimbangan Teknis Pertanahan Non Berusaha
                         </a>

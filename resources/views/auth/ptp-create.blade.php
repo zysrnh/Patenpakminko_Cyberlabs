@@ -386,7 +386,7 @@
 
     $layananLogo = match($layananActive) {
         'berusaha' => 'PKKPR.png',
-        'non-berusaha' => 'Pertimbangan Teknis PertanahanNon.png',
+        'non-berusaha' => 'PKKPRNon.png',
         'kebijakan' => 'Kebijakan.png',
         default => 'PKKPR.png'
     };
