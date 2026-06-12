@@ -61,8 +61,8 @@
                         <!-- Slide 1 -->
                         <div class="sp-slide">
                             <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="sp-row">
-                                <div class="sp-row-logo">
-                                    <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="PKKPR Berusaha">
+                                <div class="sp-row-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
                                     <strong>Pertimbangan Teknis Pertanahan Berusaha</strong>
@@ -74,8 +74,8 @@
                                 </div>
                             </a>
                             <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="sp-row">
-                                <div class="sp-row-logo">
-                                    <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="PKKPR Non Berusaha">
+                                <div class="sp-row-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
                                     <strong>Pertimbangan Teknis Pertanahan Non Berusaha</strong>
@@ -87,12 +87,38 @@
                                 </div>
                             </a>
                             <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="sp-row">
-                                <div class="sp-row-logo">
-                                    <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="Kebijakan">
+                                <div class="sp-row-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
                                     <strong>Kebijakan</strong>
                                     <span>Kebijakan pengguna &amp; pemanfaatan tanah</span>
+                                </div>
+                                <div class="sp-row-cta">
+                                    Daftar
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-row">
+                                <div class="sp-row-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                                </div>
+                                <div class="sp-row-info">
+                                    <strong>Tanah Timbul</strong>
+                                    <span>Layanan pendaftaran tanah timbul</span>
+                                </div>
+                                <div class="sp-row-cta">
+                                    Daftar
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                </div>
+                            </a>
+                            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
+                                <div class="sp-row-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                                </div>
+                                <div class="sp-row-info">
+                                    <strong>Proyek Strategis Nasional (PSN)</strong>
+                                    <span>Layanan permohonan proyek strategis</span>
                                 </div>
                                 <div class="sp-row-cta">
                                     Daftar
@@ -122,24 +148,6 @@
                                 <img src="{{ asset('storage/logo/Informal.png') }}" alt="INFORMAL">
                             </div>
                             <span class="sp-other-name">INFORMAL</span>
-                            <div class="sp-other-arrow">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                            </div>
-                        </a>
-                        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-other-card">
-                            <div class="sp-other-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-                            </div>
-                            <span class="sp-other-name">Tanah Timbul</span>
-                            <div class="sp-other-arrow">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                            </div>
-                        </a>
-                        <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-other-card">
-                            <div class="sp-other-logo" style="background:#e3f0f9; color:#218AC9; border-radius:8px; display:flex; align-items:center; justify-content:center;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:24px; height:24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-                            </div>
-                            <span class="sp-other-name">Proyek Strategis Nasional (PSN)</span>
                             <div class="sp-other-arrow">
                                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </div>
