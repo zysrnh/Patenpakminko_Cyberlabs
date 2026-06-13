@@ -1349,7 +1349,7 @@
             @endif
 
             <!-- Two-column grid -->
-            <div class="grid-2col">
+            <div class="grid-2col" {!! Auth::user()->isPelakuUsaha() ? 'style="grid-template-columns: 1fr;"' : '' !!}>
 
                 <!-- Left: Service modules + Recent activity -->
                 <div style="display:flex;flex-direction:column;gap:20px;">
@@ -1512,9 +1512,10 @@
                 </div>
 
                 <!-- Right Column -->
-                <div class="right-col">
+                <div class="right-col" style="display:flex;flex-direction:column;gap:20px;">
 
                     <!-- Status Overview -->
+                    @if(!Auth::user()->isPelakuUsaha())
                     <div class="panel">
                         <div class="panel-head">
                             <h2>Status Permohonan</h2>
@@ -1542,6 +1543,7 @@
                             @endforeach
                         </div>
                     </div>
+                    @endif
 
                     <!-- Upcoming Schedule -->
                     <div class="panel">
