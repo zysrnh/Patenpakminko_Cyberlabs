@@ -91,6 +91,11 @@ Route::get('/alur', function() {
     return view('alur');
 })->name('alur');
 
+// Route Kontak
+Route::get('/kontak', function() {
+    return view('kontak');
+})->name('kontak');
+
 // Route Berita Publik
 Route::get('/berita/{slug}', [\App\Http\Controllers\BeritaController::class, 'showPublic'])->name('berita.show');
 

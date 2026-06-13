@@ -1837,6 +1837,13 @@
 
                 <div class="nav-sep" aria-hidden="true"></div>
 
+                <a href="{{ route('kontak') }}" class="btn-nav">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Kontak Kami
+                </a>
+
                 @auth
                     @if(Auth::user()->isAdminBerita())
                         <a href="{{ route('admin.berita.index') }}" class="btn-nav">
@@ -1903,6 +1910,7 @@
         <span class="mobile-section-label">Navigasi</span>
         <a href="{{ route('alur') }}" onclick="closeMobileNav()">Alur Proses</a>
         <a href="#ulasan" onclick="closeMobileNav()">Ulasan</a>
+        <a href="{{ route('kontak') }}" onclick="closeMobileNav()">Kontak Kami</a>
         @auth
             @if(Auth::user()->isAdminBerita())
                 <a href="{{ route('admin.berita.index') }}" class="mobile-cta" onclick="closeMobileNav()">
@@ -1959,8 +1967,8 @@
                     <li><a href="{{ url('/') }}">Beranda</a></li>
                     <li><a href="#">Tentang Kami</a></li>
                     <li><a href="#">Layanan</a></li>
-                    <li><a href="#">Artikel</a></li>
-                    <li><a href="#">Kontak</a></li>
+                    <li><a href="{{ route('alur') }}">Alur Proses</a></li>
+                    <li><a href="{{ route('kontak') }}">Kontak Kami</a></li>
                 </ul>
             </div>
 
@@ -1980,7 +1988,7 @@
             <div>
                 <h4 class="f-col-title">Kontak Kami</h4>
                 <div class="f-contact-item">patenpakmiko@mail.com</div>
-                <div class="f-contact-item">08111610127</div>
+                <div class="f-contact-item">+62 813-2271-2133</div>
                 <div class="f-contact-item">Jl. Suryakencana No. 02 Kelurahan Gununggparang, Kec. Cikole, Kode Pos 43111, Kota Sukabumi</div>
             </div>
 
