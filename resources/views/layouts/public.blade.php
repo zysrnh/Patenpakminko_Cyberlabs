@@ -1971,7 +1971,7 @@
                 <h4 class="f-col-title">Kontak Kami</h4>
                 <div class="f-contact-item">patenpakmiko@mail.com</div>
                 <div class="f-contact-item">08111610127</div>
-                <div class="f-contact-item">Jl. Siliwangi No.127<br>, Cikole, Kec. Cikole, Kota Sukabumi, Jawa Barat 43113</div>
+                <div class="f-contact-item">Jl. Suryakencana No. 02 Kelurahan Gununggparang, Kec. Cikole, Kode Pos 43111, Kota Sukabumi</div>
             </div>
 
             <div>
