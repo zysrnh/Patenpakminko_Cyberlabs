@@ -1551,12 +1551,12 @@
                         </div>
                         @php
                             if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->role === 'admin') {
-                                $upcomingSchedules = \App\Models\Lapol PakBooking::whereIn('status', ['booked', 'diterima'])
+                                $upcomingSchedules = \App\Models\LapolpakBooking::whereIn('status', ['booked', 'diterima'])
                                     ->orderBy('booking_date', 'asc')
                                     ->take(5)
                                     ->get();
                             } else {
-                                $upcomingSchedules = \App\Models\Lapol PakBooking::where('user_id', Auth::id())
+                                $upcomingSchedules = \App\Models\LapolpakBooking::where('user_id', Auth::id())
                                     ->whereIn('status', ['booked', 'diterima'])
                                     ->orderBy('booking_date', 'asc')
                                     ->take(5)
