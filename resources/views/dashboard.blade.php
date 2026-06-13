@@ -990,7 +990,7 @@
                     $totalNon = \App\Models\PpkprApplication::where('user_id', $user->id)->count();
                     $totalBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->count();
                     $totalKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->count();
-                    $countLapolpak = \App\Models\LapolpakBooking::where('user_id', $user->id)->count();
+                    $countLapolpak = \App\Models\LapolpaBooking::where('user_id', $user->id)->count();
 
                     $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
@@ -1007,7 +1007,7 @@
                     $totalNon = \App\Models\PpkprApplication::count();
                     $totalBerusaha = \App\Models\PpkprBerusahaApplication::count();
                     $totalKebijakan = \App\Models\KebijakanApplication::count();
-                    $countLapolpak = \App\Models\LapolpakBooking::count();
+                    $countLapolpak = \App\Models\LapolpaBooking::count();
 
                     $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
@@ -1551,12 +1551,12 @@
                         </div>
                         @php
                             if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->role === 'admin') {
-                                $upcomingSchedules = \App\Models\LapolpakBooking::whereIn('status', ['booked', 'diterima'])
+                                $upcomingSchedules = \App\Models\LapolpaBooking::whereIn('status', ['booked', 'diterima'])
                                     ->orderBy('booking_date', 'asc')
                                     ->take(5)
                                     ->get();
                             } else {
-                                $upcomingSchedules = \App\Models\LapolpakBooking::where('user_id', Auth::id())
+                                $upcomingSchedules = \App\Models\LapolpaBooking::where('user_id', Auth::id())
                                     ->whereIn('status', ['booked', 'diterima'])
                                     ->orderBy('booking_date', 'asc')
                                     ->take(5)
