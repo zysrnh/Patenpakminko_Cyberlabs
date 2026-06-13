@@ -21,9 +21,11 @@
                     Portal Layanan Masyarakat
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
-                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width: 72px; height: auto;">
-                    <h1 class="hero-heading" style="margin-bottom: 0; text-transform: uppercase; font-size: clamp(40px, 5vw, 64px); line-height: 1;">PATEN PAK MIKO</h1>
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 16px;">
+                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width: 96px; height: auto;">
+                    <h1 class="hero-heading" style="margin-bottom: 0; text-transform: uppercase; font-size: clamp(56px, 7vw, 82px); line-height: 1.1;">
+                        PATEN<br>PAK MIKO
+                    </h1>
                 </div>
                 <h2 style="font-size: clamp(20px, 2.5vw, 28px); font-weight: 800; color: #00223D; margin-bottom: 24px; line-height: 1.4;">
                     Pertimbangan Teknis <span class="accent">Pertanahan</span><br>
