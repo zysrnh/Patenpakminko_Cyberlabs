@@ -21,11 +21,14 @@
                     Portal Layanan Masyarakat
                 </div>
 
-                <h1 class="hero-heading">
-                    Pertimbangan Teknis<br>
-                    <span class="accent">Pertanahan</span><br>
-                    yang Terkoneksi Kantor<br>Pertanahan Sukabumi Kota
-                </h1>
+                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
+                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width: 72px; height: auto;">
+                    <h1 class="hero-heading" style="margin-bottom: 0; text-transform: uppercase; font-size: clamp(40px, 5vw, 64px); line-height: 1;">PATEN PAK MIKO</h1>
+                </div>
+                <h2 style="font-size: clamp(20px, 2.5vw, 28px); font-weight: 800; color: #00223D; margin-bottom: 24px; line-height: 1.4;">
+                    Pertimbangan Teknis <span class="accent">Pertanahan</span><br>
+                    Terkoneksi Kantor Pertanahan Sukabumi Kota
+                </h2>
 
                 <p class="hero-sub">
                     PATEN Pak Miko hadir sebagai inovasi pelayanan yang memberikan kemudahan bagi pemohon dalam memperoleh layanan pertanahan secara lebih cepat, jelas, dan transparan. PATEN Pak Miko diharapkan mampu meningkatkan kepercayaan pemohon sekaligus memberikan pengalaman layanan yang lebih <strong style="color: var(--blue-dk);">profesional, responsif, dan memudahkan.</strong>
