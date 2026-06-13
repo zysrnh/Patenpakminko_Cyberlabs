@@ -25,8 +25,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 56px;
-    padding: 0 20px;
+    height: 76px;
+    padding: 0 28px;
 
     /* Glassmorphism */
     background: rgba(255, 255, 255, 0.72);
@@ -45,30 +45,12 @@
     z-index: 100;
 }
 
-/* ─── Kiri: hamburger + breadcrumb ───────────────────────────────────────── */
+/* ─── Kiri: breadcrumb ───────────────────────────────────────── */
 .topbar-left {
     display: flex;
     align-items: center;
     gap: 12px;
 }
-
-.topbar-hamburger {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #1a3a5c;
-    transition: background 0.15s ease;
-    flex-shrink: 0;
-}
-.topbar-hamburger:hover  { background: rgba(15, 50, 90, 0.07); }
-.topbar-hamburger:active { background: rgba(15, 50, 90, 0.12); }
-.topbar-hamburger svg    { width: 18px; height: 18px; }
 
 .topbar-breadcrumb {
     display: flex;
@@ -231,15 +213,8 @@
 
 <header class="topbar">
 
-    {{-- Left: hamburger + breadcrumb title --}}
+    {{-- Left: breadcrumb title --}}
     <div class="topbar-left">
-        <button class="topbar-hamburger" id="toggle-sidebar" aria-label="Buka menu navigasi">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="3" y1="6"  x2="21" y2="6"/>
-                <line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
-        </button>
 
         <div class="topbar-breadcrumb">
             <a href="{{ url('/') }}" class="topbar-breadcrumb-parent">PATEN PAK MIKO</a>
