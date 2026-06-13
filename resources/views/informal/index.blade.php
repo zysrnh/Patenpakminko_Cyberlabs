@@ -515,20 +515,31 @@
                 }
             });
 
+            const alertHtml = `
+                <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 6px; padding: 12px; margin-top: 12px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #1E3A8A; margin-bottom: 4px;">
+                        &#8505;&#65039; PEMBERITAHUAN PENTING
+                    </div>
+                    <div style="font-size: 10.5px; color: #1E40AF; line-height: 1.5;">
+                        Informasi ini <b>bersifat awal</b> dan tidak dapat dijadikan dasar pengambilan keputusan. Untuk informasi yang lebih lengkap dan akurat mengenai LP2B, LBS, LSD, serta kesesuaian ruang, silakan ajukan <b>Layanan Peta Analisis Penatagunaan Tanah</b> atau <b>Pertimbangan Teknis Pertanahan</b> di Loket Kantor Pertanahan.
+                    </div>
+                </div>
+            `;
+
             if (matches.length > 0) {
                 let txt = matches.map(m => `<b>${m}</b>`).join(', ');
                 resultStatus.innerHTML = `
-                    <div style="background: #FEF2F2; color: #991B1B; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; margin-bottom: 12px; border: 1px solid #FCA5A5;">
-                        Zona Dilindungi: ${txt}
+                    <div style="background: #FEF2F2; color: #991B1B; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; border: 1px solid #FCA5A5;">
+                        Zona Terindikasi: ${txt}
                     </div>
-                    <p class="ms-result-text">Koordinat ini terindikasi berada di dalam area yang dilindungi/dipertahankan. Harap perhatikan persyaratan ekstra saat melakukan pengajuan.</p>
+                    ${alertHtml}
                 `;
             } else {
                 resultStatus.innerHTML = `
-                    <div style="background: #F0FDF4; color: #166534; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; margin-bottom: 12px; border: 1px solid #86EFAC;">
-                        &#10003; Zona Bebas LBS / LP2B / LSD
+                    <div style="background: #F0FDF4; color: #166534; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; border: 1px solid #86EFAC;">
+                        &#10003; Bebas LBS / LP2B / LSD (Data Awal)
                     </div>
-                    <p class="ms-result-text">Koordinat ini aman dan <b>tidak terdeteksi</b> berada di zona pertanian/sawah yang dilindungi berdasarkan data awal kami. Anda dapat melanjutkan proses permohonan.</p>
+                    ${alertHtml}
                 `;
             }
 
