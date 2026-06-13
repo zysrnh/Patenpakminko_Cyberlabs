@@ -447,12 +447,37 @@
         });
     });
 
+    coordDisplay.addEventListener('change', function() {
+        const val = this.value;
+        const parts = val.split(',');
+        if(parts.length === 2) {
+            const lat = parseFloat(parts[0].trim());
+            const lng = parseFloat(parts[1].trim());
+            if(!isNaN(lat) && !isNaN(lng)) {
+                marker.setLatLng([lat, lng]);
+                map.flyTo([lat, lng], 16, { duration: 1.0 });
+                resultArea.classList.remove('active');
+            }
+        }
+    });
+
     // Fly to marker on check
     btnCek.addEventListener('click', function() {
         const btn = this;
         const originalText = btn.innerHTML;
         btn.innerHTML = 'Menganalisis...';
         btn.disabled = true;
+
+        // Sync input ke marker jaga-jaga kalau user cuma ngetik tapi gak nge-blur/enter
+        const val = coordDisplay.value;
+        const parts = val.split(',');
+        if(parts.length === 2) {
+            const parsedLat = parseFloat(parts[0].trim());
+            const parsedLng = parseFloat(parts[1].trim());
+            if(!isNaN(parsedLat) && !isNaN(parsedLng)) {
+                marker.setLatLng([parsedLat, parsedLng]);
+            }
+        }
 
         const lat = marker.getLatLng().lat;
         const lng = marker.getLatLng().lng;
