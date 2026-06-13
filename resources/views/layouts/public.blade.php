@@ -1809,6 +1809,14 @@
                             <span class="nav-dd-icon" style="background:var(--yellow-lt);">
                                 <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="">
                             </span>Pertimbangan Teknis Pertanahan Kebijakan</a>
+                        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" role="menuitem">
+                            <span class="nav-dd-icon" style="background:var(--blue-lt);">
+                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="">
+                            </span>Pertimbangan Teknis Pertanahan Tanah Timbul</a>
+                        <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" role="menuitem">
+                            <span class="nav-dd-icon" style="background:var(--blue-lt);">
+                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="">
+                            </span>Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</a>
                         <a href="{{ route('lapolpa.index') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--surface);">
                                 <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="">
@@ -1888,6 +1896,8 @@
         <a href="{{ Auth::check() ? route('berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan PKKPR Berusaha</a>
         <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</a>
         <a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Kebijakan</a>
+        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Tanah Timbul</a>
+        <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</a>
         <a href="{{ route('lapolpa.index') }}" onclick="closeMobileNav()">LAPOL PAK</a>
         <a href="{{ route('informal.index') }}" onclick="closeMobileNav()">INFORMAL</a>
         <span class="mobile-section-label">Navigasi</span>
@@ -1958,9 +1968,11 @@
                 <h4 class="f-col-title">Layanan Kami</h4>
                 <ul class="f-links">
                     <li><a href="{{ route('lapolpa.index') }}">LAPOL PAK</a></li>
-                    <li><a href="#">Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</a></li>
-                    <li><a href="#">Pertimbangan Teknis Pertanahan PKKPR Berusaha</a></li>
-                    <li><a href="#">Pertimbangan Teknis Pertanahan Kebijakan</a></li>
+                    <li><a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}">Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</a></li>
+                    <li><a href="{{ Auth::check() ? route('berusaha.create') : route('login') }}">Pertimbangan Teknis Pertanahan PKKPR Berusaha</a></li>
+                    <li><a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}">Pertimbangan Teknis Pertanahan Kebijakan</a></li>
+                    <li><a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}">Pertimbangan Teknis Pertanahan Tanah Timbul</a></li>
+                    <li><a href="{{ route('ptp.create', ['layanan' => 'psn']) }}">Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</a></li>
                     <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>
             </div>
