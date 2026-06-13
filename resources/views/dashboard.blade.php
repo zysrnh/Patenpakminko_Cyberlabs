@@ -1434,7 +1434,7 @@
                                 </div>
                                 <span class="service-count" style="background:rgba(211,115,36,.12);color:#8B4513;">
                                     <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13"/></svg>
-                                    {{ $countLapol Pak ?? 0 }} jadwal
+                                    {{ $countLapolpak ?? 0 }} jadwal
                                 </span>
                             </a>
 
