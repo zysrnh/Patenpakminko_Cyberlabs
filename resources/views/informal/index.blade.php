@@ -447,6 +447,15 @@
         });
     });
 
+    // Pindahkan marker kalau user nge-klik di sembarang area peta
+    map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        marker.setLatLng([lat, lng]);
+        coordDisplay.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+        resultArea.classList.remove('active');
+    });
+
     coordDisplay.addEventListener('change', function() {
         const val = this.value;
         const parts = val.split(',');
