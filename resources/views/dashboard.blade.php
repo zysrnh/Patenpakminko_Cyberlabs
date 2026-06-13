@@ -589,17 +589,17 @@
    TOPBAR OVERRIDE
    ════════════════════════════════════════════════════════════ */
 .topbar {
-    height: 58px;
+    height: 72px;
     background: var(--white);
     border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 28px 0 24px;
+    padding: 0 32px;
     position: sticky;
     top: 0;
     z-index: 10;
-    gap: 12px;
+    gap: 16px;
 }
 
 /* Left side */
@@ -652,14 +652,14 @@
     color: var(--blue);
 }
 .topbar-breadcrumb-sep {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     color: var(--muted);
     opacity: 0.5;
     flex-shrink: 0;
 }
 .topbar-breadcrumb-current {
-    font-size: 13.5px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--ink);
     white-space: nowrap;
@@ -679,20 +679,20 @@
 .topbar-datepill {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 5px 11px;
+    gap: 8px;
+    padding: 6px 14px;
     border-radius: 20px;
     background: var(--surface);
     border: 1px solid var(--line);
 }
 .topbar-datepill svg {
-    width: 13px;
-    height: 13px;
+    width: 15px;
+    height: 15px;
     color: var(--muted);
     flex-shrink: 0;
 }
 .topbar-datepill span {
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 500;
     color: var(--mid);
     white-space: nowrap;
@@ -701,16 +701,16 @@
 /* Divider */
 .topbar-divider {
     width: 1px;
-    height: 22px;
+    height: 24px;
     background: var(--line);
 }
 
 /* Notification button */
 .topbar-notif-btn {
     position: relative;
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     background: var(--surface);
     border: 1px solid var(--line);
     display: flex;
@@ -722,8 +722,8 @@
     flex-shrink: 0;
 }
 .topbar-notif-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
 }
 .topbar-notif-btn:hover {
     background: var(--blue-lt);
@@ -736,13 +736,13 @@
     position: absolute;
     top: -5px;
     right: -5px;
-    min-width: 17px;
-    height: 17px;
-    padding: 0 4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
     border-radius: 10px;
     background: #DC2626;
     color: #fff;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -756,9 +756,9 @@
 .topbar-user-chip {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 4px 10px 4px 4px;
-    border-radius: 20px;
+    gap: 10px;
+    padding: 5px 12px 5px 5px;
+    border-radius: 24px;
     background: var(--surface);
     border: 1px solid var(--line);
     cursor: pointer;
@@ -770,8 +770,8 @@
     border-color: var(--blue-md);
 }
 .topbar-user-avatar {
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     flex-shrink: 0;
 }
@@ -781,18 +781,18 @@
 .topbar-user-avatar--initials {
     background: var(--blue);
     color: #fff;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .topbar-user-name {
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-weight: 600;
     color: var(--ink);
     white-space: nowrap;
-    max-width: 140px;
+    max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
