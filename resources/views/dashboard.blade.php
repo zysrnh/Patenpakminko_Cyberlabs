@@ -123,27 +123,7 @@
             min-height: 100vh;
         }
 
-        /* ─── TOPBAR ─────────────────────────── */
-        .topbar {
-            height: 60px; background: var(--white);
-            border-bottom: 1px solid var(--line);
-            display: flex; align-items: center;
-            justify-content: space-between;
-            padding: 0 28px;
-            position: sticky; top: 0; z-index: 10;
-        }
-        .topbar-left { display: flex; align-items: center; gap: 12px; }
-        .hamburger {
-            display: none;
-            width: 36px; height: 36px;
-            background: var(--surface); border: 1px solid var(--line);
-            border-radius: var(--r-md); cursor: pointer;
-            align-items: center; justify-content: center;
-        }
-        .hamburger svg { width: 18px; height: 18px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
-        .topbar-title { font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
-        .topbar-right { display: flex; align-items: center; gap: 12px; }
-        .topbar-date { font-size: 12px; font-weight: 500; color: var(--muted); }
+
 
         /* ─── CONTENT ──────────────────────────────────────── */
         .content {
@@ -666,6 +646,10 @@
     font-weight: 500;
     color: var(--muted);
     white-space: nowrap;
+    transition: color 0.15s;
+}
+.topbar-breadcrumb-parent:hover {
+    color: var(--blue);
 }
 .topbar-breadcrumb-sep {
     width: 12px;
@@ -777,8 +761,13 @@
     border-radius: 20px;
     background: var(--surface);
     border: 1px solid var(--line);
-    cursor: default;
+    cursor: pointer;
     user-select: none;
+    transition: background 0.15s, border-color 0.15s;
+}
+.topbar-user-chip:hover {
+    background: var(--blue-lt);
+    border-color: var(--blue-md);
 }
 .topbar-user-avatar {
     width: 26px;

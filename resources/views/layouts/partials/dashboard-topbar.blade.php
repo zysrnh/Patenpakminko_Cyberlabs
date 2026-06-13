@@ -32,18 +32,22 @@
         </button>
 
         <div class="topbar-breadcrumb">
-            <span class="topbar-breadcrumb-parent">PATEN PAK MIKO</span>
+            <a href="{{ url('/') }}" class="topbar-breadcrumb-parent" style="text-decoration:none; color:inherit; outline:none;">PATEN PAK MIKO</a>
             <svg class="topbar-breadcrumb-sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6"/>
             </svg>
             <span class="topbar-breadcrumb-current">
-                @if(Auth::user()->isPelakuUsaha())  Dashboard Pelaku Usaha
-                @elseif(Auth::user()->isBpn())       Dashboard Admin BPN
-                @elseif(Auth::user()->isDinasPu())   Dashboard Dinas PU
-                @elseif(Auth::user()->isSatuPintu()) Dashboard Satu Pintu
-                @elseif(Auth::user()->isDpn())       Dashboard Admin Pusat
-                @elseif(Auth::user()->isAdminBerita()) Dashboard Berita
-                @else Dashboard @endif
+                @if(isset($pageTitle))
+                    {{ $pageTitle }}
+                @else
+                    @if(Auth::user()->isPelakuUsaha())  Dashboard Pelaku Usaha
+                    @elseif(Auth::user()->isBpn())       Dashboard Admin BPN
+                    @elseif(Auth::user()->isDinasPu())   Dashboard Dinas PU
+                    @elseif(Auth::user()->isSatuPintu()) Dashboard Satu Pintu
+                    @elseif(Auth::user()->isDpn())       Dashboard Admin Pusat
+                    @elseif(Auth::user()->isAdminBerita()) Dashboard Berita
+                    @else Dashboard @endif
+                @endif
             </span>
         </div>
     </div>
@@ -79,7 +83,7 @@
         </a>
 
         {{-- User chip --}}
-        <div class="topbar-user-chip">
+        <a href="{{ route('profile') }}" class="topbar-user-chip" style="text-decoration:none; outline:none;" title="Profil Pengguna">
             @if(Auth::user()->profile_photo)
                 <img
                     src="{{ asset('storage/' . Auth::user()->profile_photo) }}"
@@ -92,7 +96,7 @@
                 </div>
             @endif
             <span class="topbar-user-name">{{ Str::limit(Auth::user()->name ?? Auth::user()->username, 18) }}</span>
-        </div>
+        </a>
 
     </div>
 </header>
