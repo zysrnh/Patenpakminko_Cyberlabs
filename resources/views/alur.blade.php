@@ -85,7 +85,7 @@
 
     .timeline-card {
         background: #FFFFFF;
-        border-radius: 16px;
+        border-radius: 4px;
         padding: 40px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         flex: 1;
@@ -258,20 +258,30 @@
                     </div>
                     <div class="timeline-content">
                         <h3>Registrasi Akun</h3>
-                        <p>Untuk mengakses layanan, pengguna wajib membuat akun dan masuk menggunakan email/password.</p>
+                        <p>Pada tahap pertama, pemohon diwajibkan membuat akun pada sistem PATEN PAK MIKO sebagai identitas utama untuk mengakses seluruh layanan digital.</p>
                         
                         <div class="timeline-list-group">
                             <div class="timeline-list-title">Proses Registrasi:</div>
+                            <p style="margin-bottom: 8px; font-size: 13.5px;">Pemohon mengisi data:</p>
                             <ul class="timeline-list">
-                                <li>Mengisi nama lengkap pemohon</li>
-                                <li>Mengisi NIK / NPWP</li>
-                                <li>Mengisi email dan password aktif</li>
+                                <li>Nama lengkap</li>
+                                <li>NIK</li>
+                                <li>Email aktif</li>
+                                <li>Nomor WhatsApp aktif</li>
+                                <li>Password akun</li>
                             </ul>
                         </div>
+                        <p>Setelah data berhasil dikirim, sistem akan melakukan validasi dan akun siap digunakan untuk login.</p>
                         
-                        <p style="font-size: 13px; font-weight: 500; margin-top: 12px; margin-bottom: 0;">
-                            Pastikan email dan NIK Anda valid dan belum terdaftar sebelumnya untuk menghindari gagal registrasi.
-                        </p>
+                        <div class="timeline-list-group">
+                            <div class="timeline-list-title">Tujuan Tahap Ini:</div>
+                            <ul class="timeline-list">
+                                <li>Membuat identitas pengguna</li>
+                                <li>Menyimpan riwayat pengajuan</li>
+                                <li>Menghubungkan sistem notifikasi WhatsApp</li>
+                                <li>Mempermudah monitoring layanan</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -285,21 +295,31 @@
                     </div>
                     <div class="timeline-content">
                         <h3>Pilih Modul Layanan</h3>
-                        <p>Pilih modul layanan yang dibutuhkan dan pastikan Anda melengkapi data berikut:</p>
+                        <p>Setelah login, pengguna akan diarahkan ke dashboard utama untuk memilih jenis layanan yang ingin diajukan.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Data Pemohon:</div>
+                            <div class="timeline-list-title">Pilihan Modul:</div>
                             <ul class="timeline-list">
-                                <li>Identitas Pemohon</li>
-                                <li>Letak & Lokasi Tanah</li>
-                                <li>Rencana Penggunaan</li>
-                                <li>Titik Koordinat Polygon</li>
+                                <li>PPKPR Berusaha</li>
+                                <li>PPKPR Non Berusaha</li>
+                                <li>LAPOLPA</li>
+                                <li>Kebijakan</li>
+                                <li>INFORMAL</li>
                             </ul>
                         </div>
+                        <p>Pemohon memilih layanan sesuai kebutuhan pengajuan atau konsultasi yang akan dilakukan.</p>
 
-                        <p style="font-size: 13px; font-weight: 500; margin-top: 12px; margin-bottom: 0;">
-                            Untuk meminimalisir kesalahan dan mempercepat proses, pastikan semua detail informasi ini benar dan jelas.
-                        </p>
+                        <div class="timeline-list-group">
+                            <div class="timeline-list-title">Penjelasan Tahap:</div>
+                            <p style="margin-bottom: 8px; font-size: 13.5px;">Sistem akan menampilkan:</p>
+                            <ul class="timeline-list">
+                                <li>Informasi layanan</li>
+                                <li>Persyaratan dokumen</li>
+                                <li>Panduan pengajuan</li>
+                                <li>Alur proses layanan</li>
+                            </ul>
+                        </div>
+                        <p>Tahapan ini membantu pengguna memahami proses sebelum melakukan pengajuan.</p>
                     </div>
                 </div>
             </div>
@@ -313,23 +333,45 @@
                     </div>
                     <div class="timeline-content">
                         <h3>Unggah Dokumen</h3>
-                        <p>Unggah dokumen persyaratan secara digital untuk mempercepat proses layanan dan mengurangi kesalahan administratif.</p>
+                        <p>Setelah memilih layanan, pengguna diwajibkan mengunggah seluruh dokumen persyaratan yang dibutuhkan.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Dokumen yang diunggah:</div>
+                            <div class="timeline-list-title">Dokumen yang Diunggah:</div>
                             <ul class="timeline-list">
-                                <li>KTP / Identitas Pemohon</li>
-                                <li>Surat Kuasa (Jika Dikuasakan)</li>
-                                <li>Surat Kesesuaian Tata Ruang</li>
-                                <li>Proposal dan Rencana Tapak</li>
+                                <li>Formulir permohonan</li>
+                                <li>Dokumen identitas</li>
+                                <li>Dokumen pendukung</li>
+                                <li>Persyaratan administrasi lainnya</li>
                             </ul>
                         </div>
 
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Persyaratan File:</div>
+                            <div class="timeline-list-title">Fitur Upload:</div>
                             <ul class="timeline-list">
-                                <li>File harus bertipe PDF, JPG, PNG</li>
-                                <li>Maksimal ukuran per file adalah 10 MB</li>
+                                <li>Drag & drop file</li>
+                                <li>Multi upload document</li>
+                                <li>Validasi format file</li>
+                                <li>Progress upload otomatis</li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-list-group">
+                            <div class="timeline-list-title">Proses Validasi:</div>
+                            <p style="margin-bottom: 8px; font-size: 13.5px;">Setelah upload selesai:</p>
+                            <ul class="timeline-list">
+                                <li>Sistem mengirim data ke admin</li>
+                                <li>Admin melakukan pengecekan dokumen</li>
+                                <li>Jika dokumen tidak sesuai, pengguna menerima notifikasi revisi</li>
+                                <li>Jika sesuai, proses dilanjutkan ke tahap berikutnya</li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-list-group">
+                            <div class="timeline-list-title">Tujuan Tahap Ini:</div>
+                            <ul class="timeline-list">
+                                <li>Memastikan kelengkapan administrasi</li>
+                                <li>Mempercepat proses verifikasi</li>
+                                <li>Mengurangi kesalahan pengajuan</li>
                             </ul>
                         </div>
                     </div>
@@ -345,23 +387,37 @@
                     </div>
                     <div class="timeline-content">
                         <h3>Terima Persetujuan</h3>
-                        <p>Setelah diverifikasi, Anda akan menerima pemberitahuan via email atau WhatsApp berisi informasi berikut:</p>
+                        <p>Tahap akhir merupakan proses penerbitan hasil layanan setelah seluruh tahapan selesai dilakukan.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Pemberitahuan Berisi:</div>
+                            <div class="timeline-list-title">Proses yang Dilalui:</div>
                             <ul class="timeline-list">
-                                <li>Status Permohonan (Diterima / Ditolak)</li>
-                                <li>Rincian Permohonan</li>
-                                <li>File Keputusan / Rekomendasi</li>
-                                <li>Waktu Penyelesaian</li>
+                                <li>Validasi dokumen selesai</li>
+                                <li>Penjadwalan cek lokasi</li>
+                                <li>Peninjauan lapangan</li>
+                                <li>Rapat penilaian</li>
+                                <li>Approval dari pihak terkait</li>
+                            </ul>
+                        </div>
+                        <p>Setelah seluruh proses dinyatakan sesuai, sistem akan menerbitkan hasil layanan.</p>
+
+                        <div class="timeline-list-group">
+                            <div class="timeline-list-title">Yang Diterima Pemohon:</div>
+                            <ul class="timeline-list">
+                                <li>Status pengajuan selesai</li>
+                                <li>Nomor layanan resmi</li>
+                                <li>Dokumen final dalam format PDF</li>
+                                <li>Notifikasi WhatsApp otomatis</li>
                             </ul>
                         </div>
 
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Catatan Penting:</div>
+                            <div class="timeline-list-title">Keuntungan Sistem Digital:</div>
                             <ul class="timeline-list">
-                                <li>Pastikan nomor WhatsApp selalu aktif</li>
-                                <li>Apabila ditolak, silahkan lengkapi dokumen yang kurang atau tidak valid</li>
+                                <li>Proses lebih transparan</li>
+                                <li>Monitoring real-time</li>
+                                <li>Riwayat layanan tersimpan</li>
+                                <li>Dokumen mudah diakses kembali</li>
                             </ul>
                         </div>
                     </div>
