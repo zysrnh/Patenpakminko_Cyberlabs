@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Permohonan Pertimbangan Teknis Pertanahan Berusaha — PATEN PAK MIKO</title>
+    <title>Detail Permohonan Pertimbangan Teknis Pertanahan PKKPR Berusaha — PATEN PAK MIKO</title>
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
@@ -787,7 +787,7 @@
  
             <div class="page-header">
                 <div>
-                    <h1 class="page-title">Pelacakan Pertimbangan Teknis Pertanahan Berusaha</h1>
+                    <h1 class="page-title">Pelacakan Pertimbangan Teknis Pertanahan PKKPR Berusaha</h1>
                 </div>
                 <a href="{{ route('berusaha.index') }}" class="back-link">
                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -1230,7 +1230,7 @@
                         @csrf
                         <div class="form-grid-2">
                             <div class="form-group-v">
-                                <label for="satu_pintu_no_pkkpr">Nomor Pertimbangan Teknis Pertanahan Berusaha</label>
+                                <label for="satu_pintu_no_pkkpr">Nomor Pertimbangan Teknis Pertanahan PKKPR Berusaha</label>
                                 <input type="text" name="satu_pintu_no_pkkpr" id="satu_pintu_no_pkkpr" class="form-control-v" placeholder="cth: 503/Pertimbangan Teknis Pertanahan-B/2026/XYZ" required>
                             </div>
                             <div class="form-group-v">
@@ -1241,7 +1241,7 @@
                         <div class="form-group-v">
                             <label for="satu_pintu_document">Dokumen Produk Akhir Pertimbangan Teknis Pertanahan (PDF)</label>
                             <input type="file" name="satu_pintu_document" id="satu_pintu_document" class="form-control-v" accept=".pdf" required>
-                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen Pertek Pertanahan/SK Pertimbangan Teknis Pertanahan Berusaha hasil akhir. Maksimal 10MB.</span>
+                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen Pertek Pertanahan/SK Pertimbangan Teknis Pertanahan PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
                         </div>
                         <div class="form-group-v">
                             <label for="notes">Catatan Tambahan (Opsional)</label>
@@ -1586,7 +1586,7 @@
                         <div class="timeline-card-header">
                             <img
                                 src="{{ asset('storage/logo/PKKPR.png') }}"
-                                alt="Logo Pertimbangan Teknis Pertanahan Berusaha"
+                                alt="Logo Pertimbangan Teknis Pertanahan PKKPR Berusaha"
                                 class="timeline-service-logo"
                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                             >
@@ -1596,7 +1596,7 @@
                             </div>
                             <div class="timeline-service-meta">
                                 <div class="timeline-service-label">Pelacakan Permohonan</div>
-                                <div class="timeline-service-title">Pertimbangan Teknis Pertanahan Berusaha</div>
+                                <div class="timeline-service-title">Pertimbangan Teknis Pertanahan PKKPR Berusaha</div>
                                 <div class="timeline-step-count">8 Tahapan · 3 Instansi</div>
                             </div>
                         </div>
@@ -1842,7 +1842,7 @@
                                         8. Penerbitan Pertimbangan Teknis Pertanahan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Satu Pintu / PTSP</span>
                                     </div>
-                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen Pertimbangan Teknis Pertanahan Berusaha resmi.</div>
+                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen Pertimbangan Teknis Pertanahan PKKPR Berusaha resmi.</div>
                                     @if($application->satu_pintu_no_pkkpr)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
                                             <strong>No. Pertimbangan Teknis Pertanahan:</strong> {{ $application->satu_pintu_no_pkkpr }}
@@ -1877,7 +1877,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan dihentikan oleh instansi terkait (BPN, Dinas PUTR, atau Dinas PU).
                                         @elseif($application->status === 'disetujui')
-                                            Seluruh alur selesai. Dokumen Pertimbangan Teknis Pertanahan Berusaha siap diunduh dari portal.
+                                            Seluruh alur selesai. Dokumen Pertimbangan Teknis Pertanahan PKKPR Berusaha siap diunduh dari portal.
                                         @else
                                             Menunggu seluruh tahapan disetujui oleh semua instansi terkait.
                                         @endif

@@ -177,7 +177,7 @@
                     <div class="contact-badge bg-putr">PUTR</div>
                     <div class="contact-info">
                         <div class="contact-label">Admin Dinas PUTR (Pekerjaan Umum & Tata Ruang)</div>
-                        <div class="contact-desc">Khusus alur Pertimbangan Teknis Pertanahan Berusaha — menerima notif saat BPN menyetujui berkas, sebagai penanda untuk melakukan validasi awal permohonan.</div>
+                        <div class="contact-desc">Khusus alur Pertimbangan Teknis Pertanahan PKKPR Berusaha — menerima notif saat BPN menyetujui berkas, sebagai penanda untuk melakukan validasi awal permohonan.</div>
                         <input type="text" name="admin_putr" class="contact-input" id="admin_putr"
                                placeholder="cth: 6281234567891"
                                value="{{ old('admin_putr', $settings['admin_putr'] ?? '') }}"

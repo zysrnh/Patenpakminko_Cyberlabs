@@ -72,7 +72,7 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
-                                    <strong>Pertimbangan Teknis Pertanahan Berusaha</strong>
+                                    <strong>Pertimbangan Teknis Pertanahan PKKPR Berusaha</strong>
                                     <span>Bisnis, usaha, industri</span>
                                 </div>
                                 <div class="sp-row-cta">
@@ -85,7 +85,7 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
-                                    <strong>Pertimbangan Teknis Pertanahan Non Berusaha</strong>
+                                    <strong>Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</strong>
                                     <span>Rumah, sosial, keagamaan</span>
                                 </div>
                                 <div class="sp-row-cta">
@@ -98,7 +98,7 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
-                                    <strong>Kebijakan</strong>
+                                    <strong>Pertimbangan Teknis Pertanahan Kebijakan</strong>
                                     <span>Kebijakan pengguna &amp; pemanfaatan tanah</span>
                                 </div>
                                 <div class="sp-row-cta">
@@ -111,7 +111,7 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
-                                    <strong>Tanah Timbul</strong>
+                                    <strong>Pertimbangan Teknis Pertanahan Tanah Timbul</strong>
                                     <span>Layanan pendaftaran tanah timbul</span>
                                 </div>
                                 <div class="sp-row-cta">
@@ -124,7 +124,7 @@
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                                 </div>
                                 <div class="sp-row-info">
-                                    <strong>Proyek Strategis Nasional (PSN)</strong>
+                                    <strong>Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</strong>
                                     <span>Layanan permohonan proyek strategis</span>
                                 </div>
                                 <div class="sp-row-cta">

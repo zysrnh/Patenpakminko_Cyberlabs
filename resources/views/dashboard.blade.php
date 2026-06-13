@@ -879,20 +879,16 @@
             <div class="sidebar-section-label">Layanan</div>
             <a href="{{ route('berusaha.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-                Pertimbangan Teknis Pertanahan Berusaha
+                Pertimbangan Teknis Pertanahan PKKPR Berusaha
             </a>
             <a href="{{ route('non-berusaha.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Pertimbangan Teknis Pertanahan Non Berusaha
+                Pertimbangan Teknis Pertanahan PKKPR Non Berusaha
             </a>
             <a href="{{ route('kebijakan.index') }}" class="nav-item">
-                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                Kebijakan
-            </a>
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Pertimbangan Teknis Pertanahan Kebijakan</a>
             <a href="{{ route('tanah-timbul.index') }}" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                Tanah Timbul
-            </a>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Pertimbangan Teknis Pertanahan Tanah Timbul</a>
             <a href="{{ route('psn.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
                 PSN (Proyek Nasional)
@@ -1066,8 +1062,8 @@
                     ];
 
                     $typeLabels = [
-                        'ppkpr_non_berusaha' => 'Pertimbangan Teknis Pertanahan Non Berusaha',
-                        'ppkpr_berusaha'     => 'Pertimbangan Teknis Pertanahan Berusaha',
+                        'ppkpr_non_berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha',
+                        'ppkpr_berusaha'     => 'Pertimbangan Teknis Pertanahan PKKPR Berusaha',
                         'kebijakan_khusus'   => 'Kebijakan',
                         'psn'                => 'PSN (Proyek Nasional)',
                         'tanah_timbul'       => 'Tanah Timbul',
@@ -1375,7 +1371,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan Berusaha</h3>
+                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan PKKPR Berusaha</h3>
                                     <p>Skala bisnis mikro, kecil, menengah, dan besar.</p>
                                 </div>
                                 <span class="service-count" style="background:rgba(255,203,5,.12);color:#92600A;">
@@ -1394,7 +1390,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan Non Berusaha</h3>
+                                    <h3 style="font-size: 14px;">Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</h3>
                                     <p>Rumah tinggal, keagamaan, sosial, & fasilitas umum.</p>
                                 </div>
                                 <span class="service-count">

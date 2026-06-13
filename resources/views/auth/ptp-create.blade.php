@@ -376,12 +376,12 @@
 @php
     $layananActive = old('jenis_permohonan', request('layanan', 'berusaha'));
     $layananName = match($layananActive) {
-        'berusaha' => 'Pertimbangan Teknis Pertanahan Berusaha',
-        'non-berusaha' => 'Pertimbangan Teknis Pertanahan Non Berusaha',
+        'berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Berusaha',
+        'non-berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha',
         'kebijakan' => 'Pertimbangan Teknis Pertanahan Kebijakan',
-        'psn' => 'Pertimbangan Teknis Pertanahan PSN',
+        'psn' => 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)',
         'tanah-timbul' => 'Pertimbangan Teknis Pertanahan Tanah Timbul',
-        default => 'Pertimbangan Teknis Pertanahan Berusaha'
+        default => 'Pertimbangan Teknis Pertanahan PKKPR Berusaha'
     };
 
     $layananLogo = match($layananActive) {

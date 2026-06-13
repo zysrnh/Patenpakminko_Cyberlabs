@@ -1797,20 +1797,18 @@
                             <span class="nav-dd-icon" style="background:var(--blue-lt);">
                                 <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="">
                             </span>
-                            Pertimbangan Teknis Pertanahan Berusaha
+                            Pertimbangan Teknis Pertanahan PKKPR Berusaha
                         </a>
                         <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--green-lt);">
                                 <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="">
                             </span>
-                            Pertimbangan Teknis Pertanahan Non Berusaha
+                            Pertimbangan Teknis Pertanahan PKKPR Non Berusaha
                         </a>
                         <a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--yellow-lt);">
                                 <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="">
-                            </span>
-                            Kebijakan
-                        </a>
+                            </span>Pertimbangan Teknis Pertanahan Kebijakan</a>
                         <a href="{{ route('lapolpa.index') }}" role="menuitem">
                             <span class="nav-dd-icon" style="background:var(--surface);">
                                 <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="">
@@ -1887,9 +1885,9 @@
     <div class="mobile-nav-body">
         <a href="{{ url('/') }}" onclick="closeMobileNav()">Beranda</a>
         <span class="mobile-section-label">Layanan</span>
-        <a href="{{ Auth::check() ? route('berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Berusaha</a>
-        <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Non Berusaha</a>
-        <a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}" onclick="closeMobileNav()">Kebijakan</a>
+        <a href="{{ Auth::check() ? route('berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan PKKPR Berusaha</a>
+        <a href="{{ Auth::check() ? route('non-berusaha.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</a>
+        <a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}" onclick="closeMobileNav()">Pertimbangan Teknis Pertanahan Kebijakan</a>
         <a href="{{ route('lapolpa.index') }}" onclick="closeMobileNav()">LAPOL PAK</a>
         <a href="{{ route('informal.index') }}" onclick="closeMobileNav()">INFORMAL</a>
         <span class="mobile-section-label">Navigasi</span>
@@ -1960,9 +1958,9 @@
                 <h4 class="f-col-title">Layanan Kami</h4>
                 <ul class="f-links">
                     <li><a href="{{ route('lapolpa.index') }}">LAPOL PAK</a></li>
-                    <li><a href="#">Pertimbangan Teknis Pertanahan Non Berusaha</a></li>
-                    <li><a href="#">Pertimbangan Teknis Pertanahan Berusaha</a></li>
-                    <li><a href="#">Kebijakan</a></li>
+                    <li><a href="#">Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Pertanahan PKKPR Berusaha</a></li>
+                    <li><a href="#">Pertimbangan Teknis Pertanahan Kebijakan</a></li>
                     <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
                 </ul>
             </div>

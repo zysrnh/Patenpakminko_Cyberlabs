@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Form Pengajuan Pertimbangan Teknis Pertanahan Berusaha — PATEN PAK MIKO')
+@section('title', 'Form Pengajuan Pertimbangan Teknis Pertanahan PKKPR Berusaha — PATEN PAK MIKO')
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/ptp-form.css') }}">
@@ -16,7 +16,7 @@
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <span class="ptp-badge-name">Pertimbangan Teknis Pertanahan Berusaha</span>
+                <span class="ptp-badge-name">Pertimbangan Teknis Pertanahan PKKPR Berusaha</span>
             </div>
             <a href="{{ route('berusaha.index') }}" class="btn-kembali">&larr; Kembali</a>
         </div>
