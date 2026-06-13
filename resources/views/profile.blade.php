@@ -75,11 +75,7 @@
 
 <div class="page-header">
     <div class="page-header-left">
-        <div class="breadcrumb">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <span>›</span>
-            <span>Profil Saya</span>
-        </div>
+
         <h1>Lengkapi Data Profil</h1>
         <p>Pastikan data Anda akurat untuk mempercepat proses verifikasi dokumen.</p>
     </div>
