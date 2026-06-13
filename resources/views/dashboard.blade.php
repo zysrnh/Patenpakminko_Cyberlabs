@@ -990,7 +990,7 @@
                     $totalNon = \App\Models\PpkprApplication::where('user_id', $user->id)->count();
                     $totalBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->count();
                     $totalKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->count();
-                    $countLapol Pak = \App\Models\Lapol PakBooking::where('user_id', $user->id)->count();
+                    $countLapolpak = \App\Models\LapolpakBooking::where('user_id', $user->id)->count();
 
                     $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
@@ -1007,7 +1007,7 @@
                     $totalNon = \App\Models\PpkprApplication::count();
                     $totalBerusaha = \App\Models\PpkprBerusahaApplication::count();
                     $totalKebijakan = \App\Models\KebijakanApplication::count();
-                    $countLapol Pak = \App\Models\Lapol PakBooking::count();
+                    $countLapolpak = \App\Models\LapolpakBooking::count();
 
                     $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
