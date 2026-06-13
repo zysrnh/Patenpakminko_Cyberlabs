@@ -86,6 +86,11 @@ Route::get('/', function () {
     return $response;
 });
 
+// Route Alur Proses
+Route::get('/alur', function() {
+    return view('alur');
+})->name('alur');
+
 // Route Berita Publik
 Route::get('/berita/{slug}', [\App\Http\Controllers\BeritaController::class, 'showPublic'])->name('berita.show');
 

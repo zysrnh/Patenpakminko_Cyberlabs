@@ -1832,7 +1832,7 @@
                     </div>
                 </div>
 
-                <a href="#alur" class="nav-link">Alur Proses</a>
+                <a href="{{ route('alur') }}" class="nav-link">Alur Proses</a>
                 <a href="#ulasan" class="nav-link">Ulasan</a>
 
                 <div class="nav-sep" aria-hidden="true"></div>
@@ -1901,7 +1901,7 @@
         <a href="{{ route('lapolpa.index') }}" onclick="closeMobileNav()">LAPOL PAK</a>
         <a href="{{ route('informal.index') }}" onclick="closeMobileNav()">INFORMAL</a>
         <span class="mobile-section-label">Navigasi</span>
-        <a href="#alur" onclick="closeMobileNav()">Alur Proses</a>
+        <a href="{{ route('alur') }}" onclick="closeMobileNav()">Alur Proses</a>
         <a href="#ulasan" onclick="closeMobileNav()">Ulasan</a>
         @auth
             @if(Auth::user()->isAdminBerita())

@@ -414,7 +414,7 @@
             </p>
             <div class="cta-actions">
                 <a href="{{ route('login') }}" class="btn-cta-primary">Mulai Sekarang &rarr;</a>
-                <a href="#alur" class="btn-cta-outline">Pelajari Layanan &rarr;</a>
+                <a href="{{ route('alur') }}" class="btn-cta-outline">Pelajari Layanan &rarr;</a>
             </div>
         </div>
     </div>
