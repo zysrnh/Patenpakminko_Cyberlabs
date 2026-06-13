@@ -134,27 +134,6 @@
             min-height: 100vh;
         }
 
-        /* ─── TOPBAR ─────────────────────────── */
-        .topbar {
-            height: 60px; background: var(--white);
-            border-bottom: 1px solid var(--line);
-            display: flex; align-items: center;
-            justify-content: space-between;
-            padding: 0 28px;
-            position: sticky; top: 0; z-index: 10;
-        }
-        .topbar-left { display: flex; align-items: center; gap: 12px; }
-        .hamburger {
-            display: none;
-            width: 36px; height: 36px;
-            background: var(--surface); border: 1px solid var(--line);
-            border-radius: var(--r-md); cursor: pointer;
-            align-items: center; justify-content: center;
-        }
-        .hamburger svg { width: 18px; height: 18px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; }
-        .topbar-title { font-size: 16px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
-        .topbar-right { display: flex; align-items: center; gap: 12px; }
-        .topbar-date { font-size: 12px; font-weight: 500; color: var(--muted); }
 
         /* ─── CONTENT ────────────────────────── */
         .content { padding: 24px 28px; flex: 1; }
@@ -407,27 +386,7 @@
             <div class="header-date">
                     {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
                 </div>
-                @php
-                    $unreadCount = 0;
-                    if(Auth::check()) {
-                        $u = Auth::user();
-                        if ($u->isPelakuUsaha()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_user_id', $u->id)->where('is_read', false)->count();
-                        } elseif ($u->isBpn()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_role', 'bpn')->where('is_read', false)->count();
-                        } elseif ($u->isDinasPu()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_role', 'dinas_pu')->where('is_read', false)->count();
-                        } elseif ($u->isSatuPintu()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_role', 'satu_pintu')->where('is_read', false)->count();
-                        }
-                    }
-                @endphp
-                <a href="{{ route('mailbox.index') }}" class="notification-btn" style="position:relative; display:flex; align-items:center;">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-                    @if($unreadCount > 0)
-                        <span class="notification-badge" style="position:absolute; top:-2px; right:-4px; background:#DC2626; color:#fff; font-size:10px; padding:2px 5px; border-radius:10px; font-weight:bold;">{{ $unreadCount }}</span>
-                    @endif
-                </a>
+
             @if(Auth::check())
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -446,39 +405,11 @@
 
     <!-- MAIN WRAP -->
     <div class="main-wrap">
-        <header class="topbar">
-            <div class="topbar-left">
-                <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">
-                    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                </button>
-                <span class="topbar-title">@yield('page-title', 'PATEN PAK MIKO')</span>
-            </div>
-            <div class="topbar-right">
-                @php
-                    $unreadCount = 0;
-                    if(Auth::check()) {
-                        $u = Auth::user();
-                        if ($u->isPelakuUsaha()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_user_id', $u->id)->where('is_read', false)->count();
-                        } elseif ($u->isBpn()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_role', 'bpn')->where('is_read', false)->count();
-                        } elseif ($u->isDinasPu()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_role', 'dinas_pu')->where('is_read', false)->count();
-                        } elseif ($u->isSatuPintu()) {
-                            $unreadCount = \App\Models\Mailbox::where('target_role', 'satu_pintu')->where('is_read', false)->count();
-                        }
-                    }
-                @endphp
-                <a href="{{ route('mailbox.index') }}" class="notification-btn" style="position:relative; display:flex; align-items:center; color: var(--ink); text-decoration: none; margin-right: 12px;" title="Kotak Masuk">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-                    @if($unreadCount > 0)
-                        <span class="notification-badge" style="position:absolute; display: flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 4px; border-radius: 10px; font-size: 10px; font-weight: 700; top: -8px; right: -8px; background:#DC2626; color:#fff; line-height: 1; border: 2px solid var(--white); box-sizing: border-box;">{{ $unreadCount }}</span>
-                    @endif
-                </a>
-
-                <span class="topbar-date" id="current-date"></span>
-            </div>
-        </header>
+        @php
+            $pageTitleStr = trim($__env->yieldContent('page-title'));
+            if(empty($pageTitleStr)) $pageTitleStr = null;
+        @endphp
+        @include('layouts.partials.dashboard-topbar', ['pageTitle' => $pageTitleStr])
 
         <div class="content">
             @if(session('success'))
