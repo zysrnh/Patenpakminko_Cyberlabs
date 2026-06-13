@@ -447,18 +447,23 @@
         });
     });
 
+    // Fly to marker on check
     btnCek.addEventListener('click', function() {
         const btn = this;
         const originalText = btn.innerHTML;
         btn.innerHTML = 'Menganalisis...';
         btn.disabled = true;
 
+        const lat = marker.getLatLng().lat;
+        const lng = marker.getLatLng().lng;
+        
+        // Panning map automatically to marker
+        map.flyTo([lat, lng], 16, { duration: 1 });
+
         setTimeout(() => {
             btn.innerHTML = originalText;
             btn.disabled = false;
 
-            const lat = marker.getLatLng().lat;
-            const lng = marker.getLatLng().lng;
             resCoord.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             
             const pt = turf.point([lng, lat]);
@@ -478,13 +483,23 @@
 
             if (matches.length > 0) {
                 let txt = matches.map(m => `<b>${m}</b>`).join(', ');
-                resultStatus.innerHTML = `<p class="ms-result-text">Koordinat ini terindikasi berada di dalam area yang dilindungi/dipertahankan (${txt}). Harap perhatikan persyaratan ekstra.</p>`;
+                resultStatus.innerHTML = `
+                    <div style="background: #FEF2F2; color: #991B1B; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; margin-bottom: 12px; border: 1px solid #FCA5A5;">
+                        Zona Dilindungi: ${txt}
+                    </div>
+                    <p class="ms-result-text">Koordinat ini terindikasi berada di dalam area yang dilindungi/dipertahankan. Harap perhatikan persyaratan ekstra saat melakukan pengajuan.</p>
+                `;
             } else {
-                resultStatus.innerHTML = `<p class="ms-result-text">Koordinat ini tidak terdeteksi berada di zona LP2B, LBS, atau LSD berdasarkan data awal kami. Silakan lanjutkan permohonan Anda.</p>`;
+                resultStatus.innerHTML = `
+                    <div style="background: #F0FDF4; color: #166534; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; margin-bottom: 12px; border: 1px solid #86EFAC;">
+                        &#10003; Zona Bebas LBS / LP2B / LSD
+                    </div>
+                    <p class="ms-result-text">Koordinat ini aman dan <b>tidak terdeteksi</b> berada di zona pertanian/sawah yang dilindungi berdasarkan data awal kami. Anda dapat melanjutkan proses permohonan.</p>
+                `;
             }
 
             resultArea.classList.add('active');
-        }, 800);
+        }, 1000);
     });
 
     function flyToMarker(lat, lng) {
