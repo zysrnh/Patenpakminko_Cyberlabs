@@ -52,29 +52,32 @@
     }
 
     .ms-label {
-        font-size: 11px;
-        font-weight: 600;
-        color: #000;
+        font-size: 12px;
+        font-weight: 700;
+        color: #00223D;
         margin-bottom: 8px;
         display: block;
     }
 
     .ms-input-wrap {
-        background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        border-radius: 4px;
-        padding: 12px;
         margin-bottom: 16px;
     }
 
     .ms-input {
         width: 100%;
-        border: none;
-        background: transparent;
-        font-size: 12px;
-        color: #A0AEC0;
+        border: 1px solid #CBD5E1;
+        background: #FFFFFF;
+        padding: 12px 14px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #00223D;
         font-family: monospace;
+        font-weight: 600;
         outline: none;
+        transition: border-color 0.2s;
+    }
+    .ms-input:focus {
+        border-color: #218AC9;
     }
 
     .btn-cek-wilayah {
@@ -200,7 +203,7 @@
 
         <label class="ms-label">Koordinat Terpilih</label>
         <div class="ms-input-wrap">
-            <input type="text" class="ms-input" id="coord-display" value="-6.92770, 106.93000" readonly>
+            <input type="text" class="ms-input" id="coord-display" value="-6.92770, 106.93000">
         </div>
 
         <button class="btn-cek-wilayah" id="btn-cek">
