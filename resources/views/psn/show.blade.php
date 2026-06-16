@@ -1815,9 +1815,9 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const actionInputs = document.querySelectorAll("select[name='action'], input[type='radio'][name='action']");
     const revisiContainer = document.getElementById("revisi-berkas-container");
-    const notesField = document.getElementById("notes");
+    const actionInputs = revisiContainer ? revisiContainer.closest('form').querySelectorAll("select[name='action'], input[type='radio'][name='action']") : document.querySelectorAll("select[name='action'], input[type='radio'][name='action']");
+    const notesField = revisiContainer ? revisiContainer.closest('form').querySelector("textarea[name='notes']") : document.getElementById("notes");
     const checkboxes = document.querySelectorAll(".cb-revisi");
 
     function updateRevisiVisibility() {
@@ -1830,6 +1830,9 @@ document.addEventListener("DOMContentLoaded", function() {
             revisiContainer.style.display = isReject ? "block" : "none";
             if(!isReject) {
                 checkboxes.forEach(cb => cb.checked = false);
+                if (notesField) {
+                    notesField.value = notesField.value.replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+\n\n/g, "").replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+/g, "").trim();
+                }
             }
         }
     }
@@ -1843,6 +1846,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     checkboxes.forEach(cb => {
         cb.addEventListener("change", function() {
+            if (!notesField) return;
             let selected = Array.from(checkboxes).filter(i => i.checked).map(i => "- " + i.value);
             let currentNote = notesField.value.replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+\n\n/g, "").replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+/g, "").trim();
             

@@ -899,7 +899,7 @@
                                                 <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Disetujui / Tidak Lengka[]
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Disetujui / Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>
@@ -1949,26 +1949,14 @@
     </script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const actionInputs = document.querySelectorAll("select[name='action'], input[type='radio'][name='action']");
-        const revisiContainer = document.getElementById("revisi-berkas-container");
-        const notesField = document.getElementById("notes");
-        const checkboxes = document.querySelectorAll(".cb-revisi");
+document.addEventListener("DOMContentLoaded", function() {
+    const revisiContainer = document.getElementById("revisi-berkas-container");
+    const actionInputs = revisiContainer ? revisiContainer.closest('form').querySelectorAll("select[name='action'], input[type='radio'][name='action']") : document.querySelectorAll("select[name='action'], input[type='radio'][name='action']");
+    const notesField = revisiContainer ? revisiContainer.closest('form').querySelector("textarea[name='notes']") : document.getElementById("notes");
+    const checkboxes = document.querySelectorAll(".cb-revisi");
 
-        function updateRevisiVisibility() {
-            let isReject = false;
-            actionInputs.forEach(input => {
-                if (input.tagName === "SELECT" && input.value === "reject") isReject = true;
-                if (input.tagName === "INPUT" && input.checked && input.value === "reject") isReject = true;
-            });
-            if (revisiContainer) {
-                revisiContainer.style.display = isReject ? "block" : "none";
-                if(!isReject) {
-                    checkboxes.forEach(cb => cb.checked = false);
-                }
-            }
-        }
-
+    function updateRevisiVisibility() {
+        let isReject = false;
         actionInputs.forEach(input => {
             input.addEventListener("change", updateRevisiVisibility);
         });
