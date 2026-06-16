@@ -50,7 +50,7 @@
                 </h2>
 
                 <p class="hero-sub">
-                    PATEN PAK MIKO hadir sebagai inovasi pelayanan yang memberikan kemudahan bagi pemohon dalam memperoleh layanan pertanahan secara lebih cepat, jelas, dan transparan. PATEN Pak Miko diharapkan mampu meningkatkan kepercayaan pemohon sekaligus memberikan pengalaman layanan yang lebih <strong style="color: var(--blue-dk);">profesional, responsif, dan memudahkan.</strong>
+                    PATEN PAK MIKO hadir sebagai inovasi pelayanan yang memberikan kemudahan bagi pemohon dalam memperoleh layanan pertanahan secara lebih cepat, jelas, dan transparan. PATEN PAK MIKO diharapkan mampu meningkatkan kepercayaan pemohon sekaligus memberikan pengalaman layanan yang lebih <strong style="color: var(--blue-dk);">profesional, responsif, dan memudahkan.</strong>
                 </p>
 
                 <div class="hero-cta-row">
