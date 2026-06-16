@@ -1101,10 +1101,9 @@
                                         <strong style="font-size: 13px;">Langkah 5: Penerbitan Pertek Pertanahan</strong>
                                     </div>
                                     <div class="form-group-v">
-                                        <label for="action">Tindakan Rekomendasi Teknis</label>
                                         <select name="action" id="action" class="form-select-v" required>
-                                            <option value="approve" {{ $application->bpn_pertek_document || $application->status === 'disetujui' ? 'selected' : '' }}>Disetujui</option>
-                                            <option value="reject" {{ $application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima' ? 'selected' : '' }}>Tidak Disetujui</option>
+                                            <option value="approve" {{ $application->bpn_pertek_document || $application->status === 'disetujui' ? 'selected' : '' }}>Terbit</option>
+                                            <option value="reject" {{ $application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima' ? 'selected' : '' }}>Belum Terbit</option>
                                         </select>
                                     </div>
                                     @if($application->bpn_pertek_document)
