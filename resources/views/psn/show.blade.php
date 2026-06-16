@@ -1592,7 +1592,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 3: Peninjauan Lokasi Lapangan (Kantor Pertanahan) -->
+                            <!-- STEP 3: Peninjauan Lapangan (Kantor Pertanahan) -->
                             @php
                                 $step3Status = '';
                                 if ($application->bpn_pembayaran_status === 'sudah_bayar') {

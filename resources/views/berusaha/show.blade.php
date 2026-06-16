@@ -1000,7 +1000,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_cek_lokasi">
                                     <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                        <strong style="font-size: 13px;">Langkah 3: Jadwal Cek Lokasi Lapangan</strong>
+                                        <strong style="font-size: 13px;">Langkah 3: Jadwal Cek Lapangan</strong>
                                     </div>
                                     <div class="form-grid-2">
                                         <div class="form-group-v">
@@ -1703,7 +1703,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 4: Peninjauan Lokasi Lapangan -->
+                            <!-- STEP 4: Peninjauan Lapangan -->
                             @php
                                 $step5Status = '';
                                 if ($application->bpn_pembayaran_status === 'sudah_bayar') {
@@ -1779,7 +1779,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_pertek_document)
-                                            Surat Pertek berhasil diterbitkan dan diteruskan ke Dinas PU untuk penilaian tata ruang.
+                                            Pertimbangan Teknis Pertanahan Sudah Diterbitkan Dan Diteruskan Ke Dinas PUTR Untuk Penilian PKKPR
                                         @else
                                             Menunggu penerbitan surat rekomendasi teknis pertanahan.
                                         @endif
