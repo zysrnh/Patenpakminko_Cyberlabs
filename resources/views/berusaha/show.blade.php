@@ -1219,7 +1219,7 @@
             <!-- 3. DINAS SATU PINTU (PTSP) PANEL -->
             @if($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu')
                 <div class="verify-card">
-                    <h3 class="verify-title">🏛️ Panel Penerbitan Dokumen Akhir — Dinas Satu Pintu (PTSP)</h3>
+                    <h3 class="verify-title">🏛️ Panel Penerbitan PKKPR Berusaha - DPMPTSP</h3>
                     <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-grid-2">
