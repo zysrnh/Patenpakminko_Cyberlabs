@@ -1714,14 +1714,14 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        4. Peninjauan Lokasi Lapangan
+                                        4. Peninjauan Lapangan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_cek_lokasi_dt)
                                             Tinjau: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>Petugas: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
                                         @else
-                                            Menunggu jadwal peninjauan lokasi lapangan dari BPN.
+                                            Menunggu jadwal peninjauan lapangan dari BPN.
                                         @endif
                                     </div>
                                     @if($application->bpn_cek_lokasi_dt)
