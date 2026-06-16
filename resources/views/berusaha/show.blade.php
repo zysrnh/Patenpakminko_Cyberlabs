@@ -1239,7 +1239,7 @@
                             </div>
                         </div>
                         <div class="form-group-v">
-                            <label for="satu_pintu_document">Dokumen Produk Akhir Pertimbangan Teknis Pertanahan (PDF)</label>
+                            <label for="satu_pintu_document">Dokumentasi Produk Akhir PKKPR Berusaha</label>
                             <input type="file" name="satu_pintu_document" id="satu_pintu_document" class="form-control-v" accept=".pdf" required>
                             <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen Pertek Pertanahan/SK Pertimbangan Teknis Pertanahan PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
                         </div>
