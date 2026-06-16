@@ -953,10 +953,10 @@
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_pembayaran">
                                     <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                        <strong style="font-size: 13px;">Langkah 2: Konfirmasi Pembayaran PTN & Input No. Berkas</strong>
+                                        <strong style="font-size: 13px;">Langkah 2: Konfirmasi Pembayaran PNBP & Input No. Berkas</strong>
                                     </div>
                                     <p style="font-size: 13px; color: var(--clr-muted); margin-bottom: 16px;">
-                                        Setelah pemohon melakukan pembayaran PTN pertanahan secara offline, input <strong>Nomor Berkas</strong> di bawah lalu klik <strong>"Kirim Kredensial & Konfirmasi Lunas"</strong> untuk memverifikasi dan otomatis mengirimkan kredensial login dashboard ke WhatsApp pemohon.
+                                        Setelah pemohon melakukan pembayaran PNBP pertanahan secara offline, input <strong>Nomor Berkas</strong> di bawah lalu klik <strong>"Kirim Kredensial & Konfirmasi Lunas"</strong> untuk memverifikasi dan otomatis mengirimkan kredensial login dashboard ke WhatsApp pemohon.
                                     </p>
                                     <div class="form-group-v">
                                         <label for="no_berkas">Nomor Berkas (wajib diisi)</label>
@@ -1673,7 +1673,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 3: Pembayaran PTN -->
+                            <!-- STEP 3: Pembayaran PNBP -->
                             @php
                                 $step4Status = '';
                                 if (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])) {
@@ -1684,7 +1684,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        3. Pembayaran PTN & Registrasi
+                                        3. Pembayaran PNBP & Registrasi
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
                                     </div>
                                     <div class="timeline-desc">
@@ -1694,7 +1694,7 @@
                                                 <br>No. Berkas: <strong>{{ $application->no_berkas }}</strong>
                                             @endif
                                         @else
-                                            Menunggu konfirmasi pembayaran PTN dan input nomor berkas oleh BPN.
+                                            Menunggu konfirmasi pembayaran PNBP dan input nomor berkas oleh BPN.
                                         @endif
                                     </div>
                                     @if($application->bpn_pembayaran_status === 'sudah_bayar' && $application->bpn_pembayaran_approved_at)
