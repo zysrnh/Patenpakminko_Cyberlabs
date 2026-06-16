@@ -18,10 +18,14 @@ class KbliController extends Controller
             return response()->json([]);
         }
 
-        $path = public_path('storage/kbli2025/kbli_2025.json');
+        $path = storage_path('app/public/kbli2025/kbli_2025.json');
 
         if (!file_exists($path)) {
-            return response()->json(['error' => 'Data KBLI tidak tersedia.'], 500);
+            // Coba fallback ke public_path jika di environment tertentu ada di sana
+            $path = public_path('storage/kbli2025/kbli_2025.json');
+            if (!file_exists($path)) {
+                return response()->json(['error' => 'Data KBLI tidak tersedia.'], 500);
+            }
         }
 
         $data = json_decode(file_get_contents($path), true);
@@ -57,10 +61,13 @@ class KbliController extends Controller
             return response()->json(null);
         }
 
-        $path = public_path('storage/kbli2025/kbli_2025.json');
+        $path = storage_path('app/public/kbli2025/kbli_2025.json');
 
         if (!file_exists($path)) {
-            return response()->json(null, 500);
+            $path = public_path('storage/kbli2025/kbli_2025.json');
+            if (!file_exists($path)) {
+                return response()->json(null, 500);
+            }
         }
 
         $data = json_decode(file_get_contents($path), true);
