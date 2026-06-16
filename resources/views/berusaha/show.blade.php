@@ -1230,7 +1230,7 @@
                         @csrf
                         <div class="form-grid-2">
                             <div class="form-group-v">
-                                <label for="satu_pintu_no_pkkpr">Nomor Pertimbangan Teknis Pertanahan PKKPR Berusaha</label>
+                                <label for="satu_pintu_no_pkkpr">Nomor PKKPR Berusaha</label>
                                 <input type="text" name="satu_pintu_no_pkkpr" id="satu_pintu_no_pkkpr" class="form-control-v" placeholder="cth: 503/Pertimbangan Teknis Pertanahan-B/2026/XYZ" required>
                             </div>
                             <div class="form-group-v">
