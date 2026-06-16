@@ -501,14 +501,14 @@
             resCoord.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             
             const pt = turf.point([lng, lat]);
-            let matches = [];
+            let results = { lp2b: false, lbs: false, lsd: false };
 
             ['lp2b', 'lbs', 'lsd'].forEach(type => {
                 if (geoData[type]) {
                     let features = geoData[type].features;
                     for (let i = 0; i < features.length; i++) {
                         if (turf.booleanPointInPolygon(pt, features[i])) {
-                            matches.push(type.toUpperCase());
+                            results[type] = true;
                             break;
                         }
                     }
@@ -526,22 +526,21 @@
                 </div>
             `;
 
-            if (matches.length > 0) {
-                let txt = matches.map(m => `<b>${m}</b>`).join(', ');
-                resultStatus.innerHTML = `
-                    <div style="background: #FEF2F2; color: #991B1B; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; border: 1px solid #FCA5A5;">
-                        Zona Terindikasi: ${txt}
+            let statusHtml = `
+                <div style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="background: ${results.lp2b ? '#FEF2F2' : '#F0FDF4'}; color: ${results.lp2b ? '#991B1B' : '#166534'}; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid ${results.lp2b ? '#FCA5A5' : '#86EFAC'};">
+                        ${results.lp2b ? '&#10060;' : '&#10003;'} LP2B: ${results.lp2b ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area / Aman'}
                     </div>
-                    ${alertHtml}
-                `;
-            } else {
-                resultStatus.innerHTML = `
-                    <div style="background: #F0FDF4; color: #166534; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; display: inline-block; border: 1px solid #86EFAC;">
-                        &#10003; Bebas LBS / LP2B / LSD (Data Awal)
+                    <div style="background: ${results.lbs ? '#FEF2F2' : '#F0FDF4'}; color: ${results.lbs ? '#991B1B' : '#166534'}; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid ${results.lbs ? '#FCA5A5' : '#86EFAC'};">
+                        ${results.lbs ? '&#10060;' : '&#10003;'} LBS: ${results.lbs ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area / Aman'}
                     </div>
-                    ${alertHtml}
-                `;
-            }
+                    <div style="background: ${results.lsd ? '#FEF2F2' : '#F0FDF4'}; color: ${results.lsd ? '#991B1B' : '#166534'}; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid ${results.lsd ? '#FCA5A5' : '#86EFAC'};">
+                        ${results.lsd ? '&#10060;' : '&#10003;'} LSD: ${results.lsd ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area / Aman'}
+                    </div>
+                </div>
+            `;
+
+            resultStatus.innerHTML = statusHtml + alertHtml;
 
             resultArea.classList.add('active');
         }, 1000);
