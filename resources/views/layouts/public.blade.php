@@ -1998,7 +1998,7 @@
                     <li><a href="#">Instagram</a></li>
                     <li><a href="#">TikTok</a></li>
                     <li><a href="#">Facebook</a></li>
-                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">Youtube</a></li>
                 </ul>
             </div>
         </div>
