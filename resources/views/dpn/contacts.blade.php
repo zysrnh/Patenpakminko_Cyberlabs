@@ -172,23 +172,6 @@
                     </div>
                 </div>
 
-                <!-- PUTR -->
-                <div class="contact-item">
-                    <div class="contact-badge bg-putr">PUTR</div>
-                    <div class="contact-info">
-                        <div class="contact-label">Admin Dinas PUTR (Pekerjaan Umum & Tata Ruang)</div>
-                        <div class="contact-desc">Khusus alur Pertimbangan Teknis Pertanahan PKKPR Berusaha — menerima notif saat BPN menyetujui berkas, sebagai penanda untuk melakukan validasi awal permohonan.</div>
-                        <input type="text" name="admin_putr" class="contact-input" id="admin_putr"
-                               placeholder="cth: 6281234567891"
-                               value="{{ old('admin_putr', $settings['admin_putr'] ?? '') }}"
-                               inputmode="numeric">
-                        @if(!empty($settings['admin_putr']))
-                            <div class="contact-current">Tersimpan: <strong>{{ $settings['admin_putr'] }}</strong></div>
-                        @else
-                            <div class="contact-current" style="color: #E53E3E;">⚠ Belum diisi — notif ke PUTR menggunakan nomor fallback.</div>
-                        @endif
-                    </div>
-                </div>
 
                 <!-- Dinas PU -->
                 <div class="contact-item">
