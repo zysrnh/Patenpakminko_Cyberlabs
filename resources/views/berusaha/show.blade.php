@@ -1163,8 +1163,8 @@
                             <div class="form-group-v">
                                 <label for="action">Hasil Validasi Permohonan</label>
                                 <select name="action" id="action" class="form-select-v" required>
-                                    <option value="approve">Disetujui</option>
-                                    <option value="reject">Tidak Disetujui</option>
+                                    <option value="approve">Tervalidasi</option>
+                                    <option value="reject">Belum Tervalidasi</option>
                                 </select>
                             </div>
                             <div class="form-group-v">
