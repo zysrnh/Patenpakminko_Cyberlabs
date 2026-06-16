@@ -8,6 +8,21 @@
     .hero .sp-row { padding: 8px 14px !important; }
     .hero .sp-others { padding: 10px 16px 16px !important; gap: 8px !important; }
     .hero .sp-other-card { padding: 10px 14px !important; }
+    .hero h2 .accent {
+        color: var(--blue);
+        display: inline-block;
+        position: relative;
+    }
+    .hero h2 .accent::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        height: 3px;
+        width: 100%;
+        background: var(--yellow);
+        border-radius: 2px;
+    }
 </style>
 <section class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
@@ -28,8 +43,10 @@
                     </h1>
                 </div>
                 <h2 style="font-size: clamp(20px, 2.5vw, 28px); font-weight: 800; color: #00223D; margin-bottom: 24px; line-height: 1.4;">
-                    Pertimbangan Teknis <span class="accent">Pertanahan</span><br>
-                    Terkoneksi Kantor Pertanahan Sukabumi Kota
+                    Pertimbangan Teknis<br>
+                    <span class="accent">Pertanahan</span><br>
+                    yang Terkoneksi Kantor<br>
+                    Pertanahan Sukabumi Kota
                 </h2>
 
                 <p class="hero-sub">
