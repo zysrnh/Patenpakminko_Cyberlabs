@@ -45,7 +45,7 @@
                 <h2 style="font-size: clamp(20px, 2.5vw, 28px); font-weight: 800; color: #00223D; margin-bottom: 24px; line-height: 1.4;">
                     Pertimbangan Teknis<br>
                     <span class="accent">Pertanahan</span><br>
-                     Terkoneksi Kantor<br>
+                     terKoneksi Kantor<br>
                     Pertanahan Sukabumi Kota
                 </h2>
 
