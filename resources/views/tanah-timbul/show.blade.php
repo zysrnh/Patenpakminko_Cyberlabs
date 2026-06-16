@@ -904,7 +904,8 @@
                                                 <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} onchange="updateRevisiVisibility()" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} onchange="updateRevisiVisibility()" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Disetujui / Berkas Tidak Sesuai
+                                                
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} onchange="updateRevisiVisibility()" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Disetujui / Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>

@@ -847,7 +847,7 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Pemeriksaan Berkas:</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : (in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? '' : 'checked') }} onchange="updateRevisiVisibility()"> Disetujui</label>
-                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? 'checked' : '' }} onchange="updateRevisiVisibility()"> Tidak Disetujui / Berkas Tidak Sesuai</label>
+                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? 'checked' : '' }} onchange="updateRevisiVisibility()"> Tidak Disetujui / Tidak Lengkap</label>
                                         </div>
                                     </div>
                                     <div id="revisi-berkas-container" style="display: none; background: #FFF5F5; border: 1px solid #FC8181; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px;">
