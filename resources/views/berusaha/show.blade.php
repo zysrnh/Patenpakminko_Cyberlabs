@@ -1202,7 +1202,7 @@
                                 </div>
                             </div>
                             <div class="form-group-v">
-                                <label for="notes">Catatan Kajian Penilaian Tata Ruang (Opsional)</label>
+                                <label for="notes">Catatan Penilaian PKKPR Berusaha</label>
                                 <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan tambahan justifikasi kesesuaian pemanfaatan ruang..."></textarea>
                             </div>
                             
