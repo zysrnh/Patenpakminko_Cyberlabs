@@ -1192,8 +1192,8 @@
                             <div class="form-group-v">
                                 <label for="action">Penilaian Kepatuhan Tata Ruang</label>
                                 <select name="action" id="action" class="form-select-v" required>
-                                    <option value="sesuai">Sesuai Tata Ruang (Lanjut ke Dinas Satu Pintu / PTSP)</option>
-                                    <option value="belum_sesuai">Belum Sesuai Tata Ruang (Kembali ke BPN)</option>
+                                    <option value="sesuai">Sudah Dinilai</option>
+                                    <option value="belum_sesuai">Belum Dinilai</option>
                                 </select>
                             </div>
                             <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
