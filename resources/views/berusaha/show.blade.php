@@ -1953,25 +1953,42 @@ document.addEventListener("DOMContentLoaded", function() {
     function updateRevisiVisibility() {
         let isReject = false;
         actionInputs.forEach(input => {
-            input.addEventListener("change", updateRevisiVisibility);
+            if (input.tagName === "SELECT" && input.value === "reject") isReject = true;
+            if (input.tagName === "INPUT" && input.checked && input.value === "reject") isReject = true;
         });
-        
-        updateRevisiVisibility();
-
-        checkboxes.forEach(cb => {
-            cb.addEventListener("change", function() {
-                let selected = Array.from(checkboxes).filter(i => i.checked).map(i => "- " + i.value);
-                let currentNote = notesField.value.replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+\n\n/g, "").replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+/g, "").trim();
-                
-                if (selected.length > 0) {
-                    notesField.value = "Berkas yang harus diperbaiki:\n" + selected.join("\n") + "\n\n" + currentNote;
-                } else {
-                    notesField.value = currentNote;
+        if (revisiContainer) {
+            revisiContainer.style.display = isReject ? "block" : "none";
+            if(!isReject) {
+                checkboxes.forEach(cb => cb.checked = false);
+                if (notesField) {
+                    notesField.value = notesField.value.replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+\n\n/g, "").replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+/g, "").trim();
                 }
-            });
+            }
+        }
+    }
+
+    actionInputs.forEach(input => {
+        input.addEventListener("change", updateRevisiVisibility);
+    });
+    
+    // Initial check
+    updateRevisiVisibility();
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", function() {
+            if (!notesField) return;
+            let selected = Array.from(checkboxes).filter(i => i.checked).map(i => "- " + i.value);
+            let currentNote = notesField.value.replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+\n\n/g, "").replace(/Berkas yang harus diperbaiki:\n(- .*\n?)+/g, "").trim();
+            
+            if (selected.length > 0) {
+                notesField.value = "Berkas yang harus diperbaiki:\n" + selected.join("\n") + "\n\n" + currentNote;
+            } else {
+                notesField.value = currentNote;
+            }
         });
     });
-    </script>
+});
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const textareas = document.querySelectorAll('textarea[name="custom_wa_message"]');
