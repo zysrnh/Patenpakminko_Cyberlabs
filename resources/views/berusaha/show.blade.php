@@ -827,12 +827,7 @@
                                         {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }} 
                                         <span style="color: var(--clr-primary); font-size: 13px; font-weight: 800; margin-left: 6px;">({{ $review->rating_label }})</span>
                                     </span>
-                                    @if($review->is_approved)
-                                        <span style="font-size: 11px; background: var(--clr-green-light); color: #22543D; padding: 3px 10px; border-radius: 100px; font-weight: 700;">Telah Dipublikasikan</span>
-                                    @else
-                                        <span style="font-size: 11px; background: #E2E8F0; color: #4A5568; padding: 3px 10px; border-radius: 100px; font-weight: 700;">Menunggu Moderasi Admin</span>
-                                    @endif
-                                </div>
+                                    </div>
                                 <p style="font-style: italic; font-size: 13px; color: var(--clr-muted);">"{{ $review->comment }}"</p>
                             </div>
                         @else
