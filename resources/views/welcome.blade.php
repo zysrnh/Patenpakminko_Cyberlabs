@@ -37,7 +37,7 @@
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 16px;">
-                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width: 96px; height: auto;">
+                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width: clamp(125px, 16vw, 180px); height: auto; object-fit: contain;">
                     <h1 class="hero-heading" style="margin-bottom: 0; text-transform: uppercase; font-size: clamp(56px, 7vw, 82px); line-height: 1.1;">
                         PATEN<br>PAK MIKO
                     </h1>
