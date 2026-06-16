@@ -529,13 +529,13 @@
             let statusHtml = `
                 <div style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
                     <div style="background: ${results.lp2b ? '#F0FDF4' : '#FEF2F2'}; color: ${results.lp2b ? '#166534' : '#991B1B'}; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid ${results.lp2b ? '#86EFAC' : '#FCA5A5'};">
-                        ${results.lp2b ? '&#128522;' : '&#128546;'} LP2B: ${results.lp2b ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area'}
+                        ${results.lp2b ? '&#10003;' : '&#10060;'} LP2B: ${results.lp2b ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area'}
                     </div>
                     <div style="background: ${results.lbs ? '#F0FDF4' : '#FEF2F2'}; color: ${results.lbs ? '#166534' : '#991B1B'}; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid ${results.lbs ? '#86EFAC' : '#FCA5A5'};">
-                        ${results.lbs ? '&#128522;' : '&#128546;'} LBS: ${results.lbs ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area'}
+                        ${results.lbs ? '&#10003;' : '&#10060;'} LBS: ${results.lbs ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area'}
                     </div>
                     <div style="background: ${results.lsd ? '#F0FDF4' : '#FEF2F2'}; color: ${results.lsd ? '#166534' : '#991B1B'}; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid ${results.lsd ? '#86EFAC' : '#FCA5A5'};">
-                        ${results.lsd ? '&#128522;' : '&#128546;'} LSD: ${results.lsd ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area'}
+                        ${results.lsd ? '&#10003;' : '&#10060;'} LSD: ${results.lsd ? 'Terindikasi Masuk Area' : 'Tidak Masuk Area'}
                     </div>
                 </div>
             `;
