@@ -801,7 +801,7 @@
             @if($application->status === 'disetujui' && $application->satu_pintu_document)
                 <a href="{{ asset('storage/' . $application->satu_pintu_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Unduh Document Pertimbangan Teknis Pertanahan
+                    Unduh Document PKKPR Berusaha
                 </a>
             @endif
  
