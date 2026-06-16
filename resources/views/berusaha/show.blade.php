@@ -1807,10 +1807,10 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        7. Penilaian Pertimbangan Teknis Pertanahan
+                                        7. Penilaian PKKPR Berusaha 
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PU</span>
                                     </div>
-                                    <div class="timeline-desc">Penilaian kesesuaian tata ruang oleh Dinas Pekerjaan Umum.</div>
+                                    <div class="timeline-desc">Penilaian PKKPR Oleh Dinas PUTR</div>
                                     @if(in_array($application->dinas_pu_status, ['sesuai', 'belum_sesuai']))
                                         @if($application->dinas_pu_tanggal_penilaian)
                                             <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
@@ -1839,10 +1839,10 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        8. Penerbitan Pertimbangan Teknis Pertanahan
+                                        8. Penerbitan PKKPR Berusaha
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Satu Pintu / PTSP</span>
                                     </div>
-                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen Pertimbangan Teknis Pertanahan PKKPR Berusaha resmi.</div>
+                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen  PKKPR Berusaha</div>
                                     @if($application->satu_pintu_no_pkkpr)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
                                             <strong>No. Pertimbangan Teknis Pertanahan:</strong> {{ $application->satu_pintu_no_pkkpr }}
