@@ -212,7 +212,7 @@
                 <div class="contact-item">
                     <div class="contact-badge bg-ptsp">SP</div>
                     <div class="contact-info">
-                        <div class="contact-label">Dinas Penanaman Modal Dan Pelayanan Terpadu Satu Pintu</div>
+                        <div class="contact-label">Admin Dinas Penanaman Modal Dan Pelayanan Terpadu Satu Pintu</div>
                         <div class="contact-desc">Menerima notif saat penilaian Dinas PU selesai (Berusaha & Non-Berusaha) — sebagai trigger untuk menerbitkan Pertimbangan Teknis Pertanahan resmi.</div>
                         <input type="text" name="admin_satu_pintu" class="contact-input" id="admin_satu_pintu"
                                placeholder="cth: 6281234567893"
