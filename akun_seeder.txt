@@ -13,7 +13,7 @@ DATA AKUN SEEDER PATEN PAK MIKO
 2. AKUN INSTANSI PEMERINTAH (ADMIN)
 ------------------------------------------------
 A. Kantor Pertanahan (BPN)
-   - Username : bpn1 | Password: Paten_bpn1@2026 (Petugas BPN 1)
+   - Username : bpn1 | Password:  (Petugas BPN 1)
    - Username : bpn2 | Password: Paten_bpn2@2026 (Petugas BPN 2)
    - Username : bpn3 | Password: Paten_bpn3@2026 (Petugas BPN 3)
 

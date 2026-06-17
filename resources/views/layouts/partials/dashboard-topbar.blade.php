@@ -95,7 +95,7 @@
     align-items: center;
     gap: 7px;
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 4px;
     background: rgba(13, 45, 79, 0.06);
     border: 0.5px solid rgba(13, 45, 79, 0.1);
     color: #2a4f72;
@@ -124,7 +124,7 @@
     position: relative;
     width: 36px;
     height: 36px;
-    border-radius: 10px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -164,7 +164,7 @@
     align-items: center;
     gap: 8px;
     padding: 4px 10px 4px 4px;
-    border-radius: 22px;
+    border-radius: 4px;
     border: 0.5px solid rgba(13, 45, 79, 0.14);
     background: rgba(13, 45, 79, 0.05);
     text-decoration: none;
@@ -181,7 +181,7 @@
 .topbar-user-avatar {
     width: 28px;
     height: 28px;
-    border-radius: 50%;
+    border-radius: 4px;
     flex-shrink: 0;
     display: flex;
     align-items: center;

@@ -75,7 +75,11 @@
 
 <div class="page-header">
     <div class="page-header-left">
-
+        <div class="breadcrumb">
+            <a href="{{ route('dashboard') }}">Dashboard</a>
+            <span>›</span>
+            <span>Profil Saya</span>
+        </div>
         <h1>Lengkapi Data Profil</h1>
         <p>Pastikan data Anda akurat untuk mempercepat proses verifikasi dokumen.</p>
     </div>
@@ -140,23 +144,8 @@
                 <label for="address" class="form-label">Alamat <span class="badge-optional">Opsional</span></label>
                 <textarea id="address" name="address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap">{{ old('address', $user->address) }}</textarea>
             </div>
-        </div>
 
-        {{-- Data Usaha --}}
-        <div class="section-divider" style="border-top:1px solid var(--line);">Data Usaha</div>
-        <div class="panel-body" style="padding-top:0;">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="business_name" class="form-label">Nama Perusahaan / Usaha <span class="badge-optional">Opsional</span></label>
-                    <input type="text" id="business_name" name="business_name" class="form-control" placeholder="cth: CV. Jaya Selalu" value="{{ old('business_name', $user->business_name) }}">
-                </div>
-                <div class="form-group">
-                    <label for="business_role" class="form-label">Jabatan <span class="badge-optional">Opsional</span></label>
-                    <input type="text" id="business_role" name="business_role" class="form-control" placeholder="cth: Direktur / Owner" value="{{ old('business_role', $user->business_role) }}">
-                </div>
-            </div>
-
-            <div class="form-footer">
+            <div class="form-footer" style="margin-top: 20px;">
                 <a href="{{ route('dashboard') }}" class="btn btn-secondary" style="margin-right:10px;">Batal</a>
                 <button type="submit" class="btn btn-primary">
                     <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>

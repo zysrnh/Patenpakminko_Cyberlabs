@@ -36,10 +36,10 @@
             --surface:   #F0F6FB;
             --surface2:  #E8F2FA;
             --white:     #FFFFFF;
-            --r-sm:      6px;
-            --r-md:      10px;
-            --r-lg:      16px;
-            --r-xl:      24px;
+            --r-sm:      4px;
+            --r-md:      4px;
+            --r-lg:      8px;
+            --r-xl:      12px;
             --sidebar:   248px;
         }
 

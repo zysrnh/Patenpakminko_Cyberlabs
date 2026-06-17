@@ -45,9 +45,9 @@
             --surface:   #F7F9FC;
             --white:     #FFFFFF;
             --r-sm:  4px;
-            --r-md:  8px;
-            --r-lg:  12px;
-            --r-xl:  14px;
+            --r-md:  4px;
+            --r-lg:  8px;
+            --r-xl:  12px;
 
             /* Spacing scale */
             --sp-xs:  8px;
