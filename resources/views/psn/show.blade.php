@@ -1450,12 +1450,12 @@
                     <!-- DAY COUNTER / SLA BANNER -->
                     @php
                         $targetDate = $application->created_at->addWeekdays(10);
-                        $isSelesai = ($application->status === 'disetujui' || $application->status === 'ditolak' || $application->bpn_pertek_document);
+                        $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
                         
                         if ($isSelesai) {
-                            $slaBg = '#F0FFF4';
-                            $slaBorder = '#C6F6D5';
-                            $slaColor = '#276749';
+                            $slaBg = '#16A34A'; // Solid Green
+                            $slaBorder = '#15803D';
+                            $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
                             if ($targetDate->startOfDay() >= $now->startOfDay()) {
@@ -1465,37 +1465,37 @@
                             }
                             
                             if ($daysRemaining >= 4) {
-                                $slaBg = '#EBF8FF';
-                                $slaBorder = '#BEE3F8';
-                                $slaColor = '#2B6CB0';
+                                $slaBg = '#16A34A'; // Solid Green
+                                $slaBorder = '#15803D';
+                                $slaColor = '#FFFFFF';
                             } elseif ($daysRemaining >= 0) {
-                                $slaBg = '#FEFCBF';
-                                $slaBorder = '#F6E05E';
-                                $slaColor = '#975A16';
+                                $slaBg = '#EAB308'; // Solid Yellow
+                                $slaBorder = '#CA8A04';
+                                $slaColor = '#FFFFFF';
                             } else {
-                                $slaBg = '#FFF5F5';
-                                $slaBorder = '#FED7D7';
-                                $slaColor = '#C53030';
+                                $slaBg = '#DC2626'; // Solid Red
+                                $slaBorder = '#B91C1C';
+                                $slaColor = '#FFFFFF';
                             }
                         }
                     @endphp
                     
-                    <div class="floating-sla" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #fff; border-radius: var(--r-md); box-shadow: 0 10px 40px rgba(0,0,0,0.12); border: 1px solid var(--line); width: 340px; overflow: hidden; display: flex; flex-direction: column;">
-                        <div style="background: {{ $slaBg }}; padding: 14px 18px; border-bottom: 1px solid {{ $slaBorder }};">
-                            <div style="font-size: 11px; font-weight: 800; color: {{ $slaColor }}; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Batas Waktu (SLA)</div>
-                            <div style="font-size: 13.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">{{ $targetDate->format('d M Y') }}</strong></div>
+                    <div class="floating-sla" style="position: fixed; top: 120px; right: 32px; z-index: 9999; background: {{ $slaBg }}; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid {{ $slaBorder }}; width: 260px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 10px; font-weight: 800; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em;">Batas Waktu (SLA)</div>
+                            <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">{{ $targetDate->format('d M Y') }}</strong></div>
                         </div>
-                        <div style="padding: 16px 18px; background: white;">
+                        <div style="padding: 12px 14px; background: rgba(0,0,0,0.06);">
                             @if($isSelesai)
-                                <div style="display: flex; align-items: center; gap: 10px; color: #16A34A; font-weight: 700; font-size: 14px;">
-                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #DCFCE7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                <div style="display: flex; align-items: center; gap: 8px; color: {{ $slaColor }}; font-weight: 700; font-size: 13px;">
+                                    <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                     <span>Tepat Waktu (Selesai)</span>
                                 </div>
                             @else
-                                <div style="font-size: 11.5px; color: var(--muted); margin-bottom: 10px; font-weight: 600;">WAKTU TERSISA:</div>
-                                <div id="liveCountdownSla" data-target="{{ $targetDate->toIso8601String() }}" style="display: flex; gap: 6px; align-items: center; justify-content: space-between;">
+                                <div style="font-size: 10px; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 8px; font-weight: 700;">WAKTU TERSISA:</div>
+                                <div id="liveCountdownSla" data-target="{{ $targetDate->toIso8601String() }}" data-color="{{ $slaColor }}" style="display: flex; gap: 6px; align-items: center; justify-content: space-between;">
                                     <!-- Countdown script will inject here -->
                                 </div>
                             @endif
@@ -1508,13 +1508,14 @@
                             if(!targetEl) return;
                             
                             const targetDate = new Date(targetEl.getAttribute('data-target')).getTime();
+                            const textColor = targetEl.getAttribute('data-color');
                             
                             function updateCountdown() {
                                 const now = new Date().getTime();
                                 const distance = targetDate - now;
                                 
                                 if (distance < 0) {
-                                    targetEl.innerHTML = '<div style="color: #DC2626; font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 8px;"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Waktu Habis (Terlambat)!</div>';
+                                    targetEl.innerHTML = '<div style="color: ' + textColor + '; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Waktu Habis!</div>';
                                     return;
                                 }
                                 
@@ -1523,18 +1524,18 @@
                                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
                                 
-                                const blockStyle = 'background: var(--surface); padding: 8px 4px; border-radius: var(--r-md); text-align: center; flex: 1; border: 1px solid var(--line);';
-                                const numStyle = 'font-size: 18px; font-weight: 800; color: var(--ink); font-family: monospace; line-height: 1; margin-bottom: 4px;';
-                                const labelStyle = 'font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;';
+                                const blockStyle = 'background: rgba(255,255,255,0.2); padding: 6px 2px; border-radius: 4px; text-align: center; flex: 1; border: 1px solid rgba(255,255,255,0.1);';
+                                const numStyle = 'font-size: 14.5px; font-weight: 800; color: ' + textColor + '; font-family: monospace; line-height: 1; margin-bottom: 2px;';
+                                const labelStyle = 'font-size: 8.5px; font-weight: 700; color: ' + textColor + '; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em;';
                                 
                                 targetEl.innerHTML = `
                                     <div style="${blockStyle}"><div style="${numStyle}">${days}</div><div style="${labelStyle}">HARI</div></div>
-                                    <div style="font-weight: 800; color: var(--muted); padding-bottom: 12px;">:</div>
+                                    <div style="font-weight: 800; color: ${textColor}; opacity: 0.5; padding-bottom: 12px;">:</div>
                                     <div style="${blockStyle}"><div style="${numStyle}">${hours.toString().padStart(2, '0')}</div><div style="${labelStyle}">JAM</div></div>
-                                    <div style="font-weight: 800; color: var(--muted); padding-bottom: 12px;">:</div>
+                                    <div style="font-weight: 800; color: ${textColor}; opacity: 0.5; padding-bottom: 12px;">:</div>
                                     <div style="${blockStyle}"><div style="${numStyle}">${minutes.toString().padStart(2, '0')}</div><div style="${labelStyle}">MNT</div></div>
-                                    <div style="font-weight: 800; color: var(--muted); padding-bottom: 12px;">:</div>
-                                    <div style="${blockStyle}"><div style="${numStyle} color: var(--blue);">${seconds.toString().padStart(2, '0')}</div><div style="${labelStyle}">DTK</div></div>
+                                    <div style="font-weight: 800; color: ${textColor}; opacity: 0.5; padding-bottom: 12px;">:</div>
+                                    <div style="${blockStyle}"><div style="${numStyle}">${seconds.toString().padStart(2, '0')}</div><div style="${labelStyle}">DTK</div></div>
                                 `;
                             }
                             
