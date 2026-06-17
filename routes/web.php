@@ -200,6 +200,7 @@ Route::middleware(['auth'])->group(function () {
     // Fitur Ulasan (Review)
     Route::get('/ulasan', [ReviewController::class, 'index'])->name('ulasan.index');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::resource('/admin/users', \App\Http\Controllers\AdminUserController::class)->except(['show'])->names('admin.users');
     Route::get('/admin/reviews', [ReviewController::class, 'adminIndex'])->name('admin.reviews.index');
     Route::post('/admin/reviews/{id}/approve', [ReviewController::class, 'approve'])->name('admin.reviews.approve');
     Route::delete('/admin/reviews/{id}', [ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
