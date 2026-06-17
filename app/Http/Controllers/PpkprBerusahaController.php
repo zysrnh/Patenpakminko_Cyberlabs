@@ -247,10 +247,10 @@ class PpkprBerusahaController extends Controller
                 // Kirim Notifikasi Blast WA Kredensial & Tautan Dashboard ke Pelaku Usaha
                 $this->sendNotificationWithMailbox($application, 'credential', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
 
-                return redirect()->route('berusaha.show', $id)->with('success', "Pembayaran Retribusi terverifikasi LUNAS! No. Berkas: {$application->no_berkas}. Kredensial login dashboard telah di-blast ke WhatsApp pemohon.");
+                return redirect()->route('berusaha.show', $id)->with('success', "Pembayaran PNBP terverifikasi LUNAS! No. Berkas: {$application->no_berkas}. Kredensial login dashboard telah di-blast ke WhatsApp pemohon.");
             }
  
-            // BPN Langkah 3: Penjadwalan Cek Lokasi Lapangan
+            // BPN Langkah 3: Penjadwalan Peninjauan Lapangan
             if ($step === 'bpn_cek_lokasi') {
                 $request->validate([
                     'bpn_cek_lokasi_dt' => 'required|date',
@@ -351,7 +351,7 @@ class PpkprBerusahaController extends Controller
                 $application->dinas_pu_notes = $notes;
 
                 if ($action === 'approve') {
-                    // Validasi sukses, status kembali ke BPN menunggu pembayaran retribusi
+                    // Validasi sukses, status kembali ke BPN menunggu pembayaran PNBP
                     $application->status = 'menunggu_bpn';
                     $application->dinas_pu_status = 'validasi_awal_diterima';
                     $application->bpn_pembayaran_status = 'belum_bayar';

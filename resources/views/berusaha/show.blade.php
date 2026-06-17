@@ -891,10 +891,10 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Disetujui / Tidak Lengkap
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>
@@ -1259,7 +1259,7 @@
                 <div class="verify-card" style="border-color: #F5C2C1; background: #FFF5F5;">
                     <h3 class="verify-title" style="color: #C5221F;">⚠️ Perbaikan Dokumen Persyaratan Diperlukan</h3>
                     <p style="font-size: 13px; color: #7F2321; margin-bottom: 16px;">
-                        Petugas BPN menyatakan berkas Anda belum sesuai dengan catatan: <br>
+                        Petugas BPN menyatakan berkas Anda tidak lengkap dengan catatan: <br>
                         <strong>"{{ $application->bpn_notes }}"</strong>
                     </p>
                     <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -1402,7 +1402,7 @@
                                 <li class="detail-item">
                                     <span class="detail-label">Penilaian Tata Ruang (PU)</span>
                                     <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
-                                        {{ str_replace('_', ' ', $application->dinas_pu_status) }}
+                                        {{ $application->dinas_pu_status === 'sesuai' ? 'Sudah Dinilai' : ($application->dinas_pu_status === 'belum_sesuai' ? 'Belum Dinilai' : str_replace('_', ' ', $application->dinas_pu_status)) }}
                                     </span>
                                 </li>
                             @endif
@@ -1802,9 +1802,9 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         7. Penilaian PKKPR Berusaha 
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PU</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PUTR</span>
                                     </div>
-                                    <div class="timeline-desc">Penilaian PKKPR Oleh Dinas PUTR</div>
+                                    <div class="timeline-desc">Penilaian PKKPR oleh Dinas PUTR</div>
                                     @if(in_array($application->dinas_pu_status, ['sesuai', 'belum_sesuai']))
                                         @if($application->dinas_pu_tanggal_penilaian)
                                             <div class="timeline-notes" style="border-left-color: {{ $application->dinas_pu_status === 'sesuai' ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ $application->dinas_pu_status === 'sesuai' ? '#F4FBF7' : '#FFF5F5' }}; color: {{ $application->dinas_pu_status === 'sesuai' ? '#137333' : '#C53030' }}">
@@ -1833,10 +1833,10 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        8. Penerbitan PKKPR Berusaha
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Satu Pintu / PTSP</span>
+                                        8. Penerbitan PKKPR
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">DPMPTSP</span>
                                     </div>
-                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen  PKKPR Berusaha</div>
+                                    <div class="timeline-desc">DPMPTSP menerbitkan dokumen PKKPR Berusaha</div>
                                     @if($application->satu_pintu_no_pkkpr)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
                                             <strong>No. Pertimbangan Teknis Pertanahan:</strong> {{ $application->satu_pintu_no_pkkpr }}

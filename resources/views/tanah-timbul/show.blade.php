@@ -901,11 +901,11 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} onchange="updateRevisiVisibility()" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} onchange="updateRevisiVisibility()" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
                                                 
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} onchange="updateRevisiVisibility()" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Disetujui / Tidak Lengkap
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} onchange="updateRevisiVisibility()" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>
@@ -1212,8 +1212,8 @@
                                     <div class="form-group-v">
                                         <label for="action_pu">Keputusan Penilaian:</label>
                                         <select name="action" id="action_pu" class="form-select-v" required>
-                                            <option value="approve" {{ $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' ? 'selected' : 'selected' }}>Disetujui</option>
-                                            <option value="reject" {{ $application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr ? 'selected' : '' }}>Tidak Disetujui</option>
+                                            <option value="approve" {{ $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' ? 'selected' : 'selected' }}>Sudah Dinilai</option>
+                                            <option value="reject" {{ $application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr ? 'selected' : '' }}>Belum Dinilai</option>
                                         </select>
                                     </div>
                                     <div class="form-group-v">

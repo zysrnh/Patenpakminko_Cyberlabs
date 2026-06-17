@@ -151,7 +151,7 @@ class AdminDpnController extends Controller
                     } else {
                         $application->bpn_pembayaran_status = 'belum_bayar';
                         $application->no_berkas = null;
-                        $msg = 'Konfirmasi pembayaran retribusi berhasil di-rollback/dibatalkan.';
+                        $msg = 'Konfirmasi pembayaran PNBP berhasil di-rollback/dibatalkan.';
                     }
                 } else {
                     $application->status = 'menunggu_dinas_pu';
