@@ -3,6 +3,15 @@
 @section('title', 'TANAH TIMBUL — PATEN PAK MIKO')
 @section('page-title', 'TANAH TIMBUL')
 
+@push('styles')
+<style>
+    #searchInput:focus, #filterSla:focus {
+        border-color: var(--blue) !important;
+        box-shadow: 0 0 0 3px rgba(33,138,201,0.15) !important;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="page-header">
     <div class="page-header-left">
@@ -45,6 +54,23 @@
             @endif
         </div>
     @else
+                <!-- Filter Controls -->
+        <div class="table-filter-wrap" style="padding: 16px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: var(--surface); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg);">
+            <div class="search-box" style="position: relative; flex: 1; min-width: 250px;">
+                <svg style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 18px; height: 18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="searchInput" placeholder="Cari No. Registrasi, Pemohon, atau No WA..." style="width: 100%; padding: 10px 14px 10px 40px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13.5px; outline: none; transition: border-color 0.2s;">
+            </div>
+            @if(!Auth::user()->isPelakuUsaha())
+            <select id="filterSla" style="padding: 10px 14px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13.5px; outline: none; background: white; color: var(--ink); cursor: pointer; font-weight: 500;">
+                <option value="all">Semua Waktu (SLA)</option>
+                <option value="selesai">Sudah Selesai</option>
+                <option value="berjalan">Masih Berjalan (Aman)</option>
+                <option value="hampir">Hampir Batas Waktu</option>
+                <option value="melewati">Melewati Batas</option>
+            </select>
+            @endif
+        </div>
+
         <div class="table-wrap">
             <table>
                 <thead>
@@ -74,27 +100,29 @@
                             <td style="color:var(--mid);">{{ $app->user->phone_number }}</td>
                             <td style="color:var(--mid);">{{ $app->created_at->format('d-m-Y') }}</td>
                             @if(!Auth::user()->isPelakuUsaha())
-                                @php
+                                                                @php
                                     $isSelesai = in_array($app->status, ['disetujui', 'ditolak', 'terbit_pkpr']);
                                     $hari = $isSelesai ? (int)$app->created_at->diffInDays($app->updated_at) : (int)$app->created_at->diffInDays(now());
                                     $sisaHari = max(0, 10 - $hari);
                                     
-                                    if($hari <= 8) {
-                                        $warnaSla = '#16A34A'; // Hijau
-                                    } elseif($hari > 8 && $hari <= 10) {
-                                        $warnaSla = '#D97706'; // Kuning
+                                    if ($isSelesai) {
+                                        $slaClass = 'badge-green';
+                                    } elseif ($hari > 10) {
+                                        $slaClass = 'badge-red';
+                                    } elseif ($sisaHari <= 2) {
+                                        $slaClass = 'badge-yellow';
                                     } else {
-                                        $warnaSla = '#DC2626'; // Merah
+                                        $slaClass = 'badge-green';
                                     }
                                 @endphp
                                 <td>
-                                    <span class="badge" style="background-color:{{ $warnaSla }};color:#fff; border:none; font-size:11.5px; white-space:nowrap; padding:4px 10px; border-radius:20px; font-weight:700; letter-spacing:.01em;">
+                                    <span class="badge sla-badge {{ $slaClass }}" style="border-radius: var(--r-sm); padding: 5px 10px; font-weight: 700;">
                                         @if($isSelesai)
-                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> {{ $hari }}H Selesai
+                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Selesai
                                         @elseif($hari > 10)
-                                            🔴 {{ $hari }}H Melewati Batas
+                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Terlambat {{ $hari - 10 }}H
                                         @else
-                                            ⏳ {{ $hari }}H · Sisa {{ $sisaHari }}H
+                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Sisa {{ $sisaHari }}H
                                         @endif
                                     </span>
                                 </td>
@@ -117,4 +145,43 @@
         </div>
     @endif
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const filterSla = document.getElementById('filterSla');
+    const tableBody = document.querySelector('.table-wrap table tbody');
+    if(!tableBody) return;
+    const rows = tableBody.querySelectorAll('tr');
+
+    function filterTable() {
+        const searchTxt = searchInput ? searchInput.value.toLowerCase() : '';
+        const slaVal = filterSla ? filterSla.value : 'all';
+
+        rows.forEach(row => {
+            const textContent = row.textContent.toLowerCase();
+            let slaText = '';
+            const slaBadge = row.querySelector('.sla-badge');
+            if (slaBadge) {
+                slaText = slaBadge.textContent.toLowerCase();
+            }
+            
+            let matchSearch = textContent.includes(searchTxt);
+            let matchSla = true;
+
+            if (slaVal === 'selesai' && !slaText.includes('selesai')) matchSla = false;
+            // if aman: should contain "sisa" but not "sisa 0h", "sisa 1h", "sisa 2h"
+            if (slaVal === 'berjalan' && (!slaText.includes('sisa') || slaText.includes('sisa 2h') || slaText.includes('sisa 1h') || slaText.includes('sisa 0h'))) matchSla = false;
+            // if hampir: should contain "sisa 0h" or "sisa 1h" or "sisa 2h"
+            if (slaVal === 'hampir' && !(slaText.includes('sisa 2h') || slaText.includes('sisa 1h') || slaText.includes('sisa 0h'))) matchSla = false;
+            // if melewati: should contain "melewati batas"
+            if (slaVal === 'melewati' && !slaText.includes('terlambat')) matchSla = false;
+
+            row.style.display = (matchSearch && matchSla) ? '' : 'none';
+        });
+    }
+
+    if(searchInput) searchInput.addEventListener('input', filterTable);
+    if(filterSla) filterSla.addEventListener('change', filterTable);
+});
+</script>
 @endsection
