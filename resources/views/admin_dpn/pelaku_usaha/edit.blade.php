@@ -97,12 +97,12 @@
 <div style="padding: 24px;">
     <div class="mb-4">
         <div style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: #64748B; margin-bottom: 12px;">
-            <a href="{{ route('admin.users.index') }}" style="color: var(--blue); text-decoration: none;">Kelola Admin</a>
+            <a href="{{ route('admin.pelaku_usaha.index') }}" style="color: var(--blue); text-decoration: none;">Kelola Pengguna</a>
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            <span>Tambah Admin</span>
+            <span>Edit Pengguna</span>
         </div>
-        <h2 style="font-weight: 800; color: var(--ink); margin-bottom: 4px;">Tambah Admin Baru</h2>
-        <p style="font-size: 14.5px; color: #64748B;">Buat akun admin instansi untuk mengelola sistem.</p>
+        <h2 style="font-weight: 800; color: var(--ink); margin-bottom: 4px;">Edit Pengguna: {{ $user->username }}</h2>
+        <p style="font-size: 14.5px; color: #64748B;">Perbarui profil atau atur ulang kata sandi Pelaku Usaha ini.</p>
     </div>
 
     <div class="admin-card">
@@ -116,65 +116,68 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.users.store') }}" method="POST">
+        <form action="{{ route('admin.pelaku_usaha.update', $user->id) }}" method="POST">
             @csrf
+            @method('PUT')
             
             <div class="admin-row">
                 <div class="admin-col">
-                    <label class="admin-form-label">Peran (Role) <span class="required">*</span></label>
-                    <select name="role" class="admin-form-control" required>
-                        <option value="" disabled selected>Pilih Peran Instansi...</option>
-                        <option value="bpn" {{ old('role') == 'bpn' ? 'selected' : '' }}>Admin BPN</option>
-                        <option value="dinas_pu" {{ old('role') == 'dinas_pu' ? 'selected' : '' }}>Admin Dinas PU</option>
-                        <option value="dinas_putr" {{ old('role') == 'dinas_putr' ? 'selected' : '' }}>Admin Dinas PUTR</option>
-                        <option value="satu_pintu" {{ old('role') == 'satu_pintu' ? 'selected' : '' }}>Admin Satu Pintu / PTSP</option>
-                        <option value="admin_berita" {{ old('role') == 'admin_berita' ? 'selected' : '' }}>Admin Berita</option>
-                        <option value="dpn" {{ old('role') == 'dpn' ? 'selected' : '' }}>Super Admin (DPN)</option>
+                    <label class="admin-form-label">Username <span class="required">*</span></label>
+                    <input type="text" name="username" class="admin-form-control" value="{{ old('username', $user->username) }}" required>
+                </div>
+                <div class="admin-col">
+                    <label class="admin-form-label">Nama Lengkap / Instansi</label>
+                    <input type="text" name="name" class="admin-form-control" value="{{ old('name', $user->name) }}">
+                </div>
+            </div>
+
+            <div class="admin-row">
+                <div class="admin-col">
+                    <label class="admin-form-label">Nomor WhatsApp</label>
+                    <input type="text" name="phone_number" class="admin-form-control" value="{{ old('phone_number', $user->phone_number) }}">
+                </div>
+                <div class="admin-col">
+                    <label class="admin-form-label">Email</label>
+                    <input type="email" name="email" class="admin-form-control" value="{{ old('email', $user->email) }}">
+                </div>
+            </div>
+
+            <div class="admin-row">
+                <div class="admin-col">
+                    <label class="admin-form-label">Status Akun <span class="required">*</span></label>
+                    <select name="is_active" class="admin-form-control" required>
+                        <option value="1" {{ old('is_active', $user->is_active) == 1 ? 'selected' : '' }}>Aktif (Diizinkan Login & Mengajukan Permohonan)</option>
+                        <option value="0" {{ old('is_active', $user->is_active) == 0 ? 'selected' : '' }}>Nonaktif / Belum Terverifikasi (Blokir Akses)</option>
                     </select>
                 </div>
                 <div class="admin-col">
-                    <label class="admin-form-label">Username <span class="required">*</span></label>
-                    <input type="text" name="username" class="admin-form-control" value="{{ old('username') }}" placeholder="cth: admin_bpn1" required>
-                </div>
-            </div>
-
-            <div class="admin-row">
-                <div class="admin-col">
-                    <label class="admin-form-label">Nama Lengkap / Instansi</label>
-                    <input type="text" name="name" class="admin-form-control" value="{{ old('name') }}" placeholder="cth: Verifikator BPN 1">
-                </div>
-                <div class="admin-col">
-                    <label class="admin-form-label">Nomor WhatsApp</label>
-                    <input type="text" name="phone_number" class="admin-form-control" value="{{ old('phone_number') }}" placeholder="cth: 08123456789">
-                </div>
-            </div>
-
-            <div class="admin-row">
-                <div class="admin-col">
-                    <label class="admin-form-label">Email</label>
-                    <input type="email" name="email" class="admin-form-control" value="{{ old('email') }}" placeholder="cth: bpn@patenpakmiko.go.id">
+                    <!-- Placeholder spacing -->
                 </div>
             </div>
 
             <div style="border-top: 1px dashed #E2E8F0; margin: 24px 0;"></div>
+            
+            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; font-size: 13px; font-weight: 500;">
+                Biarkan kolom kata sandi kosong jika Anda tidak ingin mengatur ulang kata sandi pengguna ini.
+            </div>
 
             <div class="admin-row">
                 <div class="admin-col">
-                    <label class="admin-form-label">Kata Sandi Awal <span class="required">*</span></label>
-                    <input type="password" name="password" class="admin-form-control" minlength="6" placeholder="Minimal 6 karakter" required>
+                    <label class="admin-form-label">Kata Sandi Baru</label>
+                    <input type="password" name="password" class="admin-form-control" minlength="6" placeholder="Opsional">
                 </div>
                 <div class="admin-col">
-                    <label class="admin-form-label">Konfirmasi Kata Sandi <span class="required">*</span></label>
-                    <input type="password" name="password_confirmation" class="admin-form-control" minlength="6" placeholder="Ulangi kata sandi" required>
+                    <label class="admin-form-label">Konfirmasi Kata Sandi Baru</label>
+                    <input type="password" name="password_confirmation" class="admin-form-control" minlength="6" placeholder="Ulangi jika diisi">
                 </div>
             </div>
 
             <div style="display: flex; gap: 12px; margin-top: 16px;">
                 <button type="submit" class="btn-primary">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
-                    Simpan & Buat Admin
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    Simpan Perubahan
                 </button>
-                <a href="{{ route('admin.users.index') }}" class="btn-secondary">Batal</a>
+                <a href="{{ route('admin.pelaku_usaha.index') }}" class="btn-secondary">Batal</a>
             </div>
         </form>
     </div>

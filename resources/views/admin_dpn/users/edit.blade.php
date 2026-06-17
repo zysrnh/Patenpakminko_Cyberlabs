@@ -94,7 +94,7 @@
     }
 </style>
 
-<div class="container py-4">
+<div style="padding: 24px;">
     <div class="mb-4">
         <div style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: #64748B; margin-bottom: 12px;">
             <a href="{{ route('admin.users.index') }}" style="color: var(--blue); text-decoration: none;">Kelola Admin</a>

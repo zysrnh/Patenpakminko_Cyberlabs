@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-4">
+<div style="padding: 24px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div>
             <h2 style="margin-top: 0; margin-bottom: 4px; font-weight: 800; color: var(--ink);">Kelola Pengguna (Pelaku Usaha)</h2>
@@ -66,6 +66,9 @@
                         </td>
                         <td style="padding: 16px 20px; text-align: right;">
                             <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                                <a href="{{ route('admin.pelaku_usaha.edit', $user->id) }}" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; background: #EFF6FF; color: #2563EB; text-decoration: none; transition: all 0.2s;" title="Edit Pengguna">
+                                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                </a>
                                 <form action="{{ route('admin.pelaku_usaha.destroy', $user->id) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun pelaku usaha ini secara permanen? Semua data terkait mungkin ikut terhapus!');">
                                     @csrf
                                     @method('DELETE')
