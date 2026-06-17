@@ -103,22 +103,24 @@
                                     $hari = $isSelesai ? (int)$app->created_at->diffInDays($app->updated_at) : (int)$app->created_at->diffInDays(now());
                                     $sisaHari = max(0, 10 - $hari);
                                     
-                                    if($hari <= 8) {
-                                        $warnaSla = '#16A34A'; // Hijau (Aman)
-                                    } elseif($hari > 8 && $hari <= 10) {
-                                        $warnaSla = '#D97706'; // Kuning (Peringatan)
+                                    if ($isSelesai) {
+                                        $slaClass = 'badge-green';
+                                    } elseif ($hari > 10) {
+                                        $slaClass = 'badge-red';
+                                    } elseif ($sisaHari <= 2) {
+                                        $slaClass = 'badge-yellow';
                                     } else {
-                                        $warnaSla = '#DC2626'; // Merah (Terlambat/Batas Waktu)
+                                        $slaClass = 'badge-green';
                                     }
                                 @endphp
                                 <td>
-                                    <span class="badge sla-badge" style="background-color:{{ $warnaSla }};color:#fff; border:none; font-size:11.5px; white-space:nowrap; padding:4px 10px; border-radius:20px; font-weight:700; letter-spacing:.01em;">
+                                    <span class="badge sla-badge {{ $slaClass }}" style="border-radius: var(--r-sm); padding: 5px 10px; font-weight: 700;">
                                         @if($isSelesai)
-                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> {{ $hari }}H Selesai
+                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Selesai
                                         @elseif($hari > 10)
-                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> {{ $hari }}H Melewati Batas
+                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Terlambat {{ $hari - 10 }}H
                                         @else
-                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> {{ $hari }}H · Sisa {{ $sisaHari }}H
+                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Sisa {{ $sisaHari }}H
                                         @endif
                                     </span>
                                 </td>
