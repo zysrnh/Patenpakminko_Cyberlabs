@@ -1,106 +1,194 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+    .admin-form-control {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 14px;
+        color: var(--ink);
+        background-color: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 8px;
+        transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+        font-family: inherit;
+    }
+    .admin-form-control:focus {
+        background-color: #fff;
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(33, 138, 201, 0.15);
+        outline: none;
+    }
+    select.admin-form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24' stroke='%2364748B' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        padding-right: 40px;
+    }
+    .admin-form-label {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 8px;
+        display: block;
+    }
+    .admin-form-label .required {
+        color: #DC2626;
+        margin-left: 2px;
+    }
+    .admin-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        padding: 32px;
+        max-width: 800px;
+    }
+    .admin-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -12px;
+        margin-bottom: 8px;
+    }
+    .admin-col {
+        flex: 1;
+        padding: 12px;
+        min-width: 280px;
+    }
+    .btn-primary {
+        background: var(--blue);
+        color: #fff;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+    .btn-primary:hover {
+        background: var(--blue-dk);
+    }
+    .btn-secondary {
+        background: #F1F5F9;
+        color: #475569;
+        border: 1px solid #E2E8F0;
+        padding: 11px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+        background: #E2E8F0;
+        color: #334155;
+    }
+</style>
+
 <div class="container py-4">
     <div class="mb-4">
-        <div class="breadcrumb">
-            <a href="{{ route('admin.users.index') }}">Kelola Admin</a>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: #64748B; margin-bottom: 12px;">
+            <a href="{{ route('admin.users.index') }}" style="color: var(--blue); text-decoration: none;">Kelola Admin</a>
             <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             <span>Edit Admin</span>
         </div>
-        <h2 class="mb-1" style="font-weight: 800; color: var(--ink);">Edit Akun: {{ $user->username }}</h2>
-        <p class="text-muted mb-0" style="font-size: 14px;">Perbarui data instansi atau atur ulang kata sandi admin ini.</p>
+        <h2 style="font-weight: 800; color: var(--ink); margin-bottom: 4px;">Edit Akun: {{ $user->username }}</h2>
+        <p style="font-size: 14.5px; color: #64748B;">Perbarui data instansi atau atur ulang kata sandi admin ini.</p>
     </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm" style="border-radius: var(--r-md);">
-                <div class="card-body p-4">
-                    
-                    @if ($errors->any())
-                        <div class="alert alert-danger" style="font-size: 13px; border-radius: 8px;">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+    <div class="admin-card">
+        @if ($errors->any())
+            <div style="background: #FEF2F2; border: 1px solid #FECACA; color: #DC2626; padding: 16px; border-radius: 8px; margin-bottom: 24px; font-size: 13.5px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-                    <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Peran (Role) <span class="text-danger">*</span></label>
-                                <select name="role" class="form-select" required>
-                                    <option value="bpn" {{ old('role', $user->role) == 'bpn' ? 'selected' : '' }}>Admin BPN</option>
-                                    <option value="dinas_pu" {{ old('role', $user->role) == 'dinas_pu' ? 'selected' : '' }}>Admin Dinas PU</option>
-                                    <option value="dinas_putr" {{ old('role', $user->role) == 'dinas_putr' ? 'selected' : '' }}>Admin Dinas PUTR</option>
-                                    <option value="satu_pintu" {{ old('role', $user->role) == 'satu_pintu' ? 'selected' : '' }}>Admin Satu Pintu / PTSP</option>
-                                    <option value="dpn" {{ old('role', $user->role) == 'dpn' ? 'selected' : '' }}>Super Admin (DPN)</option>
-                                    <option value="admin_berita" {{ old('role', $user->role) == 'admin_berita' ? 'selected' : '' }}>Admin Berita</option>
-                                    <option value="pelaku_usaha" {{ old('role', $user->role) == 'pelaku_usaha' ? 'selected' : '' }}>Pelaku Usaha</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Username <span class="text-danger">*</span></label>
-                                <input type="text" name="username" class="form-control" value="{{ old('username', $user->username) }}" required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Nama Lengkap / Instansi</label>
-                                <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Nomor WhatsApp</label>
-                                <input type="text" name="phone_number" class="form-control" value="{{ old('phone_number', $user->phone_number) }}">
-                            </div>
-                        </div>
-
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Email</label>
-                                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Status Akun <span class="text-danger">*</span></label>
-                                <select name="is_active" class="form-select" required>
-                                    <option value="1" {{ old('is_active', $user->is_active) == 1 ? 'selected' : '' }}>Aktif</option>
-                                    <option value="0" {{ old('is_active', $user->is_active) == 0 ? 'selected' : '' }}>Nonaktif (Blokir Akses)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <hr class="mb-4">
-                        
-                        <div class="alert alert-info" style="font-size: 13px; border-radius: 8px;">
-                            Biarkan kolom kata sandi kosong jika Anda tidak ingin mengubah kata sandi akun ini.
-                        </div>
-
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Kata Sandi Baru</label>
-                                <input type="password" name="password" class="form-control" minlength="6" placeholder="Opsional">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Konfirmasi Kata Sandi Baru</label>
-                                <input type="password" name="password_confirmation" class="form-control" minlength="6" placeholder="Ulangi jika diisi">
-                            </div>
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary px-4 py-2" style="font-weight: 600;">Simpan Perubahan</button>
-                            <a href="{{ route('admin.users.index') }}" class="btn px-4 py-2" style="background: var(--surface2); color: var(--ink); font-weight: 600;">Batal</a>
-                        </div>
-                    </form>
-
+        <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            
+            <div class="admin-row">
+                <div class="admin-col">
+                    <label class="admin-form-label">Peran (Role) <span class="required">*</span></label>
+                    <select name="role" class="admin-form-control" required>
+                        <option value="bpn" {{ old('role', $user->role) == 'bpn' ? 'selected' : '' }}>Admin BPN</option>
+                        <option value="dinas_pu" {{ old('role', $user->role) == 'dinas_pu' ? 'selected' : '' }}>Admin Dinas PU</option>
+                        <option value="dinas_putr" {{ old('role', $user->role) == 'dinas_putr' ? 'selected' : '' }}>Admin Dinas PUTR</option>
+                        <option value="satu_pintu" {{ old('role', $user->role) == 'satu_pintu' ? 'selected' : '' }}>Admin Satu Pintu / PTSP</option>
+                        <option value="admin_berita" {{ old('role', $user->role) == 'admin_berita' ? 'selected' : '' }}>Admin Berita</option>
+                        <option value="dpn" {{ old('role', $user->role) == 'dpn' ? 'selected' : '' }}>Super Admin (DPN)</option>
+                    </select>
+                </div>
+                <div class="admin-col">
+                    <label class="admin-form-label">Username <span class="required">*</span></label>
+                    <input type="text" name="username" class="admin-form-control" value="{{ old('username', $user->username) }}" required>
                 </div>
             </div>
-        </div>
+
+            <div class="admin-row">
+                <div class="admin-col">
+                    <label class="admin-form-label">Nama Lengkap / Instansi</label>
+                    <input type="text" name="name" class="admin-form-control" value="{{ old('name', $user->name) }}">
+                </div>
+                <div class="admin-col">
+                    <label class="admin-form-label">Nomor WhatsApp</label>
+                    <input type="text" name="phone_number" class="admin-form-control" value="{{ old('phone_number', $user->phone_number) }}">
+                </div>
+            </div>
+
+            <div class="admin-row">
+                <div class="admin-col">
+                    <label class="admin-form-label">Email</label>
+                    <input type="email" name="email" class="admin-form-control" value="{{ old('email', $user->email) }}">
+                </div>
+                <div class="admin-col">
+                    <label class="admin-form-label">Status Akun <span class="required">*</span></label>
+                    <select name="is_active" class="admin-form-control" required>
+                        <option value="1" {{ old('is_active', $user->is_active) == 1 ? 'selected' : '' }}>Aktif (Diizinkan Login)</option>
+                        <option value="0" {{ old('is_active', $user->is_active) == 0 ? 'selected' : '' }}>Nonaktif (Blokir Akses)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="border-top: 1px dashed #E2E8F0; margin: 24px 0;"></div>
+            
+            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; font-size: 13px; font-weight: 500;">
+                Biarkan kolom kata sandi kosong jika Anda tidak ingin mengubah kata sandi akun ini.
+            </div>
+
+            <div class="admin-row">
+                <div class="admin-col">
+                    <label class="admin-form-label">Kata Sandi Baru</label>
+                    <input type="password" name="password" class="admin-form-control" minlength="6" placeholder="Opsional">
+                </div>
+                <div class="admin-col">
+                    <label class="admin-form-label">Konfirmasi Kata Sandi Baru</label>
+                    <input type="password" name="password_confirmation" class="admin-form-control" minlength="6" placeholder="Ulangi jika diisi">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 16px;">
+                <button type="submit" class="btn-primary">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    Simpan Perubahan
+                </button>
+                <a href="{{ route('admin.users.index') }}" class="btn-secondary">Batal</a>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

@@ -19,7 +19,7 @@ class AdminUserController extends Controller
             return redirect()->route('dashboard')->with('error', 'Akses ditolak. Anda tidak memiliki izin.');
         }
 
-        $users = User::orderBy('created_at', 'desc')->get();
+        $users = User::where('role', '!=', 'pelaku_usaha')->orderBy('created_at', 'desc')->get();
         return view('admin_dpn.users.index', compact('users'));
     }
 
