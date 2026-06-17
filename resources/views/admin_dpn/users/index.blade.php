@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h2 class="mb-1" style="font-weight: 800; color: var(--ink);">Kelola Admin</h2>
-            <p class="text-muted mb-0" style="font-size: 14px;">Manajemen akun khusus untuk Admin Instansi (BPN, Dinas PU, Dinas PUTR, Satu Pintu, Admin Berita, dll).</p>
+            <h2 style="margin-top: 0; margin-bottom: 4px; font-weight: 800; color: var(--ink);">Kelola Admin</h2>
+            <p style="margin: 0; color: #64748B; font-size: 14px;">Manajemen akun khusus untuk Admin Instansi (BPN, Dinas PU, Dinas PUTR, Satu Pintu, Admin Berita, dll).</p>
         </div>
-        <a href="{{ route('admin.users.create') }}" class="btn" style="background: var(--blue); color: #fff; font-weight: 600; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="{{ route('admin.users.create') }}" class="btn" style="background: var(--blue); color: #fff; font-weight: 600; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Tambah Admin
         </a>

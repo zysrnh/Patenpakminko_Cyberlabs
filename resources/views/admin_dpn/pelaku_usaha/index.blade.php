@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
         <div>
-            <h2 class="mb-1" style="font-weight: 800; color: var(--ink);">Kelola Pengguna (Pelaku Usaha)</h2>
-            <p class="text-muted mb-0" style="font-size: 14px;">Daftar akun Pelaku Usaha yang terdaftar di sistem melalui pengajuan permohonan.</p>
+            <h2 style="margin-top: 0; margin-bottom: 4px; font-weight: 800; color: var(--ink);">Kelola Pengguna (Pelaku Usaha)</h2>
+            <p style="margin: 0; color: #64748B; font-size: 14px;">Daftar akun Pelaku Usaha yang terdaftar di sistem melalui pengajuan permohonan.</p>
         </div>
     </div>
 
