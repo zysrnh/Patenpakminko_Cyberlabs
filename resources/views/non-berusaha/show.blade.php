@@ -805,7 +805,7 @@
                 @if(Auth::user()->isPelakuUsaha())
                     <div class="verify-card" style="border-color: #CBD5E0; background: #F8FAFC; margin-bottom: 24px; padding: 24px; border-radius: 12px; border: 1.5px solid var(--clr-line);">
                         <h3 class="verify-title" style="color: var(--clr-blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px;">
-                            ⭐ Ulasan & Penilaian Layanan
+                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> Ulasan & Penilaian Layanan
                         </h3>
  
                         @if($review)
@@ -833,11 +833,11 @@
                                 <div class="form-group-v" style="margin-bottom: 12px;">
                                     <label for="rating" style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Penilaian Anda</label>
                                     <select name="rating" id="rating" style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--clr-line); font-size:13.5px;" required>
-                                        <option value="5">⭐⭐⭐⭐⭐ Sangat Baik</option>
-                                        <option value="4">⭐⭐⭐⭐ Baik</option>
-                                        <option value="3">⭐⭐⭐ Cukup Baik</option>
-                                        <option value="2">⭐⭐ Kurang</option>
-                                        <option value="1">⭐ Sangat Kurang</option>
+                                        <option value="5">Sangat Baik</option>
+                                        <option value="4">Baik</option>
+                                        <option value="3">Cukup Baik</option>
+                                        <option value="2">Kurang</option>
+                                        <option value="1">Sangat Kurang</option>
                                     </select>
                                 </div>
  
@@ -992,7 +992,7 @@
                                         <strong>Langkah 3 dari 4 — Jadwal Cek Lokasi</strong>
                                         @if($application->bpn_cek_lokasi_dt)
                                             @if($cekLokasiLewat)
-                                                <span style="color:#276749;font-weight:700;"> ✅ Selesai</span> —
+                                                <span style="color:#276749;font-weight:700;"> <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Selesai</span> —
                                                 Cek lokasi <strong>{{ $application->bpn_cek_lokasi_date }}</strong> sudah lewat. Jadwal bisa tetap diubah jika perlu.
                                             @else
                                                 — Terjadwal: <strong>{{ $application->bpn_cek_lokasi_date }}</strong> (CP: {{ $application->bpn_cek_lokasi_cp }}). Ubah jika ada perubahan.
@@ -1513,7 +1513,7 @@
                             $slaColor = '#0F5132';
                             $slaBg = '#D1E7DD';
                             $slaBorder = '#BADBCC';
-                            $badgeText = '✅ Selesai';
+                            $badgeText = '<svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Selesai';
                             $badgeBg = '#198754';
                             $badgeColor = '#FFFFFF';
                         } else {
@@ -1594,7 +1594,7 @@
                                     </div>
                                     <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon.</div>
                                     @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
-                                        <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;">✅ Disetujui pada: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->format('d M Y, H:i') }} WIB</div>
+                                        <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Disetujui pada: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->format('d M Y, H:i') }} WIB</div>
                                     @endif
                                 </div>
                             </div>

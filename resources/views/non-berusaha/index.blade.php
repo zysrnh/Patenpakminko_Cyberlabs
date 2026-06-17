@@ -88,7 +88,7 @@
                                 <td>
                                     <span class="badge" style="background-color:{{ $warnaSla }};color:#fff; border:none; font-size:11.5px; white-space:nowrap; padding:4px 10px; border-radius:20px; font-weight:700; letter-spacing:.01em;">
                                         @if($isSelesai)
-                                            ✅ {{ $hari }}H Selesai
+                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> {{ $hari }}H Selesai
                                         @elseif($hari > 10)
                                             🔴 {{ $hari }}H Melewati Batas
                                         @else

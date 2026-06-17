@@ -153,8 +153,7 @@
                     <option value="">Semua Pemohon</option>
                     @foreach($pemohonList as $pemohon)
                         <option value="{{ $pemohon->id }}" {{ request('user_id') == $pemohon->id ? 'selected' : '' }}>
-                            {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}
-                        </option>
+                            {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}</option>
                     @endforeach
                 </select>
                 <select name="kategori" style="min-width: 200px;">
