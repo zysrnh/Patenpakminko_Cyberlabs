@@ -1502,64 +1502,101 @@
 
                                         <!-- SLA Banner -->
 
+                    <!-- DAY COUNTER / SLA BANNER -->
                     @php
                         $targetDate = $application->created_at->addWeekdays(10);
-                        $now = \Carbon\Carbon::now();
+                        $isSelesai = ($application->status === 'disetujui' || $application->status === 'ditolak' || $application->bpn_pertek_document);
                         
-                        $isBpnDone = ($application->bpn_pertek_document != null || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
-                        
-                        if ($isBpnDone) {
-                            $daysRemaining = 0;
-                            $slaColor = '#0F5132';
-                            $slaBg = '#D1E7DD';
-                            $slaBorder = '#BADBCC';
-                            $badgeText = '<svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Selesai';
-                            $badgeBg = '#198754';
-                            $badgeColor = '#FFFFFF';
+                        if ($isSelesai) {
+                            $slaBg = '#F0FFF4';
+                            $slaBorder = '#C6F6D5';
+                            $slaColor = '#276749';
                         } else {
-                            $daysRemaining = 0;
-                            if ($now->startOfDay() <= $targetDate->startOfDay()) {
+                            $now = \Carbon\Carbon::now();
+                            if ($targetDate->startOfDay() >= $now->startOfDay()) {
                                 $daysRemaining = $now->startOfDay()->diffInWeekdays($targetDate->startOfDay());
                             } else {
                                 $daysRemaining = -1 * $targetDate->startOfDay()->diffInWeekdays($now->startOfDay());
                             }
                             
                             if ($daysRemaining >= 4) {
-                                $slaColor = '#0F5132';
-                                $slaBg = '#D1E7DD';
-                                $slaBorder = '#BADBCC';
-                                $badgeText = '⏳ ' . $daysRemaining . ' Hari Tersisa';
-                                $badgeBg = '#198754';
-                                $badgeColor = '#FFFFFF';
+                                $slaBg = '#EBF8FF';
+                                $slaBorder = '#BEE3F8';
+                                $slaColor = '#2B6CB0';
                             } elseif ($daysRemaining >= 0) {
-                                $slaColor = '#664D03';
-                                $slaBg = '#FFF3CD';
-                                $slaBorder = '#FFECB5';
-                                $badgeText = '⚠️ ' . $daysRemaining . ' Hari Tersisa';
-                                $badgeBg = '#FFC107';
-                                $badgeColor = '#000000';
+                                $slaBg = '#FEFCBF';
+                                $slaBorder = '#F6E05E';
+                                $slaColor = '#975A16';
                             } else {
-                                $slaColor = '#842029';
-                                $slaBg = '#F8D7DA';
-                                $slaBorder = '#F5C2C7';
-                                $badgeText = '🚨 Terlambat ' . abs($daysRemaining) . ' Hari';
-                                $badgeBg = '#DC3545';
-                                $badgeColor = '#FFFFFF';
+                                $slaBg = '#FFF5F5';
+                                $slaBorder = '#FED7D7';
+                                $slaColor = '#C53030';
                             }
                         }
                     @endphp
-                    <div class="sla-banner">
-                        <div class="sla-item" style="background-color: {{ $slaBg }}; border-color: {{ $slaBorder }}; color: {{ $slaColor }};">
-                            <div class="sla-info">
-                                <div class="sla-title">Batas Waktu (Kantor Pertanahan)</div>
-                                <div class="sla-value">Target: {{ $targetDate->format('d M Y') }}</div>
-                                <div class="sla-desc">Batas waktu penyelesaian Pertek adalah 10 Hari Kerja.</div>
-                            </div>
-                            <div class="sla-badge" style="background-color: {{ $badgeBg }}; color: {{ $badgeColor }};">
-                                {{ $badgeText }}
-                            </div>
+                    
+                    <div class="floating-sla" style="position: fixed; bottom: 32px; right: 32px; z-index: 9999; background: #fff; border-radius: var(--r-md); box-shadow: 0 10px 40px rgba(0,0,0,0.12); border: 1px solid var(--line); width: 340px; overflow: hidden; display: flex; flex-direction: column;">
+                        <div style="background: {{ $slaBg }}; padding: 14px 18px; border-bottom: 1px solid {{ $slaBorder }};">
+                            <div style="font-size: 11px; font-weight: 800; color: {{ $slaColor }}; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Batas Waktu (SLA)</div>
+                            <div style="font-size: 13.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">{{ $targetDate->format('d M Y') }}</strong></div>
+                        </div>
+                        <div style="padding: 16px 18px; background: white;">
+                            @if($isSelesai)
+                                <div style="display: flex; align-items: center; gap: 10px; color: #16A34A; font-weight: 700; font-size: 14px;">
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #DCFCE7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </div>
+                                    <span>Tepat Waktu (Selesai)</span>
+                                </div>
+                            @else
+                                <div style="font-size: 11.5px; color: var(--muted); margin-bottom: 10px; font-weight: 600;">WAKTU TERSISA:</div>
+                                <div id="liveCountdownSla" data-target="{{ $targetDate->toIso8601String() }}" style="display: flex; gap: 6px; align-items: center; justify-content: space-between;">
+                                    <!-- Countdown script will inject here -->
+                                </div>
+                            @endif
                         </div>
                     </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const targetEl = document.getElementById('liveCountdownSla');
+                            if(!targetEl) return;
+                            
+                            const targetDate = new Date(targetEl.getAttribute('data-target')).getTime();
+                            
+                            function updateCountdown() {
+                                const now = new Date().getTime();
+                                const distance = targetDate - now;
+                                
+                                if (distance < 0) {
+                                    targetEl.innerHTML = '<div style="color: #DC2626; font-weight: 800; font-size: 16px; display: flex; align-items: center; gap: 8px;"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Waktu Habis (Terlambat)!</div>';
+                                    return;
+                                }
+                                
+                                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                                
+                                const blockStyle = 'background: var(--surface); padding: 8px 4px; border-radius: var(--r-md); text-align: center; flex: 1; border: 1px solid var(--line);';
+                                const numStyle = 'font-size: 18px; font-weight: 800; color: var(--ink); font-family: monospace; line-height: 1; margin-bottom: 4px;';
+                                const labelStyle = 'font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;';
+                                
+                                targetEl.innerHTML = `
+                                    <div style="${blockStyle}"><div style="${numStyle}">${days}</div><div style="${labelStyle}">HARI</div></div>
+                                    <div style="font-weight: 800; color: var(--muted); padding-bottom: 12px;">:</div>
+                                    <div style="${blockStyle}"><div style="${numStyle}">${hours.toString().padStart(2, '0')}</div><div style="${labelStyle}">JAM</div></div>
+                                    <div style="font-weight: 800; color: var(--muted); padding-bottom: 12px;">:</div>
+                                    <div style="${blockStyle}"><div style="${numStyle}">${minutes.toString().padStart(2, '0')}</div><div style="${labelStyle}">MNT</div></div>
+                                    <div style="font-weight: 800; color: var(--muted); padding-bottom: 12px;">:</div>
+                                    <div style="${blockStyle}"><div style="${numStyle} color: var(--blue);">${seconds.toString().padStart(2, '0')}</div><div style="${labelStyle}">DTK</div></div>
+                                `;
+                            }
+                            
+                            updateCountdown();
+                            setInterval(updateCountdown, 1000);
+                        });
+                    </script>
 
                     <div class="card" style="position: sticky; top: 88px;">
                         <!-- Timeline Tracker -->
