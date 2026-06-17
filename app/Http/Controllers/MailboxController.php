@@ -75,4 +75,34 @@ class MailboxController extends Controller
 
         return redirect()->back()->with('success', 'Semua pesan telah ditandai sudah dibaca.');
     }
+
+    public function getUnread()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['success' => false], 401);
+        }
+
+        $query = Mailbox::query()->where('is_read', false);
+
+        if ($user->isPelakuUsaha()) {
+            $query->where('target_user_id', $user->id);
+        } elseif ($user->isBpn()) {
+            $query->where('target_role', 'bpn');
+        } elseif ($user->isDinasPu() || $user->isDinasPutr()) {
+            $query->where('target_role', 'dinas_pu');
+        } elseif ($user->isSatuPintu()) {
+            $query->where('target_role', 'satu_pintu');
+        } else {
+            // Untuk DPN atau role lain jika dikirim langsung via target_user_id
+            $query->where('target_user_id', $user->id);
+        }
+
+        $mailboxes = $query->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $mailboxes
+        ]);
+    }
 }

@@ -246,6 +246,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mailbox', [App\Http\Controllers\MailboxController::class, 'index'])->name('mailbox.index');
     Route::get('/mailbox/{id}/read', [App\Http\Controllers\MailboxController::class, 'read'])->name('mailbox.read');
     Route::post('/mailbox/read-all', [App\Http\Controllers\MailboxController::class, 'markAllAsRead'])->name('mailbox.read_all');
+    Route::get('/api/notifications/unread', [App\Http\Controllers\MailboxController::class, 'getUnread'])->name('api.notifications.unread');
 
 });
 

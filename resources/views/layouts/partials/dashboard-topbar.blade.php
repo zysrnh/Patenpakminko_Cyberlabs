@@ -301,3 +301,142 @@
         el.textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
     })();
 </script>
+
+<!-- Toast Container -->
+<div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; pointer-events: none;"></div>
+
+<style>
+/* Toast Notification Styles */
+.toast-notif {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(13, 45, 79, 0.15);
+    border: 1px solid rgba(13, 45, 79, 0.1);
+    padding: 16px;
+    width: 320px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: auto;
+}
+.toast-notif.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+.toast-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(33, 138, 201, 0.1);
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.toast-icon svg { width: 20px; height: 20px; }
+.toast-content { flex: 1; }
+.toast-title { font-weight: 700; font-size: 13.5px; color: var(--ink); margin-bottom: 4px; line-height: 1.3; }
+.toast-message { font-size: 12px; color: #5a7a9a; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.toast-close {
+    background: none; border: none; color: #a0aec0; cursor: pointer; padding: 4px; border-radius: 6px; transition: 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.toast-close:hover { background: #f1f5f9; color: #4a5568; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let notifiedIds = JSON.parse(localStorage.getItem('notified_mailbox_ids')) || [];
+
+    function showToast(mailbox) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-notif';
+        
+        let iconHtml = `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>`;
+        
+        toast.innerHTML = `
+            <div class="toast-icon">${iconHtml}</div>
+            <div class="toast-content">
+                <div class="toast-title">${mailbox.title || 'Notifikasi Baru'}</div>
+                <div class="toast-message">${mailbox.message || ''}</div>
+            </div>
+            <button class="toast-close" onclick="this.closest('.toast-notif').remove()">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        `;
+
+        // Action on click: open the link if provided
+        if (mailbox.link) {
+            toast.querySelector('.toast-content').style.cursor = 'pointer';
+            toast.querySelector('.toast-content').addEventListener('click', () => {
+                window.location.href = mailbox.link;
+            });
+        }
+
+        container.appendChild(toast);
+        
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, 5000);
+    }
+
+    function checkNotifications() {
+        fetch('{{ route("api.notifications.unread") }}', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(res => {
+            if (res.success && Array.isArray(res.data)) {
+                // Get all current unread IDs from server
+                const currentUnreadIds = res.data.map(item => item.id);
+                
+                // Check if there are newly found items that we haven't notified yet
+                res.data.forEach(item => {
+                    if (!notifiedIds.includes(item.id)) {
+                        showToast(item);
+                        notifiedIds.push(item.id);
+                    }
+                });
+
+                // Cleanup: remove IDs from local storage that are no longer unread
+                notifiedIds = notifiedIds.filter(id => currentUnreadIds.includes(id));
+                localStorage.setItem('notified_mailbox_ids', JSON.stringify(notifiedIds));
+                
+                // Update badge count in topbar visually
+                const badge = document.querySelector('.topbar-notif-badge');
+                if (badge) {
+                    badge.textContent = currentUnreadIds.length;
+                    if (currentUnreadIds.length === 0) {
+                        badge.style.display = 'none';
+                    } else {
+                        badge.style.display = 'flex';
+                    }
+                }
+            }
+        })
+        .catch(err => console.error('Gagal memuat notifikasi AJAX:', err));
+    }
+
+    // Polling every 15 seconds
+    setInterval(checkNotifications, 15000);
+    
+    // Initial fetch to sync badge and local storage on page load
+    checkNotifications();
+});
+</script>
