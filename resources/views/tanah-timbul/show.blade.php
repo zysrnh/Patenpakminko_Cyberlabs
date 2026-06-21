@@ -861,6 +861,46 @@
                 @endif
             @endif
 
+            <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN BPN / DPN) -->
+            @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+                <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
+                    <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Pengaturan Waktu Mulai & Selesai Layanan (SLA)
+                    </h3>
+                    <p style="font-size: 13px; color: #2C5282; margin-bottom: 12px;">
+                        Gunakan fitur ini untuk menyesuaikan tanggal mulai atau berakhirnya layanan secara manual jika terdapat kendala sistem, terpotong hari libur, atau penundaan lainnya. Kosongkan jika ingin mengikuti waktu default.
+                    </p>
+                    @php
+                        $verifyRoute = match(Route::currentRouteName()) {
+                            'berusaha.show' => 'berusaha.verify',
+                            'non-berusaha.show' => 'non-berusaha.verify',
+                            'kebijakan.show' => 'kebijakan.verify',
+                            'tanah-timbul.show' => 'tanah-timbul.verify',
+                            'psn.show' => 'psn.verify',
+                            default => 'berusaha.verify'
+                        };
+                    @endphp
+                    <form action="{{ route($verifyRoute, $application->id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="step" value="update_sla">
+                        <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div class="form-group-v">
+                                <label for="tgl_mulai_layanan" style="font-weight: 600; display: block; margin-bottom: 8px; font-size: 13px; color: #2B6CB0;">Tanggal Mulai Layanan</label>
+                                <input type="datetime-local" name="tgl_mulai_layanan" id="tgl_mulai_layanan" class="form-control-v" style="border: 1px solid #63B3ED;"
+                                       value="{{ $application->tgl_mulai_layanan ? $application->tgl_mulai_layanan->format('Y-m-d\TH:i') : '' }}">
+                            </div>
+                            <div class="form-group-v">
+                                <label for="tgl_selesai_layanan" style="font-weight: 600; display: block; margin-bottom: 8px; font-size: 13px; color: #2B6CB0;">Tanggal Berakhir Layanan</label>
+                                <input type="datetime-local" name="tgl_selesai_layanan" id="tgl_selesai_layanan" class="form-control-v" style="border: 1px solid #63B3ED;"
+                                       value="{{ $application->tgl_selesai_layanan ? $application->tgl_selesai_layanan->format('Y-m-d\TH:i') : '' }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit-v" style="margin-top: 12px; background: #3182CE; padding: 8px 16px;">Simpan Pengaturan Waktu</button>
+                    </form>
+                </div>
+            @endif
+
             <!-- STAGED VERIFICATION FORM (Hanya untuk instansi yang sedang bertugas) -->
             @php
                 $user = Auth::user();

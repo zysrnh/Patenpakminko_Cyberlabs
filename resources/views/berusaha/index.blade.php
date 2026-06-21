@@ -97,30 +97,38 @@
                             <td style="color:var(--mid);">{{ $app->user->phone_number }}</td>
                             <td style="color:var(--mid);">{{ $app->created_at->format('d-m-Y') }}</td>
                             @if(!Auth::user()->isPelakuUsaha())
-                                                                @php
+                                @php
                                     $isSelesai = in_array($app->status, ['disetujui', 'ditolak', 'terbit_pkpr']);
-                                    $hari = $isSelesai ? (int)$app->created_at->diffInDays($app->updated_at) : (int)$app->created_at->diffInDays(now());
-                                    $sisaHari = max(0, 10 - $hari);
+                                    $startDate = $app->tgl_mulai_layanan ?? $app->created_at;
+                                    $endDate = $isSelesai ? ($app->tgl_selesai_layanan ?? $app->updated_at) : now();
+                                    $hari = (int)$startDate->diffInDays($endDate);
+                                    $hariKe = $hari + 1;
                                     
+                                    $isPuPhase = in_array($app->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr']);
+                                    $batasMerah = $isPuPhase ? 20 : 10;
+                                    $batasKuning = $isPuPhase ? 17 : 8;
+
                                     if ($isSelesai) {
                                         $slaClass = 'badge-green';
-                                    } elseif ($hari > 10) {
+                                        $slaText = 'Selesai (Hari ke-' . $hariKe . ')';
+                                        $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>';
+                                    } elseif ($hariKe >= $batasMerah) {
                                         $slaClass = 'badge-red';
-                                    } elseif ($sisaHari <= 2) {
+                                        $slaText = 'Hari ke-' . $hariKe . ' (Terlambat)';
+                                        $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>';
+                                    } elseif ($hariKe >= $batasKuning) {
                                         $slaClass = 'badge-yellow';
+                                        $slaText = 'Hari ke-' . $hariKe;
+                                        $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                     } else {
                                         $slaClass = 'badge-green';
+                                        $slaText = 'Hari ke-' . $hariKe;
+                                        $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                     }
                                 @endphp
                                 <td>
                                     <span class="badge sla-badge {{ $slaClass }}" style="border-radius: var(--r-sm); padding: 5px 10px; font-weight: 700;">
-                                        @if($isSelesai)
-                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Selesai
-                                        @elseif($hari > 10)
-                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Terlambat {{ $hari - 10 }}H
-                                        @else
-                                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Sisa {{ $sisaHari }}H
-                                        @endif
+                                        <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">{!! $slaIcon !!}</svg> {{ $slaText }}
                                     </span>
                                 </td>
                             @endif
@@ -166,12 +174,9 @@ document.addEventListener('DOMContentLoaded', function() {
             let matchSla = true;
 
             if (slaVal === 'selesai' && !slaText.includes('selesai')) matchSla = false;
-            // if aman: should contain "sisa" but not "sisa 0h", "sisa 1h", "sisa 2h"
-            if (slaVal === 'berjalan' && (!slaText.includes('sisa') || slaText.includes('sisa 2h') || slaText.includes('sisa 1h') || slaText.includes('sisa 0h'))) matchSla = false;
-            // if hampir: should contain "sisa 0h" or "sisa 1h" or "sisa 2h"
-            if (slaVal === 'hampir' && !(slaText.includes('sisa 2h') || slaText.includes('sisa 1h') || slaText.includes('sisa 0h'))) matchSla = false;
-            // if melewati: should contain "melewati batas"
-            if (slaVal === 'melewati' && !slaText.includes('terlambat')) matchSla = false;
+            if (slaVal === 'berjalan' && (!slaBadge || !slaBadge.classList.contains('badge-green') || slaText.includes('selesai'))) matchSla = false;
+            if (slaVal === 'hampir' && (!slaBadge || !slaBadge.classList.contains('badge-yellow'))) matchSla = false;
+            if (slaVal === 'melewati' && (!slaBadge || !slaBadge.classList.contains('badge-red'))) matchSla = false;
 
             row.style.display = (matchSearch && matchSla) ? '' : 'none';
         });

@@ -43,6 +43,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'dinas_pu_document',
     'satu_pintu_no_pkkpr',
     'satu_pintu_tanggal_terbit',
+    'tgl_mulai_layanan',
+    'tgl_selesai_layanan',
 ])]
 class PsnApplication extends Model
 {
@@ -54,6 +56,8 @@ class PsnApplication extends Model
         'bpn_pertek_uploaded_at'  => 'datetime',
         'souvenir_sent_at'        => 'datetime',
         'satu_pintu_tanggal_terbit' => 'date',
+        'tgl_mulai_layanan'       => 'datetime',
+        'tgl_selesai_layanan'     => 'datetime',
     ];
 
     public function user(): BelongsTo

@@ -44,6 +44,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'ptp_data',
     'dinas_pu_tanggal_penilaian',
     'dinas_pu_document',
+    'tgl_mulai_layanan',
+    'tgl_selesai_layanan',
 ])]
 class PpkprBerusahaApplication extends Model
 {
@@ -54,6 +56,8 @@ class PpkprBerusahaApplication extends Model
         'souvenir_sent_at'  => 'datetime',
         'satu_pintu_tanggal_terbit' => 'date',
         'dinas_pu_tanggal_penilaian' => 'date',
+        'tgl_mulai_layanan' => 'datetime',
+        'tgl_selesai_layanan' => 'datetime',
     ];
  
     /**

@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'ptp_data',
     'satu_pintu_no_pkkpr',
     'satu_pintu_tanggal_terbit',
+    'tgl_mulai_layanan',
+    'tgl_selesai_layanan',
 ])]
 class PpkprApplication extends Model
 {
@@ -57,6 +59,8 @@ class PpkprApplication extends Model
         'dinas_pu_tanggal_penilaian' => 'date',
         'putr_validated_at'          => 'datetime',
         'credential_sent_at'         => 'datetime',
+        'tgl_mulai_layanan'          => 'datetime',
+        'tgl_selesai_layanan'        => 'datetime',
     ];
     /**
      * Relasi ke User pembuat permohonan.

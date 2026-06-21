@@ -196,6 +196,17 @@ class TanahTimbulController extends Controller
         $application = TanahTimbulApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
         $user = Auth::user();
         $step = $request->input('step');
+
+        if ($user->isBpn() && $step === 'update_sla') {
+            $request->validate([
+                'tgl_mulai_layanan' => 'nullable|date',
+                'tgl_selesai_layanan' => 'nullable|date',
+            ]);
+            $application->tgl_mulai_layanan = $request->filled('tgl_mulai_layanan') ? \Carbon\Carbon::parse($request->input('tgl_mulai_layanan')) : null;
+            $application->tgl_selesai_layanan = $request->filled('tgl_selesai_layanan') ? \Carbon\Carbon::parse($request->input('tgl_selesai_layanan')) : null;
+            $application->save();
+            return redirect()->back()->with('success', 'Pengaturan SLA waktu layanan berhasil diperbarui.');
+        }
  
         // ==========================================
         // SUB-ALUR BPN (4 LANGKAH BERTURUT-TURUT)

@@ -811,10 +811,22 @@
                     
                     $processSla = function($apps) use (&$slaHijau, &$slaKuning, &$slaMerah) {
                         foreach($apps as $app) {
-                            $hari = $app->created_at->diffInDays(now());
-                            if($hari <= 8) $slaHijau++;
-                            elseif($hari > 8 && $hari <= 10) $slaKuning++;
-                            else $slaMerah++;
+                            $startDate = $app->tgl_mulai_layanan ?? $app->created_at;
+                            $endDate = $app->tgl_selesai_layanan ?? now();
+                            $hari = $startDate->diffInDays($endDate);
+                            $hariKe = $hari + 1;
+
+                            $isPuPhase = in_array($app->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr']);
+                            
+                            if ($isPuPhase) {
+                                if($hariKe <= 16) $slaHijau++;
+                                elseif($hariKe >= 17 && $hariKe <= 19) $slaKuning++;
+                                else $slaMerah++;
+                            } else {
+                                if($hariKe <= 7) $slaHijau++;
+                                elseif($hariKe >= 8 && $hariKe <= 9) $slaKuning++;
+                                else $slaMerah++;
+                            }
                         }
                     };
                     
@@ -1092,7 +1104,7 @@
                         </div>
                         <div>
                             <div style="font-size:28px;font-weight:800;color:#16A34A;line-height:1;">{{ $slaHijau }}</div>
-                            <div style="font-size:12px;font-weight:600;color:#4a7c27;margin-top:2px;">≤ 8 Hari — Aman</div>
+                            <div style="font-size:12px;font-weight:600;color:#4a7c27;margin-top:2px;">Sesuai SLA / Aman</div>
                         </div>
                     </div>
                     {{-- Kuning --}}
@@ -1102,7 +1114,7 @@
                         </div>
                         <div>
                             <div style="font-size:28px;font-weight:800;color:#D97706;line-height:1;">{{ $slaKuning }}</div>
-                            <div style="font-size:12px;font-weight:600;color:#92600A;margin-top:2px;">8–10 Hari — Peringatan</div>
+                            <div style="font-size:12px;font-weight:600;color:#92600A;margin-top:2px;">Mendekati Batas SLA</div>
                         </div>
                     </div>
                     {{-- Merah --}}
@@ -1112,7 +1124,7 @@
                         </div>
                         <div>
                             <div style="font-size:28px;font-weight:800;color:#DC2626;line-height:1;">{{ $slaMerah }}</div>
-                            <div style="font-size:12px;font-weight:600;color:#9B2C2C;margin-top:2px;">&gt; 10 Hari — Terlambat</div>
+                            <div style="font-size:12px;font-weight:600;color:#9B2C2C;margin-top:2px;">Melewati Batas SLA / Terlambat</div>
                         </div>
                     </div>
                 </div>

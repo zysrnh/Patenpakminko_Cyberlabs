@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
     'kbli',
     'proposal_kegiatan',
     'ptp_data',
+    'tgl_mulai_layanan',
+    'tgl_selesai_layanan',
 ])]
 class KebijakanApplication extends Model
 {
@@ -54,6 +56,8 @@ class KebijakanApplication extends Model
         'bpn_pertek_uploaded_at' => 'datetime',
         'souvenir_sent_at'  => 'datetime',
         'satu_pintu_tanggal_terbit' => 'date',
+        'tgl_mulai_layanan' => 'datetime',
+        'tgl_selesai_layanan' => 'datetime',
     ];
  
     /**
