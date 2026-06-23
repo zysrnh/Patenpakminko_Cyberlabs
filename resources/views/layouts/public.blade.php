@@ -1833,7 +1833,7 @@
                 </div>
 
                 <a href="{{ route('alur') }}" class="nav-link">Alur Proses</a>
-                <a href="#ulasan" class="nav-link">Ulasan</a>
+                <a href="{{ Auth::check() ? route('ulasan.index') : route('login') }}" class="nav-link">Ulasan</a>
 
                 <div class="nav-sep" aria-hidden="true"></div>
 
@@ -1909,7 +1909,7 @@
         <a href="{{ route('informal.index') }}" onclick="closeMobileNav()">INFORMAL</a>
         <span class="mobile-section-label">Navigasi</span>
         <a href="{{ route('alur') }}" onclick="closeMobileNav()">Alur Proses</a>
-        <a href="#ulasan" onclick="closeMobileNav()">Ulasan</a>
+        <a href="{{ Auth::check() ? route('ulasan.index') : route('login') }}" onclick="closeMobileNav()">Ulasan</a>
         <a href="{{ route('kontak') }}" onclick="closeMobileNav()">Kontak Kami</a>
         @auth
             @if(Auth::user()->isAdminBerita())
