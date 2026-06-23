@@ -1544,7 +1544,7 @@
 
                     <!-- DAY COUNTER / SLA BANNER -->
                     @php
-                        $targetDate = $application->created_at->addWeekdays(10);
+                        $targetDate = $application->tgl_selesai_layanan ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) : $application->created_at->addWeekdays(10);
                         $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
                         
                         if ($isSelesai) {
