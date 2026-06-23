@@ -601,11 +601,11 @@
             <div class="sidebar-logo-text">
                 <strong>PATEN PAK MIKO</strong>
                 <span>
-                    @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan Kota Sukabumi
-                    @elseif(Auth::user()->isBpn()) Portal Admin BPN
-                    @elseif(Auth::user()->isDinasPu()) Portal Dinas PU
-                    @elseif(Auth::user()->isSatuPintu()) Portal Satu Pintu
-                    @elseif(Auth::user()->isDpn()) Kantor Pertanahan Kota Sukabumi
+                    @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan (BPN) Kota Sukabumi
+                    @elseif(Auth::user()->isBpn()) Portal Admin Kantor Pertanahan (BPN)
+                    @elseif(Auth::user()->isDinasPu()) Portal Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
+                    @elseif(Auth::user()->isSatuPintu()) Portal DPMPTSP
+                    @elseif(Auth::user()->isDpn()) Kantor Pertanahan (BPN) Kota Sukabumi
                     @else Portal Manajemen @endif
                 </span>
             </div>
@@ -893,9 +893,9 @@
                     <span>
                         @if(Auth::user()->isAdminBerita()) Admin Berita
                         @elseif(Auth::user()->isPelakuUsaha()) Pelaku Usaha Terverifikasi
-                        @elseif(Auth::user()->isBpn()) Admin BPN
-                        @elseif(Auth::user()->isDinasPu()) Admin Dinas PU
-                        @elseif(Auth::user()->isSatuPintu()) Admin Satu Pintu
+                        @elseif(Auth::user()->isBpn()) Admin Kantor Pertanahan (BPN)
+                        @elseif(Auth::user()->isDinasPu()) Admin Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
+                        @elseif(Auth::user()->isSatuPintu()) Admin DPMPTSP
                         @elseif(Auth::user()->isDpn()) Super Admin
                         @else Pengguna Terverifikasi @endif
                     </span>

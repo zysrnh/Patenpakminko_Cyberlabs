@@ -14,7 +14,7 @@ class TanahTimbulController extends Controller
     use \App\Traits\WaBlastHelper;
 
     /**
-     * Tampilkan daftar pengajuan tanah-timbul Khusus.
+     * Tampilkan daftar pengajuan Tanah Timbul.
      */
     public function index()
     {

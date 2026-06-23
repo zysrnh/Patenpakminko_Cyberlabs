@@ -52,7 +52,7 @@ class RevisiController extends Controller
             ->orderBy('created_at', 'desc')->get();
         foreach($non as $n) {
             $applications[] = [
-                'type' => 'non_berusaha', 'layanan' => 'PPKPR Non-Berusaha', 'id' => $n->id,
+                'type' => 'non_berusaha', 'layanan' => 'PPKPR Non Berusaha', 'id' => $n->id,
                 'application_number' => $n->application_number, 'created_at' => $n->created_at,
                 'notes' => $n->bpn_notes ?? $n->putr_notes ?? $n->dinas_pu_notes ?? ''
             ];
@@ -204,7 +204,7 @@ class RevisiController extends Controller
             $application->bpn_notes = "Telah Direvisi Pemohon. " . $application->bpn_notes;
             $application->save();
 
-            // Blast WA ke Admin BPN bahwa pemohon telah mengunggah revisi
+            // Blast WA ke Admin Kantor Pertanahan (BPN) bahwa pemohon telah mengunggah revisi
             $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Revisi Dokumen', 'dashboard', '');
 
             return redirect()->route("pengajuan.sukses")->with("success", "Berkas perbaikan berhasil diunggah! Status permohonan kembali Menunggu Pemeriksaan BPN.");

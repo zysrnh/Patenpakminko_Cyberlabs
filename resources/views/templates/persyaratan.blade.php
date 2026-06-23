@@ -1,12 +1,12 @@
 <?php
-// Template Berkas Persyaratan Terintegrasi Pertimbangan Teknis Pertanahan Non-Berusaha
+// Template Berkas Persyaratan Terintegrasi Pertimbangan Teknis Pertanahan Non Berusaha
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Berkas Persyaratan Pertimbangan Teknis Pertanahan Non-Berusaha</title>
+    <title>Template Berkas Persyaratan Pertimbangan Teknis Pertanahan Non Berusaha</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;

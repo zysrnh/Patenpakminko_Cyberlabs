@@ -226,9 +226,9 @@
                     {{ $pageTitle }}
                 @else
                     @if(Auth::user()->isPelakuUsaha())   Dashboard Pelaku Usaha
-                    @elseif(Auth::user()->isBpn())        Dashboard Admin BPN
-                    @elseif(Auth::user()->isDinasPu())    Dashboard Dinas PU
-                    @elseif(Auth::user()->isSatuPintu())  Dashboard Satu Pintu
+                    @elseif(Auth::user()->isBpn())        Dashboard Admin Kantor Pertanahan (BPN)
+                    @elseif(Auth::user()->isDinasPu())    Dashboard Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
+                    @elseif(Auth::user()->isSatuPintu())  Dashboard DPMPTSP
                     @elseif(Auth::user()->isDpn())        Dashboard Admin Pusat
                     @elseif(Auth::user()->isAdminBerita()) Dashboard Berita
                     @else Dashboard

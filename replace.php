@@ -14,7 +14,7 @@ $content = str_replace("'module_type', 'non_berusaha'", "'module_type', 'kebijak
 $content = str_replace('value="non_berusaha"', 'value="kebijakan"', $content);
 
 // Replace specific text
-$content = str_replace("Dokumen PKKPR Non-Berusaha siap diunduh", "Dokumen Kebijakan Khusus siap diunduh", $content);
+$content = str_replace("Dokumen PKKPR Non-Berusaha siap diunduh", "Dokumen Kebijakan siap diunduh", $content);
 
 file_put_contents($targetPath, $content);
 echo "Replacement completed successfully.\n";

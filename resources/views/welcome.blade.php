@@ -262,7 +262,7 @@
                     <img src="{{ asset('storage/svg/Verifikasi&Validasi.svg') }}" alt="Verifikasi dan Validasi Berkas">
                 </div>
                 <h3 class="step-title">Verifikasi dan Validasi Berkas</h3>
-                <p class="step-desc">Petugas Kantor Pertanahan akan memeriksa kelengkapan dan kesesuaian dokumen yang telah Anda unggah ke sistem.</p>
+                <p class="step-desc">Petugas Kantor Pertanahan (BPN) akan memeriksa kelengkapan dan kesesuaian dokumen yang telah Anda unggah ke sistem.</p>
             </div>
             <div class="process-step reveal reveal-d4">
                 <div class="step-img-wrapper">

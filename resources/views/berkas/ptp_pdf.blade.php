@@ -22,7 +22,7 @@
 </head>
 <body>
 
-    <p>Kepada Yth.<br>Kepala Kantor Pertanahan Kota Sukabumi<br>di tempat.</p>
+    <p>Kepada Yth.<br>Kepala Kantor Pertanahan (BPN) Kota Sukabumi<br>di tempat.</p>
 
     <table style="margin-bottom: 15px;">
         <tr>

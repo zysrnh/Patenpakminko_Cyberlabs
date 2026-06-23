@@ -41,7 +41,7 @@ Alur perizinan tata ruang terpadu berskala bisnis besar:
 * **Finalisasi 1 Pintu (PTSP):** Input Nomor PKKPR, Tanggal Terbit, dan Unggah PDF produk akhir $\rightarrow$ Notifikasi rilis final dikirim ke BPN, PU, dan Pelaku Usaha.
 
 ### 4. ALUR 4: Kebijakan (Bypass Gistaru & Pembayaran)
-Alur permohonan berbasis kebijakan khusus (strukturnya ekuivalen penuh dengan *Non Berusaha*):
+Alur permohonan berbasis kebijakan (strukturnya ekuivalen penuh dengan *Non Berusaha*):
 * Register/Login $\rightarrow$ Submit berkas digital.
 * Validasi Berkas BPN $\rightarrow$ WhatsApp loket fisik BPN.
 * BPN input jadwal cek lokasi lapangan $\rightarrow$ Cek lapangan offline.

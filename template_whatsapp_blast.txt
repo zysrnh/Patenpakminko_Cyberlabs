@@ -5,7 +5,7 @@ Berikut adalah daftar pesan notifikasi WhatsApp otomatis yang dikirimkan oleh si
 Keterangan Variabel:
 {nama}          : Nama Pemohon / User
 {no_reg}        : Nomor Registrasi Permohonan
-{layanan}       : Jenis Layanan (Pertimbangan Teknis Pertanahan Berusaha, Non-Berusaha, Kebijakan Khusus, dll)
+{layanan}       : Jenis Layanan (Pertimbangan Teknis Pertanahan Berusaha, Non Berusaha, Kebijakan, dll)
 {url}           : Link menuju halaman detail permohonan
 {waktu}         : Waktu jadwal cek lokasi / rapat (contoh: Senin, 01 Jan 2026 Jam 09:00)
 {cp_admin}      : Nama Kontak Person Petugas Lapangan
@@ -24,19 +24,19 @@ Halo {nama}, permohonan {layanan} Anda dengan nomor {no_reg} berhasil diajukan.
 Berkas Anda sedang dalam verifikasi awal BPN. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.
 
 2. Verifikasi Berkas Awal (BPN) - VALID
-Halo {nama}, berkas {layanan} {no_reg} dinyatakan VALID oleh BPN. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran. Kami akan menghubungi Anda kembali.
+Halo {nama}, berkas {layanan} {no_reg} dinyatakan VALID oleh Kantor Pertanahan (BPN). Permohonan diteruskan ke Dinas Pekerjaan Umum dan Tata Ruang (PUTR) untuk validasi pembayaran. Kami akan menghubungi Anda kembali.
 
 3. Verifikasi Berkas Awal (BPN) - TIDAK SESUAI / DITOLAK
-Halo {nama}, berkas {layanan} {no_reg} dinyatakan TIDAK SESUAI / DITOLAK oleh BPN.
+Halo {nama}, berkas {layanan} {no_reg} dinyatakan TIDAK SESUAI / DITOLAK oleh Kantor Pertanahan (BPN).
 Alasan: "{catatan}"
 Mohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin BPN.
 
-4. Validasi Dinas PUTR Selesai (Menunggu Pembayaran)
-Halo {nama}, permohonan {layanan} {no_reg} telah divalidasi Dinas PUTR.
+4. Validasi Dinas Pekerjaan Umum dan Tata Ruang (PUTR) Selesai (Menunggu Pembayaran)
+Halo {nama}, permohonan {layanan} {no_reg} telah divalidasi Dinas Pekerjaan Umum dan Tata Ruang (PUTR).
 Silakan cek instruksi pembayaran retribusi (di email atau melalui petugas). Jika pembayaran sudah diselesaikan, Anda akan menerima detail Kredensial Akun (Username & Password) untuk memantau progress di sistem.
 
-5. Validasi Dinas PUTR - DITOLAK
-Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas PUTR.
+5. Validasi Dinas Pekerjaan Umum dan Tata Ruang (PUTR) - DITOLAK
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas Pekerjaan Umum dan Tata Ruang (PUTR).
 Catatan: {catatan}
 Harap hubungi petugas untuk informasi lebih lanjut.
 
@@ -87,16 +87,16 @@ Pantau di: {url}
 Halo {nama}, Pertimbangan Teknis Pertanahan dengan no berkas... {no_reg} telah DITERBITKAN oleh kantor pertanahan kota sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PU) dan (PUTR) untuk dilakukan penilaian. Informasi detail dapat diakses di {url}
 
 12. Pertek DITOLAK (BPN)
-Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh BPN pada tahap Pertek.
-Catatan BPN: {catatan}
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Kantor Pertanahan (BPN) pada tahap Pertek.
+Catatan Kantor Pertanahan (BPN): {catatan}
 
 Detail: {url}
 
-13. Penilaian Tata Ruang Selesai (Dinas PU)
-Halo {nama}, penilaian Pertimbangan Teknis Pertanahan {layanan} {no_reg} oleh Dinas PU selesai. Permohonan diteruskan ke Dinas Satu Pintu untuk penerbitan Pertimbangan Teknis Pertanahan resmi. Pantau di: {url}
+13. Penilaian Tata Ruang Selesai (Dinas Pekerjaan Umum dan Tata Ruang (PUTR))
+Halo {nama}, penilaian Pertimbangan Teknis Pertanahan {layanan} {no_reg} oleh Dinas Pekerjaan Umum dan Tata Ruang (PUTR) selesai. Permohonan diteruskan ke Dinas Satu Pintu untuk penerbitan Pertimbangan Teknis Pertanahan resmi. Pantau di: {url}
 
-14. Penilaian Tata Ruang DITOLAK (Dinas PU)
-Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas PU pada tahap penilaian Pertimbangan Teknis Pertanahan.
+14. Penilaian Tata Ruang DITOLAK (Dinas Pekerjaan Umum dan Tata Ruang (PUTR))
+Halo {nama}, permohonan {layanan} {no_reg} DITOLAK oleh Dinas Pekerjaan Umum dan Tata Ruang (PUTR) pada tahap penilaian Pertimbangan Teknis Pertanahan.
 Catatan: {catatan}
 
 Detail: {url}
@@ -132,19 +132,19 @@ B. TEMPLATE UNTUK ADMIN INSTANSI (NOTIFIKASI INTERNAL)
 1. Notifikasi ke Admin PUTR (Saat BPN Setuju Berkas Awal)
 [PUTR] Berkas awal BPN untuk {layanan} {no_reg} telah valid. Silakan lakukan validasi pembayaran di: {url}
 
-2. Notifikasi ke Admin BPN (Saat PUTR Selesai Validasi Awal)
+2. Notifikasi ke Admin Kantor Pertanahan (BPN) (Saat PUTR Selesai Validasi Awal)
 [BPN] {layanan} {no_reg} telah divalidasi PUTR. Menunggu konfirmasi pembayaran pemohon. Detail: {url}
 
-3. Notifikasi ke Admin Dinas PU (Saat BPN Menerbitkan Pertek)
-Notifikasi Dinas PU: Pertek BPN untuk {layanan} {no_reg} telah terbit. Silakan lakukan penilaian Pertimbangan Teknis Pertanahan di: {url}
+3. Notifikasi ke Admin Dinas Pekerjaan Umum dan Tata Ruang (PUTR) (Saat BPN Menerbitkan Pertek)
+Notifikasi Dinas Pekerjaan Umum dan Tata Ruang (PUTR): Pertek Kantor Pertanahan (BPN) untuk {layanan} {no_reg} telah terbit. Silakan lakukan penilaian Pertimbangan Teknis Pertanahan di: {url}
 
-4. Notifikasi ke Admin PTSP / Satu Pintu (Saat Dinas PU Selesai Menilai)
-Notifikasi Satu Pintu: Penilaian Dinas PU untuk {layanan} {no_reg} selesai. Silakan proses penerbitan Pertimbangan Teknis Pertanahan di: {url}
+4. Notifikasi ke Admin PTSP / Satu Pintu (Saat Dinas Pekerjaan Umum dan Tata Ruang (PUTR) Selesai Menilai)
+Notifikasi Satu Pintu: Penilaian Dinas Pekerjaan Umum dan Tata Ruang (PUTR) untuk {layanan} {no_reg} selesai. Silakan proses penerbitan Pertimbangan Teknis Pertanahan di: {url}
 
-5. Notifikasi Kembali ke BPN (Informasi bahwa PTSP harus segera menerbitkan)
-Notifikasi BPN: Dinas PU telah selesai menilai {layanan} {no_reg}. Menunggu penerbitan Pertimbangan Teknis Pertanahan oleh Satu Pintu.
+5. Notifikasi Kembali ke Kantor Pertanahan (BPN) (Informasi bahwa PTSP harus segera menerbitkan)
+Notifikasi BPN: Dinas Pekerjaan Umum dan Tata Ruang (PUTR) telah selesai menilai {layanan} {no_reg}. Menunggu penerbitan Pertimbangan Teknis Pertanahan oleh Satu Pintu.
 
-6. Notifikasi Kembali ke BPN (Pelaku Usaha Mengunggah Ulang Berkas Revisi)
+6. Notifikasi Kembali ke Kantor Pertanahan (BPN) (Pelaku Usaha Mengunggah Ulang Berkas Revisi)
 Notifikasi BPN: Pelaku Usaha {nama} telah mengunggah ulang berkas perbaikan untuk permohonan {layanan} {no_reg}.
 Silakan cek & verifikasi ulang dokumen di: {url}
 

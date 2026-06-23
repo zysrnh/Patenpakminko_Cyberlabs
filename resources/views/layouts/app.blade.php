@@ -269,14 +269,14 @@
                 <strong>PATEN PAK MIKO</strong>
                 <span>
                     @if(Auth::check())
-                        @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan Kota Sukabumi
-                        @elseif(Auth::user()->isBpn()) Portal Admin BPN
-                        @elseif(Auth::user()->isDinasPu()) Portal Dinas PU
-                        @elseif(Auth::user()->isSatuPintu()) Portal Satu Pintu
+                        @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan (BPN) Kota Sukabumi
+                        @elseif(Auth::user()->isBpn()) Portal Admin Kantor Pertanahan (BPN)
+                        @elseif(Auth::user()->isDinasPu()) Portal Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
+                        @elseif(Auth::user()->isSatuPintu()) Portal DPMPTSP
                         @elseif(Auth::user()->isDpn()) Super Admin
                         @else Portal Manajemen @endif
                     @else
-                        Kantor Pertanahan Kota Sukabumi
+                        Kantor Pertanahan (BPN) Kota Sukabumi
                     @endif
                 </span>
             </div>

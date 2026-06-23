@@ -77,12 +77,12 @@
                 <th>Kapan menerima notifikasi?</th>
             </tr>
             <tr>
-                <td><strong>Admin BPN</strong></td>
+                <td><strong>Admin Kantor Pertanahan (BPN)</strong></td>
                 <td>Saat berkas diajukan, saat PUTR validasi selesai, dan saat PUTR penilaian selesai</td>
             </tr>
             <tr>
                 <td><strong>Admin PUTR</strong></td>
-                <td>Saat BPN menyetujui berkas dan saat Pertek BPN terbit — untuk validasi awal & penilaian Pertimbangan Teknis Pertanahan</td>
+                <td>Saat BPN menyetujui berkas dan saat Pertek Kantor Pertanahan (BPN) terbit — untuk validasi awal & penilaian Pertimbangan Teknis Pertanahan</td>
             </tr>
             <tr>
                 <td><strong>Admin DPMPTSP</strong></td>
@@ -110,13 +110,13 @@
                     <svg width="22" height="22" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
                 </div>
                 <div class="contact-info">
-                    <div class="contact-label">Admin BPN</div>
+                    <div class="contact-label">Admin Kantor Pertanahan (BPN)</div>
                     <div class="contact-desc">Menerima notifikasi untuk: pengajuan baru, penyelesaian validasi PUTR, dan penyelesaian penilaian PUTR. Berperan dalam seluruh alur layanan.</div>
                     <input type="text" name="admin_bpn" class="contact-input" id="admin_bpn" placeholder="contoh: 6281234567890" value="{{ old('admin_bpn', $settings['admin_bpn'] ?? '') }}" inputmode="numeric">
                     @if(!empty($settings['admin_bpn']))
                         <div class="contact-current">Tersimpan: <strong>{{ $settings['admin_bpn'] }}</strong></div>
                     @else
-                        <div class="contact-current" style="color: #C53030;">Belum diisi — notifikasi ke BPN akan menggunakan nomor telepon sistem (cadangan).</div>
+                        <div class="contact-current" style="color: #C53030;">Belum diisi — notifikasi ke Kantor Pertanahan (BPN) akan menggunakan nomor telepon sistem (cadangan).</div>
                     @endif
                 </div>
             </div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="contact-info">
                     <div class="contact-label">Admin PUTR</div>
-                    <div class="contact-desc">Menerima notifikasi saat Pertek BPN terbit (Berusaha & Non-Berusaha) — sebagai informasi awal untuk melakukan penilaian Pertimbangan Teknis Pertanahan.</div>
+                    <div class="contact-desc">Menerima notifikasi saat Pertek Kantor Pertanahan (BPN) terbit (Berusaha & Non Berusaha) — sebagai informasi awal untuk melakukan penilaian Pertimbangan Teknis Pertanahan.</div>
                     <input type="text" name="admin_dinas_pu" class="contact-input" id="admin_dinas_pu" placeholder="contoh: 6281234567892" value="{{ old('admin_dinas_pu', $settings['admin_dinas_pu'] ?? '') }}" inputmode="numeric">
                     @if(!empty($settings['admin_dinas_pu']))
                         <div class="contact-current">Tersimpan: <strong>{{ $settings['admin_dinas_pu'] }}</strong></div>
@@ -145,7 +145,7 @@
                 </div>
                 <div class="contact-info">
                     <div class="contact-label">Admin DPMPTSP</div>
-                    <div class="contact-desc">Menerima notifikasi saat penilaian PUTR selesai (Berusaha & Non-Berusaha) — sebagai informasi untuk menerbitkan dokumen Pertimbangan Teknis Pertanahan resmi.</div>
+                    <div class="contact-desc">Menerima notifikasi saat penilaian PUTR selesai (Berusaha & Non Berusaha) — sebagai informasi untuk menerbitkan dokumen Pertimbangan Teknis Pertanahan resmi.</div>
                     <input type="text" name="admin_satu_pintu" class="contact-input" id="admin_satu_pintu" placeholder="contoh: 6281234567893" value="{{ old('admin_satu_pintu', $settings['admin_satu_pintu'] ?? '') }}" inputmode="numeric">
                     @if(!empty($settings['admin_satu_pintu']))
                         <div class="contact-current">Tersimpan: <strong>{{ $settings['admin_satu_pintu'] }}</strong></div>

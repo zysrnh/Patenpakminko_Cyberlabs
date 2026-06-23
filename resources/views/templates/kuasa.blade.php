@@ -206,11 +206,11 @@
         </table>
 
         <p class="text" style="text-indent: 30px;">
-            Secara khusus, dengan surat ini Pihak Kesatu memberikan kuasa penuh kepada Pihak Kedua untuk bertindak atas nama Pihak Kesatu dalam melakukan pengurusan pengajuan berkas permohonan Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKPR) Non-Berusaha pada sistem portal <strong>PATEN PAK MIKO</strong>.
+            Secara khusus, dengan surat ini Pihak Kesatu memberikan kuasa penuh kepada Pihak Kedua untuk bertindak atas nama Pihak Kesatu dalam melakukan pengurusan pengajuan berkas permohonan Persetujuan Kesesuaian Kegiatan Pemanfaatan Ruang (PKPR) Non Berusaha pada sistem portal <strong>PATEN PAK MIKO</strong>.
         </p>
 
         <p class="text" style="text-indent: 30px; margin-top: 10px;">
-            Kuasa ini meliputi hak untuk menandatangani berkas permohonan, melampirkan berkas fisik tanah/bangunan, menghadiri proses koordinasi dengan instansi teknis terkait, serta melakukan segala tindakan administrasi yang diperlukan hingga terbitnya Dokumen Persetujuan Resmi Pertimbangan Teknis Pertanahan Non-Berusaha.
+            Kuasa ini meliputi hak untuk menandatangani berkas permohonan, melampirkan berkas fisik tanah/bangunan, menghadiri proses koordinasi dengan instansi teknis terkait, serta melakukan segala tindakan administrasi yang diperlukan hingga terbitnya Dokumen Persetujuan Resmi Pertimbangan Teknis Pertanahan Non Berusaha.
         </p>
 
         <p class="text" style="margin-top: 15px;">

@@ -42,7 +42,7 @@ class WaTemplateController extends Controller
             $routeName = 'psn.show';
         } elseif ($type === 'kebijakan') {
             $application = KebijakanApplication::find($id);
-            $layananTitle = 'Kebijakan Khusus';
+            $layananTitle = 'Kebijakan';
             $routeName = 'kebijakan.show';
         } elseif ($type === 'tanah-timbul' || $type === 'tanah_timbul') {
             $application = TanahTimbulApplication::find($id);

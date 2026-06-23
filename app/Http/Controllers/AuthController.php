@@ -239,7 +239,7 @@ class AuthController extends Controller
         // Siapkan pesan notifikasi WhatsApp OTP
         $name = $user->name ?? $user->username;
         $message = "Halo *{$name}*,\n\n"
-                 . "Berikut adalah Kode OTP untuk menyetel ulang password akun PATENPAKMIKO Anda:\n\n"
+                 . "Berikut adalah Kode OTP untuk menyetel ulang password akun PATEN PAK MIKO Anda:\n\n"
                  . "💬 Kode OTP: *{$otp}*\n\n"
                  . "Kode ini berlaku selama *10 menit*. Mohon untuk tidak membagikan kode ini kepada siapapun demi keamanan akun Anda.";
  
@@ -330,7 +330,7 @@ class AuthController extends Controller
         if (!empty($user->phone_number)) {
             $name = $user->name ?? $user->username;
             $message = "Halo *{$name}*,\n\n"
-                     . "Password akun PATENPAKMIKO Anda telah berhasil disetel ulang!\n\n"
+                     . "Password akun PATEN PAK MIKO Anda telah berhasil disetel ulang!\n\n"
                      . "Berikut adalah Kredensial Login Anda:\n"
                      . "👤 Username: *{$user->username}*\n"
                      . "🔑 Password Baru: *{$newPassword}*\n\n"
@@ -549,7 +549,7 @@ class AuthController extends Controller
         if ($jenis === 'berusaha') {
             return redirect()->route('berusaha.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Berusaha Anda!');
         } elseif ($jenis === 'non-berusaha') {
-            return redirect()->route('non-berusaha.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Non-Berusaha Anda!');
+            return redirect()->route('non-berusaha.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Non Berusaha Anda!');
         } elseif ($jenis === 'psn') {
             return redirect()->route('psn.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan PSN Anda!');
         } elseif ($jenis === 'tanah-timbul') {

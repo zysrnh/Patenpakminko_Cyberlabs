@@ -58,11 +58,11 @@
                             @if($user->role === 'dpn')
                                 <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #FFFBEB; color: #D97706; font-size: 11.5px; font-weight: 700; border: 1px solid #FEF3C7;">Super Admin (DPN)</span>
                             @elseif($user->role === 'bpn')
-                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #EFF6FF; color: #2563EB; font-size: 11.5px; font-weight: 700; border: 1px solid #DBEAFE;">Admin BPN</span>
+                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #EFF6FF; color: #2563EB; font-size: 11.5px; font-weight: 700; border: 1px solid #DBEAFE;">Admin Kantor Pertanahan (BPN)</span>
                             @elseif(in_array($user->role, ['dinas_pu', 'dinas_putr']))
-                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #F8FAFC; color: #475569; font-size: 11.5px; font-weight: 700; border: 1px solid #E2E8F0;">Dinas PU/PUTR</span>
+                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #F8FAFC; color: #475569; font-size: 11.5px; font-weight: 700; border: 1px solid #E2E8F0;">Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</span>
                             @elseif($user->role === 'satu_pintu')
-                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #F0FDF4; color: #16A34A; font-size: 11.5px; font-weight: 700; border: 1px solid #DCFCE7;">Satu Pintu / PTSP</span>
+                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #F0FDF4; color: #16A34A; font-size: 11.5px; font-weight: 700; border: 1px solid #DCFCE7;">DPMPTSP</span>
                             @elseif($user->role === 'admin_berita')
                                 <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #FAF5FF; color: #9333EA; font-size: 11.5px; font-weight: 700; border: 1px solid #F3E8FF;">Admin Berita</span>
                             @else

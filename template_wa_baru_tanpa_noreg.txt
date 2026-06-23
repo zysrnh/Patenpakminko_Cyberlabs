@@ -3,7 +3,7 @@ TEMPLATE WHATSAPP BLAST TERBARU (PATEN PAK MIKO)
 
 Keterangan Variabel:
 {nama}          : Nama Pemohon / User
-{layanan}       : Jenis Layanan (Pertimbangan Teknis Pertanahan Berusaha, Non-Berusaha, Kebijakan Khusus, dll)
+{layanan}       : Jenis Layanan (Pertimbangan Teknis Pertanahan Berusaha, Non-Berusaha, Kebijakan, dll)
 {url}           : Link menuju halaman detail permohonan
 {waktu}         : Waktu jadwal cek lokasi / rapat
 {cp_admin}      : Nama Kontak Person Petugas Lapangan

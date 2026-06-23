@@ -690,7 +690,7 @@
                     </div>
                     <div class="logo-text">
                         <strong>PATEN PAK MIKO</strong>
-                        <span>Kantor Pertanahan Sukabumi</span>
+                        <span>Kantor Pertanahan (BPN) Sukabumi</span>
                     </div>
                 </a>
 
@@ -789,7 +789,7 @@
                 @if($application->bpn_pertek_document)
                     <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:#79A73A; margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh Dokumen Pertek Pertanahan Resmi (BPN)
+                        Unduh Dokumen Pertek Pertanahan Resmi (Kantor Pertanahan (BPN))
                     </a>
                 @elseif($application->approval_document)
                     <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
@@ -861,7 +861,7 @@
                 @endif
             @endif
 
-            <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN BPN / DPN) -->
+            <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN KANTOR PERTANAHAN (BPN) / DPN) -->
             @if(Auth::user()->isBpn() || Auth::user()->isDpn())
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
                     <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
@@ -909,16 +909,16 @@
                 
                 if ($user->isBpn() && $application->status === 'menunggu_bpn') {
                     $canVerify = true;
-                    $verifierRoleLabel = 'Petugas BPN (Verifikasi Kepemilikan Tanah)';
+                    $verifierRoleLabel = 'Petugas Kantor Pertanahan (BPN) (Verifikasi Kepemilikan Tanah)';
                 } elseif ($user->isDinasPu() && $application->status === 'menunggu_dinas_pu') {
                     $canVerify = true;
-                    $verifierRoleLabel = 'Verifikator Dinas PU (Tata Ruang)';
+                    $verifierRoleLabel = 'Verifikator Dinas Pekerjaan Umum dan Tata Ruang (PUTR)';
                 } elseif ($user->isSatuPintu() && $application->status === 'menunggu_satu_pintu') {
                     $canVerify = true;
-                    $verifierRoleLabel = 'Petugas Dinas Satu Pintu (Penerbitan Izin)';
+                    $verifierRoleLabel = 'Petugas DPMPTSP (Penerbitan Izin)';
                 }
 
-                // Logika Waktu Untuk Staged Timeline & Penentuan Form Aktif BPN
+                // Logika Waktu Untuk Staged Timeline & Penentuan Form Aktif Kantor Pertanahan (BPN)
                 $now = \Carbon\Carbon::now();
                 $cekLokasiLewat = $application->bpn_cek_lokasi_dt
                     && $now >= $application->bpn_cek_lokasi_dt;
@@ -1010,7 +1010,7 @@
                                     </div>
                                     <div class="form-group-v" style="margin-bottom:16px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Nomor Berkas <span style="color:red;">*</span></label>
-                                        <input type="text" name="no_berkas" class="form-control-v" placeholder="cth: 1234/2026/BPN..." style="background:white;" value="{{ $application->no_berkas }}" required>
+                                        <input type="text" name="no_berkas" class="form-control-v" placeholder="cth: 1234/2026/KANTOR_PERTANAHAN..." style="background:white;" value="{{ $application->no_berkas }}" required>
                                     </div>
                                     @if($isStep2Active)
                                         <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
@@ -1076,7 +1076,7 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;">Kontak Person Petugas Lapangan <span style="color:red;">*</span></label>
                                         <input type="text" name="bpn_cek_lokasi_cp" class="form-control-v"
                                             value="{{ $application->bpn_cek_lokasi_cp }}"
-                                            placeholder="cth: 08511234567 (Budi - Petugas BPN)" style="background:white;" required>
+                                            placeholder="cth: 08511234567 (Budi - Petugas Kantor Pertanahan (BPN))" style="background:white;" required>
                                     </div>
                                     @if($isStep3Active)
                                         <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
@@ -1120,7 +1120,7 @@
                                         @if($application->bpn_rapat_dt)
                                             — Terjadwal: <strong>{{ $application->bpn_rapat_date }}</strong>. Ubah jika ada perubahan.
                                         @else
-                                            — Cek lokasi terdaftar. Tentukan waktu rapat koordinasi BPN.
+                                            — Cek lokasi terdaftar. Tentukan waktu rapat koordinasi Kantor Pertanahan (BPN).
                                         @endif
                                     </div>
                                     <div class="form-group-v" style="margin-bottom:12px;">
@@ -1171,7 +1171,7 @@
                                     <input type="hidden" name="wa_type" value="pertek_terbit">
                                     <div style="background:#F0FFF4;border:1px solid #BBF7D0;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;line-height:1.6;">
                                         <strong>Langkah 5 dari 5 — Penerbitan Pertek Pertanahan</strong><br>
-                                        Rapat terdaftar. Upload Dokumen Pertek dan beri keputusan akhir BPN.
+                                        Rapat terdaftar. Upload Dokumen Pertek dan beri keputusan akhir Kantor Pertanahan (BPN).
                                     </div>
                                     <div class="form-group-v">
                                         <label for="action">Keputusan Akhir BPN:</label>
@@ -1192,7 +1192,7 @@
                                         </div>
                                     @endif
                                     <div class="form-group-v">
-                                        <label class="form-label" style="font-weight:700;color:#744210;">Catatan / Rekomendasi Teknis BPN <span style="color:red;">*</span></label>
+                                        <label class="form-label" style="font-weight:700;color:#744210;">Catatan / Rekomendasi Teknis Kantor Pertanahan (BPN) <span style="color:red;">*</span></label>
                                         <textarea name="notes" class="form-control-v" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required>{{ $application->status === 'menunggu_dinas_pu' || $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' || ($application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima') ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     @if($isStep5Active)
@@ -1239,7 +1239,7 @@
                         </script>
 
 
-                        {{-- panel-pu-1 hidden: TANAH-TIMBUL goes directly BPN → Satu Pintu (no Dinas PU step) --}}
+                        {{-- panel-pu-1 hidden: TANAH-TIMBUL goes directly BPN → DPMPTSP (no Dinas Pekerjaan Umum dan Tata Ruang (PUTR) step) --}}
                         <div id="bpn-panel-pu-1" class="bpn-panel-step" style="display: none;">
                             @php $isPuActive = (Auth::user()->isDinasPu() && $application->status === 'menunggu_dinas_pu'); @endphp
                             <fieldset {{ $isPuActive ? '' : 'disabled' }}>
@@ -1247,7 +1247,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="dinas_pu">
                                     <div style="background:#EBF8FF;border:1px solid #90CDF4;padding:12px 16px;border-radius:8px;font-size:13px;color:#2B6CB0;margin-bottom:16px;">
-                                        <strong>Penilaian Tata Ruang (Dinas PU):</strong> Periksa kesesuaian tata ruang berdasarkan dokumen Pertek BPN, lalu tentukan keputusan.
+                                        <strong>Penilaian Tata Ruang (Dinas Pekerjaan Umum dan Tata Ruang (PUTR)):</strong> Periksa kesesuaian tata ruang berdasarkan dokumen Pertek Kantor Pertanahan (BPN), lalu tentukan keputusan.
                                     </div>
                                     <div class="form-group-v">
                                         <label for="action_pu">Keputusan Penilaian:</label>
@@ -1257,7 +1257,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group-v">
-                                        <label for="notes_pu" class="form-label" style="font-weight:700;color:#744210;">Catatan Dinas PU <span style="color:red;">*</span></label>
+                                        <label for="notes_pu" class="form-label" style="font-weight:700;color:#744210;">Catatan Dinas Pekerjaan Umum dan Tata Ruang (PUTR) <span style="color:red;">*</span></label>
                                         <textarea id="notes_pu" name="notes" class="form-control-v" rows="3" placeholder="Tuliskan catatan penilaian tata ruang..." style="resize:none;background:white;" required>{{ $application->dinas_pu_notes }}</textarea>
                                     </div>
                                     @if($isPuActive)
@@ -1276,7 +1276,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="satu_pintu_terbit">
                                     <div style="background:#F0FFF4;border:1px solid #9AE6B4;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;">
-                                        <strong>Penerbitan Pertimbangan Teknis Pertanahan (Dinas Satu Pintu / PTSP):</strong> Isi data penerbitan Pertimbangan Teknis Pertanahan resmi, lalu unggah dokumen dan kirim.
+                                        <strong>Penerbitan Pertimbangan Teknis Pertanahan (DPMPTSP):</strong> Isi data penerbitan Pertimbangan Teknis Pertanahan resmi, lalu unggah dokumen dan kirim.
                                     </div>
                                     <div class="form-group-v">
                                         <label for="action_sp">Keputusan:</label>
@@ -1398,7 +1398,7 @@
                             
                             <!-- BPN Info -->
                             <li class="detail-item">
-                                <span class="detail-label">Kelayakan Berkas (BPN)</span>
+                                <span class="detail-label">Kelayakan Berkas (Kantor Pertanahan (BPN))</span>
                                 <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
                                     {{ str_replace('_', ' ', $application->bpn_berkas_status) }}
                                 </span>
@@ -1419,7 +1419,7 @@
 
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen Pertek BPN</span>
+                                    <span class="detail-label">Dokumen Pertek Kantor Pertanahan (BPN)</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
                                             Unduh Surat Pertek
@@ -1428,7 +1428,7 @@
                                 </li>
                             @endif
 
-                            <!-- Satu Pintu Info -->
+                            <!-- DPMPTSP Info -->
                             @if($application->satu_pintu_no_pkkpr)
                                 <li class="detail-item">
                                     <span class="detail-label">Nomor Pertimbangan Teknis Pertanahan</span>
@@ -1676,7 +1676,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         1. Verifikasi & Validasi
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon.</div>
                                     @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
@@ -1701,7 +1701,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         2. Pembayaran PNBP
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">Pembayaran biaya PNBP & aktivasi akun.</div>
                                     @if($application->bpn_pembayaran_status === 'sudah_bayar')
@@ -1716,7 +1716,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 3: Peninjauan Lapangan (Kantor Pertanahan) -->
+                            <!-- STEP 3: Peninjauan Lapangan (Kantor Pertanahan (BPN)) -->
                             @php
                                 $step3Status = '';
                                 if ($application->bpn_pembayaran_status === 'sudah_bayar') {
@@ -1731,8 +1731,8 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        3. Peninjauan Lapangan (BPN)
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
+                                        3. Peninjauan Lapangan (Kantor Pertanahan (BPN))
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_cek_lokasi_dt)
@@ -1748,7 +1748,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 4: Rapat Pembahasan Pertek (Kantor Pertanahan) -->
+                            <!-- STEP 4: Rapat Pembahasan Pertek (Kantor Pertanahan (BPN)) -->
                             @php
                                 $step4Status = '';
                                 if ($cekLokasiLewat) {
@@ -1764,7 +1764,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         4. Rapat Pembahasan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_rapat_dt)
@@ -1779,7 +1779,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 5: Penerbitan Pertek BPN (Included in Kantor Pertanahan step above usually, but keeping it if needed) -->
+                            <!-- STEP 5: Penerbitan Pertek Kantor Pertanahan (BPN) (Included in Kantor Pertanahan (BPN) step above usually, but keeping it if needed) -->
                             @php
                                 $step5Status = '';
                                 if ($rapatLewat) {
@@ -1797,7 +1797,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         5. Penerbitan Pertek Pertanahan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">BPN</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_pertek_document)
@@ -1812,7 +1812,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 7: Penerbitan Pertimbangan Teknis Pertanahan Satu Pintu -->
+                            <!-- STEP 7: Penerbitan Pertimbangan Teknis Pertanahan DPMPTSP -->
                             @php
                                 $step7Status = '';
                                 if (in_array($application->status, ['menunggu_satu_pintu', 'disetujui'])) {
@@ -1827,7 +1827,7 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PMPTSP</span>
                                     </div>
                                     <div class="timeline-desc">
-                                        Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu menerbitkan dokumen Pertimbangan Teknis Pertanahan resmi.
+                                        DPMPTSP menerbitkan dokumen Pertimbangan Teknis Pertanahan resmi.
                                     </div>
                                     @if($application->satu_pintu_no_pkkpr)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
@@ -1861,7 +1861,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
-                                            Permohonan dihentikan/ditolak oleh instansi terkait (BPN atau Dinas PU).
+                                            Permohonan dihentikan/ditolak oleh instansi terkait (Kantor Pertanahan (BPN) atau Dinas Pekerjaan Umum dan Tata Ruang (PUTR)).
                                         @elseif($application->status === 'disetujui')
                                             Seluruh alur selesai. Dokumen TANAH TIMBUL siap diunduh dari portal.
                                         @else

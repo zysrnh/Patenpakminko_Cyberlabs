@@ -521,7 +521,7 @@
                         &#8505;&#65039; PEMBERITAHUAN PENTING
                     </div>
                     <div style="font-size: 10.5px; color: #1E40AF; line-height: 1.5;">
-                        Informasi ini <b>bersifat awal</b> dan tidak dapat dijadikan dasar pengambilan keputusan. Untuk informasi yang lebih lengkap dan akurat mengenai LP2B, LBS, LSD, serta kesesuaian ruang, silakan ajukan <b>Layanan Peta Analisis Penatagunaan Tanah</b> atau <b>Pertimbangan Teknis Pertanahan</b> di Loket Kantor Pertanahan.
+                        Informasi ini <b>bersifat awal</b> dan tidak dapat dijadikan dasar pengambilan keputusan. Untuk informasi yang lebih lengkap dan akurat mengenai LP2B, LBS, LSD, serta kesesuaian ruang, silakan ajukan <b>Layanan Peta Analisis Penatagunaan Tanah</b> atau <b>Pertimbangan Teknis Pertanahan</b> di Loket Kantor Pertanahan (BPN).
                     </div>
                 </div>
             `;

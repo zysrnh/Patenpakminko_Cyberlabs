@@ -57,7 +57,7 @@
                         <option value="umum">Layanan Umum / Portal PATEN PAK MIKO</option>
                         <option value="lapolpa">LAPOL PAK (Layanan Pelaporan)</option>
                         <option value="berusaha">Pertimbangan Teknis Pertanahan PKKPR Berusaha</option>
-                        <option value="non_berusaha">Pertimbangan Teknis Pertanahan Non-Berusaha</option>
+                        <option value="non_berusaha">Pertimbangan Teknis Pertanahan Non Berusaha</option>
                         <option value="kebijakan">Kebijakan</option>
                     </select>
                 </div>
