@@ -91,6 +91,36 @@ Route::get('/alur', function() {
     return view('alur');
 })->name('alur');
 
+
+// Route Publik Semua Ulasan
+Route::get('/testimoni', function () {
+     = \App\Models\Review::with('user')
+        ->where('is_approved', true)
+        ->latest()
+        ->get()
+        ->map(function () {
+            ->module_label_display = ->module_label;
+            ->reviewer_name = ->user->name ?? ->user->username;
+            ->reviewer_initial = strtoupper(substr(->user->username ?? 'PU', 0, 2));
+            return ;
+        });
+
+     = \App\Models\InformalRating::with('user')
+        ->where('is_approved', true)
+        ->latest()
+        ->get()
+        ->map(function () {
+            ->module_label_display = 'INFORMAL - ' . strtoupper(->informal_type);
+            ->reviewer_name = ->name ?? (->user->name ?? (->user->username ?? 'Publik'));
+            ->reviewer_initial = strtoupper(substr(->reviewer_name, 0, 2));
+            return ;
+        });
+
+     = ->concat()->sortByDesc('created_at');
+    
+    return view('testimoni', compact('reviews'));
+})->name('testimoni');
+
 // Route Kontak
 Route::get('/kontak', function() {
     return view('kontak');
