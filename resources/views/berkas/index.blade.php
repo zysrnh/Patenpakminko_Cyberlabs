@@ -3,7 +3,8 @@
 @section('title', 'Pengelolaan Berkas - PATEN PAK MIKO')
 @section('page-title', 'Pengelolaan Berkas')
 
-@section('extra-styles')
+@section('head-extra')
+<style>
     /* Filters */
     .filters { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
     .filters form { display: flex; gap: 12px; width: 100%; }
@@ -16,31 +17,67 @@
     nav[role="navigation"] .flex.justify-between { display: flex; justify-content: space-between; align-items: center; }
     nav[role="navigation"] .hidden { display: none; }
 
-    /* Slide Modal */
+    /* ─── STYLE MODAL PREVIEW ───────────────── */
     .modal-backdrop {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5); z-index: 999;
-        opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1040;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(2px);
     }
-    .modal-backdrop.show { opacity: 1; pointer-events: auto; }
-    
+    .modal-backdrop.show {
+        opacity: 1;
+        visibility: visible;
+    }
     .modal-slide {
-        position: fixed; top: 0; right: -600px; width: 600px; max-width: 90%; height: 100vh;
-        background: #fff; z-index: 1000; box-shadow: -4px 0 20px rgba(0,0,0,0.1);
-        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;
+        position: fixed;
+        top: 0; right: -600px;
+        width: 100%; max-width: 600px;
+        height: 100vh;
+        background: #fff;
+        z-index: 1050;
+        box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+        transition: right 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        display: flex;
+        flex-direction: column;
     }
-    .modal-slide.open { right: 0; }
+    .modal-slide.open {
+        right: 0;
+    }
     .modal-header {
-        padding: 16px 24px; border-bottom: 1px solid var(--line);
-        display: flex; justify-content: space-between; align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--surface);
     }
-    .modal-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+    .modal-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--ink);
+    }
     .btn-close {
-        background: transparent; border: none; font-size: 24px; color: var(--muted);
-        cursor: pointer; line-height: 1; padding: 4px;
+        background: none; border: none;
+        font-size: 24px; color: var(--muted);
+        cursor: pointer; padding: 0;
+        line-height: 1; transition: color 0.2s;
     }
-    .modal-body { flex: 1; padding: 0; background: #f0f0f0; }
-    .modal-body iframe { width: 100%; height: 100%; border: none; }
+    .btn-close:hover { color: var(--red); }
+    .modal-body {
+        flex: 1;
+        padding: 0;
+        overflow: hidden;
+    }
+    #previewFrame {
+        width: 100%; height: 100%;
+        border: none; background: #f8fafc;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -97,37 +134,40 @@
             @csrf
             <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">Nama Berkas</label>
-                    <input type="text" name="nama_berkas" class="form-control" required placeholder="Contoh: Sketsa Lokasi Tanah Timbul">
+                    <label class="form-label">Nama Pemohon/Pelaku Usaha</label>
+                    <input type="text" name="nama_berkas" class="form-control" required placeholder="Contoh: PT Telkom Pasero TBK">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Kategori (Modul)</label>
-                    <select name="kategori" class="form-control" required>
+                    <label class="form-label">Kategori</label>
+                    <select name="kategori" class="form-control" required {!! request('kategori') ? 'style="pointer-events: none; background: #f1f5f9; color: var(--muted); font-weight: 500;" tabindex="-1"' : '' !!}>
                         <option value="">-- Pilih Jenis Dokumen --</option>
                         @if(Auth::user()->isSatuPintu())
-                            <option value="Dokumen Pertimbangan Teknis Pertanahan">Dokumen Pertimbangan Teknis Pertanahan</option>
+                            <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
                         @else
-                            <option value="Peta Lokasi">Peta Lokasi</option>
-                            <option value="Surat Kuasa">Surat Kuasa</option>
-                            <option value="FC KTP">FC KTP / Identitas</option>
-                            <option value="FC NPWP">FC NPWP</option>
-                            <option value="FC Akta Pendirian">FC Akta Pendirian</option>
-                            <option value="Rencana Penggunaan Tanah">Rencana Penggunaan Tanah</option>
-                            <option value="NIB">NIB</option>
-                            <option value="KBLI">KBLI</option>
-                            <option value="Proposal Kegiatan">Proposal Kegiatan</option>
-                            <option value="Formulir PTP">Formulir PTP</option>
-                            <option value="Dokumen Pertimbangan Teknis Pertanahan">Dokumen Pertimbangan Teknis Pertanahan</option>
-                            <option value="Dokumen Penilaian (PU)">Dokumen Penilaian (PU)</option>
-                            <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)">Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
-                            <option value="Persyaratan Lainnya">Lainnya</option>
+                            <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
+                            <option value="Surat Kuasa" {{ request('kategori') == 'Surat Kuasa' ? 'selected' : '' }}>Surat Kuasa</option>
+                            <option value="FC KTP" {{ request('kategori') == 'FC KTP' ? 'selected' : '' }}>FC KTP / Identitas</option>
+                            <option value="FC NPWP" {{ request('kategori') == 'FC NPWP' ? 'selected' : '' }}>FC NPWP</option>
+                            <option value="FC Akta Pendirian" {{ request('kategori') == 'FC Akta Pendirian' ? 'selected' : '' }}>FC Akta Pendirian</option>
+                            <option value="Rencana Penggunaan Tanah" {{ request('kategori') == 'Rencana Penggunaan Tanah' ? 'selected' : '' }}>Rencana Penggunaan Tanah</option>
+                            <option value="NIB" {{ request('kategori') == 'NIB' ? 'selected' : '' }}>NIB</option>
+                            <option value="KBLI" {{ request('kategori') == 'KBLI' ? 'selected' : '' }}>KBLI</option>
+                            <option value="Proposal Kegiatan" {{ request('kategori') == 'Proposal Kegiatan' ? 'selected' : '' }}>Proposal Kegiatan</option>
+                            <option value="Formulir PTP" {{ request('kategori') == 'Formulir PTP' ? 'selected' : '' }}>Formulir PTP</option>
+                            <option value="Pertimbangan Teknis Berusaha" {{ request('kategori') == 'Pertimbangan Teknis Berusaha' ? 'selected' : '' }}>Pertimbangan Teknis Berusaha</option>
+                            <option value="Pertimbangan Teknis Non Berusaha" {{ request('kategori') == 'Pertimbangan Teknis Non Berusaha' ? 'selected' : '' }}>Pertimbangan Teknis Non Berusaha</option>
+                            <option value="Pertimbangan Teknis Kebijakan" {{ request('kategori') == 'Pertimbangan Teknis Kebijakan' ? 'selected' : '' }}>Pertimbangan Teknis Kebijakan</option>
+                            <option value="Pertimbangan Teknis Tanah Timbul" {{ request('kategori') == 'Pertimbangan Teknis Tanah Timbul' ? 'selected' : '' }}>Pertimbangan Teknis Tanah Timbul</option>
+                            <option value="Pertimbangan Teknis PSN" {{ request('kategori') == 'Pertimbangan Teknis PSN' ? 'selected' : '' }}>Pertimbangan Teknis PSN</option>
+                            <option value="Dokumen Penilaian (PU)" {{ request('kategori') == 'Dokumen Penilaian (PU)' ? 'selected' : '' }}>Dokumen Penilaian (PU)</option>
+                            <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Lainnya</option>
                         @endif
                     </select>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Pilih File (PDF, JPG, PNG, DOCX - Max 100MB)</label>
-                <input type="file" name="file" class="form-control" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" style="background:#fff;">
+                <div class="form-group">
+                    <label class="form-label">Pilih File (PDF, JPG, PNG, DOCX - Max 100MB)</label>
+                    <input type="file" name="file" class="form-control" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" style="background:#fff;">
+                </div>
             </div>
             <div class="form-group">
                 <label class="form-label">Keterangan Tambahan (Opsional)</label>
@@ -158,7 +198,7 @@
                 </select>
                 <select name="kategori" style="min-width: 200px;">
                     @if(Auth::user()->isSatuPintu())
-                        <option value="Dokumen Pertimbangan Teknis Pertanahan" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan</option>
+                        <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
                     @else
                         <option value="">Semua Jenis Dokumen</option>
                         <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
@@ -171,9 +211,12 @@
                         <option value="KBLI" {{ request('kategori') == 'KBLI' ? 'selected' : '' }}>KBLI</option>
                         <option value="Proposal Kegiatan" {{ request('kategori') == 'Proposal Kegiatan' ? 'selected' : '' }}>Proposal Kegiatan</option>
                         <option value="Formulir PTP" {{ request('kategori') == 'Formulir PTP' ? 'selected' : '' }}>Formulir PTP</option>
-                        <option value="Dokumen Pertimbangan Teknis Pertanahan" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan</option>
+                        <option value="Pertimbangan Teknis Berusaha" {{ request('kategori') == 'Pertimbangan Teknis Berusaha' ? 'selected' : '' }}>Pertimbangan Teknis Berusaha</option>
+                        <option value="Pertimbangan Teknis Non Berusaha" {{ request('kategori') == 'Pertimbangan Teknis Non Berusaha' ? 'selected' : '' }}>Pertimbangan Teknis Non Berusaha</option>
+                        <option value="Pertimbangan Teknis Kebijakan" {{ request('kategori') == 'Pertimbangan Teknis Kebijakan' ? 'selected' : '' }}>Pertimbangan Teknis Kebijakan</option>
+                        <option value="Pertimbangan Teknis Tanah Timbul" {{ request('kategori') == 'Pertimbangan Teknis Tanah Timbul' ? 'selected' : '' }}>Pertimbangan Teknis Tanah Timbul</option>
+                        <option value="Pertimbangan Teknis PSN" {{ request('kategori') == 'Pertimbangan Teknis PSN' ? 'selected' : '' }}>Pertimbangan Teknis PSN</option>
                         <option value="Dokumen Penilaian (PU)" {{ request('kategori') == 'Dokumen Penilaian (PU)' ? 'selected' : '' }}>Dokumen Penilaian (PU)</option>
-                        <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
                         <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Persyaratan Lainnya</option>
                     @endif
                 </select>

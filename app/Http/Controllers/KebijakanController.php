@@ -128,7 +128,7 @@ class KebijakanController extends Controller
         session()->forget('ptp_form_data');
         
         // Kirim Notifikasi WhatsApp
-        $this->sendNotificationWithMailbox($app, 'submit', 'Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
+        $this->sendNotificationWithMailbox($app, 'submit', 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
  
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -221,8 +221,11 @@ class KebijakanController extends Controller
             $request->validate([
                 'action' => 'required|in:approve,reject',
                 'notes' => 'required|string|max:1000',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ], [
                 'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
+                'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
+                'sps_document.max' => 'Ukuran file SPS maksimal 5MB.',
             ]);
  
             $action = $request->input('action');
@@ -230,6 +233,13 @@ class KebijakanController extends Controller
  
             $application->bpn_notes = $notes;
             if ($action === 'approve') {
+                if (!$request->hasFile('sps_document') && !$application->bpn_sps_document) {
+                    return redirect()->back()->withErrors(['sps_document' => 'SPS wajib diunggah saat menyetujui berkas (Lengkap).']);
+                }
+                if ($request->hasFile('sps_document')) {
+                    $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
+                }
+
                 $application->bpn_berkas_status = 'diterima';
                 $application->bpn_berkas_approved_at = now();
                 $application->user->update(['is_active' => true]);
@@ -241,7 +251,7 @@ class KebijakanController extends Controller
             $application->save();
  
             // Kirim Notifikasi WhatsApp
-            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
  
             return redirect()->route('kebijakan.show', $id)->with('success', $msg);
         }
@@ -261,7 +271,7 @@ class KebijakanController extends Controller
             $application->user->update(['is_active' => true]);
 
             // Kirim notifikasi WA kredensial
-            $this->sendNotificationWithMailbox($application, 'credential', 'Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'credential', 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
 
             // Redirect route
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
@@ -353,7 +363,7 @@ class KebijakanController extends Controller
             $application->save();
  
             // Kirim Notifikasi WhatsApp khusus Pertek
-            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
  
             return redirect()->route('kebijakan.show', $id)->with('success', $msg);
         }
@@ -381,7 +391,7 @@ class KebijakanController extends Controller
             $application->save();
 
             // WA Notifikasi Selesai (Diterbitkan)
-            $this->sendNotificationWithMailbox($application, 'pkkpr_terbit', 'Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'pkkpr_terbit', 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
 
             $routeName = $application instanceof \App\Models\KebijakanApplication ? 'kebijakan.show' : 'tanah-timbul.show';
             return redirect()->route($routeName, $id)->with('success', 'PKKPR Final berhasil diterbitkan dan notifikasi telah dikirim ke pemohon.');
@@ -426,7 +436,7 @@ class KebijakanController extends Controller
             $application->save();
  
             // Notifikasi BPN ada berkas perbaikan masuk
-            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
  
             return redirect()->route('kebijakan.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
         }
@@ -434,7 +444,7 @@ class KebijakanController extends Controller
         if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
             $type = $request->input('wa_type', 'berkas_verifikasi');
             $customMsg = $request->input('custom_wa_message');
-            $this->sendNotificationWithMailbox($application, $type, 'Kebijakan', 'kebijakan.show', $customMsg);
+            $this->sendNotificationWithMailbox($application, $type, 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $customMsg);
             return redirect()->back()->with('success', 'Tautan kirim ulang WhatsApp manual berhasil dimunculkan.');
         }
 

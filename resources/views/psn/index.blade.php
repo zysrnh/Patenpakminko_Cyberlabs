@@ -104,7 +104,7 @@
                                     $isSelesai = in_array($app->status, ['disetujui', 'ditolak', 'terbit_pkpr']);
                                     $startDate = $app->tgl_mulai_layanan ?? $app->created_at;
                                     $endDate = $isSelesai ? ($app->tgl_selesai_layanan ?? $app->updated_at) : now();
-                                    $hari = (int)$startDate->diffInDays($endDate);
+                                    $hari = (int)$startDate->diffInWorkingDaysWithHolidays($endDate);
                                     $hariKe = $hari + 1;
                                     
                                     $isPuPhase = in_array($app->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr']);

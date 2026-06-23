@@ -109,7 +109,7 @@ class PsnController extends Controller
         session()->forget('ptp_form_data');
 
         // WA Notifikasi ke pemohon
-        $this->sendNotificationWithMailbox($app, 'submit', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+        $this->sendNotificationWithMailbox($app, 'submit', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
 
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -191,11 +191,23 @@ class PsnController extends Controller
             $request->validate([
                 'action' => 'required|in:approve,reject',
                 'notes'  => 'required|string|max:1000',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            ], [
+                'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
+                'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
+                'sps_document.max' => 'Ukuran file SPS maksimal 5MB.',
             ]);
 
             $application->bpn_notes = $notes;
 
             if ($action === 'approve') {
+                if (!$request->hasFile('sps_document') && !$application->bpn_sps_document) {
+                    return redirect()->back()->withErrors(['sps_document' => 'SPS wajib diunggah saat menyetujui berkas (Lengkap).']);
+                }
+                if ($request->hasFile('sps_document')) {
+                    $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
+                }
+
                 $application->bpn_berkas_status = 'diterima';
                 $application->bpn_berkas_approved_at = now();
                 $application->status = 'menunggu_putr'; // Lanjut ke PUTR untuk validasi pembayaran
@@ -206,7 +218,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -219,15 +231,15 @@ class PsnController extends Controller
                 $application->putr_validated_at = now();
                 $application->putr_notes        = $putrNotes;
                 $application->save();
-                $this->sendNotificationWithMailbox($application, 'putr_notif_payment', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
-                $this->sendNotificationWithMailbox($application, 'putr_notif_bpn', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, 'putr_notif_payment', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, 'putr_notif_bpn', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
                 return redirect()->route('psn.show', $id)
                     ->with('success', 'Permohonan divalidasi PUTR. Notif pembayaran terkirim ke pemohon dan BPN.');
             } else {
                 $application->status     = 'ditolak';
                 $application->putr_notes = $putrNotes;
                 $application->save();
-                $this->sendNotificationWithMailbox($application, 'putr_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, 'putr_tolak', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
                 return redirect()->route('psn.show', $id)->with('success', 'Permohonan PSN ditolak oleh Dinas PUTR.');
             }
         }
@@ -239,7 +251,7 @@ class PsnController extends Controller
             $application->credential_sent_at = now();
             $application->status             = 'menunggu_bpn'; // lanjut cek lokasi dst
             $application->save();
-            $this->sendNotificationWithMailbox($application, 'credential_blast', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'credential_blast', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)
                 ->with('success', 'Pembayaran dikonfirmasi. Kredensial dikirim ke WA pemohon. No. Berkas: ' . $application->no_berkas);
         }
@@ -259,7 +271,7 @@ class PsnController extends Controller
             $application->user->update(['is_active' => true]);
 
             // Kirim notifikasi WA kredensial
-            $this->sendNotificationWithMailbox($application, 'credential', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'credential', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
 
             return redirect()->route('psn.show', $id)->with('success', 'Pembayaran PNBP dikonfirmasi. Akun telah diaktifkan dan dikirim ke pemohon.');
         }
@@ -279,7 +291,7 @@ class PsnController extends Controller
             $application->bpn_cek_lokasi_cp    = $request->input('bpn_cek_lokasi_cp');
             $application->save();
 
-            $this->sendNotificationWithMailbox($application, $isReschedule ? 'cek_lokasi_ubah' : 'cek_lokasi', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $isReschedule ? 'cek_lokasi_ubah' : 'cek_lokasi', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', 'Jadwal cek lokasi disimpan & di-blast ke WA pemohon.');
         }
 
@@ -295,7 +307,7 @@ class PsnController extends Controller
             $application->bpn_rapat_date = $dateLabel;
             $application->save();
 
-            $this->sendNotificationWithMailbox($application, $isReschedule ? 'rapat_ubah' : 'rapat', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $isReschedule ? 'rapat_ubah' : 'rapat', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', 'Jadwal rapat disimpan & di-blast ke WA pemohon.');
         }
 
@@ -324,7 +336,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -357,7 +369,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pu_selesai' : 'pu_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pu_selesai' : 'pu_tolak', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -393,7 +405,7 @@ class PsnController extends Controller
             }
 
             $application->save();
-            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pkkpr_terbit' : 'pkkpr_tolak', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pkkpr_terbit' : 'pkkpr_tolak', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->route('psn.show', $id)->with('success', $msg);
         }
 
@@ -433,7 +445,7 @@ class PsnController extends Controller
             $application->save();
  
             // Notifikasi BPN ada berkas perbaikan masuk
-            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
  
             return redirect()->route('psn.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
         }
@@ -441,7 +453,7 @@ class PsnController extends Controller
         // Resend Notifikasi WA (Admin Action)
         if ($step === 'resend_wa' && !$user->isPelakuUsaha()) {
             $type = $request->input('wa_type', 'berkas_verifikasi');
-            $this->sendNotificationWithMailbox($application, $type, 'Proyek Strategis Nasional', 'psn.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $type, 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
             return redirect()->back()->with('success', 'Notifikasi WhatsApp berhasil dikirim ulang ke pemohon.');
         }
 

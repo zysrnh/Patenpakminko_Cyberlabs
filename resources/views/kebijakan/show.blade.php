@@ -929,7 +929,7 @@
                         <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
-                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
+                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_berkas">
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
@@ -939,14 +939,20 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Lengkap
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('sps_document').required=true; document.getElementById('revisi-berkas-container').style.display='none';"> Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Lengkap
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='none'; document.getElementById('sps_document').required=false; document.getElementById('revisi-berkas-container').style.display='block';"> Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>
                                     
+                                    <div id="sps-upload-container" style="display: {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'block' : 'none' }}; margin-bottom: 20px;">
+                                        <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
+                                        <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'required' : '' }}>
+                                        <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 5MB. Wajib diisi jika Berkas Lengkap (Disetujui).</div>
+                                    </div>
+
                                     <div id="revisi-berkas-container" style="display:none; margin-bottom: 12px; background: #fff5f5; padding: 12px; border: 1px solid #fed7d7; border-radius: 4px;">
                                         <label style="font-weight: 600; font-size: 12px; color: #c53030; margin-bottom: 8px; display: block;">Tandai Berkas yang Tidak Valid / Kurang Lengkap (Otomatis masuk ke catatan):</label>
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
@@ -1033,11 +1039,11 @@
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_cek_lokasi">
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:16px;">
-                                        <strong>Langkah 3 dari 4 — Jadwal Cek Lokasi</strong>
+                                        <strong>Langkah 3 dari 4 — Jadwal Peninjauan Lapangan</strong>
                                         @if($application->bpn_cek_lokasi_dt)
                                             @if($cekLokasiLewat)
                                                 <span style="color:#276749;font-weight:700;"> <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Selesai</span> —
-                                                Cek lokasi <strong>{{ $application->bpn_cek_lokasi_date }}</strong> sudah lewat. Jadwal bisa tetap diubah jika perlu.
+                                                Peninjauan lapangan <strong>{{ $application->bpn_cek_lokasi_date }}</strong> sudah lewat. Jadwal bisa tetap diubah jika perlu.
                                             @else
                                                 — Terjadwal: <strong>{{ $application->bpn_cek_lokasi_date }}</strong> (CP: {{ $application->bpn_cek_lokasi_cp }}). Ubah jika ada perubahan.
                                             @endif
@@ -1046,7 +1052,7 @@
                                         @endif
                                     </div>
                                     <div class="form-group-v" style="margin-bottom:12px;">
-                                        <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Cek Lokasi <span style="color:red;">*</span></label>
+                                        <label class="form-label" style="font-weight:700;color:#744210;">Tanggal & Waktu Peninjauan Lapangan <span style="color:red;">*</span></label>
                                         <div style="display:flex; gap:8px;">
                                             <input type="datetime-local" id="bpn_cek_lokasi_dt" name="bpn_cek_lokasi_dt" class="form-control-v"
                                                 value="{{ $application->bpn_cek_lokasi_dt ? $application->bpn_cek_lokasi_dt->format('Y-m-d\TH:i') : '' }}"
@@ -1062,7 +1068,7 @@
                                     </div>
                                     @if($isStep3Active)
                                         <button type="submit" class="btn-submit-v" style="font-size:13px;padding:10px 20px;">
-                                            {{ $application->bpn_cek_lokasi_dt ? '🔄 Ubah Jadwal Cek Lokasi & Kirim WA' : '📍 Simpan Jadwal Cek Lokasi & Blast WA' }}
+                                            {{ $application->bpn_cek_lokasi_dt ? '🔄 Ubah Jadwal Peninjauan Lapangan & Kirim WA' : '📍 Simpan Jadwal Peninjauan Lapangan & Blast WA' }}
                                         </button>
                                     @else
                                         
@@ -1078,7 +1084,7 @@
 
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                        Kirim Ulang Jadwal Cek Lokasi (WhatsApp)
+                                        Kirim Ulang Jadwal Peninjauan Lapangan (WhatsApp)
                                     </button>
                                 </form>
                             @endif
@@ -1095,7 +1101,7 @@
                                         @if($application->bpn_rapat_dt)
                                             — Terjadwal: <strong>{{ $application->bpn_rapat_date }}</strong>. Ubah jika ada perubahan.
                                         @else
-                                            — Cek lokasi terdaftar. Tentukan waktu rapat koordinasi Kantor Pertanahan (BPN).
+                                            — Peninjauan lapangan terdaftar. Tentukan waktu rapat koordinasi Kantor Pertanahan (BPN).
                                         @endif
                                     </div>
                                     <div class="form-group-v" style="margin-bottom:12px;">
@@ -1201,35 +1207,7 @@
                         </script>
                     @endif
 
-                    @if($user->isDinasPu())
-                        <div id="panel-pu-1" class="bpn-panel-step" style="display: {{ $application->bpn_pertek_document && $application->status !== 'menunggu_satu_pintu' && $application->status !== 'disetujui' ? 'block' : 'none' }};">
-                            @php $isPuActive = (Auth::user()->isDinasPu() && $application->status === 'menunggu_dinas_pu'); @endphp
-                            <fieldset {{ $isPuActive ? '' : 'disabled' }}>
-                                <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
-                                    @csrf
-                                    <div style="background:#EBF8FF;border:1px solid #90CDF4;padding:12px 16px;border-radius:8px;font-size:13px;color:#2B6CB0;margin-bottom:16px;">
-                                        <strong>Penilaian Tata Ruang (Dinas Pekerjaan Umum dan Tata Ruang (PUTR)):</strong> Periksa kesesuaian tata ruang berdasarkan dokumen Pertek Kantor Pertanahan (BPN), lalu tentukan keputusan.
-                                    </div>
-                                    <div class="form-group-v">
-                                        <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Penilaian:</label>
-                                        <div class="radio-group" style="display: flex; gap: 20px; margin-bottom: 16px;">
-                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px;"><input type="radio" name="action" value="approve" required {{ $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' ? 'checked' : 'checked' }}> Sudah Dinilai</label>
-                                            <label class="radio-label" style="display: flex; align-items: center; gap: 8px; color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ $application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr ? 'checked' : '' }}> Belum Dinilai</label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group-v">
-                                        <label for="notes_pu" class="form-label" style="font-weight:700;color:#744210;">Catatan Dinas Pekerjaan Umum dan Tata Ruang (PUTR) <span style="color:red;">*</span></label>
-                                        <textarea id="notes_pu" name="notes" class="form-control-v" rows="3" placeholder="Tuliskan catatan penilaian tata ruang..." style="resize:none;background:white;" required>{{ $application->dinas_pu_notes }}</textarea>
-                                    </div>
-                                    @if($isPuActive)
-                                        <button type="submit" class="btn-submit-v" style="background:#218AC9;">Kirim Keputusan Penilaian Tata Ruang</button>
-                                    @else
-                                        
-                                    @endif
-                                </form>
-                            </fieldset>
-                        </div>
-                    @endif
+
 
                     @if($user->isSatuPintu())
                         <div id="bpn-panel-satu-pintu" class="bpn-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
@@ -1446,22 +1424,7 @@
                                 </li>
                             @endif
 
-                            <!-- Dinas Pekerjaan Umum dan Tata Ruang (PUTR) Info -->
-                            @if($application->status !== 'menunggu_bpn')
-                                <li class="detail-item">
-                                    <span class="detail-label">Penilaian Tata Ruang (PU)</span>
-                                    <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
-                                        {{ str_replace('_', ' ', $application->status) === 'ditolak' && !$application->satu_pintu_no_pkkpr ? 'Belum Dinilai' : 'Sudah Dinilai' }}
-                                    </span>
-                                </li>
-                            @endif
 
-                            @if($application->dinas_pu_tanggal_penilaian)
-                                <li class="detail-item">
-                                    <span class="detail-label">Tanggal Penilaian PU</span>
-                                    <span class="detail-val" style="font-weight: 700;">{{ $application->dinas_pu_tanggal_penilaian->format('d-m-Y') }}</span>
-                                </li>
-                            @endif
 
                             <!-- DPMPTSP Info -->
                             @if($application->satu_pintu_no_pkkpr)
@@ -1571,8 +1534,22 @@
 
                     <!-- DAY COUNTER / SLA BANNER -->
                     @php
-                        $targetDate = $application->tgl_selesai_layanan ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) : $application->created_at->addWeekdays(10);
-                        $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                        $isPuOrPtsp = Auth::user()->isDinasPu() || Auth::user()->isSatuPintu();
+                        $defaultDays = $isPuOrPtsp ? 20 : 10;
+                        
+                        // Menghitung target SLA dengan skip hari libur nasional dan weekend
+                        $targetDate = $application->tgl_selesai_layanan 
+                            ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
+                            : $application->created_at->addWorkingDaysWithHolidays($defaultDays);
+                        
+                        $isSelesai = false;
+                        if (Auth::user()->isBpn()) {
+                            $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                        } elseif (Auth::user()->isDinasPu()) {
+                            $isSelesai = ($application->dinas_pu_status === 'disetujui' || in_array($application->status, ['ditolak', 'menunggu_satu_pintu', 'disetujui']));
+                        } else {
+                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui']);
+                        }
                         
                         if ($isSelesai) {
                             $slaBg = '#16A34A'; // Solid Green
@@ -1580,24 +1557,37 @@
                             $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
-                            if ($targetDate->startOfDay() >= $now->startOfDay()) {
-                                $daysRemaining = $now->startOfDay()->diffInWeekdays($targetDate->startOfDay());
-                            } else {
-                                $daysRemaining = -1 * $targetDate->startOfDay()->diffInWeekdays($now->startOfDay());
-                            }
+                            // Menggunakan macro baru yang skip tanggal merah & weekend
+                            $daysRemaining = $now->diffInWorkingDaysWithHolidays($targetDate);
                             
-                            if ($daysRemaining >= 4) {
-                                $slaBg = '#16A34A'; // Solid Green
-                                $slaBorder = '#15803D';
-                                $slaColor = '#FFFFFF';
-                            } elseif ($daysRemaining >= 0) {
-                                $slaBg = '#EAB308'; // Solid Yellow
-                                $slaBorder = '#CA8A04';
-                                $slaColor = '#FFFFFF';
+                            if ($isPuOrPtsp) {
+                                if ($daysRemaining >= 4) {
+                                    $slaBg = '#16A34A'; 
+                                    $slaBorder = '#15803D';
+                                    $slaColor = '#FFFFFF';
+                                } elseif ($daysRemaining >= 1) {
+                                    $slaBg = '#EAB308'; 
+                                    $slaBorder = '#CA8A04';
+                                    $slaColor = '#FFFFFF';
+                                } else {
+                                    $slaBg = '#DC2626'; 
+                                    $slaBorder = '#B91C1C';
+                                    $slaColor = '#FFFFFF';
+                                }
                             } else {
-                                $slaBg = '#DC2626'; // Solid Red
-                                $slaBorder = '#B91C1C';
-                                $slaColor = '#FFFFFF';
+                                if ($daysRemaining >= 3) {
+                                    $slaBg = '#16A34A'; 
+                                    $slaBorder = '#15803D';
+                                    $slaColor = '#FFFFFF';
+                                } elseif ($daysRemaining >= 1) {
+                                    $slaBg = '#EAB308'; 
+                                    $slaBorder = '#CA8A04';
+                                    $slaColor = '#FFFFFF';
+                                } else {
+                                    $slaBg = '#DC2626'; 
+                                    $slaBorder = '#B91C1C';
+                                    $slaColor = '#FFFFFF';
+                                }
                             }
                         }
                     @endphp
@@ -1694,10 +1684,18 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        1. Verifikasi & Validasi
+                                        1. Verifikasi, Validasi dan Pendaftaran Permohonan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon.</div>
+                                    @if($application->bpn_sps_document)
+                                        <div style="margin-top: 8px;">
+                                            <a href="{{ asset('storage/' . $application->bpn_sps_document) }}" target="_blank" class="btn-submit-v" style="background: var(--clr-blue); color: #fff; padding: 6px 12px; font-size: 11px; text-decoration: none; display: inline-flex; align-items: center; border-radius: 4px; margin: 0;">
+                                                <svg style="width:14px;height:14px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                                Unduh Surat Perintah Setor (SPS)
+                                            </a>
+                                        </div>
+                                    @endif
                                     @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
                                         <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Disetujui pada: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->format('d M Y, H:i') }} WIB</div>
                                     @endif
@@ -1831,39 +1829,6 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 6: Penilaian Pertimbangan Teknis Pertanahan Dinas Pekerjaan Umum dan Tata Ruang (PUTR) -->
-                            @php
-                                $step6Status = '';
-                                if ($application->bpn_pertek_document) {
-                                    if ($application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui') {
-                                        $step6Status = 'completed';
-                                    } elseif ($application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr) {
-                                        $step6Status = 'rejected';
-                                    } elseif ($application->status === 'menunggu_dinas_pu') {
-                                        $step6Status = 'active';
-                                    }
-                                }
-                            @endphp
-                            <div class="timeline-step {{ $step6Status }}" onclick="showBpnPanel('pu-1')" style="cursor:pointer;">
-                                <span class="timeline-dot"></span>
-                                <div class="timeline-content">
-                                    <div class="timeline-title">
-                                        5. Penilaian Pertimbangan Teknis Pertanahan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</span>
-                                    </div>
-                                    <div class="timeline-desc">
-                                        Dinas Pekerjaan Umum dan Tata Ruang menilai kesesuaian tata ruang berdasarkan dokumen Pertek. Notifikasi dikirim ke pemohon.
-                                    </div>
-                                    @if($application->dinas_pu_notes)
-                                        <div class="timeline-notes" style="border-left-color: {{ in_array($application->status, ['menunggu_satu_pintu','disetujui']) ? 'var(--clr-green)' : '#E53E3E' }}; background: {{ in_array($application->status, ['menunggu_satu_pintu','disetujui']) ? '#F4FBF7' : '#FFF5F5' }}; color: {{ in_array($application->status, ['menunggu_satu_pintu','disetujui']) ? '#137333' : '#C53030' }}">
-                                            <strong>Catatan Dinas Pekerjaan Umum dan Tata Ruang (PUTR):</strong> {{ $application->dinas_pu_notes }}
-                                        </div>
-                                    @endif
-                                    @if($application->dinas_pu_tanggal_penilaian)
-                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Selesai: {{ \Carbon\Carbon::parse($application->dinas_pu_tanggal_penilaian)->locale('id')->translatedFormat('l, d M Y') }}</div>
-                                    @endif
-                                </div>
-                            </div>
 
                             <!-- STEP 7: Penerbitan Pertimbangan Teknis Pertanahan DPMPTSP -->
                             @php
@@ -1876,7 +1841,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        6. Penerbitan Pertimbangan Teknis Pertanahan
+                                        5. Penerbitan Pertimbangan Teknis Pertanahan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PMPTSP</span>
                                     </div>
                                     <div class="timeline-desc">
@@ -1914,7 +1879,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
-                                            Permohonan dihentikan/ditolak oleh instansi terkait (Kantor Pertanahan (BPN) atau Dinas Pekerjaan Umum dan Tata Ruang (PUTR)).
+                                            Permohonan dihentikan/ditolak oleh instansi terkait (Kantor Pertanahan (BPN) atau DPMPTSP).
                                         @elseif($application->status === 'disetujui')
                                             Seluruh alur selesai. Dokumen Kebijakan siap diunduh dari portal.
                                         @else

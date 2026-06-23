@@ -69,6 +69,8 @@ class ReviewController extends Controller
         ];
         $label = $ratingLabels[$rating] ?? 'Baik';
  
+        $isApproved = $rating >= 4;
+
         Review::create([
             'user_id' => $user->id,
             'module_type' => $moduleType,
@@ -76,10 +78,14 @@ class ReviewController extends Controller
             'rating' => $rating,
             'rating_label' => $label,
             'comment' => $request->input('comment'),
-            'is_approved' => false, // Harus disetujui admin dulu sebelum tampil
+            'is_approved' => $isApproved, // Otomatis disetujui jika rating 4 atau 5
         ]);
  
-        return redirect()->back()->with('success', 'Ulasan Anda berhasil dikirim! Ulasan akan ditampilkan di halaman utama setelah disetujui oleh admin DPN.');
+        $msg = $isApproved 
+             ? 'Ulasan Anda berhasil dikirim dan telah diterbitkan di halaman utama!' 
+             : 'Ulasan Anda berhasil dikirim! Ulasan akan ditampilkan setelah disetujui oleh admin DPN.';
+
+        return redirect()->back()->with('success', $msg);
     }
  
     /**

@@ -50,7 +50,7 @@
                 <div class="review-header" style="display:flex; justify-content:space-between; margin-bottom:16px;">
                     <div class="review-author" style="display:flex; flex-direction:column;">
                         <h4 style="margin:0; font-size:16px; color:#1a202c;">{{ $review->reviewer_name }}</h4>
-                        <span style="font-size:12px; color:#718096;">Sukabumi</span>
+                        <span style="font-size:12px; color:#718096;">Sukabumi • {{ $review->module_label_display }}</span>
                     </div>
                     <div class="review-check" style="background:#EBF8FF; color:#3182CE; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
                         <svg viewBox="0 0 24 24" style="width:14px;height:14px;" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>

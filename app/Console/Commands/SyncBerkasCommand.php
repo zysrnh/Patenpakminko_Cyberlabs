@@ -45,7 +45,7 @@ class SyncBerkasCommand extends Command
             'kbli' => 'KBLI',
             'proposal_kegiatan' => 'Proposal Kegiatan',
             'persyaratan_lainnya' => 'Persyaratan Lainnya',
-            'bpn_pertek_document' => 'Dokumen Pertek (BPN)',
+            'bpn_pertek_document' => 'Dokumen Pertimbangan Teknis Pertanahan',
             'dinas_pu_document' => 'Dokumen Penilaian (PU)',
             'satu_pintu_document' => 'Dokumen PKKPR Final (PTSP)'
         ];
@@ -91,9 +91,19 @@ class SyncBerkasCommand extends Command
         // 2. Proses semua field dokumen
         foreach ($fileFields as $field => $labelJenis) {
             if (!empty($app->$field)) {
+                $kategori = $labelJenis;
+                // Jika ini adalah dokumen pertek BPN, buat spesifik sesuai layanan
+                if ($field === 'bpn_pertek_document') {
+                    if ($modulName === 'PKKPR Berusaha') $kategori = 'Pertimbangan Teknis Berusaha';
+                    elseif ($modulName === 'PKKPR Non-Berusaha') $kategori = 'Pertimbangan Teknis Non Berusaha';
+                    elseif ($modulName === 'Kebijakan Khusus') $kategori = 'Pertimbangan Teknis Kebijakan';
+                    elseif ($modulName === 'Tanah Timbul') $kategori = 'Pertimbangan Teknis Tanah Timbul';
+                    elseif ($modulName === 'PSN') $kategori = 'Pertimbangan Teknis PSN';
+                }
+
                 $this->createBerkasIfNotExists(
                     $app->user_id, 
-                    $labelJenis, 
+                    $kategori, 
                     $app->$field, 
                     $modulName, 
                     $app->application_number

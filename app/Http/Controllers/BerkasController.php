@@ -45,6 +45,11 @@ class BerkasController extends Controller
             });
         }
 
+        // Filter berdasarkan layanan khusus (PKKPR Berusaha, Non Berusaha, dsb)
+        if ($request->has('layanan') && $request->layanan != '') {
+            $query->where('nama_berkas', 'like', '[' . $request->layanan . ']%');
+        }
+
         // Filter berdasarkan pemohon
         if ($request->has('user_id') && $request->user_id != '') {
             $query->where('user_id', $request->user_id);
@@ -67,7 +72,7 @@ class BerkasController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_berkas' => 'required|string|max:255',
+            'nama_berkas' => 'nullable|string|max:255',
             'kategori'    => 'nullable|string|max:100',
             'file'        => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:102400', // Max 10MB
             'keterangan'  => 'nullable|string'
@@ -83,7 +88,7 @@ class BerkasController extends Controller
 
         Berkas::create([
             'user_id'     => Auth::id(),
-            'nama_berkas' => $request->nama_berkas,
+            'nama_berkas' => $request->nama_berkas ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'kategori'    => $request->kategori,
             'file_path'   => $filePath,
             'tipe_file'   => $file->getClientOriginalExtension(),

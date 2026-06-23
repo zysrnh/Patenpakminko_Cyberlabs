@@ -393,7 +393,7 @@
                             <div class="timeline-list-title">Proses yang Dilalui:</div>
                             <ul class="timeline-list">
                                 <li>Validasi dokumen selesai</li>
-                                <li>Penjadwalan cek lokasi</li>
+                                <li>Penjadwalan peninjauan lapangan</li>
                                 <li>Peninjauan lapangan</li>
                                 <li>Rapat penilaian</li>
                                 <li>Approval dari pihak terkait</li>

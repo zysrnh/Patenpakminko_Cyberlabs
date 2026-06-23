@@ -153,7 +153,7 @@ class PpkprNonBerusahaController extends Controller
         session()->forget('ptp_form_data');
         
         // Kirim Notifikasi WhatsApp
-        $this->sendNotificationWithMailbox($app, 'submit_berkas', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+        $this->sendNotificationWithMailbox($app, 'submit_berkas', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -246,8 +246,11 @@ class PpkprNonBerusahaController extends Controller
             $request->validate([
                 'action' => 'required|in:approve,reject',
                 'notes' => 'required|string|max:1000',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             ], [
                 'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
+                'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
+                'sps_document.max' => 'Ukuran file SPS maksimal 5MB.',
             ]);
 
             $action = $request->input('action');
@@ -255,6 +258,13 @@ class PpkprNonBerusahaController extends Controller
 
             $application->bpn_notes = $notes;
             if ($action === 'approve') {
+                if (!$request->hasFile('sps_document') && !$application->bpn_sps_document) {
+                    return redirect()->back()->withErrors(['sps_document' => 'SPS wajib diunggah saat menyetujui berkas (Lengkap).']);
+                }
+                if ($request->hasFile('sps_document')) {
+                    $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
+                }
+
                 $application->bpn_berkas_status = 'diterima';
                     $application->bpn_berkas_approved_at = now();
                 $application->bpn_pembayaran_status = 'menunggu';
@@ -268,7 +278,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
 
             // Kirim notifikasi WA
-            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
@@ -285,7 +295,7 @@ class PpkprNonBerusahaController extends Controller
             // Aktivasi Akun Pengguna
             $application->user->update(['is_active' => true]);
 
-            $this->sendNotificationWithMailbox($application, 'credential_blast', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'credential_blast', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
             return redirect()->route('non-berusaha.show', $id)
                 ->with('success', 'Pembayaran PNBP dikonfirmasi. Kredensial telah dikirim ke WA pemohon. No. Berkas: ' . $application->no_berkas);
         }
@@ -308,7 +318,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
 
             // Kirim notifikasi WA
-            $this->sendNotificationWithMailbox($application, $isUpdate ? 'cek_lokasi_ubah' : 'cek_lokasi', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $isUpdate ? 'cek_lokasi_ubah' : 'cek_lokasi', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
             $successMsg = $isUpdate ? 'Jadwal cek lokasi berhasil diubah dan dikirim ulang via WhatsApp!' : 'Jadwal cek lokasi berhasil disimpan dan dikirim ke pemohon via WhatsApp!';
             return redirect()->route('non-berusaha.show', $id)->with('success', $successMsg);
@@ -329,7 +339,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
 
             // Kirim notifikasi WA
-            $this->sendNotificationWithMailbox($application, $isUpdate ? 'rapat_ubah' : 'rapat', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $isUpdate ? 'rapat_ubah' : 'rapat', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
             $successMsg = $isUpdate ? 'Jadwal rapat berhasil diubah dan dikirim ulang via WhatsApp!' : 'Jadwal rapat koordinasi berhasil disimpan dan dikirim ke pemohon via WhatsApp!';
             return redirect()->route('non-berusaha.show', $id)->with('success', $successMsg);
@@ -365,7 +375,7 @@ class PpkprNonBerusahaController extends Controller
                 $msg = 'Permohonan ditolak pada tahap rekomendasi teknis BPN.';
             }
             $application->save();
-            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
 
@@ -407,7 +417,7 @@ class PpkprNonBerusahaController extends Controller
             $application->save();
  
             // Notifikasi BPN ada berkas perbaikan masuk
-            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
  
             return redirect()->route('non-berusaha.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
         }
@@ -421,7 +431,7 @@ class PpkprNonBerusahaController extends Controller
             }
 
             $customMsg = $request->input('custom_wa_message');
-            $this->sendNotificationWithMailbox($application, $type, 'PPKPR Non Berusaha', 'non-berusaha.show', $customMsg);
+            $this->sendNotificationWithMailbox($application, $type, 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $customMsg);
             return redirect()->route('non-berusaha.show', $id)->with('success', 'Tautan kirim ulang WhatsApp manual berhasil dimunculkan.');
         }
 
@@ -483,7 +493,7 @@ class PpkprNonBerusahaController extends Controller
         }
 
         // Kirim Notifikasi WhatsApp
-        $this->sendNotificationWithMailbox($application, $type, 'PPKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
+        $this->sendNotificationWithMailbox($application, $type, 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
         return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
     }

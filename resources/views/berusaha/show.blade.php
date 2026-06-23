@@ -1060,7 +1060,7 @@
                                     </div>
                                         <button type="submit" class="btn-submit-v" style="background: {{ $application->bpn_cek_lokasi_dt ? '#D69E2E' : 'var(--clr-blue)' }};">
                                             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                            {{ $application->bpn_cek_lokasi_dt ? 'Rubah Jadwal & Kirim WA' : 'Kirimkan Jadwal Cek Lokasi' }}
+                                            {{ $application->bpn_cek_lokasi_dt ? 'Rubah Jadwal & Kirim WA' : 'Kirimkan Jadwal Peninjauan Lapangan' }}
                                         </button>
                                     @else
                                         
@@ -1560,8 +1560,22 @@
                 <div>
                                         <!-- DAY COUNTER / SLA BANNER -->
                     @php
-                        $targetDate = $application->tgl_selesai_layanan ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) : $application->created_at->addWeekdays(10);
-                        $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                        $isPuOrPtsp = Auth::user()->isDinasPu() || Auth::user()->isSatuPintu();
+                        $defaultDays = $isPuOrPtsp ? 20 : 10;
+                        
+                        // Menghitung target SLA dengan skip hari libur nasional dan weekend
+                        $targetDate = $application->tgl_selesai_layanan 
+                            ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
+                            : $application->created_at->addWorkingDaysWithHolidays($defaultDays);
+                        
+                        $isSelesai = false;
+                        if (Auth::user()->isBpn()) {
+                            $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                        } elseif (Auth::user()->isDinasPu()) {
+                            $isSelesai = ($application->dinas_pu_status === 'disetujui' || in_array($application->status, ['ditolak', 'menunggu_satu_pintu', 'disetujui']));
+                        } else {
+                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui']);
+                        }
                         
                         if ($isSelesai) {
                             $slaBg = '#16A34A'; // Solid Green
@@ -1569,24 +1583,37 @@
                             $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
-                            if ($targetDate->startOfDay() >= $now->startOfDay()) {
-                                $daysRemaining = $now->startOfDay()->diffInWeekdays($targetDate->startOfDay());
-                            } else {
-                                $daysRemaining = -1 * $targetDate->startOfDay()->diffInWeekdays($now->startOfDay());
-                            }
+                            // Menggunakan macro baru yang skip tanggal merah & weekend
+                            $daysRemaining = $now->diffInWorkingDaysWithHolidays($targetDate);
                             
-                            if ($daysRemaining >= 4) {
-                                $slaBg = '#16A34A'; // Solid Green
-                                $slaBorder = '#15803D';
-                                $slaColor = '#FFFFFF';
-                            } elseif ($daysRemaining >= 0) {
-                                $slaBg = '#EAB308'; // Solid Yellow
-                                $slaBorder = '#CA8A04';
-                                $slaColor = '#FFFFFF';
+                            if ($isPuOrPtsp) {
+                                if ($daysRemaining >= 4) {
+                                    $slaBg = '#16A34A'; 
+                                    $slaBorder = '#15803D';
+                                    $slaColor = '#FFFFFF';
+                                } elseif ($daysRemaining >= 1) {
+                                    $slaBg = '#EAB308'; 
+                                    $slaBorder = '#CA8A04';
+                                    $slaColor = '#FFFFFF';
+                                } else {
+                                    $slaBg = '#DC2626'; 
+                                    $slaBorder = '#B91C1C';
+                                    $slaColor = '#FFFFFF';
+                                }
                             } else {
-                                $slaBg = '#DC2626'; // Solid Red
-                                $slaBorder = '#B91C1C';
-                                $slaColor = '#FFFFFF';
+                                if ($daysRemaining >= 3) {
+                                    $slaBg = '#16A34A'; 
+                                    $slaBorder = '#15803D';
+                                    $slaColor = '#FFFFFF';
+                                } elseif ($daysRemaining >= 1) {
+                                    $slaBg = '#EAB308'; 
+                                    $slaBorder = '#CA8A04';
+                                    $slaColor = '#FFFFFF';
+                                } else {
+                                    $slaBg = '#DC2626'; 
+                                    $slaBorder = '#B91C1C';
+                                    $slaColor = '#FFFFFF';
+                                }
                             }
                         }
                     @endphp
@@ -2096,7 +2123,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const html = form.innerHTML;
             if (html.includes('name="bpn_berkas_notes"') || html.includes('Simpan Verifikasi Berkas')) waTypeValue = 'berkas_verifikasi';
             else if (html.includes('name="sps_bpn"') || html.includes('Kirim Kredensial')) waTypeValue = 'credential';
-            else if (html.includes('name="bpn_lokasi_notes"') || html.includes('Kirimkan Jadwal Cek Lokasi')) waTypeValue = 'cek_lokasi';
+            else if (html.includes('name="bpn_lokasi_notes"') || html.includes('Kirimkan Jadwal Peninjauan Lapangan')) waTypeValue = 'cek_lokasi';
             else if (html.includes('name="bpn_rapat_notes"') || html.includes('Simpan Hasil Rapat')) waTypeValue = 'rapat';
             else if (html.includes('name="pertek_notes"') || html.includes('Kirim Pertek Pertanahan')) waTypeValue = 'pertek_terbit';
             else if (html.includes('name="dinas_pu_notes"') || html.includes('Kirim Validasi Awal')) waTypeValue = 'putr_validasi';

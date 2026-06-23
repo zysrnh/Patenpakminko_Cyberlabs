@@ -120,7 +120,7 @@ class PpkprBerusahaController extends Controller
         session()->forget('ptp_form_data');
  
         // Kirim Notifikasi Awal ke Pelaku Usaha
-        $this->sendNotificationWithMailbox($app, 'submit_berkas', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+        $this->sendNotificationWithMailbox($app, 'submit_berkas', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
         Auth::logout();
         return redirect()->route('pengajuan.sukses');
@@ -235,7 +235,7 @@ class PpkprBerusahaController extends Controller
                 $application->save();
  
                 // Kirim notifikasi WA ke Pelaku Usaha
-                $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
                 return redirect()->route('berusaha.show', $id)->with('success', $msg);
             }
@@ -256,7 +256,7 @@ class PpkprBerusahaController extends Controller
                 $application->user->update(['is_active' => true]);
 
                 // Kirim Notifikasi Blast WA Kredensial & Tautan Dashboard ke Pelaku Usaha
-                $this->sendNotificationWithMailbox($application, 'credential', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, 'credential', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
 
                 return redirect()->route('berusaha.show', $id)->with('success', "Pembayaran PNBP terverifikasi LUNAS! No. Berkas: {$application->no_berkas}. Kredensial login dashboard telah di-blast ke WhatsApp pemohon.");
             }
@@ -279,7 +279,7 @@ class PpkprBerusahaController extends Controller
                 $application->save();
  
                 // Kirim notifikasi ke Pelaku Usaha
-                $this->sendNotificationWithMailbox($application, $waType, 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, $waType, 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
                 return redirect()->route('berusaha.show', $id)->with('success', 'Jadwal peninjauan cek lokasi berhasil disimpan dan dikirim ke pemohon.');
             }
@@ -300,7 +300,7 @@ class PpkprBerusahaController extends Controller
                 $application->save();
  
                 // Kirim notifikasi rapat ke Pelaku Usaha
-                $this->sendNotificationWithMailbox($application, $waType, 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, $waType, 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
                 return redirect()->route('berusaha.show', $id)->with('success', 'Jadwal rapat koordinasi berhasil disimpan.');
             }
@@ -338,7 +338,7 @@ class PpkprBerusahaController extends Controller
                 $application->save();
  
                 // Kirim Notifikasi WA ke Pelaku Usaha dan Dinas PU
-                $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'pertek_terbit' : 'pertek_tolak', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
                 return redirect()->route('berusaha.show', $id)->with('success', $msg);
             }
@@ -377,7 +377,7 @@ class PpkprBerusahaController extends Controller
                 $application->save();
 
                 // Kirim notifikasi WA blast
-                $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'putr_validasi' : 'putr_tolak', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, $action === 'approve' ? 'putr_validasi' : 'putr_tolak', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
 
                 return redirect()->route('berusaha.show', $id)->with('success', $msg);
             }
@@ -415,7 +415,7 @@ class PpkprBerusahaController extends Controller
                 $application->save();
  
                 // Kirim Notifikasi WA ke PTSP (jika sesuai) atau Pelaku Usaha (jika belum sesuai)
-                $this->sendNotificationWithMailbox($application, $action === 'sesuai' ? 'pu_selesai' : 'pu_tolak', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+                $this->sendNotificationWithMailbox($application, $action === 'sesuai' ? 'pu_selesai' : 'pu_tolak', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
                 return redirect()->route('berusaha.show', $id)->with('success', $msg);
             }
@@ -446,7 +446,7 @@ class PpkprBerusahaController extends Controller
             $application->save();
  
             // Kirim Notifikasi WA Final ke BPN dan Pelaku Usaha (Dinas PU tidak dikirimi)
-            $this->sendNotificationWithMailbox($application, 'pkkpr_terbit', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'pkkpr_terbit', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
             return redirect()->route('berusaha.show', $id)->with('success', 'Produk akhir PKKPR Berusaha berhasil diterbitkan! Seluruh alur permohonan telah selesai.');
         }
@@ -488,7 +488,7 @@ class PpkprBerusahaController extends Controller
             $application->save();
  
             // Notifikasi BPN ada berkas perbaikan masuk
-            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'berkas_revisi_bpn', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
             return redirect()->route('berusaha.show', $id)->with('success', 'Berkas perbaikan berhasil diunggah. Mohon tunggu verifikasi ulang dari BPN.');
         }
@@ -496,7 +496,7 @@ class PpkprBerusahaController extends Controller
         // Pelaku Usaha menekan tombol "kirim notifikasi" blast ke Pelaku Usaha & BPN (Image 2)
         if ($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $step === 'blast_notif') {
             
-            $this->sendNotificationWithMailbox($application, 'pu_blast_notif', 'PPKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
+            $this->sendNotificationWithMailbox($application, 'pu_blast_notif', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
             
             return redirect()->route('berusaha.show', $id)->with('success', 'Notifikasi WhatsApp blast berhasil dikirim ke Pelaku Usaha dan BPN!');
         }
@@ -511,7 +511,7 @@ class PpkprBerusahaController extends Controller
             }
 
             $customMsg = $request->input('custom_wa_message');
-            $this->sendNotificationWithMailbox($application, $type, 'PPKPR Berusaha', 'berusaha.show', $customMsg);
+            $this->sendNotificationWithMailbox($application, $type, 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $customMsg);
             return redirect()->route('berusaha.show', $id)->with('success', 'Tautan kirim ulang WhatsApp manual berhasil dimunculkan.');
         }
 

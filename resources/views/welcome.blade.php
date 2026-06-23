@@ -313,7 +313,7 @@
                             </div>
                             <div class="review-author">
                                 <h4>{{ $review->reviewer_name }}</h4>
-                                <span>Sukabumi</span>
+                                <span>Sukabumi &bull; {{ $review->module_label_display }}</span>
                             </div>
                         </div>
                         <p class="review-text">"{{ $review->comment }}"</p>

@@ -26,6 +26,8 @@ class InformalController extends Controller
             'comment' => 'nullable|string'
         ]);
 
+        $isApproved = $request->rating >= 4;
+
         \App\Models\InformalRating::create([
             'user_id' => auth()->id(), // null jika tidak login
             'name' => auth()->check() ? auth()->user()->name : $request->name,
@@ -34,6 +36,7 @@ class InformalController extends Controller
             'longitude' => $request->longitude,
             'rating' => $request->rating,
             'comment' => $request->comment,
+            'is_approved' => $isApproved,
         ]);
 
         return response()->json(['success' => true, 'message' => 'Terima kasih atas rating Anda!']);

@@ -137,6 +137,9 @@ Route::get('/lapolpak', [LapolpaController::class, 'index'])->name('lapolpa.inde
 Route::post('/lapolpak', [LapolpaController::class, 'store'])->name('lapolpa.store');
 Route::get('/lapolpak/success', [LapolpaController::class, 'success'])->name('lapolpa.success');
 Route::put('/lapolpak/{id}', [LapolpaController::class, 'updateStatus'])->name('lapolpa.update');
+Route::get('/lapolpak/ulasan/{id}', [LapolpaController::class, 'showReviewForm'])->name('lapolpa.review.form');
+Route::post('/lapolpak/ulasan/{id}', [LapolpaController::class, 'submitReview'])->name('lapolpa.review.submit');
+
 Route::post('/informal/rating', [InformalController::class, 'storeRating'])->name('informal.rating.store');
 
 // Rute Publik PTP Form
@@ -247,6 +250,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dpn/whatsapp/save-provider', [PpkprNonBerusahaController::class, 'saveProviderSettings'])->name('dpn.whatsapp.save-provider');
     Route::get('/dpn/contacts', [PpkprNonBerusahaController::class, 'adminContacts'])->name('dpn.contacts');
     Route::post('/dpn/contacts/save', [PpkprNonBerusahaController::class, 'saveAdminContacts'])->name('dpn.contacts.save');
+    
+    // Holiday Management
+    Route::get('/dpn/holidays', [\App\Http\Controllers\HolidayController::class, 'index'])->name('dpn.holidays.index');
+    Route::post('/dpn/holidays', [\App\Http\Controllers\HolidayController::class, 'store'])->name('dpn.holidays.store');
+    Route::delete('/dpn/holidays/{id}', [\App\Http\Controllers\HolidayController::class, 'destroy'])->name('dpn.holidays.destroy');
     
     // Unduhan Template Persyaratan (Pelaku Usaha)
     Route::get('/templates/berkas-persyaratan', [PpkprNonBerusahaController::class, 'templatePersyaratan'])->name('templates.persyaratan');

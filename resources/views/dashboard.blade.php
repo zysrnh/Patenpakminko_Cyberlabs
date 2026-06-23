@@ -585,7 +585,46 @@
             .two-col { grid-template-columns: 1fr; }
         }
 
-
+        /* ─── SIDEBAR DROPDOWN ───────────────── */
+        .nav-item-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .nav-item.has-dropdown {
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .nav-dropdown-menu {
+            display: none;
+            flex-direction: column;
+            padding-left: 44px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+            gap: 4px;
+        }
+        .nav-dropdown-menu.open {
+            display: flex;
+        }
+        .nav-dropdown-item {
+            padding: 8px 12px;
+            color: var(--muted);
+            font-size: 12.5px;
+            text-decoration: none;
+            border-radius: var(--r-sm);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .nav-dropdown-item:hover, .nav-dropdown-item.active {
+            color: var(--blue);
+            background: var(--surface2);
+        }
+        .chevron {
+            width: 16px; height: 16px;
+            transition: transform 0.2s;
+        }
+        .nav-item.has-dropdown.open .chevron {
+            transform: rotate(180deg);
+        }
 
     </style>
 </head>
@@ -658,12 +697,34 @@
                 <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
                 LAPOL PAK
             </a>
-            @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isSatuPintu())
-            <a href="{{ route('berkas.index') }}" class="nav-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 002-2V7.5L14.5 2H6a2 2 0 00-2 2v4"/><polyline points="14 2 14 8 20 8"/><path d="M2 15h10"/><path d="M9 18l3-3-3-3"/></svg>
-                Pemberkasan
+            <a href="{{ route('ulasan.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Ulasan Layanan
             </a>
-            @endif
+        </div>
+
+        @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isSatuPintu())
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">Manajemen Pemberkasan</div>
+            <div class="nav-item-group">
+                <div class="nav-item has-dropdown" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h14a2 2 0 002-2V7.5L14.5 2H6a2 2 0 00-2 2v4"/><polyline points="14 2 14 8 20 8"/><path d="M2 15h10"/><path d="M9 18l3-3-3-3"/></svg>
+                        Pemberkasan
+                    </div>
+                    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div class="nav-dropdown-menu">
+                    <a href="{{ route('berkas.index') }}" class="nav-dropdown-item">Semua Berkas (Full)</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Berusaha</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Non Berusaha</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan Khusus', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item">Pertimbangan Teknis Kebijakan</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'Tanah Timbul', 'kategori' => 'Pertimbangan Teknis Tanah Timbul']) }}" class="nav-dropdown-item">Pertimbangan Teknis Tanah Timbul</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'PSN', 'kategori' => 'Pertimbangan Teknis PSN']) }}" class="nav-dropdown-item">Pertimbangan Teknis PSN</a>
+                </div>
+            </div>
+        </div>
+        @endif
             <a href="{{ route('ulasan.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 Ulasan Layanan
@@ -691,6 +752,10 @@
             <a href="{{ route('admin_dpn.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
                 Statistik Web
+            </a>
+            <a href="{{ route('dpn.holidays.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Kelola Kalender Libur
             </a>
             @endif
             <a href="{{ route('admin.berita.index') }}" class="nav-item">

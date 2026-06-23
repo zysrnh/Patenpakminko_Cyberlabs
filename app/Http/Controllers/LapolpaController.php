@@ -160,16 +160,18 @@ class LapolpaController extends Controller
         $url = route('lapolpa.index');
  
         // 1. Pesan Notifikasi & Panduan ke Pelaku Usaha (Pemohon)
-        $messagePemohon = "Halo {$pemohonName},\n\nJadwal pelaporan LAPOLPAK Anda berhasil terdaftar dengan status BOOKED!\n\n"
+        $messagePemohon = "Halo *{$pemohonName}*,\n\n"
+                        . "Terima kasih! Jadwal pelaporan LAPOLPAK Anda telah berhasil didaftarkan dengan status *BOOKED*.\n\n"
+                        . "Rincian Jadwal:\n"
                         . "🗓️ Tanggal: {$tglIndo}\n"
                         . "⏰ Waktu: {$rentangWaktu}\n"
-                        . "📱 WhatsApp terdaftar: {$booking->whatsapp_number}\n\n"
-                        . "*PANDUAN PELAPORAN LAPOLPAK UTK PEMOHON*:\n"
-                        . "1. Hadir tepat waktu sesuai jadwal yang telah Anda pilih.\n"
+                        . "📱 WhatsApp: {$booking->whatsapp_number}\n\n"
+                        . "📌 *PANDUAN PELAPORAN LAPOLPAK*:\n"
+                        . "1. Mohon hadir tepat waktu sesuai jadwal yang telah dipilih.\n"
                         . "2. Siapkan dokumen identitas diri (KTP) asli.\n"
-                        . "3. Bawa cetakan dokumen permohonan PPKPR/izin terkait.\n"
-                        . "4. Pastikan nomor WhatsApp Anda aktif selama proses pelaporan berlangsung.\n\n"
-                        . "Lacak bukti booking Anda di dashboard: {$url}";
+                        . "3. Bawa cetakan fisik dokumen permohonan PPKPR/izin terkait.\n"
+                        . "4. Pastikan nomor WhatsApp Anda selalu aktif selama proses berlangsung.\n\n"
+                        . "Lacak bukti pemesanan Anda melalui tautan berikut:\n{$url}";
         
         $settings = $this->getWhatsappSettings();
         if (!empty($settings['cp_admin'])) {
@@ -252,8 +254,8 @@ class LapolpaController extends Controller
         $rentangWaktu = $booking->formatted_time_range;
         $statusLabel = $booking->status_label;
  
-        $message = "Halo {$pemohonName},\n\nStatus pelaporan LAPOLPAK Anda untuk tanggal {$tglIndo} ({$rentangWaktu}) telah diubah oleh petugas menjadi:\n"
-                 . "*{$statusLabel}*\n\n";
+        $message = "Halo *{$pemohonName}*,\n\n"
+                 . "Status Permohonan Fitur LAPOL PAK Anda untuk tanggal *{$tglIndo} ({$rentangWaktu})* telah diubah menjadi: *{$statusLabel}* oleh Kantor Pertanahan Sukabumi.\n\n";
 
         if ($booking->admin_note) {
             $message .= "Catatan dari Petugas:\n_{$booking->admin_note}_\n\n";
@@ -261,6 +263,13 @@ class LapolpaController extends Controller
 
         $message .= "Terima kasih atas kerja sama Anda.\n"
                  . "Lacak detail selengkapnya di: " . route('lapolpa.index');
+
+        if ($booking->status === 'selesai') {
+            $reviewLink = route('lapolpa.review.form', ['id' => $booking->id]);
+            $message .= "\n\n⭐ *Mohon Berikan Ulasan Anda*\n"
+                     . "Bantu kami meningkatkan kualitas layanan dengan mengisi ulasan singkat melalui tautan berikut:\n"
+                     . $reviewLink;
+        }
  
         $settings = $this->getWhatsappSettings();
         if (!empty($settings['cp_admin'])) {
@@ -296,5 +305,50 @@ class LapolpaController extends Controller
         }
     }
  
+    /**
+     * Tampilkan form ulasan publik khusus LAPOLPAK.
+     */
+    public function showReviewForm($id)
+    {
+        $booking = LapolpaBooking::findOrFail($id);
+        
+        // Cek apakah sudah pernah diulas
+        $existingReview = \App\Models\InformalRating::where('informal_type', 'LAPOLPA')
+                            ->where('latitude', $booking->id) // pinjam kolom latitude buat nyimpen ID booking
+                            ->first();
+                            
+        if ($existingReview) {
+            return redirect('/')->with('success', 'Anda sudah memberikan ulasan untuk jadwal ini. Terima kasih!');
+        }
+
+        return view('lapolpa.review', compact('booking'));
+    }
+
+    /**
+     * Simpan ulasan publik khusus LAPOLPAK.
+     */
+    public function submitReview(Request $request, $id)
+    {
+        $booking = LapolpaBooking::findOrFail($id);
+        
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string'
+        ]);
+
+        $isApproved = $request->rating >= 4;
+
+        \App\Models\InformalRating::create([
+            'user_id' => $booking->user_id,
+            'name' => $booking->nama_pemohon,
+            'informal_type' => 'LAPOLPA',
+            'latitude' => $booking->id, // pinjam kolom latitude buat foreign key ke booking
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'is_approved' => $isApproved,
+        ]);
+
+        return redirect('/')->with('success', 'Terima kasih! Ulasan Anda telah berhasil dikirim.');
+    }
 }
 
