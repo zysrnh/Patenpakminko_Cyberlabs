@@ -414,6 +414,7 @@
             </div>
         </div>
         @endif
+        @endif
 
         @if(Auth::check() && (Auth::user()->isDpn() || Auth::user()->isAdminBerita()))
         <div class="sidebar-section">
