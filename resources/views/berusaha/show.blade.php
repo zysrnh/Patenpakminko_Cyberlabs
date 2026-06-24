@@ -7,6 +7,23 @@
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+    <style>
+        .flatpickr-calendar .flatpickr-day.flatpickr-disabled:not(.prevMonthDay):not(.nextMonthDay) {
+            color: #E53E3E !important;
+            background-color: #FFF5F5 !important;
+            font-weight: bold !important;
+            opacity: 1 !important;
+            border-radius: 4px;
+        }
+        .form-control-v.flatpickr-input[readonly], .flatpickr-input[readonly] {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="%232B6CB0"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 36px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+    </style>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1560,8 +1577,8 @@
                 <div>
                                         <!-- DAY COUNTER / SLA BANNER -->
                     @php
-                        $isPuOrPtsp = Auth::user()->isDinasPu() || Auth::user()->isSatuPintu();
-                        $defaultDays = $isPuOrPtsp ? 20 : 10;
+                        $isPuPhase = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr', 'disetujui', 'terbit_pkpr']) || $application->bpn_pertek_document;
+                        $defaultDays = $isPuPhase ? 20 : 10;
                         
                         // Menghitung target SLA dengan skip hari libur nasional dan weekend
                         $targetDate = $application->tgl_selesai_layanan 
@@ -1586,7 +1603,7 @@
                             // Menggunakan macro baru yang skip tanggal merah & weekend
                             $daysRemaining = $now->diffInWorkingDaysWithHolidays($targetDate);
                             
-                            if ($isPuOrPtsp) {
+                            if ($isPuPhase) {
                                 if ($daysRemaining >= 4) {
                                     $slaBg = '#16A34A'; 
                                     $slaBorder = '#15803D';
@@ -1997,9 +2014,28 @@
  
     <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
+    @php
+        $holidays = [];
+        try {
+            $holidays = \App\Models\Holiday::get()->map(function($h) {
+                return \Carbon\Carbon::parse($h->date)->format('Y-m-d');
+            })->toArray();
+        } catch(\Exception $e) {}
+    @endphp
     <script>
+        window.appHolidays = {!! json_encode($holidays) !!};
+        
         document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('input[type="datetime-local"], input[type="date"]').forEach(el => {
+                if(!el.getAttribute('placeholder')) el.setAttribute('placeholder', 'Pilih Tanggal & Waktu...');
+            });
+
+            const commonDisable = [
+                function(date) { return (date.getDay() === 0 || date.getDay() === 6); },
+                ...window.appHolidays
+            ];
+
             const penilaianInput = document.getElementById('dinas_pu_tanggal_penilaian');
             if (penilaianInput) {
                 flatpickr(penilaianInput, {
@@ -2007,7 +2043,8 @@
                     altInput: true,
                     altFormat: "d-m-Y",
                     locale: "id",
-                    allowInput: true
+                    allowInput: true,
+                    disable: commonDisable
                 });
             }
 
@@ -2018,7 +2055,8 @@
                     altInput: true,
                     altFormat: "d-m-Y",
                     locale: "id",
-                    allowInput: true
+                    allowInput: true,
+                    disable: commonDisable
                 });
             }
 
@@ -2031,7 +2069,8 @@
                     altInput: true,
                     altFormat: "d-m-Y H:i",
                     locale: "id",
-                    allowInput: true
+                    allowInput: true,
+                    disable: commonDisable
                 });
             }
 
@@ -2044,7 +2083,21 @@
                     altInput: true,
                     altFormat: "d-m-Y H:i",
                     locale: "id",
-                    allowInput: true
+                    allowInput: true,
+                    disable: commonDisable
+                });
+            }
+            
+            const slaStart = document.getElementById('tgl_mulai_layanan');
+            if(slaStart) {
+                flatpickr(slaStart, {
+                    enableTime: true, time_24hr: true, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "j F Y - H:i", locale: "id", allowInput: true, disable: commonDisable
+                });
+            }
+            const slaEnd = document.getElementById('tgl_selesai_layanan');
+            if(slaEnd) {
+                flatpickr(slaEnd, {
+                    enableTime: true, time_24hr: true, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "j F Y - H:i", locale: "id", allowInput: true, disable: commonDisable
                 });
             }
         });
@@ -2406,6 +2459,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 150);
 });
-</script>
 </body>
 </html>

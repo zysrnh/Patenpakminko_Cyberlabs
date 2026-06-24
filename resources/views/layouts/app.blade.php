@@ -15,7 +15,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
     <style>
+        .flatpickr-calendar .flatpickr-day.flatpickr-disabled:not(.prevMonthDay):not(.nextMonthDay) {
+            color: #E53E3E !important;
+            background-color: #FFF5F5 !important;
+            font-weight: 700 !important;
+            opacity: 1 !important;
+        }
+        span.flatpickr-day.disabled.prevMonthDay,
+        span.flatpickr-day.disabled.nextMonthDay {
+            opacity: 0.4 !important;
+            background-color: transparent !important;
+        }
+        
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
@@ -606,6 +622,53 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+</script>
 
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/id.js"></script>
+    @php
+        $holidays = [];
+        try {
+            $holidays = \App\Models\Holiday::get()->map(function($h) {
+                return \Carbon\Carbon::parse($h->date)->format('Y-m-d');
+            })->toArray();
+        } catch(\Exception $e) {}
+    @endphp
+    <script>
+        window.appHolidays = {!! json_encode($holidays) !!};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Flatpickr on all datetime-local inputs
+            flatpickr('input[type="datetime-local"]', {
+                enableTime: true,
+                dateFormat: "Y-m-d\\TH:i",
+                altInput: true,
+                altFormat: "j F Y - H:i",
+                locale: "id",
+                disable: [
+                    function(date) {
+                        // Disable weekends (0 = Sunday, 6 = Saturday)
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    },
+                    ...window.appHolidays
+                ]
+            });
+            
+            // Initialize Flatpickr on date inputs without time if needed
+            flatpickr('input[type="date"]', {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "j F Y",
+                locale: "id",
+                disable: [
+                    function(date) {
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    },
+                    ...window.appHolidays
+                ]
+            });
+        });
+    </script>
 </body>
 </html>
