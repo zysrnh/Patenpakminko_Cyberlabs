@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Holiday;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::useBootstrap();
         // Fetch holidays from DB (Cached for 24 hours to prevent querying on every request)
         $holidays = Cache::remember('indonesian_holidays', 86400, function () {
             try {

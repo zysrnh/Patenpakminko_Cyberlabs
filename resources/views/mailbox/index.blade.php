@@ -61,7 +61,14 @@
                 </a>
             @endforeach
         </div>
-        <div style="padding: 16px;">
+        <div style="padding: 16px; display: flex; justify-content: center; width: 100%;">
+            <style>
+                .pagination { display: flex; padding-left: 0; list-style: none; gap: 4px; margin: 0; }
+                .page-item .page-link { display: flex; align-items: center; justify-content: center; padding: 8px 14px; font-size: 13.5px; font-weight: 600; color: #3B82F6; background-color: #fff; border: 1px solid #E2E8F0; border-radius: 6px; text-decoration: none; transition: all 0.2s; }
+                .page-item .page-link:hover { background-color: #EFF6FF; border-color: #BFDBFE; }
+                .page-item.active .page-link { background-color: #3B82F6; color: #fff; border-color: #3B82F6; }
+                .page-item.disabled .page-link { color: #94A3B8; background-color: #F8FAFC; border-color: #E2E8F0; cursor: not-allowed; }
+            </style>
             {{ $mailboxes->links() }}
         </div>
     @endif
