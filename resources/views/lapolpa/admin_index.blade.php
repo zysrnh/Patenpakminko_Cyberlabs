@@ -65,6 +65,8 @@
     .cal-cell.has-booking:hover { background: #BEE3F8; }
     .cal-cell.today .cal-num { background: var(--blue); color: #fff; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; }
     .cal-cell.other-month { opacity: .3; }
+    .cal-cell.holiday { background-color: #FFF5F5; border: 1.5px solid transparent; }
+    .cal-cell.holiday .cal-num { color: #E53E3E; font-weight: 800; }
     .cal-num { font-size: 13px; font-weight: 600; color: var(--ink); display: block; text-align: center; }
     .cal-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; margin-top: 4px; }
     .cal-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
@@ -226,6 +228,14 @@
                 // Today highlight
                 if (year === today.getFullYear() && month === today.getMonth() && d === today.getDate()) {
                     cell.classList.add("today");
+                }
+
+                // Check Weekend or Holiday
+                var dayOfWeek = new Date(year, month, d).getDay();
+                var isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                var isHoliday = window.appHolidays && window.appHolidays.includes(dateKey);
+                if (isWeekend || isHoliday) {
+                    cell.classList.add("holiday");
                 }
 
                 var dayBookings = bookings[dateKey] || [];
