@@ -211,30 +211,4 @@
 @endif
 @endsection
 
-@section('head-extra')
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
-@endsection
-
-@section('scripts')
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const bookingDateInput = document.getElementById('booking_date');
-            if (bookingDateInput) {
-                flatpickr(bookingDateInput, {
-                    dateFormat: "Y-m-d",
-                    altInput: true,
-                    altFormat: "d-m-Y",
-                    locale: "id",
-                    minDate: "today",
-                    allowInput: true
-                });
-            }
-        });
-    </script>
-@endsection
 
