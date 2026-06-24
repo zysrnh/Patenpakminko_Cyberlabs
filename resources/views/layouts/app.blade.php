@@ -307,6 +307,7 @@
         .nav-item.has-dropdown.open .chevron {
             transform: rotate(180deg);
         }
+        @yield('extra-styles')
     </style>
     @yield('head-extra')
 </head>
