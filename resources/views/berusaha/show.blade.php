@@ -2154,6 +2154,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const textareas = document.querySelectorAll('textarea[name="custom_wa_message"]');
     textareas.forEach(ta => {
         const form = ta.closest('form');
+        if(!form) return;
         let waTypeInput = form.querySelector('input[name="wa_type"]');
         let waTypeValue = waTypeInput ? waTypeInput.value : null;
 
@@ -2459,5 +2460,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 150);
 });
+</script>
 </body>
 </html>
