@@ -1699,7 +1699,7 @@
                         });
                     </script>
 
-                    <div class="card" style="position: sticky; top: 88px;">
+                    <div class="card" style="position: sticky; top: 88px; max-height: calc(100vh - 100px); overflow-y: auto;">
 
                         <!-- ── SERVICE IDENTIFIER HEADER ── -->
                         <div class="timeline-card-header">
