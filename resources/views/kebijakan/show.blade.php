@@ -1241,7 +1241,7 @@
                                     @csrf
                                     <input type="hidden" name="step" value="satu_pintu_terbit">
                                     <div style="background:#F0FFF4;border:1px solid #9AE6B4;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;">
-                                        <strong>Penerbitan Pertimbangan Teknis Pertanahan (DPMPTSP):</strong> Isi data penerbitan Pertimbangan Teknis Pertanahan resmi, lalu unggah dokumen dan kirim.
+                                        <strong>Penerbitan PKKPR Kebijakan (DPMPTSP):</strong> Isi data penerbitan PKKPR resmi, lalu unggah dokumen dan kirim.
                                     </div>
                                     <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan:</label>
@@ -1252,9 +1252,9 @@
                                     </div>
                                     <div id="satuPintuFieldsWrapper">
                                         <div class="form-group-v" style="margin-bottom:12px;">
-                                            <label for="satu_pintu_no_pkkpr" class="form-label" style="font-weight:700;color:#744210;">Nomor Pertimbangan Teknis Pertanahan (wajib) <span style="color:red;">*</span></label>
+                                            <label for="satu_pintu_no_pkkpr" class="form-label" style="font-weight:700;color:#744210;">Nomor PKKPR Kebijakan (wajib) <span style="color:red;">*</span></label>
                                             <input type="text" id="satu_pintu_no_pkkpr" name="satu_pintu_no_pkkpr" class="form-control-v"
-                                                   placeholder="cth: Pertimbangan Teknis Pertanahan-NB/2026/001" value="{{ $application->satu_pintu_no_pkkpr }}" style="background:white;" required>
+                                                   placeholder="cth: PKKPR-KEB/2026/001" value="{{ $application->satu_pintu_no_pkkpr }}" style="background:white;" required>
                                         </div>
                                         <div class="form-group-v" style="margin-bottom:12px;">
                                             <label for="satu_pintu_tanggal_terbit" class="form-label" style="font-weight:700;color:#744210;">Tanggal Terbit (wajib) <span style="color:red;">*</span></label>
@@ -1277,10 +1277,10 @@
                                     </div>
                                     <div class="form-group-v">
                                         <label for="notes_sp" class="form-label" style="font-weight:700;color:#744210;">Catatan / Keterangan:</label>
-                                        <textarea id="notes_sp" name="notes" class="form-control-v" rows="3" placeholder="Catatan penerbitan Pertimbangan Teknis Pertanahan (opsional)..." style="resize:none;background:white;">{{ $application->satu_pintu_notes }}</textarea>
+                                        <textarea id="notes_sp" name="notes" class="form-control-v" rows="3" placeholder="Catatan penerbitan PKKPR Kebijakan (opsional)..." style="resize:none;background:white;">{{ $application->satu_pintu_notes }}</textarea>
                                     </div>
                                     @if($isSpActive)
-                                        <button type="submit" class="btn-submit-v" style="background:#79A73A;">📄 Terbitkan Pertimbangan Teknis Pertanahan & Blast WA Pemohon</button>
+                                        <button type="submit" class="btn-submit-v" style="background:#79A73A;">📄 Terbitkan PKKPR Kebijakan & Blast WA Pemohon</button>
                                     @else
                                         
                                     @endif
@@ -1310,7 +1310,7 @@
                                     </div>
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                        Kirim Ulang Notifikasi Pertimbangan Teknis Pertanahan (WhatsApp)
+                                        Kirim Ulang Notifikasi PKKPR Kebijakan (WhatsApp)
                                     </button>
                                 </form>
                             @endif
@@ -1439,10 +1439,10 @@
 
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen PKKPR Kebijakan</span>
+                                    <span class="detail-label">Dokumen Pertek Pertanahan</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
-                                            Unduh Pertimbangan Teknis Pertanahan
+                                            Unduh Pertek Pertanahan
                                         </a>
                                     </span>
                                 </li>

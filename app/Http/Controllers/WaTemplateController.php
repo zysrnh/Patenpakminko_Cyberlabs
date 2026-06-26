@@ -30,23 +30,23 @@ class WaTemplateController extends Controller
 
         if ($type === 'berusaha') {
             $application = PpkprBerusahaApplication::find($id);
-            $layananTitle = 'PPKPR Berusaha';
+            $layananTitle = 'Pertimbangan Teknis Pertanahan PKKPR Berusaha';
             $routeName = 'berusaha.show';
         } elseif ($type === 'non-berusaha' || $type === 'non_berusaha') {
             $application = PpkprApplication::find($id);
-            $layananTitle = 'PPKPR Non Berusaha';
+            $layananTitle = 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha';
             $routeName = 'non-berusaha.show';
         } elseif ($type === 'psn') {
             $application = PsnApplication::find($id);
-            $layananTitle = 'Proyek Strategis Nasional';
+            $layananTitle = 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)';
             $routeName = 'psn.show';
         } elseif ($type === 'kebijakan') {
             $application = KebijakanApplication::find($id);
-            $layananTitle = 'Kebijakan';
+            $layananTitle = 'Pertimbangan Teknis Pertanahan Kebijakan';
             $routeName = 'kebijakan.show';
         } elseif ($type === 'tanah-timbul' || $type === 'tanah_timbul') {
             $application = TanahTimbulApplication::find($id);
-            $layananTitle = 'Tanah Timbul';
+            $layananTitle = 'Pertimbangan Teknis Pertanahan Tanah Timbul';
             $routeName = 'tanah-timbul.show';
         }
 

@@ -1236,7 +1236,7 @@
                     </div>
                 @else
                     <div class="verify-card">
-                        <h3 class="verify-title">⚙️ Panel Penilaian Pertimbangan Teknis Pertanahan — Dinas Pekerjaan Umum (PU)</h3>
+                        <h3 class="verify-title">⚙️ Panel Penilaian PKKPR Berusaha — Dinas Pekerjaan Umum (PU)</h3>
                         <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group-v">
@@ -1291,7 +1291,7 @@
                         <div class="form-group-v">
                             <label for="satu_pintu_document">Dokumentasi Produk Akhir PKKPR Berusaha</label>
                             <input type="file" name="satu_pintu_document" id="satu_pintu_document" class="form-control-v" accept=".pdf" required>
-                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen Pertek Pertanahan/SK Pertimbangan Teknis Pertanahan PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
+                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen/SK PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
                         </div>
                         <div class="form-group-v">
                             <label for="notes">Catatan Tambahan (Opsional)</label>
@@ -1449,7 +1449,7 @@
                                     <span class="detail-label">Dokumen PKKPR Berusaha</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
-                                            Unduh Pertimbangan Teknis Pertanahan
+                                            Unduh Pertek Pertanahan
                                         </a>
                                     </span>
                                 </li>
@@ -1486,7 +1486,7 @@
                             <!-- DPMPTSP Info -->
                             @if($application->satu_pintu_no_pkkpr)
                                 <li class="detail-item">
-                                    <span class="detail-label">Nomor Pertimbangan Teknis Pertanahan</span>
+                                    <span class="detail-label">Nomor PKKPR Berusaha</span>
                                     <span class="detail-val">{{ $application->satu_pintu_no_pkkpr }}</span>
                                 </li>
                             @endif
@@ -1906,7 +1906,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_pertek_document)
-                                            Pertimbangan Teknis Pertanahan Sudah Diterbitkan Dan Diteruskan Ke Dinas Pekerjaan Umum dan Tata Ruang (PUTR) Untuk Penilian PKKPR
+                                            Pertek Pertanahan Sudah Diterbitkan Dan Diteruskan Ke Dinas Pekerjaan Umum dan Tata Ruang (PUTR) Untuk Penilian PKKPR
                                         @else
                                             Menunggu penerbitan surat rekomendasi teknis pertanahan.
                                         @endif

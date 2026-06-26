@@ -25,17 +25,17 @@ trait WaBlastHelper
                 "Halo {$nama}, permohonan {$layanan} Anda berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal Kantor Pertanahan Kota Sukabumi. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.",
 
             'berkas_verifikasi' => $app->bpn_berkas_status === 'diterima'
-                ? "Halo {$nama}, berkas permohonan Pertimbangan Teknis Pertanahan {$layanan}{$no_berkas_text} Anda dinyatakan LENGKAP oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi berkas permohonan. Kami akan menghubungi Anda kembali."
-                : "Halo {$nama}, berkas permohonan Pertimbangan Teknis Pertanahan {$layanan}{$no_berkas_text} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas'),
+                ? "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan LENGKAP oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi berkas permohonan. Kami akan menghubungi Anda kembali."
+                : "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas'),
 
             'berkas_revisi_bpn' =>
                 "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layanan}. Silakan cek & verifikasi ulang dokumen di: {$url}",
 
             'putr_notif_payment', 'putr_validasi' =>
-                "Halo {$nama}, permohonan Pertimbangan Teknis Pertanahan {$layanan}{$no_berkas_text} Anda dinyatakan TERVALIDASI oleh Dinas PUTR. Silakan cek instruksi pembayaran PNBP layanan pertimbangan teknis pertanahan pada alamat email yang anda daftarkan di aplikasi oss. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.",
+                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TERVALIDASI oleh Dinas PUTR. Silakan cek instruksi pembayaran PNBP layanan pertimbangan teknis pertanahan pada alamat email yang anda daftarkan di aplikasi oss. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.",
 
             'putr_tolak' =>
-                "Halo {$nama}, permohonan Pertimbangan Teknis Pertanahan {$layanan}{$no_berkas_text} Anda dinyatakan BELUM TERVALIDASI oleh Dinas PUTR.\nCatatan: {$app->putr_notes}\n\nDetail: {$url}",
+                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} Anda dinyatakan BELUM TERVALIDASI oleh Dinas PUTR.\nCatatan: {$app->putr_notes}\n\nDetail: {$url}",
 
             'credential_blast', 'credential' => (function() use ($app, $nama, $layanan, $url) {
                 $ptpData  = json_decode($app->ptp_data, true) ?? [];
@@ -71,10 +71,10 @@ trait WaBlastHelper
                 "Halo {$nama}, [PERUBAHAN] Jadwal rapat {$layanan}{$no_berkas_text} diubah menjadi: {$app->bpn_rapat_date}.",
 
             'pertek_terbit' =>
-                "Halo {$nama}, untuk permohonan Pertimbangan Teknis Pertanahan {$layanan}{$no_berkas_text} telah DITERBITKAN oleh Kantor Pertanahan Kota Sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PUTR) untuk dilakukan penilaian.",
+                "Halo {$nama}, untuk permohonan {$layanan}{$no_berkas_text} telah DITERBITKAN oleh Kantor Pertanahan Kota Sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PUTR) untuk dilakukan penilaian.",
 
             'pertek_tolak' =>
-                "Halo {$nama}, permohonan Pertimbangan Teknis Pertanahan {$layanan}{$no_berkas_text} DITOLAK oleh Kantor Pertanahan Kota Sukabumi pada tahap Pertek.\nCatatan: {$app->bpn_notes}\n\nDetail: {$url}",
+                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Kantor Pertanahan Kota Sukabumi pada tahap Pertimbangan Teknis Pertanahan.\nCatatan: {$app->bpn_notes}\n\nDetail: {$url}",
 
             'pu_selesai' =>
                 "Halo {$nama}, penilaian {$layanan}{$no_berkas_text} oleh Dinas PUTR telah selesai dilakukan. Selanjutnya permohonan diteruskan ke Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) Kota Sukabumi untuk dilakukan penerbitan {$dokumenFinal}. Pantau di: {$url}",
