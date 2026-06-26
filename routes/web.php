@@ -292,3 +292,30 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/pengajuan/sukses', function () {
     return view('auth.pengajuan-sukses');
 })->name('pengajuan.sukses');
+
+// ---------------------------------------------------------
+// ROUTE SETUP VPS (HAPUS ATAU COMMENT ROUTE INI JIKA SUDAH SELESAI!)
+// ---------------------------------------------------------
+Route::get('/setup-vps', function() {
+    try {
+        $output = "";
+        
+        // 1. Clear Cache
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        $output .= "<b>[SUCCESS]</b> optimize:clear berhasil dijalankan.<br>";
+        
+        // 2. Storage Link
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        $output .= "<b>[SUCCESS]</b> storage:link berhasil dijalankan.<br>";
+        
+        // 3. Migrate
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $output .= "<b>[SUCCESS]</b> migrate --force berhasil dijalankan.<br>";
+        
+        $output .= "<br><br><b>SEMUA PROSES SETUP SELESAI!</b><br>Tolong segera <b>hapus atau beri komentar</b> pada route <code>/setup-vps</code> di file <code>routes/web.php</code> demi keamanan.";
+        
+        return $output;
+    } catch (\Exception $e) {
+        return "<b>[ERROR]</b> Terjadi kesalahan saat setup:<br><br>" . $e->getMessage();
+    }
+});
