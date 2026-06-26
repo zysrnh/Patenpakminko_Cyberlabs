@@ -404,7 +404,7 @@
                     <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="nav-dropdown-menu {{ request()->routeIs('berkas.*') ? 'open' : '' }}">
-                    <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->fullUrlIs(route('berkas.index')) ? 'active' : '' }}">Semua Berkas (Full)</a>
+                    <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->fullUrlIs(route('berkas.index')) ? 'active' : '' }}">Berkas Otomatis</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis Non Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Non Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan Khusus', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis Kebijakan' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>

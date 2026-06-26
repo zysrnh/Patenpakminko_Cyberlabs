@@ -715,7 +715,7 @@
                     <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="nav-dropdown-menu">
-                    <a href="{{ route('berkas.index') }}" class="nav-dropdown-item">Semua Berkas (Full)</a>
+                    <a href="{{ route('berkas.index') }}" class="nav-dropdown-item">Berkas Otomatis</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Non Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan Khusus', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item">Pertimbangan Teknis Kebijakan</a>

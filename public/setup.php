@@ -32,10 +32,13 @@ $response = $kernel->handle(
 echo "<h2>Paten Pak Miko - VPS Setup Script</h2>";
 echo "<hr>";
 
-// 1. Run Database Seeder
-echo "<b>1. Menjalankan Database Seeder</b><br>";
+// 1. Run Migrate Fresh + Seed
+echo "<b>1. Menjalankan Migrate Fresh & Seeder</b><br>";
 try {
-    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+        '--seed' => true, 
+        '--force' => true
+    ]);
     echo "<pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre><br>";
 } catch (\Exception $e) {
     echo "<pre style='color:red'>" . $e->getMessage() . "</pre><br>";
