@@ -1846,33 +1846,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 7: Penerbitan Pertimbangan Teknis Pertanahan DPMPTSP -->
-                            @php
-                                $step7Status = '';
-                                if (in_array($application->status, ['menunggu_satu_pintu', 'disetujui'])) {
-                                    $step7Status = $application->status === 'disetujui' ? 'completed' : 'active';
-                                }
-                            @endphp
-                            <div class="timeline-step {{ $step7Status }}" onclick="showBpnPanel('satu-pintu')" style="cursor:pointer;">
-                                <span class="timeline-dot"></span>
-                                <div class="timeline-content">
-                                    <div class="timeline-title">
-                                        5. Penerbitan Pertimbangan Teknis Pertanahan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PMPTSP</span>
-                                    </div>
-                                    <div class="timeline-desc">
-                                        DPMPTSP menerbitkan dokumen Pertimbangan Teknis Pertanahan resmi.
-                                    </div>
-                                    @if($application->satu_pintu_no_pkkpr)
-                                        <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
-                                            <strong>No. Pertimbangan Teknis Pertanahan:</strong> {{ $application->satu_pintu_no_pkkpr }}
-                                        </div>
-                                    @endif
-                                    @if($application->satu_pintu_tanggal_terbit)
-                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Terbit: {{ \Carbon\Carbon::parse($application->satu_pintu_tanggal_terbit)->locale('id')->translatedFormat('l, d M Y') }}</div>
-                                    @endif
-                                </div>
-                            </div>
+
 
                             <!-- STEP 8: Selesai / Ditolak -->
                             @php
