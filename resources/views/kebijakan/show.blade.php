@@ -1836,7 +1836,7 @@
                                     }
                                 }
                             @endphp
-                            <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(5)" style="display: none; cursor:pointer;">
+                            <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(5)" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
