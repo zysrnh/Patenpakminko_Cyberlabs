@@ -1995,14 +1995,14 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         @if($application->status === 'ditolak')
-                                            Permohonan Ditolak
+                                            Layanan Ditolak
                                         @else
                                             Layanan Selesai
                                         @endif
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
-                                            Permohonan dihentikan oleh instansi terkait (BPN, Dinas Pekerjaan Umum dan Tata Ruang (PUTR), atau Dinas Pekerjaan Umum dan Tata Ruang (PUTR)).
+                                            Layanan dihentikan oleh instansi terkait (BPN, Dinas Pekerjaan Umum dan Tata Ruang (PUTR), atau Dinas Pekerjaan Umum dan Tata Ruang (PUTR)).
                                         @elseif($application->status === 'disetujui')
                                             Seluruh alur selesai. Dokumen PKKPR Berusaha siap diunduh dari portal.
                                         @else
