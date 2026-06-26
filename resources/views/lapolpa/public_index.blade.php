@@ -415,7 +415,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
             </div>
             <h3 class="lapolpa-popup-title">Informasi Penting</h3>
-            <p class="lapolpa-popup-text">Untuk pengajuan jadwal konsultasi pembuatan polygon dan sketsa peta dapat diajukan <strong>H-1</strong> dari jadwal yang ditentukan.</p>
+            <p class="lapolpa-popup-text">Untuk permohonan jadwal konsultasi pembuatan polygon dan sketsa peta dapat dimohonkan <strong>H-1</strong> dari jadwal yang ditentukan.</p>
         </div>
     </div>
 </div>

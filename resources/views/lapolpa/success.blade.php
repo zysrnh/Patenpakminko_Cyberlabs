@@ -75,8 +75,8 @@
         <!-- SVG Illustration -->
         <img src="{{ asset('storage/svg/lapolpasuk.svg') }}" alt="Berhasil" class="success-img">
 
-        <h1 class="success-title">Pengajuan Anda berhasil di kirim</h1>
-        <p class="success-text">Terima kasih, pengajuan layanan Anda telah berhasil dikirim dan sedang menunggu proses verifikasi oleh admin kami. Detail lanjutan akan di hubungi via WhatsApp oleh admin kami.</p>
+        <h1 class="success-title">Permohonan Anda berhasil dikirim</h1>
+        <p class="success-text">Terima kasih, permohonan layanan Anda telah berhasil dikirim dan sedang menunggu proses verifikasi oleh admin kami. Detail lanjutan akan dihubungi via WhatsApp oleh admin kami.</p>
         
         <a href="/" class="btn-main">
             Kembali ke Halaman Utama &rarr;

@@ -71,9 +71,9 @@
     .cal-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; margin-top: 4px; }
     .cal-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .cal-dot.booked { background: #3182CE; }
-    .cal-dot.diterima { background: #D69E2E; }
+    .cal-dot.diterima { background: #10B981; }
     .cal-dot.selesai { background: #38A169; }
-    .cal-dot.dibatalkan { background: #E53E3E; }
+    .cal-dot.ditolak { background: #E53E3E; }
     .cal-legend { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
     .cal-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); font-weight: 600; }
     .cal-booking-popup { background: var(--ink); color: #fff; border-radius: 10px; padding: 10px 14px; font-size: 12px; position: absolute; z-index: 50; min-width: 180px; display: none; top: 62px; left: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
@@ -179,9 +179,9 @@
     </div>
     <div class="cal-legend">
         <div class="cal-legend-item"><span class="cal-dot booked"></span> Booked</div>
-        <div class="cal-legend-item"><span class="cal-dot diterima"></span> Disetujui</div>
+        <div class="cal-legend-item"><span class="cal-dot diterima"></span> Diterima</div>
         <div class="cal-legend-item"><span class="cal-dot selesai"></span> Selesai</div>
-        <div class="cal-legend-item"><span class="cal-dot dibatalkan"></span> Dibatalkan</div>
+        <div class="cal-legend-item"><span class="cal-dot ditolak"></span> Ditolak</div>
     </div>
 </div>
 
@@ -193,7 +193,7 @@
         var currentMonth = today.getMonth();
 
         var monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-        var statusColors = { booked: "#3182CE", diterima: "#D69E2E", selesai: "#38A169", dibatalkan: "#E53E3E" };
+        var statusColors = { booked: "#3182CE", diterima: "#10B981", selesai: "#38A169", ditolak: "#E53E3E" };
 
         function pad(n) { return n < 10 ? "0" + n : "" + n; }
 
@@ -372,10 +372,12 @@
                                         @method('PUT')
                                         <div style="display: flex; gap: 8px; align-items: center;">
                                             <select name="status" class="status-select">
-                                                <option value="booked" {{ $booking->status === 'booked' ? 'selected' : '' }}>Booked</option>
-                                                <option value="diterima" {{ $booking->status === 'diterima' ? 'selected' : '' }}>Disetujui</option>
+                                                @if($booking->status === 'booked')
+                                                <option value="booked" selected disabled>Menunggu Aksi</option>
+                                                @endif
+                                                <option value="diterima" {{ $booking->status === 'diterima' ? 'selected' : '' }}>Diterima</option>
                                                 <option value="selesai" {{ $booking->status === 'selesai' ? 'selected' : '' }}>Selesai</option>
-                                                <option value="dibatalkan" {{ $booking->status === 'dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
+                                                <option value="ditolak" {{ $booking->status === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                                             </select>
                                             <button type="submit" class="btn btn-primary btn-sm">Update</button>
                                         </div>

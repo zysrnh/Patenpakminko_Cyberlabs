@@ -63,9 +63,10 @@ class LapolpaBooking extends Model
             case 'booked':
                 return '#3182CE'; // Blue
             case 'diterima':
-                return '#D69E2E'; // Yellow/Gold
+                return '#10B981'; // Green for Diterima
             case 'selesai':
                 return '#38A169'; // Green
+            case 'ditolak':
             case 'dibatalkan':
                 return '#E53E3E'; // Red
             default:
@@ -82,11 +83,12 @@ class LapolpaBooking extends Model
             case 'booked':
                 return 'Terjadwal (Booked)';
             case 'diterima':
-                return 'Disetujui';
+                return 'Diterima';
             case 'selesai':
                 return 'Selesai';
+            case 'ditolak':
             case 'dibatalkan':
-                return 'Dibatalkan';
+                return 'Ditolak';
             default:
                 return ucfirst($this->status);
         }

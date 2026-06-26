@@ -60,10 +60,10 @@ class LapolpaController extends Controller
             'booking_date' => 'required|date|after:today',
             'time_range' => 'required',
         ], [
-            'nama_pemohon.required' => 'Nama pengaju wajib diisi.',
+            'nama_pemohon.required' => 'Nama pemohon/pengguna layanan wajib diisi.',
             'whatsapp_number.required' => 'Nomor WhatsApp wajib diisi.',
             'booking_date.required' => 'Tanggal booking wajib dipilih.',
-            'booking_date.after' => 'Pengajuan jadwal konsultasi wajib H-1 dari jadwal yang ditentukan.',
+            'booking_date.after' => 'Permohonan jadwal konsultasi wajib H-1 dari jadwal yang ditentukan.',
             'time_range.required' => 'Rentang waktu wajib dipilih.',
         ]);
 
@@ -76,7 +76,7 @@ class LapolpaController extends Controller
         $dailyCount = LapolpaBooking::whereDate('booking_date', $bookingDate)->count();
 
         if ($dailyCount >= 6) {
-            return redirect()->back()->withInput()->withErrors(['booking_date' => 'Mohon maaf, kuota pengajuan untuk tanggal tersebut sudah penuh (Maksimal 6 pengajuan/hari). Silakan pilih tanggal lain.']);
+            return redirect()->back()->withInput()->withErrors(['booking_date' => 'Mohon maaf, kuota permohonan untuk tanggal tersebut sudah penuh (Maksimal 6 permohonan/hari). Silakan pilih tanggal lain.']);
         }
 
         // Simpan data booking
@@ -116,7 +116,7 @@ class LapolpaController extends Controller
  
         $booking = LapolpaBooking::findOrFail($id);
         $request->validate([
-            'status' => 'required|in:booked,diterima,selesai,dibatalkan',
+            'status' => 'required|in:booked,diterima,selesai,ditolak',
             'admin_note' => 'nullable|string'
         ]);
  
