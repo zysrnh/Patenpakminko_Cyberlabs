@@ -77,7 +77,7 @@ class KebijakanApplication extends Model
             'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
             'menunggu_dinas_pu'   => 'Analisis Tata Ruang (Dinas PU)',
             'menunggu_satu_pintu' => 'Penerbitan Dokumen (Satu Pintu)',
-            'disetujui'           => 'Permohonan Disetujui / Selesai',
+            'disetujui'           => 'Permohonan Selesai',
             'ditolak'             => 'Permohonan Ditolak',
             default               => 'Draft / Baru',
         };

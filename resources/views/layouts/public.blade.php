@@ -1777,7 +1777,7 @@
                 <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" class="logo-img">
                 <div class="logo-text">
                     <strong>PATEN PAK MIKO</strong>
-                    <span>Kantor Pertanahan (BPN) Kota Sukabumi</span>
+                    <span>Kantor Pertanahan Kota Sukabumi</span>
                 </div>
             </a>
 
@@ -1955,7 +1955,7 @@
                     <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;">
                     <div class="logo-text footer-logo-text">
                         <strong>PATEN PAK MIKO</strong>
-                        <span>Kantor Pertanahan (BPN) Sukabumi</span>
+                        <span>Kantor Pertanahan Kota Sukabumi</span>
                     </div>
                 </a>
                 <p class="footer-desc">Sistem pelayanan pertanahan digital yang cepat, transparan, dan terintegrasi untuk masyarakat Kota Sukabumi.</p>

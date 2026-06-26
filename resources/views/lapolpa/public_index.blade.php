@@ -355,7 +355,7 @@
         <form action="{{ route('lapolpa.store') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label class="form-label" for="nama_pemohon">Nama Pengaju<span>*</span></label>
+                <label class="form-label" for="nama_pemohon">Nama Pemohon / Pengguna Layanan<span>*</span></label>
                 <div class="input-with-icon">
                     <input type="text" name="nama_pemohon" id="nama_pemohon" class="form-control" value="{{ old('nama_pemohon') }}" required placeholder="Masukan nama lengkap Anda">
                 </div>

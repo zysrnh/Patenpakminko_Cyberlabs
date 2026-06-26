@@ -196,9 +196,12 @@
                             {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}</option>
                     @endforeach
                 </select>
+                <input type="date" name="tanggal" value="{{ request('tanggal') }}" style="min-width: 140px;" title="Filter berdasarkan Tanggal Unggah">
                 <select name="kategori" style="min-width: 200px;">
                     @if(Auth::user()->isSatuPintu())
+                        <option value="">Semua Jenis Dokumen</option>
                         <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
+                        <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
                     @else
                         <option value="">Semua Jenis Dokumen</option>
                         <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
@@ -217,11 +220,12 @@
                         <option value="Pertimbangan Teknis Tanah Timbul" {{ request('kategori') == 'Pertimbangan Teknis Tanah Timbul' ? 'selected' : '' }}>Pertimbangan Teknis Tanah Timbul</option>
                         <option value="Pertimbangan Teknis PSN" {{ request('kategori') == 'Pertimbangan Teknis PSN' ? 'selected' : '' }}>Pertimbangan Teknis PSN</option>
                         <option value="Dokumen Penilaian (PU)" {{ request('kategori') == 'Dokumen Penilaian (PU)' ? 'selected' : '' }}>Dokumen Penilaian (PU)</option>
+                        <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
                         <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Persyaratan Lainnya</option>
                     @endif
                 </select>
                 <button type="submit" class="btn btn-secondary" style="padding: 8px 16px;">Filter</button>
-                @if(request('search') || request('kategori'))
+                @if(request('search') || request('kategori') || request('tanggal'))
                     <a href="{{ route('berkas.index') }}" class="btn btn-secondary" style="padding: 8px 16px;">Reset</a>
                 @endif
             </form>

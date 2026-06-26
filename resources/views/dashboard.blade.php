@@ -640,11 +640,11 @@
             <div class="sidebar-logo-text">
                 <strong>PATEN PAK MIKO</strong>
                 <span>
-                    @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan (BPN) Kota Sukabumi
-                    @elseif(Auth::user()->isBpn()) Portal Admin Kantor Pertanahan (BPN)
+                    @if(Auth::user()->isPelakuUsaha()) Kantor Pertanahan Kota Sukabumi
+                    @elseif(Auth::user()->isBpn()) Portal Admin Kantor Pertanahan
                     @elseif(Auth::user()->isDinasPu()) Portal Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
                     @elseif(Auth::user()->isSatuPintu()) Portal DPMPTSP
-                    @elseif(Auth::user()->isDpn()) Kantor Pertanahan (BPN) Kota Sukabumi
+                    @elseif(Auth::user()->isDpn()) Kantor Pertanahan Kota Sukabumi
                     @else Portal Manajemen @endif
                 </span>
             </div>
@@ -721,6 +721,7 @@
                     <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan Khusus', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item">Pertimbangan Teknis Kebijakan</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'Tanah Timbul', 'kategori' => 'Pertimbangan Teknis Tanah Timbul']) }}" class="nav-dropdown-item">Pertimbangan Teknis Tanah Timbul</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PSN', 'kategori' => 'Pertimbangan Teknis PSN']) }}" class="nav-dropdown-item">Pertimbangan Teknis PSN</a>
+                    <a href="{{ route('berkas.index', ['kategori' => 'PKKPR Otomatis']) }}" class="nav-dropdown-item">PKKPR Otomatis</a>
                 </div>
             </div>
         </div>

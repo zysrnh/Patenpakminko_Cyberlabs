@@ -104,7 +104,7 @@
                     </select>
 
                     <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ in_array($selectedHubungan, ['Lainnya', 'Pemilik Usaha / Pengguna Layanan']) ? 'block' : 'none' }}; margin-top: 8px;">
-                        <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['PT / Badan Usaha', 'Instansi Pemerintah']) ? $ptpHubungan : '') }}">
+                        <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['Badan Hukum', 'Nama Instansi']) ? $ptpHubungan : '') }}">
                     </div>
                 </div>
             </div>            <div class="ptp-divider"></div>

@@ -225,17 +225,17 @@
         <div class="map-layers">
             <h4>Layer Peta</h4>
             <label>
-                <input type="checkbox" id="layer-lp2b" checked> 
+                <input type="checkbox" id="layer-lp2b"> 
                 <span style="display:inline-block; width:12px; height:12px; background-color:#064e3b; border-radius:2px; border: 1px solid rgba(0,0,0,0.2);"></span>
                 LP2B (Lahan Pertanian Pangan Berkelanjutan)
             </label>
             <label>
-                <input type="checkbox" id="layer-lbs" checked> 
+                <input type="checkbox" id="layer-lbs"> 
                 <span style="display:inline-block; width:12px; height:12px; background-color:#3b82f6; border-radius:2px; border: 1px solid rgba(0,0,0,0.2);"></span>
                 LBS (Lahan Baku Sawah)
             </label>
             <label>
-                <input type="checkbox" id="layer-lsd" checked> 
+                <input type="checkbox" id="layer-lsd"> 
                 <span style="display:inline-block; width:12px; height:12px; background-color:#4ade80; border-radius:2px; border: 1px solid rgba(0,0,0,0.2);"></span>
                 LSD (Lahan Sawah Dilindungi)
             </label>
@@ -388,8 +388,18 @@
         attribution: '&copy; OpenStreetMap | Data Gistaru Dummy'
     }).addTo(map);
 
+    const redIcon = new L.Icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
     const marker = L.marker([-6.9277, 106.9300], {
-        draggable: true
+        draggable: true,
+        icon: redIcon
     }).addTo(map);
 
     const coordDisplay = document.getElementById('coord-display');
@@ -430,7 +440,9 @@
     loadGeoJSON('/storage/shp_bpn/lbs.geojson', 'lbs', '#3b82f6', 0.5);
     loadGeoJSON('/storage/shp_bpn/lsd.geojson', 'lsd', '#4ade80', 0.5);
 
+    let sukabumiGeojson = null;
     fetch('/storage/shp_bpn/sukabumi_bounds.geojson').then(res => res.json()).then(geojson => {
+        sukabumiGeojson = geojson;
         const boundsLayer = L.geoJSON(geojson, { style: { color: '#003B64', weight: 3, opacity: 0.8, dashArray: '5, 5' }, interactive: false }).addTo(map);
         const bounds = boundsLayer.getBounds();
         map.setMaxBounds(bounds.pad(0.02));
@@ -501,6 +513,36 @@
             resCoord.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             
             const pt = turf.point([lng, lat]);
+            
+            // Cek apakah di luar wilayah sukabumi
+            let inSukabumi = false;
+            if (sukabumiGeojson) {
+                const features = sukabumiGeojson.features;
+                for (let i = 0; i < features.length; i++) {
+                    if (turf.booleanPointInPolygon(pt, features[i])) {
+                        inSukabumi = true;
+                        break;
+                    }
+                }
+            } else {
+                inSukabumi = true; // asumsikan true kalau gagal load json
+            }
+
+            if (!inSukabumi) {
+                resultStatus.innerHTML = `
+                    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 6px; padding: 12px; margin-top: 12px;">
+                        <div style="font-size: 11px; font-weight: 700; color: #991B1B; margin-bottom: 4px;">
+                            &#9888;&#65039; DI LUAR WILAYAH
+                        </div>
+                        <div style="font-size: 10.5px; color: #B91C1C; line-height: 1.5;">
+                            Koordinat yang Anda masukkan tidak termasuk dalam wilayah Sukabumi. Harap masukkan koordinat yang berada di wilayah Sukabumi.
+                        </div>
+                    </div>
+                `;
+                resultArea.classList.add('active');
+                return;
+            }
+
             let results = { lp2b: false, lbs: false, lsd: false };
 
             ['lp2b', 'lbs', 'lsd'].forEach(type => {
@@ -521,7 +563,7 @@
                         &#8505;&#65039; PEMBERITAHUAN PENTING
                     </div>
                     <div style="font-size: 10.5px; color: #1E40AF; line-height: 1.5;">
-                        Informasi ini <b>bersifat awal</b> dan tidak dapat dijadikan dasar pengambilan keputusan. Untuk informasi yang lebih lengkap dan akurat mengenai LP2B, LBS, LSD, serta kesesuaian ruang, silakan ajukan <b>Layanan Peta Analisis Penatagunaan Tanah</b> atau <b>Pertimbangan Teknis Pertanahan</b> di Loket Kantor Pertanahan (BPN).
+                        Informasi ini <b>bersifat awal</b> dan tidak dapat dijadikan dasar pengambilan keputusan. Untuk informasi yang lebih lengkap dan akurat mengenai LP2B, LBS, LSD, serta kesesuaian ruang, silakan ajukan <b>Layanan Peta Analisis Penatagunaan Tanah</b> atau <b>Pertimbangan Teknis Pertanahan</b> di Loket Kantor Pertanahan.
                     </div>
                 </div>
             `;

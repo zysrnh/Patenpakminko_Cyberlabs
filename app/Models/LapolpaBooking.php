@@ -82,7 +82,7 @@ class LapolpaBooking extends Model
             case 'booked':
                 return 'Terjadwal (Booked)';
             case 'diterima':
-                return 'Diterima';
+                return 'Disetujui';
             case 'selesai':
                 return 'Selesai';
             case 'dibatalkan':

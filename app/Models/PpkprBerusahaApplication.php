@@ -74,10 +74,10 @@ class PpkprBerusahaApplication extends Model
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'menunggu_bpn'        => 'Verifikasi Dokumen & Pembayaran (BPN)',
+            'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
             'menunggu_dinas_pu'   => 'Penilaian Tata Ruang (Dinas PU)',
             'menunggu_satu_pintu' => 'Penerbitan Dokumen (Satu Pintu / PTSP)',
-            'disetujui'           => 'Permohonan Disetujui / Selesai',
+            'disetujui'           => 'Permohonan Selesai',
             'ditolak'             => 'Permohonan Ditolak',
             default               => 'Draft / Baru',
         };

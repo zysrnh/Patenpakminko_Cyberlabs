@@ -826,7 +826,7 @@
             @endif
 
             <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN KANTOR PERTANAHAN (BPN) / DPN) -->
-            @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+            @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
                     <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -895,7 +895,7 @@
 
                         {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
                         {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
-                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
+                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
                                 <form action="{{ route('psn.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -907,7 +907,7 @@
                                     <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Pemeriksaan Berkas:</label>
                                         <div class="radio-group">
-                                            <label class="radio-label"><input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : (in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? '' : 'checked') }} onchange="updateRevisiVisibility()"> Lengkap</label>
+                                            <label class="radio-label"><input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : (in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? '' : 'checked') }} onchange="updateRevisiVisibility()"> Disetujui / Lengkap</label>
                                             <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? 'checked' : '' }} onchange="updateRevisiVisibility()"> Tidak Lengkap</label>
                                         </div>
                                     </div>
@@ -977,15 +977,17 @@
                                     @endif
                                 </form>
                             </fieldset>
-                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu')
+                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu' && $application->status === 'menunggu_bpn')
                                 <form action="{{ route('psn.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
-
+                                    <div class="form-group-v" style="margin-top: 12px; margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                        Kirim Ulang Notifikasi WhatsApp (Revisi Berkas)
+                                        Kirim Ulang Notifikasi WhatsApp
                                     </button>
                                 </form>
                             @endif
@@ -1490,7 +1492,7 @@
                             <!-- Pertek Pertanahan (Jika sudah diterbitkan) -->
                             @if($application->bpn_pertek_document)
                                 <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="doc-item" style="border-top: 1px solid var(--clr-line); padding-top: 12px; margin-top: 12px;">
-                                    <span class="doc-name" style="font-weight: 700; color: #1a202c;">Dokumen Pertek Pertanahan (BPN)</span>
+                                    <span class="doc-name" style="font-weight: 700; color: #1a202c;">Dokumen Pertimbangan Teknis Pertanahan</span>
                                     <span class="doc-status" style="color: var(--clr-green-dk);">
                                         Unduh Pertek
                                         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
@@ -1910,7 +1912,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan Ditolak
                                         @else
-                                            Permohonan Selesai & Disetujui
+                                            Permohonan Selesai
                                         @endif
                                     </div>
                                     <div class="timeline-desc">

@@ -804,7 +804,7 @@
                 @if($application->bpn_pertek_document)
                     <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:#79A73A; margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh Dokumen Pertek Pertanahan Resmi (Kantor Pertanahan (BPN))
+                        Unduh Dokumen Pertek Pertanahan Resmi
                     </a>
                 @elseif($application->approval_document)
                     <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
@@ -877,7 +877,7 @@
             @endif
 
             <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN KANTOR PERTANAHAN (BPN) / DPN) -->
-            @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+            @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
                     <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -924,7 +924,7 @@
                 
                 if ($user->isBpn() && $application->status === 'menunggu_bpn') {
                     $canVerify = true;
-                    $verifierRoleLabel = 'Petugas Kantor Pertanahan (BPN) (Verifikasi Kepemilikan Tanah)';
+                    $verifierRoleLabel = 'Verifikator (Verifikasi Kepemilikan Tanah)';
                 } elseif ($user->isDinasPu() && $application->status === 'menunggu_dinas_pu') {
                     $canVerify = true;
                     $verifierRoleLabel = 'Verifikator Dinas Pekerjaan Umum dan Tata Ruang (PUTR)';
@@ -947,7 +947,7 @@
 
                     @if($user->isBpn())
                         {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
-                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
+                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -960,7 +960,7 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('sps_document').required=true; document.getElementById('revisi-berkas-container').style.display='none';"> Lengkap
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('sps_document').required=true; document.getElementById('revisi-berkas-container').style.display='none';"> Disetujui / Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
                                                 <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='none'; document.getElementById('sps_document').required=false; document.getElementById('revisi-berkas-container').style.display='block';"> Tidak Lengkap
@@ -1002,12 +1002,15 @@
                                     @endif
                                 </form>
                             </fieldset>
-                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu')
+                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu' && $application->status === 'menunggu_bpn')
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
-
+                                    <div class="form-group-v" style="margin-top: 12px; margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Kirim Ulang Notifikasi WhatsApp (Revisi Berkas)
@@ -1085,7 +1088,7 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;">Kontak Person Petugas Lapangan <span style="color:red;">*</span></label>
                                         <input type="text" name="bpn_cek_lokasi_cp" class="form-control-v"
                                             value="{{ $application->bpn_cek_lokasi_cp }}"
-                                            placeholder="cth: 08511234567 (Budi - Petugas Kantor Pertanahan (BPN))" style="background:white;" required>
+                                            placeholder="cth: 08511234567 (Budi - Petugas Instansi)" style="background:white;" required>
                                     </div>
                                     @if($isStep3Active)
                                         <button type="submit" class="btn-submit-v" style="font-size:13px;padding:10px 20px;">
@@ -1122,7 +1125,7 @@
                                         @if($application->bpn_rapat_dt)
                                             — Terjadwal: <strong>{{ $application->bpn_rapat_date }}</strong>. Ubah jika ada perubahan.
                                         @else
-                                            — Peninjauan lapangan terdaftar. Tentukan waktu rapat koordinasi Kantor Pertanahan (BPN).
+                                            — Peninjauan lapangan terdaftar. Tentukan waktu rapat koordinasi.
                                         @endif
                                     </div>
                                     <div class="form-group-v" style="margin-bottom:12px;">
@@ -1166,7 +1169,7 @@
                                     <input type="hidden" name="step" value="bpn_pertek">
                                     <div style="background:#F0FFF4;border:1px solid #BBF7D0;padding:12px 16px;border-radius:8px;font-size:13px;color:#166534;margin-bottom:16px;line-height:1.6;">
                                         <strong>Langkah 5 dari 5 — Penerbitan Pertek Pertanahan</strong><br>
-                                        Rapat terdaftar. Upload Dokumen Pertek dan beri keputusan akhir Kantor Pertanahan (BPN).
+                                        Rapat terdaftar. Upload Dokumen Pertek dan beri keputusan akhir.
                                     </div>
                                     <div class="form-group-v">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Akhir BPN:</label>
@@ -1187,7 +1190,7 @@
                                         </div>
                                     @endif
                                     <div class="form-group-v">
-                                        <label class="form-label" style="font-weight:700;color:#744210;">Catatan / Rekomendasi Teknis Kantor Pertanahan (BPN) <span style="color:red;">*</span></label>
+                                        <label class="form-label" style="font-weight:700;color:#744210;">Catatan / Rekomendasi Teknis <span style="color:red;">*</span></label>
                                         <textarea name="notes" class="form-control-v" rows="3" placeholder="Tuliskan rekomendasi teknis atau alasan penolakan..." style="resize:none;background:white;" required>{{ $application->status === 'menunggu_dinas_pu' || $application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui' || ($application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima') ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     @if($isStep5Active)
@@ -1321,7 +1324,7 @@
                 <div class="verify-card" style="border-color: #F5C2C1; background: #FFF5F5;">
                     <h3 class="verify-title" style="color: #C5221F;">⚠️ Perbaikan Dokumen Persyaratan Diperlukan</h3>
                     <p style="font-size: 13px; color: #7F2321; margin-bottom: 16px;">
-                        Petugas Kantor Pertanahan (BPN) menyatakan berkas Anda tidak lengkap dengan catatan: <br>
+                        Petugas menyatakan berkas Anda tidak lengkap dengan catatan: <br>
                         <strong>"{{ $application->bpn_notes }}"</strong>
                     </p>
                     <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -1415,7 +1418,7 @@
                             
                             <!-- BPN Info -->
                             <li class="detail-item">
-                                <span class="detail-label">Kelayakan Berkas (Kantor Pertanahan (BPN))</span>
+                                <span class="detail-label">Kelayakan Berkas</span>
                                 <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
                                     {{ str_replace('_', ' ', $application->bpn_berkas_status) }}
                                 </span>
@@ -1436,10 +1439,10 @@
 
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen Pertek Kantor Pertanahan (BPN)</span>
+                                    <span class="detail-label">Dokumen Pertimbangan Teknis Pertanahan</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
-                                            Unduh Surat Pertek
+                                            Unduh Pertimbangan Teknis Pertanahan
                                         </a>
                                     </span>
                                 </li>
@@ -1706,7 +1709,6 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         1. Verifikasi, Validasi dan Pendaftaran Permohonan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">Validasi awal kelengkapan berkas dokumen persyaratan pemohon.</div>
                                     @if($application->bpn_sps_document)
@@ -1739,7 +1741,6 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         2. Pembayaran PNBP
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">Pembayaran biaya PNBP & aktivasi akun.</div>
                                     @if($application->bpn_pembayaran_status === 'sudah_bayar')
@@ -1769,8 +1770,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        3. Peninjauan Lapangan (Kantor Pertanahan (BPN))
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
+                                        3. Peninjauan Lapangan
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_cek_lokasi_dt)
@@ -1802,7 +1802,6 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         4. Rapat Pembahasan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_rapat_dt)
@@ -1835,7 +1834,6 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         5. Penerbitan Pertek Pertanahan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_pertek_document)
@@ -1895,12 +1893,12 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan Ditolak
                                         @else
-                                            Permohonan Selesai & Disetujui
+                                            Permohonan Selesai
                                         @endif
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
-                                            Permohonan dihentikan/ditolak oleh instansi terkait (Kantor Pertanahan (BPN) atau DPMPTSP).
+                                            Permohonan dihentikan/ditolak oleh instansi terkait.
                                         @elseif($application->status === 'disetujui')
                                             Seluruh alur selesai. Dokumen Kebijakan siap diunduh dari portal.
                                         @else

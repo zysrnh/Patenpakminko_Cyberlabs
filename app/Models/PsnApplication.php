@@ -71,7 +71,7 @@ class PsnApplication extends Model
             'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
             'menunggu_dinas_pu'   => 'Penilaian PKKPR (Dinas PU)',
             'menunggu_satu_pintu' => 'Penerbitan PKKPR (Satu Pintu)',
-            'disetujui'           => 'PKKPR PSN Diterbitkan / Selesai',
+            'disetujui'           => 'Permohonan Selesai',
             'ditolak'             => 'Permohonan Ditolak',
             default               => 'Draft / Baru',
         };

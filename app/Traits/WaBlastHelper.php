@@ -25,14 +25,14 @@ trait WaBlastHelper
                 "Halo {$nama}, permohonan {$layanan} Anda berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal Kantor Pertanahan Kota Sukabumi. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.",
 
             'berkas_verifikasi' => $app->bpn_berkas_status === 'diterima'
-                ? "Halo {$nama}, berkas {$layanan} Anda dinyatakan LENGKAP oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi pembayaran. Kami akan menghubungi Anda kembali."
+                ? "Halo {$nama}, berkas permohonan {$layanan} Anda dinyatakan LENGKAP oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi berkas permohonan. Kami akan menghubungi Anda kembali.\n\nJika ada pertanyaan, hubungi CP Admin: 083861669565"
                 : "Halo {$nama}, berkas {$layanan} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas'),
 
             'berkas_revisi_bpn' =>
                 "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layanan}. Silakan cek & verifikasi ulang dokumen di: {$url}",
 
             'putr_notif_payment', 'putr_validasi' =>
-                "Halo {$nama}, permohonan {$layanan} Anda dinyatakan TERVALIDASI oleh Dinas PUTR.\n\nSilakan cek instruksi pembayaran PNBP. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.",
+                "Halo {$nama}, permohonan {$layanan} Anda dinyatakan TERVALIDASI oleh Dinas PUTR. Silakan cek instruksi pembayaran PNBP layanan pertimbangan teknis pertanahan pada alamat email yang anda daftarkan di aplikasi oss. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.\n\nJika ada pertanyaan, hubungi CP Admin: 083861669565",
 
             'putr_tolak' =>
                 "Halo {$nama}, permohonan {$layanan} Anda dinyatakan BELUM TERVALIDASI oleh Dinas PUTR.\nCatatan: {$app->putr_notes}\n\nDetail: {$url}",
@@ -71,7 +71,7 @@ trait WaBlastHelper
                 "Halo {$nama}, [PERUBAHAN] Jadwal rapat {$layanan}{$no_berkas_text} diubah menjadi: {$app->bpn_rapat_date}.",
 
             'pertek_terbit' =>
-                "Halo {$nama}, Pertimbangan Teknis Pertanahan untuk permohonan {$layanan}{$no_berkas_text} telah DITERBITKAN oleh Kantor Pertanahan Kota Sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PUTR) untuk dilakukan penilaian.",
+                "Halo {$nama}, untuk permohonan {$layanan}{$no_berkas_text} telah DITERBITKAN oleh Kantor Pertanahan Kota Sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PUTR) untuk dilakukan penilaian.",
 
             'pertek_tolak' =>
                 "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Kantor Pertanahan Kota Sukabumi pada tahap Pertek.\nCatatan: {$app->bpn_notes}\n\nDetail: {$url}",
@@ -84,7 +84,8 @@ trait WaBlastHelper
 
             'pkkpr_terbit' =>
                 "Halo {$nama}, Permohonan {$layanan} Anda{$no_berkas_text} telah diterbitkan oleh Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) Kota Sukabumi.\n\n"
-              . "Selanjutnya Anda dapat mencetak {$dokumenFinal} pada Aplikasi OSS atau Website PATEN PAK MIKO dengan link sebagai berikut:\n{$url}",
+              . "Selanjutnya Anda dapat mencetak {$dokumenFinal} pada Aplikasi OSS atau Website PATEN PAK MIKO dengan link sebagai berikut:\n{$url}\n\n"
+              . "Bantu kami menjadi lebih baik dengan memberikan ulasan pelayanan kami melalui tautan berikut:\n" . url('/lapolpa'),
 
             'pkkpr_tolak' =>
                 "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh DPMPTSP.\nCatatan: {$app->satu_pintu_notes}\n\nDetail: {$url}",
@@ -192,7 +193,7 @@ trait WaBlastHelper
             ];
         }
         
-        if ($type === 'credential' && $adminBpn) {
+        if ($type === 'credential_blast' && false) { // DISABLED: Tahap Credential hanya ke pemohon tidak ke admin
             $text = "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan {$layananTitle}. Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}";
             $wa_links[] = [
                 'target' => 'Admin BPN',

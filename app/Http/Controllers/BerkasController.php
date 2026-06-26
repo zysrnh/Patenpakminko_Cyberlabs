@@ -33,6 +33,11 @@ class BerkasController extends Controller
             $query->where('kategori', $request->kategori);
         }
 
+        // Filter berdasarkan tanggal unggah
+        if ($request->has('tanggal') && $request->tanggal != '') {
+            $query->whereDate('created_at', $request->tanggal);
+        }
+
         // Filter pencarian nama berkas atau nama pengunggah
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;

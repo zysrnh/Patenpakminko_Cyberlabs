@@ -116,7 +116,7 @@ Route::get('/testimoni', function () {
             return $item;
         });
 
-    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('created_at');
+    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('created_at')->take(50);
     
     return view('testimoni', compact('reviews'));
 })->name('testimoni');

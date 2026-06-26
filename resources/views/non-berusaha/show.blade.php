@@ -877,7 +877,7 @@
             @endif
 
             <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN KANTOR PERTANAHAN (BPN) / DPN) -->
-            @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+            @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
                     <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -956,7 +956,7 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('sps_document').required=true; document.getElementById('revisi-berkas-container').style.display='none';"> Lengkap
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('sps_document').required=true; document.getElementById('revisi-berkas-container').style.display='none';"> Disetujui / Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
                                                 <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='none'; document.getElementById('sps_document').required=false; document.getElementById('revisi-berkas-container').style.display='block';"> Tidak Lengkap
@@ -997,12 +997,15 @@
                                     @endif
                                 </form>
                             </fieldset>
-                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu')
+                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu' && $application->status === 'menunggu_bpn')
                                 <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
-
+                                    <div class="form-group-v" style="margin-top: 12px; margin-bottom: 12px; text-align: left;">
+                                        <label style="font-size: 11px; color: var(--clr-muted);">Edit Pesan WA (Opsional):</label>
+                                        <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan..."></textarea>
+                                    </div>
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                                         Kirim Ulang Notifikasi WhatsApp (Revisi Berkas)
@@ -1390,12 +1393,14 @@
                                 <span class="detail-label">Nama Pemilik Usaha</span>
                                 <span class="detail-val">{{ $application->nama_pemilik_usaha }}</span>
                             </li>
+                            @if(strtolower($application->hubungan_pengaju) !== 'diri sendiri')
+                                <li class="detail-item">
+                                    <span class="detail-label">Nama Pemohon / Pengguna Layanan</span>
+                                    <span class="detail-val">{{ $application->nama_pengaju }}</span>
+                                </li>
+                            @endif
                             <li class="detail-item">
-                                <span class="detail-label">Nama Pemohon / Pengguna Layanan</span>
-                                <span class="detail-val">{{ $application->nama_pengaju }}</span>
-                            </li>
-                            <li class="detail-item">
-                                <span class="detail-label">Status Pemohon (Sebagai Apa)</span>
+                                <span class="detail-label">Hubungan Pemohon / Pengguna Layanan</span>
                                 <span class="detail-val">{{ $application->hubungan_pengaju }}</span>
                             </li>
                             <li class="detail-item">
@@ -1445,10 +1450,10 @@
 
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen Pertek Kantor Pertanahan (BPN)</span>
+                                    <span class="detail-label">Dokumen Pertimbangan Teknis Pertanahan</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
-                                            Unduh Surat Pertek
+                                            Unduh Pertimbangan Teknis Pertanahan
                                         </a>
                                     </span>
                                 </li>
@@ -1860,7 +1865,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        5. Penerbitan Pertek Pertanahan
+                                        5. Penerbitan Pertek Pertanahan PKKPR Non Berusaha
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
                                     </div>
                                     <div class="timeline-desc">
@@ -1893,7 +1898,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        5. Penilaian Pertimbangan Teknis Pertanahan
+                                        6. Penilaian PKKPR Non Berusaha
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</span>
                                     </div>
                                     <div class="timeline-desc">
@@ -1921,7 +1926,7 @@
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">
                                     <div class="timeline-title">
-                                        6. Penerbitan Pertimbangan Teknis Pertanahan
+                                        7. Penerbitan PKKPR Non Berusaha
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PMPTSP</span>
                                     </div>
                                     <div class="timeline-desc">
@@ -1954,7 +1959,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan Ditolak
                                         @else
-                                            Permohonan Selesai & Disetujui
+                                            Permohonan Selesai
                                         @endif
                                     </div>
                                     <div class="timeline-desc">

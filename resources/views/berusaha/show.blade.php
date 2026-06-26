@@ -890,7 +890,7 @@
             @endphp
  
             <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN KANTOR PERTANAHAN (BPN) / DPN) -->
-            @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+            @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
                     <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -935,7 +935,7 @@
  
             <!-- 1. BPN PANEL -->
                     <!-- SUB-STEP 1: Verifikasi Berkas Awal -->
-                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'menunggu' ? 'block' : 'none' }};">
+                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
@@ -948,7 +948,7 @@
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Lengkap
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui / Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
                                                 <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Lengkap
@@ -985,14 +985,13 @@
                                     @endif
                                 </form>
                             </fieldset>
-                            @if(Auth::user()->isBpn() && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']))
+                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu' && $application->status === 'menunggu_bpn')
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
-                                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                                        Kirim Ulang Notifikasi WhatsApp (Revisi Berkas)
+                                        Kirim Ulang Notifikasi WhatsApp
                                     </button>
                                 </form>
                             @endif
@@ -1173,7 +1172,7 @@
                                         </div>
                                     @else
                                         <div class="form-group-v">
-                                            <label for="bpn_pertek_document">Dokumen Surat Pertek (PDF)</label>
+                                            <label for="bpn_pertek_document">Dokumen Pertimbangan Teknis Pertanahan (PDF)</label>
                                             <input type="file" name="bpn_pertek_document" id="bpn_pertek_document" class="form-control-v" accept=".pdf">
                                             <span style="font-size: 11px; color: var(--clr-muted);">*Wajib diunggah jika permohonan disetujui. Maksimal 10MB.</span>
                                         </div>
@@ -1409,12 +1408,14 @@
                                 <span class="detail-label">Nama Pemilik Usaha</span>
                                 <span class="detail-val">{{ $application->nama_pemilik_usaha }}</span>
                             </li>
+                            @if(strtolower($application->hubungan_pengaju) !== 'diri sendiri')
+                                <li class="detail-item">
+                                    <span class="detail-label">Nama Pemohon / Pengguna Layanan</span>
+                                    <span class="detail-val">{{ $application->nama_pengaju }}</span>
+                                </li>
+                            @endif
                             <li class="detail-item">
-                                <span class="detail-label">Nama Pemohon / Pengguna Layanan</span>
-                                <span class="detail-val">{{ $application->nama_pengaju }}</span>
-                            </li>
-                            <li class="detail-item">
-                                <span class="detail-label">Hubungan Pengaju</span>
+                                <span class="detail-label">Hubungan Pemohon / Pengguna Layanan</span>
                                 <span class="detail-val">{{ $application->hubungan_pengaju }}</span>
                             </li>
                             <li class="detail-item">
@@ -1445,10 +1446,10 @@
  
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen Pertek Kantor Pertanahan (BPN)</span>
+                                    <span class="detail-label">Dokumen Pertimbangan Teknis Pertanahan</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
-                                            Unduh Surat Pertek
+                                            Unduh Pertimbangan Teknis Pertanahan
                                         </a>
                                     </span>
                                 </li>
@@ -1989,7 +1990,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan Ditolak
                                         @else
-                                            Permohonan Selesai & Disetujui
+                                            Permohonan Selesai
                                         @endif
                                     </div>
                                     <div class="timeline-desc">

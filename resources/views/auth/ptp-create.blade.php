@@ -475,8 +475,8 @@
                         <option value=""></option>
                         <option value="Diri Sendiri" {{ old('bertindak_atas_nama') === 'Diri Sendiri' ? 'selected' : '' }}>Diri Sendiri / Pemilik Usaha</option>
                         <option value="Penerima Kuasa" {{ old('bertindak_atas_nama') === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
-                        <option value="PT / Badan Usaha" {{ old('bertindak_atas_nama') === 'PT / Badan Usaha' ? 'selected' : '' }}>PT / Badan Usaha</option>
-                        <option value="Instansi Pemerintah" {{ old('bertindak_atas_nama') === 'Instansi Pemerintah' ? 'selected' : '' }}>Instansi Pemerintah</option>
+                        <option value="Badan Hukum" {{ old('bertindak_atas_nama') === 'Badan Hukum' ? 'selected' : '' }}>Badan Hukum</option>
+                        <option value="Nama Instansi" {{ old('bertindak_atas_nama') === 'Nama Instansi' ? 'selected' : '' }}>Nama Instansi</option>
                     </select>
                 </div>
 
@@ -665,7 +665,7 @@
             const ptGroup1 = document.getElementById('anggaran_dasar_no').closest('.form-group');
             const ptGroup2 = document.getElementById('anggaran_dasar_tanggal').closest('.form-group');
             
-            if (value === 'PT / Badan Usaha') {
+            if (value === 'Badan Hukum') {
                 ptGroup1.style.display = 'flex';
                 ptGroup2.style.display = 'flex';
             } else {
