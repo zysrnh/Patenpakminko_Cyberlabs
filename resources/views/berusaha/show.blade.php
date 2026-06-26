@@ -818,7 +818,7 @@
             @if($application->status === 'disetujui' && $application->satu_pintu_document)
                 <a href="{{ asset('storage/' . $application->satu_pintu_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Unduh Document PKKPR Berusaha
+                    Unduh Dokumen PKKPR Berusaha (PDF)
                 </a>
             @endif
  
@@ -1446,7 +1446,7 @@
  
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen Pertimbangan Teknis Pertanahan</span>
+                                    <span class="detail-label">Dokumen PKKPR Berusaha</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
                                             Unduh Pertimbangan Teknis Pertanahan
@@ -1581,10 +1581,15 @@
                         $isPuPhase = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr', 'disetujui', 'terbit_pkpr']) || $application->bpn_pertek_document;
                         $defaultDays = $isPuPhase ? 20 : 10;
                         
-                        // Menghitung target SLA dengan skip hari libur nasional dan weekend
-                        $targetDate = $application->tgl_selesai_layanan 
-                            ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
-                            : $application->created_at->addWorkingDaysWithHolidays($defaultDays);
+                        // Menghitung target SLA mulai dari tanggal pembayaran lunas (atau custom tanggal mulai)
+                        if ($application->bpn_pembayaran_status === 'sudah_bayar') {
+                            $startDate = $application->tgl_mulai_layanan ? \Carbon\Carbon::parse($application->tgl_mulai_layanan) : ($application->bpn_pembayaran_approved_at ? \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at) : $application->created_at);
+                            $targetDate = $application->tgl_selesai_layanan 
+                                ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
+                                : $startDate->copy()->addWorkingDaysWithHolidays($defaultDays);
+                        } else {
+                            $targetDate = null;
+                        }
                         
                         $isSelesai = false;
                         if (Auth::user()->isBpn()) {
@@ -1636,6 +1641,7 @@
                         }
                     @endphp
                     
+                    @if($targetDate)
                     <div class="floating-sla" style="position: fixed; top: 120px; right: 32px; z-index: 9999; background: {{ $slaBg }}; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid {{ $slaBorder }}; width: 260px; overflow: hidden; display: flex; flex-direction: column;">
                         <div style="padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.2);">
                             <div style="font-size: 10px; font-weight: 800; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em;">Batas Waktu (SLA)</div>
@@ -1699,6 +1705,7 @@
                             setInterval(updateCountdown, 1000);
                         });
                     </script>
+                    @endif
 
                     <div class="card" style="position: sticky; top: 88px; max-height: calc(100vh - 100px); overflow-y: auto;">
 
@@ -1965,7 +1972,7 @@
                                     <div class="timeline-desc">DPMPTSP menerbitkan dokumen PKKPR Berusaha</div>
                                     @if($application->satu_pintu_no_pkkpr)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
-                                            <strong>No. Pertimbangan Teknis Pertanahan:</strong> {{ $application->satu_pintu_no_pkkpr }}
+                                            <strong>No. PKKPR Berusaha:</strong> {{ $application->satu_pintu_no_pkkpr }}
                                         </div>
                                     @endif
                                     @if($application->satu_pintu_tanggal_terbit)
@@ -1997,7 +2004,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan dihentikan oleh instansi terkait (BPN, Dinas Pekerjaan Umum dan Tata Ruang (PUTR), atau Dinas Pekerjaan Umum dan Tata Ruang (PUTR)).
                                         @elseif($application->status === 'disetujui')
-                                            Seluruh alur selesai. Dokumen Pertimbangan Teknis Pertanahan PKKPR Berusaha siap diunduh dari portal.
+                                            Seluruh alur selesai. Dokumen PKKPR Berusaha siap diunduh dari portal.
                                         @else
                                             Menunggu seluruh tahapan disetujui oleh semua instansi terkait.
                                         @endif

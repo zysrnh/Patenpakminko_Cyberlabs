@@ -93,20 +93,25 @@
                     <input type="hidden" name="nama_pengaju" value="{{ old('nama_pengaju', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}">
                 </div>
 
-                <!-- Status Pemohon / Pengguna Layanan -->
+                <!-- Hubungan Pengaju -->
+                @if($ptpHubungan !== 'Diri Sendiri')
                 <div class="form-group">
-                    <label class="form-label">Status Pemohon / Pengguna Layanan (Sebagai Apa)<span class="required">*</span></label>
+                    <label class="form-label">Hubungan Pengaju (Sebagai Apa)<span class="required">*</span></label>
                     <select id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" required>
-                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Status Pemohon / Pengguna Layanan...</option>
+                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pengaju...</option>
                         <option value="Pemilik Usaha / Pengguna Layanan" {{ $selectedHubungan === 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
                         <option value="Penerima Kuasa" {{ $selectedHubungan === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
                         <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
                     </select>
 
                     <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ in_array($selectedHubungan, ['Lainnya', 'Pemilik Usaha / Pengguna Layanan']) ? 'block' : 'none' }}; margin-top: 8px;">
-                        <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['Badan Hukum', 'Nama Instansi']) ? $ptpHubungan : '') }}">
+                        <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['Badan Hukum', 'Instansi Pemerintahan']) ? $ptpHubungan : '') }}">
                     </div>
                 </div>
+                @else
+                <input type="hidden" name="hubungan_pengaju" value="Pemilik Usaha / Pengguna Layanan">
+                <input type="hidden" name="hubungan_pengaju_lainnya" value="Diri Sendiri">
+                @endif
             </div>            <div class="ptp-divider"></div>
 
             <!-- SECTION 2 -->

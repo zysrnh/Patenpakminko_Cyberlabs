@@ -804,12 +804,12 @@
                 @if($application->bpn_pertek_document)
                     <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-download-cert" style="background:#79A73A; margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh Dokumen Pertek Pertanahan Resmi
+                        Unduh Dokumen Pertek Pertanahan
                     </a>
                 @elseif($application->approval_document)
                     <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh Dokumen Pertimbangan Teknis Pertanahan Resmi (PDF)
+                        Unduh Dokumen PKKPR Kebijakan (PDF)
                     </a>
                 @endif
             @endif
@@ -1263,13 +1263,13 @@
                                         </div>
                                         <div class="form-group-v" style="margin-bottom:12px;">
                                             @if($application->approval_document)
-                                                <label class="form-label" style="font-weight:700;color:#744210;">Dokumen Pertimbangan Teknis Pertanahan</label>
+                                                <label class="form-label" style="font-weight:700;color:#744210;">Dokumen PKKPR Kebijakan</label>
                                                 <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#0f172a; font-size:13px; font-weight:600; text-decoration:none; margin-top:4px; transition:all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
                                                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                                                     Lihat Dokumen Terunggah
                                                 </a>
                                             @else
-                                                <label for="approval_document" class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen Pertimbangan Teknis Pertanahan (opsional)</label>
+                                                <label for="approval_document" class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen PKKPR Kebijakan (opsional)</label>
                                                 <input type="file" id="approval_document" name="approval_document" class="form-control-v" accept="application/pdf" style="background:white;">
                                                 <span style="font-size:11.5px;color:#744210;margin-top:4px;display:block;">Format PDF, maks. 10MB. Dokumen ini dapat diunduh oleh pemohon.</span>
                                             @endif
@@ -1439,7 +1439,7 @@
 
                             @if($application->bpn_pertek_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen Pertimbangan Teknis Pertanahan</span>
+                                    <span class="detail-label">Dokumen PKKPR Kebijakan</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->bpn_pertek_document) }}" target="_blank" class="btn-doc">
                                             Unduh Pertimbangan Teknis Pertanahan
@@ -1460,7 +1460,7 @@
 
                             @if($application->approval_document)
                                 <li class="detail-item">
-                                    <span class="detail-label">Dokumen Pertimbangan Teknis Pertanahan Terbit</span>
+                                    <span class="detail-label">Dokumen PKKPR Kebijakan Terbit</span>
                                     <span class="detail-val">
                                         <a href="{{ asset('storage/' . $application->approval_document) }}" target="_blank" class="btn-doc">
                                             Unduh Dokumen
@@ -1561,10 +1561,15 @@
                         $isPuPhase = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr', 'disetujui', 'terbit_pkpr']) || $application->bpn_pertek_document;
                         $defaultDays = $isPuPhase ? 20 : 10;
                         
-                        // Menghitung target SLA dengan skip hari libur nasional dan weekend
-                        $targetDate = $application->tgl_selesai_layanan 
-                            ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
-                            : $application->created_at->addWorkingDaysWithHolidays($defaultDays);
+                        // Menghitung target SLA mulai dari tanggal pembayaran lunas (atau custom tanggal mulai)
+                        if ($application->bpn_pembayaran_status === 'sudah_bayar') {
+                            $startDate = $application->tgl_mulai_layanan ? \Carbon\Carbon::parse($application->tgl_mulai_layanan) : ($application->bpn_pembayaran_approved_at ? \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at) : $application->created_at);
+                            $targetDate = $application->tgl_selesai_layanan 
+                                ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
+                                : $startDate->copy()->addWorkingDaysWithHolidays($defaultDays);
+                        } else {
+                            $targetDate = null;
+                        }
                         
                         $isSelesai = false;
                         if (Auth::user()->isBpn()) {
@@ -1616,6 +1621,7 @@
                         }
                     @endphp
                     
+                    @if($targetDate)
                     <div class="floating-sla" style="position: fixed; top: 120px; right: 32px; z-index: 9999; background: {{ $slaBg }}; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid {{ $slaBorder }}; width: 260px; overflow: hidden; display: flex; flex-direction: column;">
                         <div style="padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.2);">
                             <div style="font-size: 10px; font-weight: 800; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em;">Batas Waktu (SLA)</div>
@@ -1679,6 +1685,7 @@
                             setInterval(updateCountdown, 1000);
                         });
                     </script>
+                    @endif
 
                     <div class="card" style="position: sticky; top: 88px;">
                         <!-- Timeline Tracker -->
@@ -1900,7 +1907,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan dihentikan/ditolak oleh instansi terkait.
                                         @elseif($application->status === 'disetujui')
-                                            Seluruh alur selesai. Dokumen Kebijakan siap diunduh dari portal.
+                                            Seluruh alur selesai. Dokumen PKKPR Kebijakan siap diunduh dari portal.
                                         @else
                                             Menunggu seluruh tahapan selesai disetujui semua instansi terkait.
                                         @endif

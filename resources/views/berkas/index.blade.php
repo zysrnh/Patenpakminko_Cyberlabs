@@ -143,7 +143,9 @@
                         <option value="">-- Pilih Jenis Dokumen --</option>
                         @if(Auth::user()->isSatuPintu())
                             <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
+                            <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
                         @else
+                            <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
                             <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
                             <option value="Surat Kuasa" {{ request('kategori') == 'Surat Kuasa' ? 'selected' : '' }}>Surat Kuasa</option>
                             <option value="FC KTP" {{ request('kategori') == 'FC KTP' ? 'selected' : '' }}>FC KTP / Identitas</option>

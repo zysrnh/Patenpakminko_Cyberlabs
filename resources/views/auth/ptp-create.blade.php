@@ -476,8 +476,13 @@
                         <option value="Diri Sendiri" {{ old('bertindak_atas_nama') === 'Diri Sendiri' ? 'selected' : '' }}>Diri Sendiri / Pemilik Usaha</option>
                         <option value="Penerima Kuasa" {{ old('bertindak_atas_nama') === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
                         <option value="Badan Hukum" {{ old('bertindak_atas_nama') === 'Badan Hukum' ? 'selected' : '' }}>Badan Hukum</option>
-                        <option value="Nama Instansi" {{ old('bertindak_atas_nama') === 'Nama Instansi' ? 'selected' : '' }}>Nama Instansi</option>
+                        <option value="Instansi Pemerintahan" {{ old('bertindak_atas_nama') === 'Instansi Pemerintahan' ? 'selected' : '' }}>Instansi Pemerintahan</option>
                     </select>
+                </div>
+
+                <div class="form-group" id="group_nama_instansi" style="display: none;">
+                    <label class="form-label">Nama Instansi<span class="required">*</span></label>
+                    <input type="text" id="nama_instansi" name="nama_instansi" class="form-control" placeholder="Tulis Nama Instansi" value="{{ old('nama_instansi') }}">
                 </div>
 
                 <div class="form-group">
@@ -664,15 +669,28 @@
             // Example: show/hide Anggaran Dasar if PT / Badan Usaha
             const ptGroup1 = document.getElementById('anggaran_dasar_no').closest('.form-group');
             const ptGroup2 = document.getElementById('anggaran_dasar_tanggal').closest('.form-group');
+            const instansiGroup = document.getElementById('group_nama_instansi');
+            const instansiInput = document.getElementById('nama_instansi');
             
             if (value === 'Badan Hukum') {
                 ptGroup1.style.display = 'flex';
                 ptGroup2.style.display = 'flex';
+                instansiGroup.style.display = 'none';
+                instansiInput.required = false;
+            } else if (value === 'Instansi Pemerintahan') {
+                ptGroup1.style.display = 'none';
+                ptGroup2.style.display = 'none';
+                document.getElementById('anggaran_dasar_no').value = '';
+                document.getElementById('anggaran_dasar_tanggal').value = '';
+                instansiGroup.style.display = 'flex';
+                instansiInput.required = true;
             } else {
                 ptGroup1.style.display = 'none';
                 ptGroup2.style.display = 'none';
                 document.getElementById('anggaran_dasar_no').value = '';
                 document.getElementById('anggaran_dasar_tanggal').value = '';
+                instansiGroup.style.display = 'none';
+                instansiInput.required = false;
             }
         }
     });

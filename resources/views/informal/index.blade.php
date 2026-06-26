@@ -441,10 +441,11 @@
     loadGeoJSON('/storage/shp_bpn/lsd.geojson', 'lsd', '#4ade80', 0.5);
 
     let sukabumiGeojson = null;
+    let sukabumiBoundsLayer = null;
     fetch('/storage/shp_bpn/sukabumi_bounds.geojson').then(res => res.json()).then(geojson => {
         sukabumiGeojson = geojson;
-        const boundsLayer = L.geoJSON(geojson, { style: { color: '#003B64', weight: 3, opacity: 0.8, dashArray: '5, 5' }, interactive: false }).addTo(map);
-        const bounds = boundsLayer.getBounds();
+        sukabumiBoundsLayer = L.geoJSON(geojson, { style: { color: '#003B64', weight: 3, opacity: 0.8, dashArray: '5, 5' }, interactive: false }).addTo(map);
+        const bounds = sukabumiBoundsLayer.getBounds();
         map.setMaxBounds(bounds.pad(0.02));
         map.fitBounds(bounds);
         map.setMinZoom(map.getBoundsZoom(bounds));
@@ -516,16 +517,15 @@
             
             // Cek apakah di luar wilayah sukabumi
             let inSukabumi = false;
-            if (sukabumiGeojson) {
-                const features = sukabumiGeojson.features;
-                for (let i = 0; i < features.length; i++) {
-                    if (turf.booleanPointInPolygon(pt, features[i])) {
-                        inSukabumi = true;
-                        break;
-                    }
+            try {
+                if (sukabumiBoundsLayer) {
+                    inSukabumi = sukabumiBoundsLayer.getBounds().contains(L.latLng(lat, lng));
+                } else {
+                    inSukabumi = true;
                 }
-            } else {
-                inSukabumi = true; // asumsikan true kalau gagal load json
+            } catch (err) {
+                console.error("Error check sukabumi bounds:", err);
+                inSukabumi = true;
             }
 
             if (!inSukabumi) {
@@ -549,9 +549,13 @@
                 if (geoData[type]) {
                     let features = geoData[type].features;
                     for (let i = 0; i < features.length; i++) {
-                        if (turf.booleanPointInPolygon(pt, features[i])) {
-                            results[type] = true;
-                            break;
+                        try {
+                            if (turf.booleanPointInPolygon(pt, features[i])) {
+                                results[type] = true;
+                                break;
+                            }
+                        } catch (err) {
+                            // ignore invalid geometries
                         }
                     }
                 }

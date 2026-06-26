@@ -80,7 +80,7 @@ class PpkprApplication extends Model
             'menunggu_putr'       => 'Validasi Permohonan (Dinas PUTR)',
             'menunggu_dinas_pu'   => 'Analisis Tata Ruang (Dinas PU)',
             'menunggu_satu_pintu' => 'Penerbitan Dokumen (Satu Pintu)',
-            'disetujui'           => 'Permohonan Selesai',
+            'disetujui'           => 'Layanan Selesai',
             'ditolak'             => 'Permohonan Ditolak',
             default               => 'Draft / Baru',
         };

@@ -77,7 +77,7 @@ class PpkprBerusahaApplication extends Model
             'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
             'menunggu_dinas_pu'   => 'Penilaian Tata Ruang (Dinas PU)',
             'menunggu_satu_pintu' => 'Penerbitan Dokumen (Satu Pintu / PTSP)',
-            'disetujui'           => 'Permohonan Selesai',
+            'disetujui'           => 'Layanan Selesai',
             'ditolak'             => 'Permohonan Ditolak',
             default               => 'Draft / Baru',
         };
