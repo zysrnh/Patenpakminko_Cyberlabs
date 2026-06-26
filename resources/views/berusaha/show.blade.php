@@ -1607,7 +1607,7 @@
                         } else {
                             $now = \Carbon\Carbon::now();
                             // Menggunakan macro baru yang skip tanggal merah & weekend
-                            $daysRemaining = $now->diffInWorkingDaysWithHolidays($targetDate);
+                            $daysRemaining = $targetDate ? $now->diffInWorkingDaysWithHolidays($targetDate) : 0;
                             
                             if ($isPuPhase) {
                                 if ($daysRemaining >= 4) {
@@ -1997,7 +1997,7 @@
                                         @if($application->status === 'ditolak')
                                             Permohonan Ditolak
                                         @else
-                                            Permohonan Selesai
+                                            Layanan Selesai
                                         @endif
                                     </div>
                                     <div class="timeline-desc">

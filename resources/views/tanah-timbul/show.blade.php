@@ -1561,7 +1561,7 @@
                         } else {
                             $now = \Carbon\Carbon::now();
                             // Menggunakan macro baru yang skip tanggal merah & weekend
-                            $daysRemaining = $now->diffInWorkingDaysWithHolidays($targetDate);
+                            $daysRemaining = $targetDate ? $now->diffInWorkingDaysWithHolidays($targetDate) : 0;
                             
                             if ($isPuPhase) {
                                 if ($daysRemaining >= 4) {
@@ -1888,14 +1888,14 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         @if($application->status === 'ditolak')
-                                            Permohonan Ditolak
+                                            Layanan Ditolak
                                         @else
-                                            Permohonan Selesai
+                                            Layanan Selesai
                                         @endif
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
-                                            Permohonan dihentikan/ditolak oleh instansi terkait.
+                                            Layanan dihentikan/ditolak oleh instansi terkait.
                                         @elseif($application->status === 'disetujui')
                                             Seluruh alur selesai. Dokumen PKKPR Tanah Timbul siap diunduh dari portal.
                                         @else
