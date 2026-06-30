@@ -4,6 +4,9 @@
 @section('page-title', 'LAPOL PAK')
 
 @section('extra-styles')
+    @import url("https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css");
+    .flatpickr-day.holiday-or-weekend { color: #E53E3E !important; font-weight: 700 !important; }
+    .flatpickr-day.holiday-or-weekend.flatpickr-disabled { color: #E53E3E !important; background: #FCE8E6 !important; opacity: 0.6; }
     .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
     .detail-list { list-style: none; }
     .detail-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
@@ -185,8 +188,8 @@
                 <div class="form-grid-3">
                     <div class="form-group">
                         <label class="form-label" for="booking_date">Tanggal Konsultasi <span>*</span></label>
-                        <input type="date" name="booking_date" id="booking_date" class="form-control"
-                               min="{{ date('Y-m-d') }}" value="{{ old('booking_date') }}" required>
+                        <input type="text" name="booking_date" id="booking_date" class="form-control"
+                               placeholder="Pilih Tanggal" value="{{ old('booking_date') }}" required readonly style="background-color:var(--surface); cursor:pointer;">
                     </div>
                     <div class="form-group" style="grid-column: span 2;">
                         <label class="form-label" for="time_range">Rentang Waktu <span>*</span></label>
@@ -209,6 +212,44 @@
         </div>
     </div>
 @endif
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if(document.getElementById('booking_date')) {
+            const holidays = @json($holidays ?? []);
+
+            flatpickr("#booking_date", {
+                locale: "id",
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "l, j F Y",
+                minDate: new Date().fp_incr(1), // Minimal besok
+                disableMobile: "true",
+                disable: [
+                    function(date) {
+                        const y = date.getFullYear();
+                        const m = String(date.getMonth() + 1).padStart(2, '0');
+                        const d = String(date.getDate()).padStart(2, '0');
+                        const formattedDate = `${y}-${m}-${d}`;
+
+                        return (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate));
+                    }
+                ],
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const date = dayElem.dateObj;
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    const formattedDate = `${y}-${m}-${d}`;
+
+                    if (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate)) {
+                        dayElem.classList.add('holiday-or-weekend');
+                    }
+                }
+            });
+        }
+    });
+</script>
 @endsection
-
-

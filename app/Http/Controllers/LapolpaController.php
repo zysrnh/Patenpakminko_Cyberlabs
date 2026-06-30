@@ -17,10 +17,15 @@ class LapolpaController extends Controller
     public function index()
     {
         $user = Auth::user();
+
+        // Get holidays for datepicker
+        $holidays = \App\Models\Holiday::pluck('date')->map(function($date) {
+            return \Carbon\Carbon::parse($date)->format('Y-m-d');
+        })->toArray();
  
         // Jika Guest (Belum Login)
         if (!$user) {
-            return view('lapolpa.public_index');
+            return view('lapolpa.public_index', compact('holidays'));
         }
 
         // Jika Pelaku Usaha
@@ -29,7 +34,7 @@ class LapolpaController extends Controller
             $booking = LapolpaBooking::where('user_id', $user->id)
                             ->orderBy('created_at', 'desc')
                             ->first();
-            return view('lapolpa.index', compact('booking'));
+            return view('lapolpa.index', compact('booking', 'holidays'));
         }
  
         // Jika Admin (DPN) atau Petugas Instansi Lain

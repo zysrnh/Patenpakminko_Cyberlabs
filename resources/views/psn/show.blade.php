@@ -2177,8 +2177,13 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             const commonDisable = [
-                function(date) { return (date.getDay() === 0 || date.getDay() === 6); },
-                ...window.appHolidays
+                function(date) {
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    const formattedDate = `${y}-${m}-${d}`;
+                    return (date.getDay() === 0 || date.getDay() === 6 || window.appHolidays.includes(formattedDate));
+                }
             ];
 
             flatpickr('#tgl_mulai_layanan, #tgl_selesai_layanan, #bpn_cek_lokasi_dt, #bpn_rapat_dt, #dinas_pu_tanggal_penilaian, #satu_pintu_tanggal_terbit', {

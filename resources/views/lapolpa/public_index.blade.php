@@ -199,6 +199,15 @@
     .flatpickr-day:hover {
         background: #F4F7FA !important;
     }
+    .flatpickr-day.holiday-or-weekend {
+        color: #E53E3E !important;
+        font-weight: 700 !important;
+    }
+    .flatpickr-day.holiday-or-weekend.flatpickr-disabled {
+        color: #E53E3E !important;
+        background: #FCE8E6 !important;
+        opacity: 0.6;
+    }
 
     .btn-submit {
         display: flex;
@@ -440,13 +449,36 @@
             });
 
             // 2. Inisialisasi Flatpickr untuk Tanggal
+            const holidays = @json($holidays ?? []);
+
             flatpickr("#booking_date", {
                 locale: "id",
                 dateFormat: "Y-m-d",
                 altInput: true,
                 altFormat: "l, j F Y", /* Contoh: Senin, 31 April 2026 */
                 minDate: new Date().fp_incr(1), // Minimal besok
-                disableMobile: "true"
+                disableMobile: "true",
+                disable: [
+                    function(date) {
+                        const y = date.getFullYear();
+                        const m = String(date.getMonth() + 1).padStart(2, '0');
+                        const d = String(date.getDate()).padStart(2, '0');
+                        const formattedDate = `${y}-${m}-${d}`;
+
+                        return (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate));
+                    }
+                ],
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const date = dayElem.dateObj;
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    const formattedDate = `${y}-${m}-${d}`;
+
+                    if (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate)) {
+                        dayElem.classList.add('holiday-or-weekend');
+                    }
+                }
             });
 
             // 3. Custom Dropdown Logic untuk Waktu
