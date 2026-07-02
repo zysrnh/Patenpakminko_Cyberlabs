@@ -515,22 +515,15 @@
             
             const pt = turf.point([lng, lat]);
             
-            // Cek apakah di luar wilayah sukabumi (menggunakan turf.js)
-            let inSukabumi = false;
+            // Cek apakah di luar wilayah sukabumi menggunakan Bounding Box
+            let inSukabumi = true; // Default true agar tidak ter-block jika data gagal dimuat
             try {
-                if (sukabumiGeojson && sukabumiGeojson.features) {
-                    for (let i = 0; i < sukabumiGeojson.features.length; i++) {
-                        try {
-                            if (turf.booleanPointInPolygon(pt, sukabumiGeojson.features[i])) {
-                                inSukabumi = true;
-                                break;
-                            }
-                        } catch (err) {
-                            // ignore invalid geometries
-                        }
-                    }
-                } else {
-                    inSukabumi = true; 
+                if (sukabumiGeojson && sukabumiGeojson.features && sukabumiGeojson.features.length > 0) {
+                    // Karena sukabumiGeojson isinya LineString (bukan Polygon), 
+                    // booleanPointInPolygon akan error. Jadi kita pakai Bounding Box.
+                    const bbox = turf.bbox(sukabumiGeojson);
+                    const poly = turf.bboxPolygon(bbox);
+                    inSukabumi = turf.booleanPointInPolygon(pt, poly);
                 }
             } catch (err) {
                 console.error("Error check sukabumi bounds:", err);
