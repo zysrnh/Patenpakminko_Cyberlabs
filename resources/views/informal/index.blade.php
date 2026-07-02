@@ -515,15 +515,30 @@
             
             const pt = turf.point([lng, lat]);
             
-            // Cek apakah di luar wilayah sukabumi menggunakan Bounding Box
-            let inSukabumi = true; // Default true agar tidak ter-block jika data gagal dimuat
+            // Cek apakah di luar wilayah sukabumi menggunakan Polygonize & Bounding Box
+            let inSukabumi = false; 
             try {
                 if (sukabumiGeojson && sukabumiGeojson.features && sukabumiGeojson.features.length > 0) {
                     // Karena sukabumiGeojson isinya LineString (bukan Polygon), 
-                    // booleanPointInPolygon akan error. Jadi kita pakai Bounding Box.
-                    const bbox = turf.bbox(sukabumiGeojson);
-                    const poly = turf.bboxPolygon(bbox);
-                    inSukabumi = turf.booleanPointInPolygon(pt, poly);
+                    // booleanPointInPolygon murni akan error. Kita coba bentuk Polygon dari garis batas.
+                    const polys = turf.polygonize(sukabumiGeojson);
+                    
+                    if (polys && polys.features && polys.features.length > 0) {
+                        for (let i = 0; i < polys.features.length; i++) {
+                            if (turf.booleanPointInPolygon(pt, polys.features[i])) {
+                                inSukabumi = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        // Jika garis tidak membentuk area tertutup (polygonize gagal), 
+                        // gunakan Bounding Box sebagai cadangan
+                        const bbox = turf.bbox(sukabumiGeojson);
+                        const poly = turf.bboxPolygon(bbox);
+                        inSukabumi = turf.booleanPointInPolygon(pt, poly);
+                    }
+                } else {
+                    inSukabumi = true;
                 }
             } catch (err) {
                 console.error("Error check sukabumi bounds:", err);
