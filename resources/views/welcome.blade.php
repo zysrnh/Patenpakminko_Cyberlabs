@@ -33,13 +33,13 @@
             <div>
                 <div class="hero-eyebrow">
                     <span class="eyebrow-dot" aria-hidden="true"></span>
-                    Portal Layanan Masyarakat
+                    Portal Layanan Pertanahan
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 16px;">
                     <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width: clamp(125px, 16vw, 180px); height: auto; object-fit: contain;">
-                    <h1 class="hero-heading" style="margin-bottom: 0; text-transform: uppercase; font-size: clamp(56px, 7vw, 82px); line-height: 1.1;">
-                        PATEN<br>PAK MIKO
+                    <h1 class="hero-heading" style="margin-bottom: 0; text-transform: uppercase; font-size: clamp(48px, 6vw, 76px); line-height: 1.1; white-space: nowrap;">
+                        PATEN<br>PAK&nbsp;MIKO
                     </h1>
                 </div>
                 <h2 style="font-size: clamp(20px, 2.5vw, 28px); font-weight: 800; color: #00223D; margin-bottom: 24px; line-height: 1.4;">
