@@ -515,50 +515,26 @@
             
             const pt = turf.point([lng, lat]);
             
-            // Cek apakah di luar wilayah sukabumi (menggunakan Ray-Casting murni dari Leaflet Layer)
+            // Cek apakah di luar wilayah sukabumi (menggunakan turf.js)
             let inSukabumi = false;
             try {
-                if (sukabumiBoundsLayer) {
-                    // Fungsi Ray-Casting Point in Polygon
-                    const isPointInPolygon = (pt, vs) => {
-                        let x = pt.lng, y = pt.lat;
-                        let inside = false;
-                        // vs bisa berupa array dari objek L.LatLng
-                        for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-                            let xi = vs[i].lng, yi = vs[i].lat;
-                            let xj = vs[j].lng, yj = vs[j].lat;
-                            let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-                            if (intersect) inside = !inside;
+                if (sukabumiGeojson && sukabumiGeojson.features) {
+                    for (let i = 0; i < sukabumiGeojson.features.length; i++) {
+                        try {
+                            if (turf.booleanPointInPolygon(pt, sukabumiGeojson.features[i])) {
+                                inSukabumi = true;
+                                break;
+                            }
+                        } catch (err) {
+                            // ignore invalid geometries
                         }
-                        return inside;
-                    };
-
-                    const targetPt = L.latLng(lat, lng);
-
-                    // Iterasi setiap layer/garis yang digambar oleh GeoJSON
-                    sukabumiBoundsLayer.eachLayer(function(l) {
-                        if (l.getLatLngs) {
-                            let latlngs = l.getLatLngs();
-                            
-                            // Handle array bersarang (MultiPolyline / MultiPolygon)
-                            const checkDeep = (arr) => {
-                                if (arr.length > 0 && Array.isArray(arr[0])) {
-                                    arr.forEach(a => checkDeep(a));
-                                } else {
-                                    if (isPointInPolygon(targetPt, arr)) {
-                                        inSukabumi = true;
-                                    }
-                                }
-                            };
-                            checkDeep(latlngs);
-                        }
-                    });
+                    }
                 } else {
                     inSukabumi = true; 
                 }
             } catch (err) {
-                console.error("Error check sukabumi raycasting:", err);
-                inSukabumi = false; 
+                console.error("Error check sukabumi bounds:", err);
+                inSukabumi = true; 
             }
 
             if (!inSukabumi) {
@@ -568,7 +544,7 @@
                             &#9888;&#65039; DI LUAR WILAYAH
                         </div>
                         <div style="font-size: 10.5px; color: #B91C1C; line-height: 1.5;">
-                            Koordinat yang Anda masukkan tidak termasuk dalam wilayah Sukabumi. Harap masukkan koordinat yang berada di wilayah Sukabumi.
+                            Koordinat yang Anda masukkan tidak termasuk dalam wilayah Kota Sukabumi. Harap masukkan koordinat yang berada di wilayah Kota Sukabumi.
                         </div>
                     </div>
                 `;
