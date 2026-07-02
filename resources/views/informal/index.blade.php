@@ -451,6 +451,19 @@
         map.setMinZoom(map.getBoundsZoom(bounds));
     }).catch(e => console.log('Error bounds:', e));
 
+    let sukabumiAsliGeojson = null;
+    // Ambil poligon asli Kota Sukabumi dari OpenStreetMap sebagai referensi akurat (Polygon murni)
+    fetch('https://nominatim.openstreetmap.org/search.php?q=Kota+Sukabumi&polygon_geojson=1&format=json', {
+        headers: { 'Accept-Language': 'id' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(Array.isArray(data)) {
+            let match = data.find(i => i.geojson && (i.geojson.type === 'Polygon' || i.geojson.type === 'MultiPolygon'));
+            if (match) sukabumiAsliGeojson = match.geojson;
+        }
+    }).catch(e => console.log('OSM fetch error:', e));
+
     ['lp2b', 'lbs', 'lsd'].forEach(type => {
         document.getElementById('layer-' + type).addEventListener('change', function() {
             if (mapLayers[type]) {
@@ -515,14 +528,15 @@
             
             const pt = turf.point([lng, lat]);
             
-            // Cek apakah di luar wilayah sukabumi menggunakan Polygonize & Bounding Box
+            // Cek apakah di luar wilayah sukabumi
             let inSukabumi = false; 
             try {
-                if (sukabumiGeojson && sukabumiGeojson.features && sukabumiGeojson.features.length > 0) {
-                    // Karena sukabumiGeojson isinya LineString (bukan Polygon), 
-                    // booleanPointInPolygon murni akan error. Kita coba bentuk Polygon dari garis batas.
+                if (sukabumiAsliGeojson) {
+                    // Cek menggunakan data poligon murni dari OpenStreetMap
+                    inSukabumi = turf.booleanPointInPolygon(pt, sukabumiAsliGeojson);
+                } else if (sukabumiGeojson && sukabumiGeojson.features && sukabumiGeojson.features.length > 0) {
+                    // Fallback jika OSM belum termuat
                     const polys = turf.polygonize(sukabumiGeojson);
-                    
                     if (polys && polys.features && polys.features.length > 0) {
                         for (let i = 0; i < polys.features.length; i++) {
                             if (turf.booleanPointInPolygon(pt, polys.features[i])) {
@@ -531,8 +545,6 @@
                             }
                         }
                     } else {
-                        // Jika garis tidak membentuk area tertutup (polygonize gagal), 
-                        // gunakan Bounding Box sebagai cadangan
                         const bbox = turf.bbox(sukabumiGeojson);
                         const poly = turf.bboxPolygon(bbox);
                         inSukabumi = turf.booleanPointInPolygon(pt, poly);
