@@ -293,6 +293,15 @@ Route::get('/pengajuan/sukses', function () {
     return view('auth.pengajuan-sukses');
 })->name('pengajuan.sukses');
 
+// Rute untuk Download PDF Flowchart
+Route::get('/flowchart.pdf', function () {
+    $path = base_path('PATEN PAK MIKO FLOWCHART.pdf');
+    if (!file_exists($path)) {
+        abort(404, 'File not found.');
+    }
+    return response()->download($path, 'PATEN_PAK_MIKO_FLOWCHART.pdf');
+});
+
 // ---------------------------------------------------------
 // ROUTE SETUP VPS (HAPUS ATAU COMMENT ROUTE INI JIKA SUDAH SELESAI!)
 // ---------------------------------------------------------
