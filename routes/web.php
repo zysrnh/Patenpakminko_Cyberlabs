@@ -299,7 +299,7 @@ Route::get('/flowchart.pdf', function () {
     if (!file_exists($path)) {
         abort(404, 'File not found.');
     }
-    return response()->download($path, 'PATEN_PAK_MIKO_FLOWCHART.pdf');
+    return response()->file($path);
 });
 
 // ---------------------------------------------------------
