@@ -179,6 +179,8 @@ class LapolpaController extends Controller
                         . "Lacak bukti pemesanan Anda melalui tautan berikut:\n{$url}";
         
         $settings = $this->getWhatsappSettings();
+        $messagePemohon .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
+        
         if (!empty($settings['cp_admin'])) {
             $messagePemohon .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
         }
@@ -275,6 +277,8 @@ class LapolpaController extends Controller
                      . "Bantu kami meningkatkan kualitas layanan dengan mengisi ulasan singkat melalui tautan berikut:\n"
                      . $reviewLink;
         }
+        
+        $message .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
  
         $settings = $this->getWhatsappSettings();
         if (!empty($settings['cp_admin'])) {

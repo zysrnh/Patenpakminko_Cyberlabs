@@ -115,6 +115,8 @@ trait WaBlastHelper
         };
 
         if ($msg && $pemohon) {
+            $msg .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
+            
             if (!empty($settings['cp_admin'])) {
                 $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
             }
