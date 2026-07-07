@@ -41,13 +41,27 @@ trait WaBlastHelper
                 $ptpData  = json_decode($app->ptp_data, true) ?? [];
                 $nik      = $ptpData['nik'] ?? '';
                 $username = $app->user->username ?? '-';
-                $password = $nik ?: 'NIK Anda';
-                return "Halo {$nama}, pembayaran {$layanan} Anda telah dikonfirmasi.\n\n"
+                
+                $isPasswordNik = false;
+                if ($nik && \Illuminate\Support\Facades\Hash::check($nik, $app->user->password)) {
+                    $isPasswordNik = true;
+                }
+                
+                $passwordText = $isPasswordNik ? $nik : "(Gunakan NIK pendaftaran pertama atau password yang Anda buat)";
+                
+                $msg = "Halo {$nama}, pembayaran {$layanan} Anda telah dikonfirmasi.\n\n"
                      . "Akun login portal PATEN PAK MIKO Anda:\n"
                      . "Username : {$username}\n"
-                     . "Password : {$password}\n"
-                     . "No. Berkas : {$app->no_berkas}\n\n"
-                     . "Login dan pantau permohonan di: {$url}";
+                     . "Password : {$passwordText}\n"
+                     . "No. Berkas : {$app->no_berkas}\n\n";
+                     
+                if (!$isPasswordNik) {
+                    $msg .= "*Catatan:* Jika Anda lupa password, silakan gunakan fitur Lupa Password di halaman login.\n\n";
+                }
+                
+                $msg .= "Login dan pantau permohonan di: {$url}";
+                
+                return $msg;
             })(),
 
             'cek_lokasi' => (function() use ($app, $nama, $layanan, $no_berkas_text) {

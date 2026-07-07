@@ -508,6 +508,14 @@ class AuthController extends Controller
         $phoneClean = preg_replace('/[^0-9]/', '', $request->phone_number);
         $user = User::where('phone_number', $phoneClean)->first();
 
+        // Validasi Keamanan: Cegah guest/publik menggunakan nomor WA yang sudah terdaftar
+        // Mereka harus login terlebih dahulu jika ingin menggunakan nomor tersebut.
+        if ($user && (!Auth::check() || Auth::id() !== $user->id)) {
+            return redirect()->back()->withErrors([
+                'phone_number' => 'Nomor WhatsApp ini sudah terdaftar. Silakan login ke akun Anda terlebih dahulu di menu Login untuk mengajukan permohonan.'
+            ])->withInput();
+        }
+
         if (!$user) {
             // Buat kredensial unik berdasarkan Nama + NIB + NIK
             $cleanName = strtolower(explode(' ', trim($request->nama))[0]);
