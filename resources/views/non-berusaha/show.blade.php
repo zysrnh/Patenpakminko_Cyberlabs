@@ -1223,7 +1223,7 @@
                         </script>
 
 
-                        <div id="panel-pu-1" class="bpn-panel-step" style="display: {{ $application->bpn_pertek_document && $application->status !== 'menunggu_satu_pintu' && $application->status !== 'disetujui' ? 'block' : 'none' }};">
+                        <div id="bpn-panel-pu-1" class="bpn-panel-step" style="display: {{ $application->bpn_pertek_document && $application->status !== 'menunggu_satu_pintu' && $application->status !== 'disetujui' ? 'block' : 'none' }};">
                             @php $isPuActive = (Auth::user()->isDinasPu() && $application->status === 'menunggu_dinas_pu'); @endphp
                             <fieldset {{ $isPuActive ? '' : 'disabled' }}>
                                 <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST">
@@ -1251,7 +1251,7 @@
                             </fieldset>
                         </div>
 
-                        <div id="panel-satu-pintu" class="bpn-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
+                        <div id="bpn-panel-satu-pintu" class="bpn-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
                             @php $isSpActive = (Auth::user()->isSatuPintu() && $application->status === 'menunggu_satu_pintu'); @endphp
                             <fieldset {{ $isSpActive ? '' : 'disabled' }}>
                                 <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
