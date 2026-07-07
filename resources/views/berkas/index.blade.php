@@ -10,43 +10,42 @@
     .filters form { display: flex; gap: 12px; width: 100%; }
     .filters select, .filters input { padding: 8px 12px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13px; }
 
-    /* Pagination Fix */
-    nav[role="navigation"] { display: flex; flex-direction: column; gap: 16px; align-items: center; margin-top: 12px; width: 100%; }
-    @media (min-width: 640px) {
-        nav[role="navigation"] { flex-direction: row; justify-content: space-between; }
+    /* Pagination Fix (Bootstrap Style) */
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        align-items: center;
     }
-    nav[role="navigation"] > div { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; width: 100%; }
-    @media (min-width: 640px) {
-        nav[role="navigation"] > div.hidden { display: flex !important; justify-content: space-between; }
-        nav[role="navigation"] > div.sm\:hidden { display: none !important; }
-    }
-    nav[role="navigation"] svg { width: 16px; height: 16px; }
-    nav[role="navigation"] p { font-size: 13px; color: var(--muted); margin: 0; }
-    nav[role="navigation"] span.relative.z-0.inline-flex { display: inline-flex; flex-wrap: wrap; gap: 4px; align-items: center; }
-    nav[role="navigation"] a, 
-    nav[role="navigation"] span[aria-current],
-    nav[role="navigation"] span[aria-disabled] {
-        padding: 6px 12px; 
-        border: 1px solid var(--line); 
-        border-radius: var(--r-md); 
-        color: var(--blue); 
-        font-size: 13px; 
+    .page-item .page-link {
+        padding: 6px 12px;
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        color: var(--blue);
+        font-size: 13px;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         background: #fff;
     }
-    nav[role="navigation"] span[aria-current="page"], nav[role="navigation"] span.active {
+    .page-item.active .page-link {
         background: var(--blue);
         color: white;
         border-color: var(--blue);
         font-weight: 700;
     }
-    nav[role="navigation"] span[aria-disabled="true"] {
+    .page-item.disabled .page-link {
         color: #a0aec0;
         background: #f8fafc;
         cursor: not-allowed;
+    }
+    nav[role="navigation"] { width: 100%; display: flex; justify-content: center; }
+    @media (min-width: 640px) {
+        nav[role="navigation"] { justify-content: flex-start; }
     }
 
     /* ─── STYLE MODAL PREVIEW ───────────────── */
