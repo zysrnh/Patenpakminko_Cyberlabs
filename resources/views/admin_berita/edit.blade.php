@@ -48,7 +48,7 @@
                 <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--ink);">Gambar Header</label>
                 @if($berita->image_path)
                     <div style="margin-bottom: 12px;">
-                        <img src="{{ asset('storage/'.$berita->image_path) }}" alt="Current Image" style="max-height: 150px; border-radius: 8px; border: 1px solid var(--line);">
+                        <img src="{{ route('file.view', ['path' => $berita->image_path]) }}" alt="Current Image" style="max-height: 150px; border-radius: 8px; border: 1px solid var(--line);">
                     </div>
                 @endif
                 <input type="file" name="image" accept="image/*"

@@ -179,4 +179,25 @@ class BerkasController extends Controller
 
         return redirect()->route('berkas.index')->with('success', 'Sinkronisasi berhasil: ' . $output);
     }
+
+    public function viewFile($path)
+    {
+        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+            abort(404, 'File tidak ditemukan.');
+        }
+
+        $fullPath = storage_path('app/public/' . $path);
+        $ext = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
+
+        $mimeType = 'application/octet-stream';
+        if ($ext === 'pdf') $mimeType = 'application/pdf';
+        elseif (in_array($ext, ['jpg', 'jpeg'])) $mimeType = 'image/jpeg';
+        elseif ($ext === 'png')  $mimeType = 'image/png';
+        elseif ($ext === 'html') $mimeType = 'text/html';
+
+        return response()->file($fullPath, [
+            'Content-Type'        => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . basename($fullPath) . '"'
+        ]);
+    }
 }

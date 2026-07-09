@@ -9,7 +9,7 @@
         <!-- Kolom Kiri: Artikel Utama -->
         <div class="col-lg-8" style="padding: 0 15px; width: 100%; max-width: 100%; flex: 0 0 100%;">
             @if($berita->image_path)
-                <img src="{{ asset('storage/'.$berita->image_path) }}" alt="{{ $berita->title }}" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
+                <img src="{{ route('file.view', ['path' => $berita->image_path]) }}" alt="{{ $berita->title }}" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: 8px; margin-bottom: 24px;">
             @endif
 
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">

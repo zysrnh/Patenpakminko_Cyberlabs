@@ -268,6 +268,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
     Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
     Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
+    Route::get('/file/{path}', [BerkasController::class, 'viewFile'])->where('path', '.*')->name('file.view');
 
     // Admin Berita
     Route::get('/admin/berita', [\App\Http\Controllers\BeritaController::class, 'index'])->name('admin.berita.index');

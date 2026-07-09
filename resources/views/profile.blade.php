@@ -92,7 +92,7 @@
         {{-- Foto Profil --}}
         <div class="avatar-section">
             @if($user->profile_photo)
-                <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="Foto Profil" class="avatar-preview-lg" id="avatarPreview">
+                <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" class="avatar-preview-lg" id="avatarPreview">
             @else
                 <div class="avatar-placeholder-lg" id="avatarPlaceholder">{{ strtoupper(substr($user->username, 0, 2)) }}</div>
             @endif
