@@ -601,6 +601,23 @@
                 </div>
             `;
 
+            // Auto-check the layer if indicated (Permintaan Pa Fahmi No 2)
+            ['lp2b', 'lbs', 'lsd'].forEach(type => {
+                const layerCheckbox = document.getElementById('layer-' + type);
+                if (results[type]) {
+                    if (!layerCheckbox.checked) {
+                        layerCheckbox.checked = true;
+                        layerCheckbox.dispatchEvent(new Event('change'));
+                    }
+                } else {
+                    // Opsional: uncheck jika pindah titik dan tidak terindikasi lagi (agar reset rapi)
+                    if (layerCheckbox.checked) {
+                        layerCheckbox.checked = false;
+                        layerCheckbox.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+
             let statusHtml = `
                 <div style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px;">
                     <div style="background: ${results.lp2b ? '#F0FDF4' : '#FEF9C3'}; color: ${results.lp2b ? '#166534' : '#854D0E'}; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid ${results.lp2b ? '#86EFAC' : '#FDE047'};">

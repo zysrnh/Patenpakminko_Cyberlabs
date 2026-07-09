@@ -323,9 +323,9 @@
                         <td style="white-space: nowrap;">{{ $item->created_at->format('d M Y, H:i') }}</td>
                         <td style="white-space: nowrap;">
                             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                                <button type="button" class="btn btn-secondary btn-sm" onclick="openPreview('{{ route('berkas.preview', $item->id) }}', '{{ $item->nama_berkas }}')">
+                                <a href="{{ route('berkas.preview', $item->id) }}" target="_blank" class="btn btn-secondary btn-sm">
                                     Lihat
-                                </button>
+                                </a>
                                 <a href="{{ route('berkas.download', $item->id) }}" class="btn btn-primary btn-sm">Unduh</a>
                                 <form action="{{ route('berkas.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berkas ini?');" style="margin: 0;">
                                     @csrf
@@ -351,32 +351,9 @@
     </div>
 </div>
 
-<!-- Modal Preview -->
-<div class="modal-backdrop" id="previewBackdrop" onclick="closePreview()"></div>
-<div class="modal-slide" id="previewModal">
-    <div class="modal-header">
-        <div class="modal-title" id="previewTitle">Preview Dokumen</div>
-        <button class="btn-close" onclick="closePreview()">&times;</button>
-    </div>
-    <div class="modal-body">
-        <iframe id="previewFrame" src=""></iframe>
-    </div>
-</div>
-
 <script>
     function openPreview(url, title) {
-        document.getElementById('previewTitle').innerText = title;
-        document.getElementById('previewFrame').src = url;
-        document.getElementById('previewBackdrop').classList.add('show');
-        document.getElementById('previewModal').classList.add('open');
-    }
-
-    function closePreview() {
-        document.getElementById('previewBackdrop').classList.remove('show');
-        document.getElementById('previewModal').classList.remove('open');
-        setTimeout(() => {
-            document.getElementById('previewFrame').src = '';
-        }, 300);
+        window.open(url, '_blank');
     }
 </script>
 @endsection

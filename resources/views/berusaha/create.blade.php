@@ -319,14 +319,7 @@
     });
 
     function openPreview(url, title) {
-        document.getElementById('previewTitle').innerText = title;
-        document.getElementById('previewFrame').src = url;
-        const fallbackLink = document.getElementById('mobileDownloadLink');
-        if (fallbackLink) fallbackLink.href = url;
-        const fallbackDiv = document.getElementById('mobileFallback');
-        if (fallbackDiv) { fallbackDiv.style.display = window.innerWidth <= 768 ? 'block' : 'none'; }
-        document.getElementById('previewBackdrop').classList.add('show');
-        document.getElementById('previewModal').classList.add('open');
+        window.open(url, '_blank');
     }
     
     function closePreview() {

@@ -664,6 +664,54 @@ document.addEventListener('DOMContentLoaded', function() {
                     ...window.appHolidays
                 ]
             });
+
+            /* ── Client-side File Size Validation (Max 5MB) ──────── */
+            document.querySelectorAll('input[type="file"]').forEach(function(input) {
+                input.addEventListener('change', function() {
+                    const maxMB = 5;
+                    const maxBytes = maxMB * 1024 * 1024;
+                    
+                    let limitBytes = maxBytes;
+                    let limitMB = maxMB;
+                    const name = this.name;
+                    if (['fc_akta_pendirian', 'rencana_penggunaan_tanah', 'proposal_kegiatan', 'persyaratan_lainnya'].includes(name)) {
+                        limitMB = 10;
+                        limitBytes = limitMB * 1024 * 1024;
+                    }
+
+                    let totalSize = 0;
+                    for (let i = 0; i < this.files.length; i++) {
+                        totalSize += this.files[i].size;
+                    }
+                    
+                    if (totalSize > limitBytes) {
+                        this.value = ''; // Reset input
+                        
+                        let errorDiv = this.parentElement.querySelector('.file-size-error');
+                        if (!errorDiv) {
+                            errorDiv = document.createElement('div');
+                            errorDiv.className = 'file-size-error';
+                            errorDiv.style.cssText = 'color: #E53E3E; font-size: 11px; font-weight: 700; margin-top: 6px; background: #FFF5F5; padding: 6px 10px; border-radius: 4px; border: 1px solid #FED7D7;';
+                            this.parentElement.appendChild(errorDiv);
+                        }
+                        
+                        errorDiv.innerHTML = `⚠️ GAGAL! Ukuran file melebihi batas maksimal ${limitMB}MB.`;
+                        this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        errorDiv.animate([
+                            { opacity: 0.5, transform: 'scale(0.98)' },
+                            { opacity: 1, transform: 'scale(1)' }
+                        ], { duration: 300 });
+                        
+                        alert(`Maaf, ukuran file yang Anda pilih terlalu besar. Maksimal ${limitMB}MB per file.`);
+                    } else {
+                        let errorDiv = this.parentElement.querySelector('.file-size-error');
+                        if (errorDiv) {
+                            errorDiv.remove();
+                        }
+                    }
+                });
+            });
         });
     </script>
 </body>
