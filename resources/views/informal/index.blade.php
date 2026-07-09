@@ -480,6 +480,9 @@
         marker.setLatLng([lat, lng]);
         coordDisplay.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
         resultArea.classList.remove('active');
+        
+        // Otomatis jalankan pengecekan tanpa harus tekan tombol "Cek Wilayah"
+        btnCek.click();
     });
 
     coordDisplay.addEventListener('change', function() {
