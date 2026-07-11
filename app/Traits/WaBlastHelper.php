@@ -166,6 +166,7 @@ trait WaBlastHelper
 
         if (($type === 'submit' || $type === 'submit_berkas') && $adminBpn) {
             $text = "Halo Admin Kantor Pertanahan Kota Sukabumi, ada pengajuan permohonan baru untuk {$layananTitle} atas nama {$nama}. Silakan login untuk melakukan verifikasi berkas awal di: {$url}";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin BPN',
                 'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
@@ -181,6 +182,7 @@ trait WaBlastHelper
 
         if ($type === 'berkas_revisi_bpn' && $adminBpn) {
             $text = "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layananTitle}. Silakan cek dan verifikasi ulang dokumen di: {$url}";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin BPN',
                 'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
@@ -196,6 +198,7 @@ trait WaBlastHelper
         
         if ($type === 'berkas_verifikasi' && $app->bpn_berkas_status === 'diterima' && $adminPutr) {
             $text = "Notifikasi Dinas PUTR: Berkas permohonan {$no_berkas_text} atas nama {$nama} telah selesai divalidasi awal oleh Kantor Pertanahan Kota Sukabumi. Silakan lakukan Validasi Awal Tata Ruang di: {$url}";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin PUTR',
                 'url' => 'https://wa.me/' . $formatPhone($adminPutr) . '?text=' . urlencode($text)
@@ -211,6 +214,7 @@ trait WaBlastHelper
         
         if ($type === 'credential_blast' && false) { // DISABLED: Tahap Credential hanya ke pemohon tidak ke admin
             $text = "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan {$layananTitle}. Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin BPN',
                 'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
@@ -226,6 +230,7 @@ trait WaBlastHelper
         
         if ($type === 'putr_validasi' && $adminBpn) {
             $text = "Notifikasi Dinas PUTR: Berkas permohonan {$layananTitle}{$no_berkas_text} atas nama {$nama} telah selesai divalidasi awal oleh Dinas PUTR Kota Sukabumi. Silakan cek sistem untuk pendaftaran / tagihan PNBP di: {$url}";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin BPN',
                 'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
@@ -243,6 +248,7 @@ trait WaBlastHelper
             // Already sent to Pemohon via $msg block above.
             if ($adminBpn) {
                 $text = "Notifikasi DPMPTSP: {$dokumenFinalAdmin}{$no_berkas_text} atas nama {$nama} telah diterbitkan. Proses permohonan selesai. Cek di: {$url}";
+                $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
                 $wa_links[] = [
                     'target' => 'Admin BPN',
                     'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
@@ -259,6 +265,7 @@ trait WaBlastHelper
 
         if ($type === 'pertek_terbit' && $adminPutr) {
             $text = "Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk {$layananTitle}{$no_berkas_text} telah terbit dari Kantor Pertanahan Kota Sukabumi. Silakan lakukan penilaian PKKPR di: {$url}";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin PUTR',
                 'url' => 'https://wa.me/' . $formatPhone($adminPutr) . '?text=' . urlencode($text)
@@ -274,6 +281,7 @@ trait WaBlastHelper
         
         if ($type === 'pu_selesai' && $adminPtsp) {
             $text = "Notifikasi DPMPTSP: Penilaian Dinas PUTR untuk {$layananTitle}{$no_berkas_text} selesai. Silakan proses penerbitan {$dokumenFinalAdmin} di: {$url}";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin DPMPTSP',
                 'url' => 'https://wa.me/' . $formatPhone($adminPtsp) . '?text=' . urlencode($text)
@@ -289,6 +297,7 @@ trait WaBlastHelper
         
         if ($type === 'pu_selesai' && $adminBpn) {
             $text = "Notifikasi Kantor Pertanahan Kota Sukabumi: Dinas PUTR telah selesai menilai {$layananTitle}{$no_berkas_text}. Menunggu penerbitan {$dokumenFinalAdmin} oleh DPMPTSP.";
+            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin BPN',
                 'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
