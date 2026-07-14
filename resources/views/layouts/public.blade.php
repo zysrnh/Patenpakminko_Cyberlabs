@@ -2290,20 +2290,22 @@
                     totalSize += this.files[i].size;
                 }
             } else {
+                let msgDiv = this.parentElement.querySelector('.file-size-error');
+                if (msgDiv) msgDiv.remove();
                 return; // Tidak ada file
             }
             
             let errorDiv = this.parentElement.querySelector('.file-size-error');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'file-size-error';
+                this.parentElement.appendChild(errorDiv);
+            }
             
             if (totalSize > limitBytes) {
                 this.value = ''; // Reset input sehingga file batal dipilih
                 
-                if (!errorDiv) {
-                    errorDiv = document.createElement('div');
-                    errorDiv.className = 'file-size-error';
-                    errorDiv.style.cssText = 'color: #E53E3E; font-size: 12px; font-weight: 600; margin-top: 8px; background: #FFF5F5; padding: 10px 14px; border-radius: 6px; border: 1px solid #FED7D7; display: flex; align-items: center; gap: 8px; line-height: 1.4;';
-                    this.parentElement.appendChild(errorDiv);
-                }
+                errorDiv.style.cssText = 'color: #E53E3E; font-size: 12px; font-weight: 600; margin-top: 8px; background: #FFF5F5; padding: 10px 14px; border-radius: 6px; border: 1px solid #FED7D7; display: flex; align-items: center; gap: 8px; line-height: 1.4;';
                 
                 errorDiv.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> <span><strong>Gagal Memilih File!</strong><br>Ukuran dokumen Anda melebihi batas maksimal <b>${limitMB}MB</b>. Silakan kompres atau pilih file lain.</span>`;
                 
@@ -2317,10 +2319,15 @@
                 ], { duration: 300 });
                 
             } else {
-                // Hapus error jika file valid
-                if (errorDiv) {
-                    errorDiv.remove();
-                }
+                // Tampilkan pesan sukses jika file valid
+                const mbSize = (totalSize / (1024 * 1024)).toFixed(2);
+                errorDiv.style.cssText = 'color: #047857; font-size: 12px; font-weight: 600; margin-top: 8px; background: #D1FAE5; padding: 10px 14px; border-radius: 6px; border: 1px solid #A7F3D0; display: flex; align-items: center; gap: 8px; line-height: 1.4;';
+                errorDiv.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> <span><strong>File Memenuhi Syarat!</strong><br>Ukuran file Anda (${mbSize}MB) aman untuk diunggah.</span>`;
+                
+                errorDiv.animate([
+                    { opacity: 0.5, transform: 'scale(0.98)' },
+                    { opacity: 1, transform: 'scale(1)' }
+                ], { duration: 300 });
             }
         }
 
