@@ -2262,40 +2262,50 @@
         startArtAuto();
     }
 
-    /* ── Client-side File Size Validation (Max 5MB) ──────── */
+    /* ── Client-side File Size Validation ──────── */
     document.querySelectorAll('input[type="file"]').forEach(function(input) {
-        input.addEventListener('change', function() {
-            const maxMB = 5;
-            const maxBytes = maxMB * 1024 * 1024;
+        function validateFileSize() {
+            let limitMB = 5; // Default 5MB
             
-            // Perlakuan khusus untuk file Akta Pendirian, Rencana Penggunaan Tanah, Proposal, Persyaratan Lainnya (Maks 10MB)
-            // Ini untuk menyesuaikan dengan batas di view yang menyebut 10MB
-            let limitBytes = maxBytes;
-            let limitMB = maxMB;
+            // Coba ambil batas dari teks .file-help
+            const helpSpan = this.parentElement.querySelector('.file-help');
+            if (helpSpan) {
+                const match = helpSpan.textContent.match(/Maks\s+(\d+)MB/i);
+                if (match) {
+                    limitMB = parseInt(match[1]);
+                }
+            }
+            
+            // Fallback (jika file-help tidak ada)
             const name = this.name;
-            if (['fc_akta_pendirian', 'rencana_penggunaan_tanah', 'proposal_kegiatan', 'persyaratan_lainnya'].includes(name)) {
+            if (['fc_akta_pendirian', 'rencana_penggunaan_tanah', 'proposal_kegiatan', 'persyaratan_lainnya'].includes(name) && !helpSpan) {
                 limitMB = 10;
-                limitBytes = limitMB * 1024 * 1024;
             }
 
+            const limitBytes = limitMB * 1024 * 1024;
             let totalSize = 0;
-            for (let i = 0; i < this.files.length; i++) {
-                totalSize += this.files[i].size;
+            
+            if (this.files && this.files.length > 0) {
+                for (let i = 0; i < this.files.length; i++) {
+                    totalSize += this.files[i].size;
+                }
+            } else {
+                return; // Tidak ada file
             }
             
+            let errorDiv = this.parentElement.querySelector('.file-size-error');
+            
             if (totalSize > limitBytes) {
-                this.value = ''; // Reset input
+                this.value = ''; // Reset input sehingga file batal dipilih
                 
-                // Cari atau buat div error
-                let errorDiv = this.parentElement.querySelector('.file-size-error');
                 if (!errorDiv) {
                     errorDiv = document.createElement('div');
                     errorDiv.className = 'file-size-error';
-                    errorDiv.style.cssText = 'color: #E53E3E; font-size: 11px; font-weight: 700; margin-top: 6px; background: #FFF5F5; padding: 6px 10px; border-radius: 4px; border: 1px solid #FED7D7;';
+                    errorDiv.style.cssText = 'color: #E53E3E; font-size: 12px; font-weight: 600; margin-top: 8px; background: #FFF5F5; padding: 10px 14px; border-radius: 6px; border: 1px solid #FED7D7; display: flex; align-items: center; gap: 8px; line-height: 1.4;';
                     this.parentElement.appendChild(errorDiv);
                 }
                 
-                errorDiv.innerHTML = `⚠️ GAGAL! Ukuran file melebihi batas maksimal ${limitMB}MB.`;
+                errorDiv.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> <span><strong>Gagal Memilih File!</strong><br>Ukuran dokumen Anda melebihi batas maksimal <b>${limitMB}MB</b>. Silakan kompres atau pilih file lain.</span>`;
                 
                 // Scroll to this input
                 this.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -2306,15 +2316,15 @@
                     { opacity: 1, transform: 'scale(1)' }
                 ], { duration: 300 });
                 
-                alert(`Maaf, ukuran file yang Anda pilih terlalu besar. Maksimal ${limitMB}MB per file.`);
             } else {
-                // Hapus error jika file sudah valid
-                let errorDiv = this.parentElement.querySelector('.file-size-error');
+                // Hapus error jika file valid
                 if (errorDiv) {
                     errorDiv.remove();
                 }
             }
-        });
+        }
+
+        input.addEventListener('change', validateFileSize);
     });
 
 })();

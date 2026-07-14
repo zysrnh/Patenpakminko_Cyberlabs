@@ -348,6 +348,7 @@
             wrapper.classList.remove('drag-over');
             if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 input.files = e.dataTransfer.files;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     });
