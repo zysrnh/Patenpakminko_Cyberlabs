@@ -77,7 +77,7 @@
                             </svg>
                         </div>
                         <div class="sp-header-text">
-                            <strong>Pilih Modul Layanan yang Anda Butuhkan</strong>
+                            <strong>Pilih Jenis Layanan yang Anda Butuhkan</strong>
                         </div>
                     </div>
 

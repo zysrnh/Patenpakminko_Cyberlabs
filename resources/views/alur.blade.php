@@ -291,14 +291,14 @@
                 <div class="timeline-number">2</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
-                        <img src="{{ asset('storage/svg/PilihModul.svg') }}" alt="Pilih Modul Layanan">
+                        <img src="{{ asset('storage/svg/PilihModul.svg') }}" alt="Pilih Jenis Layanan">
                     </div>
                     <div class="timeline-content">
-                        <h3>Pilih Modul Layanan</h3>
+                        <h3>Pilih Jenis Layanan</h3>
                         <p>Setelah login, pengguna akan diarahkan ke dashboard utama untuk memilih jenis layanan yang ingin diajukan.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Pilihan Modul:</div>
+                            <div class="timeline-list-title">Pilihan Layanan:</div>
                             <ul class="timeline-list">
                                 <li>PPKPR Berusaha</li>
                                 <li>PPKPR Non Berusaha</li>
