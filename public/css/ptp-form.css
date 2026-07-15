@@ -471,6 +471,8 @@ select.form-control {
     display: inline-flex;
     align-items: center;
     transition: background .2s, border-color .2s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 .btn-contoh:hover { background: #D6EAF5; border-color: #3291A8; color: #00223D; }
 

@@ -2321,8 +2321,27 @@
             } else {
                 // Tampilkan pesan sukses jika file valid
                 const mbSize = (totalSize / (1024 * 1024)).toFixed(2);
-                errorDiv.style.cssText = 'color: #047857; font-size: 12px; font-weight: 600; margin-top: 8px; background: #D1FAE5; padding: 10px 14px; border-radius: 6px; border: 1px solid #A7F3D0; display: flex; align-items: center; gap: 8px; line-height: 1.4;';
-                errorDiv.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> <span><strong>File Memenuhi Syarat!</strong><br>Ukuran file Anda (${mbSize}MB) aman untuk diunggah.</span>`;
+                errorDiv.style.cssText = 'color: #047857; font-size: 11px; font-weight: 500; margin-top: 8px; background: #D1FAE5; padding: 8px 12px; border-radius: 6px; border: 1px solid #A7F3D0; display: flex; flex-direction: column; gap: 6px; line-height: 1.3;';
+                
+                const fileUrl = URL.createObjectURL(this.files[0]);
+                const fileName = this.files[0].name;
+
+                errorDiv.innerHTML = `
+                    <div style="display: flex; align-items: flex-start; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <span><strong style="font-size:12px;">File Memenuhi Syarat!</strong><br>Ukuran file (${mbSize}MB) aman.</span>
+                    </div>
+                    <div style="display: flex; gap: 6px; margin-left: 22px;">
+                        <a href="${fileUrl}" target="_blank" style="padding: 4px 10px; background: #fff; color: #047857; border: 1px solid #047857; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 10px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            Preview
+                        </a>
+                        <a href="${fileUrl}" download="${fileName}" style="padding: 4px 10px; background: #047857; color: #fff; border: 1px solid #047857; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 10px; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Download
+                        </a>
+                    </div>
+                `;
                 
                 errorDiv.animate([
                     { opacity: 0.5, transform: 'scale(0.98)' },
