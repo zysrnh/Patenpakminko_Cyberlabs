@@ -1844,7 +1844,7 @@
                     Kontak Kami
                 </a>
 
-                @auth
+                @if(Auth::check() && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
                     @if(Auth::user()->isAdminBerita())
                         <a href="{{ route('admin.berita.index') }}" class="btn-nav">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1911,7 +1911,7 @@
         <a href="{{ route('alur') }}" onclick="closeMobileNav()">Alur Proses</a>
         <a href="{{ route('testimoni') }}" onclick="closeMobileNav()">Ulasan</a>
         <a href="{{ route('kontak') }}" onclick="closeMobileNav()">Kontak Kami</a>
-        @auth
+        @if(Auth::check() && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
             @if(Auth::user()->isAdminBerita())
                 <a href="{{ route('admin.berita.index') }}" class="mobile-cta" onclick="closeMobileNav()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

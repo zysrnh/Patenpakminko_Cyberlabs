@@ -188,6 +188,13 @@ Route::middleware('guest')->group(function () {
 // Rute untuk pengguna yang sudah login (Authenticated)
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user && $user->role === 'pelaku_usaha' && !$user->is_active) {
+            \Illuminate\Support\Facades\Auth::logout();
+            return redirect()->route('login')->withErrors([
+                'login' => 'Akun belum aktif. Anda baru bisa login setelah permohonan Anda mencapai tahap verifikasi pembayaran (Step 3).',
+            ]);
+        }
         return view('dashboard');
     })->name('dashboard');
     

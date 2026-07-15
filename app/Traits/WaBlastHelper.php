@@ -129,6 +129,27 @@ trait WaBlastHelper
         };
 
         if ($msg && $pemohon) {
+            $postPnbpTypes = [
+                'cek_lokasi', 'cek_lokasi_ubah', 'rapat', 'rapat_ubah',
+                'pertek_terbit', 'pertek_tolak', 'pu_selesai', 'pu_tolak',
+                'pkkpr_terbit', 'pkkpr_tolak'
+            ];
+
+            if (in_array($type, $postPnbpTypes)) {
+                $ptpData  = json_decode($app->ptp_data, true) ?? [];
+                $nik      = $ptpData['nik'] ?? '';
+                $username = $app->user->username ?? '-';
+                
+                $isPasswordNik = false;
+                if ($nik && \Illuminate\Support\Facades\Hash::check($nik, $app->user->password)) {
+                    $isPasswordNik = true;
+                }
+                
+                $passwordText = $isPasswordNik ? $nik : "(Gunakan NIK pendaftaran pertama atau password yang Anda buat)";
+                
+                $msg .= "\n\n*Informasi Akun Anda:*\nUsername : {$username}\nPassword : {$passwordText}";
+            }
+
             $msg .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             
             if (!empty($settings['cp_admin'])) {
