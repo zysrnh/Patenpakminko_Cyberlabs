@@ -485,6 +485,11 @@
                     <input type="text" id="nama_instansi" name="nama_instansi" class="form-control" placeholder="Tulis Nama Instansi" value="{{ old('nama_instansi') }}">
                 </div>
 
+                <div class="form-group" id="group_nama_pemberi_kuasa" style="display: none;">
+                    <label class="form-label">Nama Pemberi Kuasa<span class="required">*</span></label>
+                    <input type="text" id="nama_pemberi_kuasa" name="nama_pemberi_kuasa" class="form-control" placeholder="Tulis Nama Pemberi Kuasa / Pemilik Usaha" value="{{ old('nama_pemberi_kuasa') }}">
+                </div>
+
                 <div class="form-group">
                     <label class="form-label">Nomor Anggaran Dasar Perusahaan<span class="optional">(Opsional)</span></label>
                     <input type="text" id="anggaran_dasar_no" name="anggaran_dasar_no" class="form-control" placeholder="Nomor AD/ART (Khusus PT/CV)" value="{{ old('anggaran_dasar_no') }}">
@@ -671,12 +676,16 @@
             const ptGroup2 = document.getElementById('anggaran_dasar_tanggal').closest('.form-group');
             const instansiGroup = document.getElementById('group_nama_instansi');
             const instansiInput = document.getElementById('nama_instansi');
+            const pemberiKuasaGroup = document.getElementById('group_nama_pemberi_kuasa');
+            const pemberiKuasaInput = document.getElementById('nama_pemberi_kuasa');
             
             if (value === 'Badan Hukum') {
                 ptGroup1.style.display = 'flex';
                 ptGroup2.style.display = 'flex';
                 instansiGroup.style.display = 'none';
                 instansiInput.required = false;
+                pemberiKuasaGroup.style.display = 'none';
+                pemberiKuasaInput.required = false;
             } else if (value === 'Instansi Pemerintahan') {
                 ptGroup1.style.display = 'none';
                 ptGroup2.style.display = 'none';
@@ -684,6 +693,17 @@
                 document.getElementById('anggaran_dasar_tanggal').value = '';
                 instansiGroup.style.display = 'flex';
                 instansiInput.required = true;
+                pemberiKuasaGroup.style.display = 'none';
+                pemberiKuasaInput.required = false;
+            } else if (value === 'Penerima Kuasa') {
+                ptGroup1.style.display = 'none';
+                ptGroup2.style.display = 'none';
+                document.getElementById('anggaran_dasar_no').value = '';
+                document.getElementById('anggaran_dasar_tanggal').value = '';
+                instansiGroup.style.display = 'none';
+                instansiInput.required = false;
+                pemberiKuasaGroup.style.display = 'flex';
+                pemberiKuasaInput.required = true;
             } else {
                 ptGroup1.style.display = 'none';
                 ptGroup2.style.display = 'none';
@@ -691,6 +711,8 @@
                 document.getElementById('anggaran_dasar_tanggal').value = '';
                 instansiGroup.style.display = 'none';
                 instansiInput.required = false;
+                pemberiKuasaGroup.style.display = 'none';
+                pemberiKuasaInput.required = false;
             }
         }
     });

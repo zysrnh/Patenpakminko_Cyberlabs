@@ -473,6 +473,8 @@ class AuthController extends Controller
             'phone_number' => 'required|string|min:9|max:15',
             'alamat' => 'required|string|max:500',
             'bertindak_atas_nama' => 'required|string|max:150',
+            'nama_instansi' => 'required_if:bertindak_atas_nama,Badan Hukum,Instansi Pemerintahan|nullable|string|max:150',
+            'nama_pemberi_kuasa' => 'required_if:bertindak_atas_nama,Penerima Kuasa|nullable|string|max:150',
             'anggaran_dasar_no' => 'nullable|string|max:100',
             'anggaran_dasar_tanggal' => 'nullable|date',
             'jenis_permohonan' => 'required|in:berusaha,non-berusaha,kebijakan,psn,tanah-timbul',
@@ -493,6 +495,8 @@ class AuthController extends Controller
             'phone_number.required' => 'Nomor WhatsApp wajib diisi.',
             'alamat.required' => 'Alamat wajib diisi.',
             'bertindak_atas_nama.required' => 'Isian "Bertindak untuk dan atas nama" wajib diisi.',
+            'nama_instansi.required_if' => 'Nama Instansi wajib diisi.',
+            'nama_pemberi_kuasa.required_if' => 'Nama Pemberi Kuasa wajib diisi jika bertindak sebagai kuasa.',
             'jenis_permohonan.required' => 'Silakan pilih salah satu Jenis Permohonan.',
             'rencana_kegiatan.required' => 'Rencana Kegiatan wajib diisi.',
             'letak_tanah_jalan.required' => 'Detail letak tanah (jalan/RT/RW) wajib diisi.',
@@ -565,5 +569,30 @@ class AuthController extends Controller
         } else {
             return redirect()->route('kebijakan.create')->with('success', 'Formulir PTP berhasil divalidasi. Silakan lengkapi berkas persyaratan Kebijakan Anda!');
         }
+    }
+
+    /**
+     * Preview dan Download Formulir PTP (PDF) sebelum permohonan dikirim.
+     */
+    public function previewPtpForm()
+    {
+        if (!session()->has('ptp_form_data')) {
+            return back()->with('error', 'Data PTP tidak ditemukan. Silakan isi form PTP terlebih dahulu.');
+        }
+
+        $ptp = session('ptp_form_data');
+        $ptp['app_number'] = 'PREVIEW-' . date('YmdHis');
+        $ptp = array_merge([
+            "nama" => "-", "nik" => "-", "nib" => "-", "alamat" => "-", "phone_number" => "-", 
+            "email" => "-", "bertindak_atas_nama" => "-", "anggaran_dasar_tanggal" => "-", 
+            "anggaran_dasar_no" => "-", "rencana_kegiatan" => "-", "kbli" => "-", 
+            "letak_tanah_jalan" => "-", "letak_tanah_kelurahan" => "-", "letak_tanah_kecamatan" => "-", 
+            "luas_tanah" => "-", "status_penguasaan" => "-", "penggunaan_saat_ini" => "-"
+        ], $ptp);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
+        $pdf->setPaper('A4', 'portrait');
+
+        return $pdf->stream('Preview_Formulir_PTP_' . date('YmdHis') . '.pdf');
     }
 }

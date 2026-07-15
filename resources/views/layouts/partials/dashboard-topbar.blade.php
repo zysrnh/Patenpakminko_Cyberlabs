@@ -10,7 +10,7 @@
         if ($u->isPelakuUsaha()) {
             $unreadCount = \App\Models\Mailbox::where('target_user_id', $u->id)->where('is_read', false)->count();
         } elseif ($u->isBpn()) {
-            $unreadCount = \App\Models\Mailbox::where('target_role', 'bpn')->where('is_read', false)->count();
+            $unreadCount = \App\Models\Mailbox::where('target_role', 'Kantor Pertanahan')->where('is_read', false)->count();
         } elseif ($u->isDinasPu() || $u->isDinasPutr()) {
             $unreadCount = \App\Models\Mailbox::where('target_role', 'dinas_pu')->where('is_read', false)->count();
         } elseif ($u->isSatuPintu()) {
@@ -226,7 +226,7 @@
                     {{ $pageTitle }}
                 @else
                     @if(Auth::user()->isPelakuUsaha())   Dashboard Pelaku Usaha
-                    @elseif(Auth::user()->isBpn())        Dashboard Admin Kantor Pertanahan (BPN)
+                    @elseif(Auth::user()->isBpn())        Dashboard Admin Kantor Pertanahan
                     @elseif(Auth::user()->isDinasPu())    Dashboard Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
                     @elseif(Auth::user()->isSatuPintu())  Dashboard DPMPTSP
                     @elseif(Auth::user()->isDpn())        Dashboard Admin Pusat

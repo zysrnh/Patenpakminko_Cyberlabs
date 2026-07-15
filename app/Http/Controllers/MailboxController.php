@@ -49,6 +49,10 @@ class MailboxController extends Controller
             $mailbox->save();
         }
 
+        if (request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         if ($mailbox->link) {
             return redirect($mailbox->link);
         }

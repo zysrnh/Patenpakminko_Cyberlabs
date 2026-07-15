@@ -68,15 +68,26 @@
                     <div class="form-hint">Masukkan ID permohonan atau booking Anda (opsional).</div>
                 </div>
 
+                <style>
+                    .star-rating-form { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; }
+                    .star-rating-form input { display: none; }
+                    .star-rating-form label { font-size: 32px; color: #CBD5E0; cursor: pointer; transition: color 0.2s; line-height: 1; margin: 0; padding: 0; }
+                    .star-rating-form input:checked ~ label, .star-rating-form label:hover, .star-rating-form label:hover ~ label { color: #D69E2E; }
+                </style>
                 <div class="form-group">
-                    <label class="form-label" for="rating">Penilaian (Bintang)</label>
-                    <select name="rating" id="rating" class="form-control" required>
-                        <option value="5">(5) Sangat Baik</option>
-                        <option value="4">(4) Baik</option>
-                        <option value="3">(3) Cukup Baik</option>
-                        <option value="2">(2) Kurang</option>
-                        <option value="1">(1) Sangat Kurang</option>
-                    </select>
+                    <label class="form-label">Penilaian (Bintang)</label>
+                    <div class="star-rating-form">
+                        <input type="radio" id="star5" name="rating" value="5" required />
+                        <label for="star5" title="Sangat Baik">★</label>
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label for="star4" title="Baik">★</label>
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label for="star3" title="Cukup Baik">★</label>
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label for="star2" title="Kurang">★</label>
+                        <input type="radio" id="star1" name="rating" value="1" />
+                        <label for="star1" title="Sangat Kurang">★</label>
+                    </div>
                 </div>
 
                 <div class="form-group">

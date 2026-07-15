@@ -469,7 +469,7 @@
                     </div>
                     <div class="logo-text">
                         <strong>PATEN PAK MIKO</strong>
-                        <span>Kantor Pertanahan (BPN) Sukabumi</span>
+                        <span>Kantor Pertanahan Sukabumi</span>
                     </div>
                 </a>
 

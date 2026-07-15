@@ -392,7 +392,7 @@
             </a>
         </div>
 
-        @if(Auth::check() && in_array(Auth::user()->role, ['dpn', 'bpn', 'dinas_pu', 'dinas_putr', 'satu_pintu']))
+        @if(Auth::check() && in_array(Auth::user()->role, ['dpn', 'Kantor Pertanahan', 'dinas_pu', 'dinas_putr', 'satu_pintu']))
         <div class="sidebar-section">
             <div class="sidebar-section-label">Manajemen Pemberkasan</div>
             <div class="nav-item-group">

@@ -72,6 +72,16 @@
             @php
                 $ptpNama = session('ptp_form_data.nama', '');
                 $ptpHubungan = session('ptp_form_data.bertindak_atas_nama', '');
+                $ptpInstansi = session('ptp_form_data.nama_instansi', '');
+                $ptpPemberiKuasa = session('ptp_form_data.nama_pemberi_kuasa', '');
+
+                $pemilikUsahaValue = $ptpNama;
+                if ($ptpHubungan === 'Penerima Kuasa') {
+                    $pemilikUsahaValue = $ptpPemberiKuasa ?: $ptpNama;
+                } elseif (in_array($ptpHubungan, ['Badan Hukum', 'Instansi Pemerintahan'])) {
+                    $pemilikUsahaValue = $ptpInstansi ?: $ptpNama;
+                }
+                
                 $selectedHubungan = old('hubungan_pengaju');
                 if (!$selectedHubungan) {
                     if ($ptpHubungan === 'Diri Sendiri') {
@@ -88,7 +98,7 @@
                 <!-- Nama Pemilik Usaha / Perusahaan -->
                 <div class="form-group">
                     <label class="form-label">Nama Pemohon / Pengguna Layanan<span class="required">*</span></label>
-                    <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" style="background:#E2E8F0; cursor:not-allowed;" value="{{ old('nama_pemilik_usaha', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}" readonly required>
+                    <input type="text" id="nama_pemilik_usaha" name="nama_pemilik_usaha" class="form-control" style="background:#E2E8F0; cursor:not-allowed;" value="{{ old('nama_pemilik_usaha', $pemilikUsahaValue ?: (Auth::user()->name ?? Auth::user()->username)) }}" readonly required>
                     <!-- Tersembunyi karena form awal memerlukan nama_pengaju juga -->
                     <input type="hidden" name="nama_pengaju" value="{{ old('nama_pengaju', $ptpNama ?: (Auth::user()->name ?? Auth::user()->username)) }}">
                 </div>
@@ -245,8 +255,9 @@
 
 
             <!-- ACTIONS -->
-            <div class="btn-submit-wrap">
+            <div class="btn-submit-wrap" style="display: flex; gap: 12px; justify-content: flex-end; align-items: center; flex-wrap: wrap; margin-top: 24px;">
                 <button type="button" class="btn-batal" onclick="window.history.back()">Batal</button>
+                <a href="{{ route('ptp.preview') }}" target="_blank" class="btn-submit" style="background: #EBF8FF; color: #2B6CB0; border: 1.5px solid #2B6CB0; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; text-align: center;">Preview Formulir PTP (PDF)</a>
                 <button type="submit" class="btn-submit">
                     Kirim Permohonan
                 </button>

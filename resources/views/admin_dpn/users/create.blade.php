@@ -124,7 +124,7 @@
                     <label class="admin-form-label">Peran (Role) <span class="required">*</span></label>
                     <select name="role" class="admin-form-control" required>
                         <option value="" disabled selected>Pilih Peran Instansi...</option>
-                        <option value="bpn" {{ old('role') == 'bpn' ? 'selected' : '' }}>Admin Kantor Pertanahan (BPN)</option>
+                        <option value="Kantor Pertanahan" {{ old('role') == 'Kantor Pertanahan' ? 'selected' : '' }}>Admin Kantor Pertanahan</option>
                         <option value="dinas_pu" {{ old('role') == 'dinas_pu' ? 'selected' : '' }}>Admin Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</option>
                         <option value="dinas_putr" {{ old('role') == 'dinas_putr' ? 'selected' : '' }}>Admin Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</option>
                         <option value="satu_pintu" {{ old('role') == 'satu_pintu' ? 'selected' : '' }}>Admin DPMPTSP</option>
@@ -141,7 +141,7 @@
             <div class="admin-row">
                 <div class="admin-col">
                     <label class="admin-form-label">Nama Lengkap / Instansi</label>
-                    <input type="text" name="name" class="admin-form-control" value="{{ old('name') }}" placeholder="cth: Verifikator BPN 1">
+                    <input type="text" name="name" class="admin-form-control" value="{{ old('name') }}" placeholder="cth: Verifikator Kantor Pertanahan 1">
                 </div>
                 <div class="admin-col">
                     <label class="admin-form-label">Nomor WhatsApp</label>
@@ -152,7 +152,7 @@
             <div class="admin-row">
                 <div class="admin-col">
                     <label class="admin-form-label">Email</label>
-                    <input type="email" name="email" class="admin-form-control" value="{{ old('email') }}" placeholder="cth: bpn@patenpakmiko.go.id">
+                    <input type="email" name="email" class="admin-form-control" value="{{ old('email') }}" placeholder="cth: Kantor Pertanahan@patenpakmiko.go.id">
                 </div>
             </div>
 

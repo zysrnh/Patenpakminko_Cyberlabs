@@ -22,17 +22,17 @@ trait WaBlastHelper
 
         return match ($type) {
             'submit', 'submit_berkas' =>
-                "Halo {$nama}, permohonan {$layanan} Anda berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal Kantor Pertanahan Kota Sukabumi. Kami akan mengirimkan pembaruan status selanjutnya melalui WhatsApp.",
+                "Halo {$nama}, permohonan {$layanan} Anda berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal Kantor Pertanahan Kota Sukabumi.",
 
             'berkas_verifikasi' => $app->bpn_berkas_status === 'diterima'
-                ? "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan LENGKAP oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi berkas permohonan. Kami akan menghubungi Anda kembali."
+                ? "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan LENGKAP oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi berkas permohonan."
                 : "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas'),
 
             'berkas_revisi_bpn' =>
                 "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layanan}. Silakan cek & verifikasi ulang dokumen di: {$url}",
 
             'putr_notif_payment', 'putr_validasi' =>
-                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TERVALIDASI oleh Dinas PUTR. Silakan cek instruksi pembayaran PNBP layanan pertimbangan teknis pertanahan pada alamat email yang anda daftarkan di aplikasi oss. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.",
+                "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} Anda Telah selesai di Verifikasi oleh Dinas PUTR. Silakan cek instruksi pembayaran PNBP layanan pertimbangan teknis pertanahan pada alamat email yang anda daftarkan di aplikasi oss. Jika pembayaran sudah diselesaikan, Anda akan menerima detail Akun.",
 
             'putr_tolak' =>
                 "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} Anda dinyatakan BELUM TERVALIDASI oleh Dinas PUTR.\nCatatan: {$app->putr_notes}\n\nDetail: {$url}",
@@ -67,13 +67,13 @@ trait WaBlastHelper
             'cek_lokasi' => (function() use ($app, $nama, $layanan, $no_berkas_text) {
                 $waktu = $app->bpn_cek_lokasi_date ?: ($app->bpn_cek_lokasi_dt ? Carbon::parse($app->bpn_cek_lokasi_dt)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B') : '-');
                 return "Halo {$nama}, permohonan {$layanan} Anda{$no_berkas_text} dijadwalkan untuk peninjauan lapangan pada:\n\n"
-                     . "Waktu: {$waktu}\n"
-                     . "CP Lapangan/Admin: (atas nama) {$app->bpn_cek_lokasi_cp}\n\n"
-                     . "Harap konfirmasi kesediaan anda dengan menghubungi CP di atas.";
+                     . "Waktu: {$waktu}\n\n"
+                     . "Harap konfirmasi kesediaan Anda dengan menghubungi Contact Person di bawah:\n"
+                     . "Contact Person Petugas Lapang: {$app->bpn_cek_lokasi_cp}";
             })(),
 
             'cek_lokasi_ubah' =>
-                "Halo {$nama}, [PERUBAHAN JADWAL] Peninjauan lapangan {$layanan}{$no_berkas_text} diubah.\n\nJadwal Baru: {$app->bpn_cek_lokasi_date}\nCP Petugas: {$app->bpn_cek_lokasi_cp}",
+                "Halo {$nama}, [PERUBAHAN JADWAL] Peninjauan lapangan {$layanan}{$no_berkas_text} diubah.\n\nJadwal Baru: {$app->bpn_cek_lokasi_date}\n\nHarap konfirmasi kesediaan Anda dengan menghubungi Contact Person di bawah:\nContact Person Petugas Lapang: {$app->bpn_cek_lokasi_cp}",
 
             'rapat' => (function() use ($app, $nama, $layanan, $no_berkas_text) {
                 $waktu = $app->bpn_rapat_date ?: ($app->bpn_rapat_dt ? Carbon::parse($app->bpn_rapat_dt)->locale('id')->translatedFormat('l, d F Y \J\a\m H:i \W\I\B') : '-');
@@ -85,13 +85,13 @@ trait WaBlastHelper
                 "Halo {$nama}, [PERUBAHAN] Jadwal rapat {$layanan}{$no_berkas_text} diubah menjadi: {$app->bpn_rapat_date}.",
 
             'pertek_terbit' =>
-                "Halo {$nama}, untuk permohonan {$layanan}{$no_berkas_text} telah DITERBITKAN oleh Kantor Pertanahan Kota Sukabumi. Proses selanjutnya di Dinas Pekerjaan Umum (PUTR) untuk dilakukan penilaian.",
+                "Halo {$nama}, untuk permohonan {$layanan}{$no_berkas_text} telah DITERBITKAN oleh Kantor Pertanahan Kota Sukabumi.",
 
             'pertek_tolak' =>
                 "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Kantor Pertanahan Kota Sukabumi pada tahap Pertimbangan Teknis Pertanahan.\nCatatan: {$app->bpn_notes}\n\nDetail: {$url}",
 
             'pu_selesai' =>
-                "Halo {$nama}, penilaian {$layanan}{$no_berkas_text} oleh Dinas PUTR telah selesai dilakukan. Selanjutnya permohonan diteruskan ke Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) Kota Sukabumi untuk dilakukan penerbitan {$dokumenFinal}. Pantau di: {$url}",
+                "Halo {$nama}, penilaian {$layanan}{$no_berkas_text} Telah selesai di Verifikasi oleh Dinas PUTR. Selanjutnya permohonan diteruskan ke Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) Kota Sukabumi untuk dilakukan penerbitan {$dokumenFinal}. Pantau di: {$url}",
 
             'pu_tolak' =>
                 "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} DITOLAK oleh Dinas PUTR.\nCatatan: {$app->dinas_pu_notes}\n\nDetail: {$url}",
@@ -150,6 +150,7 @@ trait WaBlastHelper
                 $msg .= "\n\n*Informasi Akun Anda:*\nUsername : {$username}\nPassword : {$passwordText}";
             }
 
+            $msg .= "\n\nKami akan menghubungi Anda untuk informasi selanjutnya.";
             $msg .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             
             if (!empty($settings['cp_admin'])) {
@@ -301,7 +302,7 @@ trait WaBlastHelper
         }
         
         if ($type === 'pu_selesai' && $adminPtsp) {
-            $text = "Notifikasi DPMPTSP: Penilaian Dinas PUTR untuk {$layananTitle}{$no_berkas_text} selesai. Silakan proses penerbitan {$dokumenFinalAdmin} di: {$url}";
+            $text = "Notifikasi DPMPTSP: {$layananTitle}{$no_berkas_text} Telah selesai di Verifikasi oleh Dinas PUTR. Silakan proses penerbitan {$dokumenFinalAdmin} di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin DPMPTSP',
@@ -311,13 +312,13 @@ trait WaBlastHelper
                 'target_user_id' => null,
                 'target_role' => 'satu_pintu',
                 'title' => 'Penilaian PUTR Selesai',
-                'message' => "Penilaian Dinas PUTR telah selesai. Menunggu proses penerbitan {$dokumenFinalAdmin}.\n\n{$infoPemohon}",
+                'message' => "Telah selesai di Verifikasi oleh Dinas PUTR. Menunggu proses penerbitan {$dokumenFinalAdmin}.\n\n{$infoPemohon}",
                 'link' => $url,
             ];
         }
         
         if ($type === 'pu_selesai' && $adminBpn) {
-            $text = "Notifikasi Kantor Pertanahan Kota Sukabumi: Dinas PUTR telah selesai menilai {$layananTitle}{$no_berkas_text}. Menunggu penerbitan {$dokumenFinalAdmin} oleh DPMPTSP.";
+            $text = "Notifikasi Kantor Pertanahan Kota Sukabumi: {$layananTitle}{$no_berkas_text} Telah selesai di Verifikasi oleh Dinas PUTR. Menunggu penerbitan {$dokumenFinalAdmin} oleh DPMPTSP.";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
                 'target' => 'Admin BPN',
@@ -327,7 +328,7 @@ trait WaBlastHelper
                 'target_user_id' => null,
                 'target_role' => 'bpn',
                 'title' => 'Penilaian PUTR Selesai',
-                'message' => "Dinas PUTR telah selesai melakukan penilaian. Menunggu penerbitan {$dokumenFinalAdmin} oleh DPMPTSP.\n\n{$infoPemohon}",
+                'message' => "Telah selesai di Verifikasi oleh Dinas PUTR. Menunggu penerbitan {$dokumenFinalAdmin} oleh DPMPTSP.\n\n{$infoPemohon}",
                 'link' => $url,
             ];
         }

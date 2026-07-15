@@ -25,18 +25,41 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
-        // Fetch holidays from DB (Cached for 24 hours to prevent querying on every request)
+        // Fetch holidays from API and DB (Cached for 24 hours)
         $holidays = Cache::remember('indonesian_holidays', 86400, function () {
+            $nationalHolidays = [];
+            
+            // 1. Fetch dari API Libur Nasional
+            try {
+                $response = \Illuminate\Support\Facades\Http::withoutVerifying()
+                    ->timeout(5)
+                    ->get('https://api-harilibur.vercel.app/api');
+                
+                if ($response->successful()) {
+                    foreach ($response->json() as $holiday) {
+                        if (isset($holiday['holiday_date']) && (isset($holiday['is_national_holiday']) && $holiday['is_national_holiday'])) {
+                            $nationalHolidays[] = $holiday['holiday_date'];
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                // Ignore API failure
+            }
+
+            // 2. Fetch dari Kalender DB Lokal (Libur Tambahan)
             try {
                 if (Schema::hasTable('holidays')) {
-                    return Holiday::pluck('date')->map(function($date) {
+                    $dbHolidays = Holiday::pluck('date')->map(function($date) {
                         return $date->format('Y-m-d');
                     })->toArray();
+                    
+                    return array_unique(array_merge($nationalHolidays, $dbHolidays));
                 }
             } catch (\Exception $e) {
                 // If DB is not ready during tests/migrations
             }
-            return [];
+            
+            return $nationalHolidays;
         });
 
         Carbon::macro('isHoliday', function() use ($holidays) {

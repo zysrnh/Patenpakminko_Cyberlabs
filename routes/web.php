@@ -145,6 +145,7 @@ Route::post('/informal/rating', [InformalController::class, 'storeRating'])->nam
 // Rute Publik PTP Form
 Route::get('/permohonan-ptp', [AuthController::class, 'showPtpForm'])->name('ptp.create');
 Route::post('/permohonan-ptp', [AuthController::class, 'storePtpForm'])->name('ptp.store');
+Route::get('/permohonan-ptp/preview', [AuthController::class, 'previewPtpForm'])->name('ptp.preview');
 
 // Rute Portal Revisi Publik
 Route::get("/revisi-berkas", [\App\Http\Controllers\RevisiController::class, "index"])->name("revisi.index");

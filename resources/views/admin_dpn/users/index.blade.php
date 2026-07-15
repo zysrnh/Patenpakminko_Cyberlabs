@@ -57,8 +57,8 @@
                         <td style="padding: 16px 20px;">
                             @if($user->role === 'dpn')
                                 <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #FFFBEB; color: #D97706; font-size: 11.5px; font-weight: 700; border: 1px solid #FEF3C7;">Super Admin (DPN)</span>
-                            @elseif($user->role === 'bpn')
-                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #EFF6FF; color: #2563EB; font-size: 11.5px; font-weight: 700; border: 1px solid #DBEAFE;">Admin Kantor Pertanahan (BPN)</span>
+                            @elseif($user->role === 'Kantor Pertanahan')
+                                <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #EFF6FF; color: #2563EB; font-size: 11.5px; font-weight: 700; border: 1px solid #DBEAFE;">Admin Kantor Pertanahan</span>
                             @elseif(in_array($user->role, ['dinas_pu', 'dinas_putr']))
                                 <span style="display: inline-block; padding: 4px 10px; border-radius: 6px; background: #F8FAFC; color: #475569; font-size: 11.5px; font-weight: 700; border: 1px solid #E2E8F0;">Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</span>
                             @elseif($user->role === 'satu_pintu')

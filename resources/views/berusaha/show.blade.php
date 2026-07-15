@@ -729,7 +729,7 @@
                     </div>
                     <div class="logo-text">
                         <strong>PATEN PAK MIKO</strong>
-                        <span>Kantor Pertanahan (BPN) Sukabumi</span>
+                        <span>Kantor Pertanahan Sukabumi</span>
                     </div>
                 </a>
  
@@ -775,25 +775,7 @@
                 </div>
             @endif
 
-            @if(session('wa_links') && count(session('wa_links')) > 0)
-                <div style="background:#E8F5E9;border:1.5px solid #A5D6A7;border-radius:8px;padding:16px 20px;margin-bottom:20px;">
-                    <div style="font-size:13px;font-weight:700;color:#1B5E20;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
-                        Kirim Notifikasi WhatsApp Manual
-                    </div>
-                    <div style="font-size:12px;color:#2E7D32;margin-bottom:12px;">Klik tombol di bawah untuk membuka WhatsApp dan kirim notifikasi ke pihak terkait:</div>
-                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                        @foreach(session('wa_links') as $link)
-                            <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer"
-                               style="display:inline-flex;align-items:center;gap:6px;background:#25D366;color:#fff;padding:9px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:700;transition:all 0.2s;"
-                               onmouseover="this.style.background='#1EBE5A'" onmouseout="this.style.background='#25D366'">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                                Kirim ke {{ $link['target'] }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+
  
             @if($errors->any())
                 <div class="alert-error">
@@ -854,15 +836,26 @@
                                 <input type="hidden" name="module_type" value="berusaha">
                                 <input type="hidden" name="module_id" value="{{ $application->id }}">
                                 
+                                <style>
+                                    .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; }
+                                    .star-rating input { display: none; }
+                                    .star-rating label { font-size: 32px; color: #CBD5E0; cursor: pointer; transition: color 0.2s; line-height: 1; margin: 0; padding: 0; }
+                                    .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #D69E2E; }
+                                </style>
                                 <div class="form-group-v" style="margin-bottom: 12px;">
-                                    <label for="rating" style="font-weight: 700; font-size: 12px;">Penilaian Anda</label>
-                                    <select name="rating" id="rating" class="form-select-v" style="padding: 10px;" required>
-                                        <option value="5">Sangat Baik</option>
-                                        <option value="4">Baik</option>
-                                        <option value="3">Cukup Baik</option>
-                                        <option value="2">Kurang</option>
-                                        <option value="1">Sangat Kurang</option>
-                                    </select>
+                                    <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Penilaian Anda</label>
+                                    <div class="star-rating">
+                                        <input type="radio" id="star5" name="rating" value="5" required />
+                                        <label for="star5" title="Sangat Baik">★</label>
+                                        <input type="radio" id="star4" name="rating" value="4" />
+                                        <label for="star4" title="Baik">★</label>
+                                        <input type="radio" id="star3" name="rating" value="3" />
+                                        <label for="star3" title="Cukup Baik">★</label>
+                                        <input type="radio" id="star2" name="rating" value="2" />
+                                        <label for="star2" title="Kurang">★</label>
+                                        <input type="radio" id="star1" name="rating" value="1" />
+                                        <label for="star1" title="Sangat Kurang">★</label>
+                                    </div>
                                 </div>
  
                                 <div class="form-group-v" style="margin-bottom: 16px;">
@@ -879,7 +872,7 @@
                 @endif
             @endif
  
-            <!-- LOGIKA DETEKSI TENGGANG WAKTU OTOMATIS BPN -->
+            <!-- LOGIKA DETEKSI TENGGANG WAKTU OTOMATIS Kantor Pertanahan -->
             @php
                 $user = Auth::user();
                 $now = \Carbon\Carbon::now();
@@ -888,8 +881,81 @@
                 $rapatLewat = $application->bpn_rapat_dt
                     && $now >= $application->bpn_rapat_dt;
             @endphp
+            
+            <!-- FITUR ULASAN LAYANAN -->
+            @if($application->status === 'selesai' || $application->status === 'ditolak')
+                @php
+                    $review = \App\Models\Review::where('user_id', Auth::id())
+                        ->where('module_type', 'berusaha')
+                        ->where('module_id', $application->id)
+                        ->first();
+                @endphp
  
-            <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN KANTOR PERTANAHAN (BPN) / DPN) -->
+                @if(Auth::user()->isPelakuUsaha())
+                    <div class="verify-card" style="border-color: #CBD5E0; background: #F8FAFC; margin-bottom: 24px; padding: 24px; border-radius: 12px; border: 1.5px solid var(--clr-line);">
+                        <h3 class="verify-title" style="color: var(--clr-blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px;">
+                            <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg> Ulasan & Penilaian Layanan
+                        </h3>
+ 
+                        @if($review)
+                            <div style="background: #FFFFFF; border: 1.5px solid var(--clr-line); padding: 16px; border-radius: 10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="color: var(--clr-yellow); font-size: 16px; font-weight: 700;">
+                                        {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }} 
+                                        <span style="color: var(--clr-ink); font-size: 13px; font-weight: 800; margin-left: 6px;">({{ $review->rating_label }})</span>
+                                    </span>
+                                    @if($review->is_approved)
+                                        <span style="font-size: 11px; background: #EBF8FF; color: #2B6CB0; padding: 3px 10px; border-radius: 100px; font-weight: 700;">Telah Dipublikasikan</span>
+                                    @else
+                                        <span style="font-size: 11px; background: #E2E8F0; color: #4A5568; padding: 3px 10px; border-radius: 100px; font-weight: 700;">Menunggu Moderasi Admin</span>
+                                    @endif
+                                </div>
+                                <p style="font-style: italic; font-size: 13px; color: var(--clr-muted);">"{{ $review->comment }}"</p>
+                            </div>
+                        @else
+                            <p style="font-size: 12.5px; color: var(--clr-muted); margin-bottom: 16px;">Silakan berikan ulasan Anda terkait efisiensi pelaporan dan pelayanan kami untuk membantu kami meningkatkan kualitas sistem.</p>
+                            <form action="{{ route('review.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="module_type" value="berusaha">
+                                <input type="hidden" name="module_id" value="{{ $application->id }}">
+                                
+                                <style>
+                                    .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; gap: 4px; }
+                                    .star-rating input { display: none; }
+                                    .star-rating label { font-size: 32px; color: #CBD5E0; cursor: pointer; transition: color 0.2s; line-height: 1; margin: 0; padding: 0; }
+                                    .star-rating input:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #D69E2E; }
+                                </style>
+                                <div class="form-group" style="margin-bottom: 12px;">
+                                    <label style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Penilaian Anda</label>
+                                    <div class="star-rating">
+                                        <input type="radio" id="star5" name="rating" value="5" required />
+                                        <label for="star5" title="Sangat Baik">★</label>
+                                        <input type="radio" id="star4" name="rating" value="4" />
+                                        <label for="star4" title="Baik">★</label>
+                                        <input type="radio" id="star3" name="rating" value="3" />
+                                        <label for="star3" title="Cukup Baik">★</label>
+                                        <input type="radio" id="star2" name="rating" value="2" />
+                                        <label for="star2" title="Kurang">★</label>
+                                        <input type="radio" id="star1" name="rating" value="1" />
+                                        <label for="star1" title="Sangat Kurang">★</label>
+                                    </div>
+                                </div>
+ 
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <label for="comment" style="font-weight: 700; font-size: 12px; display: block; margin-bottom: 6px;">Catatan Ulasan / Feedback</label>
+                                    <textarea name="comment" id="comment" style="width:100%; padding: 10px; border-radius: 8px; border: 1.5px solid var(--clr-line); font-size:13.5px; resize:none;" rows="2" placeholder="Tuliskan saran atau ulasan singkat Anda..." required></textarea>
+                                </div>
+ 
+                                <button type="submit" style="background: var(--clr-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer;">
+                                    Kirim Ulasan Layanan
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                @endif
+            @endif
+ 
+            <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN Kantor Pertanahan / DPN) -->
             @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
                     <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
@@ -933,9 +999,9 @@
             <!-- ─── VERIFICATION PANELS FOR DIFFERENT ROLES ──────── -->
             <!-- ==================================================== -->
  
-            <!-- 1. BPN PANEL -->
+            <!-- 1. Kantor Pertanahan PANEL -->
                     <!-- SUB-STEP 1: Verifikasi Berkas Awal -->
-                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
+                        <div id="Kantor Pertanahan-panel-1" class="Kantor Pertanahan-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
@@ -997,7 +1063,7 @@
                             @endif
                         </div>
 
-                        <div id="bpn-panel-2" class="bpn-panel-step" style="display: {{ $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar' ? 'block' : 'none' }};">
+                        <div id="Kantor Pertanahan-panel-2" class="Kantor Pertanahan-panel-step" style="display: {{ $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar' ? 'block' : 'none' }};">
                             @php $isStep2Active = (Auth::user()->isBpn() && $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar'); @endphp
                             <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
@@ -1044,7 +1110,7 @@
                             @endif
                         </div>
 
-                        <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
+                        <div id="Kantor Pertanahan-panel-3" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
                             @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat)); @endphp
                             <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
@@ -1063,8 +1129,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group-v">
-                                            <label for="bpn_cek_lokasi_cp">Kontak CP Admin / Petugas</label>
-                                            <input type="text" name="bpn_cek_lokasi_cp" id="bpn_cek_lokasi_cp" class="form-control-v" placeholder="cth: Admin Kantor Pertanahan (BPN) (081234567891)" 
+                                            <label for="bpn_cek_lokasi_cp">Kontak Person Petugas Lapang</label>
+                                            <input type="text" name="bpn_cek_lokasi_cp" id="bpn_cek_lokasi_cp" class="form-control-v" placeholder="cth: Admin Kantor Pertanahan (081234567891)" 
                                                    value="{{ $application->bpn_cek_lokasi_cp }}" required>
                                         </div>
                                     </div>
@@ -1094,11 +1160,13 @@
                                     </div>
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-blue); width: 100%; justify-content: center;">
                                         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                                        Kirim Ulang Pesan WA
+                                    </button>
                                 </form>
                             @endif
                         </div>
 
-                        <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
+                        <div id="Kantor Pertanahan-panel-4" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
                             @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat)); @endphp
                             <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
@@ -1147,7 +1215,7 @@
                             @endif
                         </div>
 
-                        <div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
+                        <div id="Kantor Pertanahan-panel-5" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
                             @php $isStep5Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
                             <fieldset {{ $isStep5Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -1165,7 +1233,7 @@
                                     @if($application->bpn_pertek_document)
                                         <div class="form-group-v">
                                             <label for="bpn_pertek_document">Dokumen Pertek</label>
-                                            <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; color:#0f172a; font-size:13px; font-weight:600; text-decoration:none; margin-top:4px; transition:all 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'">
+                                            <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display:inline-flex; align-items:center; gap:8px; padding:8px 16px; background:#F97316; border:none; border-radius:6px; color:#ffffff; font-size:13px; font-weight:600; text-decoration:none; margin-top:4px; transition:all 0.2s;" onmouseover="this.style.background='#EA580C'" onmouseout="this.style.background='#F97316'">
                                                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                                                 Lihat Dokumen Terunggah
                                             </a>
@@ -1178,7 +1246,7 @@
                                         </div>
                                     @endif
                                     <div class="form-group-v">
-                                        <label for="notes">Catatan Pertimbangan Teknis Kantor Pertanahan (BPN)</label>
+                                        <label for="notes">Catatan Pertimbangan Teknis Kantor Pertanahan</label>
                                         <textarea name="notes" id="notes" class="form-control-v" rows="3" placeholder="Masukkan ringkasan kajian tata ruang pertanahan..." required>{{ $application->status === 'disetujui' || ($application->status === 'ditolak' && !$application->bpn_pertek_document && $application->bpn_berkas_status === 'diterima') ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     @if($isStep5Active)
@@ -1197,10 +1265,10 @@
                         
                         <script>
                             function showBpnPanel(stepNum) {
-                                document.querySelectorAll('.bpn-panel-step').forEach(function(el) {
+                                document.querySelectorAll('.Kantor Pertanahan-panel-step').forEach(function(el) {
                                     el.style.display = 'none';
                                 });
-                                var target = document.getElementById('bpn-panel-' + stepNum);
+                                var target = document.getElementById('Kantor Pertanahan-panel-' + stepNum);
                                 if(target) {
                                     target.style.display = 'block';
                                     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1254,7 +1322,7 @@
                                 <div class="form-group-v">
                                     <label for="dinas_pu_document">Dokumen Penilaian Tata Ruang (PDF, Opsional)</label>
                                     <input type="file" name="dinas_pu_document" id="dinas_pu_document" class="form-control-v" accept=".pdf">
-                                    <span style="font-size: 11px; color: var(--clr-muted);">*File yang diunggah hanya dapat diakses oleh Kantor Pertanahan (BPN).</span>
+                                    <span style="font-size: 11px; color: var(--clr-muted);">*File yang diunggah hanya dapat diakses oleh Kantor Pertanahan.</span>
                                 </div>
                             </div>
                             <div class="form-group-v">
@@ -1315,7 +1383,7 @@
                 <div class="verify-card" style="border-color: #F5C2C1; background: #FFF5F5;">
                     <h3 class="verify-title" style="color: #C5221F;">⚠️ Perbaikan Dokumen Persyaratan Diperlukan</h3>
                     <p style="font-size: 13px; color: #7F2321; margin-bottom: 16px;">
-                        Petugas Kantor Pertanahan (BPN) menyatakan berkas Anda tidak lengkap dengan catatan: <br>
+                        Petugas Kantor Pertanahan menyatakan berkas Anda tidak lengkap dengan catatan: <br>
                         <strong>"{{ $application->bpn_notes }}"</strong>
                     </p>
                     <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -1366,12 +1434,12 @@
                 </div>
             @endif
  
-            <!-- 5. PELAKU USAHA ACTION: BLAST NOTIF KE BPN -->
+            <!-- 5. PELAKU USAHA ACTION: BLAST NOTIF KE Kantor Pertanahan -->
             @if($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'belum_bayar')
                 <div class="verify-card" style="border-color: #B8E2C8; background: #F4FBF7;">
                     <h3 class="verify-title" style="color: #137333;">✓ Berkas Valid! Langkah Selanjutnya</h3>
                     <p style="font-size: 13px; color: #137333; margin-bottom: 16px;">
-                        Berkas awal Anda telah disetujui BPN. Silakan tekan tombol di bawah untuk men-trigger verifikasi pembayaran dan mengirimkan notifikasi ke Kantor Pertanahan (BPN).
+                        Berkas awal Anda telah disetujui Kantor Pertanahan. Silakan tekan tombol di bawah untuk men-trigger verifikasi pembayaran dan mengirimkan notifikasi ke Kantor Pertanahan.
                     </p>
                     <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                         @csrf
@@ -1423,9 +1491,9 @@
                                 <span class="detail-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
                             </li>
                             
-                            <!-- BPN Info -->
+                            <!-- Kantor Pertanahan Info -->
                             <li class="detail-item">
-                                <span class="detail-label">Kelayakan Berkas (Kantor Pertanahan (BPN))</span>
+                                <span class="detail-label">Kelayakan Berkas (Kantor Pertanahan)</span>
                                 <span class="detail-val" style="text-transform: capitalize; font-weight: 700;">
                                     {{ str_replace('_', ' ', $application->bpn_berkas_status) }}
                                 </span>
@@ -1586,7 +1654,7 @@
                             $startDate = $application->tgl_mulai_layanan ? \Carbon\Carbon::parse($application->tgl_mulai_layanan) : ($application->bpn_pembayaran_approved_at ? \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at) : $application->created_at);
                             $targetDate = $application->tgl_selesai_layanan 
                                 ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
-                                : $startDate->copy()->addWorkingDaysWithHolidays($defaultDays);
+                                : $startDate->copy()->addDays($defaultDays);
                         } else {
                             $targetDate = null;
                         }
@@ -1606,8 +1674,7 @@
                             $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
-                            // Menggunakan macro baru yang skip tanggal merah & weekend
-                            $daysRemaining = $targetDate ? $now->diffInWorkingDaysWithHolidays($targetDate) : 0;
+                            $daysRemaining = $targetDate ? $now->diffInDays($targetDate, false) : 0;
                             
                             if ($isPuPhase) {
                                 if ($daysRemaining >= 4) {
@@ -1740,7 +1807,7 @@
                                 </div>
                             </div>
 
-                            <!-- STEP 1: Verifikasi Berkas Awal BPN -->
+                            <!-- STEP 1: Verifikasi Berkas Awal Kantor Pertanahan -->
                             @php
                                 $step2Status = 'active';
                                 if ($application->bpn_berkas_status === 'diterima') {
@@ -1754,7 +1821,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         1. Verifikasi Berkas Awal
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">Validasi kelengkapan berkas dokumen persyaratan pemohon.</div>
                                     @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
@@ -1788,7 +1855,7 @@
                                         2. Validasi Permohonan
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</span>
                                     </div>
-                                    <div class="timeline-desc">Pemeriksaan awal kelayakan tata ruang. Notifikasi dikirim ke Kantor Pertanahan (BPN) dan Pelaku Usaha.</div>
+                                    <div class="timeline-desc">Pemeriksaan awal kelayakan tata ruang. Notifikasi dikirim ke Kantor Pertanahan dan Pelaku Usaha.</div>
                                     @if(in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai']) && $application->dinas_pu_approved_at)
                                         <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Disetujui pada: {{ \Carbon\Carbon::parse($application->dinas_pu_approved_at)->format('d M Y, H:i') }} WIB</div>
                                     @endif
@@ -1812,7 +1879,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         3. Pembayaran PNBP & Registrasi
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_pembayaran_status === 'sudah_bayar')
@@ -1821,7 +1888,7 @@
                                                 <br>No. Berkas: <strong>{{ $application->no_berkas }}</strong>
                                             @endif
                                         @else
-                                            Menunggu konfirmasi pembayaran PNBP dan input nomor berkas oleh Kantor Pertanahan (BPN).
+                                            Menunggu konfirmasi pembayaran PNBP dan input nomor berkas oleh Kantor Pertanahan.
                                         @endif
                                     </div>
                                     @if($application->bpn_pembayaran_status === 'sudah_bayar' && $application->bpn_pembayaran_approved_at)
@@ -1842,13 +1909,13 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         4. Peninjauan Lapangan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_cek_lokasi_dt)
                                             Tinjau: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>Petugas: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
                                         @else
-                                            Menunggu jadwal peninjauan lapangan dari Kantor Pertanahan (BPN).
+                                            Menunggu jadwal peninjauan lapangan dari Kantor Pertanahan.
                                         @endif
                                     </div>
                                     @if($application->bpn_cek_lokasi_dt)
@@ -1869,7 +1936,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         5. Rapat Pembahasan Pertek
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_rapat_dt)
@@ -1902,7 +1969,7 @@
                                 <div class="timeline-content">
                                     <div class="timeline-title">
                                         6. Penerbitan Pertek Pertanahan
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan (BPN)</span>
+                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_pertek_document)
@@ -2002,7 +2069,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
-                                            Layanan dihentikan oleh instansi terkait (BPN, Dinas Pekerjaan Umum dan Tata Ruang (PUTR), atau Dinas Pekerjaan Umum dan Tata Ruang (PUTR)).
+                                            Layanan dihentikan oleh instansi terkait (Kantor Pertanahan, Dinas Pekerjaan Umum dan Tata Ruang (PUTR), atau Dinas Pekerjaan Umum dan Tata Ruang (PUTR)).
                                         @elseif($application->status === 'disetujui')
                                             Seluruh alur selesai. Dokumen PKKPR Berusaha siap diunduh dari portal.
                                         @else
@@ -2017,6 +2084,35 @@
                 </div>
  
             </div>
+            @if(session('wa_links') && count(session('wa_links')) > 0)
+                <div id="wa-blast-container" style="background:#E8F5E9;border:1.5px solid #A5D6A7;border-radius:8px;padding:16px 20px;margin-bottom:20px;box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);">
+                    <div style="font-size:13px;font-weight:700;color:#1B5E20;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                        Kirim Notifikasi WhatsApp Manual
+                    </div>
+                    <div style="font-size:12px;color:#2E7D32;margin-bottom:12px;">Klik tombol di bawah untuk membuka WhatsApp dan kirim notifikasi ke pihak terkait:</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                        @foreach(session('wa_links') as $link)
+                            <a href="{{ $link['url'] }}" target="_blank" rel="noopener noreferrer"
+                               style="display:inline-flex;align-items:center;gap:6px;background:#25D366;color:#fff;padding:9px 16px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:700;transition:all 0.2s;"
+                               onmouseover="this.style.background='#1EBE5A'" onmouseout="this.style.background='#25D366'">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                Kirim ke {{ $link['target'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        setTimeout(function() {
+                            const waContainer = document.getElementById('wa-blast-container');
+                            if (waContainer) {
+                                waContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 400);
+                    });
+                </script>
+            @endif
         </div>
     </main>
  
@@ -2313,9 +2409,6 @@ document.addEventListener('DOMContentLoaded', function() {
         border-top: 1px solid #E2E8F0;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
-        position: sticky;
-        bottom: 0;
-        z-index: 10;
     }
     .btn-nav-global {
         padding: 6px 14px;
@@ -2432,8 +2525,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const match = targetStep.getAttribute('onclick').match(/showBpnPanel\(['"]?([^'"]+)['"]?\)/);
         
         if(match) {
-            const tPanel = document.getElementById('bpn-panel-' + match[1]);
-            document.querySelectorAll('.bpn-panel-step').forEach(p => p.style.display = 'none');
+            const tPanel = document.getElementById('Kantor Pertanahan-panel-' + match[1]);
+            document.querySelectorAll('.Kantor Pertanahan-panel-step').forEach(p => p.style.display = 'none');
             if(tPanel) { 
                 tPanel.style.display = 'block'; 
             }
@@ -2442,6 +2535,7 @@ document.addEventListener('DOMContentLoaded', function() {
             targetStep.classList.add('viewing-step');
             
             targetStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         updateNavButtons();
     }
@@ -2459,9 +2553,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize
     setTimeout(() => {
-        const activePanel = document.querySelector('.bpn-panel-step[style*="display: block"]');
+        const activePanel = document.querySelector('.Kantor Pertanahan-panel-step[style*="display: block"]');
         if(activePanel) {
-            const panelIdMatch = activePanel.id.replace('bpn-panel-', '');
+            const panelIdMatch = activePanel.id.replace('Kantor Pertanahan-panel-', '');
             const activeStepIndex = timelineSteps.findIndex(s => s.getAttribute('onclick').includes(panelIdMatch));
             if(activeStepIndex !== -1) {
                 switchPanel(activeStepIndex);
