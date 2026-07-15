@@ -449,7 +449,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Nomor Induk Berusaha (NIB)<span class="optional">(Opsional)</span></label>
-                    <input type="text" name="nib" class="form-control" placeholder="13 Digit NIB (Kosongkan jika tidak ada)" value="{{ old('nib') }}">
+                    <input type="text" name="nib" class="form-control" placeholder="13 Digit NIB (Kosongkan jika tidak ada)" maxlength="13" value="{{ old('nib') }}" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
 
                 <div class="form-group">
