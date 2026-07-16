@@ -970,12 +970,11 @@
                                             <label><input type="checkbox" class="cb-revisi" value="Peta Lokasi / Sketsa"> Peta Lokasi / Sketsa</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Surat Kuasa"> Surat Kuasa</label>
                                             <label><input type="checkbox" class="cb-revisi" value="FC KTP Pemohon"> FC KTP Pemohon</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="FC NPWP"> FC NPWP</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="FC Akta Pendirian"> FC Akta Pendirian</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Dokumen Kebijakan"> Dokumen Kebijakan</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Rencana Penggunaan Tanah"> Rencana Penggunaan Tanah</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Bukti Penguasaan Tanah"> Bukti Penguasaan Tanah</label>
                                             <label><input type="checkbox" class="cb-revisi" value="NIB"> NIB</label>
                                             <label><input type="checkbox" class="cb-revisi" value="KBLI"> KBLI</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="Proposal Kegiatan"> Proposal Kegiatan</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Persyaratan Lainnya"> Persyaratan Lainnya</label>
                                         </div>
                                     </div>
@@ -1584,9 +1583,10 @@
                         $isPuPhase = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr', 'disetujui', 'terbit_pkpr']) || $application->bpn_pertek_document;
                         $defaultDays = $isPuPhase ? 20 : 10;
                         
-                        // Menghitung target SLA mulai dari tanggal pembayaran lunas (atau custom tanggal mulai)
-                        if ($application->bpn_pembayaran_status === 'sudah_bayar') {
-                            $startDate = $application->tgl_mulai_layanan ? \Carbon\Carbon::parse($application->tgl_mulai_layanan) : ($application->bpn_pembayaran_approved_at ? \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at) : $application->created_at);
+                        // SLA: badge muncul setelah bayar, countdown jalan hanya jika BPN sudah set tgl_mulai_layanan
+                        $sudahBayar = $application->bpn_pembayaran_status === 'sudah_bayar';
+                        if ($sudahBayar && $application->tgl_mulai_layanan) {
+                            $startDate = \Carbon\Carbon::parse($application->tgl_mulai_layanan);
                             $targetDate = $application->tgl_selesai_layanan 
                                 ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
                                 : $startDate->copy()->addDays($defaultDays);
@@ -1604,12 +1604,17 @@
                         }
                         
                         if ($isSelesai) {
-                            $slaBg = '#16A34A'; // Solid Green
+                            $slaBg = '#16A34A';
                             $slaBorder = '#15803D';
+                            $slaColor = '#FFFFFF';
+                        } elseif (!$sudahBayar || !$targetDate) {
+                            // Belum bayar ATAU sudah bayar tapi BPN belum set SLA
+                            $slaBg = '#64748B';
+                            $slaBorder = '#475569';
                             $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
-                            $daysRemaining = $targetDate ? $now->diffInDays($targetDate, false) : 0;
+                            $daysRemaining = $now->diffInDays($targetDate, false);
                             
                             if ($isPuPhase) {
                                 if ($daysRemaining >= 4) {
@@ -1643,11 +1648,17 @@
                         }
                     @endphp
                     
-                    @if($targetDate)
+                    {{-- Badge SLA selalu muncul --}}
                     <div class="floating-sla" style="position: fixed; top: 120px; right: 32px; z-index: 9999; background: {{ $slaBg }}; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid {{ $slaBorder }}; width: 260px; overflow: hidden; display: flex; flex-direction: column;">
                         <div style="padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.2);">
                             <div style="font-size: 10px; font-weight: 800; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em;">Batas Waktu (SLA)</div>
-                            <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">{{ $targetDate->format('d M Y') }}</strong></div>
+                            @if($targetDate)
+                                <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">{{ $targetDate->format('d M Y') }}</strong></div>
+                            @elseif($sudahBayar)
+                                <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">Belum Diatur</strong></div>
+                            @else
+                                <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">Menunggu Pembayaran</strong></div>
+                            @endif
                         </div>
                         <div style="padding: 12px 14px; background: rgba(0,0,0,0.06);">
                             @if($isSelesai)
@@ -1656,6 +1667,20 @@
                                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                     <span>Tepat Waktu (Selesai)</span>
+                                </div>
+                            @elseif(!$sudahBayar)
+                                <div style="display: flex; align-items: center; gap: 8px; color: {{ $slaColor }}; font-weight: 700; font-size: 13px;">
+                                    <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                    </div>
+                                    <span>Menunggu Pembayaran PNBP</span>
+                                </div>
+                            @elseif(!$targetDate)
+                                <div style="display: flex; align-items: center; gap: 8px; color: {{ $slaColor }}; font-weight: 700; font-size: 13px;">
+                                    <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </div>
+                                    <span>Menunggu Admin Set SLA</span>
                                 </div>
                             @else
                                 <div style="font-size: 10px; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 8px; font-weight: 700;">WAKTU TERSISA:</div>
@@ -1707,7 +1732,6 @@
                             setInterval(updateCountdown, 1000);
                         });
                     </script>
-                    @endif
 
                     <div class="card" style="position: sticky; top: 88px;">
                         <!-- Timeline Tracker -->

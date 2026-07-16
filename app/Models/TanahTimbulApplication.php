@@ -74,9 +74,9 @@ class TanahTimbulApplication extends Model
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
-            'menunggu_dinas_pu'   => 'Analisis Tata Ruang (Dinas PU)',
-            'menunggu_satu_pintu' => 'Penerbitan Dokumen (Satu Pintu)',
+            'menunggu_bpn'        => 'Verifikasi Dokumen (Kantor Pertanahan)',
+            'menunggu_dinas_pu'   => 'Analisis Tata Ruang (Dinas PUTR)',
+            'menunggu_satu_pintu' => 'Penerbitan Dokumen (DPMPTSP)',
             'disetujui'           => 'Layanan Selesai',
             'ditolak'             => 'Permohonan Ditolak',
             default               => 'Draft / Baru',

@@ -68,9 +68,9 @@ class PsnApplication extends Model
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
-            'menunggu_bpn'        => 'Verifikasi Dokumen (BPN)',
-            'menunggu_dinas_pu'   => 'Penilaian PKKPR (Dinas PU)',
-            'menunggu_satu_pintu' => 'Penerbitan PKKPR (Satu Pintu)',
+            'menunggu_bpn'        => 'Verifikasi Dokumen (Kantor Pertanahan)',
+            'menunggu_dinas_pu'   => 'Penilaian PKKPR (Dinas PUTR)',
+            'menunggu_satu_pintu' => 'Penerbitan PKKPR (DPMPTSP)',
             'disetujui'           => 'Layanan Selesai',
             'ditolak'             => 'Permohonan Ditolak',
             default               => 'Draft / Baru',

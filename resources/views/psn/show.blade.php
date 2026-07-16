@@ -60,10 +60,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* ─── CONTAINER: diperlebar, penuhi gap kiri kanan ──── */
         .container {
-            max-width: 1000px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 40px;
         }
 
         /* ─── HEADER ─────────────────────────────────────────── */
@@ -556,6 +557,13 @@
             margin-bottom: 16px;
         }
  
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+            min-width: 0;
+        }
+
         .form-group-v {
             margin-bottom: 16px;
         }
@@ -893,55 +901,46 @@
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
                                         <strong>Langkah 1 dari 4 — Verifikasi Berkas Awal:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, lalu terima atau tolak. Notifikasi WA akan terkirim otomatis.
                                     </div>
-                                    <div class="form-group-v">
-                                        <label class="form-label" style="font-weight:700;color:#744210;">Keputusan Pemeriksaan Berkas:</label>
-                                        <div class="radio-group">
-                                            <label class="radio-label"><input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : (in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? '' : 'checked') }} onchange="updateRevisiVisibility()"> Disetujui / Lengkap</label>
-                                            <label class="radio-label" style="color:#E53E3E;"><input type="radio" name="action" value="reject" required {{ in_array($application->bpn_berkas_status, ['ditolak', 'tidak_sesuai']) ? 'checked' : '' }} onchange="updateRevisiVisibility()"> Tidak Lengkap</label>
+                                    <div class="form-group-v" style="margin-bottom: 20px;">
+                                        <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
+                                        <div style="display: flex; gap: 20px;">
+                                            <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('sps_document').required=true; document.getElementById('revisi-berkas-container').style.display='none';"> Disetujui / Lengkap
+                                            </label>
+                                            <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='none'; document.getElementById('sps_document').required=false; document.getElementById('revisi-berkas-container').style.display='block';"> Tidak Lengkap
+                                            </label>
                                         </div>
                                     </div>
+                                    
                                     <div id="sps-upload-container" style="display: {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'block' : 'none' }}; margin-bottom: 20px;">
                                         <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
                                         <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'required' : '' }}>
                                         <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 5MB. Wajib diisi jika Berkas Lengkap (Disetujui).</div>
                                     </div>
-                                    <div id="revisi-berkas-container" style="display: none; background: #FFF5F5; border: 1px solid #FC8181; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px;">
-                                        <label class="form-label" style="font-weight:700;color:#C53030;margin-bottom:8px;">Pilih Dokumen yang Perlu Diperbaiki:</label>
+
+                                    <div id="revisi-berkas-container" style="display:none; margin-bottom: 12px; background: #fff5f5; padding: 12px; border: 1px solid #fed7d7; border-radius: 4px;">
+                                        <label style="font-weight: 600; font-size: 12px; color: #c53030; margin-bottom: 8px; display: block;">Tandai Berkas yang Tidak Valid / Kurang Lengkap (Otomatis masuk ke catatan):</label>
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
                                             <label><input type="checkbox" class="cb-revisi" value="Formulir PTP"> Formulir PTP</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Peta Lokasi / Sketsa"> Peta Lokasi / Sketsa</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Surat Kuasa"> Surat Kuasa</label>
                                             <label><input type="checkbox" class="cb-revisi" value="FC KTP Pemohon"> FC KTP Pemohon</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="FC NPWP"> FC NPWP</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="FC Akta Pendirian"> FC Akta Pendirian</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Penetapan Dokumen PSN"> Penetapan Dokumen PSN</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Rencana Penggunaan Tanah"> Rencana Penggunaan Tanah</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Bukti Penguasaan Tanah"> Bukti Penguasaan Tanah</label>
                                             <label><input type="checkbox" class="cb-revisi" value="NIB"> NIB</label>
                                             <label><input type="checkbox" class="cb-revisi" value="KBLI"> KBLI</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="Proposal Kegiatan"> Proposal Kegiatan</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Persyaratan Lainnya"> Persyaratan Lainnya</label>
                                         </div>
                                     </div>
+
                                     <div class="form-group-v">
-                                        <label for="notes" class="form-label" style="font-weight:700;color:#744210;">Catatan Pemeriksaan Berkas <span style="color:red;">*</span></label>
-                                        <textarea id="notes" name="notes" class="form-control-v" rows="3" placeholder="Tuliskan hasil pemeriksaan dokumen persyaratan..." style="resize:none;background:white;" required>{{ $application->bpn_berkas_status !== 'menunggu' ? $application->bpn_notes : '' }}</textarea>
+                                        <label for="notes" style="display: block; font-size: 12.5px; font-weight: 700; color: var(--clr-ink); margin-bottom: 6px;">Catatan Pemeriksaan</label>
+                                        <textarea id="notes" name="notes" class="form-control-v" rows="3" placeholder="Masukkan catatan atau instruksi perbaikan..." required>{{ $application->bpn_berkas_status !== 'menunggu' ? $application->bpn_notes : '' }}</textarea>
                                     </div>
                                     <script>
-                                        function updateRevisiVisibility() {
-                                            const rejectRadio = document.querySelector('input[name="action"][value="reject"]');
-                                            const revisiContainer = document.getElementById('revisi-berkas-container');
-                                            const spsContainer = document.getElementById('sps-upload-container');
-                                            const spsInput = document.getElementById('sps_document');
-                                            if(rejectRadio && revisiContainer) {
-                                                const isReject = rejectRadio.checked;
-                                                revisiContainer.style.display = isReject ? 'block' : 'none';
-                                                spsContainer.style.display = isReject ? 'none' : 'block';
-                                                if (spsInput) spsInput.required = !isReject;
-                                            }
-                                        }
-                                        
                                         document.addEventListener('DOMContentLoaded', function() {
-                                            updateRevisiVisibility();
-                                            
                                             const checkboxes = document.querySelectorAll('.cb-revisi');
                                             const notesArea = document.getElementById('notes');
                                             
@@ -962,7 +961,7 @@
                                         });
                                     </script>
                                     @if($isStep1Active)
-                                        <button type="submit" class="btn-submit-v">Kirim Hasil Verifikasi Berkas & Blast WA</button>
+                                        <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas</button>
                                     @else
                                         
                                     @endif
@@ -1531,9 +1530,10 @@
                         $isPuPhase = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr', 'disetujui', 'terbit_pkpr']) || $application->bpn_pertek_document;
                         $defaultDays = $isPuPhase ? 20 : 10;
                         
-                        // Menghitung target SLA mulai dari tanggal pembayaran lunas (atau custom tanggal mulai)
-                        if ($application->bpn_pembayaran_status === 'sudah_bayar') {
-                            $startDate = $application->tgl_mulai_layanan ? \Carbon\Carbon::parse($application->tgl_mulai_layanan) : ($application->bpn_pembayaran_approved_at ? \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at) : $application->created_at);
+                        // SLA: badge SELALU muncul, countdown jalan hanya jika sudah bayar + BPN sudah set tgl_mulai_layanan
+                        $sudahBayar = $application->bpn_pembayaran_status === 'sudah_bayar';
+                        if ($sudahBayar && $application->tgl_mulai_layanan) {
+                            $startDate = \Carbon\Carbon::parse($application->tgl_mulai_layanan);
                             $targetDate = $application->tgl_selesai_layanan 
                                 ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
                                 : $startDate->copy()->addDays($defaultDays);
@@ -1551,50 +1551,40 @@
                         }
                         
                         if ($isSelesai) {
-                            $slaBg = '#16A34A'; // Solid Green
+                            $slaBg = '#16A34A';
                             $slaBorder = '#15803D';
+                            $slaColor = '#FFFFFF';
+                        } elseif (!$sudahBayar || !$targetDate) {
+                            $slaBg = '#64748B';
+                            $slaBorder = '#475569';
                             $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
-                            $daysRemaining = $targetDate ? $now->diffInDays($targetDate, false) : 0;
+                            $daysRemaining = $now->diffInDays($targetDate, false);
                             
                             if ($isPuPhase) {
-                                if ($daysRemaining >= 4) {
-                                    $slaBg = '#16A34A'; 
-                                    $slaBorder = '#15803D';
-                                    $slaColor = '#FFFFFF';
-                                } elseif ($daysRemaining >= 1) {
-                                    $slaBg = '#EAB308'; 
-                                    $slaBorder = '#CA8A04';
-                                    $slaColor = '#FFFFFF';
-                                } else {
-                                    $slaBg = '#DC2626'; 
-                                    $slaBorder = '#B91C1C';
-                                    $slaColor = '#FFFFFF';
-                                }
+                                if ($daysRemaining >= 4) { $slaBg = '#16A34A'; $slaBorder = '#15803D'; $slaColor = '#FFFFFF'; }
+                                elseif ($daysRemaining >= 1) { $slaBg = '#EAB308'; $slaBorder = '#CA8A04'; $slaColor = '#FFFFFF'; }
+                                else { $slaBg = '#DC2626'; $slaBorder = '#B91C1C'; $slaColor = '#FFFFFF'; }
                             } else {
-                                if ($daysRemaining >= 3) {
-                                    $slaBg = '#16A34A'; 
-                                    $slaBorder = '#15803D';
-                                    $slaColor = '#FFFFFF';
-                                } elseif ($daysRemaining >= 1) {
-                                    $slaBg = '#EAB308'; 
-                                    $slaBorder = '#CA8A04';
-                                    $slaColor = '#FFFFFF';
-                                } else {
-                                    $slaBg = '#DC2626'; 
-                                    $slaBorder = '#B91C1C';
-                                    $slaColor = '#FFFFFF';
-                                }
+                                if ($daysRemaining >= 3) { $slaBg = '#16A34A'; $slaBorder = '#15803D'; $slaColor = '#FFFFFF'; }
+                                elseif ($daysRemaining >= 1) { $slaBg = '#EAB308'; $slaBorder = '#CA8A04'; $slaColor = '#FFFFFF'; }
+                                else { $slaBg = '#DC2626'; $slaBorder = '#B91C1C'; $slaColor = '#FFFFFF'; }
                             }
                         }
                     @endphp
                     
-                    @if($targetDate)
+                    {{-- Badge SLA selalu muncul --}}
                     <div class="floating-sla" style="position: fixed; top: 120px; right: 32px; z-index: 9999; background: {{ $slaBg }}; border-radius: 4px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid {{ $slaBorder }}; width: 260px; overflow: hidden; display: flex; flex-direction: column;">
                         <div style="padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.2);">
                             <div style="font-size: 10px; font-weight: 800; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em;">Batas Waktu (SLA)</div>
-                            <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">{{ $targetDate->format('d M Y') }}</strong></div>
+                            @if($targetDate)
+                                <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">{{ $targetDate->format('d M Y') }}</strong></div>
+                            @elseif($sudahBayar)
+                                <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">Belum Diatur</strong></div>
+                            @else
+                                <div style="font-size: 12.5px; color: {{ $slaColor }};">Target: <strong style="font-weight: 800;">Menunggu Pembayaran</strong></div>
+                            @endif
                         </div>
                         <div style="padding: 12px 14px; background: rgba(0,0,0,0.06);">
                             @if($isSelesai)
@@ -1603,6 +1593,20 @@
                                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                     </div>
                                     <span>Tepat Waktu (Selesai)</span>
+                                </div>
+                            @elseif(!$sudahBayar)
+                                <div style="display: flex; align-items: center; gap: 8px; color: {{ $slaColor }}; font-weight: 700; font-size: 13px;">
+                                    <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                                    </div>
+                                    <span>Menunggu Pembayaran PNBP</span>
+                                </div>
+                            @elseif(!$targetDate)
+                                <div style="display: flex; align-items: center; gap: 8px; color: {{ $slaColor }}; font-weight: 700; font-size: 13px;">
+                                    <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    </div>
+                                    <span>Menunggu Admin Set SLA</span>
                                 </div>
                             @else
                                 <div style="font-size: 10px; color: {{ $slaColor }}; opacity: 0.95; margin-bottom: 8px; font-weight: 700;">WAKTU TERSISA:</div>
@@ -1654,7 +1658,6 @@
                             setInterval(updateCountdown, 1000);
                         });
                     </script>
-                    @endif
 
                     <div class="card" style="position: sticky; top: 88px;">
                         <!-- ── SERVICE IDENTIFIER HEADER ── -->
