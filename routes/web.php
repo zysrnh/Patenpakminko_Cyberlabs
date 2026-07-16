@@ -10,6 +10,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\InformalController;
 use App\Http\Controllers\PsnController;
 use App\Http\Controllers\BerkasController;
+use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\AdminDpnController;
 use App\Http\Controllers\KbliController;
 use App\Http\Controllers\WaTemplateController;
@@ -278,6 +279,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
     Route::get('/file/{path}', [BerkasController::class, 'viewFile'])->where('path', '.*')->name('file.view');
 
+    // Pengelolaan Dokumen Manual (Dokumen Baru)
+    Route::get('/dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
+    Route::post('/dokumen', [DokumenController::class, 'store'])->name('dokumen.store');
+    Route::get('/dokumen/{id}/download', [DokumenController::class, 'download'])->name('dokumen.download');
+    Route::get('/dokumen/{id}/preview', [DokumenController::class, 'preview'])->name('dokumen.preview');
+    Route::delete('/dokumen/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+    Route::post('/dokumen/download-zip', [DokumenController::class, 'downloadZip'])->name('dokumen.download_zip');
+    Route::post('/dokumen/download-batch', [DokumenController::class, 'downloadBatch'])->name('dokumen.download_batch');
+
     // Admin Berita
     Route::get('/admin/berita', [\App\Http\Controllers\BeritaController::class, 'index'])->name('admin.berita.index');
     Route::get('/admin/berita/create', [\App\Http\Controllers\BeritaController::class, 'create'])->name('admin.berita.create');
@@ -336,4 +346,54 @@ Route::get('/setup-vps', function() {
     } catch (\Exception $e) {
         return "<b>[ERROR]</b> Terjadi kesalahan saat setup:<br><br>" . $e->getMessage();
     }
+});
+
+Route::get('/setup-dokumens', function() {
+    if (!\Illuminate\Support\Facades\Schema::hasTable('dokumens')) {
+        \Illuminate\Support\Facades\Schema::create('dokumens', function (\Illuminate\Database\Schema\Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('nama_dokumen');
+            $table->string('kategori')->nullable();
+            $table->string('file_path');
+            $table->string('tipe_file', 10)->nullable();
+            $table->string('ukuran_file', 20)->nullable();
+            $table->text('keterangan')->nullable();
+            $table->timestamps();
+        });
+        return "Tabel dokumens berhasil dibuat!";
+    }
+    return "Tabel dokumens sudah ada.";
+});
+
+Route::get('/setup-copy', function() {
+    $content = file_get_contents(app_path('Http/Controllers/BerkasController.php'));
+    $content = str_replace('BerkasController', 'DokumenController', $content);
+    $content = str_replace('use App\Models\Berkas;', 'use App\Models\Dokumen;', $content);
+    $content = str_replace('Berkas::', 'Dokumen::', $content);
+    $content = str_replace('$berkas', '$dokumen', $content);
+    $content = str_replace('berkas.', 'dokumen.', $content);
+    $content = str_replace('berkas/', 'dokumen/', $content);
+    $content = str_replace('nama_berkas', 'nama_dokumen', $content);
+    $content = str_replace('berkas', 'dokumen', $content);
+    $content = str_replace('Berkas', 'Dokumen', $content);
+    file_put_contents(app_path('Http/Controllers/DokumenController.php'), $content);
+
+    $viewContent = file_get_contents(resource_path('views/berkas/index.blade.php'));
+    $viewContent = str_replace('Berkas', 'Dokumen', $viewContent);
+    $viewContent = str_replace('berkas', 'dokumen', $viewContent);
+    $viewContent = str_replace('nama_berkas', 'nama_dokumen', $viewContent);
+    
+    $viewPath = resource_path('views/dokumen');
+    if (!file_exists($viewPath)) {
+        mkdir($viewPath, 0777, true);
+    }
+    file_put_contents($viewPath.'/index.blade.php', $viewContent);
+
+    return "Copy done!";
+});
+
+Route::get('/debug-kat', function() {
+    $berkas = \App\Models\Berkas::where('nama_berkas', 'like', '%[PKKPR Berusaha]%')->pluck('kategori')->unique();
+    return response()->json($berkas);
 });

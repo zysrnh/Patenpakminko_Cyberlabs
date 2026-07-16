@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Berkas;
+use App\Models\Dokumen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class BerkasController extends Controller
+class DokumenController extends Controller
 {
     /**
      * Pastikan hanya role yang diizinkan yang bisa akses controller ini
@@ -26,7 +26,7 @@ class BerkasController extends Controller
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke fitur ini.');
         }
 
-        $query = Berkas::with('user')->latest();
+        $query = Dokumen::with('user')->latest();
 
         // Filter berdasarkan kategori
         if ($request->has('kategori') && $request->kategori != '') {
@@ -38,11 +38,11 @@ class BerkasController extends Controller
             $query->whereDate('created_at', $request->tanggal);
         }
 
-        // Filter pencarian nama berkas atau nama pengunggah
+        // Filter pencarian nama dokumen atau nama pengunggah
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('nama_berkas', 'like', '%' . $search . '%')
+                $q->where('nama_dokumen', 'like', '%' . $search . '%')
                   ->orWhereHas('user', function($qUser) use ($search) {
                       $qUser->where('name', 'like', '%' . $search . '%')
                             ->orWhere('business_name', 'like', '%' . $search . '%');
@@ -52,7 +52,7 @@ class BerkasController extends Controller
 
         // Filter berdasarkan layanan khusus (PKKPR Berusaha, Non Berusaha, dsb)
         if ($request->has('layanan') && $request->layanan != '') {
-            $query->where('nama_berkas', 'like', '[' . $request->layanan . ']%');
+            $query->where('nama_dokumen', 'like', '[' . $request->layanan . ']%');
         }
 
         // Filter berdasarkan pemohon
@@ -65,25 +65,25 @@ class BerkasController extends Controller
             $query->where('kategori', 'Dokumen Pertimbangan Teknis Pertanahan');
         }
 
-        $berkas = $query->paginate(10);
+        $dokumen = $query->paginate(10);
         
         // Ambil daftar pemohon yang sudah ada berkas/dokumennya atau role pelaku_usaha
-        $userIdsBerkas = Berkas::select('user_id')->distinct()->pluck('user_id')->toArray();
-        $userIdsDokumen = \App\Models\Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray();
+        $userIdsBerkas = \App\Models\Berkas::select('user_id')->distinct()->pluck('user_id')->toArray();
+        $userIdsDokumen = Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray();
         $allUserIds = array_unique(array_merge($userIdsBerkas, $userIdsDokumen));
         
         $pemohonList = \App\Models\User::whereIn('id', $allUserIds)->orWhere('role', 'pelaku_usaha')->get();
 
         // Ambil daftar kategori yang sudah ada untuk dropdown filter
-        $kategoriList = Berkas::select('kategori')->distinct()->whereNotNull('kategori')->orderBy('kategori')->pluck('kategori');
+        $kategoriList = Dokumen::select('kategori')->distinct()->whereNotNull('kategori')->orderBy('kategori')->pluck('kategori');
 
-        return view('berkas.index', compact('berkas', 'pemohonList', 'kategoriList'));
+        return view('dokumen.index', compact('dokumen', 'pemohonList', 'kategoriList'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nama_berkas' => 'nullable|string|max:255',
+            'nama_dokumen' => 'nullable|string|max:255',
             'kategori'    => 'nullable|string|max:100',
             'file'        => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:102400', // Max 10MB
             'keterangan'  => 'nullable|string'
@@ -91,15 +91,15 @@ class BerkasController extends Controller
 
         $file = $request->file('file');
         
-        // Simpan file ke storage/app/public/berkas
-        $filePath = $file->store('berkas', 'public');
+        // Simpan file ke storage/app/public/dokumen
+        $filePath = $file->store('dokumen', 'public');
         
         $ukuranKb = round($file->getSize() / 1024, 2);
         $ukuranStr = $ukuranKb > 1024 ? round($ukuranKb / 1024, 2) . ' MB' : $ukuranKb . ' KB';
 
-        Berkas::create([
+        Dokumen::create([
             'user_id'     => Auth::id(),
-            'nama_berkas' => $request->nama_berkas ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+            'nama_dokumen' => $request->nama_dokumen ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
             'kategori'    => $request->kategori,
             'file_path'   => $filePath,
             'tipe_file'   => $file->getClientOriginalExtension(),
@@ -107,15 +107,15 @@ class BerkasController extends Controller
             'keterangan'  => $request->keterangan
         ]);
 
-        return redirect()->route('berkas.index')->with('success', 'Berkas berhasil diupload.');
+        return redirect()->route('dokumen.index')->with('success', 'Dokumen berhasil diupload.');
     }
 
     public function download($id)
     {
-        $berkas = Berkas::findOrFail($id);
+        $dokumen = Dokumen::findOrFail($id);
         
-        if (Storage::disk('public')->exists($berkas->file_path)) {
-            return Storage::disk('public')->download($berkas->file_path, $berkas->nama_berkas . '.' . $berkas->tipe_file);
+        if (Storage::disk('public')->exists($dokumen->file_path)) {
+            return Storage::disk('public')->download($dokumen->file_path, $dokumen->nama_dokumen . '.' . $dokumen->tipe_file);
         }
 
         return redirect()->back()->with('error', 'File tidak ditemukan di server.');
@@ -123,14 +123,14 @@ class BerkasController extends Controller
 
     public function preview($id)
     {
-        $berkas = Berkas::findOrFail($id);
+        $dokumen = Dokumen::findOrFail($id);
         
-        if (!Storage::disk('public')->exists($berkas->file_path)) {
+        if (!Storage::disk('public')->exists($dokumen->file_path)) {
             return response()->json(['error' => 'File tidak ditemukan.'], 404);
         }
 
-        $path = storage_path('app/public/' . $berkas->file_path);
-        $ext  = strtolower($berkas->tipe_file);
+        $path = storage_path('app/public/' . $dokumen->file_path);
+        $ext  = strtolower($dokumen->tipe_file);
 
         // Untuk DOCX: konversi ke HTML dulu pakai PhpWord, tampilkan di browser
         if (in_array($ext, ['doc', 'docx'])) {
@@ -159,31 +159,114 @@ class BerkasController extends Controller
 
         return response()->file($path, [
             'Content-Type'        => $mimeType,
-            'Content-Disposition' => 'inline; filename="' . $berkas->nama_berkas . '.' . $ext . '"'
+            'Content-Disposition' => 'inline; filename="' . $dokumen->nama_dokumen . '.' . $ext . '"'
         ]);
     }
 
     public function destroy($id)
     {
-        $berkas = Berkas::findOrFail($id);
+        $dokumen = Dokumen::findOrFail($id);
         
         // Hapus fisik file
-        if (Storage::disk('public')->exists($berkas->file_path)) {
-            Storage::disk('public')->delete($berkas->file_path);
+        if (Storage::disk('public')->exists($dokumen->file_path)) {
+            Storage::disk('public')->delete($dokumen->file_path);
         }
         
-        $berkas->delete();
+        $dokumen->delete();
 
-        return redirect()->route('berkas.index')->with('success', 'Berkas berhasil dihapus.');
+        return redirect()->route('dokumen.index')->with('success', 'Dokumen berhasil dihapus.');
     }
 
-    public function sync()
+    public function downloadZip(Request $request)
     {
-        // Panggil command artisan sync
-        \Illuminate\Support\Facades\Artisan::call('berkas:sync');
-        $output = \Illuminate\Support\Facades\Artisan::output();
+        $userId = $request->user_id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Silakan pilih pemohon terlebih dahulu untuk mengunduh semua dokumen.');
+        }
 
-        return redirect()->route('berkas.index')->with('success', 'Sinkronisasi berhasil: ' . $output);
+        $user = \App\Models\User::find($userId);
+        if (!$user) {
+            return redirect()->back()->with('error', 'Pemohon tidak ditemukan.');
+        }
+
+        // Ambil dari Berkas (Otomatis) dan Dokumen (Manual)
+        $berkas = \App\Models\Berkas::where('user_id', $userId)->get();
+        $dokumen = Dokumen::where('user_id', $userId)->get();
+
+        if ($berkas->isEmpty() && $dokumen->isEmpty()) {
+            return redirect()->back()->with('error', 'Tidak ada dokumen untuk pemohon ini.');
+        }
+
+        $zip = new \ZipArchive;
+        $zipFileName = 'Semua_Dokumen_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $user->name ?? $user->business_name) . '.zip';
+        $zipFilePath = public_path($zipFileName);
+
+        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
+            // Tambahkan file dari Berkas
+            foreach ($berkas as $b) {
+                if (Storage::disk('public')->exists($b->file_path)) {
+                    $path = storage_path('app/public/' . $b->file_path);
+                    $nameInZip = 'Otomatis/' . $b->nama_berkas . '.' . $b->tipe_file;
+                    $zip->addFile($path, $nameInZip);
+                }
+            }
+            // Tambahkan file dari Dokumen
+            foreach ($dokumen as $d) {
+                if (Storage::disk('public')->exists($d->file_path)) {
+                    $path = storage_path('app/public/' . $d->file_path);
+                    $nameInZip = 'Manual/' . $d->nama_dokumen . '.' . $d->tipe_file;
+                    $zip->addFile($path, $nameInZip);
+                }
+            }
+            $zip->close();
+        } else {
+            return redirect()->back()->with('error', 'Gagal membuat file ZIP.');
+        }
+
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+    }
+
+    public function downloadBatch(Request $request)
+    {
+        $ids = $request->input('dokumen_ids');
+        
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'Tidak ada dokumen yang dipilih.');
+        }
+
+        $dokumenList = Dokumen::whereIn('id', $ids)->get();
+
+        if ($dokumenList->isEmpty()) {
+            return redirect()->back()->with('error', 'Dokumen yang dipilih tidak ditemukan.');
+        }
+
+        $zip = new \ZipArchive;
+        $zipFileName = 'Batch_Dokumen_' . date('Ymd_His') . '.zip';
+        $zipFilePath = public_path($zipFileName);
+
+        if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
+            foreach ($dokumenList as $d) {
+                if (Storage::disk('public')->exists($d->file_path)) {
+                    $path = storage_path('app/public/' . $d->file_path);
+                    $nameInZip = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', $d->nama_dokumen) . '.' . $d->tipe_file;
+                    
+                    // Prevent duplicate names in zip
+                    $count = 1;
+                    $originalName = pathinfo($nameInZip, PATHINFO_FILENAME);
+                    while($zip->locateName($nameInZip) !== false) {
+                        $nameInZip = $originalName . '_' . $count . '.' . $d->tipe_file;
+                        $count++;
+                    }
+
+                    $zip->addFile($path, $nameInZip);
+                }
+            }
+            $zip->close();
+        } else {
+            return redirect()->back()->with('error', 'Gagal membuat file ZIP.');
+        }
+
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
     }
 
     public function viewFile($path)

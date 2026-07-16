@@ -392,7 +392,7 @@
             </a>
         </div>
 
-        @if(Auth::check() && in_array(Auth::user()->role, ['dpn', 'Kantor Pertanahan', 'dinas_pu', 'dinas_putr', 'satu_pintu']))
+        @if(Auth::check() && (Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isSatuPintu()))
         <div class="sidebar-section">
             <div class="sidebar-section-label">Manajemen Pemberkasan</div>
             <div class="nav-item-group">
@@ -405,13 +405,17 @@
                 </div>
                 <div class="nav-dropdown-menu {{ request()->routeIs('berkas.*') ? 'open' : '' }}">
                     <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->fullUrlIs(route('berkas.index')) ? 'active' : '' }}">Berkas Otomatis</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis Non Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Non Berusaha</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis Kebijakan' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'Tanah Timbul', 'kategori' => 'Pertimbangan Teknis Tanah Timbul']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis Tanah Timbul' ? 'active' : '' }}">Pertimbangan Teknis Tanah Timbul</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'PSN', 'kategori' => 'Pertimbangan Teknis PSN']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertimbangan Teknis PSN' ? 'active' : '' }}">Pertimbangan Teknis PSN</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item {{ request('layanan') == 'PKKPR Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item {{ request('layanan') == 'PKKPR Non-Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Non Berusaha</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan Khusus', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item {{ request('layanan') == 'Kebijakan Khusus' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'Tanah Timbul', 'kategori' => 'Pertimbangan Teknis Tanah Timbul']) }}" class="nav-dropdown-item {{ request('layanan') == 'Tanah Timbul' ? 'active' : '' }}">Pertimbangan Teknis Tanah Timbul</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'PSN', 'kategori' => 'Pertimbangan Teknis PSN']) }}" class="nav-dropdown-item {{ request('layanan') == 'PSN' ? 'active' : '' }}">Pertimbangan Teknis PSN</a>
                 </div>
             </div>
+            <a href="{{ route('dokumen.index') }}" class="nav-item {{ request()->routeIs('dokumen.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Pengelolaan Berkas
+            </a>
         </div>
         @endif
         @endif
@@ -553,6 +557,19 @@
         if (el) el.textContent = d.toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
         // Sidebar mobile toggle
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                const scrollPos = sessionStorage.getItem('sidebarScrollPos');
+                if (scrollPos) {
+                    sidebar.scrollTop = parseInt(scrollPos, 10);
+                }
+                sidebar.addEventListener('scroll', function() {
+                    sessionStorage.setItem('sidebarScrollPos', sidebar.scrollTop);
+                });
+            }
+        });
+
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('open');

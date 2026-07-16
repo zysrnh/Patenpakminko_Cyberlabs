@@ -8,6 +8,7 @@ use App\Models\PpkprApplication;
 use App\Models\PpkprBerusahaApplication;
 use App\Models\KebijakanApplication;
 use App\Models\PsnApplication;
+use App\Models\TanahTimbulApplication;
 
 class SyncBerkasCommand extends Command
 {
@@ -75,6 +76,13 @@ class SyncBerkasCommand extends Command
         $psnApps = PsnApplication::all();
         foreach ($psnApps as $app) {
             $this->processApp($app, $fileFields, 'PSN');
+            $count++;
+        }
+
+        // 5. Tanah Timbul
+        $tanahTimbulApps = TanahTimbulApplication::all();
+        foreach ($tanahTimbulApps as $app) {
+            $this->processApp($app, $fileFields, 'Tanah Timbul');
             $count++;
         }
 
@@ -163,8 +171,13 @@ class SyncBerkasCommand extends Command
 
     private function createBerkasIfNotExists($userId, $jenisLabel, $filePath, $modulName, $appNumber)
     {
-        // Hindari duplikasi
-        if (Berkas::where('file_path', $filePath)->exists()) {
+        $namaBerkas = "[$modulName] $appNumber";
+        
+        // Hindari duplikasi berdasarkan permohonan dan kategori
+        if (Berkas::where('user_id', $userId)
+            ->where('nama_berkas', $namaBerkas)
+            ->where('kategori', $jenisLabel)
+            ->exists()) {
             return;
         }
 
@@ -181,7 +194,7 @@ class SyncBerkasCommand extends Command
 
         Berkas::create([
             'user_id' => $userId,
-            'nama_berkas' => "[$modulName] $appNumber",
+            'nama_berkas' => $namaBerkas,
             'kategori' => $jenisLabel,
             'file_path' => $filePath,
             'tipe_file' => strtolower($ext),

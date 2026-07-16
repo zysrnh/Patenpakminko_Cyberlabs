@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Pengelolaan Berkas - PATEN PAK MIKO')
-@section('page-title', 'Pengelolaan Berkas')
+@section('title', 'Pengelolaan Dokumen - PATEN PAK MIKO')
+@section('page-title', 'Pengelolaan Dokumen')
 
 @section('head-extra')
 <style>
@@ -108,82 +108,6 @@
         width: 100%; height: 100%;
         border: none; background: #f8fafc;
     }
-
-    /* ─── ENHANCED UI ───────────────────────── */
-    .filter-card {
-        background: #f8fafc;
-        border: 1px solid var(--line);
-        border-radius: var(--r-md);
-        padding: 16px;
-        margin-bottom: 20px;
-    }
-    .filter-grid {
-        display: grid;
-        grid-template-columns: minmax(200px, 1.5fr) 1fr 1fr 1.2fr auto;
-        gap: 12px;
-        align-items: center;
-    }
-    @media (max-width: 900px) {
-        .filter-grid { grid-template-columns: 1fr 1fr; }
-        .filter-grid .search-col { grid-column: 1 / -1; }
-        .filter-grid .action-col { grid-column: 1 / -1; display: flex; gap: 8px; }
-    }
-    .filter-grid .form-control {
-        padding: 8px 12px;
-        font-size: 13px;
-        height: 38px;
-    }
-    
-    .table-modern {
-        border-collapse: separate;
-        border-spacing: 0;
-        width: 100%;
-    }
-    .table-modern th {
-        background: #f1f5f9;
-        color: #475569;
-        font-weight: 600;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 12px 16px;
-        border-bottom: 2px solid var(--line);
-    }
-    .table-modern td {
-        padding: 16px;
-        vertical-align: middle;
-        border-bottom: 1px solid var(--line);
-        background: #fff;
-        transition: background 0.2s;
-    }
-    .table-modern tbody tr:hover td {
-        background: #f8fafc;
-    }
-    
-    .file-icon-box {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px; height: 36px;
-        border-radius: var(--r-md);
-        font-weight: 700; font-size: 11px;
-    }
-    .bg-pdf { background: #fee2e2; color: #ef4444; }
-    .bg-img { background: #e0e7ff; color: #6366f1; }
-    .bg-doc { background: #dbeafe; color: #3b82f6; }
-    .bg-def { background: #f1f5f9; color: #64748b; }
-
-    .btn-action-sm {
-        display: inline-flex; align-items: center; justify-content: center;
-        padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;
-        transition: all 0.2s; text-decoration: none; border: none; cursor: pointer; gap: 4px;
-    }
-    .btn-action-light { background: #f1f5f9; color: #475569; }
-    .btn-action-light:hover { background: #e2e8f0; color: #0f172a; }
-    .btn-action-blue { background: #e0f2fe; color: #0369a1; }
-    .btn-action-blue:hover { background: #bae6fd; color: #0c4a6e; }
-    .btn-action-red { background: #fee2e2; color: #b91c1c; }
-    .btn-action-red:hover { background: #fecaca; color: #7f1d1d; }
 </style>
 @endsection
 
@@ -193,20 +117,12 @@
         <div class="breadcrumb">
             <a href="{{ route('dashboard') }}">Dashboard</a>
             <span>›</span>
-            <span>Pengelolaan Berkas</span>
+            <span>Pengelolaan Dokumen</span>
         </div>
-        <h1>Pengelolaan Berkas</h1>
+        <h1>Pengelolaan Dokumen</h1>
         <p>Unggah, simpan, dan kelola dokumen lintas instansi (Kantor Pertanahan & PU).</p>
     </div>
-    <div>
-        <form action="{{ route('berkas.sync') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-secondary">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0115-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 01-15 6.7L3 16"/></svg>
-                Tarik Data (Pemohon)
-            </button>
-        </form>
-    </div>
+
 </div>
 
 @if(session('success'))
@@ -234,15 +150,15 @@
 
 <div class="panel">
     <div class="panel-head">
-        <h2>Unggah Berkas Baru</h2>
+        <h2>Unggah Dokumen Baru</h2>
     </div>
     <div class="panel-body">
-        <form action="{{ route('berkas.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('dokumen.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-grid">
                 <div class="form-group">
                     <label class="form-label">Nama Pemohon/Pelaku Usaha</label>
-                    <input type="text" name="nama_berkas" class="form-control" required placeholder="Contoh: PT Telkom Pasero TBK">
+                    <input type="text" name="nama_dokumen" class="form-control" required placeholder="Contoh: PT Telkom Pasero TBK">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Kategori</label>
@@ -291,96 +207,96 @@
 
 <div class="panel">
     <div class="panel-head">
-        <h2>Daftar Berkas Tersimpan</h2>
+        <h2>Daftar Dokumen Tersimpan</h2>
     </div>
     <div class="panel-body">
         
-        <div class="filter-card">
-            <form action="{{ route('berkas.index') }}" method="GET" class="filter-grid">
-                <div class="search-col">
-                    <input type="text" name="search" class="form-control" placeholder="Cari nama berkas atau pengunggah..." value="{{ request('search') }}">
-                </div>
-                <div>
-                    <select name="user_id" class="form-control">
-                        <option value="">Semua Pemohon</option>
-                        @foreach($pemohonList as $pemohon)
-                            <option value="{{ $pemohon->id }}" {{ request('user_id') == $pemohon->id ? 'selected' : '' }}>
-                                {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}</option>
+        <div class="filters">
+            <form action="{{ route('dokumen.index') }}" method="GET" style="display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center;">
+                <input type="text" name="search" placeholder="Cari nama dokumen atau pengunggah..." value="{{ request('search') }}" style="flex: 1; min-width: 250px;">
+                <select name="user_id" style="min-width: 180px;">
+                    <option value="">Semua Pemohon</option>
+                    @foreach($pemohonList as $pemohon)
+                        <option value="{{ $pemohon->id }}" {{ request('user_id') == $pemohon->id ? 'selected' : '' }}>
+                            {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}</option>
+                    @endforeach
+                </select>
+                <input type="date" name="tanggal" value="{{ request('tanggal') }}" style="min-width: 140px;" title="Filter berdasarkan Tanggal Unggah">
+                <select name="kategori" style="min-width: 200px;">
+                    <option value="">Semua Jenis Dokumen</option>
+                    @if(Auth::user()->isSatuPintu())
+                        <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
+                        <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
+                    @else
+                        @foreach($kategoriList as $kat)
+                            <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
                         @endforeach
-                    </select>
-                </div>
-                <div>
-                    <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" title="Filter berdasarkan Tanggal Unggah">
-                </div>
-                <div>
-                    @if(request('layanan'))
-                        <input type="hidden" name="layanan" value="{{ request('layanan') }}">
                     @endif
-                    <select name="kategori" class="form-control" style="{{ request('layanan') ? 'pointer-events: none; background: #e2e8f0; color: #475569; font-weight: 600; border-color: #cbd5e1;' : '' }}" {!! request('layanan') ? 'tabindex="-1"' : '' !!}>
-                        <option value="">Semua Jenis Dokumen</option>
-                        @if(Auth::user()->isSatuPintu())
-                            <option value="Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)" {{ request('kategori') == 'Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)' ? 'selected' : '' }}>Dokumen Pertimbangan Teknis Pertanahan Final (PTSP)</option>
-                            <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
-                        @else
-                            @php
-                                $katList = $kategoriList->toArray();
-                                if(request('kategori') && !in_array(request('kategori'), $katList)) {
-                                    $katList[] = request('kategori');
-                                }
-                            @endphp
-                            @foreach($katList as $kat)
-                                <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
-                <div class="action-col" style="display: flex; gap: 8px;">
-                    <button type="submit" class="btn btn-secondary" style="padding: 8px 16px; height: 38px;">Filter</button>
-                    @if(request('search') || request('kategori') || request('tanggal') || request('layanan'))
-                        <a href="{{ route('berkas.index', request('layanan') ? ['layanan' => request('layanan'), 'kategori' => request('kategori')] : []) }}" class="btn btn-secondary" style="padding: 8px 16px; height: 38px; background: #fff; color: #ef4444; border-color: #fca5a5;">Reset</a>
-                    @endif
-                </div>
+                </select>
+                <button type="submit" class="btn btn-secondary" style="padding: 8px 16px;">Filter</button>
+                @if(request('search') || request('kategori') || request('tanggal'))
+                    <a href="{{ route('dokumen.index') }}" class="btn btn-secondary" style="padding: 8px 16px;">Reset</a>
+                @endif
             </form>
+            @if(request('user_id'))
+            <form action="{{ route('dokumen.download_zip') }}" method="POST" style="margin:0;">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ request('user_id') }}">
+                <button type="submit" class="btn btn-primary" style="padding: 8px 16px; background-color: #10b981; border-color: #10b981;">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Unduh ZIP (Semua Dokumen)
+                </button>
+            </form>
+            @endif
         </div>
 
-        <div class="table-wrap" style="border: none; padding: 0;">
-            <table class="table-modern">
+        <div class="table-wrap">
+            <form action="{{ route('dokumen.download_batch') }}" method="POST" id="batchDownloadForm">
+                @csrf
+                <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size: 13px; color: var(--muted);">
+                        <span id="selectedCount">0</span> dokumen terpilih
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="btnBatchDownload" disabled style="background-color: #6366f1; border-color: #6366f1;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Unduh Batch (Terpilih)
+                    </button>
+                </div>
+            <table>
                 <thead>
                     <tr>
-                        <th style="width: 40px;"></th>
-                        <th>Info Berkas</th>
-                        <th>Pengaju / Akun</th>
-                        <th>Tanggal Unggah</th>
-                        <th style="text-align: right;">Aksi</th>
+                        <th style="width: 40px; text-align: center;">
+                            <input type="checkbox" id="selectAll" style="cursor: pointer; width: 16px; height: 16px;">
+                        </th>
+                        <th>Nama Dokumen</th>
+                        <th>Kategori</th>
+                        <th>Informasi File</th>
+                        <th>Pengaju / Pengunggah</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($berkas as $item)
-                    @php
-                        $ext = strtolower($item->tipe_file);
-                        $bgClass = 'bg-def';
-                        if(in_array($ext, ['pdf'])) $bgClass = 'bg-pdf';
-                        elseif(in_array($ext, ['jpg','jpeg','png'])) $bgClass = 'bg-img';
-                        elseif(in_array($ext, ['doc','docx','xls','xlsx'])) $bgClass = 'bg-doc';
-                    @endphp
+                    @forelse($dokumen as $item)
                     <tr>
-                        <td>
-                            <div class="file-icon-box {{ $bgClass }}">
-                                {{ strtoupper(substr($ext, 0, 3)) }}
-                            </div>
+                        <td style="text-align: center;">
+                            <input type="checkbox" name="dokumen_ids[]" value="{{ $item->id }}" class="doc-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
                         </td>
+                        <td style="max-width: 250px; word-wrap: break-word;">
+                            <strong>{{ $item->nama_dokumen }}</strong>
+                            @if($item->keterangan)
+                                <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">{{ Str::limit($item->keterangan, 50) }}</div>
+                            @endif
+                        </td>
+                        <td style="white-space: nowrap;"><span class="badge badge-gray">{{ $item->kategori ?? 'Umum' }}</span></td>
                         <td>
-                            <div style="font-weight: 600; color: #0f172a; font-size: 14px; margin-bottom: 4px;">{{ $item->nama_berkas }}</div>
-                            <div style="display: flex; gap: 8px; align-items: center; font-size: 12px;">
-                                <span style="color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: 500;">{{ $item->kategori ?? 'Umum' }}</span>
-                                <span style="color: #94a3b8;">•</span>
-                                <span style="color: #64748b;">{{ $item->ukuran_file }}</span>
-                            </div>
+                            <span class="badge badge-blue">{{ strtoupper($item->tipe_file) }}</span>
+                            <span style="font-size:12px;color:var(--muted);margin-left:6px;">{{ $item->ukuran_file }}</span>
                         </td>
                         @php
                             $pengajuInfo = null;
-                            if (strpos($item->nama_berkas, '[') === 0 && strpos($item->nama_berkas, '] ') !== false) {
-                                $parts = explode('] ', $item->nama_berkas);
+                            if (strpos($item->nama_dokumen, '[') === 0 && strpos($item->nama_dokumen, '] ') !== false) {
+                                $parts = explode('] ', $item->nama_dokumen);
                                 if (count($parts) >= 2) {
                                     $appNo = trim($parts[1]);
                                     if (strpos($appNo, 'BERUSAHA-') === 0) {
@@ -404,48 +320,36 @@
                             $finalName = $pengajuInfo ?: ($item->user->name ?? 'Admin');
                         @endphp
                         <td>
-                            <div style="font-weight: 600; color: #334155; font-size: 13px;">{{ $finalName }}</div>
-                            <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Akun: PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</div>
+                            <span style="font-weight: 500; color: var(--ink);">{{ $finalName }}</span><br>
+                            <span style="font-size: 11px; color: var(--muted);">(Akun: PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }})</span>
                         </td>
-                        <td>
-                            <div style="font-size: 13px; color: #475569; font-weight: 500;">{{ $item->created_at->format('d M Y') }}</div>
-                            <div style="font-size: 11px; color: #94a3b8;">{{ $item->created_at->format('H:i') }} WIB</div>
-                        </td>
-                        <td style="text-align: right;">
-                            <div style="display: flex; justify-content: flex-end; gap: 6px;">
-                                <a href="{{ route('berkas.preview', $item->id) }}" target="_blank" class="btn-action-sm btn-action-light" title="Lihat">
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <td style="white-space: nowrap;">{{ $item->created_at->format('d M Y, H:i') }}</td>
+                        <td style="white-space: nowrap;">
+                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                <a href="{{ route('dokumen.preview', $item->id) }}" target="_blank" class="btn btn-secondary btn-sm">
                                     Lihat
                                 </a>
-                                <a href="{{ route('berkas.download', $item->id) }}" class="btn-action-sm btn-action-blue" title="Unduh">
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                    Unduh
-                                </a>
-                                <form action="{{ route('berkas.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berkas ini?');" style="margin: 0;">
+                                <a href="{{ route('dokumen.download', $item->id) }}" class="btn btn-primary btn-sm">Unduh</a>
+                                <form action="{{ route('dokumen.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');" style="margin: 0;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-action-sm btn-action-red" title="Hapus">
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        Hapus
-                                    </button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                                 </form>
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 60px 20px;">
-                            <div style="color: #94a3b8; margin-bottom: 8px;">
-                                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                            </div>
-                            <div style="color: #475569; font-weight: 500;">Belum ada berkas yang ditemukan.</div>
+                        <td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--muted);">
+                            Belum ada dokumen yang diunggah.
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
+            </form>
             <div style="margin-top: 20px;">
-                {{ $berkas->links() }}
+                {{ $dokumen->links() }}
             </div>
         </div>
     </div>
@@ -455,5 +359,34 @@
     function openPreview(url, title) {
         window.open(url, '_blank');
     }
+
+    // Script for Checkbox Batch Download
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAll = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('.doc-checkbox');
+        const btnBatch = document.getElementById('btnBatchDownload');
+        const countDisplay = document.getElementById('selectedCount');
+
+        function updateState() {
+            let checkedCount = 0;
+            checkboxes.forEach(cb => {
+                if(cb.checked) checkedCount++;
+            });
+            countDisplay.innerText = checkedCount;
+            btnBatch.disabled = checkedCount === 0;
+            selectAll.checked = (checkedCount === checkboxes.length && checkboxes.length > 0);
+        }
+
+        if(selectAll) {
+            selectAll.addEventListener('change', function() {
+                checkboxes.forEach(cb => cb.checked = this.checked);
+                updateState();
+            });
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateState);
+        });
+    });
 </script>
 @endsection

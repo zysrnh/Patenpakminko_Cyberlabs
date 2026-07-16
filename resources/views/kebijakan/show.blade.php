@@ -1583,10 +1583,17 @@
                         $isPuPhase = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr', 'disetujui', 'terbit_pkpr']) || $application->bpn_pertek_document;
                         $defaultDays = $isPuPhase ? 20 : 10;
                         
-                        // SLA: badge muncul setelah bayar, countdown jalan hanya jika BPN sudah set tgl_mulai_layanan
+                        // SLA: badge SELALU muncul. Jika sudah bayar, hitung target date otomatis/manual.
                         $sudahBayar = $application->bpn_pembayaran_status === 'sudah_bayar';
-                        if ($sudahBayar && $application->tgl_mulai_layanan) {
-                            $startDate = \Carbon\Carbon::parse($application->tgl_mulai_layanan);
+                        if ($sudahBayar) {
+                            $defaultStartDate = $application->bpn_pembayaran_approved_at 
+                                ? \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at) 
+                                : $application->created_at->copy();
+                                
+                            $startDate = $application->tgl_mulai_layanan 
+                                ? \Carbon\Carbon::parse($application->tgl_mulai_layanan) 
+                                : $defaultStartDate;
+                                
                             $targetDate = $application->tgl_selesai_layanan 
                                 ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
                                 : $startDate->copy()->addDays($defaultDays);
@@ -1673,7 +1680,7 @@
                                     <div style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                     </div>
-                                    <span>Menunggu Pembayaran PNBP</span>
+                                    <span>Menunggu Pembayaran</span>
                                 </div>
                             @elseif(!$targetDate)
                                 <div style="display: flex; align-items: center; gap: 8px; color: {{ $slaColor }}; font-weight: 700; font-size: 13px;">

@@ -718,12 +718,15 @@
                     <a href="{{ route('berkas.index') }}" class="nav-dropdown-item">Berkas Otomatis</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Non Berusaha</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item">Pertimbangan Teknis Kebijakan</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan Khusus', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item">Pertimbangan Teknis Kebijakan</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'Tanah Timbul', 'kategori' => 'Pertimbangan Teknis Tanah Timbul']) }}" class="nav-dropdown-item">Pertimbangan Teknis Tanah Timbul</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PSN', 'kategori' => 'Pertimbangan Teknis PSN']) }}" class="nav-dropdown-item">Pertimbangan Teknis PSN</a>
-                    <a href="{{ route('berkas.index', ['kategori' => 'PKKPR Otomatis']) }}" class="nav-dropdown-item">PKKPR Otomatis</a>
                 </div>
             </div>
+            <a href="{{ route('dokumen.index') }}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Pengelolaan Berkas
+            </a>
         </div>
         @endif
             <a href="{{ route('ulasan.index') }}" class="nav-item">
@@ -1325,6 +1328,20 @@
         const d = new Date();
         const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
         document.getElementById('current-date').textContent = d.toLocaleDateString('id-ID', opts);
+
+        // Maintain sidebar scroll position
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                const scrollPos = sessionStorage.getItem('sidebarScrollPos');
+                if (scrollPos) {
+                    sidebar.scrollTop = parseInt(scrollPos, 10);
+                }
+                sidebar.addEventListener('scroll', function() {
+                    sessionStorage.setItem('sidebarScrollPos', sidebar.scrollTop);
+                });
+            }
+        });
 
         // Sidebar Toggle Logic for Mobile
         const btnToggle = document.getElementById('toggle-sidebar');
