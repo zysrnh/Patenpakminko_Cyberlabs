@@ -145,7 +145,7 @@ class PpkprBerusahaController extends Controller
     /**
      * Download Formulir PTP dalam bentuk PDF.
      */
-    public function ptpPdf($id)
+    public function ptpPdf(Request $request, $id)
     {
         $application = PpkprBerusahaApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
         
@@ -164,24 +164,31 @@ class PpkprBerusahaController extends Controller
             "luas_tanah" => "-", "status_penguasaan" => "-", "penggunaan_saat_ini" => "-"
         ], $ptp);
 
+        if ($request->query('action') === 'download') {
+            // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
+            $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+            if (!file_exists($templatePath)) {
+                return back()->with('error', 'Template dokumen tidak ditemukan.');
+            }
 
-        // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
-        $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
-        if (!file_exists($templatePath)) {
-            return back()->with('error', 'Template dokumen tidak ditemukan.');
+            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+            foreach ($ptp as $key => $value) {
+                $templateProcessor->setValue($key, $value);
+            }
+
+            $fileName = 'Formulir_PTP_' . $application->application_number . '.docx';
+            $tempFile = tempnam(sys_get_temp_dir(), 'PTP');
+            $templateProcessor->saveAs($tempFile);
+
+            return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
         }
 
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
-
-        foreach ($ptp as $key => $value) {
-            $templateProcessor->setValue($key, $value);
-        }
-
-        $fileName = 'Formulir_PTP_' . $application->application_number . '.docx';
-        $tempFile = tempnam(sys_get_temp_dir(), 'PTP');
-        $templateProcessor->saveAs($tempFile);
-
-        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
+        $pdf->setPaper([0, 0, 609.4488, 935.433], 'portrait');
+        $filename = 'Formulir_PTP_' . $application->application_number . '.pdf';
+        
+        return $pdf->stream($filename);
     }
 
     /**

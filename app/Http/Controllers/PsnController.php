@@ -72,6 +72,8 @@ class PsnController extends Controller
             'fc_akta_pendirian'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
             'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
             'kbli_kode'                => 'required|string|max:20',
+            'nib'                      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
+            'kbli'                     => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
             'proposal_kegiatan'        => 'required|file|mimes:pdf,doc,docx|max:102400',
             'persyaratan_lainnya'      => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
         ]);
@@ -93,7 +95,7 @@ class PsnController extends Controller
         $filesToStore = [
             'peta_lokasi', 'surat_kuasa', 'fc_ktp', 'fc_npwp',
             'fc_akta_pendirian', 'rencana_penggunaan_tanah',
-            'proposal_kegiatan', 'persyaratan_lainnya',
+            'nib', 'kbli', 'proposal_kegiatan', 'persyaratan_lainnya',
         ];
 
         foreach ($filesToStore as $fileKey) {
@@ -129,7 +131,7 @@ class PsnController extends Controller
     }
 
     // â”€â”€â”€ VERIFY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    public function ptpPdf($id)
+    public function ptpPdf(Request $request, $id)
     {
         $application = PsnApplication::where('id', $id)->orWhere('application_number', $id)->firstOrFail();
         
@@ -147,24 +149,31 @@ class PsnController extends Controller
             "luas_tanah" => "-", "status_penguasaan" => "-", "penggunaan_saat_ini" => "-"
         ], $ptp);
 
+        if ($request->query('action') === 'download') {
+            // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
+            $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+            if (!file_exists($templatePath)) {
+                return back()->with('error', 'Template dokumen tidak ditemukan.');
+            }
 
-        // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
-        $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
-        if (!file_exists($templatePath)) {
-            return back()->with('error', 'Template dokumen tidak ditemukan.');
+            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+            foreach ($ptp as $key => $value) {
+                $templateProcessor->setValue($key, $value);
+            }
+
+            $fileName = 'Formulir_PTP_' . $application->application_number . '.docx';
+            $tempFile = tempnam(sys_get_temp_dir(), 'PTP');
+            $templateProcessor->saveAs($tempFile);
+
+            return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
         }
 
-        $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
-
-        foreach ($ptp as $key => $value) {
-            $templateProcessor->setValue($key, $value);
-        }
-
-        $fileName = 'Formulir_PTP_' . $application->application_number . '.docx';
-        $tempFile = tempnam(sys_get_temp_dir(), 'PTP');
-        $templateProcessor->saveAs($tempFile);
-
-        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
+        $pdf->setPaper([0, 0, 609.4488, 935.433], 'portrait');
+        $filename = 'Formulir_PTP_' . $application->application_number . '.pdf';
+        
+        return $pdf->stream($filename);
     }
 
     public function verify(Request $request, $id)

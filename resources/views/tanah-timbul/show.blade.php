@@ -964,16 +964,17 @@
                                     <div id="revisi-berkas-container" style="display:none; margin-bottom: 12px; background: #fff5f5; padding: 12px; border: 1px solid #fed7d7; border-radius: 4px;">
                                         <label style="font-weight: 600; font-size: 12px; color: #c53030; margin-bottom: 8px; display: block;">Tandai Berkas yang Tidak Valid / Kurang Lengkap (Otomatis masuk ke catatan):</label>
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
-                                            <label><input type="checkbox" class="cb-revisi" value="1. Formulir Permohonan"> 1. Formulir Permohonan</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="2. Fotokopi KTP"> 2. Fotokopi KTP</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="3. Peta Bidang Tanah"> 3. Peta Bidang Tanah / Sketsa Lokasi</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="4. NPWP"> 4. NPWP</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="5. Surat Kuasa"> 5. Surat Pernyataan / Kuasa</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="6. NIB"> 6. NIB (Nomor Induk Berusaha)</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="7. KTP Penerima Kuasa"> 7. KTP Penerima Kuasa</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="8. KBLI"> 8. KBLI</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="9. Proposal Kegiatan"> 9. Proposal Kegiatan</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="10. Persyaratan Lainnya"> 10. Persyaratan Lainnya</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Formulir PTP"> Formulir PTP</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Peta Lokasi / Sketsa"> Peta Lokasi / Sketsa</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Surat Kuasa"> Surat Kuasa</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC KTP Pemohon"> FC KTP Pemohon</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC NPWP"> FC NPWP</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC Akta Pendirian"> FC Akta Pendirian</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Rencana Penggunaan Tanah"> Rencana Penggunaan Tanah</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="NIB"> NIB</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="KBLI"> KBLI</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Proposal Kegiatan"> Proposal Kegiatan</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Persyaratan Lainnya"> Persyaratan Lainnya</label>
                                         </div>
                                     </div>
 
@@ -981,6 +982,27 @@
                                         <label for="notes" class="form-label" style="font-weight:700;color:#744210;">Catatan Pemeriksaan Berkas <span style="color:red;">*</span></label>
                                         <textarea id="notes" name="notes" class="form-control-v" rows="3" placeholder="Tuliskan hasil pemeriksaan dokumen persyaratan..." style="resize:none;background:white;" required>{{ $application->bpn_berkas_status !== 'menunggu' ? $application->bpn_notes : '' }}</textarea>
                                     </div>
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const checkboxes = document.querySelectorAll('.cb-revisi');
+                                            const notesArea = document.getElementById('notes');
+                                            
+                                            checkboxes.forEach(cb => {
+                                                cb.addEventListener('change', function() {
+                                                    let activeNotes = [];
+                                                    checkboxes.forEach(c => {
+                                                        if(c.checked) activeNotes.push("- " + c.value);
+                                                    });
+                                                    
+                                                    if(activeNotes.length > 0) {
+                                                        notesArea.value = "Mohon perbaiki dokumen berikut:\n" + activeNotes.join("\n") + "\n\nCatatan Tambahan: ";
+                                                    } else {
+                                                        notesArea.value = "";
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
                                     @if($isStep1Active)
                                         <div class="form-group-v" style="margin-bottom: 12px; border-top: 1px dashed var(--clr-line); padding-top: 12px; margin-top: 12px;">
                                             <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
@@ -1435,7 +1457,19 @@
                                 @if($application->ptp_data)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="font-size: 13px; color: var(--clr-mid); font-weight: 500;">Formulir PTP</span>
-                                    <a href="{{ route('tanah-timbul.ptp_pdf', $application->id) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                    <div style="position: relative;">
+                                        <button type="button" onclick="document.getElementById('ptpAdminDropdown').style.display = document.getElementById('ptpAdminDropdown').style.display === 'none' ? 'block' : 'none'" class="btn-doc" style="border: none; cursor: pointer;">
+                                            Buka Berkas ▾
+                                        </button>
+                                        <div id="ptpAdminDropdown" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background: white; border: 1px solid #E2E8F0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: max-content; overflow: hidden; z-index: 10; text-align: left;">
+                                            <a href="{{ route('tanah-timbul.ptp_pdf', $application->id) }}" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600; border-bottom: 1px solid #E2E8F0;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Preview PDF
+                                            </a>
+                                            <a href="{{ route('tanah-timbul.ptp_pdf', $application->id) }}?action=download" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download DOC
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                                 @endif
                                 

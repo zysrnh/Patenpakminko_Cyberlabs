@@ -1030,9 +1030,12 @@
                                             <label><input type="checkbox" class="cb-revisi" value="KTP Pemohon"> KTP Pemohon</label>
                                             <label><input type="checkbox" class="cb-revisi" value="NPWP"> NPWP</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Surat Kuasa"> Surat Kuasa</label>
-                                            <label><input type="checkbox" class="cb-revisi" value="NIB / KBLI"> NIB / KBLI</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Akta Pendirian"> Akta Pendirian</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Rencana Penggunaan Tanah"> Rencana Penggunaan Tanah</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="NIB"> NIB</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Sertifikat Standar / KBLI"> Sertifikat Standar / KBLI</label>
                                             <label><input type="checkbox" class="cb-revisi" value="Proposal Kegiatan"> Proposal Kegiatan</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Persyaratan Lainnya"> Persyaratan Lainnya</label>
                                         </div>
                                     </div>
                                     <div class="form-group-v">
@@ -1565,7 +1568,19 @@
                                 @if($application->ptp_data)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <span style="font-size: 13px; color: var(--clr-mid); font-weight: 500;">Formulir PTP</span>
-                                    <a href="{{ route('berusaha.ptp_pdf', $application->id) }}" target="_blank" class="btn-doc">Buka Berkas</a>
+                                    <div style="position: relative;">
+                                        <button type="button" onclick="document.getElementById('ptpAdminDropdown').style.display = document.getElementById('ptpAdminDropdown').style.display === 'none' ? 'block' : 'none'" class="btn-doc" style="border: none; cursor: pointer;">
+                                            Buka Berkas ▾
+                                        </button>
+                                        <div id="ptpAdminDropdown" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background: white; border: 1px solid #E2E8F0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: max-content; overflow: hidden; z-index: 10; text-align: left;">
+                                            <a href="{{ route('berusaha.ptp_pdf', $application->id) }}" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600; border-bottom: 1px solid #E2E8F0;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Preview PDF
+                                            </a>
+                                            <a href="{{ route('berusaha.ptp_pdf', $application->id) }}?action=download" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download DOC
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                                 @endif
                                 

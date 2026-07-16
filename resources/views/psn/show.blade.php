@@ -907,16 +907,18 @@
                                     </div>
                                     <div id="revisi-berkas-container" style="display: none; background: #FFF5F5; border: 1px solid #FC8181; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px;">
                                         <label class="form-label" style="font-weight:700;color:#C53030;margin-bottom:8px;">Pilih Dokumen yang Perlu Diperbaiki:</label>
-                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="Peta/sketsa lokasi buram atau tidak sesuai"> Peta Lokasi</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="Surat Kuasa tidak sah/kurang lengkap"> Surat Kuasa</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="KTP tidak jelas/tidak sesuai"> FC KTP</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="NPWP tidak valid"> FC NPWP</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="Akta Pendirian tidak lengkap"> FC Akta Pendirian</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="Rencana Penggunaan Tanah kurang detail"> Rencana Penggunaan Tanah</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="KBLI tidak valid"> KBLI</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="Proposal Kegiatan kurang jelas"> Proposal Kegiatan</label>
-                                            <label style="font-size: 13px; cursor: pointer;"><input type="checkbox" class="doc-revisi-cb" value="Persyaratan lainnya tidak memenuhi standar"> Persyaratan Lainnya</label>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
+                                            <label><input type="checkbox" class="cb-revisi" value="Formulir PTP"> Formulir PTP</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Peta Lokasi / Sketsa"> Peta Lokasi / Sketsa</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Surat Kuasa"> Surat Kuasa</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC KTP Pemohon"> FC KTP Pemohon</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC NPWP"> FC NPWP</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="FC Akta Pendirian"> FC Akta Pendirian</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Rencana Penggunaan Tanah"> Rencana Penggunaan Tanah</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="NIB"> NIB</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="KBLI"> KBLI</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Proposal Kegiatan"> Proposal Kegiatan</label>
+                                            <label><input type="checkbox" class="cb-revisi" value="Persyaratan Lainnya"> Persyaratan Lainnya</label>
                                         </div>
                                     </div>
                                     <div class="form-group-v">
@@ -940,7 +942,7 @@
                                         document.addEventListener('DOMContentLoaded', function() {
                                             updateRevisiVisibility();
                                             
-                                            const checkboxes = document.querySelectorAll('.doc-revisi-cb');
+                                            const checkboxes = document.querySelectorAll('.cb-revisi');
                                             const notesArea = document.getElementById('notes');
                                             
                                             checkboxes.forEach(cb => {
@@ -1406,10 +1408,22 @@
                             
                             <!-- Persyaratan Utama -->
                             @if($application->ptp_data)
-                            <a href="{{ route('psn.ptp_pdf', $application->id) }}" target="_blank" class="doc-item">
+                            <div class="doc-item">
                                 <span class="doc-name" style="font-weight: 700; color: var(--clr-blue-dk);">Formulir PTP (Digital)</span>
-                                <span class="doc-status">Unduh/Lihat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></span>
-                            </a>
+                                <div class="doc-status" style="position: relative;">
+                                    <button type="button" onclick="document.getElementById('ptpAdminDropdown').style.display = document.getElementById('ptpAdminDropdown').style.display === 'none' ? 'block' : 'none'" style="background: none; border: none; color: #2B6CB0; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 0;">
+                                        Unduh/Lihat ▾
+                                    </button>
+                                    <div id="ptpAdminDropdown" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background: white; border: 1px solid #E2E8F0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: max-content; overflow: hidden; z-index: 10; text-align: left;">
+                                        <a href="{{ route('psn.ptp_pdf', $application->id) }}" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600; border-bottom: 1px solid #E2E8F0;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Preview PDF
+                                        </a>
+                                        <a href="{{ route('psn.ptp_pdf', $application->id) }}?action=download" style="display: flex; align-items: center; gap: 8px; padding: 10px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download DOC
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                             @endif
                             @if($application->peta_lokasi)
                             <a href="{{ route('file.view', ['path' => $application->peta_lokasi]) }}" target="_blank" class="doc-item">

@@ -4,27 +4,34 @@
     <meta charset="UTF-8">
     <title>Formulir PTP - {{ $app_number }}</title>
     <style>
-        body { font-family: "Times New Roman", Times, serif; font-size: 11pt; line-height: 1.5; padding: 20px; }
+        body { font-family: "Times New Roman", Times, serif; font-size: 9pt; line-height: 1.15; padding: 0; margin: 0; }
         .text-center { text-align: center; }
         .bold { font-weight: bold; }
         .underline { text-decoration: underline; }
-        .title { font-size: 12pt; font-weight: bold; text-align: center; text-decoration: underline; margin-bottom: 20px; }
+        .title { font-size: 10pt; font-weight: bold; text-align: center; text-decoration: underline; margin-bottom: 15px; }
         
         table { width: 100%; border-collapse: collapse; }
-        td { vertical-align: top; padding: 2px 4px; }
+        td { vertical-align: top; padding: 1px 2px; }
         .col-num { width: 3%; }
         .col-label { width: 35%; }
         .col-colon { width: 2%; text-align: center; }
         .col-val { width: 60%; }
 
-        .section-title { font-weight: bold; text-align: center; margin-top: 30px; margin-bottom: 20px; font-size: 11pt; }
+        .section-title { font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 9pt; }
+        
+        @page {
+            size: 215.9mm 330.2mm; /* F4 size */
+            margin: 10mm 15mm;
+        }
     </style>
 </head>
 <body>
 
-    <p>Kepada Yth.<br>Kepala Kantor Pertanahan Kota Sukabumi<br>di tempat.</p>
+    <div class="title">PERMOHONAN PERTIMBANGAN TEKNIS PERTANAHAN</div>
 
-    <table style="margin-bottom: 15px;">
+    <p style="margin-top: 0; margin-bottom: 10px;">Kepada Yth.<br>Kepala Kantor Pertanahan Kota Sukabumi<br>di tempat.</p>
+
+    <table style="margin-bottom: 10px;">
         <tr>
             <td colspan="4">Yang bertanda tangan di bawah ini:</td>
         </tr>
@@ -72,12 +79,12 @@
         </tr>
     </table>
 
-    <p style="text-align: justify; margin-bottom: 10px;">
+    <p style="text-align: justify; margin-bottom: 5px;">
         dengan ini mengajukan permohonan Pertimbangan Teknis Pertanahan untuk kegiatan : ***)<br>
         1. Penerbitan Kesesuaian Kegiatan Pemanfaatan Ruang; terdiri dari :<br>
-        &nbsp;&nbsp;&nbsp;a. Pertimbangan Teknis Pertanahan untuk Kegiatan Berusaha;<br>
-        &nbsp;&nbsp;&nbsp;b. Pertimbangan Teknis Pertanahan untuk Kegiatan NonBerusaha;<br>
-        &nbsp;&nbsp;&nbsp;c. Pertimbangan Teknis Pertanahan/RKKPR untuk Kegiatan yang bersifat Strategis Nasional.<br>
+        &nbsp;&nbsp;&nbsp;a. PKKPR untuk Kegiatan Berusaha;<br>
+        &nbsp;&nbsp;&nbsp;b. PKKPR untuk Kegiatan NonBerusaha;<br>
+        &nbsp;&nbsp;&nbsp;c. PKKPR/RKKPR untuk Kegiatan yang bersifat Strategis Nasional.<br>
         2. Penegasan Status dan Rekomendasi Penguasaan Tanah Timbul;<br>
         3. Penyelenggaraan Kebijakan Penggunaan dan Pemanfaatan Tanah.
     </p>
@@ -95,7 +102,7 @@
         </tr>
     </table>
 
-    <p style="font-style: italic; font-size: 10pt; margin-bottom: 10px;">***) Klasifikasi Baku Lapangan usaha Indonesia (untuk pemohon pelaku usaha)</p>
+    <p style="font-style: italic; font-size: 8pt; margin-top: 5px; margin-bottom: 5px;">***) Klasifikasi Baku Lapangan usaha Indonesia (untuk pemohon pelaku usaha)</p>
 
     <p style="margin-bottom: 5px;">dengan keterangan sebagai berikut :</p>
     
@@ -142,8 +149,8 @@
         </tr>
     </table>
 
-    <p style="margin-top: 15px; margin-bottom: 5px;">Sebagai kelengkapan permohonan, bersama ini kami lampirkan :</p>
-    <table style="font-size: 10pt; line-height: 1.3;">
+    <p style="margin-top: 10px; margin-bottom: 5px;">Sebagai kelengkapan permohonan, bersama ini kami lampirkan :</p>
+    <table style="font-size: 9pt; line-height: 1.15;">
         <tr><td class="col-num">1.</td><td>Peta atau Sketsa lokasi yang dimohon.</td></tr>
         <tr><td class="col-num">2.</td><td>Surat Kuasa (apabila dikuasakan).</td></tr>
         <tr><td class="col-num">3.</td><td>Fotocopy Kartu Tanda Penduduk (KTP).</td></tr>
@@ -155,21 +162,21 @@
         <tr><td></td><td style="font-style: italic;">(Semua kelengkapan permohonan di menggunakan Kertas ukuran F4)</td></tr>
     </table>
 
-    <div style="font-size: 9pt; font-style: italic; margin-top: 10px; line-height: 1.2;">
+    <div style="font-size: 8pt; font-style: italic; margin-top: 5px; line-height: 1.15;">
         *) untuk pemohon Pelaku Usaha yang sudah memiliki NIB<br>
         **) khusus untuk pemohon badan hukum<br>
         ***) pilih salah satu<br>
         ****) Klasifikasi Baku Lapangan usaha Indonesia (untuk pemohon pelaku usaha)
     </div>
 
-    <p style="text-align: justify; margin-top: 15px;">Demikian permohonan ini kami sampaikan, kami bertanggung jawab atas kebenaran persyaratan yg dilampirkan di atas, dan kami menyatakan akan mematuhi semua ketentuan dan persyaratan yang ditetapkan dalam pertimbangan teknis pertanahan.</p>
+    <p style="text-align: justify; margin-top: 10px; margin-bottom: 10px;">Demikian permohonan ini kami sampaikan, kami bertanggung jawab atas kebenaran persyaratan yg dilampirkan di atas, dan kami menyatakan akan mematuhi semua ketentuan dan persyaratan yang ditetapkan dalam pertimbangan teknis pertanahan.</p>
 
-    <table style="width: 100%; margin-top: 30px; text-align: center;">
+    <table style="width: 100%; margin-top: 10px; text-align: center;">
         <tr>
             <td style="width: 50%;"></td>
             <td style="width: 50%;">
                 Sukabumi, ....................................<br>
-                Pemohon,<br><br><br><br><br>
+                Pemohon,<br><br><br>
                 ( {{ $nama }} )
             </td>
         </tr>
@@ -245,8 +252,8 @@
     </table>
 
     <style>
-        .table-border { border-collapse: collapse; width: 100%; font-size: 10pt; }
-        .table-border th, .table-border td { border: 1px solid black; padding: 4px; }
+        .table-border { border-collapse: collapse; width: 100%; font-size: 8pt; line-height: 1.1; }
+        .table-border th, .table-border td { border: 1px solid black; padding: 2px 4px; }
         .text-center { text-align: center; }
     </style>
 

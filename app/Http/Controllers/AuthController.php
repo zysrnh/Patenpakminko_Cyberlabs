@@ -574,7 +574,7 @@ class AuthController extends Controller
     /**
      * Preview dan Download Formulir PTP (PDF) sebelum permohonan dikirim.
      */
-    public function previewPtpForm()
+    public function previewPtpForm(Request $request)
     {
         if (!session()->has('ptp_form_data')) {
             return back()->with('error', 'Data PTP tidak ditemukan. Silakan isi form PTP terlebih dahulu.');
@@ -590,9 +590,31 @@ class AuthController extends Controller
             "luas_tanah" => "-", "status_penguasaan" => "-", "penggunaan_saat_ini" => "-"
         ], $ptp);
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
-        $pdf->setPaper('A4', 'portrait');
+        if ($request->query('action') === 'download') {
+            // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
+            $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+            if (!file_exists($templatePath)) {
+                return back()->with('error', 'Template dokumen tidak ditemukan.');
+            }
 
-        return $pdf->stream('Preview_Formulir_PTP_' . date('YmdHis') . '.pdf');
+            $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
+
+            foreach ($ptp as $key => $value) {
+                $templateProcessor->setValue($key, $value);
+            }
+
+            $fileName = 'Preview_Formulir_PTP_' . date('YmdHis') . '.docx';
+            $tempFile = tempnam(sys_get_temp_dir(), 'PTP');
+            $templateProcessor->saveAs($tempFile);
+
+            return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('berkas.ptp_pdf', $ptp);
+        // Ukuran F4 (215 mm x 330 mm) dalam satuan point
+        $pdf->setPaper([0, 0, 609.4488, 935.433], 'portrait');
+        $filename = 'Preview_Formulir_PTP_' . date('YmdHis') . '.pdf';
+        
+        return $pdf->stream($filename);
     }
 }

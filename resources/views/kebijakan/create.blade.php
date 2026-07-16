@@ -291,7 +291,19 @@
             <!-- ACTIONS -->
             <div class="btn-submit-wrap" style="display: flex; gap: 12px; justify-content: flex-end; align-items: center; flex-wrap: wrap; margin-top: 24px;">
                 <button type="button" class="btn-batal" onclick="window.history.back()">Batal</button>
-                <a href="{{ route('ptp.preview') }}" target="_blank" class="btn-submit" style="background: #EBF8FF; color: #2B6CB0; border: 1.5px solid #2B6CB0; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; text-align: center;">Preview Formulir PTP (PDF)</a>
+                <div style="position: relative; display: inline-block;">
+                    <button type="button" onclick="document.getElementById('ptpDropdown').style.display = document.getElementById('ptpDropdown').style.display === 'none' ? 'block' : 'none'" class="btn-submit" style="background: #EBF8FF; color: #2B6CB0; border: 1.5px solid #2B6CB0; padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer;">
+                        Formulir PTP ▾
+                    </button>
+                    <div id="ptpDropdown" style="display: none; position: absolute; bottom: 100%; left: 0; margin-bottom: 8px; background: white; border: 1px solid #E2E8F0; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: max-content; min-width: 100%; overflow: hidden; z-index: 10;">
+                        <a href="{{ route('ptp.preview') }}" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600; border-bottom: 1px solid #E2E8F0;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Preview PDF
+                        </a>
+                        <a href="{{ route('ptp.preview') }}?action=download" style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; text-decoration: none; color: #2D3748; font-size: 13px; font-weight: 600;" onmouseover="this.style.background='#F7FAFC'" onmouseout="this.style.background='white'">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download DOC
+                        </a>
+                    </div>
+                </div>
                 <button type="submit" class="btn-submit">
                     Kirim Permohonan
                 </button>
