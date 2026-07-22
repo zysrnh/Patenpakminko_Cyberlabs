@@ -222,6 +222,17 @@
                     Chat via WhatsApp
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 </a>
+
+                <div style="margin-top: 32px;">
+                    <h3 class="contact-info-title" style="margin-bottom: 12px;">Media Sosial Resmi</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                        <a href="https://www.tiktok.com/@kantahkotsukabumi" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #000000; color: #FFF; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">TikTok</a>
+                        <a href="https://www.instagram.com/kantahkotasukabumi/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #E1306C; color: #FFF; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">Instagram</a>
+                        <a href="https://www.threads.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #101010; color: #FFF; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">Threads</a>
+                        <a href="https://www.youtube.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #FF0000; color: #FFF; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">YouTube</a>
+                        <a href="https://www.facebook.com/share/1L6H5iMc8H/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #1877F2; color: #FFF; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600;">Facebook</a>
+                    </div>
+                </div>
             </div>
 
             <div class="contact-right">

@@ -1835,6 +1835,22 @@
                 <a href="{{ route('alur') }}" class="nav-link">Alur Proses</a>
                 <a href="{{ route('testimoni') }}" class="nav-link">Ulasan</a>
 
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+                        Media Sosial
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="nav-dropdown-content" role="menu" style="min-width: 180px;">
+                        <a href="https://www.tiktok.com/@kantahkotsukabumi" target="_blank" rel="noopener noreferrer" role="menuitem">TikTok</a>
+                        <a href="https://www.instagram.com/kantahkotasukabumi/" target="_blank" rel="noopener noreferrer" role="menuitem">Instagram</a>
+                        <a href="https://www.threads.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" role="menuitem">Threads</a>
+                        <a href="https://www.youtube.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" role="menuitem">YouTube</a>
+                        <a href="https://www.facebook.com/share/1L6H5iMc8H/" target="_blank" rel="noopener noreferrer" role="menuitem">Facebook</a>
+                    </div>
+                </div>
+
                 <div class="nav-sep" aria-hidden="true"></div>
 
                 <a href="{{ route('kontak') }}" class="btn-nav">
@@ -1911,6 +1927,12 @@
         <a href="{{ route('alur') }}" onclick="closeMobileNav()">Alur Proses</a>
         <a href="{{ route('testimoni') }}" onclick="closeMobileNav()">Ulasan</a>
         <a href="{{ route('kontak') }}" onclick="closeMobileNav()">Kontak Kami</a>
+        <span class="mobile-section-label">Media Sosial</span>
+        <a href="https://www.tiktok.com/@kantahkotsukabumi" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">TikTok</a>
+        <a href="https://www.instagram.com/kantahkotasukabumi/" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Instagram</a>
+        <a href="https://www.threads.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Threads</a>
+        <a href="https://www.youtube.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">YouTube</a>
+        <a href="https://www.facebook.com/share/1L6H5iMc8H/" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Facebook</a>
         @if(Auth::check() && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
             @if(Auth::user()->isAdminBerita())
                 <a href="{{ route('admin.berita.index') }}" class="mobile-cta" onclick="closeMobileNav()">
@@ -1995,10 +2017,11 @@
             <div>
                 <h4 class="f-col-title">Social Media</h4>
                 <ul class="f-links">
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">TikTok</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Youtube</a></li>
+                    <li><a href="https://www.tiktok.com/@kantahkotsukabumi" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+                    <li><a href="https://www.instagram.com/kantahkotasukabumi/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                    <li><a href="https://www.threads.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer">Threads</a></li>
+                    <li><a href="https://www.youtube.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+                    <li><a href="https://www.facebook.com/share/1L6H5iMc8H/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
                 </ul>
             </div>
         </div>
