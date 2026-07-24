@@ -28,7 +28,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|alpha_dash|min:4|max:50|unique:users,username',
-            'phone_number' => 'required|string|min:9|max:15|unique:users,phone_number',
+            'phone_number' => 'required|string|min:9|max:15',
             'password' => 'required|string|min:6|confirmed',
         ], [
             'username.required' => 'Username wajib diisi.',
@@ -129,7 +129,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'username' => 'required|string|alpha_dash|min:4|max:50|unique:users,username,' . $user->id,
-            'phone_number' => 'required|string|min:9|max:15|unique:users,phone_number,' . $user->id,
+            'phone_number' => 'required|string|min:9|max:15',
             'name' => 'nullable|string|max:100',
             'email' => 'nullable|email|unique:users,email,' . $user->id,
             'address' => 'nullable|string|max:500',
@@ -507,18 +507,9 @@ class AuthController extends Controller
             'penggunaan_saat_ini.required' => 'Penggunaan tanah saat ini wajib diisi.',
         ]);
 
-        // Selalu buat/cari akun pelaku_usaha berdasarkan nomor HP
-        // (Jika user sudah login sebagai instansi/admin, proses tetap menggunakan akun pelaku_usaha baru)
+        // Cari atau buat akun pelaku_usaha berdasarkan nomor WA
         $phoneClean = preg_replace('/[^0-9]/', '', $request->phone_number);
         $user = User::where('phone_number', $phoneClean)->first();
-
-        // Validasi Keamanan: Cegah guest/publik menggunakan nomor WA yang sudah terdaftar
-        // Mereka harus login terlebih dahulu jika ingin menggunakan nomor tersebut.
-        if ($user && (!Auth::check() || Auth::id() !== $user->id)) {
-            return redirect()->back()->withErrors([
-                'phone_number' => 'Nomor WhatsApp ini sudah terdaftar. Silakan login ke akun Anda terlebih dahulu di menu Login untuk mengajukan permohonan.'
-            ])->withInput();
-        }
 
         if (!$user) {
             // Buat kredensial unik berdasarkan Nama + NIB + NIK
@@ -537,7 +528,7 @@ class AuthController extends Controller
                 $counter++;
             }
 
-            // Password adalah NIK
+            // Password default adalah NIK
             $passwordText = $request->nik;
 
             $user = User::create([
@@ -547,10 +538,11 @@ class AuthController extends Controller
                 'address'      => $request->alamat,
                 'password'     => Hash::make($passwordText),
                 'role'         => 'pelaku_usaha',
+                'is_active'    => false, // Kredensial belum aktif untuk login dashboard sebelum diterbitkan admin
             ]);
         }
 
-        // Login sebagai akun pelaku_usaha (gantikan session admin jika ada)
+        // Login sementara dalam konteks pendaftaran permohonan
         Auth::login($user);
 
         // Simpan data PTP ke session
@@ -592,7 +584,7 @@ class AuthController extends Controller
 
         if ($request->query('action') === 'download') {
             // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
-            $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+            $templatePath = \App\Models\TemplateDokumen::getTemplatePath('pertek_2026', storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx'));
             if (!file_exists($templatePath)) {
                 return back()->with('error', 'Template dokumen tidak ditemukan.');
             }

@@ -59,7 +59,7 @@ class AdminPelakuUsahaController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'name' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:20|unique:users,phone_number,' . $user->id,
+            'phone_number' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'is_active' => 'required|boolean',

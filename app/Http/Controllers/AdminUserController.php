@@ -47,7 +47,7 @@ class AdminUserController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users',
             'name' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:20|unique:users',
+            'phone_number' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|string|in:dpn,bpn,dinas_pu,dinas_putr,satu_pintu,admin_berita,pelaku_usaha',
@@ -93,7 +93,7 @@ class AdminUserController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'name' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:20|unique:users,phone_number,' . $user->id,
+            'phone_number' => 'nullable|string|max:20',
             'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'role' => 'required|string|in:dpn,bpn,dinas_pu,dinas_putr,satu_pintu,admin_berita,pelaku_usaha',

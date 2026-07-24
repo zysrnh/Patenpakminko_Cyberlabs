@@ -132,7 +132,7 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">1. Peta/sketsa lokasi yang dimohon<span class="required">*</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/2%20Peta%20atau%20Sketsa%20Lokasi.pdf') }}', 'Contoh Peta / Sketsa Lokasi')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_2_sketsa_lokasi', 'storage/Contoh_Format/2. SKETSA LOKASI.pdf') }}', 'Contoh Peta / Sketsa Lokasi')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="peta_lokasi" accept=".pdf,.jpg,.jpeg,.png" required>
@@ -144,7 +144,7 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">2. Surat Kuasa<span class="required">*</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/3%20Surat%20Kuasa.pdf') }}', 'Contoh Surat Kuasa')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_3_surat_kuasa', 'storage/Contoh_Format/3. Contoh Surat Kuasa Perusahaan.pdf') }}', 'Contoh Surat Kuasa')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png" required>
@@ -156,7 +156,7 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">3. Fotokopi KTP<span class="required">*</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/4%20KTP%20Kuasa%20dan%20Pemberi%20Kuasa.pdf') }}', 'Contoh Fotokopi KTP')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_4_ktp', 'storage/Contoh_Format/4. Contoh KTP.pdf') }}', 'Contoh Fotokopi KTP')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="fc_ktp" accept=".pdf,.jpg,.jpeg,.png" required>
@@ -168,7 +168,7 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">4. Fotokopi NPWP<span class="required">*</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/5%20NPWP%20Badan%20Usaha.pdf') }}', 'Contoh Fotokopi NPWP')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_5_npwp', 'storage/Contoh_Format/5. Contoh NPWP.pdf') }}', 'Contoh Fotokopi NPWP')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png" required>
@@ -180,7 +180,7 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum<span class="required">*</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/6%20Akta%20Pendirian.pdf') }}', 'Contoh Akta Pendirian')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_6_akta_pendirian', 'storage/Contoh_Format/6. contoh akta PENDIRIAN PERSEROAN TERBATAS.pdf') }}', 'Contoh Akta Pendirian')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
@@ -192,7 +192,7 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">6. Rencana Penggunaan & Pemanfaatan Tanah<span class="required">*</span></span>
-                        <button type="button" class="btn-contoh" style="opacity: 0; pointer-events:none;">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_7_rencana_pemanfaatan_tanah', 'storage/Contoh_Format/7. Rencana Penggunaan pemanfaatan tanah.pdf') }}', 'Contoh Rencana Pemanfaatan Tanah')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="rencana_penggunaan_tanah" accept=".pdf,.jpg,.jpeg,.png" required>
@@ -204,10 +204,9 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">7. Nomor Induk Berusaha (NIB)<span class="optional">(Opsional)</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/8%20NIB%20(Nomor%20Induk%20Berusaha).pdf') }}', 'Contoh NIB')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_8_nib', 'storage/Contoh_Format/8. Contoh NIB.pdf') }}', 'Contoh NIB')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <!-- Kita tetap pasang required di controller sesuai validasi sebelumnya, tapi label ngikut gambar -->
                         <input type="file" name="nib" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
                     </div>
@@ -217,20 +216,19 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">8. Dokumen KBLI yang diajukan<span class="optional">(Opsional)</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/9%20KBLI%20(Klasifikasi%20Baku%20Lapangan%20Usaha%20Indonesia).pdf') }}', 'Contoh Dokumen KBLI')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_9_kbli', 'storage/Contoh_Format/9. Contoh KBLI.pdf') }}', 'Contoh Dokumen KBLI')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="kbli" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
                     </div>
-                    
                 </div>
 
                 <!-- 9. Proposal -->
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text">9. Proposal Rencana Kegiatan Berusaha<span class="optional">(Opsional)</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/10%20Proposal%20Rencana%20Kegiatan%20Berusaha.pdf') }}', 'Contoh Proposal Kegiatan')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_10_proposal', 'storage/Contoh_Format/10. Contoh Bussiness Plan Proposal.pdf') }}', 'Contoh Proposal Kegiatan')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx">
@@ -242,7 +240,7 @@
                 <div class="form-group">
                     <label class="form-label">
                         <span class="label-text" style="line-height: 1.4;">10. Persyaratan lainnya yang diperlukan<br><span style="font-size:11px; font-weight:500; color:#7A9BB5;">(Sertifikat HAK / SKT / Akta / Sewa Menyewa)</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/11%20Sertipikat%20dan%20Bukti%20Penguasaan%20Fisik%20Lainnya.pdf') }}', 'Contoh Dokumen Pertek Pertanahan / Bukti Fisik')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_11_sertipikat', 'storage/Contoh_Format/11. Contoh serifikat elektronik, analog, akta sewa, perjanjian sewa.pdf') }}', 'Contoh Dokumen Pertek Pertanahan / Bukti Fisik')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar">

@@ -14,6 +14,7 @@ use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\AdminDpnController;
 use App\Http\Controllers\KbliController;
 use App\Http\Controllers\WaTemplateController;
+use App\Http\Controllers\TemplateDokumenController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
@@ -91,6 +92,19 @@ Route::get('/', function () {
 Route::get('/alur', function() {
     return view('alur');
 })->name('alur');
+
+// Route Download Template Publik
+Route::get('/download-template/{kode}', function($kode) {
+    $template = \App\Models\TemplateDokumen::where('kode_template', $kode)->where('is_active', true)->first();
+    if ($template && \Illuminate\Support\Facades\Storage::disk('public')->exists($template->file_path)) {
+        return \Illuminate\Support\Facades\Storage::disk('public')->download($template->file_path, $template->nama_template . '.' . $template->tipe_file);
+    }
+    $defaultPath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+    if (file_exists($defaultPath)) {
+        return response()->download($defaultPath, 'Formulir_Pertek_2026_Template.docx');
+    }
+    abort(404, 'Template tidak ditemukan.');
+})->name('public.template.download');
 
 
 // Route Publik Semua Ulasan
@@ -287,6 +301,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/dokumen/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
     Route::post('/dokumen/download-zip', [DokumenController::class, 'downloadZip'])->name('dokumen.download_zip');
     Route::post('/dokumen/download-batch', [DokumenController::class, 'downloadBatch'])->name('dokumen.download_batch');
+
+    // Pengelolaan Master Template Dokumen (CRUD Template)
+    Route::get('/admin/templates', [TemplateDokumenController::class, 'index'])->name('admin.templates.index');
+    Route::post('/admin/templates', [TemplateDokumenController::class, 'store'])->name('admin.templates.store');
+    Route::put('/admin/templates/{id}', [TemplateDokumenController::class, 'update'])->name('admin.templates.update');
+    Route::post('/admin/templates/{id}/toggle-active', [TemplateDokumenController::class, 'toggleActive'])->name('admin.templates.toggle_active');
+    Route::get('/admin/templates/{id}/download', [TemplateDokumenController::class, 'download'])->name('admin.templates.download');
+    Route::get('/admin/templates/{id}/preview', [TemplateDokumenController::class, 'preview'])->name('admin.templates.preview');
+    Route::delete('/admin/templates/{id}', [TemplateDokumenController::class, 'destroy'])->name('admin.templates.destroy');
 
     // Admin Berita
     Route::get('/admin/berita', [\App\Http\Controllers\BeritaController::class, 'index'])->name('admin.berita.index');

@@ -411,6 +411,23 @@
             <a href="/" class="btn-kembali">&larr; Kembali</a>
         </div>
 
+        <!-- Banner Unduh Template Dokumen PTP -->
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 1.5px solid #bae6fd; border-radius: 12px; padding: 16px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: #0284c7; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                </div>
+                <div>
+                    <h4 style="margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #0369a1;">Unduh Template</h4>
+                    <p style="margin: 0; font-size: 12px; color: #0284c7;">Unduh template fisik Formulir Pertimbangan Teknis Pertanahan (.docx)</p>
+                </div>
+            </div>
+            <a href="{{ route('public.template.download', 'pertek_2026') }}" class="btn-download-template" style="background: #0284c7; color: white; padding: 9px 18px; border-radius: 8px; font-weight: 700; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2); transition: all 0.2s ease;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Unduh Template
+            </a>
+        </div>
+
         <!-- Alerts -->
         @if(session('info'))
             <div class="alert alert-info">{{ session('info') }}</div>

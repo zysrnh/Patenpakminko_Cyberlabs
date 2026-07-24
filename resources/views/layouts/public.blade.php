@@ -2003,7 +2003,7 @@
                     <li><a href="{{ Auth::check() ? route('kebijakan.create') : route('login') }}">Pertimbangan Teknis Pertanahan Kebijakan</a></li>
                     <li><a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}">Pertimbangan Teknis Pertanahan Tanah Timbul</a></li>
                     <li><a href="{{ route('ptp.create', ['layanan' => 'psn']) }}">Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</a></li>
-                    <li><a href="{{ route('informal.index') }}">Peta Publik</a></li>
+                    <li><a href="{{ route('informal.index') }}">INFORMAL</a></li>
                 </ul>
             </div>
 

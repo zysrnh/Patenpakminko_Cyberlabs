@@ -151,7 +151,7 @@ class PsnController extends Controller
 
         if ($request->query('action') === 'download') {
             // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
-            $templatePath = storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx');
+            $templatePath = \App\Models\TemplateDokumen::getTemplatePath('pertek_2026', storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx'));
             if (!file_exists($templatePath)) {
                 return back()->with('error', 'Template dokumen tidak ditemukan.');
             }
