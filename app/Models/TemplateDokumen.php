@@ -50,7 +50,7 @@ class TemplateDokumen extends Model
         $template = self::where('kode_template', $kode)->where('is_active', true)->first();
 
         if ($template && Storage::disk('public')->exists($template->file_path)) {
-            return asset('storage/' . $template->file_path);
+            return route('public.template.preview', $template->kode_template);
         }
 
         return asset($defaultRelativePath);

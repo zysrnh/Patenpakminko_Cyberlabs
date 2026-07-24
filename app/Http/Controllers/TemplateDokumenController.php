@@ -170,6 +170,48 @@ class TemplateDokumenController extends Controller
         ]);
     }
 
+    public function publicPreview($kode)
+    {
+        $template = TemplateDokumen::where('kode_template', $kode)->where('is_active', true)->first();
+
+        if (!$template || !Storage::disk('public')->exists($template->file_path)) {
+            return response()->json(['error' => 'File template tidak ditemukan di server.'], 404);
+        }
+
+        $fullPath = storage_path('app/public/' . $template->file_path);
+        $ext = strtolower($template->tipe_file);
+
+        if (in_array($ext, ['doc', 'docx'])) {
+            try {
+                $phpWord = \PhpOffice\PhpWord\IOFactory::load($fullPath);
+                $writer  = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+
+                ob_start();
+                $writer->save('php://output');
+                $html = ob_get_clean();
+
+                return response($html, 200)->header('Content-Type', 'text/html');
+            } catch (\Exception $e) {
+                return response('<html><body style="font-family:sans-serif;padding:40px;text-align:center;"><h3>Tidak dapat merender preview file Word ini.</h3><p style="color:#718096">Gunakan tombol <strong>Unduh</strong> untuk membuka file di Microsoft Word.</p></body></html>', 200)
+                    ->header('Content-Type', 'text/html');
+            }
+        }
+
+        $mimeType = 'application/octet-stream';
+        if ($ext === 'pdf') {
+            $mimeType = 'application/pdf';
+        } elseif (in_array($ext, ['jpg', 'jpeg'])) {
+            $mimeType = 'image/jpeg';
+        } elseif ($ext === 'png') {
+            $mimeType = 'image/png';
+        }
+
+        return response()->file($fullPath, [
+            'Content-Type'        => $mimeType,
+            'Content-Disposition' => 'inline; filename="' . $template->nama_template . '.' . $ext . '"',
+        ]);
+    }
+
     public function destroy($id)
     {
         $template = TemplateDokumen::findOrFail($id);

@@ -93,7 +93,7 @@ Route::get('/alur', function() {
     return view('alur');
 })->name('alur');
 
-// Route Download Template Publik
+// Route Download & Preview Template Publik
 Route::get('/download-template/{kode}', function($kode) {
     $template = \App\Models\TemplateDokumen::where('kode_template', $kode)->where('is_active', true)->first();
     if ($template && \Illuminate\Support\Facades\Storage::disk('public')->exists($template->file_path)) {
@@ -105,6 +105,8 @@ Route::get('/download-template/{kode}', function($kode) {
     }
     abort(404, 'Template tidak ditemukan.');
 })->name('public.template.download');
+
+Route::get('/preview-template/{kode}', [TemplateDokumenController::class, 'publicPreview'])->name('public.template.preview');
 
 
 // Route Publik Semua Ulasan
