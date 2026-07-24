@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropUnique(['phone_number']);
+            try {
+                $table->dropUnique('users_phone_number_unique');
+            } catch (\Throwable $e) {
+                try {
+                    $table->dropUnique(['phone_number']);
+                } catch (\Throwable $ex) {
+                    // Ignore if already dropped
+                }
+            }
         });
     }
 
