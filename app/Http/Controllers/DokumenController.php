@@ -26,6 +26,13 @@ class DokumenController extends Controller
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke fitur ini.');
         }
 
+        if (!\Illuminate\Support\Facades\Schema::hasTable('dokumens')) {
+            $dokumen = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+            $pemohonList = \App\Models\User::where('role', 'pelaku_usaha')->get();
+            $kategoriList = collect([]);
+            return view('dokumen.index', compact('dokumen', 'pemohonList', 'kategoriList'));
+        }
+
         $query = Dokumen::with('user')->latest();
 
         // Filter berdasarkan kategori

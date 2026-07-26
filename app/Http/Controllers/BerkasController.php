@@ -69,7 +69,9 @@ class BerkasController extends Controller
         
         // Ambil daftar pemohon yang sudah ada berkas/dokumennya atau role pelaku_usaha
         $userIdsBerkas = Berkas::select('user_id')->distinct()->pluck('user_id')->toArray();
-        $userIdsDokumen = \App\Models\Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray();
+        $userIdsDokumen = \Illuminate\Support\Facades\Schema::hasTable('dokumens')
+            ? \App\Models\Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray()
+            : [];
         $allUserIds = array_unique(array_merge($userIdsBerkas, $userIdsDokumen));
         
         $pemohonList = \App\Models\User::whereIn('id', $allUserIds)->orWhere('role', 'pelaku_usaha')->get();
