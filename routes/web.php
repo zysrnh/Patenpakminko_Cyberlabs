@@ -63,24 +63,34 @@ Route::get('/', function () {
     }
     $averageRating = number_format($averageRating, 1);
     
-    // Hitung visitor
+    // Hitung visitor & statistik web
     $visitorFile = 'visitor_stats.json';
-    $visitorCount = 0;
+    $statsData = [
+        'count' => 0,
+        'permohonan_diproses' => '12k',
+        'rata_rata_penyelesaian' => '10 hari',
+        'rating_override' => '',
+    ];
     if (\Illuminate\Support\Facades\Storage::exists($visitorFile)) {
-        $visitorCount = json_decode(\Illuminate\Support\Facades\Storage::get($visitorFile), true)['count'] ?? 0;
+        $loaded = json_decode(\Illuminate\Support\Facades\Storage::get($visitorFile), true);
+        if (is_array($loaded)) {
+            $statsData = array_merge($statsData, $loaded);
+        }
     }
     
+    $visitorCount = (int) $statsData['count'];
     $isNewVisitor = false;
     if (!request()->cookie('visited')) {
         $visitorCount++;
-        \Illuminate\Support\Facades\Storage::put($visitorFile, json_encode(['count' => $visitorCount]));
+        $statsData['count'] = $visitorCount;
+        \Illuminate\Support\Facades\Storage::put($visitorFile, json_encode($statsData));
         $isNewVisitor = true;
     }
 
     // Berita / Artikel
     $beritas = \App\Models\Berita::where('is_published', true)->latest()->take(10)->get();
 
-    $response = response()->view('welcome', compact('reviews', 'averageRating', 'visitorCount', 'beritas'));
+    $response = response()->view('welcome', compact('reviews', 'averageRating', 'visitorCount', 'statsData', 'beritas'));
     if ($isNewVisitor) {
         $response->cookie('visited', true, 60 * 24); // 24 jam
     }
@@ -218,6 +228,7 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/admin_dpn', [AdminDpnController::class, 'index'])->name('admin_dpn.index');
     Route::post('/admin_dpn', [AdminDpnController::class, 'update'])->name('admin_dpn.update');
+    Route::post('/admin_dpn/reset-visitor', [AdminDpnController::class, 'resetVisitorCount'])->name('admin_dpn.reset_visitor');
     Route::post('/souvenir/send/{type}/{id}', [AdminDpnController::class, 'markSouvenirSent'])->name('souvenir.mark_sent');
     Route::post('/application/rollback/{type}/{id}', [AdminDpnController::class, 'rollbackStatus'])->name('application.rollback');
     Route::post('/application/forward/{type}/{id}', [AdminDpnController::class, 'forwardStatus'])->name('application.forward');

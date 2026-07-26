@@ -11,25 +11,63 @@ class AdminDpnController extends Controller
 
     public function index()
     {
-        $count = 0;
+        $stats = [
+            'count' => 0,
+            'permohonan_diproses' => '12k',
+            'rata_rata_penyelesaian' => '10 hari',
+            'rating_override' => '',
+        ];
+
         if (Storage::exists($this->filePath)) {
             $data = json_decode(Storage::get($this->filePath), true);
-            $count = $data['count'] ?? 0;
+            if (is_array($data)) {
+                $stats = array_merge($stats, $data);
+            }
         }
 
-        return view('admin_dpn.index', compact('count'));
+        $count = $stats['count'];
+
+        return view('admin_dpn.index', compact('stats', 'count'));
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'count' => 'required|integer|min:0'
+            'count' => 'required|integer|min:0',
+            'permohonan_diproses' => 'nullable|string|max:50',
+            'rata_rata_penyelesaian' => 'nullable|string|max:50',
+            'rating_override' => 'nullable|string|max:20',
         ]);
         
-        $data = ['count' => (int) $request->count];
-        Storage::put($this->filePath, json_encode($data));
+        $stats = [
+            'count' => (int) $request->count,
+            'permohonan_diproses' => $request->permohonan_diproses ?: '12k',
+            'rata_rata_penyelesaian' => $request->rata_rata_penyelesaian ?: '10 hari',
+            'rating_override' => $request->rating_override ?: '',
+        ];
+        Storage::put($this->filePath, json_encode($stats));
 
-        return redirect()->back()->with('success', 'Jumlah kunjungan web berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Statistik website beranda berhasil diperbarui!');
+    }
+
+    public function resetVisitorCount()
+    {
+        $stats = [
+            'count' => 0,
+            'permohonan_diproses' => '12k',
+            'rata_rata_penyelesaian' => '10 hari',
+            'rating_override' => '',
+        ];
+        if (Storage::exists($this->filePath)) {
+            $data = json_decode(Storage::get($this->filePath), true);
+            if (is_array($data)) {
+                $stats = array_merge($stats, $data);
+            }
+        }
+        $stats['count'] = 0;
+        Storage::put($this->filePath, json_encode($stats));
+
+        return redirect()->back()->with('success', 'Jumlah kunjungan berhasil di-reset ke 0!');
     }
 
     public function markSouvenirSent($type, $id)

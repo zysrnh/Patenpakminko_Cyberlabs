@@ -195,28 +195,34 @@
     <div class="container">
         <div class="stats-inner">
             @php
+                $statsData = $statsData ?? [];
+                $permValue = $statsData['permohonan_diproses'] ?? '12k';
+                $penyValue = $statsData['rata_rata_penyelesaian'] ?? '10 hari';
+                $ratingVal = !empty($statsData['rating_override']) ? $statsData['rating_override'] : ($averageRating ?? '5.0');
+                $ratingSuffix = !empty($statsData['rating_override']) || str_contains((string)$ratingVal, '/') ? '' : '/5';
+
                 $stats = [
                     [
                         'icon' => '<img src="'.asset('storage/svg/quote-request 1.svg').'" alt="">',
-                        'value' => '12',
-                        'suffix' => 'k',
+                        'value' => $permValue,
+                        'suffix' => '',
                         'label' => 'Permohonan Diproses',
                     ],
                     [
                         'icon' => '<img src="'.asset('storage/svg/tag 1.svg').'" alt="">',
-                        'value' => $averageRating ?? '4.0',
-                        'suffix' => '/5',
+                        'value' => $ratingVal,
+                        'suffix' => $ratingSuffix,
                         'label' => 'Rata-rata Rating',
                     ],
                     [
                         'icon' => '<img src="'.asset('storage/svg/calendar 1.svg').'" alt="">',
-                        'value' => '10',
-                        'suffix' => ' hari',
+                        'value' => $penyValue,
+                        'suffix' => '',
                         'label' => 'Rata-rata Penyelesaian',
                     ],
                     [
                         'icon' => '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
-                        'value' => $visitorCount ?? '0',
+                        'value' => number_format((int)($visitorCount ?? 0)),
                         'suffix' => '',
                         'label' => 'Kunjungan',
                     ],
