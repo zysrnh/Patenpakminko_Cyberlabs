@@ -57,11 +57,36 @@
     </div>
 @endif
 
+<div class="panel" style="margin-bottom: 20px;">
+    <div class="panel-body" style="padding: 16px 20px;">
+        <form method="GET" action="{{ route('admin.reviews.index') }}" style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <label style="font-weight: 600; font-size: 13px; color: var(--blue-dk); margin: 0; display: flex; align-items: center; gap: 6px;">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                Filter Berdasarkan Layanan:
+            </label>
+            <select name="layanan" onchange="this.form.submit()" style="padding: 8px 12px; border-radius: 4px; border: 1px solid #CBD5E0; font-size: 13px; color: #2D3748; background: #fff; min-width: 240px;">
+                <option value="">-- Semua Layanan (Formal & Informal) --</option>
+                <option value="berusaha" {{ request('layanan') == 'berusaha' ? 'selected' : '' }}>PKKPR Berusaha</option>
+                <option value="non_berusaha" {{ request('layanan') == 'non_berusaha' ? 'selected' : '' }}>PKKPR Non-Berusaha</option>
+                <option value="kebijakan" {{ request('layanan') == 'kebijakan' ? 'selected' : '' }}>Pertimbangan Teknis Kebijakan</option>
+                <option value="lapolpa" {{ request('layanan') == 'lapolpa' ? 'selected' : '' }}>LAPOL PAK</option>
+                <option value="tanah_timbul" {{ request('layanan') == 'tanah_timbul' ? 'selected' : '' }}>Tanah Timbul</option>
+                <option value="psn" {{ request('layanan') == 'psn' ? 'selected' : '' }}>PSN (Proyek Strategis Nasional)</option>
+                <option value="umum" {{ request('layanan') == 'umum' ? 'selected' : '' }}>Ulasan Umum</option>
+                <option value="informal" {{ request('layanan') == 'informal' ? 'selected' : '' }}>INFORMAL (Peta Digital / Rating Zonasi)</option>
+            </select>
+            @if(request('layanan'))
+                <a href="{{ route('admin.reviews.index') }}" class="btn btn-secondary btn-sm" style="text-decoration: none;">Reset Filter</a>
+            @endif
+        </form>
+    </div>
+</div>
+
 <div class="panel">
     <div class="panel-head">
         <h2>
             <svg class="panel-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-            Daftar Pengajuan Ulasan
+            Daftar Pengajuan Ulasan Layanan
         </h2>
     </div>
     <div class="panel-body" style="padding: 0;">
@@ -71,7 +96,7 @@
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="width: 48px; height: 48px; margin-bottom: 12px; color: var(--muted);">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
-                    <p>Belum ada ulasan yang diajukan oleh pelaku usaha.</p>
+                    <p>Tidak ada ulasan layanan yang cocok dengan filter yang dipilih.</p>
                 </div>
             @else
                 <table>
@@ -82,7 +107,9 @@
                             <th>Penilaian</th>
                             <th>Catatan Ulasan</th>
                             <th>Status Publikasi</th>
-                            <th>Aksi Admin</th>
+                            @if(Auth::user()->isDpn())
+                                <th>Aksi Admin</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -118,6 +145,7 @@
                                         <span class="badge badge-gray">Menunggu Review</span>
                                     @endif
                                 </td>
+                                @if(Auth::user()->isDpn())
                                 <td>
                                     <div class="actions-wrap">
                                         @if(!$review->is_approved)
@@ -139,6 +167,7 @@
                                         </form>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
@@ -174,7 +203,9 @@
                             <th>Penilaian</th>
                             <th>Catatan Ulasan</th>
                             <th>Status Publikasi</th>
-                            <th>Aksi Admin</th>
+                            @if(Auth::user()->isDpn())
+                                <th>Aksi Admin</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -210,6 +241,7 @@
                                         <span class="badge badge-gray">Menunggu Review</span>
                                     @endif
                                 </td>
+                                @if(Auth::user()->isDpn())
                                 <td>
                                     <div class="actions-wrap">
                                         @if(!$rating->is_approved)
@@ -231,6 +263,7 @@
                                         </form>
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

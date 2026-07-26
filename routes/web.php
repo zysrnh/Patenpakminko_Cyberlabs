@@ -47,7 +47,7 @@ Route::get('/', function () {
             return $item;
         });
 
-    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('created_at')->take(6);
+    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('rating')->values()->take(6);
 
     // Kalkulasi rata-rata keseluruhan (Review + InformalRating)
     $avgReview = Review::where('is_approved', true)->avg('rating') ?? 0;
@@ -133,7 +133,7 @@ Route::get('/testimoni', function () {
             return $item;
         });
 
-    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('created_at')->take(50);
+    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('rating')->values()->take(50);
     
     return view('testimoni', compact('reviews'));
 })->name('testimoni');

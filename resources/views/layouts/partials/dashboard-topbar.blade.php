@@ -208,6 +208,29 @@
     color: #0d2d4f;
     letter-spacing: -0.01em;
 }
+.topbar-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    background: rgba(220, 38, 38, 0.08);
+    color: #dc2626;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    white-space: nowrap;
+    outline: none;
+    margin-left: 4px;
+}
+.topbar-logout-btn:hover {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+}
 /* ─────────────────────────────────────────────────────────────────────────── */
 </style>
 
@@ -238,7 +261,7 @@
         </div>
     </div>
 
-    {{-- Right: date · mailbox · user --}}
+    {{-- Right: date · mailbox · user · logout --}}
     <div class="topbar-right">
 
         {{-- Date pill --}}
@@ -286,6 +309,21 @@
             @endif
             <span class="topbar-user-name">{{ Str::limit(Auth::user()->name ?? Auth::user()->username, 18) }}</span>
         </a>
+
+        {{-- Topbar Logout Button --}}
+        @if(Auth::check())
+        <form action="{{ route('logout') }}" method="POST" style="margin: 0; display: inline-flex;">
+            @csrf
+            <button type="submit" class="topbar-logout-btn" title="Keluar dari Akun">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;">
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                    <polyline points="16 17 21 12 16 7"/>
+                    <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+                <span>Keluar</span>
+            </button>
+        </form>
+        @endif
 
     </div>
 </header>

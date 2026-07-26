@@ -91,16 +91,31 @@ class ReviewController extends Controller
     /**
      * Tampilkan halaman pengelolaan ulasan bagi Admin (DPN).
      */
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Hanya DPN / Super Admin yang dapat mengelola ulasan.');
+        $user = Auth::user();
+        if (!($user->isDpn() || $user->isBpn() || $user->isDinasPu() || $user->isDinasPutr() || $user->isSatuPintu() || $user->isAdminBerita())) {
+            abort(403, 'Anda tidak memiliki akses ke halaman evaluasi ulasan.');
         }
- 
-        $reviews = Review::with('user')->orderBy('created_at', 'desc')->get();
-        $informalRatings = \App\Models\InformalRating::with('user')->orderBy('created_at', 'desc')->get();
+
+        $layanan = $request->input('layanan');
+
+        $queryReviews = Review::with('user')->orderBy('rating', 'desc')->orderBy('created_at', 'desc');
+        $queryInformal = \App\Models\InformalRating::with('user')->orderBy('rating', 'desc')->orderBy('created_at', 'desc');
+
+        if ($layanan) {
+            if ($layanan === 'informal') {
+                $queryReviews->whereRaw('1 = 0');
+            } else {
+                $queryReviews->where('module_type', $layanan);
+                $queryInformal->whereRaw('1 = 0');
+            }
+        }
+
+        $reviews = $queryReviews->get();
+        $informalRatings = $queryInformal->get();
         
-        return view('admin.reviews', compact('reviews', 'informalRatings'));
+        return view('admin.reviews', compact('reviews', 'informalRatings', 'layanan'));
     }
  
     /**
