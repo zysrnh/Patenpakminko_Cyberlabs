@@ -244,10 +244,6 @@
                     </div>
 
                     <button type="submit" class="btn-login">Login</button>
-
-                    <div style="margin-top: 24px; text-align: center;">
-                        <a href="{{ Route::has('password.request') ? route('password.request') : '#' }}" class="forgot-pw" style="font-size: 14px; font-weight: 500; color: #7A9BB5;">Lupa Password?</a>
-                    </div>
                 </form>
             </div>
         </div>

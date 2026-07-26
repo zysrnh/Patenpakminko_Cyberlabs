@@ -42,24 +42,14 @@ trait WaBlastHelper
                 $nik      = $ptpData['nik'] ?? '';
                 $username = $app->user->username ?? '-';
                 
-                $isPasswordNik = false;
-                if ($nik && \Illuminate\Support\Facades\Hash::check($nik, $app->user->password)) {
-                    $isPasswordNik = true;
-                }
-                
-                $passwordText = $isPasswordNik ? $nik : "(Gunakan NIK pendaftaran pertama atau password yang Anda buat)";
+                $passwordText = $nik ?: "(NIK pendaftaran Anda)";
                 
                 $msg = "Halo {$nama}, pembayaran {$layanan} Anda telah dikonfirmasi.\n\n"
                      . "Akun login portal PATEN PAK MIKO Anda:\n"
                      . "Username : {$username}\n"
                      . "Password : {$passwordText}\n"
-                     . "No. Berkas : {$app->no_berkas}\n\n";
-                     
-                if (!$isPasswordNik) {
-                    $msg .= "*Catatan:* Jika Anda lupa password, silakan gunakan fitur Lupa Password di halaman login.\n\n";
-                }
-                
-                $msg .= "Login dan pantau permohonan di: {$url}";
+                     . "No. Berkas : {$app->no_berkas}\n\n"
+                     . "Login dan pantau permohonan di: {$url}";
                 
                 return $msg;
             })(),
