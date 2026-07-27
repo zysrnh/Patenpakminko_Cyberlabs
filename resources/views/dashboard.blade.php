@@ -703,6 +703,8 @@
             </a>
         </div>
 
+        @endif
+
         @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isSatuPintu())
         <div class="sidebar-section">
             <div class="sidebar-section-label">Manajemen Pemberkasan</div>
