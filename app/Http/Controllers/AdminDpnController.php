@@ -39,11 +39,15 @@ class AdminDpnController extends Controller
             'rating_override' => 'nullable|string|max:20',
         ]);
         
+        $permVal  = $request->input('permohonan_diproses');
+        $penyVal  = $request->input('rata_rata_penyelesaian');
+        $rateVal  = $request->input('rating_override');
+
         $stats = [
-            'count' => (int) $request->count,
-            'permohonan_diproses' => $request->permohonan_diproses ?: '12k',
-            'rata_rata_penyelesaian' => $request->rata_rata_penyelesaian ?: '10 hari',
-            'rating_override' => $request->rating_override ?: '',
+            'count'                  => (int) $request->count,
+            'permohonan_diproses'    => ($permVal !== null && $permVal !== '') ? $permVal : '12k',
+            'rata_rata_penyelesaian' => ($penyVal !== null && $penyVal !== '') ? $penyVal : '10 hari',
+            'rating_override'        => $rateVal ?? '',
         ];
         Storage::put($this->filePath, json_encode($stats));
 
