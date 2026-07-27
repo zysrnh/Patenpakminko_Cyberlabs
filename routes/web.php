@@ -327,21 +327,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/berkas', [BerkasController::class, 'index'])->name('berkas.index');
     Route::post('/berkas', [BerkasController::class, 'store'])->name('berkas.store');
     Route::post('/berkas/sync', [BerkasController::class, 'sync'])->name('berkas.sync');
+    Route::match(['get', 'post'], '/berkas/bulk-destroy', [BerkasController::class, 'bulkDestroy'])->name('berkas.bulk-destroy');
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
     Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
     Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
-    Route::match(['get', 'post'], '/berkas/bulk-destroy', [BerkasController::class, 'bulkDestroy'])->name('berkas.bulk-destroy');
     Route::get('/file/{path}', [BerkasController::class, 'viewFile'])->where('path', '.*')->name('file.view');
 
     // Pengelolaan Dokumen Manual (Dokumen Baru)
     Route::get('/dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
     Route::post('/dokumen', [DokumenController::class, 'store'])->name('dokumen.store');
-    Route::get('/dokumen/{id}/download', [DokumenController::class, 'download'])->name('dokumen.download');
-    Route::get('/dokumen/{id}/preview', [DokumenController::class, 'preview'])->name('dokumen.preview');
-    Route::delete('/dokumen/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
     Route::match(['get', 'post'], '/dokumen/bulk-destroy', [DokumenController::class, 'bulkDestroy'])->name('dokumen.bulk-destroy');
     Route::post('/dokumen/download-zip', [DokumenController::class, 'downloadZip'])->name('dokumen.download_zip');
     Route::post('/dokumen/download-batch', [DokumenController::class, 'downloadBatch'])->name('dokumen.download_batch');
+    Route::get('/dokumen/{id}/download', [DokumenController::class, 'download'])->name('dokumen.download');
+    Route::get('/dokumen/{id}/preview', [DokumenController::class, 'preview'])->name('dokumen.preview');
+    Route::delete('/dokumen/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
 
     // Pengelolaan Master Template Dokumen (CRUD Template)
     Route::get('/admin/templates', [TemplateDokumenController::class, 'index'])->name('admin.templates.index');

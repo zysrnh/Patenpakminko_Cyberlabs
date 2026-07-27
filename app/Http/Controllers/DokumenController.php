@@ -185,7 +185,7 @@ class DokumenController extends Controller
 
     public function destroy($id)
     {
-        $dokumen = Dokumen::find($id) ?: \App\Models\Berkas::find($id);
+        $dokumen = (\Illuminate\Support\Facades\Schema::hasTable('dokumens') ? Dokumen::find($id) : null) ?: \App\Models\Berkas::find($id);
         if (!$dokumen) abort(404, 'Dokumen tidak ditemukan.');
         
         // Hapus fisik file
