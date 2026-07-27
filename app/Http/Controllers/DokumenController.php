@@ -312,4 +312,31 @@ class DokumenController extends Controller
             'Content-Disposition' => 'inline; filename="' . basename($fullPath) . '"'
         ]);
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat menghapus dokumen.');
+        }
+
+        $ids = $request->input('dokumen_ids', $request->input('ids', []));
+
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'Tidak ada dokumen yang dipilih.');
+        }
+
+        $count = 0;
+        foreach ($ids as $id) {
+            $item = (\Illuminate\Support\Facades\Schema::hasTable('dokumens') ? Dokumen::find($id) : null) ?: \App\Models\Berkas::find($id);
+            if ($item) {
+                if (Storage::disk('public')->exists($item->file_path)) {
+                    Storage::disk('public')->delete($item->file_path);
+                }
+                $item->delete();
+                $count++;
+            }
+        }
+
+        return redirect()->back()->with('success', "{$count} dokumen berhasil dihapus.");
+    }
 }

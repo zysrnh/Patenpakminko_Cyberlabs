@@ -330,6 +330,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
     Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
     Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
+    Route::match(['get', 'post'], '/berkas/bulk-destroy', [BerkasController::class, 'bulkDestroy'])->name('berkas.bulk-destroy');
     Route::get('/file/{path}', [BerkasController::class, 'viewFile'])->where('path', '.*')->name('file.view');
 
     // Pengelolaan Dokumen Manual (Dokumen Baru)
@@ -338,6 +339,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dokumen/{id}/download', [DokumenController::class, 'download'])->name('dokumen.download');
     Route::get('/dokumen/{id}/preview', [DokumenController::class, 'preview'])->name('dokumen.preview');
     Route::delete('/dokumen/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+    Route::match(['get', 'post'], '/dokumen/bulk-destroy', [DokumenController::class, 'bulkDestroy'])->name('dokumen.bulk-destroy');
     Route::post('/dokumen/download-zip', [DokumenController::class, 'downloadZip'])->name('dokumen.download_zip');
     Route::post('/dokumen/download-batch', [DokumenController::class, 'downloadBatch'])->name('dokumen.download_batch');
 

@@ -71,10 +71,27 @@
             @endif
         </div>
 
+        @if(Auth::user()->isDpn())
+        <form id="bulkForm" action="{{ route('non-berusaha.bulk-destroy') }}" method="POST">
+            @csrf
+            <div style="padding: 10px 16px; background: #fff5f5; border-bottom: 1px solid #feb2b2; display: flex; align-items: center; justify-content: space-between;" id="bulkBar">
+                <div style="font-size: 13px; font-weight: 600; color: #c53030;">
+                    <span id="selectCount">0</span> permohonan dipilih
+                </div>
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus semua permohonan yang dipilih? Data tidak bisa dikembalikan!')" style="background:#E53E3E; border-color:#E53E3E; color:#fff;">
+                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Hapus Terpilih
+                </button>
+            </div>
+        @endif
+
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
+                        @if(Auth::user()->isDpn())
+                        <th style="width:36px; text-align:center;"><input type="checkbox" id="checkAll" style="cursor:pointer;"></th>
+                        @endif
                         <th>No. Registrasi</th>
                         <th>Pemohon</th>
                         <th>No. WA</th>
@@ -89,6 +106,9 @@
                 <tbody>
                     @foreach($applications as $app)
                         <tr>
+                            @if(Auth::user()->isDpn())
+                            <td style="text-align:center;"><input type="checkbox" name="ids[]" value="{{ $app->id }}" class="row-check" style="cursor:pointer;"></td>
+                            @endif
                             <td><span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);">{{ $app->application_number }}</span></td>
                             <td>
                                 <div style="font-weight:700; color:#003B64;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
@@ -143,13 +163,10 @@
                                     <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </a>
                                 @if(Auth::user()->isDpn())
-                                <form action="{{ route('non-berusaha.destroy', $app->id) }}" method="POST" onsubmit="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="btn btn-sm" style="background:#E53E3E;border-color:#E53E3E;color:#fff;">
-                                        <svg viewBox="0 0 24 24" style="width:14px;height:14px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                        Hapus
-                                    </button>
-                                </form>
+                                <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#E53E3E;border-color:#E53E3E;color:#fff;">
+                                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    Hapus
+                                </button>
                                 @endif
                             </td>
                         </tr>
@@ -157,10 +174,47 @@
                 </tbody>
             </table>
         </div>
+        @if(Auth::user()->isDpn())
+        </form>
+
+        @foreach($applications as $app)
+        <form id="delete-form-{{ $app->id }}" action="{{ route('non-berusaha.destroy', $app->id) }}" method="POST" style="display:none;">
+            @csrf
+            @method('DELETE')
+        </form>
+        @endforeach
+        @endif
     @endif
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const checkAll = document.getElementById('checkAll');
+    const rowChecks = document.querySelectorAll('.row-check');
+    const selectCount = document.getElementById('selectCount');
+
+    function updateCount() {
+        if (!rowChecks.length) return;
+        const checked = document.querySelectorAll('.row-check:checked');
+        if (selectCount) selectCount.textContent = checked.length;
+        if (checkAll) {
+            checkAll.checked = (checked.length === rowChecks.length && rowChecks.length > 0);
+        }
+    }
+
+    if (checkAll) {
+        checkAll.addEventListener('change', function() {
+            rowChecks.forEach(cb => {
+                if (cb.closest('tr').style.display !== 'none') {
+                    cb.checked = this.checked;
+                }
+            });
+            updateCount();
+        });
+    }
+
+    rowChecks.forEach(cb => {
+        cb.addEventListener('change', updateCount);
+    });
     const searchInput = document.getElementById('searchInput');
     const filterSla = document.getElementById('filterSla');
     const tableBody = document.querySelector('.table-wrap table tbody');
