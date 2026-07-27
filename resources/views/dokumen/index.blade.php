@@ -258,12 +258,12 @@
                         <span id="selectedCount">0</span> dokumen terpilih
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button type="submit" class="btn btn-primary" id="btnBatchDownload" disabled style="background-color: #6366f1; border-color: #6366f1;">
+                        <button type="button" class="btn btn-primary" id="btnBatchDownload" disabled style="background-color: #6366f1; border-color: #6366f1;" onclick="submitBatchDoc('{{ route('dokumen.download_batch') }}')">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                             Unduh Batch (Terpilih)
                         </button>
                         @if(Auth::user()->isDpn())
-                        <button type="submit" formaction="{{ route('dokumen.bulk-destroy') }}" class="btn btn-danger" id="btnBatchDelete" disabled style="background-color: #e53e3e; border-color: #e53e3e; color:#fff;" onclick="return confirm('Apakah Anda yakin ingin menghapus permanen semua dokumen yang dipilih? Data tidak bisa dikembalikan!')">
+                        <button type="button" class="btn btn-danger" id="btnBatchDelete" disabled style="background-color: #e53e3e; border-color: #e53e3e; color:#fff;" onclick="submitBatchDoc('{{ route('dokumen.bulk-destroy') }}', 'Apakah Anda yakin ingin menghapus permanen semua dokumen yang dipilih? Data tidak bisa dikembalikan!')">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             Hapus Batch (Terpilih)
                         </button>
@@ -364,6 +364,15 @@
 </div>
 
 <script>
+    function submitBatchDoc(url, msg) {
+        if (msg && !confirm(msg)) return false;
+        const form = document.getElementById('batchDownloadForm');
+        if (form) {
+            form.action = url;
+            form.submit();
+        }
+    }
+
     function openPreview(url, title) {
         window.open(url, '_blank');
     }

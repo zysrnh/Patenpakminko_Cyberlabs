@@ -333,6 +333,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/berkas', [BerkasController::class, 'store'])->name('berkas.store');
     Route::post('/berkas/sync', [BerkasController::class, 'sync'])->name('berkas.sync');
     Route::match(['get', 'post'], '/berkas/bulk-destroy', [BerkasController::class, 'bulkDestroy'])->name('berkas.bulk-destroy');
+    Route::match(['get', 'post'], '/berkas/bulk_destroy', [BerkasController::class, 'bulkDestroy']);
+    Route::match(['get', 'post'], '/berkas/bulk%20destroy', [BerkasController::class, 'bulkDestroy']);
     Route::match(['get', 'post'], '/berkas/bulk{any}', [BerkasController::class, 'bulkDestroy'])->where('any', '.*');
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
     Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
@@ -343,6 +345,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
     Route::post('/dokumen', [DokumenController::class, 'store'])->name('dokumen.store');
     Route::match(['get', 'post'], '/dokumen/bulk-destroy', [DokumenController::class, 'bulkDestroy'])->name('dokumen.bulk-destroy');
+    Route::match(['get', 'post'], '/dokumen/bulk_destroy', [DokumenController::class, 'bulkDestroy']);
+    Route::match(['get', 'post'], '/dokumen/bulk%20destroy', [DokumenController::class, 'bulkDestroy']);
+    Route::match(['get', 'post'], '/dokumen/bulk-delete', [DokumenController::class, 'bulkDestroy']);
+    Route::match(['get', 'post'], '/dokumen/delete-batch', [DokumenController::class, 'bulkDestroy']);
     Route::match(['get', 'post'], '/dokumen/bulk{any}', [DokumenController::class, 'bulkDestroy'])->where('any', '.*');
     Route::post('/dokumen/download-zip', [DokumenController::class, 'downloadZip'])->name('dokumen.download_zip');
     Route::post('/dokumen/download-batch', [DokumenController::class, 'downloadBatch'])->name('dokumen.download_batch');
