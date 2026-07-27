@@ -259,6 +259,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
     Route::delete('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'destroy'])->name('non-berusaha.destroy');
     Route::match(['get', 'post'], '/non-berusaha/bulk-destroy', [PpkprNonBerusahaController::class, 'bulkDestroy'])->name('non-berusaha.bulk-destroy');
+    Route::match(['get', 'post'], '/non-berusaha/bulk_destroy', [PpkprNonBerusahaController::class, 'bulkDestroy']);
  
     // Kebijakan
     Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
@@ -267,6 +268,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
     Route::delete('/kebijakan/{id}', [KebijakanController::class, 'destroy'])->name('kebijakan.destroy');
     Route::match(['get', 'post'], '/kebijakan/bulk-destroy', [KebijakanController::class, 'bulkDestroy'])->name('kebijakan.bulk-destroy');
+    Route::match(['get', 'post'], '/kebijakan/bulk_destroy', [KebijakanController::class, 'bulkDestroy']);
 
     // Tanah Timbul
     Route::get('/tanah-timbul', [TanahTimbulController::class, 'index'])->name('tanah-timbul.index');
@@ -275,6 +277,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tanah-timbul/{id}/verifikasi', [TanahTimbulController::class, 'verify'])->name('tanah-timbul.verify');
     Route::delete('/tanah-timbul/{id}', [TanahTimbulController::class, 'destroy'])->name('tanah-timbul.destroy');
     Route::match(['get', 'post'], '/tanah-timbul/bulk-destroy', [TanahTimbulController::class, 'bulkDestroy'])->name('tanah-timbul.bulk-destroy');
+    Route::match(['get', 'post'], '/tanah-timbul/bulk_destroy', [TanahTimbulController::class, 'bulkDestroy']);
 
     // PSN
     Route::get('/psn', [PsnController::class, 'index'])->name('psn.index');
@@ -283,6 +286,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/psn/{id}/verifikasi', [PsnController::class, 'verify'])->name('psn.verify');
     Route::delete('/psn/{id}', [PsnController::class, 'destroy'])->name('psn.destroy');
     Route::match(['get', 'post'], '/psn/bulk-destroy', [PsnController::class, 'bulkDestroy'])->name('psn.bulk-destroy');
+    Route::match(['get', 'post'], '/psn/bulk_destroy', [PsnController::class, 'bulkDestroy']);
  
     // PPKPR Berusaha
     Route::get('/berusaha', [PpkprBerusahaController::class, 'index'])->name('berusaha.index');
@@ -291,6 +295,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/berusaha/{id}/verifikasi', [PpkprBerusahaController::class, 'verify'])->name('berusaha.verify');
     Route::delete('/berusaha/{id}', [PpkprBerusahaController::class, 'destroy'])->name('berusaha.destroy');
     Route::match(['get', 'post'], '/berusaha/bulk-destroy', [PpkprBerusahaController::class, 'bulkDestroy'])->name('berusaha.bulk-destroy');
+    Route::match(['get', 'post'], '/berusaha/bulk_destroy', [PpkprBerusahaController::class, 'bulkDestroy']);
     
     // Fitur Ulasan (Review)
     Route::get('/ulasan', [ReviewController::class, 'index'])->name('ulasan.index');
