@@ -196,7 +196,7 @@
         <div class="stats-inner">
             @php
                 $statsData = $statsData ?? [];
-                $permValue = $statsData['permohonan_diproses'] ?? '12k';
+                $permValue = $statsData['permohonan_diproses_display'] ?? $statsData['permohonan_diproses'] ?? '12k';
                 $penyValue = $statsData['rata_rata_penyelesaian'] ?? '10 hari';
                 $hasRatingOverride = isset($statsData['rating_override']) && $statsData['rating_override'] !== '';
                 $ratingVal = $hasRatingOverride ? $statsData['rating_override'] : ($averageRating ?? '5.0');

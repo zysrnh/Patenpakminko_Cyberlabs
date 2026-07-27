@@ -87,10 +87,24 @@ Route::get('/', function () {
         $isNewVisitor = true;
     }
 
+    // Hitung total permohonan otomatis dari semua layanan
+    $totalPermohonan = \App\Models\PpkprApplication::count()
+        + \App\Models\PpkprBerusahaApplication::count()
+        + \App\Models\KebijakanApplication::count()
+        + \App\Models\PsnApplication::count()
+        + \App\Models\TanahTimbulApplication::count()
+        + \App\Models\LapolpaBooking::count();
+
+    // Gunakan override manual jika ada, jika tidak pakai hitungan DB
+    $hasPermOverride = isset($statsData['permohonan_diproses']) && $statsData['permohonan_diproses'] !== '';
+    $statsData['permohonan_diproses_display'] = $hasPermOverride
+        ? $statsData['permohonan_diproses']
+        : number_format($totalPermohonan);
+
     // Berita / Artikel
     $beritas = \App\Models\Berita::where('is_published', true)->latest()->take(10)->get();
 
-    $response = response()->view('welcome', compact('reviews', 'averageRating', 'visitorCount', 'statsData', 'beritas'));
+    $response = response()->view('welcome', compact('reviews', 'averageRating', 'visitorCount', 'statsData', 'beritas', 'totalPermohonan'));
     if ($isNewVisitor) {
         $response->cookie('visited', true, 60 * 24); // 24 jam
     }

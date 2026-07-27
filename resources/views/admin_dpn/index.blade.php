@@ -37,9 +37,12 @@
                 @csrf
                 
                 <div class="form-group mb-3">
-                    <label class="form-label" style="font-weight: 700; font-size: 13px;">1. Permohonan Diproses</label>
-                    <input type="text" name="permohonan_diproses" class="form-control" value="{{ $stats['permohonan_diproses'] ?? '12k' }}" placeholder="Contoh: 12k atau 1.500" required>
-                    <div style="font-size: 11px; color: #718096; margin-top: 4px;">Teks/angka permohonan diproses di beranda.</div>
+                    <label class="form-label" style="font-weight: 700; font-size: 13px;">1. Override Permohonan Diproses <span style="font-weight: 400; color: #718096;">(Opsional)</span></label>
+                    <input type="text" name="permohonan_diproses" class="form-control" value="{{ $stats['permohonan_diproses'] ?? '' }}" placeholder="Biarkan kosong untuk otomatis hitung dari database...">
+                    <div style="font-size: 11px; color: #718096; margin-top: 4px;">
+                        Jika <strong>dikosongkan</strong> → otomatis hitung total permohonan real dari semua layanan di database.
+                        Jika <strong>diisi</strong> (misal: <code>12k</code> atau <code>0</code>) → nilai tersebut yang tampil di beranda.
+                    </div>
                 </div>
 
                 <div class="form-group mb-3">
