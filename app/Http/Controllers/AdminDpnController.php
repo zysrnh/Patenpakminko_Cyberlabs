@@ -45,7 +45,7 @@ class AdminDpnController extends Controller
 
         $stats = [
             'count'                  => (int) $request->count,
-            'permohonan_diproses'    => ($permVal !== null && $permVal !== '') ? $permVal : '12k',
+            'permohonan_diproses'    => $permVal ?? '',                                                          // kosong = auto hitung DB
             'rata_rata_penyelesaian' => ($penyVal !== null && $penyVal !== '') ? $penyVal : '10 hari',
             'rating_override'        => $rateVal ?? '',
         ];
