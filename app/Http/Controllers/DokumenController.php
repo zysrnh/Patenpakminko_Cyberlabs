@@ -315,14 +315,14 @@ class DokumenController extends Controller
 
     public function bulkDestroy(Request $request)
     {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Hanya Super Admin DPN yang dapat menghapus dokumen.');
+        if (!Auth::user() || !Auth::user()->isDpn()) {
+            return redirect()->route('dokumen.index')->with('error', 'Hanya Super Admin DPN yang dapat menghapus dokumen.');
         }
 
         $ids = $request->input('dokumen_ids', $request->input('ids', []));
 
         if (empty($ids)) {
-            return redirect()->back()->with('error', 'Tidak ada dokumen yang dipilih.');
+            return redirect()->route('dokumen.index')->with('error', 'Silakan centang dokumen yang ingin dihapus terlebih dahulu.');
         }
 
         $count = 0;
@@ -337,6 +337,6 @@ class DokumenController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', "{$count} dokumen berhasil dihapus.");
+        return redirect()->route('dokumen.index')->with('success', "{$count} dokumen berhasil dihapus.");
     }
 }

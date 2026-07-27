@@ -338,11 +338,7 @@
                                     Lihat
                                 </a>
                                 <a href="{{ route('dokumen.download', $item->id) }}" class="btn btn-primary btn-sm">Unduh</a>
-                                <form action="{{ route('dokumen.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');" style="margin: 0;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                                </form>
+                                <button type="submit" form="delete-form-{{ $item->id }}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');">Hapus</button>
                             </div>
                         </td>
                     </tr>
@@ -356,6 +352,14 @@
                 </tbody>
             </table>
             </form>
+
+            @foreach($dokumen as $item)
+            <form id="delete-form-{{ $item->id }}" action="{{ route('dokumen.destroy', $item->id) }}" method="POST" style="display:none;">
+                @csrf
+                @method('DELETE')
+            </form>
+            @endforeach
+
             <div style="margin-top: 20px;">
                 {{ $dokumen->links() }}
             </div>
