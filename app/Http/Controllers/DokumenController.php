@@ -31,8 +31,15 @@ class DokumenController extends Controller
             \Illuminate\Support\Facades\Artisan::call('berkas:sync');
         } catch (\Throwable $e) {}
 
-        // Jika tabel dokumens kosong, tampilkan data dari Berkas (hasil sync permohonan)
-        $useBerkas = !Dokumen::exists();
+        // Jika tabel dokumens belum ada/kosong, tampilkan data dari Berkas (hasil sync permohonan)
+        $useBerkas = true;
+        if (\Illuminate\Support\Facades\Schema::hasTable('dokumens')) {
+            try {
+                $useBerkas = !Dokumen::exists();
+            } catch (\Throwable $e) {
+                $useBerkas = true;
+            }
+        }
         $query = $useBerkas ? \App\Models\Berkas::with('user')->latest() : Dokumen::with('user')->latest();
 
         // Filter berdasarkan kategori
@@ -78,7 +85,9 @@ class DokumenController extends Controller
         
         // Ambil daftar pemohon yang sudah ada berkas/dokumennya atau role pelaku_usaha
         $userIdsBerkas = \App\Models\Berkas::select('user_id')->distinct()->pluck('user_id')->toArray();
-        $userIdsDokumen = Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray();
+        $userIdsDokumen = \Illuminate\Support\Facades\Schema::hasTable('dokumens')
+            ? Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray()
+            : [];
         $allUserIds = array_unique(array_merge($userIdsBerkas, $userIdsDokumen));
         
         $pemohonList = \App\Models\User::whereIn('id', $allUserIds)->orWhere('role', 'pelaku_usaha')->get();
@@ -203,7 +212,9 @@ class DokumenController extends Controller
 
         // Ambil dari Berkas (Otomatis) dan Dokumen (Manual)
         $berkas = \App\Models\Berkas::where('user_id', $userId)->get();
-        $dokumen = Dokumen::where('user_id', $userId)->get();
+        $dokumen = \Illuminate\Support\Facades\Schema::hasTable('dokumens')
+            ? Dokumen::where('user_id', $userId)->get()
+            : collect([]);
 
         if ($berkas->isEmpty() && $dokumen->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada dokumen untuk pemohon ini.');
