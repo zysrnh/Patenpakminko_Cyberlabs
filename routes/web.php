@@ -178,6 +178,8 @@ Route::get('/lapolpak', [LapolpaController::class, 'index'])->name('lapolpa.inde
 Route::post('/lapolpak', [LapolpaController::class, 'store'])->name('lapolpa.store');
 Route::get('/lapolpak/success', [LapolpaController::class, 'success'])->name('lapolpa.success');
 Route::put('/lapolpak/{id}', [LapolpaController::class, 'updateStatus'])->name('lapolpa.update');
+Route::delete('/lapolpak/{id}', [LapolpaController::class, 'destroy'])->name('lapolpa.destroy');
+Route::post('/lapolpak/bulk-destroy', [LapolpaController::class, 'bulkDestroy'])->name('lapolpa.bulk-destroy');
 Route::get('/lapolpak/ulasan/{id}', [LapolpaController::class, 'showReviewForm'])->name('lapolpa.review.form');
 Route::post('/lapolpak/ulasan/{id}', [LapolpaController::class, 'submitReview'])->name('lapolpa.review.submit');
 
@@ -250,35 +252,45 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile');
     Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
     
-    // PPKPR Non-Berusaha (Pelaku Usaha & Petugas Verifikasi)
+    // PPKPR Non-Berusaha
     Route::get('/non-berusaha', [PpkprNonBerusahaController::class, 'index'])->name('non-berusaha.index');
     Route::get('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'show'])->name('non-berusaha.show');
     Route::get('/non-berusaha/{id}/ptp', [PpkprNonBerusahaController::class, 'ptpPdf'])->name('non-berusaha.ptp_pdf');
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
+    Route::delete('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'destroy'])->name('non-berusaha.destroy');
+    Route::match(['get', 'post'], '/non-berusaha/bulk-destroy', [PpkprNonBerusahaController::class, 'bulkDestroy'])->name('non-berusaha.bulk-destroy');
  
-    // Kebijakan & Tanah Timbul
+    // Kebijakan
     Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
     Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
     Route::get('/kebijakan/{id}/ptp', [KebijakanController::class, 'ptpPdf'])->name('kebijakan.ptp_pdf');
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
+    Route::delete('/kebijakan/{id}', [KebijakanController::class, 'destroy'])->name('kebijakan.destroy');
+    Route::match(['get', 'post'], '/kebijakan/bulk-destroy', [KebijakanController::class, 'bulkDestroy'])->name('kebijakan.bulk-destroy');
 
     // Tanah Timbul
     Route::get('/tanah-timbul', [TanahTimbulController::class, 'index'])->name('tanah-timbul.index');
     Route::get('/tanah-timbul/{id}', [TanahTimbulController::class, 'show'])->name('tanah-timbul.show');
     Route::get('/tanah-timbul/{id}/ptp', [TanahTimbulController::class, 'ptpPdf'])->name('tanah-timbul.ptp_pdf');
     Route::post('/tanah-timbul/{id}/verifikasi', [TanahTimbulController::class, 'verify'])->name('tanah-timbul.verify');
+    Route::delete('/tanah-timbul/{id}', [TanahTimbulController::class, 'destroy'])->name('tanah-timbul.destroy');
+    Route::match(['get', 'post'], '/tanah-timbul/bulk-destroy', [TanahTimbulController::class, 'bulkDestroy'])->name('tanah-timbul.bulk-destroy');
 
-    // PSN (Proyek Strategis Nasional)
+    // PSN
     Route::get('/psn', [PsnController::class, 'index'])->name('psn.index');
     Route::get('/psn/{id}', [PsnController::class, 'show'])->name('psn.show');
     Route::get('/psn/{id}/ptp', [PsnController::class, 'ptpPdf'])->name('psn.ptp_pdf');
     Route::post('/psn/{id}/verifikasi', [PsnController::class, 'verify'])->name('psn.verify');
+    Route::delete('/psn/{id}', [PsnController::class, 'destroy'])->name('psn.destroy');
+    Route::match(['get', 'post'], '/psn/bulk-destroy', [PsnController::class, 'bulkDestroy'])->name('psn.bulk-destroy');
  
-    // PPKPR Berusaha (Pelaku Usaha, BPN, Dinas PU, & Satu Pintu)
+    // PPKPR Berusaha
     Route::get('/berusaha', [PpkprBerusahaController::class, 'index'])->name('berusaha.index');
     Route::get('/berusaha/{id}', [PpkprBerusahaController::class, 'show'])->name('berusaha.show');
     Route::get('/berusaha/{id}/ptp', [PpkprBerusahaController::class, 'ptpPdf'])->name('berusaha.ptp_pdf');
     Route::post('/berusaha/{id}/verifikasi', [PpkprBerusahaController::class, 'verify'])->name('berusaha.verify');
+    Route::delete('/berusaha/{id}', [PpkprBerusahaController::class, 'destroy'])->name('berusaha.destroy');
+    Route::match(['get', 'post'], '/berusaha/bulk-destroy', [PpkprBerusahaController::class, 'bulkDestroy'])->name('berusaha.bulk-destroy');
     
     // Fitur Ulasan (Review)
     Route::get('/ulasan', [ReviewController::class, 'index'])->name('ulasan.index');

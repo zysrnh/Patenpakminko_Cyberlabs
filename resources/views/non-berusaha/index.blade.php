@@ -137,11 +137,20 @@
                                     {{ $app->status_label }}
                                 </span>
                             </td>
-                            <td>
+                            <td style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
                                 <a href="{{ route('non-berusaha.show', $app->id) }}" class="btn btn-sm btn-secondary">
                                     Detail
                                     <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                 </a>
+                                @if(Auth::user()->isDpn())
+                                <form action="{{ route('non-berusaha.destroy', $app->id) }}" method="POST" onsubmit="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="btn btn-sm" style="background:#E53E3E;border-color:#E53E3E;color:#fff;">
+                                        <svg viewBox="0 0 24 24" style="width:14px;height:14px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        Hapus
+                                    </button>
+                                </form>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

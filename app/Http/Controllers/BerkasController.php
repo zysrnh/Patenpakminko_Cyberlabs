@@ -26,6 +26,11 @@ class BerkasController extends Controller
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke fitur ini.');
         }
 
+        // Auto-sync data dari permohonan ke berkas
+        try {
+            \Illuminate\Support\Facades\Artisan::call('berkas:sync');
+        } catch (\Throwable $e) {}
+
         $query = Berkas::with('user')->latest();
 
         // Filter berdasarkan kategori

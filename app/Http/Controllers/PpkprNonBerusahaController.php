@@ -527,4 +527,19 @@ class PpkprNonBerusahaController extends Controller
 
         return redirect()->back()->with('success', 'Kontak Admin Instansi berhasil disimpan!');
     }
+
+    public function destroy($id)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat menghapus permohonan.');
+        }
+        $app = PpkprApplication::findOrFail($id);
+        $appNo = $app->application_number;
+        $fileFields = ['peta_lokasi','surat_kuasa','fc_ktp','fc_npwp','fc_akta_pendirian','rencana_penggunaan_tanah','nib','proposal_kegiatan','persyaratan_lainnya','bpn_document'];
+        foreach ($fileFields as $field) {
+            if (!empty($app->$field)) Storage::delete($app->$field);
+        }
+        $app->delete();
+        return redirect()->route('non-berusaha.index')->with('success', "Permohonan {$appNo} berhasil dihapus dari antrean.");
+    }
 }

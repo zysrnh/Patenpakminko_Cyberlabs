@@ -453,9 +453,20 @@ class TanahTimbulController extends Controller
 
         abort(403, 'Aksi tidak diizinkan atau status permohonan tidak sesuai.');
     }
- 
     // removed getWhatsappSettings
- 
 
-    
+    public function destroy($id)
+    {
+        if (!\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat menghapus permohonan.');
+        }
+        $app = \App\Models\TanahTimbulApplication::findOrFail($id);
+        $appNo = $app->application_number;
+        $fileFields = ['peta_lokasi','surat_kuasa','fc_ktp','fc_npwp','fc_akta_pendirian','rencana_penggunaan_tanah','proposal_kegiatan','persyaratan_lainnya','bpn_document'];
+        foreach ($fileFields as $field) {
+            if (!empty($app->$field)) \Illuminate\Support\Facades\Storage::delete($app->$field);
+        }
+        $app->delete();
+        return redirect()->route('tanah-timbul.index')->with('success', "Permohonan {$appNo} berhasil dihapus dari antrean.");
+    }
 }

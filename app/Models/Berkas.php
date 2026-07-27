@@ -25,4 +25,9 @@ class Berkas extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getNamaDokumenAttribute()
+    {
+        return $this->attributes['nama_berkas'] ?? '';
+    }
 }

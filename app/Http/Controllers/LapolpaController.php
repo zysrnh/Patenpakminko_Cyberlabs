@@ -359,5 +359,16 @@ class LapolpaController extends Controller
 
         return redirect('/')->with('success', 'Terima kasih! Ulasan Anda telah berhasil dikirim.');
     }
+
+    public function destroy($id)
+    {
+        if (!\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat menghapus antrian.');
+        }
+        $booking = \App\Models\LapolpaBooking::findOrFail($id);
+        $noRef = $booking->booking_number ?? "#$id";
+        $booking->delete();
+        return redirect()->route('lapolpa.index')->with('success', "Antrian LAPOL PAK {$noRef} berhasil dihapus.");
+    }
 }
 

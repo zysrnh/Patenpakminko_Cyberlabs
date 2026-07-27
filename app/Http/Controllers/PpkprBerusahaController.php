@@ -13,7 +13,11 @@ use Carbon\Carbon;
 class PpkprBerusahaController extends Controller
 {
     use \App\Traits\WaBlastHelper;
+    use \App\Traits\BulkDestroyHelper;
 
+    protected $bulkModel         = \App\Models\PpkprBerusahaApplication::class;
+    protected $bulkRedirectRoute  = 'berusaha.index';
+    protected $bulkFileFields     = ['peta_lokasi','surat_kuasa','fc_ktp','fc_npwp','fc_akta_pendirian','rencana_penggunaan_tanah','nib','kbli','proposal_kegiatan','persyaratan_lainnya','satu_pintu_document'];
     /**
      * Tampilkan daftar permohonan PPKPR Berusaha.
      */
@@ -542,6 +546,21 @@ class PpkprBerusahaController extends Controller
             file_put_contents($path, json_encode($settings, JSON_PRETTY_PRINT));
         }
         return $settings;
+    }
+    public function destroy($id)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat menghapus permohonan.');
+        }
+        $app = PpkprBerusahaApplication::findOrFail($id);
+        $appNo = $app->application_number;
+        // Hapus file-file yang tersimpan
+        $fileFields = ['peta_lokasi','surat_kuasa','fc_ktp','fc_npwp','fc_akta_pendirian','rencana_penggunaan_tanah','nib','kbli','proposal_kegiatan','persyaratan_lainnya','satu_pintu_document'];
+        foreach ($fileFields as $field) {
+            if (!empty($app->$field)) Storage::delete($app->$field);
+        }
+        $app->delete();
+        return redirect()->route('berusaha.index')->with('success', "Permohonan {$appNo} berhasil dihapus dari antrean.");
     }
  
 }

@@ -26,14 +26,14 @@ class DokumenController extends Controller
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke fitur ini.');
         }
 
-        if (!\Illuminate\Support\Facades\Schema::hasTable('dokumens')) {
-            $dokumen = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
-            $pemohonList = \App\Models\User::where('role', 'pelaku_usaha')->get();
-            $kategoriList = collect([]);
-            return view('dokumen.index', compact('dokumen', 'pemohonList', 'kategoriList'));
-        }
+        // Auto-sync data berkas dari permohonan
+        try {
+            \Illuminate\Support\Facades\Artisan::call('berkas:sync');
+        } catch (\Throwable $e) {}
 
-        $query = Dokumen::with('user')->latest();
+        // Jika tabel dokumens kosong, tampilkan data dari Berkas (hasil sync permohonan)
+        $useBerkas = !Dokumen::exists();
+        $query = $useBerkas ? \App\Models\Berkas::with('user')->latest() : Dokumen::with('user')->latest();
 
         // Filter berdasarkan kategori
         if ($request->has('kategori') && $request->kategori != '') {
@@ -48,8 +48,9 @@ class DokumenController extends Controller
         // Filter pencarian nama dokumen atau nama pengunggah
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('nama_dokumen', 'like', '%' . $search . '%')
+            $nameField = $useBerkas ? 'nama_berkas' : 'nama_dokumen';
+            $query->where(function($q) use ($search, $nameField) {
+                $q->where($nameField, 'like', '%' . $search . '%')
                   ->orWhereHas('user', function($qUser) use ($search) {
                       $qUser->where('name', 'like', '%' . $search . '%')
                             ->orWhere('business_name', 'like', '%' . $search . '%');
@@ -59,7 +60,8 @@ class DokumenController extends Controller
 
         // Filter berdasarkan layanan khusus (PKKPR Berusaha, Non Berusaha, dsb)
         if ($request->has('layanan') && $request->layanan != '') {
-            $query->where('nama_dokumen', 'like', '[' . $request->layanan . ']%');
+            $nameField = $useBerkas ? 'nama_berkas' : 'nama_dokumen';
+            $query->where($nameField, 'like', '[' . $request->layanan . ']%');
         }
 
         // Filter berdasarkan pemohon
@@ -82,7 +84,8 @@ class DokumenController extends Controller
         $pemohonList = \App\Models\User::whereIn('id', $allUserIds)->orWhere('role', 'pelaku_usaha')->get();
 
         // Ambil daftar kategori yang sudah ada untuk dropdown filter
-        $kategoriList = Dokumen::select('kategori')->distinct()->whereNotNull('kategori')->orderBy('kategori')->pluck('kategori');
+        $modelClass = $useBerkas ? \App\Models\Berkas::class : Dokumen::class;
+        $kategoriList = $modelClass::select('kategori')->distinct()->whereNotNull('kategori')->orderBy('kategori')->pluck('kategori');
 
         return view('dokumen.index', compact('dokumen', 'pemohonList', 'kategoriList'));
     }
@@ -119,10 +122,12 @@ class DokumenController extends Controller
 
     public function download($id)
     {
-        $dokumen = Dokumen::findOrFail($id);
+        $dokumen = Dokumen::find($id) ?: \App\Models\Berkas::find($id);
+        if (!$dokumen) abort(404, 'Dokumen tidak ditemukan.');
         
         if (Storage::disk('public')->exists($dokumen->file_path)) {
-            return Storage::disk('public')->download($dokumen->file_path, $dokumen->nama_dokumen . '.' . $dokumen->tipe_file);
+            $name = $dokumen->nama_dokumen ?: ($dokumen->nama_berkas ?? 'dokumen');
+            return Storage::disk('public')->download($dokumen->file_path, $name . '.' . $dokumen->tipe_file);
         }
 
         return redirect()->back()->with('error', 'File tidak ditemukan di server.');
@@ -130,14 +135,14 @@ class DokumenController extends Controller
 
     public function preview($id)
     {
-        $dokumen = Dokumen::findOrFail($id);
-        
-        if (!Storage::disk('public')->exists($dokumen->file_path)) {
+        $dokumen = Dokumen::find($id) ?: \App\Models\Berkas::find($id);
+        if (!$dokumen || !Storage::disk('public')->exists($dokumen->file_path)) {
             return response()->json(['error' => 'File tidak ditemukan.'], 404);
         }
 
         $path = storage_path('app/public/' . $dokumen->file_path);
         $ext  = strtolower($dokumen->tipe_file);
+        $name = $dokumen->nama_dokumen ?: ($dokumen->nama_berkas ?? 'dokumen');
 
         // Untuk DOCX: konversi ke HTML dulu pakai PhpWord, tampilkan di browser
         if (in_array($ext, ['doc', 'docx'])) {
@@ -151,7 +156,6 @@ class DokumenController extends Controller
 
                 return response($html, 200)->header('Content-Type', 'text/html');
             } catch (\Exception $e) {
-                // Fallback: tampilkan pesan error daripada download
                 return response('<html><body style="font-family:sans-serif;padding:40px;text-align:center;"><h3>Tidak dapat menampilkan preview file ini.</h3><p style="color:#718096">Gunakan tombol <strong>Unduh</strong> untuk membuka file di Microsoft Word.</p></body></html>', 200)
                     ->header('Content-Type', 'text/html');
             }
@@ -166,13 +170,14 @@ class DokumenController extends Controller
 
         return response()->file($path, [
             'Content-Type'        => $mimeType,
-            'Content-Disposition' => 'inline; filename="' . $dokumen->nama_dokumen . '.' . $ext . '"'
+            'Content-Disposition' => 'inline; filename="' . $name . '.' . $ext . '"'
         ]);
     }
 
     public function destroy($id)
     {
-        $dokumen = Dokumen::findOrFail($id);
+        $dokumen = Dokumen::find($id) ?: \App\Models\Berkas::find($id);
+        if (!$dokumen) abort(404, 'Dokumen tidak ditemukan.');
         
         // Hapus fisik file
         if (Storage::disk('public')->exists($dokumen->file_path)) {
