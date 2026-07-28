@@ -80,6 +80,16 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Carbon::macro('diffInWorkingDaysWithHolidays', function($target) {
+            if (!$target) {
+                return 0;
+            }
+            if (!$target instanceof \DateTimeInterface) {
+                try {
+                    $target = \Carbon\Carbon::parse($target);
+                } catch (\Exception $e) {
+                    return 0;
+                }
+            }
             $start = $this->copy()->startOfDay();
             $end = $target->copy()->startOfDay();
             
