@@ -98,24 +98,30 @@ class PpkprNonBerusahaController extends Controller
         }
 
         $request->validate([
-            'nama_pemilik_usaha' => 'required|string|max:100',
-            'nama_pengaju' => 'required|string|max:100',
-            'hubungan_pengaju' => 'required|string|max:100',
-            'peta_lokasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-            'surat_kuasa' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-            'fc_ktp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-            'fc_npwp' => 'required|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-            'fc_akta_pendirian' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-            'kbli_kode' => 'required|string|max:20',
-            'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-            'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
-            'persyaratan_lainnya' => 'required|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
+            'nama_pemilik_usaha'        => 'required|string|max:100',
+            'nama_pengaju'              => 'required|string|max:100',
+            'hubungan_pengaju'          => 'required|string|max:100',
+            'peta_lokasi'               => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'surat_kuasa'               => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'fc_ktp'                    => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'fc_npwp'                   => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'fc_akta_pendirian'         => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'rencana_penggunaan_tanah'  => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'nib'                       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'kbli_kode'                 => 'nullable|string|max:20',
+            'kbli'                      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'proposal_kegiatan'         => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+            'persyaratan_lainnya'       => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
         ], [
-            'nama_pemilik_usaha.required' => 'Nama pemilik usaha wajib diisi.',
-            'nama_pengaju.required' => 'Nama pengaju wajib diisi.',
-            'hubungan_pengaju.required' => 'Hubungan pengaju / sebagai apa wajib diisi.',
+            'nama_pemilik_usaha.required'       => 'Nama pemilik usaha wajib diisi.',
+            'nama_pengaju.required'             => 'Nama pengaju wajib diisi.',
+            'hubungan_pengaju.required'         => 'Hubungan pengaju / sebagai apa wajib diisi.',
+            'peta_lokasi.required'              => 'Peta/sketsa lokasi wajib diunggah.',
+            'peta_lokasi.mimes'                 => 'Peta lokasi harus berformat PDF, JPG, atau PNG.',
+            'fc_ktp.required'                   => 'Fotokopi KTP wajib diunggah.',
+            'fc_npwp.required'                  => 'Fotokopi NPWP wajib diunggah.',
+            'fc_akta_pendirian.required'        => 'FC Akta Pendirian / Dokumen Penetapan wajib diunggah.',
+            'rencana_penggunaan_tanah.required' => 'Rencana Penggunaan Tanah wajib diunggah.',
         ]);
 
         $data = $request->only([
@@ -389,17 +395,17 @@ class PpkprNonBerusahaController extends Controller
         // Pelaku Usaha mengupload ulang berkas jika tidak sesuai
         if ($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']) && $step === 'reupload') {
             $request->validate([
-                'peta_lokasi' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-                'surat_kuasa' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-                'fc_ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-                'fc_npwp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-                'fc_akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
-                'rencana_penggunaan_tanah' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
-                'nib' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-                'kbli_kode' => 'nullable|string|max:20',
-                'kbli' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:1024000',
-                'proposal_kegiatan' => 'nullable|file|mimes:pdf,doc,docx|max:102400',
-                'persyaratan_lainnya' => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
+                'peta_lokasi'               => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'surat_kuasa'               => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'fc_ktp'                    => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'fc_npwp'                   => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'fc_akta_pendirian'         => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'rencana_penggunaan_tanah'  => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'nib'                       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'kbli_kode'                 => 'nullable|string|max:20',
+                'kbli'                      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
+                'proposal_kegiatan'         => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+                'persyaratan_lainnya'       => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
             ]);
  
             $filesToStore = [
