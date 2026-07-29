@@ -254,32 +254,30 @@
                 <div class="timeline-number">1</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
-                        <img src="{{ asset('storage/svg/RegisAkun.svg') }}" alt="Registrasi Akun">
+                        <img src="{{ asset('storage/svg/PilihLayanan.svg') }}" alt="Pilih Layanan">
                     </div>
                     <div class="timeline-content">
-                        <h3>Registrasi Akun</h3>
-                        <p>Pada tahap pertama, pemohon diwajibkan membuat akun pada sistem PATEN PAK MIKO sebagai identitas utama untuk mengakses seluruh layanan digital.</p>
+                        <h3>Pilih Layanan</h3>
+                        <p>Tentukan jenis layanan permohonan yang sesuai dengan kebutuhan dan kriteria kegiatan pemanfaatan ruang Anda.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Proses Registrasi:</div>
-                            <p style="margin-bottom: 8px; font-size: 13.5px;">Pemohon mengisi data:</p>
+                            <div class="timeline-list-title">Pilihan Layanan:</div>
                             <ul class="timeline-list">
-                                <li>Nama lengkap</li>
-                                <li>NIK</li>
-                                <li>Email aktif</li>
-                                <li>Nomor WhatsApp aktif</li>
-                                <li>Password akun</li>
+                                <li>PPKPR Berusaha</li>
+                                <li>PPKPR Non Berusaha</li>
+                                <li>PKKPR Kebijakan</li>
+                                <li>PSN (Proyek Strategis Nasional)</li>
+                                <li>PKKPR Tanah Timbul</li>
                             </ul>
                         </div>
-                        <p>Setelah data berhasil dikirim, sistem akan melakukan validasi dan akun siap digunakan untuk login.</p>
+                        <p>Pemohon memilih jenis layanan yang tersedia di portal sesuai dengan peruntukan dan kriteria kegiatan.</p>
                         
                         <div class="timeline-list-group">
                             <div class="timeline-list-title">Tujuan Tahap Ini:</div>
                             <ul class="timeline-list">
-                                <li>Membuat identitas pengguna</li>
-                                <li>Menyimpan riwayat pengajuan</li>
-                                <li>Menghubungkan sistem notifikasi WhatsApp</li>
-                                <li>Mempermudah monitoring layanan</li>
+                                <li>Memilih jenis permohonan yang sesuai kebutuhan</li>
+                                <li>Mengetahui syarat dan alur spesifik tiap layanan</li>
+                                <li>Mempermudah pengisian formulir pengajuan</li>
                             </ul>
                         </div>
                     </div>
@@ -291,35 +289,40 @@
                 <div class="timeline-number">2</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
-                        <img src="{{ asset('storage/svg/PilihModul.svg') }}" alt="Pilih Jenis Layanan">
+                        <img src="{{ asset('storage/svg/UnggahDocumen.svg') }}" alt="Unggah Dokumen">
                     </div>
                     <div class="timeline-content">
-                        <h3>Pilih Jenis Layanan</h3>
-                        <p>Setelah login, pengguna akan diarahkan ke dashboard utama untuk memilih jenis layanan yang ingin diajukan.</p>
+                        <h3>Unggah Dokumen</h3>
+                        <p>Lengkapi dan unggah berkas persyaratan permohonan melalui sistem secara digital dengan mudah dan cepat.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Pilihan Layanan:</div>
+                            <div class="timeline-list-title">Dokumen yang Diunggah:</div>
                             <ul class="timeline-list">
-                                <li>PPKPR Berusaha</li>
-                                <li>PPKPR Non Berusaha</li>
-                                <li>LAPOLPA</li>
-                                <li>Kebijakan</li>
-                                <li>INFORMAL</li>
+                                <li>Formulir permohonan & Identitas pemohon</li>
+                                <li>Dokumen bukti kepemilikan / penguasaan tanah</li>
+                                <li>Peta lokasi / Koordinat area permohonan</li>
+                                <li>Persyaratan administrasi lainnya</li>
                             </ul>
                         </div>
-                        <p>Pemohon memilih layanan sesuai kebutuhan pengajuan atau konsultasi yang akan dilakukan.</p>
 
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Penjelasan Tahap:</div>
-                            <p style="margin-bottom: 8px; font-size: 13.5px;">Sistem akan menampilkan:</p>
+                            <div class="timeline-list-title">Fitur Upload:</div>
                             <ul class="timeline-list">
-                                <li>Informasi layanan</li>
-                                <li>Persyaratan dokumen</li>
-                                <li>Panduan pengajuan</li>
-                                <li>Alur proses layanan</li>
+                                <li>Upload berkas digital mudah</li>
+                                <li>Multi upload document</li>
+                                <li>Validasi format file otomatis</li>
+                                <li>Progress upload real-time</li>
                             </ul>
                         </div>
-                        <p>Tahapan ini membantu pengguna memahami proses sebelum melakukan pengajuan.</p>
+
+                        <div class="timeline-list-group">
+                            <div class="timeline-list-title">Tujuan Tahap Ini:</div>
+                            <ul class="timeline-list">
+                                <li>Memastikan kelengkapan berkas administrasi</li>
+                                <li>Mengurangi kesalahan pengajuan fisik</li>
+                                <li>Mempercepat proses verifikasi data</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -329,49 +332,35 @@
                 <div class="timeline-number">3</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
-                        <img src="{{ asset('storage/svg/UnggahDokumen.svg') }}" alt="Unggah Dokumen">
+                        <img src="{{ asset('storage/svg/Verifikasi&Validasi.svg') }}" alt="Verifikasi dan Validasi Berkas">
                     </div>
                     <div class="timeline-content">
-                        <h3>Unggah Dokumen</h3>
-                        <p>Setelah memilih layanan, pengguna diwajibkan mengunggah seluruh dokumen persyaratan yang dibutuhkan.</p>
+                        <h3>Verifikasi dan Validasi Berkas</h3>
+                        <p>Petugas Kantor Pertanahan akan memeriksa kelengkapan dan kesesuaian dokumen yang telah Anda unggah ke sistem.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Dokumen yang Diunggah:</div>
+                            <div class="timeline-list-title">Proses Verifikasi:</div>
                             <ul class="timeline-list">
-                                <li>Formulir permohonan</li>
-                                <li>Dokumen identitas</li>
-                                <li>Dokumen pendukung</li>
-                                <li>Persyaratan administrasi lainnya</li>
+                                <li>Pemeriksaan kelengkapan administrasi oleh petugas</li>
+                                <li>Verifikasi teknis dan validasi berkas</li>
+                                <li>Peninjauan / penilaian sesuai ketentuan</li>
                             </ul>
                         </div>
 
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Fitur Upload:</div>
+                            <div class="timeline-list-title">Tindak Lanjut Berkas:</div>
+                            <p style="margin-bottom: 8px; font-size: 13.5px;">Setelah verifikasi dilakukan:</p>
                             <ul class="timeline-list">
-                                <li>Drag & drop file</li>
-                                <li>Multi upload document</li>
-                                <li>Validasi format file</li>
-                                <li>Progress upload otomatis</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Proses Validasi:</div>
-                            <p style="margin-bottom: 8px; font-size: 13.5px;">Setelah upload selesai:</p>
-                            <ul class="timeline-list">
-                                <li>Sistem mengirim data ke admin</li>
-                                <li>Admin melakukan pengecekan dokumen</li>
-                                <li>Jika dokumen tidak sesuai, pengguna menerima notifikasi revisi</li>
-                                <li>Jika sesuai, proses dilanjutkan ke tahap berikutnya</li>
+                                <li>Jika dokumen tidak sesuai, pemohon menerima notifikasi revisi</li>
+                                <li>Jika dokumen valid & lengkap, proses dilanjutkan ke tahap berikutnya</li>
                             </ul>
                         </div>
 
                         <div class="timeline-list-group">
                             <div class="timeline-list-title">Tujuan Tahap Ini:</div>
                             <ul class="timeline-list">
-                                <li>Memastikan kelengkapan administrasi</li>
-                                <li>Mempercepat proses verifikasi</li>
-                                <li>Mengurangi kesalahan pengajuan</li>
+                                <li>Memastikan keabsahan data permohonan</li>
+                                <li>Menjamin kesesuaian dengan regulasi pertanahan & tata ruang</li>
                             </ul>
                         </div>
                     </div>
@@ -383,41 +372,34 @@
                 <div class="timeline-number">4</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
-                        <img src="{{ asset('storage/svg/TerimaPersetujuan.svg') }}" alt="Terima Persetujuan">
+                        <img src="{{ asset('storage/svg/LayananBerjalan.svg') }}" alt="Layanan Berjalan">
                     </div>
                     <div class="timeline-content">
-                        <h3>Terima Persetujuan</h3>
-                        <p>Tahap akhir merupakan proses penerbitan hasil layanan setelah seluruh tahapan selesai dilakukan.</p>
+                        <h3>Layanan Berjalan</h3>
+                        <p>Permohonan Anda sedang diproses. Pantau status perkembangan layanan secara real-time melalui dashboard.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Proses yang Dilalui:</div>
+                            <div class="timeline-list-title">Proses yang Berlangsung:</div>
                             <ul class="timeline-list">
-                                <li>Validasi dokumen selesai</li>
-                                <li>Penjadwalan peninjauan lapangan</li>
-                                <li>Peninjauan lapangan</li>
-                                <li>Rapat penilaian</li>
-                                <li>Approval dari pihak terkait</li>
+                                <li>Pemrosesan draft dokumen & persetujuan teknis</li>
+                                <li>Penerbitan surat / dokumen hasil layanan</li>
                             </ul>
                         </div>
-                        <p>Setelah seluruh proses dinyatakan sesuai, sistem akan menerbitkan hasil layanan.</p>
 
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Yang Diterima Pemohon:</div>
+                            <div class="timeline-list-title">Fitur & Hasil Layanan:</div>
                             <ul class="timeline-list">
-                                <li>Status pengajuan selesai</li>
-                                <li>Nomor layanan resmi</li>
-                                <li>Dokumen final dalam format PDF</li>
-                                <li>Notifikasi WhatsApp otomatis</li>
+                                <li>Pantau status permohonan secara real-time via dashboard</li>
+                                <li>Notifikasi otomatis perkembangan layanan</li>
+                                <li>Unduh dokumen resmi hasil layanan setelah selesai</li>
                             </ul>
                         </div>
 
                         <div class="timeline-list-group">
                             <div class="timeline-list-title">Keuntungan Sistem Digital:</div>
                             <ul class="timeline-list">
-                                <li>Proses lebih transparan</li>
-                                <li>Monitoring real-time</li>
-                                <li>Riwayat layanan tersimpan</li>
-                                <li>Dokumen mudah diakses kembali</li>
+                                <li>Transparan dan dapat dipantau setiap saat</li>
+                                <li>Pengarsipan dokumen aman dan mudah diakses</li>
                             </ul>
                         </div>
                     </div>
