@@ -261,13 +261,20 @@
                         <p>Tentukan jenis layanan permohonan yang sesuai dengan kebutuhan dan kriteria kegiatan pemanfaatan ruang Anda.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Jenis Layanan yang Tersedia:</div>
+                            <div class="timeline-list-title">Layanan Pertimbangan Teknis Pertanahan:</div>
                             <ul class="timeline-list">
-                                <li>PKKPR Berusaha</li>
-                                <li>PKKPR Non Berusaha</li>
-                                <li>PKKPR Kebijakan</li>
-                                <li>Proyek Strategis Nasional (PSN)</li>
-                                <li>PKKPR Tanah Timbul</li>
+                                <li>Pertimbangan Teknis Pertanahan PKKPR Berusaha</li>
+                                <li>Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</li>
+                                <li>Pertimbangan Teknis Pertanahan Kebijakan</li>
+                                <li>Pertimbangan Teknis Pertanahan Tanah Timbul</li>
+                                <li>Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</li>
+                            </ul>
+                        </div>
+                        <div class="timeline-list-group" style="margin-top: 12px;">
+                            <div class="timeline-list-title">Layanan Lainnya:</div>
+                            <ul class="timeline-list">
+                                <li>LAPOL PAK</li>
+                                <li>INFORMAL</li>
                             </ul>
                         </div>
                     </div>
