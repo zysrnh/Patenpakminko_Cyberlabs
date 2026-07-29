@@ -261,23 +261,13 @@
                         <p>Tentukan jenis layanan permohonan yang sesuai dengan kebutuhan dan kriteria kegiatan pemanfaatan ruang Anda.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Pilihan Layanan:</div>
+                            <div class="timeline-list-title">Jenis Layanan yang Tersedia:</div>
                             <ul class="timeline-list">
-                                <li>PPKPR Berusaha</li>
-                                <li>PPKPR Non Berusaha</li>
+                                <li>PKKPR Berusaha</li>
+                                <li>PKKPR Non Berusaha</li>
                                 <li>PKKPR Kebijakan</li>
-                                <li>PSN (Proyek Strategis Nasional)</li>
+                                <li>Proyek Strategis Nasional (PSN)</li>
                                 <li>PKKPR Tanah Timbul</li>
-                            </ul>
-                        </div>
-                        <p>Pemohon memilih jenis layanan yang tersedia di portal sesuai dengan peruntukan dan kriteria kegiatan.</p>
-                        
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Tujuan Tahap Ini:</div>
-                            <ul class="timeline-list">
-                                <li>Memilih jenis permohonan yang sesuai kebutuhan</li>
-                                <li>Mengetahui syarat dan alur spesifik tiap layanan</li>
-                                <li>Mempermudah pengisian formulir pengajuan</li>
                             </ul>
                         </div>
                     </div>
@@ -296,31 +286,17 @@
                         <p>Lengkapi dan unggah berkas persyaratan permohonan melalui sistem secara digital dengan mudah dan cepat.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Dokumen yang Diunggah:</div>
+                            <div class="timeline-list-title">Berkas Persyaratan yang Diunggah:</div>
                             <ul class="timeline-list">
-                                <li>Formulir permohonan & Identitas pemohon</li>
-                                <li>Dokumen bukti kepemilikan / penguasaan tanah</li>
-                                <li>Peta lokasi / Koordinat area permohonan</li>
-                                <li>Persyaratan administrasi lainnya</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Fitur Upload:</div>
-                            <ul class="timeline-list">
-                                <li>Upload berkas digital mudah</li>
-                                <li>Multi upload document</li>
-                                <li>Validasi format file otomatis</li>
-                                <li>Progress upload real-time</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Tujuan Tahap Ini:</div>
-                            <ul class="timeline-list">
-                                <li>Memastikan kelengkapan berkas administrasi</li>
-                                <li>Mengurangi kesalahan pengajuan fisik</li>
-                                <li>Mempercepat proses verifikasi data</li>
+                                <li>Peta / Sketsa Lokasi yang dimohon</li>
+                                <li>Surat Kuasa (apabila dikuasakan)</li>
+                                <li>Fotokopi KTP Pemohon</li>
+                                <li>Fotokopi NPWP Pemohon</li>
+                                <li>Fotokopi Akta Pendirian & Pengesahan Badan Hukum (untuk Perusahaan)</li>
+                                <li>Rencana Penggunaan & Pemanfaatan Tanah</li>
+                                <li>Nomor Induk Berusaha (NIB) & Dokumen KBLI (opsional)</li>
+                                <li>Proposal Rencana Kegiatan Berusaha (opsional)</li>
+                                <li>Bukti Penguasaan Tanah (Sertifikat HAK / SKT / Akta Sewa) & Persyaratan Lainnya</li>
                             </ul>
                         </div>
                     </div>
@@ -341,26 +317,9 @@
                         <div class="timeline-list-group">
                             <div class="timeline-list-title">Proses Verifikasi:</div>
                             <ul class="timeline-list">
-                                <li>Pemeriksaan kelengkapan administrasi oleh petugas</li>
-                                <li>Verifikasi teknis dan validasi berkas</li>
-                                <li>Peninjauan / penilaian sesuai ketentuan</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Tindak Lanjut Berkas:</div>
-                            <p style="margin-bottom: 8px; font-size: 13.5px;">Setelah verifikasi dilakukan:</p>
-                            <ul class="timeline-list">
-                                <li>Jika dokumen tidak sesuai, pemohon menerima notifikasi revisi</li>
-                                <li>Jika dokumen valid & lengkap, proses dilanjutkan ke tahap berikutnya</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Tujuan Tahap Ini:</div>
-                            <ul class="timeline-list">
-                                <li>Memastikan keabsahan data permohonan</li>
-                                <li>Menjamin kesesuaian dengan regulasi pertanahan & tata ruang</li>
+                                <li>Pemeriksaan kelengkapan administrasi dan keabsahan dokumen oleh petugas</li>
+                                <li>Jika dokumen belum sesuai, pemohon menerima notifikasi perbaikan/revisi berkas</li>
+                                <li>Jika berkas valid dan lengkap, permohonan diteruskan ke tahap pemrosesan teknis</li>
                             </ul>
                         </div>
                     </div>
@@ -379,27 +338,12 @@
                         <p>Permohonan Anda sedang diproses. Pantau status perkembangan layanan secara real-time melalui dashboard.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Proses yang Berlangsung:</div>
+                            <div class="timeline-list-title">Pemantauan & Hasil Layanan:</div>
                             <ul class="timeline-list">
-                                <li>Pemrosesan draft dokumen & persetujuan teknis</li>
-                                <li>Penerbitan surat / dokumen hasil layanan</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Fitur & Hasil Layanan:</div>
-                            <ul class="timeline-list">
-                                <li>Pantau status permohonan secara real-time via dashboard</li>
-                                <li>Notifikasi otomatis perkembangan layanan</li>
-                                <li>Unduh dokumen resmi hasil layanan setelah selesai</li>
-                            </ul>
-                        </div>
-
-                        <div class="timeline-list-group">
-                            <div class="timeline-list-title">Keuntungan Sistem Digital:</div>
-                            <ul class="timeline-list">
-                                <li>Transparan dan dapat dipantau setiap saat</li>
-                                <li>Pengarsipan dokumen aman dan mudah diakses</li>
+                                <li>Pemrosesan permohonan dan penyusunan rekomendasi / dokumen teknis</li>
+                                <li>Pantau status permohonan secara real-time via Dashboard Pemohon</li>
+                                <li>Notifikasi WhatsApp otomatis pada setiap pembaruan status</li>
+                                <li>Unduh dokumen resmi hasil layanan (PDF) secara digital setelah selesai</li>
                             </ul>
                         </div>
                     </div>
