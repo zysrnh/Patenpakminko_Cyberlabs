@@ -293,17 +293,18 @@
                         <p>Lengkapi dan unggah berkas persyaratan permohonan melalui sistem secara digital dengan mudah dan cepat.</p>
                         
                         <div class="timeline-list-group">
-                            <div class="timeline-list-title">Berkas Persyaratan yang Diunggah:</div>
+                            <div class="timeline-list-title">10 Berkas Persyaratan yang Diunggah:</div>
                             <ul class="timeline-list">
                                 <li>Peta / Sketsa Lokasi yang dimohon</li>
                                 <li>Surat Kuasa (apabila dikuasakan)</li>
                                 <li>Fotokopi KTP Pemohon</li>
                                 <li>Fotokopi NPWP Pemohon</li>
-                                <li>Fotokopi Akta Pendirian & Pengesahan Badan Hukum (untuk Perusahaan)</li>
+                                <li>Fotokopi Akta Pendirian & Pengesahan Badan Hukum</li>
                                 <li>Rencana Penggunaan & Pemanfaatan Tanah</li>
-                                <li>Nomor Induk Berusaha (NIB) & Dokumen KBLI (opsional)</li>
+                                <li>Nomor Induk Berusaha (NIB) / Legalitas Usaha</li>
+                                <li>Dokumen KBLI yang diajukan (opsional)</li>
                                 <li>Proposal Rencana Kegiatan Berusaha (opsional)</li>
-                                <li>Bukti Penguasaan Tanah (Sertifikat HAK / SKT / Akta Sewa) & Persyaratan Lainnya</li>
+                                <li>Persyaratan Lainnya (Sertifikat HAK / SKT / Akta Sewa)</li>
                             </ul>
                         </div>
                     </div>
