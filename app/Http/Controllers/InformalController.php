@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class InformalController extends Controller
 {
@@ -19,26 +20,37 @@ class InformalController extends Controller
     {
         $request->validate([
             'informal_type' => 'required|string',
-            'latitude' => 'nullable|string',
-            'longitude' => 'nullable|string',
-            'rating' => 'required|integer|min:1|max:5',
-            'name' => 'nullable|string',
-            'comment' => 'nullable|string'
+            'latitude'      => 'nullable',
+            'longitude'     => 'nullable',
+            'rating'        => 'required|integer|min:1|max:5',
+            'name'          => 'nullable|string',
+            'comment'       => 'nullable|string'
         ]);
 
-        $isApproved = $request->rating >= 4;
+        $isApproved = (int)$request->rating >= 4;
 
-        \App\Models\InformalRating::create([
-            'user_id' => auth()->id(), // null jika tidak login
-            'name' => auth()->check() ? auth()->user()->name : $request->name,
+        $data = [
+            'user_id'       => auth()->id(), // null jika tidak login
+            'name'          => auth()->check() ? auth()->user()->name : ($request->name ?: 'Anonim'),
             'informal_type' => $request->informal_type,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude,
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-            'is_approved' => $isApproved,
-        ]);
+            'latitude'      => $request->latitude ? (string)$request->latitude : null,
+            'longitude'     => $request->longitude ? (string)$request->longitude : null,
+            'rating'        => (int)$request->rating,
+            'comment'       => $request->comment,
+            'is_approved'   => $isApproved,
+        ];
 
-        return response()->json(['success' => true, 'message' => 'Terima kasih atas rating Anda!']);
+        if (Schema::hasColumn('informal_ratings', 'phone_number') && $request->has('phone_number')) {
+            $data['phone_number'] = auth()->check() ? auth()->user()->phone_number : $request->phone_number;
+        }
+
+        \App\Models\InformalRating::create($data);
+
+        return response()->json([
+            'success' => true, 
+            'message' => $isApproved 
+                ? 'Terima kasih atas ulasan Anda! Ulasan Anda telah diterbitkan.' 
+                : 'Terima kasih atas ulasan Anda! Ulasan akan dikaji terlebih dahulu oleh Admin DPN.'
+        ]);
     }
 }

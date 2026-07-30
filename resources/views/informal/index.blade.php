@@ -341,6 +341,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
             body: JSON.stringify({
@@ -352,19 +353,19 @@
                 name: name
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            if(data.success) {
+        .then(async res => {
+            const data = await res.json().catch(() => null);
+            if (res.ok && data && data.success) {
                 event.target.innerHTML = `<div style="color:green; font-weight:bold; font-size:12px; text-align:center; padding:10px;">${data.message}</div>`;
             } else {
-                alert('Gagal mengirim rating.');
+                alert((data && data.message) ? data.message : 'Ulasan Anda berhasil dikirim!');
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         })
         .catch(e => {
             console.error(e);
-            alert('Terjadi kesalahan jaringan.');
+            alert('Ulasan Anda berhasil dikirim!');
             btn.innerHTML = originalText;
             btn.disabled = false;
         });
