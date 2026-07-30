@@ -50,18 +50,29 @@ Route::get('/', function () {
     $reviews = $formalReviews->concat($informalReviews)->sortByDesc('rating')->values()->take(6);
 
     // Kalkulasi rata-rata keseluruhan (Review + InformalRating)
-    $avgReview = Review::where('is_approved', true)->avg('rating') ?? 0;
-    $countReview = Review::where('is_approved', true)->count();
-    
-    $avgInformal = \App\Models\InformalRating::where('is_approved', true)->avg('rating') ?? 0;
-    $countInformal = \App\Models\InformalRating::where('is_approved', true)->count();
-    
-    $totalCount = $countReview + $countInformal;
-    $averageRating = 0;
-    if ($totalCount > 0) {
-        $averageRating = (($avgReview * $countReview) + ($avgInformal * $countInformal)) / $totalCount;
+    $countApprovedReview = Review::where('is_approved', true)->count();
+    $countApprovedInformal = \App\Models\InformalRating::where('is_approved', true)->count();
+    $totalApprovedCount = $countApprovedReview + $countApprovedInformal;
+
+    if ($totalApprovedCount > 0) {
+        $avgReview = Review::where('is_approved', true)->avg('rating') ?? 0;
+        $avgInformal = \App\Models\InformalRating::where('is_approved', true)->avg('rating') ?? 0;
+        $averageRating = (($avgReview * $countApprovedReview) + ($avgInformal * $countApprovedInformal)) / $totalApprovedCount;
+    } else {
+        // Fallback jika belum ada yang diapprove: hitung dari seluruh rating yang telah masuk ke DB
+        $countAllReview = Review::count();
+        $countAllInformal = \App\Models\InformalRating::count();
+        $totalAllCount = $countAllReview + $countAllInformal;
+
+        if ($totalAllCount > 0) {
+            $avgReviewAll = Review::avg('rating') ?? 0;
+            $avgInformalAll = \App\Models\InformalRating::avg('rating') ?? 0;
+            $averageRating = (($avgReviewAll * $countAllReview) + ($avgInformalAll * $countAllInformal)) / $totalAllCount;
+        } else {
+            $averageRating = 5.0; // Default jika belum ada rating sama sekali
+        }
     }
-    $averageRating = number_format($averageRating, 1);
+    $averageRating = number_format((float)$averageRating, 1);
     
     // Hitung visitor & statistik web
     $visitorFile = 'visitor_stats.json';
