@@ -217,7 +217,11 @@
                                 </td>
                                 <td>
                                     <span style="font-weight: 700; color: var(--blue);">{{ strtoupper($rating->informal_type) }}</span>
-                                    <div style="font-size: 11px; color: var(--muted);">Koord: {{ number_format((float)$rating->latitude, 4) }}, {{ number_format((float)$rating->longitude, 4) }}</div>
+                                    @if(!empty($rating->latitude) && (float)$rating->latitude != 0)
+                                        <div style="font-size: 11px; color: var(--blue-dk); font-weight: 600;">📍 Koord: {{ number_format((float)$rating->latitude, 5) }}, {{ number_format((float)$rating->longitude, 5) }}</div>
+                                    @else
+                                        <div style="font-size: 11px; color: var(--muted); font-style: italic;">Ulasan Umum (Tanpa Koordinat)</div>
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="stars-yellow">

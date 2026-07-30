@@ -318,6 +318,13 @@
         let ratingVal = document.getElementById('rating-val-' + formId).value;
         if(!ratingVal) return alert('Silakan pilih rating terlebih dahulu.');
         
+        // Ambil koordinat dari marker peta jika lat & lng belum ada
+        if ((!lat || !lng) && typeof marker !== 'undefined' && marker) {
+            const pos = marker.getLatLng();
+            lat = pos.lat;
+            lng = pos.lng;
+        }
+
         let commentVal = document.getElementById('rating-comment-' + formId).value;
         let name = '';
         if(!isLoggedIn) {

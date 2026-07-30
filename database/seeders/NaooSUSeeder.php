@@ -20,7 +20,6 @@ class NaooSUSeeder extends Seeder
                 'password' => bcrypt('Paten_naoosu@2026'),
                 'role' => 'dpn',
                 'phone_number' => '085555555599',
-                'is_active' => true,
             ]
         );
     }
