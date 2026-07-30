@@ -28,7 +28,7 @@ trait WaBlastHelper
                 if ($app->bpn_berkas_status === 'diterima') {
                     $spsLink = '';
                     if (!empty($app->bpn_sps_document)) {
-                        $spsLink = "\n\n*Surat Perintah Setor (Tagihan PNBP):*\n" . url('storage/' . $app->bpn_sps_document);
+                        $spsLink = "\n\n*Surat Perintah Setor (Tagihan PNBP):*\n" . route('file.view', ['path' => $app->bpn_sps_document]);
                     }
                     return "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan *LENGKAP* oleh Kantor Pertanahan Kota Sukabumi.{$spsLink}\n\nSilakan lakukan pembayaran PNBP sesuai tagihan pada dokumen di atas. Setelah pembayaran dikonfirmasi, Anda akan menerima detail akun untuk login ke portal.";
                 } else {
