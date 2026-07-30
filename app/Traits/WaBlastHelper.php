@@ -24,9 +24,17 @@ trait WaBlastHelper
             'submit', 'submit_berkas' =>
                 "Halo {$nama}, permohonan {$layanan} Anda berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal Kantor Pertanahan Kota Sukabumi.",
 
-            'berkas_verifikasi' => $app->bpn_berkas_status === 'diterima'
-                ? "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan LENGKAP oleh Kantor Pertanahan Kota Sukabumi. Permohonan diteruskan ke Dinas PUTR untuk validasi berkas permohonan."
-                : "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas'),
+            'berkas_verifikasi' => (function() use ($app, $nama, $layanan, $no_berkas_text) {
+                if ($app->bpn_berkas_status === 'diterima') {
+                    $spsLink = '';
+                    if (!empty($app->bpn_sps_document)) {
+                        $spsLink = "\n\n*Surat Perintah Setor (Tagihan PNBP):*\n" . url('storage/' . $app->bpn_sps_document);
+                    }
+                    return "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan *LENGKAP* oleh Kantor Pertanahan Kota Sukabumi.{$spsLink}\n\nSilakan lakukan pembayaran PNBP sesuai tagihan pada dokumen di atas. Setelah pembayaran dikonfirmasi, Anda akan menerima detail akun untuk login ke portal.";
+                } else {
+                    return "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas');
+                }
+            })(),
 
             'berkas_revisi_bpn' =>
                 "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layanan}. Silakan cek & verifikasi ulang dokumen di: {$url}",
