@@ -479,7 +479,7 @@ class AuthController extends Controller
             'anggaran_dasar_tanggal' => 'nullable|date',
             'jenis_permohonan' => 'required|in:berusaha,non-berusaha,kebijakan,psn,tanah-timbul',
             'rencana_kegiatan' => 'required|string|max:500',
-            'kbli' => 'required_if:jenis_permohonan,berusaha|nullable|string|max:100',
+            'kbli' => 'required_if:jenis_permohonan,berusaha|nullable|string|max:500',
             'letak_tanah_jalan' => 'required|string|max:200',
             'letak_tanah_kelurahan' => 'required|string|max:100',
             'letak_tanah_kecamatan' => 'required|string|max:100',
