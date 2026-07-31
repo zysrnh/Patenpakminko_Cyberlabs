@@ -7,8 +7,8 @@
     .profile-card {
         background: #ffffff;
         border: 1px solid #E2E8F0;
-        border-radius: 14px;
-        box-shadow: 0 2px 10px rgba(0,38,66,0.03);
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0,38,66,0.03);
         margin-bottom: 24px;
         overflow: hidden;
     }
@@ -21,26 +21,26 @@
         background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
     }
     .avatar-preview-lg {
-        width: 80px; height: 80px;
-        border-radius: 20px;
+        width: 76px; height: 76px;
+        border-radius: 6px;
         object-fit: cover;
-        border: 3px solid #ffffff;
-        box-shadow: 0 4px 14px rgba(0,59,100,0.12);
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 8px rgba(0,59,100,0.12);
         flex-shrink: 0;
     }
     .avatar-placeholder-lg {
-        width: 80px; height: 80px;
-        border-radius: 20px;
+        width: 76px; height: 76px;
+        border-radius: 6px;
         background: linear-gradient(135deg, #003B64 0%, #218AC9 100%);
         color: #ffffff;
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 800;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        border: 3px solid #ffffff;
-        box-shadow: 0 4px 14px rgba(0,59,100,0.12);
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 8px rgba(0,59,100,0.12);
     }
     .avatar-upload-btn {
         display: inline-flex;
@@ -48,20 +48,19 @@
         gap: 8px;
         background: #ffffff;
         border: 1.5px solid #CBD5E1;
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-size: 12.5px;
+        border-radius: 4px;
+        padding: 7px 14px;
+        font-size: 12px;
         font-weight: 700;
         color: #334155;
         cursor: pointer;
         transition: all 0.2s ease;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     .avatar-upload-btn:hover {
         border-color: #218AC9;
         color: #218AC9;
         background: #F0F9FF;
-        transform: translateY(-1px);
     }
     #profile_photo { display: none; }
     .badge-optional {
@@ -69,7 +68,7 @@
         font-weight: 700;
         color: #64748B;
         background: #F1F5F9;
-        padding: 2px 7px;
+        padding: 2px 6px;
         border-radius: 4px;
         margin-left: 6px;
     }
@@ -102,10 +101,10 @@
     }
     .form-control {
         width: 100%;
-        padding: 10px 14px;
-        font-size: 13.5px;
+        padding: 9px 12px;
+        font-size: 13px;
         border: 1.5px solid #CBD5E1;
-        border-radius: 8px;
+        border-radius: 4px;
         background: #F8FAFC;
         color: #0F172A;
         transition: all 0.2s ease;
@@ -113,7 +112,7 @@
     .form-control:focus {
         border-color: #218AC9;
         background: #FFFFFF;
-        box-shadow: 0 0 0 3px rgba(33, 138, 201, 0.15);
+        box-shadow: 0 0 0 3px rgba(33, 138, 201, 0.12);
         outline: none;
     }
     .form-grid {
@@ -137,25 +136,24 @@
         background: linear-gradient(135deg, #003B64 0%, #218AC9 100%);
         color: #ffffff;
         border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
+        padding: 9px 18px;
+        border-radius: 4px;
         font-size: 13px;
         font-weight: 700;
         cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,59,100,0.18);
+        box-shadow: 0 2px 6px rgba(0,59,100,0.15);
         transition: all 0.2s ease;
     }
     .btn-save:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(0,59,100,0.25);
+        opacity: 0.95;
     }
     .btn-cancel {
         display: inline-flex;
         align-items: center;
-        padding: 10px 18px;
+        padding: 9px 16px;
         background: #F1F5F9;
         border: 1px solid #E2E8F0;
-        border-radius: 8px;
+        border-radius: 4px;
         color: #475569;
         font-size: 13px;
         font-weight: 700;
@@ -169,7 +167,7 @@
 @php $user = Auth::user(); @endphp
 
 <!-- Header Card -->
-<div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,38,66,0.03);">
+<div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 18px 24px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02);">
     <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
         <div>
             <div style="font-size: 12px; color: #64748B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
@@ -177,7 +175,7 @@
                 <span>›</span>
                 <span style="color: #64748B;">Profil Saya</span>
             </div>
-            <h1 style="font-size: 20px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Lengkapi Data Profil</h1>
+            <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Lengkapi Data Profil</h1>
             <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Pastikan data Anda akurat untuk mempercepat proses verifikasi dokumen.</p>
         </div>
     </div>
@@ -196,8 +194,8 @@
             @endif
             <div>
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                    <h2 style="font-size: 16px; font-weight: 800; color: #003B64; margin: 0;">{{ $user->name ?? $user->username }}</h2>
-                    <span style="background: #E0F2FE; color: #0369A1; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px;">
+                    <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0;">{{ $user->name ?? $user->username }}</h2>
+                    <span style="background: #E0F2FE; color: #0369A1; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
                         @if($user->isDpn()) Super Admin
                         @elseif($user->isBpn()) Admin Instansi
                         @elseif($user->isDinasPu()) Admin PUTR
@@ -206,7 +204,7 @@
                         @else Pengguna Terverifikasi @endif
                     </span>
                 </div>
-                <div style="font-size: 12.5px; color: #64748B; margin-bottom: 12px; font-weight: 500;">📱 {{ $user->phone_number }}</div>
+                <div style="font-size: 12.5px; color: #64748B; margin-bottom: 12px; font-weight: 500;">WA: {{ $user->phone_number }}</div>
                 
                 <label for="profile_photo" class="avatar-upload-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>

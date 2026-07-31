@@ -1009,18 +1009,18 @@
             @endphp
 
             <!-- Hero Header Card (Clean & Minimal) -->
-            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 8px rgba(0,38,66,0.03);">
+            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 6px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02);">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     @if($user->profile_photo)
-                        <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 2px solid #fff; box-shadow: 0 4px 12px rgba(0,59,100,0.15);">
+                        <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,59,100,0.12);">
                     @else
-                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #003B64 0%, #218AC9 100%); color: #fff; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,59,100,0.15);">
+                        <div style="width: 44px; height: 44px; border-radius: 6px; background: linear-gradient(135deg, #003B64 0%, #218AC9 100%); color: #fff; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,59,100,0.12);">
                             {{ strtoupper(substr($user->username ?? 'U', 0, 2)) }}
                         </div>
                     @endif
                     <div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                            <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
+                            <h1 style="font-size: 18px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
                         </div>
                         <p style="font-size: 12.5px; color: #64748B; margin: 0;">
                             @if(Auth::user()->isAdminBerita()) Kelola publikasi artikel dan informasi terbaru di sini.
@@ -1033,13 +1033,13 @@
 
                 <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
                     @if($isProfileIncomplete)
-                        <a href="{{ route('profile') }}" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#FEF3C7'" onmouseout="this.style.background='#FFFBEB'">
+                        <a href="{{ route('profile') }}" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#FEF3C7'" onmouseout="this.style.background='#FFFBEB'">
                             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                             Lengkapi Profil
                         </a>
                     @endif
 
-                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; border: 1px solid #E2E8F0; color: #334155; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;">
+                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; border: 1px solid #E2E8F0; color: #334155; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         <span>
                             @if(Auth::user()->isAdminBerita()) Admin Berita
@@ -1063,30 +1063,30 @@
                     $beritasList = \App\Models\Berita::latest()->take(5)->get();
                 @endphp
                 <div class="kpi-row">
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="border-radius: 6px;">
                         <div class="kpi-top">
                             <span class="kpi-label">Total Berita</span>
-                            <div class="kpi-icon blue">
+                            <div class="kpi-icon blue" style="border-radius: 4px;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v10a2 2 0 01-2 2z"/></svg>
                             </div>
                         </div>
                         <div class="kpi-number">{{ $totalBerita }}</div>
                         <div class="kpi-sub"><span class="kpi-badge neutral">Semua Berita</span></div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="border-radius: 6px;">
                         <div class="kpi-top">
                             <span class="kpi-label">Dipublikasi</span>
-                            <div class="kpi-icon green">
+                            <div class="kpi-icon green" style="border-radius: 4px;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                             </div>
                         </div>
                         <div class="kpi-number">{{ $publishedBerita }}</div>
                         <div class="kpi-sub"><span class="kpi-badge up">Tampil Publik</span></div>
                     </div>
-                    <div class="kpi-card">
+                    <div class="kpi-card" style="border-radius: 6px;">
                         <div class="kpi-top">
                             <span class="kpi-label">Draft</span>
-                            <div class="kpi-icon yellow">
+                            <div class="kpi-icon yellow" style="border-radius: 4px;">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                             </div>
                         </div>
@@ -1095,23 +1095,23 @@
                     </div>
                 </div>
 
-                <div class="panel">
+                <div class="panel" style="border-radius: 6px;">
                     <div class="panel-head">
                         <h2>Berita Terbaru</h2>
                         <a href="{{ route('admin.berita.index') }}" class="panel-head-link">Lihat Semua &rarr;</a>
                     </div>
                     <div class="activity-list">
                         @forelse($beritasList as $beritaItem)
-                        <div class="activity-item" style="align-items: center; padding: 20px 24px;">
+                        <div class="activity-item" style="align-items: center; padding: 18px 20px;">
                             @if($beritaItem->image_path)
-                                <img src="{{ route('file.view', ['path' => $beritaItem->image_path]) }}" alt="{{ $beritaItem->title }}" style="width: 220px; height: 130px; object-fit: cover; border-radius: 16px; flex-shrink: 0; border: 1px solid var(--line);">
+                                <img src="{{ route('file.view', ['path' => $beritaItem->image_path]) }}" alt="{{ $beritaItem->title }}" style="width: 180px; height: 110px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--line);">
                             @else
-                                <div style="width: 220px; height: 130px; border-radius: 16px; background: var(--surface2); border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                    <svg width="36" height="36" fill="none" stroke="var(--muted)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <div style="width: 180px; height: 110px; border-radius: 6px; background: var(--surface2); border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="32" height="32" fill="none" stroke="var(--muted)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                 </div>
                             @endif
-                            <div class="activity-body" style="margin-left: 18px;">
-                                <div class="activity-title" style="font-size: 15px; margin-bottom: 6px;">{{ $beritaItem->title }}</div>
+                            <div class="activity-body" style="margin-left: 16px;">
+                                <div class="activity-title" style="font-size: 14px; margin-bottom: 4px;">{{ $beritaItem->title }}</div>
                                 <div class="activity-meta">{{ $beritaItem->created_at->format('d M Y, H:i') }} • {{ $beritaItem->category ?? 'Umum' }}</div>
                             </div>
                             <div class="activity-status {{ $beritaItem->is_published ? 'status-approved' : 'status-pending' }}">
@@ -1128,15 +1128,15 @@
             @else
             <!-- Souvenir Alert Warning -->
             @if(!$user->isPelakuUsaha() && count($pendingSouvenirs) > 0)
-                <div class="alert-warning" style="display: block; padding: 16px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #FCD34D; background: #FFFBEB; color: #92400E;">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #D97706; flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                        <strong style="font-size: 14px;">Peringatan Souvenir Pending (SLA > 10 Hari)</strong>
+                <div class="alert-warning" style="display: block; padding: 14px 18px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #FCD34D; background: #FFFBEB; color: #92400E;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #D97706; flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <strong style="font-size: 13.5px;">Peringatan Souvenir Pending (SLA > 10 Hari)</strong>
                     </div>
-                    <p style="font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
+                    <p style="font-size: 12.5px; margin-bottom: 10px; line-height: 1.5;">
                         Terdapat <strong>{{ count($pendingSouvenirs) }}</strong> permohonan yang telah melebihi 10 hari sejak dokumen Pertek Pertanahan diunggah/diterbitkan, tetapi souvenir belum dikirimkan.
                     </p>
-                    <div style="overflow-x: auto; background: rgba(255, 255, 255, 0.7); border-radius: 8px; border: 1px solid rgba(217, 119, 6, 0.15);">
+                    <div style="overflow-x: auto; background: rgba(255, 255, 255, 0.7); border-radius: 4px; border: 1px solid rgba(217, 119, 6, 0.15);">
                         <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
                             <thead>
                                 <tr style="border-bottom: 1px solid rgba(217, 119, 6, 0.15);">
@@ -1156,14 +1156,14 @@
                                         </td>
                                         <td style="padding: 8px 12px; font-weight: 500;">{{ $ps['type_label'] }}</td>
                                         <td style="padding: 8px 12px;">
-                                            <span style="background: #FEF2F2; color: #991B1B; padding: 2px 7px; border-radius: 10px; font-weight: 700; font-size: 10.5px; border: 1px solid #FCA5A5;">
-                                                🔴 {{ $ps['days'] }} Hari
+                                            <span style="background: #FEF2F2; color: #991B1B; padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 10.5px; border: 1px solid #FCA5A5;">
+                                                {{ $ps['days'] }} Hari
                                             </span>
                                         </td>
                                         <td style="padding: 8px 12px; text-align: right;">
                                             <form action="{{ route('souvenir.mark_sent', [$ps['type_key'], $ps['id']]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin souvenir untuk permohonan {{ $ps['application_number'] }} telah diserahkan?')">
                                                 @csrf
-                                                <button type="submit" style="background: #F59E0B; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">
+                                                <button type="submit" style="background: #F59E0B; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;">
                                                     Tandai Terkirim
                                                 </button>
                                             </form>
@@ -1178,57 +1178,57 @@
 
             <!-- Clean Executive KPI Row -->
             <div class="kpi-row" style="margin-bottom: 20px;">
-                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
+                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
                     <div class="kpi-top">
                         <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">TOTAL PERMOHONAN</span>
-                        <div class="kpi-icon blue" style="border-radius: 8px; width: 32px; height: 32px;">
+                        <div class="kpi-icon blue" style="border-radius: 4px; width: 30px; height: 30px;">
                             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #0F172A;">{{ $totalPermohonan ?? 0 }}</div>
+                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #0F172A;">{{ $totalPermohonan ?? 0 }}</div>
                     <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Semua jenis berkas</div>
                 </div>
 
-                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
+                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
                     <div class="kpi-top">
                         <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">MENUNGGU REVIEW</span>
-                        <div class="kpi-icon yellow" style="border-radius: 8px; width: 32px; height: 32px; background: #FEF3C7; color: #D97706;">
+                        <div class="kpi-icon yellow" style="border-radius: 4px; width: 30px; height: 30px; background: #FEF3C7; color: #D97706;">
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #D97706;">{{ $totalPending ?? 0 }}</div>
+                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #D97706;">{{ $totalPending ?? 0 }}</div>
                     <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Dalam proses verifikasi</div>
                 </div>
 
-                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
+                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
                     <div class="kpi-top">
                         <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">DISETUJUI</span>
-                        <div class="kpi-icon green" style="border-radius: 8px; width: 32px; height: 32px; background: #DCFCE7; color: #16A34A;">
+                        <div class="kpi-icon green" style="border-radius: 4px; width: 30px; height: 30px; background: #DCFCE7; color: #16A34A;">
                             <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #16A34A;">{{ $totalDisetujui ?? 0 }}</div>
+                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #16A34A;">{{ $totalDisetujui ?? 0 }}</div>
                     <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Permohonan selesai</div>
                 </div>
 
-                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
+                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
                     <div class="kpi-top">
                         <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">DITOLAK</span>
-                        <div class="kpi-icon red" style="border-radius: 8px; width: 32px; height: 32px; background: #FEE2E2; color: #DC2626;">
+                        <div class="kpi-icon red" style="border-radius: 4px; width: 30px; height: 30px; background: #FEE2E2; color: #DC2626;">
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #DC2626;">{{ $totalDitolak ?? 0 }}</div>
+                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #DC2626;">{{ $totalDitolak ?? 0 }}</div>
                     <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Perlu perbaikan/ditolak</div>
                 </div>
             </div>
 
             @if(!Auth::user()->isPelakuUsaha())
             <!-- ── SLA PENGENDALIAN INTERNAL (CLEAN INTEGRATED ROW) ──────────────────── -->
-            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 2px 8px rgba(0,38,66,0.02);">
+            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 2px 6px rgba(0,38,66,0.02);">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 32px; height: 32px; border-radius: 8px; background: #ECFDF5; color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <div style="width: 30px; height: 30px; border-radius: 4px; background: #ECFDF5; color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
                     <div>
                         <div style="font-size: 13px; font-weight: 800; color: #0F172A;">Pengendalian SLA — Berkas Aktif</div>
@@ -1236,23 +1236,23 @@
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
                     {{-- Hijau --}}
-                    <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
-                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
-                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman: <strong style="font-size: 13px; font-weight: 800;">{{ $slaHijau }}</strong></span>
+                    <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 4px; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaHijau }}</strong></span>
                     </div>
 
                     {{-- Kuning --}}
-                    <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
-                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
-                        <span style="font-size: 12px; font-weight: 600; color: #92400E;">Mendekati Batas: <strong style="font-size: 13px; font-weight: 800;">{{ $slaKuning }}</strong></span>
+                    <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 4px; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #92400E;">Mendekati Batas: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaKuning }}</strong></span>
                     </div>
 
                     {{-- Merah --}}
-                    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
-                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
-                        <span style="font-size: 12px; font-weight: 600; color: #991B1B;">Terlambat: <strong style="font-size: 13px; font-weight: 800;">{{ $slaMerah }}</strong></span>
+                    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 4px; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
+                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #991B1B;">Terlambat: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaMerah }}</strong></span>
                     </div>
                 </div>
             </div>
