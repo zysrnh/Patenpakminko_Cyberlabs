@@ -513,16 +513,18 @@
 }
 </style>
 
-{{-- ── Page Header ────────────────────────────────────────────────── --}}
-<div class="page-header" style="margin-bottom: 20px;">
-    <div class="page-header-left">
-        <div class="breadcrumb">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
+{{-- ── Page Header Card ────────────────────────────────────────────── --}}
+<div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 18px 24px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+    <div>
+        <div style="font-size: 12px; color: #64748B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <a href="{{ route('dashboard') }}" style="color: #218AC9; text-decoration: none; font-weight: 600;">Dashboard</a>
             <span>›</span>
-            <span>Manajemen Hari Libur (SLA)</span>
+            <span style="color: #64748B;">Manajemen Hari Libur (SLA)</span>
         </div>
-        <h1>Pengaturan Kalender Libur Nasional</h1>
-        <p>Visualisasi dan atur tanggal merah & cuti bersama — akan dilewati otomatis dalam perhitungan SLA.</p>
+        <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">
+            Pengaturan Kalender Libur Nasional
+        </h1>
+        <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Visualisasi dan atur tanggal merah & cuti bersama — akan dilewati otomatis dalam perhitungan SLA berkas aktif.</p>
     </div>
 </div>
 
