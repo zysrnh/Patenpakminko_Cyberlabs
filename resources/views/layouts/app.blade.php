@@ -234,6 +234,56 @@
         .empty-state h3 { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
         .empty-state p { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
 
+        /* ─── GLOBAL PAGINATION ──────────────── */
+        .pagination {
+            display: flex !important;
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            gap: 4px !important;
+            align-items: center !important;
+        }
+        .pagination li {
+            display: inline-block !important;
+            margin: 0 !important;
+            list-style: none !important;
+        }
+        .pagination li::before {
+            content: none !important;
+        }
+        .page-item .page-link, .pagination li a, .pagination li span {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 32px !important;
+            height: 32px !important;
+            padding: 0 10px !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 4px !important;
+            color: #218AC9 !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            text-decoration: none !important;
+            background: #FFFFFF !important;
+            box-sizing: border-box !important;
+            transition: all 0.15s ease !important;
+        }
+        .pagination li.active .page-link, .pagination li.active span, .pagination li.active a {
+            background: #218AC9 !important;
+            color: #FFFFFF !important;
+            border-color: #218AC9 !important;
+        }
+        .pagination li.disabled .page-link, .pagination li.disabled span {
+            color: #94A3B8 !important;
+            background: #F8FAFC !important;
+            border-color: #E2E8F0 !important;
+            cursor: not-allowed !important;
+        }
+        .pagination li a:hover {
+            background: #EFF6FF !important;
+            border-color: #218AC9 !important;
+        }
+
         /* ─── MOBILE RESPONSIVE ──────────────── */
         @media (max-width: 768px) {
             body { display: block; }
