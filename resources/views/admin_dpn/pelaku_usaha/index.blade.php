@@ -33,6 +33,23 @@
 @endif
 
 <div class="panel" style="border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); overflow: hidden; background: #ffffff;">
+    <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+        <form method="GET" action="{{ route('admin.pelaku_usaha.index') }}" style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; max-width: 420px;">
+                <input type="text" name="search" class="form-control" placeholder="Cari nama, username, atau no WA..." value="{{ request('search') }}" style="font-size: 12.5px; padding: 7px 12px; border-radius: 4px; border: 1.5px solid #CBD5E1; height: 36px; box-sizing: border-box;">
+                <button type="submit" class="btn btn-primary" style="background: #218AC9; border: none; border-radius: 4px; font-size: 12px; font-weight: 700; height: 36px; padding: 0 14px; white-space: nowrap; box-sizing: border-box;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                    Cari
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('admin.pelaku_usaha.index') }}" class="btn btn-secondary" style="border-radius: 4px; font-size: 12px; font-weight: 700; height: 36px; padding: 0 12px; display: inline-flex; align-items: center; text-decoration: none; border: 1px solid #CBD5E1; background: #ffffff; color: #64748B; box-sizing: border-box;">Reset</a>
+                @endif
+            </div>
+            <div style="font-size: 12px; color: #64748B; font-weight: 600;">
+                Total Pelaku Usaha: <strong style="color: #003B64;">{{ $users->total() }}</strong>
+            </div>
+        </form>
+    </div>
     <div class="panel-body" style="padding: 0;">
         <div style="overflow-x: auto;">
             <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
@@ -48,7 +65,7 @@
                 <tbody>
                     @forelse($users as $index => $user)
                     <tr style="border-bottom: 1px solid #F1F5F9;">
-                        <td style="padding: 12px 14px; color: #64748B; font-weight: 600; font-size: 12.5px;">{{ $index + 1 }}</td>
+                        <td style="padding: 12px 14px; color: #64748B; font-weight: 600; font-size: 12.5px;">{{ $users->firstItem() + $index }}</td>
                         <td style="padding: 12px 14px;">
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <div style="width: 32px; height: 32px; border-radius: 4px; background: #218AC9; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0;">
@@ -94,13 +111,21 @@
                     <tr>
                         <td colspan="5" style="padding: 40px 20px; text-align: center;">
                             <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5" style="margin-bottom: 10px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                            <h3 style="font-size: 14px; font-weight: 700; color: #003B64; margin-bottom: 4px;">Belum ada Pelaku Usaha</h3>
-                            <p style="font-size: 12.5px; color: #64748B;">Sistem belum menerima permohonan yang mendaftarkan akun secara otomatis.</p>
+                            <h3 style="font-size: 14px; font-weight: 700; color: #003B64; margin-bottom: 4px;">Tidak ada data Pelaku Usaha</h3>
+                            <p style="font-size: 12.5px; color: #64748B;">Pencarian tidak menemukan hasil atau belum ada akun pelaku usaha terdaftar.</p>
                         </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div style="padding: 14px 18px; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: #ffffff;">
+        <div style="font-size: 12px; color: #64748B; font-weight: 500;">
+            Menampilkan {{ $users->firstItem() ?? 0 }} - {{ $users->lastItem() ?? 0 }} dari total {{ $users->total() }} akun
+        </div>
+        <div>
+            {{ $users->links('pagination::bootstrap-4') }}
         </div>
     </div>
 </div>

@@ -484,9 +484,10 @@
         <div class="sidebar-bottom">
             <div class="sidebar-user">
                 @if(Auth::check() && Auth::user()->profile_photo)
-                    <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="sidebar-avatar">
+                    <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="" class="sidebar-avatar" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                    <div class="sidebar-avatar" style="display:none;">{{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username ?? 'U', 0, 2)) }}</div>
                 @else
-                    <div class="sidebar-avatar">{{ Auth::check() ? strtoupper(substr(Auth::user()->username ?? 'U', 0, 2)) : 'G' }}</div>
+                    <div class="sidebar-avatar">{{ Auth::check() ? strtoupper(substr(Auth::user()->name ?? Auth::user()->username ?? 'U', 0, 2)) : 'G' }}</div>
                 @endif
                 <div class="sidebar-user-info">
                     <strong>{{ Auth::check() ? (Auth::user()->name ?? Auth::user()->username) : 'Guest / Tamu' }}</strong>
