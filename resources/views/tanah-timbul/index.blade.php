@@ -75,7 +75,7 @@
         @if(Auth::user()->isDpn())
         <form id="bulkForm" action="{{ route('tanah-timbul.bulk-destroy') }}" method="POST">
             @csrf
-            <div style="padding: 10px 18px; background: #FEF2F2; border-bottom: 1px solid #FECACA; display: flex; align-items: center; justify-content: space-between;" id="bulkBar">
+            <div style="padding: 10px 18px; background: #FEF2F2; border-bottom: 1px solid #FECACA; display: none; align-items: center; justify-content: space-between;" id="bulkBar">
                 <div style="font-size: 12.5px; font-weight: 700; color: #991B1B;">
                     <span id="selectCount">0</span> permohonan dipilih
                 </div>
@@ -197,15 +197,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkAll = document.getElementById('checkAll');
     const rowChecks = document.querySelectorAll('.row-check');
     const selectCount = document.getElementById('selectCount');
+    const bulkBar = document.getElementById('bulkBar');
 
     function updateCount() {
         if (!rowChecks.length) return;
         const checked = document.querySelectorAll('.row-check:checked');
         if (selectCount) selectCount.textContent = checked.length;
+        if (bulkBar) {
+            bulkBar.style.display = checked.length > 0 ? 'flex' : 'none';
+        }
         if (checkAll) {
             checkAll.checked = (checked.length === rowChecks.length && rowChecks.length > 0);
         }
     }
+
+    updateCount();
 
     if (checkAll) {
         checkAll.addEventListener('change', function() {
