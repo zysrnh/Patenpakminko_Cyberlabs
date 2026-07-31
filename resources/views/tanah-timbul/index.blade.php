@@ -101,7 +101,7 @@
                         <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">SLA (Pengendalian)</th>
                         @endif
                         <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
-                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Aksi</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 140px; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -161,15 +161,15 @@
                                     {{ $app->status_label }}
                                 </span>
                             </td>
-                            <td style="padding: 12px 14px;">
-                                <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-                                    <a href="{{ route('tanah-timbul.show', $app->id) }}" class="btn btn-sm btn-secondary" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px;">
+                            <td style="padding: 12px 14px; white-space: nowrap; text-align: center;">
+                                <div style="display:inline-flex; gap:6px; align-items:center;">
+                                    <a href="{{ route('tanah-timbul.show', $app->id) }}" class="btn btn-sm btn-secondary" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px;">
                                         Detail
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>
                                     @if(Auth::user()->isDpn())
-                                    <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#DC2626;border-color:#DC2626;color:#fff; border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px;">
-                                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;vertical-align:-1px;margin-right:2px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#DC2626;border-color:#DC2626;color:#fff; border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <svg viewBox="0 0 24 24" style="width:12px;height:12px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                         Hapus
                                     </button>
                                     @endif
