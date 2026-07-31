@@ -6,43 +6,44 @@
 @push('styles')
 <style>
     #searchInput:focus, #filterSla:focus {
-        border-color: var(--blue) !important;
-        box-shadow: 0 0 0 3px rgba(33,138,201,0.15) !important;
+        border-color: #218AC9 !important;
+        box-shadow: 0 0 0 3px rgba(33,138,201,0.12) !important;
     }
 </style>
 @endpush
 
 @section('content')
-<div class="page-header">
-    <div class="page-header-left">
-        <div class="breadcrumb">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
+<!-- Header Card -->
+<div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 18px 24px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+    <div>
+        <div style="font-size: 12px; color: #64748B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+            <a href="{{ route('dashboard') }}" style="color: #218AC9; text-decoration: none; font-weight: 600;">Dashboard</a>
             <span>›</span>
-            <span>Kebijakan</span>
+            <span style="color: #64748B;">Kebijakan</span>
         </div>
-        <h1>
+        <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">
             @if(Auth::user()->isPelakuUsaha())
                 Riwayat Permohonan Saya
             @else
                 Antrean Berkas Masuk
             @endif
         </h1>
-        <p>Permohonan berbasis mandat kebijakan pemerintah.</p>
+        <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Permohonan berbasis mandat kebijakan pemerintah.</p>
     </div>
     @if(Auth::user()->isPelakuUsaha())
-        <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="btn btn-primary">
-            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="btn btn-primary" style="border-radius: 4px; padding: 8px 16px; font-weight: 700; font-size: 13px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Buat Permohonan Baru
         </a>
     @endif
 </div>
 
-<div class="panel">
+<div class="panel" style="border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); overflow: hidden; background: #ffffff;">
     @if($applications->isEmpty())
-        <div class="empty-state">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <h3>Belum Ada Permohonan</h3>
-            <p>
+        <div class="empty-state" style="padding: 40px 20px; text-align: center;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <h3 style="font-size: 15px; font-weight: 700; color: #0F172A; margin: 12px 0 4px;">Belum Ada Permohonan</h3>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">
                 @if(Auth::user()->isPelakuUsaha())
                     Anda belum mengajukan permohonan Kebijakan.
                 @else
@@ -50,18 +51,18 @@
                 @endif
             </p>
             @if(Auth::user()->isPelakuUsaha())
-                <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="btn btn-primary">Ajukan Sekarang</a>
+                <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="btn btn-primary" style="border-radius: 4px;">Ajukan Sekarang</a>
             @endif
         </div>
     @else
-                <!-- Filter Controls -->
-        <div class="table-filter-wrap" style="padding: 16px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: var(--surface); border-top-left-radius: var(--r-lg); border-top-right-radius: var(--r-lg);">
-            <div class="search-box" style="position: relative; flex: 1; min-width: 250px;">
-                <svg style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 18px; height: 18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" id="searchInput" placeholder="Cari No. Registrasi, Pemohon, atau No WA..." style="width: 100%; padding: 10px 14px 10px 40px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13.5px; outline: none; transition: border-color 0.2s;">
+        <!-- Filter Controls -->
+        <div class="table-filter-wrap" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: #F8FAFC;">
+            <div class="search-box" style="position: relative; flex: 1; min-width: 240px;">
+                <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94A3B8; width: 16px; height: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" id="searchInput" placeholder="Cari No. Registrasi, Pemohon, atau No WA..." style="width: 100%; padding: 8px 12px 8px 36px; border: 1.5px solid #CBD5E1; border-radius: 4px; font-size: 13px; outline: none; background: #ffffff; color: #0F172A; transition: border-color 0.2s;">
             </div>
             @if(!Auth::user()->isPelakuUsaha())
-            <select id="filterSla" style="padding: 10px 14px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13.5px; outline: none; background: white; color: var(--ink); cursor: pointer; font-weight: 500;">
+            <select id="filterSla" style="padding: 8px 12px; border: 1.5px solid #CBD5E1; border-radius: 4px; font-size: 13px; outline: none; background: #ffffff; color: #0F172A; cursor: pointer; font-weight: 600;">
                 <option value="all">Semua Waktu (SLA)</option>
                 <option value="selesai">Sudah Selesai</option>
                 <option value="berjalan">Masih Berjalan (Aman)</option>
@@ -74,51 +75,51 @@
         @if(Auth::user()->isDpn())
         <form id="bulkForm" action="{{ route('kebijakan.bulk-destroy') }}" method="POST">
             @csrf
-            <div style="padding: 10px 16px; background: #fff5f5; border-bottom: 1px solid #feb2b2; display: flex; align-items: center; justify-content: space-between;" id="bulkBar">
-                <div style="font-size: 13px; font-weight: 600; color: #c53030;">
+            <div style="padding: 10px 18px; background: #FEF2F2; border-bottom: 1px solid #FECACA; display: flex; align-items: center; justify-content: space-between;" id="bulkBar">
+                <div style="font-size: 12.5px; font-weight: 700; color: #991B1B;">
                     <span id="selectCount">0</span> permohonan dipilih
                 </div>
-                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus semua permohonan yang dipilih? Data tidak bisa dikembalikan!')" style="background:#E53E3E; border-color:#E53E3E; color:#fff;">
-                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:-2px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus semua permohonan yang dipilih? Data tidak bisa dikembalikan!')" style="background:#DC2626; border-color:#DC2626; color:#fff; border-radius: 4px; font-weight: 700; font-size: 12px; padding: 5px 12px;">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     Hapus Terpilih
                 </button>
             </div>
         @endif
 
         <div class="table-wrap">
-            <table>
+            <table style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr>
+                    <tr style="border-bottom: 1.5px solid #E2E8F0; background: #F8FAFC;">
                         @if(Auth::user()->isDpn())
-                        <th style="width:36px; text-align:center;"><input type="checkbox" id="checkAll" style="cursor:pointer;"></th>
+                        <th style="width:36px; text-align:center; padding: 10px 12px;"><input type="checkbox" id="checkAll" style="cursor:pointer;"></th>
                         @endif
-                        <th>No. Registrasi</th>
-                        <th>Pemohon</th>
-                        <th>No. WA</th>
-                        <th>Tgl Pengajuan</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">No. Registrasi</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Pemohon</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">No. WA</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Tgl Pengajuan</th>
                         @if(!Auth::user()->isPelakuUsaha())
-                        <th>SLA (Pengendalian)</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">SLA (Pengendalian)</th>
                         @endif
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($applications as $app)
-                        <tr>
+                        <tr style="border-bottom: 1px solid #F1F5F9;">
                             @if(Auth::user()->isDpn())
-                            <td style="text-align:center;"><input type="checkbox" name="ids[]" value="{{ $app->id }}" class="row-check" style="cursor:pointer;"></td>
+                            <td style="text-align:center; padding: 12px;"><input type="checkbox" name="ids[]" value="{{ $app->id }}" class="row-check" style="cursor:pointer;"></td>
                             @endif
-                            <td>
-                                <span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--blue);">{{ $app->application_number }}</span>
-                                <div style="font-size:11px;color:var(--muted);margin-top:2px;font-weight:600;">{{ $app->service_name }}</div>
+                            <td style="padding: 12px 14px;">
+                                <span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:#003B64;">{{ $app->application_number }}</span>
+                                <div style="font-size:11px;color:#64748B;margin-top:2px;font-weight:600;">{{ $app->service_name }}</div>
                             </td>
-                            <td>
-                                <div style="font-weight:700; color:#003B64;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
-                                <div style="font-size:11px; color:var(--muted);">Akun: PMH{{ str_pad($app->user->id, 3, '0', STR_PAD_LEFT) }}</div>
+                            <td style="padding: 12px 14px;">
+                                <div style="font-weight:700; color:#003B64; font-size: 13px;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
+                                <div style="font-size:11px; color:#64748B;">Akun: PMH{{ str_pad($app->user->id, 3, '0', STR_PAD_LEFT) }}</div>
                             </td>
-                            <td style="color:var(--mid);">{{ $app->user->phone_number }}</td>
-                            <td style="color:var(--mid);">{{ $app->created_at->format('d-m-Y') }}</td>
+                            <td style="padding: 12px 14px; color:#334155; font-size: 12.5px;">{{ $app->user->phone_number }}</td>
+                            <td style="padding: 12px 14px; color:#334155; font-size: 12.5px;">{{ $app->created_at->format('d-m-Y') }}</td>
                             @if(!Auth::user()->isPelakuUsaha())
                                 @php
                                     $isSelesai = in_array($app->status, ['disetujui', 'ditolak', 'terbit_pkpr']);
@@ -149,28 +150,30 @@
                                         $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                     }
                                 @endphp
-                                <td>
-                                    <span class="badge sla-badge {{ $slaClass }}" style="border-radius: var(--r-sm); padding: 5px 10px; font-weight: 700;">
-                                        <svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">{!! $slaIcon !!}</svg> {{ $slaText }}
+                                <td style="padding: 12px 14px;">
+                                    <span class="badge sla-badge {{ $slaClass }}" style="border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px;">
+                                        <svg style="width:13px;height:13px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">{!! $slaIcon !!}</svg> {{ $slaText }}
                                     </span>
                                 </td>
                             @endif
-                            <td>
-                                <span class="badge" style="background-color:{{ $app->status_color }}20;color:{{ $app->status_color }};">
+                            <td style="padding: 12px 14px;">
+                                <span class="badge" style="background-color:{{ $app->status_color }}20;color:{{ $app->status_color }}; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px;">
                                     {{ $app->status_label }}
                                 </span>
                             </td>
-                            <td style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
-                                <a href="{{ route('kebijakan.show', $app->id) }}" class="btn btn-sm btn-secondary">
-                                    Detail
-                                    <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                </a>
-                                @if(Auth::user()->isDpn())
-                                <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#E53E3E;border-color:#E53E3E;color:#fff;">
-                                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                    Hapus
-                                </button>
-                                @endif
+                            <td style="padding: 12px 14px;">
+                                <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                                    <a href="{{ route('kebijakan.show', $app->id) }}" class="btn btn-sm btn-secondary" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px;">
+                                        Detail
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                    </a>
+                                    @if(Auth::user()->isDpn())
+                                    <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#DC2626;border-color:#DC2626;color:#fff; border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px;">
+                                        <svg viewBox="0 0 24 24" style="width:13px;height:13px;vertical-align:-1px;margin-right:2px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        Hapus
+                                    </button>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach
