@@ -958,28 +958,45 @@
                 }
             @endphp
 
-            <!-- Welcome Strip -->
-            <div class="welcome-strip">
-                <div>
-                    <h1>Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
-                    <p>
-                        @if(Auth::user()->isAdminBerita()) Kelola publikasi artikel dan informasi terbaru di sini.
-                        @elseif(Auth::user()->isPelakuUsaha()) Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.
-                        @else Kelola permohonan pemanfaatan ruang dan pantau status layanan secara real-time.
-                        @endif
-                    </p>
+            <!-- Hero Header Card (Clean & Minimal) -->
+            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 8px rgba(0,38,66,0.03);">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #003B64 0%, #218AC9 100%); color: #fff; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,59,100,0.15);">
+                        {{ strtoupper(substr($user->username ?? 'U', 0, 2)) }}
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                            <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
+                        </div>
+                        <p style="font-size: 12.5px; color: #64748B; margin: 0;">
+                            @if(Auth::user()->isAdminBerita()) Kelola publikasi artikel dan informasi terbaru di sini.
+                            @elseif(Auth::user()->isPelakuUsaha()) Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.
+                            @else Kelola permohonan pemanfaatan ruang dan pantau status layanan secara real-time.
+                            @endif
+                        </p>
+                    </div>
                 </div>
-                <div class="welcome-strip-badge">
-                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span>
-                        @if(Auth::user()->isAdminBerita()) Admin Berita
-                        @elseif(Auth::user()->isPelakuUsaha()) Pelaku Usaha Terverifikasi
-                        @elseif(Auth::user()->isBpn()) Admin Instansi
-                        @elseif(Auth::user()->isDinasPu()) Admin Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
-                        @elseif(Auth::user()->isSatuPintu()) Admin DPMPTSP
-                        @elseif(Auth::user()->isDpn()) Super Admin
-                        @else Pengguna Terverifikasi @endif
-                    </span>
+
+                <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+                    @if($isProfileIncomplete)
+                        <a href="{{ route('profile') }}" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#FEF3C7'" onmouseout="this.style.background='#FFFBEB'">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            Lengkapi Profil
+                        </a>
+                    @endif
+
+                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; border: 1px solid #E2E8F0; color: #334155; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <span>
+                            @if(Auth::user()->isAdminBerita()) Admin Berita
+                            @elseif(Auth::user()->isPelakuUsaha()) Pelaku Usaha
+                            @elseif(Auth::user()->isBpn()) Admin Instansi
+                            @elseif(Auth::user()->isDinasPu()) Admin PUTR
+                            @elseif(Auth::user()->isSatuPintu()) Admin DPMPTSP
+                            @elseif(Auth::user()->isDpn()) Super Admin
+                            @else Pengguna Terverifikasi @endif
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -1057,43 +1074,42 @@
             @else
             <!-- Souvenir Alert Warning -->
             @if(!$user->isPelakuUsaha() && count($pendingSouvenirs) > 0)
-                <div class="alert-warning" style="display: block; padding: 18px 24px; border-radius: var(--r-lg); margin-bottom: 24px; border: 1.5px solid #FBE89F; background: #FFFDF0; color: #744210;">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #D97706; flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                        <strong style="font-size: 15px;">Peringatan Souvenir Pending (SLA > 10 Hari)</strong>
+                <div class="alert-warning" style="display: block; padding: 16px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #FCD34D; background: #FFFBEB; color: #92400E;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #D97706; flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        <strong style="font-size: 14px;">Peringatan Souvenir Pending (SLA > 10 Hari)</strong>
                     </div>
-                    <p style="font-size: 13.5px; margin-bottom: 14px; line-height: 1.5;">
-                        Terdapat <strong>{{ count($pendingSouvenirs) }}</strong> permohonan yang telah melebihi 10 hari sejak dokumen Pertek Pertanahan diunggah/diterbitkan (Tahap 6), tetapi souvenir belum dikirimkan ke pemohon. Silakan hubungi pemohon dan tandai sebagai terkirim setelah diserahkan.
+                    <p style="font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
+                        Terdapat <strong>{{ count($pendingSouvenirs) }}</strong> permohonan yang telah melebihi 10 hari sejak dokumen Pertek Pertanahan diunggah/diterbitkan, tetapi souvenir belum dikirimkan.
                     </p>
-                    <div style="overflow-x: auto; background: rgba(255, 255, 255, 0.5); border-radius: var(--r-md); border: 1px solid rgba(217, 119, 6, 0.15);">
-                        <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: left;">
+                    <div style="overflow-x: auto; background: rgba(255, 255, 255, 0.7); border-radius: 8px; border: 1px solid rgba(217, 119, 6, 0.15);">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
                             <thead>
                                 <tr style="border-bottom: 1px solid rgba(217, 119, 6, 0.15);">
-                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">No. Registrasi</th>
-                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">Pemohon</th>
-                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">Layanan</th>
-                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px;">Durasi Pend.</th>
-                                    <th style="padding: 10px 14px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 11px; text-align: right;">Aksi</th>
+                                    <th style="padding: 8px 12px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 10.5px;">No. Registrasi</th>
+                                    <th style="padding: 8px 12px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 10.5px;">Pemohon</th>
+                                    <th style="padding: 8px 12px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 10.5px;">Layanan</th>
+                                    <th style="padding: 8px 12px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 10.5px;">Durasi Pend.</th>
+                                    <th style="padding: 8px 12px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 10.5px; text-align: right;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($pendingSouvenirs as $ps)
                                     <tr style="border-bottom: 1px solid rgba(217, 119, 6, 0.1); background: transparent;">
-                                        <td style="padding: 10px 14px; font-family: 'DM Mono', monospace; font-weight: 600; color: #003B64;">{{ $ps['application_number'] }}</td>
-                                        <td style="padding: 10px 14px;">
+                                        <td style="padding: 8px 12px; font-family: 'DM Mono', monospace; font-weight: 600; color: #003B64;">{{ $ps['application_number'] }}</td>
+                                        <td style="padding: 8px 12px;">
                                             <div style="font-weight: 700;">{{ $ps['pemilik'] }}</div>
-                                            <div style="font-size: 11px; color: #8F5C2C;">{{ $ps['phone'] }}</div>
                                         </td>
-                                        <td style="padding: 10px 14px; font-weight: 500;">{{ $ps['type_label'] }}</td>
-                                        <td style="padding: 10px 14px;">
-                                            <span style="background: #FFF5F5; color: #C53030; padding: 3px 8px; border-radius: 12px; font-weight: 700; font-size: 11px; border: 1px solid #FED7D7;">
+                                        <td style="padding: 8px 12px; font-weight: 500;">{{ $ps['type_label'] }}</td>
+                                        <td style="padding: 8px 12px;">
+                                            <span style="background: #FEF2F2; color: #991B1B; padding: 2px 7px; border-radius: 10px; font-weight: 700; font-size: 10.5px; border: 1px solid #FCA5A5;">
                                                 🔴 {{ $ps['days'] }} Hari
                                             </span>
                                         </td>
-                                        <td style="padding: 10px 14px; text-align: right;">
+                                        <td style="padding: 8px 12px; text-align: right;">
                                             <form action="{{ route('souvenir.mark_sent', [$ps['type_key'], $ps['id']]) }}" method="POST" style="display: inline;" onsubmit="return confirm('Apakah Anda yakin souvenir untuk permohonan {{ $ps['application_number'] }} telah diserahkan?')">
                                                 @csrf
-                                                <button type="submit" class="alert-link" style="padding: 6px 12px; font-size: 11px; border-radius: var(--r-sm); transition: all 0.2s;">
+                                                <button type="submit" style="background: #F59E0B; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">
                                                     Tandai Terkirim
                                                 </button>
                                             </form>
@@ -1106,107 +1122,83 @@
                 </div>
             @endif
 
-            <!-- Profile Alert -->
-            @if($isProfileIncomplete)
-                <div class="alert-profile">
-                    <div class="alert-text">
-                        <strong>Profil belum lengkap</strong> — Lengkapi email, alamat, dan data usaha untuk mempercepat verifikasi dokumen Anda.
-                    </div>
-                    <a href="{{ route('profile') }}" class="alert-link">Lengkapi Sekarang</a>
-                </div>
-            @endif
-
-            <!-- KPI Cards -->
-            <div class="kpi-row">
-                <div class="kpi-card">
+            <!-- Clean Executive KPI Row -->
+            <div class="kpi-row" style="margin-bottom: 20px;">
+                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
                     <div class="kpi-top">
-                        <span class="kpi-label">Total Permohonan</span>
-                        <div class="kpi-icon blue">
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">TOTAL PERMOHONAN</span>
+                        <div class="kpi-icon blue" style="border-radius: 8px; width: 32px; height: 32px;">
                             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number">{{ $totalPermohonan ?? 0 }}</div>
-                    <div class="kpi-sub"><span class="kpi-badge neutral">Semua jenis</span></div>
+                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #0F172A;">{{ $totalPermohonan ?? 0 }}</div>
+                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Semua jenis berkas</div>
                 </div>
-                <div class="kpi-card">
+
+                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
                     <div class="kpi-top">
-                        <span class="kpi-label">Menunggu Review</span>
-                        <div class="kpi-icon yellow">
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">MENUNGGU REVIEW</span>
+                        <div class="kpi-icon yellow" style="border-radius: 8px; width: 32px; height: 32px; background: #FEF3C7; color: #D97706;">
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number">{{ $totalPending ?? 0 }}</div>
-                    <div class="kpi-sub"><span class="kpi-badge neutral">Dalam proses</span></div>
+                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #D97706;">{{ $totalPending ?? 0 }}</div>
+                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Dalam proses verifikasi</div>
                 </div>
-                <div class="kpi-card">
+
+                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
                     <div class="kpi-top">
-                        <span class="kpi-label">Disetujui</span>
-                        <div class="kpi-icon green">
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">DISETUJUI</span>
+                        <div class="kpi-icon green" style="border-radius: 8px; width: 32px; height: 32px; background: #DCFCE7; color: #16A34A;">
                             <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number">{{ $totalDisetujui ?? 0 }}</div>
-                    <div class="kpi-sub"><span class="kpi-badge up">↑ Selesai</span></div>
+                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #16A34A;">{{ $totalDisetujui ?? 0 }}</div>
+                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Permohonan selesai</div>
                 </div>
-                <div class="kpi-card">
+
+                <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
                     <div class="kpi-top">
-                        <span class="kpi-label">Ditolak</span>
-                        <div class="kpi-icon red">
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">DITOLAK</span>
+                        <div class="kpi-icon red" style="border-radius: 8px; width: 32px; height: 32px; background: #FEE2E2; color: #DC2626;">
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number">{{ $totalDitolak ?? 0 }}</div>
-                    <div class="kpi-sub"><span class="kpi-badge down">Perlu tindak lanjut</span></div>
+                    <div class="kpi-number" style="font-size: 26px; font-weight: 800; color: #DC2626;">{{ $totalDitolak ?? 0 }}</div>
+                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Perlu perbaikan/ditolak</div>
                 </div>
             </div>
 
             @if(!Auth::user()->isPelakuUsaha())
-            <!-- ── SLA PENGENDALIAN INTERNAL ──────────────────── -->
-            <div style="background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 24px;margin-bottom:20px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-                    <div style="display:flex;align-items:center;gap:10px;">
-                        <div style="width:32px;height:32px;border-radius:8px;background:#EEF7E2;display:flex;align-items:center;justify-content:center;">
-                            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#16A34A" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        </div>
-                        <div>
-                            <div style="font-size:13.5px;font-weight:700;color:var(--ink);">Pengendalian SLA — Berkas Aktif</div>
-                            <div style="font-size:11.5px;color:var(--muted);">Monitoring internal waktu proses permohonan yang sedang berjalan</div>
-                        </div>
+            <!-- ── SLA PENGENDALIAN INTERNAL (CLEAN INTEGRATED ROW) ──────────────────── -->
+            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 2px 8px rgba(0,38,66,0.02);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: #ECFDF5; color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
-                    <div style="font-size:11px;color:var(--muted);background:var(--surface);border-radius:6px;padding:4px 10px;">
-                        Total aktif: {{ $slaHijau + $slaKuning + $slaMerah }} berkas
+                    <div>
+                        <div style="font-size: 13px; font-weight: 800; color: #0F172A;">Pengendalian SLA Berkas Aktif</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Total berkas berjalan: <strong>{{ $slaHijau + $slaKuning + $slaMerah }} berkas</strong></div>
                     </div>
                 </div>
-                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+
+                <div style="display: flex; align-items: center; gap: 10px;">
                     {{-- Hijau --}}
-                    <div style="background:#EEF7E2;border:1.5px solid #16A34A40;border-radius:var(--r-md);padding:16px 20px;display:flex;align-items:center;gap:14px;">
-                        <div style="width:42px;height:42px;border-radius:50%;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        </div>
-                        <div>
-                            <div style="font-size:28px;font-weight:800;color:#16A34A;line-height:1;">{{ $slaHijau }}</div>
-                            <div style="font-size:12px;font-weight:600;color:#4a7c27;margin-top:2px;">Sesuai SLA / Aman</div>
-                        </div>
+                    <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman (SLA): <strong style="font-size: 13px; font-weight: 800;">{{ $slaHijau }}</strong></span>
                     </div>
+
                     {{-- Kuning --}}
-                    <div style="background:#FFFBEB;border:1.5px solid #D9770640;border-radius:var(--r-md);padding:16px 20px;display:flex;align-items:center;gap:14px;">
-                        <div style="width:42px;height:42px;border-radius:50%;background:#D97706;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        </div>
-                        <div>
-                            <div style="font-size:28px;font-weight:800;color:#D97706;line-height:1;">{{ $slaKuning }}</div>
-                            <div style="font-size:12px;font-weight:600;color:#92600A;margin-top:2px;">Mendekati Batas SLA</div>
-                        </div>
+                    <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #92400E;">Mendekati Batas: <strong style="font-size: 13px; font-weight: 800;">{{ $slaKuning }}</strong></span>
                     </div>
+
                     {{-- Merah --}}
-                    <div style="background:#FFF5F5;border:1.5px solid #DC262640;border-radius:var(--r-md);padding:16px 20px;display:flex;align-items:center;gap:14px;">
-                        <div style="width:42px;height:42px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                        </div>
-                        <div>
-                            <div style="font-size:28px;font-weight:800;color:#DC2626;line-height:1;">{{ $slaMerah }}</div>
-                            <div style="font-size:12px;font-weight:600;color:#9B2C2C;margin-top:2px;">Melewati Batas SLA / Terlambat</div>
-                        </div>
+                    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #991B1B;">Terlambat: <strong style="font-size: 13px; font-weight: 800;">{{ $slaMerah }}</strong></span>
                     </div>
                 </div>
             </div>
