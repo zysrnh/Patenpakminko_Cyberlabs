@@ -330,7 +330,7 @@
                             <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Tanggal Booking</th>
                             <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Rentang Waktu</th>
                             <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
-                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 220px;">Aksi Admin</th>
+                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; min-width: 260px;">Aksi Admin</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -353,12 +353,12 @@
                                         {{ $booking->status_label }}
                                     </span>
                                 </td>
-                                <td style="padding: 12px 14px;">
-                                    <form action="{{ route('lapolpa.update', $booking->id) }}" method="POST" style="display: flex; flex-direction: column; gap: 8px;">
+                                <td style="padding: 12px 14px; min-width: 260px;">
+                                    <form action="{{ route('lapolpa.update', $booking->id) }}" method="POST" style="display: flex; flex-direction: column; gap: 6px;">
                                         @csrf
                                         @method('PUT')
                                         <div style="display: flex; gap: 6px; align-items: center;">
-                                            <select name="status" class="status-select" style="flex: 1;">
+                                            <select name="status" class="status-select" style="flex: 1; height: 34px; box-sizing: border-box;">
                                                 @if($booking->status === 'booked')
                                                 <option value="booked" selected disabled>Menunggu Aksi</option>
                                                 @endif
@@ -366,9 +366,9 @@
                                                 <option value="selesai" {{ $booking->status === 'selesai' ? 'selected' : '' }}>Selesai</option>
                                                 <option value="ditolak" {{ $booking->status === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                                             </select>
-                                            <button type="submit" class="btn btn-primary btn-sm" style="border-radius: 4px; font-size: 11.5px; padding: 6px 12px; font-weight: 700;">Update</button>
+                                            <button type="submit" class="btn btn-primary btn-sm" style="border-radius: 4px; font-size: 12px; padding: 0 14px; font-weight: 700; height: 34px; white-space: nowrap; box-sizing: border-box;">Update</button>
                                         </div>
-                                        <input type="text" name="admin_note" placeholder="Catatan untuk pemohon (Opsional)" value="{{ $booking->admin_note }}" class="form-control" style="font-size: 11px; padding: 6px 10px; border-radius: 4px; border: 1px solid #CBD5E1;">
+                                        <input type="text" name="admin_note" placeholder="Catatan untuk pemohon (Opsional)" value="{{ $booking->admin_note }}" class="form-control" style="font-size: 11.5px; padding: 6px 10px; border-radius: 4px; border: 1.5px solid #CBD5E1; height: 34px; box-sizing: border-box; width: 100%;">
                                     </form>
                                 </td>
                             </tr>
