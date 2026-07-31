@@ -1677,7 +1677,7 @@
                                 
                             $targetDate = $application->tgl_selesai_layanan 
                                 ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
-                                : $startDate->copy()->addDays($defaultDays);
+                                : $startDate->copy()->addWorkingDaysWithHolidays($defaultDays);
                         } else {
                             $targetDate = null;
                         }
@@ -1701,7 +1701,10 @@
                             $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
-                            $daysRemaining = $now->diffInDays($targetDate, false);
+                            $daysRemaining = (int)$now->diffInWorkingDaysWithHolidays($targetDate);
+                            if ($now > $targetDate) {
+                                $daysRemaining = -$daysRemaining;
+                            }
                             
                             if ($isPuPhase) {
                                 if ($daysRemaining >= 4) { $slaBg = '#16A34A'; $slaBorder = '#15803D'; $slaColor = '#FFFFFF'; }
@@ -2223,16 +2226,40 @@
                 });
             }
             
-            const slaStart = document.getElementById('tgl_mulai_layanan');
-            if(slaStart) {
-                flatpickr(slaStart, {
+            function addWorkingDays(startDate, days, holidays) {
+                let date = new Date(startDate);
+                let added = 0;
+                while (added < days) {
+                    date.setDate(date.getDate() + 1);
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    const dateStr = `${y}-${m}-${d}`;
+                    if (date.getDay() !== 0 && date.getDay() !== 6 && !holidays.includes(dateStr)) {
+                        added++;
+                    }
+                }
+                return date;
+            }
+
+            const slaEnd = document.getElementById('tgl_selesai_layanan');
+            let selesaiPicker = null;
+            if(slaEnd) {
+                selesaiPicker = flatpickr(slaEnd, {
                     enableTime: true, time_24hr: true, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "j F Y - H:i", locale: "id", allowInput: true, disable: commonDisable
                 });
             }
-            const slaEnd = document.getElementById('tgl_selesai_layanan');
-            if(slaEnd) {
-                flatpickr(slaEnd, {
-                    enableTime: true, time_24hr: true, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "j F Y - H:i", locale: "id", allowInput: true, disable: commonDisable
+
+            const slaStart = document.getElementById('tgl_mulai_layanan');
+            if(slaStart) {
+                flatpickr(slaStart, {
+                    enableTime: true, time_24hr: true, dateFormat: "Y-m-d\\TH:i", altInput: true, altFormat: "j F Y - H:i", locale: "id", allowInput: true, disable: commonDisable,
+                    onChange: function(selectedDates, dateStr, instance) {
+                        if (selectedDates.length > 0 && selesaiPicker) {
+                            const target = addWorkingDays(selectedDates[0], {{ $isPuPhase ? 20 : 10 }}, window.appHolidays || []);
+                            selesaiPicker.setDate(target, true);
+                        }
+                    }
                 });
             }
         });

@@ -894,7 +894,7 @@
                         foreach($apps as $app) {
                             $startDate = $app->tgl_mulai_layanan ?? $app->created_at;
                             $endDate = $app->tgl_selesai_layanan ?? now();
-                            $hari = $startDate->diffInDays($endDate);
+                            $hari = (int)$startDate->diffInWorkingDaysWithHolidays($endDate);
                             $hariKe = $hari + 1;
 
                             $isPuPhase = in_array($app->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr']);
@@ -940,7 +940,7 @@
 
                         foreach ($apps as $app) {
                             $uploadedAt = $app->bpn_pertek_uploaded_at ?? $app->updated_at;
-                            $days = (int) $uploadedAt->diffInDays(now());
+                            $days = (int) $uploadedAt->diffInWorkingDaysWithHolidays(now());
                             if ($days >= 10) {
                                 $pendingSouvenirs[] = [
                                     'id'                 => $app->id,

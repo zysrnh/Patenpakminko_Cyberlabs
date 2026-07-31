@@ -1543,7 +1543,7 @@
                                 
                             $targetDate = $application->tgl_selesai_layanan 
                                 ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
-                                : $startDate->copy()->addDays($defaultDays);
+                                : $startDate->copy()->addWorkingDaysWithHolidays($defaultDays);
                         } else {
                             $targetDate = null;
                         }
@@ -1567,7 +1567,10 @@
                             $slaColor = '#FFFFFF';
                         } else {
                             $now = \Carbon\Carbon::now();
-                            $daysRemaining = $now->diffInDays($targetDate, false);
+                            $daysRemaining = (int)$now->diffInWorkingDaysWithHolidays($targetDate);
+                            if ($now > $targetDate) {
+                                $daysRemaining = -$daysRemaining;
+                            }
                             
                             if ($isPuPhase) {
                                 if ($daysRemaining >= 4) { $slaBg = '#16A34A'; $slaBorder = '#15803D'; $slaColor = '#FFFFFF'; }
@@ -2234,7 +2237,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             ];
 
-            flatpickr('#tgl_mulai_layanan, #tgl_selesai_layanan, #bpn_cek_lokasi_dt, #bpn_rapat_dt, #dinas_pu_tanggal_penilaian, #satu_pintu_tanggal_terbit', {
+            function addWorkingDays(startDate, days, holidays) {
+                let date = new Date(startDate);
+                let added = 0;
+                while (added < days) {
+                    date.setDate(date.getDate() + 1);
+                    const y = date.getFullYear();
+                    const m = String(date.getMonth() + 1).padStart(2, '0');
+                    const d = String(date.getDate()).padStart(2, '0');
+                    const dateStr = `${y}-${m}-${d}`;
+                    if (date.getDay() !== 0 && date.getDay() !== 6 && !holidays.includes(dateStr)) {
+                        added++;
+                    }
+                }
+                return date;
+            }
+
+            const selesaiPicker = flatpickr('#tgl_selesai_layanan', {
+                enableTime: true,
+                dateFormat: "Y-m-d\\TH:i",
+                altInput: true,
+                altFormat: "j F Y - H:i",
+                locale: "id",
+                allowInput: true,
+                disable: commonDisable
+            });
+
+            flatpickr('#tgl_mulai_layanan', {
+                enableTime: true,
+                dateFormat: "Y-m-d\\TH:i",
+                altInput: true,
+                altFormat: "j F Y - H:i",
+                locale: "id",
+                allowInput: true,
+                disable: commonDisable,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0 && selesaiPicker) {
+                        const target = addWorkingDays(selectedDates[0], {{ $isPuPhase ? 20 : 10 }}, window.appHolidays || []);
+                        selesaiPicker.setDate(target, true);
+                    }
+                }
+            });
+
+            flatpickr('#bpn_cek_lokasi_dt, #bpn_rapat_dt, #dinas_pu_tanggal_penilaian, #satu_pintu_tanggal_terbit', {
                 enableTime: true,
                 dateFormat: "Y-m-d\\TH:i",
                 altInput: true,
