@@ -48,35 +48,46 @@
         border-color: #218AC9;
     }
 
-    /* ─── CALENDAR ──────────────────────────── */
+    /* ─── CALENDAR ULTRA CLEAN ──────────────────────────── */
     .cal-wrap { background: #fff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,38,66,0.02); }
-    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .cal-header h2 { font-size: 16px; font-weight: 800; color: #003B64; margin: 0; }
-    .cal-nav { display: flex; align-items: center; gap: 8px; }
-    .cal-nav button { width: 32px; height: 32px; border: 1.5px solid #CBD5E1; background: #fff; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .18s; }
+    .cal-nav { display: flex; align-items: center; gap: 8px; background: #F8FAFC; padding: 4px 8px; border-radius: 6px; border: 1px solid #E2E8F0; }
+    .cal-nav button { width: 28px; height: 28px; border: 1px solid #CBD5E1; background: #fff; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .18s; }
     .cal-nav button:hover { background: #218AC9; border-color: #218AC9; }
     .cal-nav button:hover svg { stroke: #fff; }
-    .cal-nav button svg { width: 14px; height: 14px; fill: none; stroke: #003B64; stroke-width: 2.5; stroke-linecap: round; }
-    .cal-month-label { font-size: 15px; font-weight: 800; color: #003B64; min-width: 140px; text-align: center; letter-spacing: -0.01em; }
+    .cal-nav button svg { width: 13px; height: 13px; fill: none; stroke: #003B64; stroke-width: 2.5; stroke-linecap: round; }
+    .cal-month-label { font-size: 14px; font-weight: 800; color: #003B64; min-width: 120px; text-align: center; letter-spacing: -0.01em; }
     .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
     .cal-day-name { text-align: center; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; padding: 6px 0; letter-spacing: 0.05em; }
-    .cal-cell { min-height: 56px; border-radius: 4px; padding: 6px; position: relative; cursor: default; transition: background .15s; border: 1px solid #F1F5F9; background: #FAFAFA; }
-    .cal-cell.has-booking { cursor: pointer; background: #EFF6FF; border: 1.5px solid #93C5FD; }
+    .cal-day-name.weekend { color: #DC2626; }
+    
+    .cal-cell { min-height: 52px; border-radius: 4px; padding: 6px 4px; position: relative; cursor: default; transition: all .15s; border: 1px solid #E2E8F0; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+    .cal-cell:hover { border-color: #218AC9; background: #F8FAFC; }
+    .cal-cell.has-booking { cursor: pointer; background: #EFF6FF; border: 1.5px solid #60A5FA; }
     .cal-cell.has-booking:hover { background: #DBEAFE; }
-    .cal-cell.today .cal-num { background: #218AC9; color: #fff; border-radius: 4px; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; }
-    .cal-cell.other-month { opacity: .3; background: transparent; border-color: transparent; }
-    .cal-cell.holiday { background-color: #FEF2F2; border: 1px solid #FCA5A5; }
-    .cal-cell.holiday .cal-num { color: #DC2626; font-weight: 800; }
-    .cal-num { font-size: 12.5px; font-weight: 600; color: #0F172A; display: block; text-align: center; }
-    .cal-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; margin-top: 4px; }
+    
+    /* Today Highlight */
+    .cal-cell.today { border: 2px solid #218AC9 !important; background: #F0F9FF !important; }
+    .cal-cell.today .cal-num { color: #218AC9; font-weight: 800; font-size: 13.5px; }
+
+    /* Other Month & Holidays */
+    .cal-cell.other-month { opacity: .25; background: #FAFAFA; border-color: transparent; }
+    .cal-cell.holiday { background-color: #FFF5F5; border-color: #FEE2E2; }
+    .cal-cell.holiday .cal-num { color: #DC2626; font-weight: 700; }
+
+    .cal-num { font-size: 13px; font-weight: 600; color: #0F172A; display: block; text-align: center; line-height: 1.2; }
+    .cal-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; margin-top: 5px; }
     .cal-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .cal-dot.booked { background: #2563EB; }
     .cal-dot.diterima { background: #16A34A; }
     .cal-dot.selesai { background: #059669; }
     .cal-dot.ditolak { background: #DC2626; }
-    .cal-legend { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+    
+    .cal-legend { display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid #F1F5F9; }
     .cal-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #475569; font-weight: 600; }
-    .cal-booking-popup { background: #003B64; color: #fff; border-radius: 6px; padding: 10px 14px; font-size: 12px; position: absolute; z-index: 50; min-width: 190px; display: none; top: 62px; left: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.1); }
+    
+    .cal-booking-popup { background: #003B64; color: #fff; border-radius: 6px; padding: 10px 14px; font-size: 12px; position: absolute; z-index: 50; min-width: 190px; display: none; top: 58px; left: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.1); }
     .cal-booking-popup.active { display: block; }
     .cal-booking-popup h4 { font-size: 12px; font-weight: 700; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 5px; }
     .cal-popup-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
@@ -149,13 +160,13 @@
         </div>
     </div>
     <div class="cal-grid" id="cal-grid">
-        <div class="cal-day-name">Min</div>
+        <div class="cal-day-name weekend">Min</div>
         <div class="cal-day-name">Sen</div>
         <div class="cal-day-name">Sel</div>
         <div class="cal-day-name">Rab</div>
         <div class="cal-day-name">Kam</div>
         <div class="cal-day-name">Jum</div>
-        <div class="cal-day-name">Sab</div>
+        <div class="cal-day-name weekend">Sab</div>
     </div>
     <div class="cal-legend">
         <div class="cal-legend-item"><span class="cal-dot booked"></span> Booked</div>
@@ -200,7 +211,6 @@
                 var dateKey = year + "-" + pad(month + 1) + "-" + pad(d);
                 var cell = document.createElement("div");
                 cell.className = "cal-cell";
-                cell.style.position = "relative";
 
                 if (year === today.getFullYear() && month === today.getMonth() && d === today.getDate()) {
                     cell.classList.add("today");
@@ -235,7 +245,7 @@
                     }
                     if (dayBookings.length > 3) {
                         var more = document.createElement("span");
-                        more.style.cssText = "font-size:9px;color:var(--muted);font-weight:700;";
+                        more.style.cssText = "font-size:9px;color:#64748B;font-weight:700;";
                         more.textContent = "+" + (dayBookings.length - 3);
                         dotsWrap.appendChild(more);
                     }
