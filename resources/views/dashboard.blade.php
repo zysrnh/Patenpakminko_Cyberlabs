@@ -131,7 +131,86 @@
             flex: 1;
         }
 
+        /* ─── WELCOME STRIP ────────────────────────────────── */
+        .welcome-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--ink);
+            border-radius: var(--r-lg);
+            padding: 22px 28px;
+            margin-bottom: 24px;
+            border-left: 5px solid var(--yellow);
+            position: relative;
+            overflow: hidden;
+        }
+        .welcome-strip::after {
+            content: '';
+            position: absolute;
+            right: -30px; top: -40px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.03);
+        }
+        .welcome-strip h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+            letter-spacing: -.02em;
+        }
+        .welcome-strip p {
+            font-size: 13.5px;
+            color: rgba(255,255,255,.65);
+        }
+        .welcome-strip-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: var(--r-lg);
+            padding: 10px 16px;
+            flex-shrink: 0;
+        }
+        .welcome-strip-badge svg {
+            width: 18px; height: 18px; fill: none;
+            stroke: var(--yellow); stroke-width: 2;
+            stroke-linecap: round; stroke-linejoin: round;
+        }
+        .welcome-strip-badge span {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: rgba(255,255,255,.8);
+        }
+
         /* ─── ALERTS ───────────────────────────────────────── */
+        .alert-profile {
+            background: #FFFDF0;
+            border: 1.5px solid #FBE89F;
+            color: #744210;
+            padding: 14px 18px;
+            border-radius: var(--r-lg);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .alert-text { font-size: 13px; line-height: 1.5; font-weight: 500; }
+        .alert-link {
+            background: var(--yellow);
+            color: #744210;
+            border: none;
+            padding: 8px 14px;
+            border-radius: var(--r-md);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            white-space: nowrap;
+        }
         .alert-success {
             background: #E6F4EA;
             border: 1px solid #B8E2C8;
@@ -208,11 +287,10 @@
             font-weight: 700;
             padding: 2px 7px;
             border-radius: 20px;
-            color: #fff;
         }
-        .kpi-badge.up      { background: var(--green-dk); }
-        .kpi-badge.down    { background: #C53030; }
-        .kpi-badge.neutral { background: var(--blue); }
+        .kpi-badge.up   { background: var(--green-lt); color: var(--green-dk); }
+        .kpi-badge.down { background: #FFF5F5; color: #C53030; }
+        .kpi-badge.neutral { background: var(--blue-lt); color: var(--blue); }
 
         /* ─── TWO-COL LAYOUT ─────────────────────────────────── */
         .grid-2col {
@@ -222,6 +300,7 @@
             align-items: start;
         }
 
+        /* ─── SERVICES PANEL ─────────────────────────────────── */
         .panel {
             background: var(--white);
             border: 1px solid var(--line);
@@ -244,6 +323,90 @@
             font-weight: 700;
             color: var(--blue);
             text-decoration: none;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .service-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 18px;
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            text-decoration: none;
+            transition: all .18s;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card:nth-child(2n) { border-right: none; }
+        .service-card:nth-last-child(-n+2) { border-bottom: none; }
+        .service-card:nth-last-child(1):nth-child(2n+1) { border-bottom: none; border-right: none; grid-column: span 2; }
+
+        .service-card:hover {
+            background: var(--surface);
+        }
+        .service-card:hover .service-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .service-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .service-icon {
+            width: 40px; height: 40px;
+            border-radius: var(--r-md);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .service-icon svg {
+            width: 19px; height: 19px;
+            fill: none; stroke: currentColor;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .service-icon.green  { background: var(--green-lt); color: var(--green-dk); }
+        .service-icon.yellow { background: rgba(255,203,5,.12); color: var(--brown); }
+        .service-icon.blue   { background: var(--blue-lt); color: var(--blue); }
+        .service-icon.orange { background: rgba(211,115,36,.12); color: #D37324; }
+        .service-icon.gold   { background: rgba(214,158,46,.1); color: #D69E2E; }
+
+        .service-arrow {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: var(--blue-lt);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: all .18s;
+        }
+        .service-arrow svg { width: 13px; height: 13px; fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linecap: round; }
+
+        .service-card h3 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 3px;
+        }
+        .service-card p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+        .service-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--blue-lt);
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-top: 4px;
         }
 
         /* ─── ACTIVITY PANEL ─────────────────────────────────── */
@@ -293,12 +456,11 @@
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 20px;
-            color: #fff;
         }
-        .status-pending  { background: var(--brown); }
-        .status-review   { background: var(--blue); }
-        .status-approved { background: var(--green-dk); }
-        .status-rejected { background: #C53030; }
+        .status-pending  { background: var(--yellow-lt); color: #92600A; }
+        .status-review   { background: var(--blue-lt); color: var(--blue); }
+        .status-approved { background: var(--green-lt); color: var(--green-dk); }
+        .status-rejected { background: #FFF5F5; color: #C53030; }
 
         /* ─── QUICK STATS SIDEBAR ────────────────────────────── */
         .right-col { display: flex; flex-direction: column; gap: 20px; }
@@ -480,7 +642,7 @@
                 <span>
                     @if(Auth::user()->isPelakuUsaha()) Portal Layanan Instansi
                     @elseif(Auth::user()->isBpn()) Portal Admin Instansi
-                    @elseif(Auth::user()->isDinasPu()) Portal Dinas Pekerjaan Umum dan Tata Ruang
+                    @elseif(Auth::user()->isDinasPu()) Portal Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
                     @elseif(Auth::user()->isSatuPintu()) Portal DPMPTSP
                     @elseif(Auth::user()->isDpn()) Portal Layanan Instansi
                     @else Portal Manajemen @endif
@@ -521,7 +683,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Pertimbangan Teknis Pertanahan Tanah Timbul</a>
             <a href="{{ route('psn.index') }}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-                PSN — Proyek Nasional
+                PSN (Proyek Nasional)
             </a>
         </div>
 
@@ -767,7 +929,7 @@
                         'ppkpr_non_berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha',
                         'ppkpr_berusaha'     => 'Pertimbangan Teknis Pertanahan PKKPR Berusaha',
                         'kebijakan_khusus'   => 'Kebijakan',
-                        'psn'                => 'PSN — Proyek Nasional',
+                        'psn'                => 'PSN (Proyek Nasional)',
                         'tanah_timbul'       => 'Tanah Timbul',
                     ];
 
@@ -796,7 +958,7 @@
                 }
             @endphp
 
-            <!-- Hero Header Card -->
+            <!-- Hero Header Card (Clean & Minimal) -->
             <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 8px rgba(0,38,66,0.03);">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #003B64 0%, #218AC9 100%); color: #fff; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,59,100,0.15);">
@@ -823,7 +985,7 @@
                         </a>
                     @endif
 
-                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #003B64; color: #fff; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;">
+                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; border: 1px solid #E2E8F0; color: #334155; padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 700;">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         <span>
                             @if(Auth::user()->isAdminBerita()) Admin Berita
@@ -915,7 +1077,7 @@
                 <div class="alert-warning" style="display: block; padding: 16px 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #FCD34D; background: #FFFBEB; color: #92400E;">
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #D97706; flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                        <strong style="font-size: 14px;">Peringatan Souvenir Pending — SLA Lebih dari 10 Hari</strong>
+                        <strong style="font-size: 14px;">Peringatan Souvenir Pending (SLA > 10 Hari)</strong>
                     </div>
                     <p style="font-size: 13px; margin-bottom: 12px; line-height: 1.5;">
                         Terdapat <strong>{{ count($pendingSouvenirs) }}</strong> permohonan yang telah melebihi 10 hari sejak dokumen Pertek Pertanahan diunggah/diterbitkan, tetapi souvenir belum dikirimkan.
@@ -940,8 +1102,8 @@
                                         </td>
                                         <td style="padding: 8px 12px; font-weight: 500;">{{ $ps['type_label'] }}</td>
                                         <td style="padding: 8px 12px;">
-                                            <span style="background: #DC2626; color: #fff; padding: 2px 7px; border-radius: 10px; font-weight: 700; font-size: 10.5px;">
-                                                {{ $ps['days'] }} Hari
+                                            <span style="background: #FEF2F2; color: #991B1B; padding: 2px 7px; border-radius: 10px; font-weight: 700; font-size: 10.5px; border: 1px solid #FCA5A5;">
+                                                🔴 {{ $ps['days'] }} Hari
                                             </span>
                                         </td>
                                         <td style="padding: 8px 12px; text-align: right;">
@@ -960,7 +1122,7 @@
                 </div>
             @endif
 
-            <!-- Executive KPI Row -->
+            <!-- Clean Executive KPI Row -->
             <div class="kpi-row" style="margin-bottom: 20px;">
                 <div class="kpi-card" style="box-shadow: 0 2px 8px rgba(0,38,66,0.02); border-radius: 12px; padding: 18px 20px;">
                     <div class="kpi-top">
@@ -1008,29 +1170,35 @@
             </div>
 
             @if(!Auth::user()->isPelakuUsaha())
-            <!-- ── BERKAS AKTIF (SOLID STATUS PILLS) ──────────────────── -->
+            <!-- ── SLA PENGENDALIAN INTERNAL (CLEAN INTEGRATED ROW) ──────────────────── -->
             <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 2px 8px rgba(0,38,66,0.02);">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 32px; height: 32px; border-radius: 8px; background: #10B981; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <div style="width: 32px; height: 32px; border-radius: 8px; background: #ECFDF5; color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
                     <div>
-                        <div style="font-size: 13px; font-weight: 800; color: #0F172A;">Berkas Aktif</div>
+                        <div style="font-size: 13px; font-weight: 800; color: #0F172A;">Pengendalian SLA Berkas Aktif</div>
                         <div style="font-size: 11.5px; color: #64748B;">Total berkas berjalan: <strong>{{ $slaHijau + $slaKuning + $slaMerah }} berkas</strong></div>
                     </div>
                 </div>
 
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: #10B981; border-radius: 8px; padding: 8px 14px;">
-                        <span style="font-size: 12px; font-weight: 600; color: #ffffff;">Aman: <strong style="font-size: 13px; font-weight: 800;">{{ $slaHijau }}</strong></span>
+                    {{-- Hijau --}}
+                    <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman (SLA): <strong style="font-size: 13px; font-weight: 800;">{{ $slaHijau }}</strong></span>
                     </div>
 
-                    <div style="background: #F59E0B; border-radius: 8px; padding: 8px 14px;">
-                        <span style="font-size: 12px; font-weight: 600; color: #ffffff;">Mendekati Batas: <strong style="font-size: 13px; font-weight: 800;">{{ $slaKuning }}</strong></span>
+                    {{-- Kuning --}}
+                    <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #92400E;">Mendekati Batas: <strong style="font-size: 13px; font-weight: 800;">{{ $slaKuning }}</strong></span>
                     </div>
 
-                    <div style="background: #EF4444; border-radius: 8px; padding: 8px 14px;">
-                        <span style="font-size: 12px; font-weight: 600; color: #ffffff;">Terlambat: <strong style="font-size: 13px; font-weight: 800;">{{ $slaMerah }}</strong></span>
+                    {{-- Merah --}}
+                    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #991B1B;">Terlambat: <strong style="font-size: 13px; font-weight: 800;">{{ $slaMerah }}</strong></span>
                     </div>
                 </div>
             </div>
@@ -1039,8 +1207,9 @@
             <!-- Two-column grid -->
             <div class="grid-2col" {!! Auth::user()->isPelakuUsaha() ? 'style="grid-template-columns: 1fr;"' : '' !!}>
 
-                <!-- Left: Recent activity -->
+                <!-- Left: Service modules + Recent activity -->
                 <div style="display:flex;flex-direction:column;gap:20px;">
+
 
                     <!-- Recent Activity -->
                     <div class="panel">
@@ -1135,7 +1304,7 @@
                                         </div>
                                         <div class="schedule-info">
                                             <h4>{{ $sched->nama_pemohon ?? ($sched->user->name ?? 'Tamu') }}</h4>
-                                            <span>{{ $sched->formatted_time_range }} · LAPOL PAK — {{ ucfirst($sched->status) }}</span>
+                                            <span>{{ $sched->formatted_time_range }} · LAPOL PAK ({{ ucfirst($sched->status) }})</span>
                                         </div>
                                     </div>
                                 @endforeach
