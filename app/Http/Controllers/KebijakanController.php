@@ -85,7 +85,7 @@ class KebijakanController extends Controller
             'nib'                       => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
             'kbli_kode'                 => 'nullable|string|max:20',
             'kbli'                      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'proposal_kegiatan'         => 'nullable|file|mimes:pdf,doc,docx|max:102400',
+            'proposal_kegiatan'         => 'required|file|mimes:pdf,doc,docx|max:102400',
             'persyaratan_lainnya'       => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
         ], [
             'nama_pemilik_usaha.required'       => 'Nama pemilik usaha wajib diisi.',
@@ -100,6 +100,7 @@ class KebijakanController extends Controller
             'fc_akta_pendirian.required'        => 'FC Akta Pendirian / Dokumen Penetapan wajib diunggah.',
             'rencana_penggunaan_tanah.required' => 'Rencana Penggunaan Tanah wajib diunggah.',
             'nib.required'                      => 'Dokumen NIB wajib diunggah.',
+            'proposal_kegiatan.required'        => 'Proposal Rencana Kegiatan wajib diunggah.',
         ]);
  
         $data = $request->only([

@@ -227,11 +227,11 @@
                 <!-- 9. Proposal -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">9. Proposal Rencana Kegiatan Berusaha<span class="optional">(Opsional)</span></span>
+                        <span class="label-text">9. Proposal Rencana Kegiatan Berusaha<span class="required">*</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_10_proposal', 'storage/Contoh_Format/10. Contoh Bussiness Plan Proposal.pdf') }}', 'Contoh Proposal Kegiatan')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx">
+                        <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
                         <span class="file-help">Format : PDF, DOC, DOCX, Maks 10MB</span>
                     </div>
                 </div>
