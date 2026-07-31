@@ -298,7 +298,7 @@
         <a href="{{ route('profile') }}" class="topbar-user-chip" title="Profil Pengguna">
             @if(Auth::user()->profile_photo)
                 <img
-                    src="{{ asset('storage/' . Auth::user()->profile_photo) }}"
+                    src="{{ route('file.view', ['path' => Auth::user()->profile_photo]) }}"
                     alt="Foto Profil"
                     class="topbar-user-avatar topbar-user-avatar--img"
                 >

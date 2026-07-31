@@ -798,7 +798,7 @@
         <div class="sidebar-bottom">
             <div class="sidebar-user">
                 @if(Auth::user()->profile_photo)
-                    <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="sidebar-avatar">
+                    <img src="{{ route('file.view', ['path' => Auth::user()->profile_photo]) }}" alt="Foto Profil" class="sidebar-avatar">
                 @else
                     <div class="sidebar-avatar">{{ strtoupper(substr(Auth::user()->username, 0, 2)) }}</div>
                 @endif
@@ -956,14 +956,68 @@
                         }
                     }
                 }
+
+                // --- Fetch Aktivitas Terkini (5 Permohonan Terbaru) ---
+                $recentActivities = collect();
+                $recentModels = [
+                    ['class' => \App\Models\PpkprBerusahaApplication::class, 'type' => 'PKKPR Berusaha', 'route' => 'berusaha.show'],
+                    ['class' => \App\Models\PpkprApplication::class,        'type' => 'PKKPR Non Berusaha', 'route' => 'non-berusaha.show'],
+                    ['class' => \App\Models\KebijakanApplication::class,    'type' => 'Kebijakan', 'route' => 'kebijakan.show'],
+                    ['class' => \App\Models\TanahTimbulApplication::class,  'type' => 'Tanah Timbul', 'route' => 'tanah-timbul.show'],
+                    ['class' => \App\Models\PsnApplication::class,          'type' => 'PSN', 'route' => 'psn.show'],
+                ];
+
+                foreach ($recentModels as $m) {
+                    $query = $m['class']::with('user');
+                    if ($user->isPelakuUsaha()) {
+                        $query->where('user_id', $user->id);
+                    }
+                    $items = $query->latest()->take(5)->get();
+                    foreach ($items as $item) {
+                        $statusKey = 'pending';
+                        $statusLabel = 'Menunggu Review';
+                        $statusColor = 'yellow';
+
+                        if (in_array($item->status, ['disetujui', 'terbit_pkpr'])) {
+                            $statusKey = 'approved';
+                            $statusLabel = 'Disetujui';
+                            $statusColor = 'green';
+                        } elseif ($item->status === 'ditolak') {
+                            $statusKey = 'rejected';
+                            $statusLabel = 'Ditolak';
+                            $statusColor = 'red';
+                        } elseif (in_array($item->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr'])) {
+                            $statusKey = 'review';
+                            $statusLabel = 'Proses Instansi';
+                            $statusColor = 'blue';
+                        }
+
+                        $recentActivities->push((object)[
+                            'id'           => $item->id,
+                            'title'        => ($item->nama_pemilik_usaha ?? ($item->user->name ?? $item->user->username)) . ' (' . ($item->application_number ?? 'No. Berkas #' . $item->id) . ')',
+                            'type'         => $m['type'],
+                            'created_at'   => $item->created_at,
+                            'status_key'   => $statusKey,
+                            'status_label' => $statusLabel,
+                            'status_color' => $statusColor,
+                            'url'          => route($m['route'], $item->id),
+                        ]);
+                    }
+                }
+
+                $recentActivities = $recentActivities->sortByDesc('created_at')->take(5);
             @endphp
 
             <!-- Hero Header Card (Clean & Minimal) -->
             <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 8px rgba(0,38,66,0.03);">
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #003B64 0%, #218AC9 100%); color: #fff; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,59,100,0.15);">
-                        {{ strtoupper(substr($user->username ?? 'U', 0, 2)) }}
-                    </div>
+                    @if($user->profile_photo)
+                        <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" style="width: 48px; height: 48px; border-radius: 12px; object-fit: cover; flex-shrink: 0; border: 2px solid #fff; box-shadow: 0 4px 12px rgba(0,59,100,0.15);">
+                    @else
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #003B64 0%, #218AC9 100%); color: #fff; font-weight: 800; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,59,100,0.15);">
+                            {{ strtoupper(substr($user->username ?? 'U', 0, 2)) }}
+                        </div>
+                    @endif
                     <div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
                             <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
@@ -1177,7 +1231,7 @@
                         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
                     <div>
-                        <div style="font-size: 13px; font-weight: 800; color: #0F172A;">Pengendalian SLA Berkas Aktif</div>
+                        <div style="font-size: 13px; font-weight: 800; color: #0F172A;">Pengendalian SLA — Berkas Aktif</div>
                         <div style="font-size: 11.5px; color: #64748B;">Total berkas berjalan: <strong>{{ $slaHijau + $slaKuning + $slaMerah }} berkas</strong></div>
                     </div>
                 </div>
@@ -1186,7 +1240,7 @@
                     {{-- Hijau --}}
                     <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; padding: 8px 14px; display: flex; align-items: center; gap: 8px;">
                         <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
-                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman (SLA): <strong style="font-size: 13px; font-weight: 800;">{{ $slaHijau }}</strong></span>
+                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman: <strong style="font-size: 13px; font-weight: 800;">{{ $slaHijau }}</strong></span>
                     </div>
 
                     {{-- Kuning --}}
@@ -1215,20 +1269,20 @@
                     <div class="panel">
                         <div class="panel-head">
                             <h2>Aktivitas Terkini</h2>
-                            <a href="#" class="panel-head-link">Lihat semua →</a>
+                            <span style="font-size: 12px; color: var(--muted); font-weight: 500;">5 Permohonan Terbaru</span>
                         </div>
                         <div class="activity-list">
-                            @forelse($recentActivities ?? [] as $activity)
-                                <div class="activity-item">
-                                    <span class="activity-dot {{ $activity->status_color ?? 'gray' }}"></span>
-                                    <div class="activity-body">
-                                        <div class="activity-title">{{ $activity->title }}</div>
+                            @forelse($recentActivities as $activity)
+                                <a href="{{ $activity->url }}" class="activity-item" style="text-decoration: none; display: flex; align-items: center;">
+                                    <span class="activity-dot {{ $activity->status_color }}"></span>
+                                    <div class="activity-body" style="margin-left: 10px;">
+                                        <div class="activity-title" style="font-weight: 700; color: #003B64;">{{ $activity->title }}</div>
                                         <div class="activity-meta">{{ $activity->type }} · {{ $activity->created_at->diffForHumans() }}</div>
                                     </div>
-                                    <span class="activity-status status-{{ $activity->status_key ?? 'pending' }}">
+                                    <span class="activity-status status-{{ $activity->status_key }}">
                                         {{ $activity->status_label }}
                                     </span>
-                                </div>
+                                </a>
                             @empty
                                 <div class="activity-item" style="padding:24px 18px;justify-content:center;flex-direction:column;text-align:center;gap:8px;">
                                     <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#B3D4EC" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
