@@ -228,7 +228,7 @@
         /* ─── KPI CARDS ─────────────────────────────────────── */
         .kpi-row {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 16px;
             margin-bottom: 24px;
         }
@@ -844,6 +844,10 @@
                     $totalKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->count();
                     $countLapolpak = \App\Models\LapolpaBooking::where('user_id', $user->id)->count();
 
+                    $unpaidNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+                    $unpaidBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+                    $unpaidKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+
                     $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
                     $pendingKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
@@ -861,6 +865,10 @@
                     $totalKebijakan = \App\Models\KebijakanApplication::count();
                     $countLapolpak = \App\Models\LapolpaBooking::count();
 
+                    $unpaidNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+                    $unpaidBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+                    $unpaidKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+
                     $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
                     $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
                     $pendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
@@ -875,6 +883,7 @@
                 }
 
                 $totalPermohonan = $totalNon + $totalBerusaha + $totalKebijakan;
+                $totalUnpaid = $unpaidNon + $unpaidBerusaha + $unpaidKebijakan;
                 $totalPending = $pendingNon + $pendingBerusaha + $pendingKebijakan;
                 $totalDisetujui = $disetujuiNon + $disetujuiBerusaha + $disetujuiKebijakan;
                 $totalDitolak = $ditolakNon + $ditolakBerusaha + $ditolakKebijakan;
@@ -1195,18 +1204,29 @@
 
                 <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">MENUNGGU REVIEW</span>
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #D97706;">BELUM BAYAR / VERIFIKASI</span>
                         <div class="kpi-icon yellow" style="border-radius: 4px; width: 30px; height: 30px; background: #FEF3C7; color: #D97706;">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #D97706;">{{ $totalPending ?? 0 }}</div>
-                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Dalam proses verifikasi</div>
+                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #D97706;">{{ $totalUnpaid ?? 0 }}</div>
+                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Menunggu SPS / Bayar</div>
                 </div>
 
                 <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">DISETUJUI</span>
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #2563EB;">SEDANG DIPROSES (LUNAS)</span>
+                        <div class="kpi-icon blue" style="border-radius: 4px; width: 30px; height: 30px; background: #EFF6FF; color: #2563EB;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        </div>
+                    </div>
+                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #2563EB;">{{ $totalPending ?? 0 }}</div>
+                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Proses kajian instansi</div>
+                </div>
+
+                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
+                    <div class="kpi-top">
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #16A34A;">DISETUJUI</span>
                         <div class="kpi-icon green" style="border-radius: 4px; width: 30px; height: 30px; background: #DCFCE7; color: #16A34A;">
                             <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         </div>
@@ -1217,7 +1237,7 @@
 
                 <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">DITOLAK</span>
+                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #DC2626;">DITOLAK</span>
                         <div class="kpi-icon red" style="border-radius: 4px; width: 30px; height: 30px; background: #FEE2E2; color: #DC2626;">
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                         </div>
