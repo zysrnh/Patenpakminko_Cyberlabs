@@ -101,7 +101,7 @@ class KebijakanController extends Controller
             'rencana_penggunaan_tanah.required' => 'Rencana Penggunaan Tanah wajib diunggah.',
             'nib.required'                      => 'Dokumen NIB wajib diunggah.',
             'proposal_kegiatan.required'        => 'Proposal Rencana Kegiatan wajib diunggah.',
-        ]);
+        ]); 
   
         $data = $request->only([
             'nama_pemilik_usaha', 'nama_pengaju', 'hubungan_pengaju', 'kbli_kode'

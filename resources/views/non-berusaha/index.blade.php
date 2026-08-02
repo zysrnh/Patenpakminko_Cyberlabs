@@ -61,6 +61,13 @@
                 <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94A3B8; width: 16px; height: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <input type="text" id="searchInput" placeholder="Cari No. Registrasi, Pemohon, atau No WA..." style="width: 100%; padding: 8px 12px 8px 36px; border: 1.5px solid #CBD5E1; border-radius: 4px; font-size: 13px; outline: none; background: #ffffff; color: #0F172A; transition: border-color 0.2s;">
             </div>
+            <select id="filterStatus" style="padding: 8px 12px; border: 1.5px solid #CBD5E1; border-radius: 4px; font-size: 13px; outline: none; background: #ffffff; color: #0F172A; cursor: pointer; font-weight: 600;">
+                <option value="all">Semua Status Permohonan</option>
+                <option value="diproses">Sedang Diproses (Sudah Bayar)</option>
+                <option value="belum_bayar">Belum Bayar / Menunggu Verifikasi</option>
+                <option value="selesai">Layanan Selesai (Disetujui)</option>
+                <option value="ditolak">Permohonan Ditolak</option>
+            </select>
             @if(!Auth::user()->isPelakuUsaha())
             <select id="filterSla" style="padding: 8px 12px; border: 1.5px solid #CBD5E1; border-radius: 4px; font-size: 13px; outline: none; background: #ffffff; color: #0F172A; cursor: pointer; font-weight: 600;">
                 <option value="all">Semua Waktu (SLA)</option>
@@ -226,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     const searchInput = document.getElementById('searchInput');
     const filterSla = document.getElementById('filterSla');
+    const filterStatus = document.getElementById('filterStatus');
     const tableBody = document.querySelector('.table-wrap table tbody');
     if(!tableBody) return;
     const rows = tableBody.querySelectorAll('tr');
@@ -233,6 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function filterTable() {
         const searchTxt = searchInput ? searchInput.value.toLowerCase() : '';
         const slaVal = filterSla ? filterSla.value : 'all';
+        const statusVal = filterStatus ? filterStatus.value : 'all';
 
         rows.forEach(row => {
             const textContent = row.textContent.toLowerCase();
@@ -244,18 +253,25 @@ document.addEventListener('DOMContentLoaded', function() {
             
             let matchSearch = textContent.includes(searchTxt);
             let matchSla = true;
+            let matchStatus = true;
 
             if (slaVal === 'selesai' && !slaText.includes('selesai')) matchSla = false;
             if (slaVal === 'berjalan' && (!slaBadge || !slaBadge.classList.contains('badge-green') || slaText.includes('selesai'))) matchSla = false;
             if (slaVal === 'hampir' && (!slaBadge || !slaBadge.classList.contains('badge-yellow'))) matchSla = false;
             if (slaVal === 'melewati' && (!slaBadge || !slaBadge.classList.contains('badge-red'))) matchSla = false;
 
-            row.style.display = (matchSearch && matchSla) ? '' : 'none';
+            if (statusVal === 'diproses' && (textContent.includes('menunggu pembayaran') || textContent.includes('layanan selesai') || textContent.includes('permohonan ditolak'))) matchStatus = false;
+            if (statusVal === 'belum_bayar' && (!textContent.includes('menunggu pembayaran') && !textContent.includes('verifikasi dokumen'))) matchStatus = false;
+            if (statusVal === 'selesai' && !textContent.includes('layanan selesai')) matchStatus = false;
+            if (statusVal === 'ditolak' && !textContent.includes('permohonan ditolak')) matchStatus = false;
+
+            row.style.display = (matchSearch && matchSla && matchStatus) ? '' : 'none';
         });
     }
 
     if(searchInput) searchInput.addEventListener('input', filterTable);
     if(filterSla) filterSla.addEventListener('change', filterTable);
+    if(filterStatus) filterStatus.addEventListener('change', filterTable);
 });
 </script>
 @endsection

@@ -98,12 +98,12 @@ Route::get('/', function () {
         $isNewVisitor = true;
     }
 
-    // Hitung total permohonan otomatis dari semua layanan
-    $totalPermohonan = \App\Models\PpkprApplication::count()
-        + \App\Models\PpkprBerusahaApplication::count()
-        + \App\Models\KebijakanApplication::count()
-        + \App\Models\PsnApplication::count()
-        + \App\Models\TanahTimbulApplication::count()
+    // Hitung total permohonan otomatis dari semua layanan (hanya yang sudah bayar)
+    $totalPermohonan = \App\Models\PpkprApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
+        + \App\Models\PpkprBerusahaApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
+        + \App\Models\KebijakanApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
+        + \App\Models\PsnApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
+        + \App\Models\TanahTimbulApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
         + \App\Models\LapolpaBooking::count();
 
     // Gunakan override manual jika ada, jika tidak pakai hitungan DB

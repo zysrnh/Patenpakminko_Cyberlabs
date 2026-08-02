@@ -844,9 +844,9 @@
                     $totalKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->count();
                     $countLapolpak = \App\Models\LapolpaBooking::where('user_id', $user->id)->count();
 
-                    $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
-                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
-                    $pendingKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->count();
+                    $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
+                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
+                    $pendingKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
 
                     $disetujuiNon = \App\Models\PpkprApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
                     $disetujuiBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
@@ -861,9 +861,9 @@
                     $totalKebijakan = \App\Models\KebijakanApplication::count();
                     $countLapolpak = \App\Models\LapolpaBooking::count();
 
-                    $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
-                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
-                    $pendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak'])->count();
+                    $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
+                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
+                    $pendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
 
                     $disetujuiNon = \App\Models\PpkprApplication::where('status', 'disetujui')->count();
                     $disetujuiBerusaha = \App\Models\PpkprBerusahaApplication::where('status', 'disetujui')->count();
@@ -886,10 +886,10 @@
                 // --- Kalkulasi SLA Pengendalian (Hanya untuk Admin) ---
                 $slaHijau = 0; $slaKuning = 0; $slaMerah = 0;
                 if (!$user->isPelakuUsaha()) {
-                    $allPendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->get();
-                    $allPendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->get();
-                    $allPendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->get();
-                    
+                    $allPendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->where('bpn_pembayaran_status', 'sudah_bayar')->get();
+                    $allPendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->where('bpn_pembayaran_status', 'sudah_bayar')->get();
+                    $allPendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->where('bpn_pembayaran_status', 'sudah_bayar')->get();
+
                     $processSla = function($apps) use (&$slaHijau, &$slaKuning, &$slaMerah) {
                         foreach($apps as $app) {
                             $startDate = $app->tgl_mulai_layanan ?? $app->created_at;
@@ -986,10 +986,14 @@
                             $statusKey = 'rejected';
                             $statusLabel = 'Ditolak';
                             $statusColor = 'red';
-                        } elseif (in_array($item->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr'])) {
+                        } elseif ($item->bpn_pembayaran_status === 'sudah_bayar') {
                             $statusKey = 'review';
                             $statusLabel = 'Proses Instansi';
                             $statusColor = 'blue';
+                        } else {
+                            $statusKey = 'unpaid';
+                            $statusLabel = 'Menunggu Pembayaran';
+                            $statusColor = 'yellow';
                         }
 
                         $recentActivities->push((object)[
