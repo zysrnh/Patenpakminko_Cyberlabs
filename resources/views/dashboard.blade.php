@@ -977,7 +977,7 @@
                 ];
 
                 foreach ($recentModels as $m) {
-                    $query = $m['class']::with('user');
+                    $query = $m['class']::with('user')->where('bpn_pembayaran_status', 'sudah_bayar');
                     if ($user->isPelakuUsaha()) {
                         $query->where('user_id', $user->id);
                     }
@@ -1331,10 +1331,10 @@
                             @php
                                 $total = max(($totalPermohonan ?? 1), 1);
                                 $statuses = [
-                                    ['label' => 'Disetujui',        'value' => $totalDisetujui ?? 0, 'color' => 'green'],
-                                    ['label' => 'Menunggu Review',  'value' => $totalPending ?? 0,   'color' => 'blue'],
-                                    ['label' => 'Perlu Revisi',     'value' => $totalRevisi ?? 0,    'color' => 'yellow'],
-                                    ['label' => 'Ditolak',          'value' => $totalDitolak ?? 0,   'color' => 'red'],
+                                    ['label' => 'Disetujui',                'value' => $totalDisetujui ?? 0, 'color' => 'green'],
+                                    ['label' => 'Sedang Diproses (Lunas)',  'value' => $totalPending ?? 0,   'color' => 'blue'],
+                                    ['label' => 'Belum Bayar',              'value' => $totalUnpaid ?? 0,    'color' => 'yellow'],
+                                    ['label' => 'Ditolak',                  'value' => $totalDitolak ?? 0,   'color' => 'red'],
                                 ];
                             @endphp
                             @foreach($statuses as $s)
