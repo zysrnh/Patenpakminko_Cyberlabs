@@ -54,19 +54,7 @@
                 </p>
 
                 <div class="hero-cta-row">
-                    @php
-                        $welcomeSettings = [];
-                        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
-                            $welcomeSettings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
-                        }
-                        $welcomePhone = $welcomeSettings['contact_phone'] ?? ($welcomeSettings['cp_admin'] ?? '6281322712133');
-                        $cleanWelcomePhone = preg_replace('/[^0-9]/', '', $welcomePhone);
-                        if (str_starts_with($cleanWelcomePhone, '0')) {
-                            $cleanWelcomePhone = '62' . substr($cleanWelcomePhone, 1);
-                        }
-                        $welcomeWaUrl = 'https://wa.me/' . $cleanWelcomePhone;
-                    @endphp
-                    <a href="{{ $welcomeWaUrl }}" target="_blank" class="btn-primary">
+                    <a href="{{ route('kontak') }}" class="btn-primary">
                         Hubungi Kami
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
