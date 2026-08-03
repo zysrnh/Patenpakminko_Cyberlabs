@@ -540,7 +540,49 @@ class PpkprNonBerusahaController extends Controller
         $settings = array_merge($settings, $data);
         \Illuminate\Support\Facades\Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
 
-        return redirect()->back()->with('success', 'Kontak Admin & Informasi Halaman Kontak Publik berhasil disimpan!');
+        return redirect()->back()->with('success', 'Kontak Admin Instansi berhasil disimpan!');
+    }
+
+    public function adminPublicContact()
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengelola Halaman Kontak.');
+        }
+
+        $settings = [];
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+
+        return view('dpn.kontak_page', compact('settings'));
+    }
+
+    public function saveAdminPublicContact(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengelola Halaman Kontak.');
+        }
+
+        $data = $request->except('_token');
+
+        // Extract src URL from full iframe tag if user pasted full <iframe ...></iframe>
+        if (!empty($data['contact_map_iframe'])) {
+            $iframeInput = trim($data['contact_map_iframe']);
+            if (preg_match('/src=["\']([^"\']+)["\']/', $iframeInput, $match)) {
+                $data['contact_map_url'] = $match[1];
+            } else {
+                $data['contact_map_url'] = $iframeInput;
+            }
+        }
+
+        $settings = [];
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+        $settings = array_merge($settings, $data);
+        \Illuminate\Support\Facades\Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
+
+        return redirect()->back()->with('success', 'Informasi Halaman Kontak Publik berhasil diperbarui!');
     }
 
     public function destroy($id)

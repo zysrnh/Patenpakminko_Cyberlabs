@@ -170,70 +170,10 @@
                         <div class="contact-current" style="color: #C53030;">Belum diisi — Informasi Contact Person tidak akan disisipkan pada pesan notifikasi pemohon.</div>
                     @endif
                 </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Panel Pengaturan Halaman Kontak Publik (/kontak) -->
-    <div class="panel" style="margin-top: 24px;">
-        <div class="panel-head">
-            <h2>Pengaturan Informasi Halaman Kontak Publik (/kontak)</h2>
-        </div>
-        <div class="panel-body">
-
-            <!-- Alamat Kantor -->
-            <div class="contact-item">
-                <div class="contact-badge" style="background: #0284C7; color: white;">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                </div>
-                <div class="contact-info">
-                    <div class="contact-label">Alamat Kantor Pertanahan</div>
-                    <div class="contact-desc">Teks alamat resmi yang tampil pada halaman /kontak publik.</div>
-                    <textarea name="contact_address" class="contact-input" rows="2" placeholder="Jl. Suryakencana No. 02, Kel. Gunungparang, Kec. Cikole, Kota Sukabumi, Jawa Barat 43111">{{ old('contact_address', $settings['contact_address'] ?? 'Jl. Suryakencana No. 02, Kel. Gunungparang, Kec. Cikole, Kota Sukabumi, Jawa Barat 43111') }}</textarea>
-                </div>
-            </div>
-
-            <!-- Telepon / WhatsApp CS -->
-            <div class="contact-item">
-                <div class="contact-badge" style="background: #16A34A; color: white;">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                </div>
-                <div class="contact-info">
-                    <div class="contact-label">Nomor Telepon CS / WhatsApp Helpdesk</div>
-                    <div class="contact-desc">Nomor WhatsApp tujuan untuk tombol "Hubungi Kami" & "Chat Helpdesk" (Gunakan format angka tanpa + atau spasi, contoh: 6281322712133).</div>
-                    <input type="text" name="contact_phone" class="contact-input" placeholder="contoh: 6281322712133" value="{{ old('contact_phone', $settings['contact_phone'] ?? '6281322712133') }}">
-                </div>
-            </div>
-
-            <!-- Email Resmi -->
-            <div class="contact-item">
-                <div class="contact-badge" style="background: #D97706; color: white;">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                </div>
-                <div class="contact-info">
-                    <div class="contact-label">Email Official</div>
-                    <div class="contact-desc">Email resmi bantuan pertanahan yang tampil pada halaman /kontak.</div>
-                    <input type="email" name="contact_email" class="contact-input" placeholder="patenpakminko@mail.com" value="{{ old('contact_email', $settings['contact_email'] ?? 'patenpakminko@mail.com') }}">
-                </div>
-            </div>
-
-            <!-- Google Maps Embed URL -->
-            <div class="contact-item">
-                <div class="contact-badge" style="background: #4F46E5; color: white;">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-                </div>
-                <div class="contact-info">
-                    <div class="contact-label">Embed URL Google Maps</div>
-                    <div class="contact-desc">Link src iframe Google Maps lokasi kantor pertanahan.</div>
-                    <input type="text" name="contact_map_url" class="contact-input" placeholder="https://www.google.com/maps/embed?pb=..." value="{{ old('contact_map_url', $settings['contact_map_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1980.3801373425704!2d106.92710990964812!3d-6.919236993930166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68483119f0eb21%3A0xc96505f81ecf236f!2sJl.%20Surya%20Kencana%20No.2%2C%20Gunungparang%2C%20Kec.%20Cikole%2C%20Kota%20Sukabumi%2C%20Jawa%20Barat%2043111!5e0!3m2!1sid!2sid!4v1781316668923!5m2!1sid!2sid') }}">
-                </div>
-            </div>
-
             <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line);">
                 <button type="submit" class="btn btn-primary">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M5 13l4 4L19 7"/></svg>
-                    Simpan Seluruh Pengaturan Kontak
+                    Simpan Kontak Admin Instansi
                 </button>
             </div>
         </div>

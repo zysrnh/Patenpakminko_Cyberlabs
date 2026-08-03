@@ -328,6 +328,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dpn/whatsapp/save-provider', [PpkprNonBerusahaController::class, 'saveProviderSettings'])->name('dpn.whatsapp.save-provider');
     Route::get('/dpn/contacts', [PpkprNonBerusahaController::class, 'adminContacts'])->name('dpn.contacts');
     Route::post('/dpn/contacts/save', [PpkprNonBerusahaController::class, 'saveAdminContacts'])->name('dpn.contacts.save');
+    Route::get('/dpn/kontak-page', [PpkprNonBerusahaController::class, 'adminPublicContact'])->name('dpn.kontak_page');
+    Route::post('/dpn/kontak-page/save', [PpkprNonBerusahaController::class, 'saveAdminPublicContact'])->name('dpn.kontak_page.save');
     
     // Holiday Management
     Route::get('/dpn/holidays', [\App\Http\Controllers\HolidayController::class, 'index'])->name('dpn.holidays.index');
