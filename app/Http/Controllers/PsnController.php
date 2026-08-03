@@ -124,7 +124,9 @@ class PsnController extends Controller
         // WA Notifikasi ke pemohon
         $this->sendNotificationWithMailbox($app, 'submit', 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)', 'psn.show', $request->input('custom_wa_message'));
 
-        Auth::logout();
+        if (Auth::check() && !Auth::user()->is_active) {
+            Auth::logout();
+        }
         return redirect()->route('pengajuan.sukses');
     }
 

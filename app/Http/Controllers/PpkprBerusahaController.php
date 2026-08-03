@@ -136,7 +136,9 @@ class PpkprBerusahaController extends Controller
         // Kirim Notifikasi Awal ke Pelaku Usaha
         $this->sendNotificationWithMailbox($app, 'submit_berkas', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
  
-        Auth::logout();
+        if (Auth::check() && !Auth::user()->is_active) {
+            Auth::logout();
+        }
         return redirect()->route('pengajuan.sukses');
     }
  

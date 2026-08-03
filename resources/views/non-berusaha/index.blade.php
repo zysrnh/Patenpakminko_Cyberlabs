@@ -62,8 +62,8 @@
                 <input type="text" id="searchInput" placeholder="Cari No. Registrasi, Pemohon, atau No WA..." style="width: 100%; padding: 8px 12px 8px 36px; border: 1.5px solid #CBD5E1; border-radius: 4px; font-size: 13px; outline: none; background: #ffffff; color: #0F172A; transition: border-color 0.2s;">
             </div>
             <select id="filterStatus" style="padding: 8px 12px; border: 1.5px solid #CBD5E1; border-radius: 4px; font-size: 13px; outline: none; background: #ffffff; color: #0F172A; cursor: pointer; font-weight: 600;">
-                <option value="diproses" selected>Sedang Diproses (Sudah Bayar)</option>
-                <option value="all">Semua Status Permohonan</option>
+                <option value="all" selected>Semua Status Permohonan</option>
+                <option value="diproses">Sedang Diproses (Sudah Bayar)</option>
                 <option value="belum_bayar">Belum Bayar / Menunggu Verifikasi</option>
                 <option value="selesai">Layanan Selesai (Disetujui)</option>
                 <option value="ditolak">Permohonan Ditolak</option>

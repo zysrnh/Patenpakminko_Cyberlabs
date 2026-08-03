@@ -101,9 +101,15 @@
         @endif
 
         <!-- The user can go to their dashboard / timeline to see the application -->
-        <a href="{{ url('/') }}" class="btn-home">
-            Kembali ke Halaman Utama &rarr;
-        </a>
+        @if(Auth::check())
+            <a href="{{ route('dashboard') }}" class="btn-home">
+                Kembali ke Dashboard &rarr;
+            </a>
+        @else
+            <a href="{{ url('/') }}" class="btn-home">
+                Kembali ke Halaman Utama &rarr;
+            </a>
+        @endif
     </div>
 </div>
 @endsection

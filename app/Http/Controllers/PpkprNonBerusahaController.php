@@ -162,7 +162,9 @@ class PpkprNonBerusahaController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendNotificationWithMailbox($app, 'submit_berkas', 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha', 'non-berusaha.show', $request->input('custom_wa_message'));
 
-        Auth::logout();
+        if (Auth::check() && !Auth::user()->is_active) {
+            Auth::logout();
+        }
         return redirect()->route('pengajuan.sukses');
     }
 

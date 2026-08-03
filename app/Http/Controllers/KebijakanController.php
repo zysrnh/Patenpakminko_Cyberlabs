@@ -140,7 +140,9 @@ class KebijakanController extends Controller
         // Kirim Notifikasi WhatsApp
         $this->sendNotificationWithMailbox($app, 'submit', 'Pertimbangan Teknis Pertanahan Kebijakan', 'kebijakan.show', $request->input('custom_wa_message'));
  
-        Auth::logout();
+        if (Auth::check() && !Auth::user()->is_active) {
+            Auth::logout();
+        }
         return redirect()->route('pengajuan.sukses');
     }
  
