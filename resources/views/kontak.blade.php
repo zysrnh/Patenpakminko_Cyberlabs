@@ -2,6 +2,23 @@
 
 @section('title', 'Hubungi Kami — PATEN PAK MIKO Kantor Pertanahan Kota Sukabumi')
 
+@php
+    $settings = [];
+    if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+        $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+    }
+    $address = $settings['contact_address'] ?? 'Jl. Suryakencana No. 02, Kel. Gunungparang, Kec. Cikole, Kota Sukabumi, Jawa Barat 43111';
+    $phone = $settings['contact_phone'] ?? ($settings['cp_admin'] ?? '6281322712133');
+    $email = $settings['contact_email'] ?? 'patenpakminko@mail.com';
+    $mapUrl = $settings['contact_map_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1980.3801373425704!2d106.92710990964812!3d-6.919236993930166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68483119f0eb21%3A0xc96505f81ecf236f!2sJl.%20Surya%20Kencana%20No.2%2C%20Gunungparang%2C%20Kec.%20Cikole%2C%20Kota%20Sukabumi%2C%20Jawa%20Barat%2043111!5e0!3m2!1sid!2sid!4v1781316668923!5m2!1sid!2sid';
+
+    $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
+    if (str_starts_with($cleanPhone, '0')) {
+        $cleanPhone = '62' . substr($cleanPhone, 1);
+    }
+    $waUrl = 'https://wa.me/' . $cleanPhone;
+@endphp
+
 @section('content')
 <style>
     .contact-wrapper {
@@ -242,7 +259,7 @@
                         </div>
                         <div class="contact-detail-content">
                             <span>Alamat Kantor Resmi</span>
-                            Jl. Suryakencana No. 02, Kel. Gunungparang, Kec. Cikole, Kota Sukabumi, Jawa Barat 43111
+                            {{ $address }}
                         </div>
                     </div>
 
@@ -253,7 +270,7 @@
                         </div>
                         <div class="contact-detail-content">
                             <span>Telepon CS / WhatsApp</span>
-                            +62 813-2271-2133
+                            +{{ $cleanPhone }}
                         </div>
                     </div>
 
@@ -264,13 +281,13 @@
                         </div>
                         <div class="contact-detail-content">
                             <span>Email Official</span>
-                            patenpakmiko@mail.com
+                            {{ $email }}
                         </div>
                     </div>
                 </div>
 
                 <!-- WhatsApp CS Direct Button -->
-                <a href="https://wa.me/6281322712133" target="_blank" class="btn-wa-direct">
+                <a href="{{ $waUrl }}" target="_blank" class="btn-wa-direct">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.228-1.157z"/></svg>
                     Chat Helpdesk WhatsApp
                 </a>
@@ -345,14 +362,14 @@
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
                 <div>
                     <h3 style="font-size: 18px; font-weight: 800; color: #003B64; margin: 0 0 4px;">Lokasi Kantor Pertanahan Kota Sukabumi</h3>
-                    <p style="font-size: 13px; color: #64748B; margin: 0;">Jl. Suryakencana No. 02, Gunungparang, Kec. Cikole, Kota Sukabumi · Jam Kerja: Senin–Jumat (08.00–16.00 WIB)</p>
+                    <p style="font-size: 13px; color: #64748B; margin: 0;">{{ $address }} · Jam Kerja: Senin–Jumat (08.00–16.00 WIB)</p>
                 </div>
-                <a href="https://maps.google.com/?q=Jl.+Surya+Kencana+No.2+Sukabumi" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; color: #003B64; border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
+                <a href="https://maps.google.com/?q={{ urlencode($address) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; color: #003B64; border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
                     Buka Google Maps ↗
                 </a>
             </div>
             <div style="width: 100%; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0;">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1980.3801373425704!2d106.92710990964812!3d-6.919236993930166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68483119f0eb21%3A0xc96505f81ecf236f!2sJl.%20Surya%20Kencana%20No.2%2C%20Gunungparang%2C%20Kec.%20Cikole%2C%20Kota%20Sukabumi%2C%20Jawa%20Barat%2043111!5e0!3m2!1sid!2sid!4v1781316668923!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe src="{{ $mapUrl }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
     </div>

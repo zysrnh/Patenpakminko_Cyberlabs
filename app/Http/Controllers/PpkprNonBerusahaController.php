@@ -514,6 +514,10 @@ class PpkprNonBerusahaController extends Controller
 
     public function adminContacts()
     {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengelola kontak.');
+        }
+
         $settings = [];
         if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
             $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
@@ -524,6 +528,10 @@ class PpkprNonBerusahaController extends Controller
 
     public function saveAdminContacts(Request $request)
     {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengelola kontak.');
+        }
+
         $data = $request->except('_token');
         $settings = [];
         if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
@@ -532,7 +540,7 @@ class PpkprNonBerusahaController extends Controller
         $settings = array_merge($settings, $data);
         \Illuminate\Support\Facades\Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
 
-        return redirect()->back()->with('success', 'Kontak Admin Instansi berhasil disimpan!');
+        return redirect()->back()->with('success', 'Kontak Admin & Informasi Halaman Kontak Publik berhasil disimpan!');
     }
 
     public function destroy($id)
