@@ -201,6 +201,9 @@ Route::get('/permohonan-ptp', [AuthController::class, 'showPtpForm'])->name('ptp
 Route::post('/permohonan-ptp', [AuthController::class, 'storePtpForm'])->name('ptp.store');
 Route::get('/permohonan-ptp/preview', [AuthController::class, 'previewPtpForm'])->name('ptp.preview');
 
+// Rute Lihat/Download File Publik (Tanpa Harus Login)
+Route::get('/file/{path}', [BerkasController::class, 'viewFile'])->where('path', '.*')->name('file.view');
+
 // Rute Portal Revisi Publik
 Route::get("/revisi-berkas", [\App\Http\Controllers\RevisiController::class, "index"])->name("revisi.index");
 Route::post("/revisi-berkas/track", [\App\Http\Controllers\RevisiController::class, "track"])->name("revisi.track");
@@ -352,7 +355,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
     Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
     Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
-    Route::get('/file/{path}', [BerkasController::class, 'viewFile'])->where('path', '.*')->name('file.view');
 
     // Pengelolaan Dokumen Manual (Dokumen Baru)
     Route::get('/dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
