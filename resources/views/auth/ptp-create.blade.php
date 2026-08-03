@@ -456,7 +456,7 @@
             <div class="form-grid">
                 <div class="form-group full">
                     <label class="form-label">Nama Lengkap Pemohon<span class="required">*</span></label>
-                    <input type="text" name="nama" class="form-control" placeholder="Tulis nama lengkap sesuai KTP" value="{{ old('nama') }}" required>
+                    <input type="text" name="nama" class="form-control" placeholder="Tulis nama lengkap sesuai KTP" value="{{ old('nama', Auth::check() ? (Auth::user()->name ?: Auth::user()->username) : '') }}" required>
                 </div>
 
                 <div class="form-group">
@@ -471,12 +471,12 @@
 
                 <div class="form-group">
                     <label class="form-label">Nomor WhatsApp Aktif<span class="required">*</span></label>
-                    <input type="text" name="phone_number" class="form-control" placeholder="Contoh: 0812XXXXXXXX" value="{{ old('phone_number') }}" required>
+                    <input type="text" name="phone_number" class="form-control" placeholder="Contoh: 0812XXXXXXXX" value="{{ old('phone_number', Auth::check() ? Auth::user()->phone_number : '') }}" required>
                 </div>
 
                 <div class="form-group full">
                     <label class="form-label">Alamat Pemohon Lengkap<span class="required">*</span></label>
-                    <textarea name="alamat" class="form-control" placeholder="Tulis alamat rumah lengkap sesuai KTP" required>{{ old('alamat') }}</textarea>
+                    <textarea name="alamat" class="form-control" placeholder="Tulis alamat rumah lengkap sesuai KTP" required>{{ old('alamat', Auth::check() ? Auth::user()->address : '') }}</textarea>
                 </div>
             </div>
 

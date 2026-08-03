@@ -509,7 +509,12 @@ class AuthController extends Controller
 
         // Cari atau buat akun pelaku_usaha berdasarkan nomor WA
         $phoneClean = preg_replace('/[^0-9]/', '', $request->phone_number);
-        $user = User::where('phone_number', $phoneClean)->first();
+        
+        if (Auth::check() && Auth::user()->isPelakuUsaha()) {
+            $user = Auth::user();
+        } else {
+            $user = User::where('phone_number', $phoneClean)->first();
+        }
 
         if (!$user) {
             // Buat kredensial unik berdasarkan Nama + NIB + NIK
