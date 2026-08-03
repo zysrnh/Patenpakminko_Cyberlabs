@@ -464,7 +464,7 @@
                     <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->fullUrlIs(route('berkas.index')) ? 'active' : '' }}">Berkas Otomatis</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item {{ request('layanan') == 'PKKPR Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item {{ request('layanan') == 'PKKPR Non-Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Non Berusaha</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan Khusus', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item {{ request('layanan') == 'Kebijakan Khusus' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item {{ request('layanan') == 'Kebijakan' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'Tanah Timbul', 'kategori' => 'Pertimbangan Teknis Tanah Timbul']) }}" class="nav-dropdown-item {{ request('layanan') == 'Tanah Timbul' ? 'active' : '' }}">Pertimbangan Teknis Tanah Timbul</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PSN', 'kategori' => 'Pertimbangan Teknis PSN']) }}" class="nav-dropdown-item {{ request('layanan') == 'PSN' ? 'active' : '' }}">Pertimbangan Teknis PSN</a>
                 </div>
