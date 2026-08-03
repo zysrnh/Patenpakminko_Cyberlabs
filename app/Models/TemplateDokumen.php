@@ -39,6 +39,15 @@ class TemplateDokumen extends Model
             return storage_path('app/public/' . $template->file_path);
         }
 
+        if (file_exists($defaultFallbackPath)) {
+            return $defaultFallbackPath;
+        }
+
+        $altPath = str_replace(' Template.docx', '.docx', $defaultFallbackPath);
+        if (file_exists($altPath)) {
+            return $altPath;
+        }
+
         return $defaultFallbackPath;
     }
 

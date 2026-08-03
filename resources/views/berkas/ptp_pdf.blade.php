@@ -158,7 +158,7 @@
         <tr><td class="col-num">5.</td><td>Fotocopy Akta Pendirian dan Pengesahan Badan Hukum (untuk badan hukum).</td></tr>
         <tr><td class="col-num">6.</td><td>Nomor Induk Berusaha (NIB) (untuk pemohon Pelaku Usaha apabila sudah memiliki NIB) *).</td></tr>
         <tr><td class="col-num">7.</td><td>Proposal rencana kegiatan berusaha (untuk pelaku usaha).</td></tr>
-        <tr><td class="col-num">8.</td><td>Dokumen Pertek Pertanahan dan Bukti Penguasaan Fisik Lainnya (Akta/Perjanjian Sewa Menyewa/Perjanjian Pinjam Pakai atau lainnya yg menerangkan penguasaan dan penggunaan tanah).</td></tr>
+        <tr><td class="col-num">8.</td><td>Sertipikat dan Bukti Penguasaan Fisik Lainnya (Akta/Perjanjian Sewa Menyewa/Perjanjian Pinjam Pakai atau lainnya yg menerangkan penguasaan dan penggunaan tanah).</td></tr>
         <tr><td></td><td style="font-style: italic;">(Semua kelengkapan permohonan di menggunakan Kertas ukuran F4)</td></tr>
     </table>
 
@@ -278,7 +278,7 @@
         <tr><td class="text-center">8</td><td>Nomor Induk Berusaha (NIB) jika telah terdaftar dalam Sistem OSS *)</td><td></td><td></td><td></td></tr>
         <tr><td class="text-center">9</td><td>Klasifikasi Baku Lapangan Usaha Indonesia (KBLI) yang diajukan *)</td><td></td><td></td><td></td></tr>
         <tr><td class="text-center">10</td><td>Proposal Rencana Kegiatan Berusaha *)</td><td></td><td></td><td></td></tr>
-        <tr><td class="text-center">11</td><td>Dokumen Pertek Pertanahan dan Bukti Penguasaan Fisik Lainnya</td><td></td><td></td><td></td></tr>
+        <tr><td class="text-center">11</td><td>Sertipikat dan Bukti Penguasaan Fisik Lainnya</td><td></td><td></td><td></td></tr>
     </table>
 
     <table class="table-border">
@@ -287,24 +287,24 @@
             <th colspan="2" style="width: 35%;">Pemohon</th>
         </tr>
         <tr>
-            <td>1. AHMAD FAHMI, S.E., M.Si.<br>NIP. 19841210 201101 1 003</td>
+            <td>1. AHMAD FAHMI, S.E., M.I.L.<br>NIP. 19841210 201101 1 003</td>
             <td style="vertical-align: bottom;">1...................</td>
             <td rowspan="5" style="vertical-align: bottom; text-align: center;">1...................</td>
         </tr>
         <tr>
-            <td>2. NURBELLA SRI BANON, S.H., M.Kn.<br>NIP. 19950119 202204 2 001</td>
+            <td>2. NURBELLA SRIBANON, S.H., M.KN.<br>NIP. 19950119 202204 2 001</td>
             <td style="vertical-align: bottom;">2...................</td>
         </tr>
         <tr>
-            <td>3. WAHYUDI, S.Kom.<br>NIP. PPPK. 19880628 202321 1 017</td>
+            <td>3. WAHYUDI, S.Kom.<br>NIP. PPPK. 19880528 202321 1 017</td>
             <td style="vertical-align: bottom;">3...................</td>
         </tr>
         <tr>
-            <td>4. RINALDI SURYAGRAHANA, S.E.<br>NIP. PPPK. 19880818 202321 1 018</td>
+            <td>4. RINALDI SURYAGRAHANA, S.E.<br>NIP. PPPK. 19880318 202321 1 018</td>
             <td style="vertical-align: bottom;">4...................</td>
         </tr>
         <tr>
-            <td>5. SIKALVY ARIYANTI SURYANA<br>NIP. PPPK. 19910927 202321 2 065</td>
+            <td>5. SEALVY ARIYANTI SURYANA<br>NIP. PPPK. 19910927 202521 2 065</td>
             <td style="vertical-align: bottom;">5...................</td>
         </tr>
     </table>
