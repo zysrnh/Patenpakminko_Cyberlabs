@@ -1928,18 +1928,18 @@
         <a href="{{ route('testimoni') }}" onclick="closeMobileNav()">Ulasan</a>
         <a href="{{ route('kontak') }}" onclick="closeMobileNav()">Kontak Kami</a>
         <span class="mobile-section-label">Media Sosial</span>
-        <a href="https://www.tiktok.com/@kantahkotsukabumi" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">TikTok</a>
-        <a href="https://www.instagram.com/kantahkotasukabumi/" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Instagram</a>
-        <a href="https://www.threads.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Threads</a>
-        <a href="https://www.youtube.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">YouTube</a>
-        <a href="https://www.facebook.com/share/1L6H5iMc8H/" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Facebook</a>
+        <a href="{{ $fTiktok }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">TikTok</a>
+        <a href="{{ $fInstagram }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Instagram</a>
+        <a href="{{ $fThreads }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Threads</a>
+        <a href="{{ $fYoutube }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">YouTube</a>
+        <a href="{{ $fFacebook }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Facebook</a>
         @if(Auth::check() && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
             @if(Auth::user()->isAdminBerita())
                 <a href="{{ route('admin.berita.index') }}" class="mobile-cta" onclick="closeMobileNav()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                        <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l5 5v11a2 2 0 0 1-2 2z"></path>
                     </svg>
-                    Dashboard
+                    Kelola Berita
                 </a>
             @else
                 <a href="{{ route('dashboard') }}" class="mobile-cta" onclick="closeMobileNav()">
@@ -1962,23 +1962,45 @@
     </div>
 </div>
 
+<main style="min-height: 100vh; display: flex; flex-direction: column;">
+    @yield('content')
+</main>
 
+@php
+    $footerSettings = [];
+    if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+        $footerSettings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+    }
+    $fAddress = $footerSettings['contact_address'] ?? 'Jl. Suryakencana No. 02 Kelurahan Gunungparang, Kec. Cikole, Kode Pos 43111, Kota Sukabumi';
+    $fPhone = $footerSettings['contact_phone'] ?? ($footerSettings['cp_admin'] ?? '6281322712133');
+    $fEmail = $footerSettings['contact_email'] ?? 'patenpakminko@mail.com';
 
-    <main style="min-height: 100vh; display: flex; flex-direction: column;">
-        @yield('content')
-    </main>
+    $fCleanPhone = preg_replace('/[^0-9]/', '', $fPhone);
+    if (str_starts_with($fCleanPhone, '0')) {
+        $fCleanPhone = '62' . substr($fCleanPhone, 1);
+    }
 
-<!-- ══ FOOTER ═══════════════════════════════════════════════ -->
-<footer class="site-footer">
-    <div class="container">
-        <div class="footer-grid">
-            <div>
-                <a href="/" class="logo-wrap" style="margin-bottom:18px;">
-                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;">
-                    <div class="logo-text footer-logo-text">
-                        <strong>PATEN PAK MIKO</strong>
-                        <span>Kantor Pertanahan Kota Sukabumi</span>
-                    </div>
+    $fTiktok = $footerSettings['social_tiktok'] ?? 'https://www.tiktok.com/@kantahkotsukabumi';
+    $fInstagram = $footerSettings['social_instagram'] ?? 'https://www.instagram.com/kantahkotasukabumi/';
+    $fThreads = $footerSettings['social_threads'] ?? 'https://www.threads.com/@kantahkotasukabumi';
+    $fYoutube = $footerSettings['social_youtube'] ?? 'https://www.youtube.com/@kantahkotasukabumi';
+    $fFacebook = $footerSettings['social_facebook'] ?? 'https://www.facebook.com/share/1L6H5iMc8H/';
+@endphp
+
+<!-- ═�    <div class="footer-bottom">
+        <div class="container footer-bottom-inner">
+            <p class="footer-copy">&copy; 2026 PATEN PAK MIKO. All rights reserved</p>
+            <nav class="footer-legal" aria-label="Legal links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms &amp; Conditions</a>
+            </nav>
+        </div>
+    </div>
+</footer> <a href="#">Terms &amp; Conditions</a>
+            </nav>
+        </div>
+    </div>
+</footer>/div>
                 </a>
                 <p class="footer-desc">Sistem pelayanan pertanahan digital yang cepat, transparan, dan terintegrasi untuk masyarakat Kota Sukabumi.</p>
             </div>
