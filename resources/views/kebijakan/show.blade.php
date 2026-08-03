@@ -1329,6 +1329,33 @@
                 </div>
             @endif
 
+            <!-- PELAKU USAHA NOTIFIKASI: BERKAS LENGKAP -->
+            @if($user->isPelakuUsaha() && $application->bpn_berkas_status === 'diterima')
+                <div class="verify-card" style="border-color: #C6F6D5; background: #F0FFF4; margin-bottom: 20px; padding: 20px; border-radius: 12px; border: 1.5px solid #68D391;">
+                    <h3 class="verify-title" style="color: #22543D; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px;">
+                        ✅ Berkas Persyaratan Dinyatakan LENGKAP
+                    </h3>
+                    <p style="font-size: 13.5px; color: #276749; margin-bottom: 12px; line-height: 1.6;">
+                        Dokumen permohonan Anda telah diperiksa dan dinyatakan <strong>LENGKAP</strong> oleh Petugas Kantor Pertanahan Kota Sukabumi.
+                        @if($application->bpn_notes)
+                            <br>Catatan Petugas: <em>"{{ $application->bpn_notes }}"</em>
+                        @endif
+                    </p>
+                    @if($application->bpn_sps_document)
+                        <div style="margin-top: 12px; padding: 14px; background: #FFFFFF; border: 1px solid #C6F6D5; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <span style="font-size: 13px; font-weight: 700; color: #22543D; display: block;">📄 Dokumen Surat Perintah Setor (SPS / Tagihan PNBP):</span>
+                                <span style="font-size: 12px; color: #4A5568;">Silakan unduh dokumen ini untuk melakukan pembayaran PNBP.</span>
+                            </div>
+                            <a href="{{ route('file.view', ['path' => $application->bpn_sps_document]) }}" target="_blank" class="btn-action-v btn-view-v" style="display: inline-flex; align-items: center; gap: 6px; background: #2F855A; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 12.5px; font-weight: 700; transition: all 0.2s;" onmouseover="this.style.background='#276749'" onmouseout="this.style.background='#2F855A'">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                Unduh Dokumen SPS (Tagihan PNBP)
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
             <!-- PELAKU USAHA ACTION: REUPLOAD JIKA BERKAS TIDAK SESUAI -->
             @if($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']))
                 <div class="verify-card" style="border-color: #F5C2C1; background: #FFF5F5;">

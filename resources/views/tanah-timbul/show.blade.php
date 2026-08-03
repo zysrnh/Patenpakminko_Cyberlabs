@@ -1358,6 +1358,90 @@
                                 </form>
                             @endif
                         </div>
+            @endif
+
+            <!-- PELAKU USAHA NOTIFIKASI: BERKAS LENGKAP -->
+            @if($user->isPelakuUsaha() && $application->bpn_berkas_status === 'diterima')
+                <div class="verify-card" style="border-color: #C6F6D5; background: #F0FFF4; margin-bottom: 20px; padding: 20px; border-radius: 12px; border: 1.5px solid #68D391;">
+                    <h3 class="verify-title" style="color: #22543D; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px;">
+                        ✅ Berkas Persyaratan Dinyatakan LENGKAP
+                    </h3>
+                    <p style="font-size: 13.5px; color: #276749; margin-bottom: 12px; line-height: 1.6;">
+                        Dokumen permohonan Anda telah diperiksa dan dinyatakan <strong>LENGKAP</strong> oleh Petugas Kantor Pertanahan Kota Sukabumi.
+                        @if($application->bpn_notes)
+                            <br>Catatan Petugas: <em>"{{ $application->bpn_notes }}"</em>
+                        @endif
+                    </p>
+                    @if($application->bpn_sps_document)
+                        <div style="margin-top: 12px; padding: 14px; background: #FFFFFF; border: 1px solid #C6F6D5; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <span style="font-size: 13px; font-weight: 700; color: #22543D; display: block;">📄 Dokumen Surat Perintah Setor (SPS / Tagihan PNBP):</span>
+                                <span style="font-size: 12px; color: #4A5568;">Silakan unduh dokumen ini untuk melakukan pembayaran PNBP.</span>
+                            </div>
+                            <a href="{{ route('file.view', ['path' => $application->bpn_sps_document]) }}" target="_blank" class="btn-action-v btn-view-v" style="display: inline-flex; align-items: center; gap: 6px; background: #2F855A; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-size: 12.5px; font-weight: 700; transition: all 0.2s;" onmouseover="this.style.background='#276749'" onmouseout="this.style.background='#2F855A'">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                                Unduh Dokumen SPS (Tagihan PNBP)
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
+            <!-- PELAKU USAHA ACTION: REUPLOAD JIKA BERKAS TIDAK SESUAI -->
+            @if($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && in_array($application->bpn_berkas_status, ['tidak_sesuai', 'ditolak']))
+                <div class="verify-card" style="border-color: #F5C2C1; background: #FFF5F5; margin-bottom: 20px; padding: 20px; border-radius: 12px; border: 1.5px solid #E53E3E;">
+                    <h3 class="verify-title" style="color: #C5221F; margin-bottom: 8px;">⚠️ Perbaikan Dokumen Persyaratan Diperlukan</h3>
+                    <p style="font-size: 13px; color: #7F2321; margin-bottom: 16px;">
+                        Petugas menyatakan berkas Anda tidak lengkap dengan catatan: <br>
+                        <strong>"{{ $application->bpn_notes }}"</strong>
+                    </p>
+                    <form action="{{ route('tanah-timbul.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="step" value="reupload">
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="peta_lokasi">1. Peta/sketsa lokasi</label>
+                            <input type="file" name="peta_lokasi" id="peta_lokasi" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="surat_kuasa">2. Surat kuasa</label>
+                            <input type="file" name="surat_kuasa" id="surat_kuasa" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="fc_ktp">3. FC KTP</label>
+                            <input type="file" name="fc_ktp" id="fc_ktp" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="fc_npwp">4. FC NPWP</label>
+                            <input type="file" name="fc_npwp" id="fc_npwp" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="fc_akta_pendirian">5. FC Akta Pendirian & Pengesahan Badan Hukum</label>
+                            <input type="file" name="fc_akta_pendirian" id="fc_akta_pendirian" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="rencana_penggunaan_tanah">6. Rencana Penggunaan Tanah</label>
+                            <input type="file" name="rencana_penggunaan_tanah" id="rencana_penggunaan_tanah" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="nib">7. NIB</label>
+                            <input type="file" name="nib" id="nib" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 8px;">
+                            <label for="kbli">8. KBLI</label>
+                            <input type="file" name="kbli" id="kbli" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 12px;">
+                            <label for="proposal_kegiatan">9. Proposal Kegiatan</label>
+                            <input type="file" name="proposal_kegiatan" id="proposal_kegiatan" class="form-control-v" accept=".pdf,.doc,.docx">
+                        </div>
+                        <div class="form-group-v" style="margin-bottom: 12px;">
+                            <label for="persyaratan_lainnya">10. Persyaratan Lainnya (Opsional)</label>
+                            <input type="file" name="persyaratan_lainnya" id="persyaratan_lainnya" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar">
+                        </div>
+                        <button type="submit" class="btn-submit-v" style="background: #C5221F;">Kirim Berkas Perbaikan</button>
+                    </form>
+                </div>
+            @endif
 
             <div class="layout-grid">
                 

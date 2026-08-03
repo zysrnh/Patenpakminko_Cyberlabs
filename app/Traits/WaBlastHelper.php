@@ -158,10 +158,17 @@ trait WaBlastHelper
                 'target' => 'Pemohon',
                 'url' => 'https://wa.me/' . $formatPhone($pemohon) . '?text=' . urlencode($msg)
             ];
+            $titlePemohon = 'Notifikasi Pemohon - ' . $layananTitle;
+            if ($type === 'berkas_verifikasi') {
+                $titlePemohon = ($app->bpn_berkas_status === 'diterima')
+                    ? 'Berkas Persyaratan Lengkap - ' . $layananTitle
+                    : 'Berkas Tidak Lengkap / Perlu Revisi - ' . $layananTitle;
+            }
+
             $mailboxes[] = [
                 'target_user_id' => $app->user_id,
                 'target_role' => null,
-                'title' => 'Notifikasi Pemohon - ' . $layananTitle,
+                'title' => $titlePemohon,
                 'message' => $msg,
                 'link' => $url,
             ];
