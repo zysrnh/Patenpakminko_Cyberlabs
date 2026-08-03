@@ -1766,15 +1766,33 @@
     </style>
 </head>
 <body>
+@php
+    $footerSettings = [];
+    if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+        $footerSettings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+    }
+    $fAddress = $footerSettings['contact_address'] ?? 'Jl. Suryakencana No. 02 Kelurahan Gunungparang, Kec. Cikole, Kode Pos 43111, Kota Sukabumi';
+    $fPhone = $footerSettings['contact_phone'] ?? ($footerSettings['cp_admin'] ?? '6281322712133');
+    $fEmail = $footerSettings['contact_email'] ?? 'patenpakminko@mail.com';
 
-<!-- ══ HEADER ══════════════════════════════════════════════ -->
-<header id="site-header">
+    $fCleanPhone = preg_replace('/[^0-9]/', '', $fPhone);
+    if (str_starts_with($fCleanPhone, '0')) {
+        $fCleanPhone = '62' . substr($fCleanPhone, 1);
+    }
+
+    $fTiktok = $footerSettings['social_tiktok'] ?? 'https://www.tiktok.com/@kantahkotsukabumi';
+    $fInstagram = $footerSettings['social_instagram'] ?? 'https://www.instagram.com/kantahkotasukabumi/';
+    $fThreads = $footerSettings['social_threads'] ?? 'https://www.threads.com/@kantahkotasukabumi';
+    $fYoutube = $footerSettings['social_youtube'] ?? 'https://www.youtube.com/@kantahkotasukabumi';
+    $fFacebook = $footerSettings['social_facebook'] ?? 'https://www.facebook.com/share/1L6H5iMc8H/';
+@endphp
+
+<!-- ══ HEADER ═══════════════════════════════════════════════ -->
+<header class="site-header" id="site-header">
     <div class="container">
         <div class="header-inner">
-
-            <!-- Logo -->
             <a href="/" class="logo-wrap">
-                <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" class="logo-img">
+                <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" class="logo-img">
                 <div class="logo-text">
                     <strong>PATEN PAK MIKO</strong>
                     <span>Kantor Pertanahan Kota Sukabumi</span>
@@ -1966,41 +1984,19 @@
     @yield('content')
 </main>
 
-@php
-    $footerSettings = [];
-    if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
-        $footerSettings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
-    }
-    $fAddress = $footerSettings['contact_address'] ?? 'Jl. Suryakencana No. 02 Kelurahan Gunungparang, Kec. Cikole, Kode Pos 43111, Kota Sukabumi';
-    $fPhone = $footerSettings['contact_phone'] ?? ($footerSettings['cp_admin'] ?? '6281322712133');
-    $fEmail = $footerSettings['contact_email'] ?? 'patenpakminko@mail.com';
 
-    $fCleanPhone = preg_replace('/[^0-9]/', '', $fPhone);
-    if (str_starts_with($fCleanPhone, '0')) {
-        $fCleanPhone = '62' . substr($fCleanPhone, 1);
-    }
 
-    $fTiktok = $footerSettings['social_tiktok'] ?? 'https://www.tiktok.com/@kantahkotsukabumi';
-    $fInstagram = $footerSettings['social_instagram'] ?? 'https://www.instagram.com/kantahkotasukabumi/';
-    $fThreads = $footerSettings['social_threads'] ?? 'https://www.threads.com/@kantahkotasukabumi';
-    $fYoutube = $footerSettings['social_youtube'] ?? 'https://www.youtube.com/@kantahkotasukabumi';
-    $fFacebook = $footerSettings['social_facebook'] ?? 'https://www.facebook.com/share/1L6H5iMc8H/';
-@endphp
-
-<!-- ═�    <div class="footer-bottom">
-        <div class="container footer-bottom-inner">
-            <p class="footer-copy">&copy; 2026 PATEN PAK MIKO. All rights reserved</p>
-            <nav class="footer-legal" aria-label="Legal links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms &amp; Conditions</a>
-            </nav>
-        </div>
-    </div>
-</footer> <a href="#">Terms &amp; Conditions</a>
-            </nav>
-        </div>
-    </div>
-</footer>/div>
+<!-- ══ FOOTER ═══════════════════════════════════════════════ -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <a href="/" class="logo-wrap" style="margin-bottom:18px;">
+                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" style="width:44px;height:44px;object-fit:contain;flex-shrink:0;">
+                    <div class="logo-text footer-logo-text">
+                        <strong>PATEN PAK MIKO</strong>
+                        <span>Kantor Pertanahan Kota Sukabumi</span>
+                    </div>
                 </a>
                 <p class="footer-desc">Sistem pelayanan pertanahan digital yang cepat, transparan, dan terintegrasi untuk masyarakat Kota Sukabumi.</p>
             </div>
@@ -2031,19 +2027,19 @@
 
             <div>
                 <h4 class="f-col-title">Kontak Kami</h4>
-                <div class="f-contact-item">patenpakmiko@mail.com</div>
-                <div class="f-contact-item">+62 813-2271-2133</div>
-                <div class="f-contact-item">Jl. Suryakencana No. 02 Kelurahan Gununggparang, Kec. Cikole, Kode Pos 43111, Kota Sukabumi</div>
+                <div class="f-contact-item">{{ $fEmail }}</div>
+                <div class="f-contact-item">+{{ $fCleanPhone }}</div>
+                <div class="f-contact-item">{{ $fAddress }}</div>
             </div>
 
             <div>
                 <h4 class="f-col-title">Social Media</h4>
                 <ul class="f-links">
-                    <li><a href="https://www.tiktok.com/@kantahkotsukabumi" target="_blank" rel="noopener noreferrer">TikTok</a></li>
-                    <li><a href="https://www.instagram.com/kantahkotasukabumi/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-                    <li><a href="https://www.threads.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer">Threads</a></li>
-                    <li><a href="https://www.youtube.com/@kantahkotasukabumi" target="_blank" rel="noopener noreferrer">YouTube</a></li>
-                    <li><a href="https://www.facebook.com/share/1L6H5iMc8H/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+                    <li><a href="{{ $fTiktok }}" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+                    <li><a href="{{ $fInstagram }}" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+                    <li><a href="{{ $fThreads }}" target="_blank" rel="noopener noreferrer">Threads</a></li>
+                    <li><a href="{{ $fYoutube }}" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+                    <li><a href="{{ $fFacebook }}" target="_blank" rel="noopener noreferrer">Facebook</a></li>
                 </ul>
             </div>
         </div>
@@ -2060,13 +2056,11 @@
     </div>
 </footer>
 
-
 <!-- ══ SCRIPTS ══════════════════════════════════════════════ -->
 <script>
 (function() {
     'use strict';
 
-    /* ── Mobile Nav ─────────────────────────────────────── */
     const hamburger = document.getElementById('hamburgerBtn');
     const mobileNav = document.getElementById('mobileNav');
     let lastFocus = null;
@@ -2098,25 +2092,21 @@
         }
     });
 
-    // Close on backdrop (outside nav content)
     mobileNav.addEventListener('click', function(e) {
         if (e.target === mobileNav) closeMobileNav();
     });
 
-    // Close on Escape
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
             closeMobileNav();
         }
     });
 
-    /* ── Header scroll shadow ───────────────────────────── */
     const header = document.getElementById('site-header');
     window.addEventListener('scroll', function() {
         header.classList.toggle('scrolled', window.scrollY > 20);
     }, { passive: true });
 
-    /* ── Reveal on scroll ───────────────────────────────── */
     if ('IntersectionObserver' in window) {
         const io = new IntersectionObserver(function(entries) {
             entries.forEach(function(e) {
@@ -2128,13 +2118,11 @@
         }, { threshold: 0.08 });
         document.querySelectorAll('.reveal').forEach(function(el) { io.observe(el); });
     } else {
-        // Fallback for no IntersectionObserver
         document.querySelectorAll('.reveal').forEach(function(el) {
             el.classList.add('visible');
         });
     }
 
-    /* ── Service Panel Slider ───────────────────────────── */
     const spRows = document.getElementById('spRows');
     if (spRows) {
         const spPrev = document.getElementById('spPrev');
@@ -2162,7 +2150,6 @@
         if (spPrev) spPrev.addEventListener('click', function() { spScrollBy(-1); });
         if (spNext) spNext.addEventListener('click', function() { spScrollBy(1); });
 
-        // Pause on panel hover/touch
         const panel = document.querySelector('.service-panel');
         if (panel) {
             panel.addEventListener('mouseenter', stopSpAuto);
@@ -2176,7 +2163,6 @@
         startSpAuto();
     }
 
-    /* ── Reviews Slider ─────────────────────────────────── */
     const revSlider = document.getElementById('revSlider');
     if (revSlider) {
         const revDots = document.querySelectorAll('#revDots .rev-dot');
@@ -2224,7 +2210,6 @@
             setTimeout(startRevAuto, 2000);
         }, { passive: true });
 
-        // Update dots on scroll
         revSlider.addEventListener('scroll', function() {
             const cw = getCardWidth();
             const index = Math.round(revSlider.scrollLeft / cw);
@@ -2236,7 +2221,6 @@
         startRevAuto();
     }
 
-    /* ── Articles Carousel ──────────────────────────────── */
     const artCarousel = document.getElementById('artCarousel');
     if (artCarousel) {
         const artDotEls = document.querySelectorAll('#artDots .art-dot');
@@ -2280,7 +2264,6 @@
             setTimeout(startArtAuto, 1000);
         }, { passive: true });
 
-        // Update dots on scroll
         artCarousel.addEventListener('scroll', function() {
             const cw = getArtCardWidth();
             const cardIndex = Math.round(artCarousel.scrollLeft / cw);
@@ -2291,7 +2274,6 @@
             });
         }, { passive: true });
 
-        // Dot click
         artDotEls.forEach(function(dot, i) {
             dot.addEventListener('click', function() {
                 const cw = getArtCardWidth();
@@ -2307,12 +2289,10 @@
         startArtAuto();
     }
 
-    /* ── Client-side File Size Validation ──────── */
     document.querySelectorAll('input[type="file"]').forEach(function(input) {
         function validateFileSize() {
-            let limitMB = 5; // Default 5MB
+            let limitMB = 5;
             
-            // Coba ambil batas dari teks .file-help
             const helpSpan = this.parentElement.querySelector('.file-help');
             if (helpSpan) {
                 const match = helpSpan.textContent.match(/Maks\s+(\d+)MB/i);
@@ -2321,7 +2301,6 @@
                 }
             }
             
-            // Fallback (jika file-help tidak ada)
             const name = this.name;
             if (['fc_akta_pendirian', 'rencana_penggunaan_tanah', 'proposal_kegiatan', 'persyaratan_lainnya'].includes(name) && !helpSpan) {
                 limitMB = 10;
@@ -2337,7 +2316,7 @@
             } else {
                 let msgDiv = this.parentElement.querySelector('.file-size-error');
                 if (msgDiv) msgDiv.remove();
-                return; // Tidak ada file
+                return;
             }
             
             let errorDiv = this.parentElement.querySelector('.file-size-error');
@@ -2348,23 +2327,20 @@
             }
             
             if (totalSize > limitBytes) {
-                this.value = ''; // Reset input sehingga file batal dipilih
+                this.value = '';
                 
                 errorDiv.style.cssText = 'color: #E53E3E; font-size: 12px; font-weight: 600; margin-top: 8px; background: #FFF5F5; padding: 10px 14px; border-radius: 6px; border: 1px solid #FED7D7; display: flex; align-items: center; gap: 8px; line-height: 1.4;';
                 
                 errorDiv.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> <span><strong>Gagal Memilih File!</strong><br>Ukuran dokumen Anda melebihi batas maksimal <b>${limitMB}MB</b>. Silakan kompres atau pilih file lain.</span>`;
                 
-                // Scroll to this input
                 this.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-                // Flash animation
                 errorDiv.animate([
                     { opacity: 0.5, transform: 'scale(0.98)' },
                     { opacity: 1, transform: 'scale(1)' }
                 ], { duration: 300 });
                 
             } else {
-                // Tampilkan pesan sukses jika file valid
                 const mbSize = (totalSize / (1024 * 1024)).toFixed(2);
                 errorDiv.style.cssText = 'color: #047857; font-size: 11px; font-weight: 500; margin-top: 8px; background: #D1FAE5; padding: 8px 12px; border-radius: 6px; border: 1px solid #A7F3D0; display: flex; flex-direction: column; gap: 6px; line-height: 1.3;';
                 
