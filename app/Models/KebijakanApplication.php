@@ -121,6 +121,6 @@ class KebijakanApplication extends Model
                 }
             }
         }
-        return 'Kebijakan Khusus';
+        return 'Kebijakan';
     }
 }

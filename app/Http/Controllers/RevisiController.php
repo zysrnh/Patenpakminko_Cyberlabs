@@ -74,7 +74,7 @@ class RevisiController extends Controller
             ->orderBy('created_at', 'desc')->get();
         foreach($kebijakan as $k) {
             $applications[] = [
-                'type' => 'kebijakan', 'layanan' => 'Kebijakan Khusus', 'id' => $k->id,
+                'type' => 'kebijakan', 'layanan' => 'Kebijakan', 'id' => $k->id,
                 'application_number' => $k->application_number, 'created_at' => $k->created_at,
                 'notes' => $k->bpn_notes ?? $k->putr_notes ?? $k->dinas_pu_notes ?? ''
             ];

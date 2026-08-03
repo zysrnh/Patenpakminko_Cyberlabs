@@ -38,9 +38,9 @@ class Review extends Model
             case 'berusaha':
                 return 'PPKPR Berusaha';
             case 'kebijakan':
-                return 'Kebijakan Khusus';
+                return 'Kebijakan';
             case 'lapolpa':
-                return 'LAPOLPA (Layanan Pelaporan)';
+                return 'LAPOL PAK (Layanan Pelaporan)';
             case 'umum':
                 return 'Layanan Umum / Portal';
             default:

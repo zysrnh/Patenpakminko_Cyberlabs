@@ -68,7 +68,7 @@ class SyncBerkasCommand extends Command
         // 3. Kebijakan Khusus
         $kebijakanApps = KebijakanApplication::all();
         foreach ($kebijakanApps as $app) {
-            $this->processApp($app, $fileFields, 'Kebijakan Khusus');
+            $this->processApp($app, $fileFields, 'Kebijakan');
             $count++;
         }
 
@@ -104,7 +104,7 @@ class SyncBerkasCommand extends Command
                 if ($field === 'bpn_pertek_document') {
                     if ($modulName === 'PKKPR Berusaha') $kategori = 'Pertimbangan Teknis Berusaha';
                     elseif ($modulName === 'PKKPR Non-Berusaha') $kategori = 'Pertimbangan Teknis Non Berusaha';
-                    elseif ($modulName === 'Kebijakan Khusus') $kategori = 'Pertimbangan Teknis Kebijakan';
+                    elseif ($modulName === 'Kebijakan') $kategori = 'Pertimbangan Teknis Kebijakan';
                     elseif ($modulName === 'Tanah Timbul') $kategori = 'Pertimbangan Teknis Tanah Timbul';
                     elseif ($modulName === 'PSN') $kategori = 'Pertimbangan Teknis PSN';
                 }
