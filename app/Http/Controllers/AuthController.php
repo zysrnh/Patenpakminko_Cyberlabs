@@ -435,6 +435,10 @@ class AuthController extends Controller
     {
         $requestedLayanan = $request->query('layanan');
 
+        if ($request->query('new')) {
+            session()->forget('ptp_form_data');
+        }
+
         // Jika user sudah login sebagai pelaku_usaha dan sudah punya session PTP
         if (Auth::check() && Auth::user()->isPelakuUsaha() && session()->has('ptp_form_data')) {
             $ptp = session('ptp_form_data');

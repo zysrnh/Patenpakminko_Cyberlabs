@@ -31,7 +31,7 @@
         <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Permohonan berbasis mandat Tanah Timbul pemerintah.</p>
     </div>
     @if(Auth::user()->isPelakuUsaha())
-        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="btn btn-primary" style="border-radius: 4px; padding: 8px 16px; font-weight: 700; font-size: 13px;">
+        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul', 'new' => 1]) }}" class="btn btn-primary" style="border-radius: 4px; padding: 8px 16px; font-weight: 700; font-size: 13px;">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Buat Permohonan Baru
         </a>
@@ -51,7 +51,7 @@
                 @endif
             </p>
             @if(Auth::user()->isPelakuUsaha())
-                <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="btn btn-primary" style="border-radius: 4px;">Ajukan Sekarang</a>
+                <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul', 'new' => 1]) }}" class="btn btn-primary" style="border-radius: 4px;">Ajukan Sekarang</a>
             @endif
         </div>
     @else

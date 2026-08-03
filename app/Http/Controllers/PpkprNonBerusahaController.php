@@ -72,11 +72,15 @@ class PpkprNonBerusahaController extends Controller
     public function create()
     {
         if (!Auth::check()) {
-            return redirect()->route('ptp.create')->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
+            return redirect()->route('ptp.create', ['layanan' => 'non-berusaha', 'new' => 1])->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
         }
 
         if (!Auth::user()->isPelakuUsaha()) {
             abort(403, 'Hanya Pelaku Usaha yang dapat membuat pengajuan permohonan.');
+        }
+
+        if (!session()->has('ptp_form_data')) {
+            return redirect()->route('ptp.create', ['layanan' => 'non-berusaha', 'new' => 1])->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
         }
 
         return view('non-berusaha.create');
