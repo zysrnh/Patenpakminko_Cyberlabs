@@ -1008,20 +1008,31 @@
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_berkas">
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
-                                        <strong>Langkah 1: Verifikasi Kelayakan Dokumen Persyaratan:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, lalu terima atau tolak. Notifikasi WA akan terkirim otomatis.
+                                        <strong>Langkah 1: Verifikasi Kelayakan Dokumen Persyaratan:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, sertakan file SPS (Surat Perintah Setor) untuk tagihan PNBP, lalu terima atau tolak. Notifikasi WA (beserta link SPS) akan terkirim otomatis.
                                     </div>
                                     <div class="form-group-v" style="margin-bottom: 20px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('revisi-berkas-container').style.display='none';"> Disetujui / Lengkap
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('revisi-berkas-container').style.display='none';"> Disetujui / Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('revisi-berkas-container').style.display='block';"> Tidak Lengkap
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='none'; document.getElementById('revisi-berkas-container').style.display='block';"> Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>
                                     
+                                    <div id="sps-upload-container" style="display: {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'block' : 'none' }}; margin-bottom: 20px;">
+                                        <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
+                                        <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ !$application->bpn_sps_document ? 'required' : '' }}>
+                                        <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 5MB. File SPS ini akan dikirimkan otomatis ke WhatsApp Pemohon untuk melakukan pembayaran PNBP.</div>
+                                        @if($application->bpn_sps_document)
+                                            <div style="margin-top: 6px;">
+                                                <a href="{{ route('file.view', ['path' => $application->bpn_sps_document]) }}" target="_blank" style="font-size: 12px; color: #003B64; font-weight: 700; text-decoration: underline;">📄 Lihat Dokumen SPS yang Terunggah</a>
+                                            </div>
+                                        @endif
+                                    </div>
+
                                     <div id="revisi-berkas-container" style="display:none; margin-bottom: 12px; background: #fff5f5; padding: 12px; border: 1px solid #fed7d7; border-radius: 4px;">
                                         <label style="font-weight: 600; font-size: 12px; color: #c53030; margin-bottom: 8px; display: block;">Tandai Berkas yang Tidak Valid / Kurang Lengkap (Otomatis masuk ke catatan):</label>
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
@@ -1048,50 +1059,42 @@
                                         <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
                                         <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
                                     </div>
-                                    <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas</button>
+                                    <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas & Blast SPS WA</button>
                                     @else
                                         
                                     @endif
                                 </form>
                             </fieldset>
-                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status !== 'menunggu' && $application->status === 'menunggu_bpn')
-                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" style="margin-top: 16px;">
+                            @if(Auth::user()->isBpn() && $application->bpn_berkas_status === 'diterima')
+                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" style="margin-top: 12px;">
                                     @csrf
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
-                                        Kirim Ulang Notifikasi WhatsApp
+                                        Kirim Ulang Notifikasi WhatsApp (Link SPS)
                                     </button>
                                 </form>
                             @endif
                         </div>
 
-                        <div id="Kantor Pertanahan-panel-2" class="Kantor Pertanahan-panel-step" style="display: {{ $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar' ? 'block' : 'none' }};">
-                            @php $isStep2Active = (Auth::user()->isBpn() && $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar'); @endphp
+                        <div id="Kantor Pertanahan-panel-2" class="Kantor Pertanahan-panel-step" style="display: {{ ($application->dinas_pu_status === 'validasi_awal_diterima' || $application->bpn_berkas_status === 'diterima') && $application->bpn_pembayaran_status === 'belum_bayar' ? 'block' : 'none' }};">
+                            @php $isStep2Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'belum_bayar'); @endphp
                             <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
-                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_pembayaran">
                                     <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px;">
-                                        <strong style="font-size: 13px;">Langkah 2: Upload SPS & Konfirmasi Pembayaran PNBP</strong>
+                                        <strong style="font-size: 13px;">Langkah 2: Konfirmasi Pembayaran PNBP & Input No. Berkas</strong>
                                     </div>
                                     <p style="font-size: 13px; color: var(--clr-muted); margin-bottom: 16px;">
-                                        Unggah Surat Perintah Setor (SPS) dan input Nomor Berkas untuk memverifikasi lunas, lalu klik <strong>"Kirim Kredensial & Konfirmasi Lunas"</strong>.
+                                        Setelah pemohon melakukan pembayaran PNBP secara offline, input <strong>Nomor Berkas</strong> di bawah lalu klik <strong>"Kirim Kredensial & Konfirmasi Lunas"</strong> untuk memverifikasi lunas dan otomatis mengirimkan kredensial login dashboard ke WhatsApp pemohon.
                                     </p>
-                                    <div style="margin-bottom: 15px;">
-                                        <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
-                                        <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ !$application->bpn_sps_document ? 'required' : '' }}>
-                                        @if($application->bpn_sps_document)
-                                            <div style="margin-top: 6px;">
-                                                <a href="{{ route('file.view', ['path' => $application->bpn_sps_document]) }}" target="_blank" style="font-size: 12px; color: #003B64; font-weight: 700; text-decoration: underline;">📄 Lihat Dokumen SPS yang Terunggah</a>
-                                            </div>
-                                        @endif
-                                    </div>
                                     <div class="form-group-v">
                                         <label for="no_berkas">Nomor Berkas (wajib diisi)</label>
                                         <input type="text" name="no_berkas" id="no_berkas" class="form-control-v"
                                                placeholder="cth: BERKAS/Pertimbangan Teknis Pertanahan-B/2026/001"
                                                value="{{ $application->no_berkas ?? old('no_berkas') }}" required>
+                                        <span style="font-size: 11px; color: var(--clr-muted);">Nomor berkas ini akan dicatat dalam sistem dan dikirim ke pemohon via WhatsApp.</span>
                                     </div>
                                     @if($isStep2Active)
                                         

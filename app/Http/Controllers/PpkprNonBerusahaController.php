@@ -281,7 +281,7 @@ class PpkprNonBerusahaController extends Controller
                 if (!$request->hasFile('sps_document') && !$application->bpn_sps_document) {
                     return redirect()->back()->withErrors(['sps_document' => 'SPS wajib diunggah saat menyetujui berkas (Lengkap).']);
                 }
-                if ($request->hasFile('sps_document')) {
+                if ($request->hasFile('sps_document') && \Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), 'bpn_sps_document')) {
                     $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
                 }
 
