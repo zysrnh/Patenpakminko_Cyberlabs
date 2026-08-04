@@ -338,7 +338,7 @@ trait WaBlastHelper
             ];
         }
         
-        // Filter notifikasi untuk PKKPR Kebijakan Khusus dan Tanah Timbul (Hanya BPN & Pemohon saja)
+        
         $isBpnPemohonOnly = (
             stripos($layananTitle, 'Kebijakan') !== false ||
             stripos($layananTitle, 'Tanah Timbul') !== false ||
@@ -347,13 +347,13 @@ trait WaBlastHelper
         );
 
         if ($isBpnPemohonOnly) {
-            // Hanya izinkan link WA untuk Pemohon & Admin BPN
+        
             $wa_links = array_values(array_filter($wa_links, function ($link) {
                 $target = $link['target'] ?? '';
                 return $target === 'Pemohon' || stripos($target, 'BPN') !== false;
             }));
 
-            // Hanya izinkan Mailbox untuk Pemohon & Admin BPN
+        
             $mailboxes = array_values(array_filter($mailboxes, function ($box) {
                 return $box['target_user_id'] !== null || ($box['target_role'] ?? '') === 'bpn';
             }));
@@ -363,7 +363,7 @@ trait WaBlastHelper
             session()->flash('wa_links', $wa_links);
         }
 
-        // Insert into Mailboxes
+        
         foreach ($mailboxes as $box) {
             \App\Models\Mailbox::create([
                 'target_user_id' => $box['target_user_id'],

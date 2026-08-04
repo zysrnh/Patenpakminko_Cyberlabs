@@ -93,7 +93,7 @@
             </div>
         @endif
 
-        <div class="table-wrap">
+        <div class="table-wrap" style="min-height: 180px;">
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr style="border-bottom: 1.5px solid #E2E8F0; background: #F8FAFC;">
@@ -178,7 +178,7 @@
                                              <svg viewBox="0 0 24 24" style="width:12px;height:12px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                                              Berkas PTP ▾
                                          </button>
-                                         <div class="ptp-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 4px; background: white; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 140px; overflow: hidden; z-index: 100; text-align: left;">
+                                         <div class="ptp-dropdown-menu" style="display: none; position: absolute; bottom: 100%; top: auto; right: 0; margin-bottom: 6px; background: white; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 -4px 12px rgba(0,0,0,0.15); width: 140px; overflow: hidden; z-index: 1000; text-align: left;">
                                              <a href="{{ route('tanah-timbul.ptp_pdf', $app->id) }}" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; text-decoration: none; color: #0F172A; font-size: 12px; font-weight: 600; border-bottom: 1px solid #F1F5F9;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='white'">
                                                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                                  Preview PDF
