@@ -905,10 +905,9 @@
 
                     $processSla = function($apps) use (&$slaHijau, &$slaKuning, &$slaMerah) {
                         foreach($apps as $app) {
-                            $startDate = $app->tgl_mulai_layanan ?? $app->created_at;
-                            $endDate = $app->tgl_selesai_layanan ?? now();
-                            $hari = (int)$startDate->diffInWorkingDaysWithHolidays($endDate);
-                            $hariKe = $hari + 1;
+                            $startDate = $app->tgl_mulai_layanan ? \Carbon\Carbon::parse($app->tgl_mulai_layanan) : $app->created_at;
+                            $endDate = $app->tgl_selesai_layanan ? \Carbon\Carbon::parse($app->tgl_selesai_layanan) : now();
+                            $hariKe = $startDate->getEffectiveWorkingDayNumber($endDate);
 
                             $isPuPhase = in_array($app->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr']);
                             

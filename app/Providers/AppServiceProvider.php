@@ -66,17 +66,49 @@ class AppServiceProvider extends ServiceProvider
             return in_array($this->format('Y-m-d'), $holidays);
         });
 
+        Carbon::macro('isWorkingDay', function() use ($holidays) {
+            return !$this->isWeekend() && !in_array($this->format('Y-m-d'), $holidays);
+        });
+
         Carbon::macro('addWorkingDaysWithHolidays', function($days) {
-            $date = $this->copy();
-            $added = 0;
-            // Jika hari ini libur, jangan skip hari ini. Tapi kalau besok libur, baru di-skip.
+            $date = $this->copy()->startOfDay();
+            while (!$date->isWorkingDay()) {
+                $date->addDay();
+            }
+            $added = 1;
             while ($added < $days) {
                 $date->addDay();
-                if (!$date->isWeekend() && !$date->isHoliday()) {
+                if ($date->isWorkingDay()) {
                     $added++;
                 }
             }
             return $date;
+        });
+
+        Carbon::macro('getEffectiveWorkingDayNumber', function($target = null) {
+            $target = $target ? ($target instanceof \DateTimeInterface ? Carbon::instance($target) : Carbon::parse($target)) : Carbon::now();
+            
+            $start = $this->copy()->startOfDay();
+            $end = $target->copy()->startOfDay();
+            
+            while (!$start->isWorkingDay()) {
+                $start->addDay();
+            }
+            
+            if ($end < $start) {
+                return 0;
+            }
+            
+            $count = 0;
+            $curr = $start->copy();
+            while ($curr <= $end) {
+                if ($curr->isWorkingDay()) {
+                    $count++;
+                }
+                $curr->addDay();
+            }
+            
+            return $count;
         });
 
         Carbon::macro('diffInWorkingDaysWithHolidays', function($target) {
@@ -105,7 +137,7 @@ class AppServiceProvider extends ServiceProvider
             $days = 0;
             while ($start < $end) {
                 $start->addDay();
-                if (!$start->isWeekend() && !$start->isHoliday()) {
+                if ($start->isWorkingDay()) {
                     $days++;
                 }
             }

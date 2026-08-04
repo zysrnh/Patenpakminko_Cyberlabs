@@ -128,10 +128,10 @@
                             @if(!Auth::user()->isPelakuUsaha())
                                 @php
                                     $isSelesai = in_array($app->status, ['disetujui', 'ditolak', 'terbit_pkpr']);
-                                    $startDate = $app->tgl_mulai_layanan ?? $app->created_at;
-                                    $endDate = $isSelesai ? ($app->tgl_selesai_layanan ?? $app->updated_at) : now();
-                                    $hari = (int)$startDate->diffInWorkingDaysWithHolidays($endDate);
-                                    $hariKe = $hari + 1;
+                                    $startDate = $app->tgl_mulai_layanan ? \Carbon\Carbon::parse($app->tgl_mulai_layanan) : $app->created_at;
+                                    $endDate = $isSelesai ? ($app->tgl_selesai_layanan ? \Carbon\Carbon::parse($app->tgl_selesai_layanan) : $app->updated_at) : now();
+                                    
+                                    $hariKe = $startDate->getEffectiveWorkingDayNumber($endDate);
                                     
                                     $isPuPhase = in_array($app->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr']);
                                     $batasMerah = $isPuPhase ? 20 : 10;
@@ -139,19 +139,23 @@
 
                                     if ($isSelesai) {
                                         $slaClass = 'badge-green';
-                                        $slaText = 'Selesai (Hari ke-' . $hariKe . ')';
+                                        $slaText = $hariKe > 0 ? 'Selesai (Hari ke-' . $hariKe . ' Kerja)' : 'Selesai';
                                         $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>';
+                                    } elseif ($hariKe == 0) {
+                                        $slaClass = 'badge-yellow';
+                                        $slaText = 'Libur / Belum Hari Kerja';
+                                        $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                     } elseif ($hariKe >= $batasMerah) {
                                         $slaClass = 'badge-red';
-                                        $slaText = 'Hari ke-' . $hariKe . ' (Terlambat)';
+                                        $slaText = 'Hari ke-' . $hariKe . ' Kerja (Terlambat)';
                                         $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                     } elseif ($hariKe >= $batasKuning) {
                                         $slaClass = 'badge-yellow';
-                                        $slaText = 'Hari ke-' . $hariKe;
+                                        $slaText = 'Hari ke-' . $hariKe . ' Kerja';
                                         $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                     } else {
                                         $slaClass = 'badge-green';
-                                        $slaText = 'Hari ke-' . $hariKe;
+                                        $slaText = 'Hari ke-' . $hariKe . ' Kerja';
                                         $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                     }
                                 @endphp
