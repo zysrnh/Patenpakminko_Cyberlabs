@@ -174,6 +174,12 @@
                                         Detail
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>
+                                    @if($app->ptp_data)
+                                    <a href="{{ route('kebijakan.ptp_pdf', $app->id) }}" target="_blank" class="btn btn-sm" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px; background: #E3F0F9; color: #003B64; border: 1px solid #B3D4EC; text-decoration: none;" title="Download / Lihat Berkas PTP">
+                                        <svg viewBox="0 0 24 24" style="width:12px;height:12px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                        Berkas PTP
+                                    </a>
+                                    @endif
                                     @if(Auth::user()->isDpn())
                                     <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#DC2626;border-color:#DC2626;color:#fff; border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px;">
                                         <svg viewBox="0 0 24 24" style="width:12px;height:12px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
