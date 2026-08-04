@@ -993,11 +993,20 @@
                         <div id="Kantor Pertanahan-panel-2" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' ? 'block' : 'none' }};">
                             @php $isStep2Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
-                                <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST">
+                                <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_konfirmasi_bayar">
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:16px;">
-                                        <strong>Langkah 2 — Konfirmasi Pembayaran PNBP:</strong> Berkas telah disetujui. Masukkan Nomor Berkas untuk mengkonfirmasi bahwa pembayaran PNBP telah diterima. Sistem otomatis mengirim akun ke WA pemohon.
+                                        <strong>Langkah 2 — Upload SPS & Konfirmasi Pembayaran PNBP:</strong> Unggah file SPS dan masukkan Nomor Berkas untuk mengkonfirmasi bahwa pembayaran PNBP telah diterima. Sistem otomatis mengirim akun ke WA pemohon.
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
+                                        <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png">
+                                        @if($application->bpn_sps_document)
+                                            <div style="margin-top: 6px;">
+                                                <a href="{{ route('file.view', ['path' => $application->bpn_sps_document]) }}" target="_blank" style="font-size: 12px; color: #003B64; font-weight: 700; text-decoration: underline;">📄 Lihat Dokumen SPS yang Terunggah</a>
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="form-group-v" style="margin-bottom:16px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;">Nomor Berkas <span style="color:red;">*</span></label>

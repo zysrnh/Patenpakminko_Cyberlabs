@@ -13,6 +13,7 @@ return new class extends Migration
     {
         $tables = [
             'ppkpr_applications',
+            'ppkpr_berusaha_applications',
             'psn_applications',
             'kebijakan_applications',
             'tanah_timbul_applications',

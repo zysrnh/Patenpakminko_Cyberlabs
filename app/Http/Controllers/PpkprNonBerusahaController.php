@@ -303,12 +303,20 @@ class PpkprNonBerusahaController extends Controller
             return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
         }
 
-        // BPN Langkah 2: Konfirmasi Pembayaran PNBP + No. Berkas -> Blast Credentials ke pemohon
+        // BPN Langkah 2: Konfirmasi Pembayaran PNBP + No. Berkas + Upload SPS -> Blast Credentials ke pemohon
         if ($user->isBpn() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' && $step === 'bpn_konfirmasi_bayar') {
-            $request->validate(['no_berkas' => 'required|string|max:100'], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
+            $request->validate([
+                'no_berkas' => 'required|string|max:100',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            ], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
+
+            if ($request->hasFile('sps_document') && \Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), 'bpn_sps_document')) {
+                $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
+            }
+
             $application->no_berkas          = $request->input('no_berkas');
             $application->bpn_pembayaran_status = 'sudah_bayar';
-                    $application->bpn_pembayaran_approved_at = now();
+            $application->bpn_pembayaran_approved_at = now();
             $application->credential_sent_at = now();
             $application->save();
             
