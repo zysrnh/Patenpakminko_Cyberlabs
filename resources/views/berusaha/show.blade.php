@@ -1022,6 +1022,17 @@
                                         </div>
                                     </div>
                                     
+                                    <div id="sps-upload-container" style="display: {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'block' : 'none' }}; margin-bottom: 20px;">
+                                        <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
+                                        <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'required' : '' }}>
+                                        <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 5MB. Wajib diisi jika Berkas Lengkap (Disetujui). File SPS ini akan dikirimkan otomatis ke WhatsApp Pemohon.</div>
+                                        @if($application->bpn_sps_document)
+                                            <div style="margin-top: 6px;">
+                                                <a href="{{ route('file.view', ['path' => $application->bpn_sps_document]) }}" target="_blank" style="font-size: 12px; color: #003B64; font-weight: 700; text-decoration: underline;">📄 Lihat Dokumen SPS yang Terunggah</a>
+                                            </div>
+                                        @endif
+                                    </div>
+
                                     <div id="revisi-berkas-container" style="display:none; margin-bottom: 12px; background: #fff5f5; padding: 12px; border: 1px solid #fed7d7; border-radius: 4px;">
                                         <label style="font-weight: 600; font-size: 12px; color: #c53030; margin-bottom: 8px; display: block;">Tandai Berkas yang Tidak Valid / Kurang Lengkap (Otomatis masuk ke catatan):</label>
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
