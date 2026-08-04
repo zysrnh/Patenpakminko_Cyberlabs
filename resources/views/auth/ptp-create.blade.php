@@ -493,7 +493,9 @@
                         <option value="Diri Sendiri" {{ old('bertindak_atas_nama') === 'Diri Sendiri' ? 'selected' : '' }}>Diri Sendiri / Pemilik Usaha</option>
                         <option value="Penerima Kuasa" {{ old('bertindak_atas_nama') === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
                         <option value="Badan Hukum" {{ old('bertindak_atas_nama') === 'Badan Hukum' ? 'selected' : '' }}>Badan Hukum</option>
-                        <option value="Instansi Pemerintahan" {{ old('bertindak_atas_nama') === 'Instansi Pemerintahan' ? 'selected' : '' }}>Instansi Pemerintahan</option>
+                        @if($layananActive !== 'berusaha')
+                            <option value="Instansi Pemerintahan" {{ old('bertindak_atas_nama') === 'Instansi Pemerintahan' ? 'selected' : '' }}>Instansi Pemerintahan</option>
+                        @endif
                     </select>
                 </div>
 

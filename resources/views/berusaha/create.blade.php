@@ -78,7 +78,7 @@
                 $pemilikUsahaValue = $ptpNama;
                 if ($ptpHubungan === 'Penerima Kuasa') {
                     $pemilikUsahaValue = $ptpPemberiKuasa ?: $ptpNama;
-                } elseif (in_array($ptpHubungan, ['Badan Hukum', 'Instansi Pemerintahan'])) {
+                } elseif ($ptpHubungan === 'Badan Hukum') {
                     $pemilikUsahaValue = $ptpInstansi ?: $ptpNama;
                 }
                 
@@ -111,11 +111,11 @@
                         <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pemohon...</option>
                         <option value="Pemilik Usaha / Pengguna Layanan" {{ $selectedHubungan === 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
                         <option value="Penerima Kuasa" {{ $selectedHubungan === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
-                        <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
+                        <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>PT / Lainnya (Ketik Manual)</option>
                     </select>
 
                     <div id="hubungan_pengaju_lainnya_wrapper" style="display: {{ in_array($selectedHubungan, ['Lainnya', 'Pemilik Usaha / Pengguna Layanan']) ? 'block' : 'none' }}; margin-top: 8px;">
-                        <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', in_array($ptpHubungan, ['Badan Hukum', 'Instansi Pemerintahan']) ? $ptpHubungan : '') }}">
+                        <input type="text" id="hubungan_pengaju_lainnya" name="hubungan_pengaju_lainnya" class="form-control" placeholder="Masukkan hubungan secara manual..." value="{{ old('hubungan_pengaju_lainnya', $ptpHubungan === 'Badan Hukum' ? $ptpHubungan : '') }}">
                     </div>
                 </div>
                 @else
