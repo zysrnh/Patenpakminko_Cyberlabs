@@ -361,6 +361,7 @@ Route::middleware(['auth'])->group(function () {
     // Pengelolaan Dokumen Manual (Dokumen Baru)
     Route::get('/dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
     Route::post('/dokumen', [DokumenController::class, 'store'])->name('dokumen.store');
+    Route::post('/dokumen/destroy-all', [DokumenController::class, 'destroyAll'])->name('dokumen.destroy_all');
     Route::match(['get', 'post'], '/dokumen/bulk-destroy', [DokumenController::class, 'bulkDestroy'])->name('dokumen.bulk-destroy');
     Route::match(['get', 'post'], '/dokumen/bulk_destroy', [DokumenController::class, 'bulkDestroy']);
     Route::match(['get', 'post'], '/dokumen/bulk%20destroy', [DokumenController::class, 'bulkDestroy']);

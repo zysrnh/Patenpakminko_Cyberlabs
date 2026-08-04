@@ -316,8 +316,9 @@ class DokumenController extends Controller
 
     public function bulkDestroy(Request $request)
     {
-        if (!Auth::user() || !Auth::user()->isDpn()) {
-            return redirect()->route('dokumen.index')->with('error', 'Hanya Super Admin DPN yang dapat menghapus dokumen.');
+        $user = Auth::user();
+        if (!$user || $user->isDinasPu() || $user->isDinasPutr() || $user->isSatuPintu()) {
+            return redirect()->route('dokumen.index')->with('error', 'Akses ditolak. Anda tidak memiliki hak akses untuk menghapus dokumen.');
         }
 
         $ids = $request->input('dokumen_ids', $request->input('ids', []));
@@ -339,5 +340,36 @@ class DokumenController extends Controller
         }
 
         return redirect()->route('dokumen.index')->with('success', "{$count} dokumen berhasil dihapus.");
+    }
+
+    public function destroyAll(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user || $user->isDinasPu() || $user->isDinasPutr() || $user->isSatuPintu()) {
+            return redirect()->route('dokumen.index')->with('error', 'Akses ditolak. Anda tidak memiliki hak akses untuk menghapus dokumen.');
+        }
+
+        $count = 0;
+        if (\Illuminate\Support\Facades\Schema::hasTable('dokumens')) {
+            $allDokumen = Dokumen::all();
+            foreach ($allDokumen as $item) {
+                if (Storage::disk('public')->exists($item->file_path)) {
+                    Storage::disk('public')->delete($item->file_path);
+                }
+                $item->delete();
+                $count++;
+            }
+        }
+
+        $allBerkas = \App\Models\Berkas::all();
+        foreach ($allBerkas as $item) {
+            if (Storage::disk('public')->exists($item->file_path)) {
+                Storage::disk('public')->delete($item->file_path);
+            }
+            $item->delete();
+            $count++;
+        }
+
+        return redirect()->route('dokumen.index')->with('success', "Seluruh dokumen ({$count} dokumen) berhasil dihapus.");
     }
 }
