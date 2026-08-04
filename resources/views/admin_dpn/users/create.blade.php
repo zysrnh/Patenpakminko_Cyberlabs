@@ -123,10 +123,9 @@
                 <div class="admin-col">
                     <label class="admin-form-label">Peran (Role) <span class="required">*</span></label>
                     <select name="role" class="admin-form-control" required>
-                        <option value="" disabled selected>Pilih Peran Instansi...</option>
-                        <option value="Kantor Pertanahan" {{ old('role') == 'Kantor Pertanahan' ? 'selected' : '' }}>Admin Kantor Pertanahan</option>
+                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Pilih Peran Instansi...</option>
+                        <option value="bpn" {{ old('role') == 'bpn' || old('role') == 'Kantor Pertanahan' ? 'selected' : '' }}>Admin Kantor Pertanahan</option>
                         <option value="dinas_pu" {{ old('role') == 'dinas_pu' ? 'selected' : '' }}>Admin Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</option>
-                        <option value="dinas_putr" {{ old('role') == 'dinas_putr' ? 'selected' : '' }}>Admin Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</option>
                         <option value="satu_pintu" {{ old('role') == 'satu_pintu' ? 'selected' : '' }}>Admin DPMPTSP</option>
                         <option value="admin_berita" {{ old('role') == 'admin_berita' ? 'selected' : '' }}>Admin Berita</option>
                         <option value="dpn" {{ old('role') == 'dpn' ? 'selected' : '' }}>Super Admin (DPN)</option>
