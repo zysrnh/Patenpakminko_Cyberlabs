@@ -388,10 +388,18 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     let notifiedIds = JSON.parse(localStorage.getItem('notified_mailbox_ids')) || [];
+    let toastQueue = [];
+    let isShowingToast = false;
 
     function showToast(mailbox) {
         const container = document.getElementById('toast-container');
         if (!container) return;
+
+        // Remove any existing toasts first
+        container.querySelectorAll('.toast-notif').forEach(el => {
+            el.classList.remove('show');
+            setTimeout(() => el.remove(), 300);
+        });
 
         const toast = document.createElement('div');
         toast.className = 'toast-notif';
@@ -409,7 +417,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </button>
         `;
 
-        // Action on click: open the link if provided
         if (mailbox.link) {
             toast.querySelector('.toast-content').style.cursor = 'pointer';
             toast.querySelector('.toast-content').addEventListener('click', () => {
@@ -418,13 +425,55 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         container.appendChild(toast);
-        
-        // Trigger animation
-        requestAnimationFrame(() => {
-            toast.classList.add('show');
+        requestAnimationFrame(() => toast.classList.add('show'));
+
+        const timer = setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, 4000);
+
+        // Cancel auto-dismiss on hover
+        toast.addEventListener('mouseenter', () => clearTimeout(timer));
+        toast.addEventListener('mouseleave', () => {
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 1500);
+        });
+    }
+
+    function showSummaryToast(count, firstItem) {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        container.querySelectorAll('.toast-notif').forEach(el => {
+            el.classList.remove('show');
+            setTimeout(() => el.remove(), 300);
         });
 
-        // Auto remove after 5 seconds
+        const toast = document.createElement('div');
+        toast.className = 'toast-notif';
+
+        let iconHtml = `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>`;
+
+        toast.innerHTML = `
+            <div class="toast-icon" style="background: rgba(220, 38, 38, 0.1); color: #dc2626;">${iconHtml}</div>
+            <div class="toast-content" style="cursor: pointer;">
+                <div class="toast-title">${count} Notifikasi Baru</div>
+                <div class="toast-message">Klik untuk melihat seluruh kotak masuk Anda.</div>
+            </div>
+            <button class="toast-close" onclick="this.closest('.toast-notif').remove()">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        `;
+
+        toast.querySelector('.toast-content').addEventListener('click', () => {
+            window.location.href = '{{ route("mailbox.index") }}';
+        });
+
+        container.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add('show'));
+
         setTimeout(() => {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 400);
@@ -441,40 +490,38 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(res => {
             if (res.success && Array.isArray(res.data)) {
-                // Get all current unread IDs from server
                 const currentUnreadIds = res.data.map(item => item.id);
                 
-                // Check if there are newly found items that we haven't notified yet
-                res.data.forEach(item => {
-                    if (!notifiedIds.includes(item.id)) {
-                        showToast(item);
-                        notifiedIds.push(item.id);
-                    }
-                });
+                // Find new items not yet shown
+                const newItems = res.data.filter(item => !notifiedIds.includes(item.id));
 
-                // Cleanup: remove IDs from local storage that are no longer unread
+                if (newItems.length === 1) {
+                    showToast(newItems[0]);
+                } else if (newItems.length > 1) {
+                    showSummaryToast(newItems.length, newItems[0]);
+                }
+
+                // Mark all new items as notified
+                newItems.forEach(item => notifiedIds.push(item.id));
+
+                // Cleanup IDs no longer unread
                 notifiedIds = notifiedIds.filter(id => currentUnreadIds.includes(id));
                 localStorage.setItem('notified_mailbox_ids', JSON.stringify(notifiedIds));
                 
-                // Update badge count in topbar visually
+                // Update badge count in topbar
                 const badge = document.querySelector('.topbar-notif-badge');
                 if (badge) {
-                    badge.textContent = currentUnreadIds.length;
-                    if (currentUnreadIds.length === 0) {
-                        badge.style.display = 'none';
-                    } else {
-                        badge.style.display = 'flex';
-                    }
+                    badge.textContent = currentUnreadIds.length > 99 ? '99+' : currentUnreadIds.length;
+                    badge.style.display = currentUnreadIds.length === 0 ? 'none' : 'flex';
                 }
             }
         })
         .catch(err => console.error('Gagal memuat notifikasi AJAX:', err));
     }
 
-    // Polling every 15 seconds
     setInterval(checkNotifications, 15000);
-    
-    // Initial fetch to sync badge and local storage on page load
     checkNotifications();
 });
 </script>
+
+

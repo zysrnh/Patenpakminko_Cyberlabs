@@ -1679,7 +1679,9 @@
                         
                         $isSelesai = false;
                         if (Auth::user()->isBpn()) {
-                            $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                            // BPN: selesai hanya jika permohonan sudah di-approve/tolak secara final
+                            // Status menunggu_dinas_pu / menunggu_satu_pintu masih berjalan, bukan selesai
+                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui']);
                         } elseif (Auth::user()->isDinasPu()) {
                             $isSelesai = ($application->dinas_pu_status === 'disetujui' || in_array($application->status, ['ditolak', 'menunggu_satu_pintu', 'disetujui']));
                         } else {

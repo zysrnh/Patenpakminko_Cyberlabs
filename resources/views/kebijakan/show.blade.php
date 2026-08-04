@@ -1632,7 +1632,7 @@
                         
                         $isSelesai = false;
                         if (Auth::user()->isBpn()) {
-                            $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui']);
                         } elseif (Auth::user()->isDinasPu()) {
                             $isSelesai = ($application->dinas_pu_status === 'disetujui' || in_array($application->status, ['ditolak', 'menunggu_satu_pintu', 'disetujui']));
                         } else {

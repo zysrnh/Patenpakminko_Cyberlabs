@@ -963,8 +963,6 @@
                                             </div>
                                         @endif
                                     </div>
-                                        <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 5MB. Wajib diisi jika Berkas Lengkap (Disetujui).</div>
-                                    </div>
                                     @if($isStep1Active)
 
                                         <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas</button>
@@ -1597,7 +1595,7 @@
                         
                         $isSelesai = false;
                         if (Auth::user()->isBpn()) {
-                            $isSelesai = ($application->bpn_pertek_document || in_array($application->status, ['ditolak', 'menunggu_dinas_pu', 'menunggu_satu_pintu', 'disetujui']));
+                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui']);
                         } elseif (Auth::user()->isDinasPu()) {
                             $isSelesai = ($application->dinas_pu_status === 'disetujui' || in_array($application->status, ['ditolak', 'menunggu_satu_pintu', 'disetujui']));
                         } else {
