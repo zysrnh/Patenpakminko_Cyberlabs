@@ -43,14 +43,7 @@ class PsnController extends Controller
             return redirect()->route('ptp.create', ['layanan' => 'psn', 'new' => 1])->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
         }
         if (!Auth::user()->isPelakuUsaha()) {
-            $ptpData = session('ptp_form_data');
-            Auth::logout();
-            request()->session()->invalidate();
-            request()->session()->regenerateToken();
-            if ($ptpData) {
-                session(['ptp_form_data' => $ptpData]);
-            }
-            return redirect()->route('login')->with('error', 'Anda sedang login sebagai Admin. Silakan login menggunakan akun Pemohon (Pelaku Usaha) untuk melanjutkan pengajuan permohonan.');
+            abort(403, 'Hanya Pelaku Usaha yang dapat membuat pengajuan.');
         }
         if (!session()->has('ptp_form_data')) {
             return redirect()->route('ptp.create', ['layanan' => 'psn', 'new' => 1])->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
