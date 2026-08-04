@@ -556,7 +556,11 @@ class AuthController extends Controller
         }
 
         // Login sementara dalam konteks pendaftaran permohonan
-        Auth::login($user);
+        // Hanya login jika belum login, atau jika sedang login sebagai Pelaku Usaha
+        // Jangan override sesi Admin yang sedang aktif
+        if (!Auth::check() || Auth::user()->isPelakuUsaha()) {
+            Auth::login($user);
+        }
 
         // Simpan data PTP ke session
         session(['ptp_form_data' => $request->all()]);
