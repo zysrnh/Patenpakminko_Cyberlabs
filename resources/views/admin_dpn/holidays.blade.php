@@ -81,7 +81,7 @@
     padding: 4px 0;
 }
 
-.hl-day-name.sun { color: #DC2626; }
+.hl-day-name.sun, .hl-day-name.sat { color: #DC2626; }
 
 .hl-days-grid {
     display: grid;
@@ -120,7 +120,7 @@
     font-weight: 800;
 }
 
-.hl-day.sunday { color: #DC2626; }
+.hl-day.sunday, .hl-day.saturday { color: #DC2626; }
 
 .hl-day.is-holiday {
     background: #FEF2F2;
@@ -554,7 +554,7 @@
                 <div class="hl-day-name">Rab</div>
                 <div class="hl-day-name">Kam</div>
                 <div class="hl-day-name">Jum</div>
-                <div class="hl-day-name">Sab</div>
+                <div class="hl-day-name sat">Sab</div>
                 <div class="hl-day-name sun">Min</div>
             </div>
             <div class="hl-days-grid" id="calendarDays"></div>
@@ -791,6 +791,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (isToday)        cell.classList.add('today');
             if (dayOfWeek === 0) cell.classList.add('sunday');
+            if (dayOfWeek === 6) cell.classList.add('saturday');
             if (hData)          cell.classList.add(hData.is_collective ? 'is-collective' : 'is-holiday');
             if (selected)       cell.classList.add('selected');
 
