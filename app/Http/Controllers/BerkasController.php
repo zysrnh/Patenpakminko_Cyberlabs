@@ -168,6 +168,11 @@ class BerkasController extends Controller
 
     public function destroy($id)
     {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user->isDinasPu() || $user->isDinasPutr() || $user->isSatuPintu()) {
+            return redirect()->route('berkas.index')->with('error', 'Akses ditolak.');
+        }
+
         $berkas = Berkas::findOrFail($id);
         
         // Hapus fisik file

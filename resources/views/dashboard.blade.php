@@ -720,8 +720,10 @@
                     <a href="{{ route('berkas.index') }}" class="nav-dropdown-item">Berkas Otomatis</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item">Pertimbangan Teknis Non Berusaha</a>
+                    @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
                     <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item">Pertimbangan Teknis Kebijakan</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'Tanah Timbul', 'kategori' => 'Pertimbangan Teknis Tanah Timbul']) }}" class="nav-dropdown-item">Pertimbangan Teknis Tanah Timbul</a>
+                    @endif
                     <a href="{{ route('berkas.index', ['layanan' => 'PSN', 'kategori' => 'Pertimbangan Teknis PSN']) }}" class="nav-dropdown-item">Pertimbangan Teknis PSN</a>
                 </div>
             </div>

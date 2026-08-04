@@ -328,7 +328,9 @@
                                     Lihat
                                 </a>
                                 <a href="{{ route('dokumen.download', $item->id) }}" class="btn btn-primary btn-sm">Unduh</a>
+                                @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
                                 <button type="submit" form="delete-form-{{ $item->id }}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');">Hapus</button>
+                                @endif
                             </div>
                         </td>
                     </tr>

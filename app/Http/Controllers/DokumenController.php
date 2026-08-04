@@ -181,6 +181,11 @@ class DokumenController extends Controller
 
     public function destroy($id)
     {
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if ($user->isDinasPu() || $user->isDinasPutr() || $user->isSatuPintu()) {
+            return redirect()->route('dokumen.index')->with('error', 'Akses ditolak.');
+        }
+
         $dokumen = (\Illuminate\Support\Facades\Schema::hasTable('dokumens') ? Dokumen::find($id) : null) ?: \App\Models\Berkas::find($id);
         if (!$dokumen) abort(404, 'Dokumen tidak ditemukan.');
         
