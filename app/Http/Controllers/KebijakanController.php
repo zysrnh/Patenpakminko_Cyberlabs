@@ -43,7 +43,14 @@ class KebijakanController extends Controller
         }
 
         if (!Auth::user()->isPelakuUsaha()) {
-            abort(403, 'Hanya Pelaku Usaha yang dapat membuat pengajuan permohonan.');
+            $ptpData = session('ptp_form_data');
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+            if ($ptpData) {
+                session(['ptp_form_data' => $ptpData]);
+            }
+            return redirect()->route('login')->with('error', 'Anda sedang login sebagai Admin. Silakan login menggunakan akun Pemohon (Pelaku Usaha) untuk melanjutkan pengajuan permohonan.');
         }
 
         if (!session()->has('ptp_form_data')) {
