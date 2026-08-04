@@ -25,6 +25,18 @@
         }
     </style>
 </head>
+@php
+    $formattedLuas = $luas_tanah;
+    if ($luas_tanah !== '-' && !empty($luas_tanah)) {
+        $numericStr = preg_replace('/[^\d.,]/', '', $luas_tanah);
+        $cleanVal = str_replace(',', '.', str_replace('.', '', $numericStr));
+        if (is_numeric($cleanVal)) {
+            $formattedLuas = number_format((float)$cleanVal, 0, ',', '.') . ' m²';
+        } elseif (!str_contains($luas_tanah, 'm²')) {
+            $formattedLuas .= ' m²';
+        }
+    }
+@endphp
 <body>
 
     <div class="title">PERMOHONAN PERTIMBANGAN TEKNIS PERTANAHAN</div>
@@ -133,7 +145,7 @@
             <td class="col-num">2.</td>
             <td class="col-label">Luas tanah yang dimohon</td>
             <td class="col-colon">:</td>
-            <td class="col-val">{{ $luas_tanah }}</td>
+            <td class="col-val">{{ $formattedLuas }}</td>
         </tr>
         <tr>
             <td class="col-num">3.</td>
@@ -247,7 +259,7 @@
             <td class="col-num" style="padding-top: 10px;">3.</td>
             <td class="col-label" style="padding-top: 10px;">Luas tanah yang dimohon</td>
             <td class="col-colon" style="padding-top: 10px;">:</td>
-            <td class="col-val" style="padding-top: 10px;">{{ $luas_tanah }}</td>
+            <td class="col-val" style="padding-top: 10px;">{{ $formattedLuas }}</td>
         </tr>
     </table>
 

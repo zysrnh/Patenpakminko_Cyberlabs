@@ -165,6 +165,14 @@ class PsnController extends Controller
             "luas_tanah" => "-", "status_penguasaan" => "-", "penggunaan_saat_ini" => "-"
         ], $ptp);
 
+        if (isset($ptp['luas_tanah']) && $ptp['luas_tanah'] !== '-') {
+            $numericStr = preg_replace('/[^\d.,]/', '', $ptp['luas_tanah']);
+            $cleanVal = str_replace(',', '.', str_replace('.', '', $numericStr));
+            if (is_numeric($cleanVal) && (float)$cleanVal > 0) {
+                $ptp['luas_tanah'] = number_format((float)$cleanVal, 0, ',', '.') . ' m²';
+            }
+        }
+
         if ($request->query('action') === 'download') {
             // Menggunakan PhpWord TemplateProcessor untuk cetak DOCX
             $templatePath = \App\Models\TemplateDokumen::getTemplatePath('pertek_2026', storage_path('app/public/doc/Formulir/Formulir Pertek 2026 Template.docx'));

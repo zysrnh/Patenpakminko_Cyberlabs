@@ -540,7 +540,8 @@
 
                 <div class="form-group">
                     <label class="form-label">Luas Tanah yang Dimohon (m²)<span class="required">*</span></label>
-                    <input type="number" name="luas_tanah" class="form-control" placeholder="Luas dalam meter persegi" value="{{ old('luas_tanah') }}" required>
+                    <input type="number" name="luas_tanah" id="luas_tanah_input" class="form-control" placeholder="Luas dalam meter persegi (cth: 15000)" value="{{ old('luas_tanah') }}" required>
+                    <div id="luas_tanah_info" style="font-size: 12px; color: #2B6CB0; margin-top: 5px; font-weight: 700;"></div>
                 </div>
 
                 <div class="form-group full">
@@ -833,6 +834,22 @@
                 dropdown.classList.remove('show');
             }
         });
+
+        const luasInput = document.getElementById('luas_tanah_input');
+        const luasInfo = document.getElementById('luas_tanah_info');
+        if (luasInput && luasInfo) {
+            function updateLuasInfo() {
+                let raw = luasInput.value;
+                if (raw && !isNaN(raw) && parseFloat(raw) > 0) {
+                    let num = parseFloat(raw);
+                    luasInfo.innerText = 'Format Terbaca di Dokumen/PDF: ' + new Intl.NumberFormat('id-ID').format(num) + ' m²';
+                } else {
+                    luasInfo.innerText = '';
+                }
+            }
+            luasInput.addEventListener('input', updateLuasInfo);
+            updateLuasInfo();
+        }
     });
 </script>
 @endsection
