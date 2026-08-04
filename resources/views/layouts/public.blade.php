@@ -1772,8 +1772,8 @@
         $footerSettings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
     }
     $fAddress = $footerSettings['contact_address'] ?? 'Jl. Suryakencana No. 02 Kelurahan Gunungparang, Kec. Cikole, Kode Pos 43111, Kota Sukabumi';
-    $fPhone = $footerSettings['contact_phone'] ?? ($footerSettings['cp_admin'] ?? '6281322712133');
-    $fEmail = $footerSettings['contact_email'] ?? 'patenpakminko@mail.com';
+    $fPhone = $footerSettings['contact_phone'] ?? ($footerSettings['cp_admin'] ?? '6282234523450');
+    $fEmail = $footerSettings['contact_email'] ?? 'penataanpertanahanmiko@gmail.com';
 
     $fCleanPhone = preg_replace('/[^0-9]/', '', $fPhone);
     if (str_starts_with($fCleanPhone, '0')) {

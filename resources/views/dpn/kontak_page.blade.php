@@ -193,10 +193,10 @@
                     </div>
                     <div>
                         <div class="item-label">Nomor Telepon CS / WhatsApp Helpdesk</div>
-                        <div class="item-sub">Nomor WhatsApp tujuan tombol "Hubungi Kami" & "Chat Helpdesk" (Gunakan format angka, contoh: 6281322712133).</div>
+                        <div class="item-sub">Nomor WhatsApp tujuan tombol "Hubungi Kami" & "Chat Helpdesk" (Gunakan format angka, contoh: 6282234523450).</div>
                     </div>
                 </div>
-                <input type="text" name="contact_phone" class="custom-input" placeholder="contoh: 6281322712133" value="{{ old('contact_phone', $settings['contact_phone'] ?? '6281322712133') }}" required>
+                <input type="text" name="contact_phone" class="custom-input" placeholder="contoh: 6282234523450" value="{{ old('contact_phone', $settings['contact_phone'] ?? '6282234523450') }}" required>
             </div>
 
             <!-- 3. Email Official -->
@@ -210,7 +210,7 @@
                         <div class="item-sub">Email resmi bantuan pertanahan yang ditampilkan pada halaman kontak publik.</div>
                     </div>
                 </div>
-                <input type="email" name="contact_email" class="custom-input" placeholder="patenpakminko@mail.com" value="{{ old('contact_email', $settings['contact_email'] ?? 'patenpakminko@mail.com') }}" required>
+                <input type="email" name="contact_email" class="custom-input" placeholder="penataanpertanahanmiko@gmail.com" value="{{ old('contact_email', $settings['contact_email'] ?? 'penataanpertanahanmiko@gmail.com') }}" required>
             </div>
 
             <!-- 4. Kode Iframe / Link Google Maps -->

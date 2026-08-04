@@ -8,8 +8,8 @@
         $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
     }
     $address = $settings['contact_address'] ?? 'Jl. Suryakencana No. 02, Kel. Gunungparang, Kec. Cikole, Kota Sukabumi, Jawa Barat 43111';
-    $phone = $settings['contact_phone'] ?? ($settings['cp_admin'] ?? '6281322712133');
-    $email = $settings['contact_email'] ?? 'patenpakminko@mail.com';
+    $phone = $settings['contact_phone'] ?? ($settings['cp_admin'] ?? '6282234523450');
+    $email = $settings['contact_email'] ?? 'penataanpertanahanmiko@gmail.com';
     $mapUrl = $settings['contact_map_url'] ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1980.3801373425704!2d106.92710990964812!3d-6.919236993930166!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68483119f0eb21%3A0xc96505f81ecf236f!2sJl.%20Surya%20Kencana%20No.2%2C%20Gunungparang%2C%20Kec.%20Cikole%2C%20Kota%20Sukabumi%2C%20Jawa%20Barat%2043111!5e0!3m2!1sid!2sid!4v1781316668923!5m2!1sid!2sid';
 
     $socialTiktok = $settings['social_tiktok'] ?? 'https://www.tiktok.com/@kantahkotsukabumi';
