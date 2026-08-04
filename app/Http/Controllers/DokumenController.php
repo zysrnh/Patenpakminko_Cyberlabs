@@ -76,10 +76,6 @@ class DokumenController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        // Khusus PTSP: Hanya boleh melihat kategori "Dokumen Pertimbangan Teknis Pertanahan"
-        if ($user->isSatuPintu()) {
-            $query->where('kategori', 'Dokumen Pertimbangan Teknis Pertanahan');
-        }
 
         $dokumen = $query->paginate(10);
         
