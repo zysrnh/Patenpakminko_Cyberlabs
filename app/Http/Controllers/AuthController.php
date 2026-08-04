@@ -183,6 +183,10 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        // Hapus remember_token dari DB agar cookie "ingat saya" tidak bisa auto-login lagi
+        if (Auth::check()) {
+            Auth::user()->forceFill(['remember_token' => null])->save();
+        }
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
