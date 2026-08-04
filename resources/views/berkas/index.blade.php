@@ -349,7 +349,7 @@
                     <tr>
                         <th style="width: 40px;"></th>
                         <th>Info Berkas</th>
-                        <th>Pengaju / Akun</th>
+                        <th>Pemohon / Akun</th>
                         <th>Tanggal Unggah</th>
                         <th style="text-align: right;">Aksi</th>
                     </tr>

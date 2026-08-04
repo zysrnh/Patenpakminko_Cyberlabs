@@ -106,9 +106,9 @@
                 <!-- Hubungan Pengaju -->
                 @if($ptpHubungan !== 'Diri Sendiri')
                 <div class="form-group">
-                    <label class="form-label">Hubungan Pengaju (Sebagai Apa)<span class="required">*</span></label>
+                    <label class="form-label">Hubungan Pemohon (Sebagai Apa)<span class="required">*</span></label>
                     <select id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" required>
-                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pengaju...</option>
+                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pemohon...</option>
                         <option value="Pemilik Usaha / Pengguna Layanan" {{ $selectedHubungan === 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
                         <option value="Penerima Kuasa" {{ $selectedHubungan === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
                         <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
@@ -286,7 +286,7 @@
             <img src="{{ asset('storage/svg/tandatanya.svg') }}" alt="Ilustrasi Bantuan">
         </div>
         <div class="help-banner-content">
-            <h2>Butuh <span>Bantuan</span><br>Pengajuan Dokumen?</h2>
+            <h2>Butuh <span>Bantuan</span><br>Permohonan Dokumen?</h2>
             <p>Tim PATEN PAK MIKO siap membantu proses pelayanan pertanahan Anda.</p>
             <a href="https://wa.me/628123456789" class="btn-hubungi" target="_blank">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
@@ -325,7 +325,7 @@
                 if (selectHubungan.value === 'Pemilik Usaha / Pengguna Layanan') {
                     inputLainnya.placeholder = 'Ketik pemilik usaha/layanan apa (cth: Pemilik Toko Roti, dll)';
                 } else {
-                    inputLainnya.placeholder = 'Masukkan hubungan pengaju secara manual (cth: Instansi, PT, dll)';
+                    inputLainnya.placeholder = 'Masukkan hubungan Pemohon secara manual (cth: Instansi, PT, dll)';
                 }
             } else {
                 wrapperLainnya.style.display = 'none';

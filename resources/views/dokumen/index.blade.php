@@ -279,7 +279,7 @@
                         <th>Nama Dokumen</th>
                         <th>Kategori</th>
                         <th>Informasi File</th>
-                        <th>Pengaju / Pengunggah</th>
+                        <th>Pemohon / Akun</th>
                         <th>Tanggal</th>
                         <th>Aksi</th>
                     </tr>

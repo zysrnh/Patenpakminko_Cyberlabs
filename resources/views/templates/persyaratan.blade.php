@@ -174,7 +174,7 @@
         <h2 class="title">KUMPULAN DOKUMEN PERSYARATAN PERMOHONAN Pertimbangan Teknis Pertanahan NON-BERUSAHA</h2>
         <p class="subtitle">PORTAL PELAYANAN PATEN PAK MIKO</p>
 
-        <div class="section-header">I. Identitas Pengaju & Usaha</div>
+        <div class="section-header">I. Identitas Pemohon</div>
         <table class="form-table">
             <tr>
                 <td class="label">Nama Pemilik Usaha</td>
@@ -182,17 +182,17 @@
                 <td>....................................................................................................</td>
             </tr>
             <tr>
-                <td class="label">Nama Pengaju (Pemohon)</td>
+                <td class="label">Nama Pemohon</td>
                 <td class="separator">:</td>
                 <td>....................................................................................................</td>
             </tr>
             <tr>
-                <td class="label">Hubungan Pengaju Dengan Pemilik</td>
+                <td class="label">Hubungan Pemohon Dengan Pemilik</td>
                 <td class="separator">:</td>
                 <td>.................................................................................................... (cth: Pemilik/Kuasa/Staf)</td>
             </tr>
             <tr>
-                <td class="label">Nomor WhatsApp Pengaju</td>
+                <td class="label">Nomor WhatsApp Pemohon</td>
                 <td class="separator">:</td>
                 <td>....................................................................................................</td>
             </tr>
@@ -218,12 +218,12 @@
                 <tr>
                     <td class="center">[  ]</td>
                     <td><strong>Surat kuasa (apabila dikuasakan)</strong></td>
-                    <td>Surat kuasa bermaterai jika pengajuan diwakilkan.</td>
+                    <td>Surat kuasa bermaterai jika permohonan diwakilkan.</td>
                 </tr>
                 <tr>
                     <td class="center">[  ]</td>
                     <td><strong>Fotokopi KTP</strong></td>
-                    <td>KTP pengaju atau pemilik yang masih berlaku.</td>
+                    <td>KTP Pemohon atau pemilik yang masih berlaku.</td>
                 </tr>
                 <tr>
                     <td class="center">[  ]</td>
@@ -260,7 +260,7 @@
             </div>
             <div class="sig-box">
                 <p>Bandung, ............................................. 20...</p>
-                <p style="margin-top: 5px; font-weight: bold;">Pengaju / Pemohon,</p>
+                <p style="margin-top: 5px; font-weight: bold;">Pemohon,</p>
                 <br><br><br>
                 <p style="margin-top: 15px;">( ................................................... )</p>
                 <p style="font-size: 11px; color: #555;">Tanda Tangan & Nama Terang</p>

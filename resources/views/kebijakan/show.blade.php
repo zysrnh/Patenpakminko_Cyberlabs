@@ -1449,7 +1449,7 @@
                                 <span class="detail-val mono">+{{ $application->user->phone_number }}</span>
                             </li>
                             <li class="detail-item">
-                                <span class="detail-label">Tanggal Pengajuan Berkas</span>
+                                <span class="detail-label">Tanggal Permohonan</span>
                                 <span class="detail-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
                             </li>
                             

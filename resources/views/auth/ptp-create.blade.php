@@ -487,8 +487,8 @@
             
             <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">Hubungan Pengaju (Bertindak Sebagai)<span class="required">*</span></label>
-                    <select id="bertindak_atas_nama" name="bertindak_atas_nama" class="form-control" required placeholder="Pilih Hubungan Pengaju">
+                    <label class="form-label">Hubungan Pemohon (Bertindak Sebagai)<span class="required">*</span></label>
+                    <select id="bertindak_atas_nama" name="bertindak_atas_nama" class="form-control" required placeholder="Pilih Hubungan Pemohon">
                         <option value=""></option>
                         <option value="Diri Sendiri" {{ old('bertindak_atas_nama') === 'Diri Sendiri' ? 'selected' : '' }}>Diri Sendiri / Pemilik Usaha</option>
                         <option value="Penerima Kuasa" {{ old('bertindak_atas_nama') === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
@@ -683,7 +683,7 @@
     // Initialize Tom Select
     let tsBertindak = new TomSelect('#bertindak_atas_nama', {
         create: false,
-        placeholder: "Pilih Hubungan Pengaju...",
+        placeholder: "Pilih Hubungan Pemohon...",
         allowEmptyOption: true,
         plugins: ['dropdown_input'],
         onChange: function(value) {

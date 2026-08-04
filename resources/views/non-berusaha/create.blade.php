@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Form Pengajuan Pertimbangan Teknis Pertanahan PKKPR Non Berusaha — PATEN PAK MIKO')
+@section('title', 'Form Permohonan Pertimbangan Teknis Pertanahan PKKPR Non Berusaha — PATEN PAK MIKO')
 
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/ptp-form.css') }}">
@@ -106,9 +106,9 @@
                 <!-- Hubungan Pengaju -->
                 @if($ptpHubungan !== 'Diri Sendiri')
                 <div class="form-group">
-                    <label class="form-label">Hubungan Pengaju (Sebagai Apa)<span class="required">*</span></label>
+                    <label class="form-label">Hubungan Pemohon (Sebagai Apa)<span class="required">*</span></label>
                     <select id="hubungan_pengaju" name="hubungan_pengaju" class="form-control" required>
-                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pengaju...</option>
+                        <option value="" disabled {{ $selectedHubungan ? '' : 'selected' }}>Pilih Hubungan Pemohon...</option>
                         <option value="Pemilik Usaha / Pengguna Layanan" {{ $selectedHubungan === 'Pemilik Usaha / Pengguna Layanan' ? 'selected' : '' }}>Pemilik Usaha / Pengguna Layanan</option>
                         <option value="Penerima Kuasa" {{ $selectedHubungan === 'Penerima Kuasa' ? 'selected' : '' }}>Penerima Kuasa</option>
                         <option value="Lainnya" {{ $selectedHubungan === 'Lainnya' ? 'selected' : '' }}>Instansi / PT / Lainnya (Ketik Manual)</option>
@@ -327,7 +327,7 @@
                 if (selectHubungan.value === 'Pemilik Usaha / Pengguna Layanan') {
                     inputLainnya.placeholder = 'Ketik pemilik usaha/layanan apa (cth: Pemilik Toko Roti, dll)';
                 } else {
-                    inputLainnya.placeholder = 'Masukkan hubungan pengaju secara manual (cth: Instansi, PT, dll)';
+                    inputLainnya.placeholder = 'Masukkan hubungan pemohon secara manual (cth: Instansi, PT, dll)';
                 }
             } else {
                 wrapperLainnya.style.display = 'none';

@@ -1004,20 +1004,20 @@
                         <div id="Kantor Pertanahan-panel-1" class="Kantor Pertanahan-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
-                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
+                                <form action="{{ route('berusaha.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="step" value="bpn_berkas">
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
-                                        <strong>Langkah 1: Verifikasi Kelayakan Dokumen Persyaratan:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, lalu terima atau tolak. Notifikasi WA akan terkirim otomatis.
+                                        <strong>Langkah 1: Verifikasi Kelayakan Dokumen Persyaratan:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, sertakan file SPS (Surat Perintah Setor), lalu terima atau tolak. Notifikasi WA (beserta link SPS) akan terkirim otomatis.
                                     </div>
                                     <div class="form-group-v" style="margin-bottom: 20px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui / Lengkap
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('sps_document').required=true; document.getElementById('revisi-berkas-container').style.display='none';"> Disetujui / Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Lengkap
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak' ? 'checked' : '' }} style="width:16px;height:16px;accent-color:var(--clr-blue);" onchange="document.getElementById('sps-upload-container').style.display='none'; document.getElementById('sps_document').required=false; document.getElementById('revisi-berkas-container').style.display='block';"> Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>
@@ -1437,23 +1437,7 @@
                 </div>
             @endif
  
-            <!-- 5. PELAKU USAHA ACTION: BLAST NOTIF KE Kantor Pertanahan -->
-            @if($user->isPelakuUsaha() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'belum_bayar')
-                <div class="verify-card" style="border-color: #B8E2C8; background: #F4FBF7;">
-                    <h3 class="verify-title" style="color: #137333;">✓ Berkas Valid! Langkah Selanjutnya</h3>
-                    <p style="font-size: 13px; color: #137333; margin-bottom: 16px;">
-                        Berkas awal Anda telah disetujui Kantor Pertanahan. Silakan tekan tombol di bawah untuk men-trigger verifikasi pembayaran dan mengirimkan notifikasi ke Kantor Pertanahan.
-                    </p>
-                    <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="step" value="blast_notif">
-                        <button type="submit" class="btn-submit-v" style="background: var(--clr-green);">
-                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                            Kirim Notifikasi Verifikasi Pembayaran
-                        </button>
-                    </form>
-                </div>
-            @endif
+
  
             <div class="layout-grid">
                 
@@ -1490,7 +1474,7 @@
                                 <span class="detail-val">{{ $application->hubungan_pengaju }}</span>
                             </li>
                             <li class="detail-item">
-                                <span class="detail-label">Tanggal Pengajuan</span>
+                                <span class="detail-label">Tanggal Permohonan</span>
                                 <span class="detail-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
                             </li>
                             

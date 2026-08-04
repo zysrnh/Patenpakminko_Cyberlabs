@@ -83,7 +83,7 @@
                     Simpan Notifikasi Pendaftaran ke WhatsApp
                 </div>
                 <div style="font-size: 12px; color: #2E7D32; margin-bottom: 12px;">
-                    Klik tombol di bawah untuk membuka WhatsApp dan menyimpan bukti pengajuan permohonan Anda:
+                    Klik tombol di bawah untuk membuka WhatsApp dan menyimpan bukti permohonan Anda:
                 </div>
                 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
                     @foreach(session('wa_links') as $link)

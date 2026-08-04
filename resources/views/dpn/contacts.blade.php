@@ -111,7 +111,7 @@
                 </div>
                 <div class="contact-info">
                     <div class="contact-label">Admin Kantor Pertanahan</div>
-                    <div class="contact-desc">Menerima notifikasi untuk: pengajuan baru, penyelesaian validasi PUTR, dan penyelesaian penilaian PUTR. Berperan dalam seluruh alur layanan.</div>
+                    <div class="contact-desc">Menerima notifikasi untuk: permohonan baru, penyelesaian validasi PUTR, dan penyelesaian penilaian PUTR. Berperan dalam seluruh alur layanan.</div>
                     <input type="text" name="admin_bpn" class="contact-input" id="admin_bpn" placeholder="contoh: 6281234567890" value="{{ old('admin_bpn', $settings['admin_bpn'] ?? '') }}" inputmode="numeric">
                     @if(!empty($settings['admin_bpn']))
                         <div class="contact-current">Tersimpan: <strong>{{ $settings['admin_bpn'] }}</strong></div>

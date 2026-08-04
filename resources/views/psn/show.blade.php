@@ -1382,7 +1382,7 @@
                                 <span class="data-val">{{ $application->nama_pengaju }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">Hubungan Pengaju (Sebagai Apa)</span>
+                                <span class="data-label">Hubungan Pemohon (Sebagai Apa)</span>
                                 <span class="data-val">{{ $application->hubungan_pengaju }}</span>
                             </div>
                             <div class="data-item">
@@ -1394,7 +1394,7 @@
                                 <span class="data-val mono">+{{ $application->user->phone_number }}</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">Tanggal Pengajuan Berkas</span>
+                                <span class="data-label">Tanggal Permohonan</span>
                                 <span class="data-val">{{ $application->created_at->format('d-m-Y, H:i') }} WIB</span>
                             </div>
                         </div>
