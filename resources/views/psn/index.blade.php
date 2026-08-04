@@ -100,7 +100,6 @@
                         @if(Auth::user()->isDpn())
                         <th style="width:36px; text-align:center; padding: 10px 12px;"><input type="checkbox" id="checkAll" style="cursor:pointer;"></th>
                         @endif
-                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">No. Registrasi</th>
                         <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Pemohon</th>
                         <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">No. WA</th>
                         <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Tgl Pengajuan</th>
@@ -108,7 +107,7 @@
                         <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">SLA (Pengendalian)</th>
                         @endif
                         <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
-                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 140px; text-align: center;">Aksi</th>
+                        <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -118,12 +117,11 @@
                             <td style="text-align:center; padding: 12px;"><input type="checkbox" name="ids[]" value="{{ $app->id }}" class="row-check" style="cursor:pointer;"></td>
                             @endif
                             <td style="padding: 12px 14px;">
-                                <span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:#003B64;">{{ $app->application_number }}</span>
-                                <div style="font-size:11px;color:#64748B;margin-top:2px;font-weight:600;">{{ $app->service_name }}</div>
-                            </td>
-                            <td style="padding: 12px 14px;">
                                 <div style="font-weight:700; color:#003B64; font-size: 13px;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
-                                <div style="font-size:11px; color:#64748B;">Akun: PMH{{ str_pad($app->user->id, 3, '0', STR_PAD_LEFT) }}</div>
+                                <div style="font-size:11px; color:#64748B;">
+                                    Akun: PMH{{ str_pad($app->user->id, 3, '0', STR_PAD_LEFT) }} • 
+                                    <span style="font-family:'DM Mono',monospace; font-weight:600; color:#003B64;">{{ $app->application_number }}</span>
+                                </div>
                             </td>
                             <td style="padding: 12px 14px; color:#334155; font-size: 12.5px;">{{ $app->user->phone_number }}</td>
                             <td style="padding: 12px 14px; color:#334155; font-size: 12.5px;">{{ $app->created_at->format('d-m-Y') }}</td>
@@ -175,10 +173,22 @@
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>
                                     @if($app->ptp_data)
-                                    <a href="{{ route('psn.ptp_pdf', $app->id) }}" target="_blank" class="btn btn-sm" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px; background: #E3F0F9; color: #003B64; border: 1px solid #B3D4EC; text-decoration: none;" title="Download / Lihat Berkas PTP">
-                                        <svg viewBox="0 0 24 24" style="width:12px;height:12px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                        Berkas PTP
-                                    </a>
+                                    <div class="ptp-dropdown-container" style="position: relative; display: inline-block;">
+                                        <button type="button" onclick="const d=this.nextElementSibling; document.querySelectorAll('.ptp-dropdown-menu').forEach(m=>{if(m!==d)m.style.display='none';}); d.style.display=d.style.display==='block'?'none':'block';" class="btn btn-sm" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px; background: #E3F0F9; color: #003B64; border: 1px solid #B3D4EC; cursor: pointer;">
+                                            <svg viewBox="0 0 24 24" style="width:12px;height:12px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                            Berkas PTP ▾
+                                        </button>
+                                        <div class="ptp-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; margin-top: 4px; background: white; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 140px; overflow: hidden; z-index: 100; text-align: left;">
+                                            <a href="{{ route('psn.ptp_pdf', $app->id) }}" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; text-decoration: none; color: #0F172A; font-size: 12px; font-weight: 600; border-bottom: 1px solid #F1F5F9;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='white'">
+                                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                Preview PDF
+                                            </a>
+                                            <a href="{{ route('psn.ptp_pdf', $app->id) }}?action=download" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; text-decoration: none; color: #0F172A; font-size: 12px; font-weight: 600;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='white'">
+                                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                                Download DOCX
+                                            </a>
+                                        </div>
+                                    </div>
                                     @endif
                                     @if(Auth::user()->isDpn())
                                     <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#DC2626;border-color:#DC2626;color:#fff; border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px;">

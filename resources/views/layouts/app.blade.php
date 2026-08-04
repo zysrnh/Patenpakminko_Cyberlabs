@@ -793,7 +793,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             errorDiv.remove();
                         }
                     }
-                });
+            // Close PTP Dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.ptp-dropdown-container')) {
+                    document.querySelectorAll('.ptp-dropdown-menu').forEach(function(m) {
+                        m.style.display = 'none';
+                    });
+                }
             });
         });
     </script>
