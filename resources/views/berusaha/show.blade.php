@@ -1077,7 +1077,7 @@
                             @endif
                         </div>
 
-                        <div id="Kantor Pertanahan-panel-2" class="Kantor Pertanahan-panel-step" style="display: {{ ($application->dinas_pu_status === 'validasi_awal_diterima' || $application->bpn_berkas_status === 'diterima') && $application->bpn_pembayaran_status === 'belum_bayar' ? 'block' : 'none' }};">
+                        <div id="Kantor Pertanahan-panel-2" class="Kantor Pertanahan-panel-step" style="display: {{ $application->dinas_pu_status === 'validasi_awal_diterima' && $application->bpn_pembayaran_status === 'belum_bayar' ? 'block' : 'none' }};">
                             @php $isStep2Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'belum_bayar'); @endphp
                             <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
                                 <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">

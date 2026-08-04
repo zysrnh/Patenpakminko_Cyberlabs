@@ -222,8 +222,12 @@ trait WaBlastHelper
                 'link' => $url,
             ];
         }
-        
-        if ($type === 'berkas_verifikasi' && $app->bpn_berkas_status === 'diterima' && $adminPutr) {
+        $isBpnOnly = ($app instanceof \App\Models\KebijakanApplication 
+            || $app instanceof \App\Models\TanahTimbulApplication 
+            || stripos($layananTitle, 'Kebijakan') !== false 
+            || stripos($layananTitle, 'Tanah Timbul') !== false);
+
+        if ($type === 'berkas_verifikasi' && $app->bpn_berkas_status === 'diterima' && $adminPutr && !$isBpnOnly) {
             $text = "Notifikasi Dinas PUTR: Berkas permohonan {$no_berkas_text} atas nama {$nama} telah selesai divalidasi awal oleh Kantor Pertanahan Kota Sukabumi. Silakan lakukan Validasi Awal Tata Ruang di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
@@ -290,7 +294,7 @@ trait WaBlastHelper
             }
         }
 
-        if ($type === 'pertek_terbit' && $adminPutr) {
+        if ($type === 'pertek_terbit' && $adminPutr && !$isBpnOnly) {
             $text = "Notifikasi Dinas PUTR: Pertimbangan Teknis Pertanahan (PTP) untuk {$layananTitle}{$no_berkas_text} telah terbit dari Kantor Pertanahan Kota Sukabumi. Silakan lakukan penilaian PKKPR di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
@@ -306,7 +310,7 @@ trait WaBlastHelper
             ];
         }
         
-        if ($type === 'pu_selesai' && $adminPtsp) {
+        if ($type === 'pu_selesai' && $adminPtsp && !$isBpnOnly) {
             $text = "Notifikasi DPMPTSP: {$layananTitle}{$no_berkas_text} Telah selesai di Verifikasi oleh Dinas PUTR. Silakan proses penerbitan {$dokumenFinalAdmin} di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             $wa_links[] = [
