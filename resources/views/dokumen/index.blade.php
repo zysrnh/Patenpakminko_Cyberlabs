@@ -120,7 +120,7 @@
             <span>Pengelolaan Dokumen</span>
         </div>
         <h1>Pengelolaan Dokumen</h1>
-        <p>Unggah, simpan, dan kelola dokumen lintas instansi (Kantor Pertanahan & PU).</p>
+        <p>Unggah, simpan, dan kelola dokumen lintas instansi.</p>
     </div>
 
 </div>

@@ -196,7 +196,7 @@
             <span>Pengelolaan Berkas</span>
         </div>
         <h1>Pengelolaan Berkas</h1>
-        <p>Unggah, simpan, dan kelola dokumen lintas instansi (Kantor Pertanahan & PU).</p>
+        <p>Unggah, simpan, dan kelola dokumen lintas instansi.</p>
     </div>
     <div>
         <form action="{{ route('berkas.sync') }}" method="POST">
