@@ -25,48 +25,43 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
-        // Fetch holidays from API and DB (Cached for 24 hours)
-        $holidays = Cache::remember('indonesian_holidays', 86400, function () {
-            $nationalHolidays = [];
-            
-            // 1. Fetch dari API Libur Nasional
-            try {
-                $response = \Illuminate\Support\Facades\Http::withoutVerifying()
-                    ->timeout(5)
-                    ->get('https://api-harilibur.vercel.app/api');
-                
-                if ($response->successful()) {
-                    foreach ($response->json() as $holiday) {
-                        if (isset($holiday['holiday_date']) && (isset($holiday['is_national_holiday']) && $holiday['is_national_holiday'])) {
-                            $nationalHolidays[] = $holiday['holiday_date'];
+        $getHolidays = function () {
+            return Cache::remember('indonesian_holidays', 3600, function () {
+                $nationalHolidays = [];
+                try {
+                    $response = \Illuminate\Support\Facades\Http::withoutVerifying()
+                        ->timeout(3)
+                        ->get('https://api-harilibur.vercel.app/api');
+                    if ($response->successful()) {
+                        foreach ($response->json() as $holiday) {
+                            if (isset($holiday['holiday_date']) && (isset($holiday['is_national_holiday']) && $holiday['is_national_holiday'])) {
+                                $nationalHolidays[] = $holiday['holiday_date'];
+                            }
                         }
                     }
-                }
-            } catch (\Exception $e) {
-                // Ignore API failure
-            }
+                } catch (\Exception $e) {}
 
-            // 2. Fetch dari Kalender DB Lokal (Libur Tambahan)
-            try {
-                if (Schema::hasTable('holidays')) {
-                    $dbHolidays = Holiday::pluck('date')->map(function($date) {
-                        return $date->format('Y-m-d');
-                    })->toArray();
-                    
-                    return array_unique(array_merge($nationalHolidays, $dbHolidays));
-                }
-            } catch (\Exception $e) {
-                // If DB is not ready during tests/migrations
-            }
-            
-            return $nationalHolidays;
-        });
+                try {
+                    if (Schema::hasTable('holidays')) {
+                        $dbHolidays = Holiday::pluck('date')->map(function($date) {
+                            return $date->format('Y-m-d');
+                        })->toArray();
+                        return array_unique(array_merge($nationalHolidays, $dbHolidays));
+                    }
+                } catch (\Exception $e) {}
 
-        Carbon::macro('isHoliday', function() use ($holidays) {
+                return $nationalHolidays;
+            });
+        };
+
+        Carbon::macro('isHoliday', function() use ($getHolidays) {
+            $holidays = $getHolidays();
             return in_array($this->format('Y-m-d'), $holidays);
         });
 
-        Carbon::macro('isWorkingDay', function() use ($holidays) {
+        Carbon::macro('isWorkingDay', function() use ($getHolidays) {
+            $holidays = $getHolidays();
+            // Hari kerja: Bukan Sabtu (6), Bukan Minggu (0), dan bukan Tanggal Merah/Cuti Bersama
             return !$this->isWeekend() && !in_array($this->format('Y-m-d'), $holidays);
         });
 
