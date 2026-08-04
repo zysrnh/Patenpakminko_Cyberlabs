@@ -138,4 +138,27 @@ class AdminUserController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'Akun berhasil dihapus.');
     }
+
+    /**
+     * Hapus masal (bulk delete via checklist) admin.
+     */
+    public function bulkDestroy(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak.');
+        }
+
+        $ids = $request->input('user_ids', []);
+
+        // Mencegah admin menghapus akunnya sendiri
+        $ids = array_diff($ids, [Auth::id()]);
+
+        if (empty($ids)) {
+            return redirect()->route('admin.users.index')->with('error', 'Silakan centang akun admin yang ingin dihapus (Anda tidak dapat menghapus akun Anda sendiri).');
+        }
+
+        $count = User::whereIn('id', $ids)->where('role', '!=', 'pelaku_usaha')->delete();
+
+        return redirect()->route('admin.users.index')->with('success', "{$count} akun admin berhasil dihapus.");
+    }
 }

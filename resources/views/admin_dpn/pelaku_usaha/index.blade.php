@@ -96,80 +96,91 @@
                     <a href="{{ route('admin.pelaku_usaha.index') }}" class="btn btn-secondary" style="border-radius: 4px; font-size: 12px; font-weight: 700; height: 36px; padding: 0 12px; display: inline-flex; align-items: center; text-decoration: none; border: 1px solid #CBD5E1; background: #ffffff; color: #64748B; box-sizing: border-box;">Reset</a>
                 @endif
             </div>
-            <div style="font-size: 12px; color: #64748B; font-weight: 600;">
-                Total Pelaku Usaha: <strong style="color: #003B64;">{{ $users->total() }}</strong>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button type="submit" form="bulkDeleteForm" id="btnBulkDelete" disabled style="background: #DC2626; border: none; border-radius: 4px; font-size: 12px; font-weight: 700; height: 36px; padding: 0 14px; color: #fff; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; opacity: 0.5; cursor: not-allowed; transition: all 0.2s;" onclick="return confirm('Apakah Anda yakin ingin menghapus secara permanen seluruh akun pengguna yang dicentang?');">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Hapus Terpilih (<span id="selectedUserCount">0</span>)
+                </button>
+                <div style="font-size: 12px; color: #64748B; font-weight: 600;">
+                    Total Pelaku Usaha: <strong style="color: #003B64;">{{ $users->total() }}</strong>
+                </div>
             </div>
         </form>
     </div>
     <div class="panel-body" style="padding: 0;">
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
-                <thead>
-                    <tr style="background: #F8FAFC; border-bottom: 1.5px solid #E2E8F0;">
-                        <th style="padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 50px;">No</th>
-                        <th style="padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Nama / Username</th>
-                        <th style="padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Kontak Info</th>
-                        <th style="padding: 10px 14px; text-align: center; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status Akses</th>
-                        <th style="padding: 10px 14px; text-align: center; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 100px;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($users as $index => $user)
-                    <tr style="border-bottom: 1px solid #F1F5F9;">
-                        <td style="padding: 12px 14px; color: #64748B; font-weight: 600; font-size: 12.5px;">{{ $users->firstItem() + $index }}</td>
-                        <td style="padding: 12px 14px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 32px; height: 32px; border-radius: 4px; background: #218AC9; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0;">
-                                    {{ strtoupper(substr($user->name ?: $user->username, 0, 2)) }}
+        <form id="bulkDeleteForm" action="{{ route('admin.pelaku_usaha.bulk-destroy') }}" method="POST">
+            @csrf
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                    <thead>
+                        <tr style="background: #F8FAFC; border-bottom: 1.5px solid #E2E8F0;">
+                            <th style="padding: 10px 14px; text-align: center; width: 40px;">
+                                <input type="checkbox" id="selectAllUsers" style="width: 16px; height: 16px; cursor: pointer; accent-color: #218AC9;">
+                            </th>
+                            <th style="padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 40px;">No</th>
+                            <th style="padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Nama / Username</th>
+                            <th style="padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Kontak Info</th>
+                            <th style="padding: 10px 14px; text-align: center; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status Akses</th>
+                            <th style="padding: 10px 14px; text-align: center; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; width: 100px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($users as $index => $user)
+                        <tr style="border-bottom: 1px solid #F1F5F9;">
+                            <td style="padding: 12px 14px; text-align: center;">
+                                <input type="checkbox" name="user_ids[]" value="{{ $user->id }}" class="user-cb" style="width: 16px; height: 16px; cursor: pointer; accent-color: #218AC9;">
+                            </td>
+                            <td style="padding: 12px 14px; color: #64748B; font-weight: 600; font-size: 12.5px;">{{ $users->firstItem() + $index }}</td>
+                            <td style="padding: 12px 14px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 32px; height: 32px; border-radius: 4px; background: #218AC9; color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0;">
+                                        {{ strtoupper(substr($user->name ?: $user->username, 0, 2)) }}
+                                    </div>
+                                    <div>
+                                        <strong style="color: #003B64; font-size: 13px; display: block;">{{ $user->name ?: '-' }}</strong>
+                                        <div style="font-size: 11.5px; color: #64748B;">{{ '@'.$user->username }}</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <strong style="color: #003B64; font-size: 13px; display: block;">{{ $user->name ?: '-' }}</strong>
-                                    <div style="font-size: 11.5px; color: #64748B;">{{ '@'.$user->username }}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td style="padding: 12px 14px;">
-                            <div style="font-size: 12.5px; font-weight: 700; color: #003B64;">{{ $user->phone_number ?: '-' }}</div>
-                            <div style="font-size: 11.5px; color: #64748B;">{{ $user->email ?: '-' }}</div>
-                        </td>
-                        <td style="padding: 12px 14px; text-align: center;">
-                            @if($user->is_active)
-                                <span class="badge" style="background: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                                    <span style="width: 5px; height: 5px; border-radius: 50%; background: #15803D;"></span> Aktif
-                                </span>
-                            @else
-                                <span class="badge" style="background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                                    <span style="width: 5px; height: 5px; border-radius: 50%; background: #D97706;"></span> Belum Terverifikasi
-                                </span>
-                            @endif
-                        </td>
-                        <td style="padding: 12px 14px; text-align: center;">
-                            <div style="display: flex; justify-content: center; gap: 4px;">
-                                <a href="{{ route('admin.pelaku_usaha.edit', $user->id) }}" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 4px; background: #EFF6FF; color: #218AC9; border: 1px solid #BFDBFE; text-decoration: none;" title="Edit Pengguna">
-                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                                </a>
-                                <form action="{{ route('admin.pelaku_usaha.destroy', $user->id) }}" method="POST" style="margin: 0;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun pelaku usaha ini secara permanen? Semua data terkait mungkin ikut terhapus!');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 4px; background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; cursor: pointer;" title="Hapus Pengguna">
+                            </td>
+                            <td style="padding: 12px 14px;">
+                                <div style="font-size: 12.5px; font-weight: 700; color: #003B64;">{{ $user->phone_number ?: '-' }}</div>
+                                <div style="font-size: 11.5px; color: #64748B;">{{ $user->email ?: '-' }}</div>
+                            </td>
+                            <td style="padding: 12px 14px; text-align: center;">
+                                @if($user->is_active)
+                                    <span class="badge" style="background: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <span style="width: 5px; height: 5px; border-radius: 50%; background: #15803D;"></span> Aktif
+                                    </span>
+                                @else
+                                    <span class="badge" style="background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
+                                        <span style="width: 5px; height: 5px; border-radius: 50%; background: #D97706;"></span> Belum Terverifikasi
+                                    </span>
+                                @endif
+                            </td>
+                            <td style="padding: 12px 14px; text-align: center;">
+                                <div style="display: flex; justify-content: center; gap: 4px;">
+                                    <a href="{{ route('admin.pelaku_usaha.edit', $user->id) }}" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 4px; background: #EFF6FF; color: #218AC9; border: 1px solid #BFDBFE; text-decoration: none;" title="Edit Pengguna">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                                    </a>
+                                    <button type="button" style="display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 4px; background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; cursor: pointer;" title="Hapus Pengguna" onclick="if(confirm('Apakah Anda yakin ingin menghapus akun ini?')) { document.querySelectorAll('.user-cb').forEach(cb => cb.checked = false); document.querySelector('.user-cb[value=\'{{ $user->id }}\']').checked = true; document.getElementById('bulkDeleteForm').submit(); }">
                                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                     </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" style="padding: 40px 20px; text-align: center;">
-                            <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5" style="margin-bottom: 10px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                            <h3 style="font-size: 14px; font-weight: 700; color: #003B64; margin-bottom: 4px;">Tidak ada data Pelaku Usaha</h3>
-                            <p style="font-size: 12.5px; color: #64748B;">Pencarian tidak menemukan hasil atau belum ada akun pelaku usaha terdaftar.</p>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" style="padding: 40px 20px; text-align: center;">
+                                <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5" style="margin-bottom: 10px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                                <h3 style="font-size: 14px; font-weight: 700; color: #003B64; margin-bottom: 4px;">Tidak ada data Pelaku Usaha</h3>
+                                <p style="font-size: 12.5px; color: #64748B;">Pencarian tidak menemukan hasil atau belum ada akun pelaku usaha terdaftar.</p>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </form>
     </div>
     <div style="padding: 14px 18px; border-top: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: #ffffff;">
         <div style="font-size: 12px; color: #64748B; font-weight: 500;">
@@ -180,4 +191,49 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('selectAllUsers');
+    const checkboxes = document.querySelectorAll('.user-cb');
+    const btnBulk = document.getElementById('btnBulkDelete');
+    const countSpan = document.getElementById('selectedUserCount');
+
+    function updateBulkState() {
+        const checked = document.querySelectorAll('.user-cb:checked');
+        const count = checked.length;
+        if (countSpan) countSpan.textContent = count;
+        
+        if (btnBulk) {
+            if (count > 0) {
+                btnBulk.disabled = false;
+                btnBulk.style.opacity = '1';
+                btnBulk.style.cursor = 'pointer';
+            } else {
+                btnBulk.disabled = true;
+                btnBulk.style.opacity = '0.5';
+                btnBulk.style.cursor = 'not-allowed';
+            }
+        }
+    }
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+            updateBulkState();
+        });
+    }
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            if (!this.checked && selectAll) {
+                selectAll.checked = false;
+            } else if (selectAll && document.querySelectorAll('.user-cb:checked').length === checkboxes.length) {
+                selectAll.checked = true;
+            }
+            updateBulkState();
+        });
+    });
+});
+</script>
 @endsection

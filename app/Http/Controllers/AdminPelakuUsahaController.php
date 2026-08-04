@@ -113,4 +113,24 @@ class AdminPelakuUsahaController extends Controller
 
         return redirect()->route('admin.pelaku_usaha.index')->with('success', 'Akun pelaku usaha berhasil dihapus.');
     }
+
+    /**
+     * Hapus masal (bulk delete via checklist) pelaku usaha.
+     */
+    public function bulkDestroy(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak.');
+        }
+
+        $ids = $request->input('user_ids', []);
+
+        if (empty($ids)) {
+            return redirect()->route('admin.pelaku_usaha.index')->with('error', 'Silakan centang pengguna yang ingin dihapus terlebih dahulu.');
+        }
+
+        $count = User::whereIn('id', $ids)->where('role', 'pelaku_usaha')->delete();
+
+        return redirect()->route('admin.pelaku_usaha.index')->with('success', "{$count} akun pengguna berhasil dihapus.");
+    }
 }
