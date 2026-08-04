@@ -793,49 +793,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             errorDiv.remove();
                         }
                     }
-            // Close PTP Dropdowns when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.ptp-dropdown-container')) {
-                    document.querySelectorAll('.ptp-dropdown-menu').forEach(function(m) {
-                        m.style.display = 'none';
-                    });
-                }
-            });
-
-            window.addEventListener('scroll', function() {
-                document.querySelectorAll('.ptp-dropdown-menu').forEach(function(m) {
-                    m.style.display = 'none';
                 });
-            }, true);
+            });
         });
-
-        function togglePtpDropdown(btn) {
-            const menu = btn.nextElementSibling;
-            const isVisible = menu.style.display === 'block';
-
-            document.querySelectorAll('.ptp-dropdown-menu').forEach(m => m.style.display = 'none');
-
-            if (!isVisible) {
-                const rect = btn.getBoundingClientRect();
-                const menuWidth = 145;
-                const menuHeight = 75;
-                
-                let top = rect.bottom + 4;
-                let left = rect.right - menuWidth;
-
-                if (top + menuHeight > window.innerHeight && rect.top - menuHeight > 0) {
-                    top = rect.top - menuHeight - 4;
-                }
-
-                if (left < 10) left = 10;
-
-                menu.style.position = 'fixed';
-                menu.style.top = top + 'px';
-                menu.style.left = left + 'px';
-                menu.style.display = 'block';
-                menu.style.zIndex = '99999';
-            }
-        }
     </script>
 </body>
 </html>

@@ -173,22 +173,11 @@
                                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                                     </a>
                                     @if($app->ptp_data)
-                                    <div class="ptp-dropdown-container" style="position: relative; display: inline-block;">
-                                        <button type="button" onclick="togglePtpDropdown(this)" class="btn btn-sm" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px; background: #E3F0F9; color: #003B64; border: 1px solid #B3D4EC; cursor: pointer;">
-                                            <svg viewBox="0 0 24 24" style="width:12px;height:12px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                            Berkas PTP ▾
-                                        </button>
-                                        <div class="ptp-dropdown-menu" style="display: none; position: fixed; background: white; border: 1px solid #CBD5E1; border-radius: 6px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1); width: 145px; overflow: hidden; z-index: 99999; text-align: left;">
-                                            <a href="{{ route('berusaha.ptp_pdf', $app->id) }}" target="_blank" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; text-decoration: none; color: #0F172A; font-size: 12px; font-weight: 600; border-bottom: 1px solid #F1F5F9;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='white'">
-                                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                                Preview PDF
-                                            </a>
-                                            <a href="{{ route('berusaha.ptp_pdf', $app->id) }}?action=download" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; text-decoration: none; color: #0F172A; font-size: 12px; font-weight: 600;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='white'">
-                                                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                                Download DOCX
-                                            </a>
-                                        </div>
-                                    </div>
+                                     <select onchange="if(this.value){ if(this.options[this.selectedIndex].getAttribute('data-target')==='_blank'){ window.open(this.value, '_blank'); } else { window.location.href = this.value; } this.selectedIndex = 0; }" style="border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 8px; background: #E3F0F9; color: #003B64; border: 1px solid #B3D4EC; cursor: pointer; outline: none; height: 30px;">
+                                         <option value="" selected disabled>Berkas PTP ▾</option>
+                                         <option value="{{ route('berusaha.ptp_pdf', $app->id) }}" data-target="_blank">📄 Preview PDF</option>
+                                         <option value="{{ route('berusaha.ptp_pdf', $app->id) }}?action=download" data-target="_self">📥 Download DOCX</option>
+                                     </select>
                                     @endif
                                     @if(Auth::user()->isDpn())
                                     <button type="submit" form="delete-form-{{ $app->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus permanen permohonan {{ $app->application_number }}? Data tidak bisa dikembalikan!')" style="background:#DC2626;border-color:#DC2626;color:#fff; border-radius: 4px; font-size: 12px; font-weight: 700; padding: 5px 10px; display: inline-flex; align-items: center; gap: 4px;">
