@@ -76,7 +76,7 @@ class PpkprNonBerusahaController extends Controller
         }
 
         if (!Auth::user()->isPelakuUsaha()) {
-            return redirect()->route('dashboard')->with('error', 'Hanya Pemohon / Pelaku Usaha yang dapat membuat pengajuan permohonan.');
+            abort(403, 'Hanya Pelaku Usaha yang dapat membuat pengajuan permohonan.');
         }
 
         if (!session()->has('ptp_form_data')) {
