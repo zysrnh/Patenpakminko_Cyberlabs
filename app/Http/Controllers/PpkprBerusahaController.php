@@ -234,36 +234,49 @@ class PpkprBerusahaController extends Controller
         // ==========================================
         // 1. TAHAP BPN (Verifikasi Dokumen, Pembayaran, Lokasi, Rapat, Pertek)
         // ==========================================
-        if ($user->isBpn() && $application->status === 'menunggu_bpn') {
+        if ($user->isBpn()) {
  
-            // BPN Langkah 1: Verifikasi Dokumen Persyaratan
+            // BPN Langkah 1: Verifikasi Dokumen Persyaratan & Upload SPS
             if ($step === 'bpn_berkas') {
                 $request->validate([
                     'action' => 'required|in:approve,reject',
                     'notes' => 'required|string|max:1000',
+                    'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                ], [
+                    'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
+                    'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
+                    'sps_document.max' => 'Ukuran file SPS maksimal 5MB.',
                 ]);
- 
+
                 $action = $request->input('action');
                 $notes = $request->input('notes');
- 
+
                 $application->bpn_notes = $notes;
                 
                 if ($action === 'approve') {
+                    if (!$request->hasFile('sps_document') && !$application->bpn_sps_document) {
+                        return redirect()->back()->withErrors(['sps_document' => 'Dokumen SPS wajib diunggah saat menyetujui berkas (Lengkap).']);
+                    }
+                    if ($request->hasFile('sps_document')) {
+                        $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
+                    }
+
                     $application->bpn_berkas_status = 'diterima';
-                    $application->bpn_berkas_approved_at = now();
-                    // Alur berlanjut ke Validasi Permohonan oleh Dinas PUTR / Dinas PU
-                    $application->status = 'menunggu_dinas_pu';
-                    $application->dinas_pu_status = 'menunggu_validasi_awal';
-                    $msg = 'Berkas persyaratan dinyatakan sesuai oleh BPN. Permohonan diteruskan ke Dinas PUTR untuk Validasi Awal.';
+                    $application->bpn_berkas_approved_at = $application->bpn_berkas_approved_at ?? now();
+                    if ($application->status === 'menunggu_bpn') {
+                        $application->status = 'menunggu_dinas_pu';
+                        $application->dinas_pu_status = 'menunggu_validasi_awal';
+                    }
+                    $msg = 'Berkas disetujui, Dokumen SPS berhasil diunggah & tautan di-blast ke WhatsApp pemohon.';
                 } else {
                     $application->bpn_berkas_status = 'tidak_sesuai';
                     $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi.';
                 }
                 $application->save();
- 
-                // Kirim notifikasi WA ke Pelaku Usaha
+
+                // Kirim notifikasi WA ke Pelaku Usaha (Termasuk tautan dokumen SPS)
                 $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
- 
+
                 return redirect()->route('berusaha.show', $id)->with('success', $msg);
             }
  
@@ -278,7 +291,7 @@ class PpkprBerusahaController extends Controller
                 // Simpan no berkas dan konfirmasi pembayaran
                 $application->no_berkas = $request->input('no_berkas');
                 $application->bpn_pembayaran_status = 'sudah_bayar';
-                    $application->bpn_pembayaran_approved_at = now();
+                $application->bpn_pembayaran_approved_at = now();
                 $application->save();
                 $application->user->update(['is_active' => true]);
 
