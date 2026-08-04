@@ -822,6 +822,26 @@
                 @endif
             @endif
 
+            <!-- KEMBALI KE TAHAP SEBELUMNYA (ROLLBACK STATUS & NOTIFIKASI WA) -->
+            @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+                <div class="verify-card" style="border: 1px solid #FBD38D; background: #FFFAF0; margin-bottom: 24px; padding: 16px; border-radius: 8px;">
+                    <h3 class="verify-title" style="color: #C05621; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                        Kembali ke Tahap Sebelumnya (Rollback Status & Notifikasi WA)
+                    </h3>
+                    <p style="font-size: 12.5px; color: #7B341E; margin-bottom: 12px;">
+                        Gunakan fitur ini jika permohonan perlu dikembalikan ke tahap pemeriksaan sebelumnya. Status permohonan di database akan diperbarui dan notifikasi WhatsApp ke pihak terkait akan otomatis dibuatkan.
+                    </p>
+                    <form action="{{ route('application.rollback', ['type' => 'psn', 'id' => $application->id]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengembalikan status permohonan ini ke tahap sebelumnya?');">
+                        @csrf
+                        <button type="submit" style="background: #DD6B20; border: none; color: #fff; font-weight: 700; font-size: 12.5px; padding: 9px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                            Rollback Status & Kirim Notifikasi WA
+                        </button>
+                    </form>
+                </div>
+            @endif
+
             <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN Kantor Pertanahan / DPN) -->
             @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">

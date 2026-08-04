@@ -21,6 +21,16 @@ trait WaBlastHelper
                         : "Dokumen {$layanan}";
 
         return match ($type) {
+            'rollback' => (function() use ($app, $nama, $layanan, $no_berkas_text, $url) {
+                $statusNama = match ($app->status) {
+                    'menunggu_bpn' => 'Pemeriksaan Kantor Pertanahan (BPN)',
+                    'menunggu_putr', 'menunggu_dinas_pu' => 'Validasi / Penilaian Dinas PU',
+                    'menunggu_satu_pintu' => 'Verifikasi Dinas DPMPTSP (Satu Pintu)',
+                    default => 'Verifikasi Berkas Awal'
+                };
+                return "Halo {$nama}, permohonan {$layanan}{$no_berkas_text} Anda dikembalikan (rollback) ke tahap *{$statusNama}* untuk dilakukan pemeriksaan/penyesuaian kembali.\n\nDetail permohonan: {$url}";
+            })(),
+
             'submit', 'submit_berkas' =>
                 "Halo {$nama}, permohonan {$layanan} Anda berhasil diajukan.\n\nBerkas Anda sedang dalam verifikasi awal Kantor Pertanahan Kota Sukabumi.",
 

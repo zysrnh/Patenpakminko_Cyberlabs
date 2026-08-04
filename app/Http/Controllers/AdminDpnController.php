@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminDpnController extends Controller
 {
+    use \App\Traits\WaBlastHelper;
+
     private $filePath = 'visitor_stats.json';
 
     public function index()
@@ -261,6 +263,19 @@ class AdminDpnController extends Controller
         }
 
         $application->save();
+
+        $layananName = match($type) {
+            'ppkpr_berusaha', 'berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Berusaha',
+            'ppkpr_non_berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha',
+            'kebijakan_khusus' => 'Pertimbangan Teknis Pertanahan Kebijakan',
+            'psn' => 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)',
+            'tanah_timbul', 'tanah-timbul' => 'Pertimbangan Teknis Pertanahan Tanah Timbul',
+            default => 'Layanan Pertanahan'
+        };
+
+        try {
+            $this->sendNotificationWithMailbox($application, 'rollback', $layananName, $redirectRoutes[$type], $msg);
+        } catch (\Exception $e) {}
 
         return redirect()->route($redirectRoutes[$type], $id)->with('success', $msg);
     }
