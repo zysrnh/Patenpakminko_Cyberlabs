@@ -101,8 +101,8 @@ class AdminDpnController extends Controller
 
     public function rollbackStatus($type, $id)
     {
-        if (!\Illuminate\Support\Facades\Auth::user()->isBpn()) {
-            abort(403, 'Hanya petugas BPN yang berwenang untuk melakukan rollback status.');
+        if (!\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin (DPN) yang berwenang untuk melakukan rollback status.');
         }
 
         $models = [

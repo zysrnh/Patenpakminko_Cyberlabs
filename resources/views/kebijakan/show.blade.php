@@ -866,7 +866,7 @@
             @endif
 
             <!-- KEMBALI KE TAHAP SEBELUMNYA (ROLLBACK STATUS & NOTIFIKASI WA) -->
-            @if(Auth::user()->isBpn() || Auth::user()->isDpn())
+            @if(Auth::user()->isDpn())
                 <div class="verify-card" style="border: 1px solid #FBD38D; background: #FFFAF0; margin-bottom: 24px; padding: 16px; border-radius: 8px;">
                     <h3 class="verify-title" style="color: #C05621; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
