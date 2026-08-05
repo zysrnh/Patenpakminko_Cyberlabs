@@ -842,8 +842,8 @@
                 </div>
             @endif
 
-            <!-- MAJU KE TAHAP BERIKUTNYA (FORWARD STATUS & NOTIFIKASI WA) -->
-            @if(Auth::user()->isDpn())
+            {{-- MAJU KE TAHAP BERIKUTNYA (DISEMBUNYIKAN SEMENTARA) --}}
+            @if(false)
                 <div class="verify-card" style="border: 1px solid #B2F5EA; background: #F0FFF4; margin-bottom: 24px; padding: 16px; border-radius: 8px;">
                     <h3 class="verify-title" style="color: #276749; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/></svg>
