@@ -725,7 +725,7 @@
                     
                     <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
                         @if(Auth::user()->profile_photo)
-                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar">
+                            <img src="{{ route('file.view', ['path' => Auth::user()->profile_photo]) }}" alt="Foto Profil" class="header-avatar">
                         @else
                             <div class="header-avatar-placeholder">
                                 {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 2)) }}
