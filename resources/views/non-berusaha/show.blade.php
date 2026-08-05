@@ -885,6 +885,26 @@
                 </div>
             @endif
 
+            <!-- MAJU KE TAHAP BERIKUTNYA (FORWARD STATUS & NOTIFIKASI WA) -->
+            @if(Auth::user()->isDpn())
+                <div class="verify-card" style="border: 1px solid #B2F5EA; background: #F0FFF4; margin-bottom: 24px; padding: 16px; border-radius: 8px;">
+                    <h3 class="verify-title" style="color: #276749; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/></svg>
+                        Maju ke Tahap Berikutnya (Forward Status & Notifikasi WA)
+                    </h3>
+                    <p style="font-size: 12.5px; color: #276749; margin-bottom: 12px;">
+                        Gunakan fitur ini untuk memajukan status permohonan ke tahap berikutnya secara bypass.
+                    </p>
+                    <form action="{{ route('application.forward', ['type' => 'ppkpr_non_berusaha', 'id' => $application->id]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memajukan status permohonan ini?');">
+                        @csrf
+                        <button type="submit" style="background: #276749; border: none; color: #fff; font-weight: 700; font-size: 12.5px; padding: 9px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/></svg>
+                            Maju ke Tahap Berikutnya & Kirim Notifikasi WA
+                        </button>
+                    </form>
+                </div>
+            @endif
+
             <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN Kantor Pertanahan / DPN) -->
             @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
                 <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">

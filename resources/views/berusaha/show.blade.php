@@ -740,7 +740,8 @@
                     
                     <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
                         @if(Auth::user()->profile_photo)
-                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar">
+                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Foto Profil" class="header-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                            <div class="header-avatar-placeholder" style="display:none;">{{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 2)) }}</div>
                         @else
                             <div class="header-avatar-placeholder">
                                 {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 2)) }}
@@ -970,6 +971,26 @@
                         <button type="submit" style="background: #DD6B20; border: none; color: #fff; font-weight: 700; font-size: 12.5px; padding: 9px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
                             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
                             Rollback Status & Kirim Notifikasi WA
+                        </button>
+                    </form>
+                </div>
+            @endif
+
+            <!-- MAJU KE TAHAP BERIKUTNYA (FORWARD STATUS & NOTIFIKASI WA) -->
+            @if(Auth::user()->isDpn())
+                <div class="verify-card" style="border: 1px solid #B2F5EA; background: #F0FFF4; margin-bottom: 24px; padding: 16px; border-radius: 8px;">
+                    <h3 class="verify-title" style="color: #276749; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/></svg>
+                        Maju ke Tahap Berikutnya (Forward Status & Notifikasi WA)
+                    </h3>
+                    <p style="font-size: 12.5px; color: #276749; margin-bottom: 12px;">
+                        Gunakan fitur ini untuk memajukan status permohonan ke tahap berikutnya secara bypass. Status akan diperbarui dan notifikasi WhatsApp ke pihak terkait akan otomatis dibuatkan.
+                    </p>
+                    <form action="{{ route('application.forward', ['type' => 'berusaha', 'id' => $application->id]) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memajukan status permohonan ini ke tahap berikutnya?');">
+                        @csrf
+                        <button type="submit" style="background: #276749; border: none; color: #fff; font-weight: 700; font-size: 12.5px; padding: 9px 18px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/></svg>
+                            Maju ke Tahap Berikutnya & Kirim Notifikasi WA
                         </button>
                     </form>
                 </div>

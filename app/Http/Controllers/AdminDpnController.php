@@ -282,8 +282,8 @@ class AdminDpnController extends Controller
 
     public function forwardStatus($type, $id)
     {
-        if (!\Illuminate\Support\Facades\Auth::user()->isBpn()) {
-            abort(403, "Hanya petugas BPN yang berwenang untuk melakukan bypass status.");
+        if (!\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, "Hanya Super Admin (DPN) yang berwenang untuk melakukan maju status.");
         }
 
         $models = [
@@ -296,64 +296,100 @@ class AdminDpnController extends Controller
             "tanah-timbul" => \App\Models\TanahTimbulApplication::class,
         ];
 
+        $redirectRoutes = [
+            'ppkpr_non_berusaha' => 'non-berusaha.show',
+            'ppkpr_berusaha' => 'berusaha.show',
+            'berusaha' => 'berusaha.show',
+            'kebijakan_khusus' => 'kebijakan.show',
+            'psn' => 'psn.show',
+            'tanah_timbul' => 'tanah-timbul.show',
+            'tanah-timbul' => 'tanah-timbul.show',
+        ];
+
         if (!array_key_exists($type, $models)) {
             return redirect()->back()->with("error", "Tipe permohonan tidak valid.");
         }
 
         $modelClass = $models[$type];
         $application = $modelClass::findOrFail($id);
-        $msg = "Permohonan di-forward ke tahap selanjutnya.";
+        $msg = "Permohonan di-maju ke tahap selanjutnya.";
 
         if ($type === "ppkpr_berusaha" || $type === "berusaha") {
             if ($application->status === "menunggu_bpn") {
                 if ($application->bpn_berkas_status !== "diterima") {
                     $application->bpn_berkas_status = "diterima";
+                    $msg = "Berkas dinyatakan diterima/lengkap.";
                 } elseif ($application->bpn_pembayaran_status !== "sudah_bayar") {
                     $application->bpn_pembayaran_status = "sudah_bayar";
                     $application->no_berkas = "BYPASS-" . time();
+                    $msg = "Pembayaran PNBP dikonfirmasi (bypass).";
                 } elseif (!$application->bpn_cek_lokasi_dt) {
                     $application->bpn_cek_lokasi_dt = now();
                     $application->bpn_cek_lokasi_date = now()->format("Y-m-d\TH:i");
                     $application->bpn_cek_lokasi_cp = "Bypass CP";
+                    $msg = "Jadwal Cek Lokasi di-set (bypass).";
                 } elseif (!$application->bpn_rapat_dt) {
                     $application->bpn_rapat_dt = now();
                     $application->bpn_rapat_date = now()->format("Y-m-d\TH:i");
+                    $msg = "Jadwal Rapat Pembahasan di-set (bypass).";
                 } else {
-                    $application->status = "menunggu_putr";
+                    $application->status = "menunggu_dinas_pu";
                     $application->dinas_pu_status = "menunggu_validasi_awal";
+                    $msg = "Permohonan di-maju ke tahap Validasi Awal Dinas PUTR.";
                 }
-            } elseif ($application->status === "menunggu_putr") {
-                $application->status = "menunggu_dinas_pu";
             } elseif ($application->status === "menunggu_dinas_pu") {
                 $application->status = "menunggu_satu_pintu";
+                $msg = "Permohonan di-maju ke tahap Verifikasi Dinas Satu Pintu.";
             } elseif ($application->status === "menunggu_satu_pintu") {
                 $application->status = "disetujui";
+                $msg = "Permohonan di-maju ke status Disetujui.";
             }
         } else {
             if ($application->status === "menunggu_bpn") {
                 if ($application->bpn_berkas_status !== "diterima") {
                     $application->bpn_berkas_status = "diterima";
+                    $msg = "Berkas dinyatakan diterima/lengkap.";
                 } elseif ($application->bpn_pembayaran_status !== "sudah_bayar") {
                     $application->bpn_pembayaran_status = "sudah_bayar";
                     $application->no_berkas = "BYPASS-" . time();
+                    $msg = "Pembayaran PNBP dikonfirmasi (bypass).";
                 } elseif (!$application->bpn_cek_lokasi_dt) {
                     $application->bpn_cek_lokasi_dt = now();
                     $application->bpn_cek_lokasi_date = now()->format("Y-m-d\TH:i");
                     $application->bpn_cek_lokasi_cp = "Bypass CP";
+                    $msg = "Jadwal Cek Lokasi di-set (bypass).";
                 } elseif (!$application->bpn_rapat_dt) {
                     $application->bpn_rapat_dt = now();
                     $application->bpn_rapat_date = now()->format("Y-m-d\TH:i");
+                    $msg = "Jadwal Rapat Pembahasan di-set (bypass).";
                 } else {
                     $application->status = "menunggu_dinas_pu";
+                    $msg = "Permohonan di-maju ke tahap Verifikasi Dinas PU.";
                 }
             } elseif ($application->status === "menunggu_dinas_pu") {
                 $application->status = "menunggu_satu_pintu";
+                $msg = "Permohonan di-maju ke tahap Verifikasi Dinas Satu Pintu.";
             } elseif ($application->status === "menunggu_satu_pintu") {
                 $application->status = "disetujui";
+                $msg = "Permohonan di-maju ke status Disetujui.";
             }
         }
 
         $application->save();
-        return redirect()->back()->with("success", $msg);
+
+        $layananName = match($type) {
+            'ppkpr_berusaha', 'berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Berusaha',
+            'ppkpr_non_berusaha' => 'Pertimbangan Teknis Pertanahan PKKPR Non Berusaha',
+            'kebijakan_khusus' => 'Pertimbangan Teknis Pertanahan Kebijakan',
+            'psn' => 'Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)',
+            'tanah_timbul', 'tanah-timbul' => 'Pertimbangan Teknis Pertanahan Tanah Timbul',
+            default => 'Layanan Pertanahan'
+        };
+
+        try {
+            $this->sendNotificationWithMailbox($application, 'rollback', $layananName, $redirectRoutes[$type], $msg);
+        } catch (\Exception $e) {}
+
+        return redirect()->route($redirectRoutes[$type], $id)->with("success", $msg);
     }
 }
