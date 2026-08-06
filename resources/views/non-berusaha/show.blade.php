@@ -1717,19 +1717,35 @@
                             const targetEl = document.getElementById('liveCountdownSla');
                             if(!targetEl) return;
                             
-                            const targetDate = new Date(targetEl.getAttribute('data-target')).getTime();
+                            const targetDateStr = targetEl.getAttribute('data-target');
+                            const targetDateObj = new Date(targetDateStr);
                             const textColor = targetEl.getAttribute('data-color');
                             
                             function updateCountdown() {
-                                const now = new Date().getTime();
-                                const distance = targetDate - now;
+                                const now = new Date();
+                                const distance = targetDateObj.getTime() - now.getTime();
                                 
                                 if (distance < 0) {
                                     targetEl.innerHTML = '<div style="color: ' + textColor + '; font-weight: 800; font-size: 13px; display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Waktu Habis!</div>';
                                     return;
                                 }
                                 
-                                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                const holidays = window.appHolidays || [];
+                                let workingDays = 0;
+                                let tempDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                                let targetDay = new Date(targetDateObj.getFullYear(), targetDateObj.getMonth(), targetDateObj.getDate());
+                                
+                                while (tempDate <= targetDay) {
+                                    const y = tempDate.getFullYear();
+                                    const m = String(tempDate.getMonth() + 1).padStart(2, '0');
+                                    const d = String(tempDate.getDate()).padStart(2, '0');
+                                    const dateStr = `${y}-${m}-${d}`;
+                                    if (tempDate.getDay() !== 0 && tempDate.getDay() !== 6 && !holidays.includes(dateStr)) {
+                                        workingDays++;
+                                    }
+                                    tempDate.setDate(tempDate.getDate() + 1);
+                                }
+                                
                                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -1739,7 +1755,7 @@
                                 const labelStyle = 'font-size: 8.5px; font-weight: 700; color: ' + textColor + '; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em;';
                                 
                                 targetEl.innerHTML = `
-                                    <div style="${blockStyle}"><div style="${numStyle}">${days}</div><div style="${labelStyle}">HARI</div></div>
+                                    <div style="${blockStyle}"><div style="${numStyle}">${workingDays}</div><div style="${labelStyle}">HARI</div></div>
                                     <div style="font-weight: 800; color: ${textColor}; opacity: 0.5; padding-bottom: 12px;">:</div>
                                     <div style="${blockStyle}"><div style="${numStyle}">${hours.toString().padStart(2, '0')}</div><div style="${labelStyle}">JAM</div></div>
                                     <div style="font-weight: 800; color: ${textColor}; opacity: 0.5; padding-bottom: 12px;">:</div>
