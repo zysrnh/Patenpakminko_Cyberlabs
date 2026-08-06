@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Holiday;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HolidayController extends Controller
 {
@@ -37,6 +38,8 @@ class HolidayController extends Controller
             'is_collective_leave' => $request->has('is_collective_leave'),
         ]);
 
+        Cache::forget('indonesian_holidays');
+
         return redirect()->back()->with('success', 'Hari libur berhasil ditambahkan.');
     }
 
@@ -48,6 +51,8 @@ class HolidayController extends Controller
 
         $holiday = Holiday::findOrFail($id);
         $holiday->delete();
+
+        Cache::forget('indonesian_holidays');
 
         return redirect()->back()->with('success', 'Hari libur berhasil dihapus.');
     }

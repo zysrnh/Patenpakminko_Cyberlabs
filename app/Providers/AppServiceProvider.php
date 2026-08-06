@@ -34,23 +34,23 @@ class AppServiceProvider extends ServiceProvider
                         ->get('https://api-harilibur.vercel.app/api');
                     if ($response->successful()) {
                         foreach ($response->json() as $holiday) {
-                            if (isset($holiday['holiday_date']) && (isset($holiday['is_national_holiday']) && $holiday['is_national_holiday'])) {
+                            if (isset($holiday['holiday_date']) && (!isset($holiday['is_national_holiday']) || $holiday['is_national_holiday'])) {
                                 $nationalHolidays[] = $holiday['holiday_date'];
                             }
                         }
                     }
-                } catch (\Exception $e) {}
+                } catch (\Throwable $e) {}
 
+                $dbHolidays = [];
                 try {
                     if (Schema::hasTable('holidays')) {
                         $dbHolidays = Holiday::pluck('date')->map(function($date) {
-                            return $date->format('Y-m-d');
+                            return \Carbon\Carbon::parse($date)->format('Y-m-d');
                         })->toArray();
-                        return array_unique(array_merge($nationalHolidays, $dbHolidays));
                     }
-                } catch (\Exception $e) {}
+                } catch (\Throwable $e) {}
 
-                return $nationalHolidays;
+                return array_values(array_unique(array_merge($nationalHolidays, $dbHolidays)));
             });
         };
 
