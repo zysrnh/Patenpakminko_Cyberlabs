@@ -67,7 +67,10 @@ class AppServiceProvider extends ServiceProvider
 
         Carbon::macro('addWorkingDaysWithHolidays', function($days) {
             $date = $this->copy()->startOfDay();
-            $added = 0;
+            while (!$date->isWorkingDay()) {
+                $date->addDay();
+            }
+            $added = 1;
             while ($added < $days) {
                 $date->addDay();
                 if ($date->isWorkingDay()) {
