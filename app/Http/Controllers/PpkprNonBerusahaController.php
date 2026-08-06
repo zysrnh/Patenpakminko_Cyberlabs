@@ -75,10 +75,6 @@ class PpkprNonBerusahaController extends Controller
             return redirect()->route('ptp.create', ['layanan' => 'non-berusaha', 'new' => 1])->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
         }
 
-        if (!Auth::user()->isPelakuUsaha()) {
-            return redirect()->route('ptp.create', ['layanan' => 'non_berusaha', 'new' => 1]);
-        }
-
         if (!session()->has('ptp_form_data')) {
             return redirect()->route('ptp.create', ['layanan' => 'non-berusaha', 'new' => 1])->with('info', 'Silakan isi formulir Permohonan PTP terlebih dahulu.');
         }
@@ -91,8 +87,8 @@ class PpkprNonBerusahaController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Auth::check() || !Auth::user()->isPelakuUsaha()) {
-            abort(403, 'Aksi tidak diizinkan.');
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Sesi Anda telah berakhir. Silakan login terlebih dahulu.');
         }
 
         if (in_array($request->input('hubungan_pengaju'), ['Lainnya', 'Pemilik Usaha / Pengguna Layanan'])) {
