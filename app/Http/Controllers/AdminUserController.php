@@ -47,10 +47,16 @@ class AdminUserController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users',
             'name' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:20',
+            'phone_number' => 'nullable|string|max:20|unique:users,phone_number',
             'email' => 'nullable|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|string|in:dpn,bpn,dinas_pu,dinas_putr,satu_pintu,admin_berita,pelaku_usaha',
+        ], [
+            'phone_number.unique' => 'Nomor WhatsApp / Telepon sudah terdaftar dalam sistem.',
+            'username.unique' => 'Username ini sudah digunakan.',
+            'email.unique' => 'Alamat email ini sudah terdaftar.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
+            'password.min' => 'Kata sandi minimal 6 karakter.',
         ]);
 
         User::create([
@@ -93,11 +99,15 @@ class AdminUserController extends Controller
         $request->validate([
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'name' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:20',
+            'phone_number' => 'nullable|string|max:20|unique:users,phone_number,' . $user->id,
             'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'role' => 'required|string|in:dpn,bpn,dinas_pu,dinas_putr,satu_pintu,admin_berita,pelaku_usaha',
             'is_active' => 'required|boolean',
+        ], [
+            'phone_number.unique' => 'Nomor WhatsApp / Telepon sudah terdaftar dalam sistem.',
+            'username.unique' => 'Username ini sudah digunakan.',
+            'email.unique' => 'Alamat email ini sudah terdaftar.',
         ]);
 
         $data = [

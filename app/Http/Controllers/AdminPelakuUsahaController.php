@@ -72,9 +72,13 @@ class AdminPelakuUsahaController extends Controller
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
-            'phone_number' => 'nullable|string|max:20',
+            'phone_number' => 'nullable|string|max:20|unique:users,phone_number,' . $user->id,
             'is_active' => 'required|boolean',
             'password' => 'nullable|string|min:6',
+        ], [
+            'phone_number.unique' => 'Nomor WhatsApp / Telepon sudah terdaftar dalam sistem.',
+            'username.unique' => 'Username ini sudah digunakan.',
+            'email.unique' => 'Alamat email ini sudah terdaftar.',
         ]);
 
         $data = [
