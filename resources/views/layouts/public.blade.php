@@ -2358,6 +2358,12 @@
 
 })();
 </script>
-<script src="{{ asset('js/temp-upload-helper.js') }}?v={{ time() }}"></script>
+@if(file_exists(public_path('js/temp-upload-helper.js')))
+<script>
+{!! file_get_contents(public_path('js/temp-upload-helper.js')) !!}
+</script>
+@else
+<script src="{{ asset('js/temp-upload-helper.js') }}"></script>
+@endif
 </body>
 </html>
