@@ -65,23 +65,22 @@ class PsnController extends Controller
             'nama_pemilik_usaha'       => 'required|string|max:100',
             'nama_pengaju'             => 'required|string|max:100',
             'hubungan_pengaju'         => 'required|string|max:100',
-            'peta_lokasi'              => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'surat_kuasa'              => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'fc_ktp'                   => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'fc_npwp'                  => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'fc_akta_pendirian'        => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'rencana_penggunaan_tanah' => 'required|file|mimes:pdf,jpg,jpeg,png|max:102400',
+            'peta_lokasi'              => ($request->hasFile('peta_lokasi') || $request->filled('temp_peta_lokasi')) ? 'nullable' : 'required',
+            'surat_kuasa'              => 'nullable',
+            'fc_ktp'                   => ($request->hasFile('fc_ktp') || $request->filled('temp_fc_ktp')) ? 'nullable' : 'required',
+            'fc_npwp'                  => ($request->hasFile('fc_npwp') || $request->filled('temp_fc_npwp')) ? 'nullable' : 'required',
+            'fc_akta_pendirian'        => ($request->hasFile('fc_akta_pendirian') || $request->filled('temp_fc_akta_pendirian')) ? 'nullable' : 'required',
+            'rencana_penggunaan_tanah' => ($request->hasFile('rencana_penggunaan_tanah') || $request->filled('temp_rencana_penggunaan_tanah')) ? 'nullable' : 'required',
             'kbli_kode'                => 'nullable|string|max:20',
-            'nib'                      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'kbli'                     => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
-            'proposal_kegiatan'        => 'required|file|mimes:pdf,doc,docx|max:102400',
-            'persyaratan_lainnya'      => 'nullable|file|mimes:pdf,jpg,jpeg,png,zip,rar|max:102400',
+            'nib'                      => 'nullable',
+            'kbli'                     => 'nullable',
+            'proposal_kegiatan'        => ($request->hasFile('proposal_kegiatan') || $request->filled('temp_proposal_kegiatan')) ? 'nullable' : 'required',
+            'persyaratan_lainnya'      => 'nullable',
         ], [
             'nama_pemilik_usaha.required'       => 'Nama pemilik usaha wajib diisi.',
             'nama_pengaju.required'             => 'Nama pengaju wajib diisi.',
             'hubungan_pengaju.required'         => 'Hubungan pengaju / sebagai apa wajib diisi.',
             'peta_lokasi.required'              => 'Peta/sketsa lokasi wajib diunggah.',
-            'peta_lokasi.mimes'                 => 'Peta lokasi harus berformat PDF, JPG, atau PNG.',
             'fc_ktp.required'                   => 'Fotokopi KTP wajib diunggah.',
             'fc_npwp.required'                  => 'Fotokopi NPWP wajib diunggah.',
             'fc_akta_pendirian.required'        => 'FC Akta Pendirian / Dokumen Penetapan wajib diunggah.',
@@ -115,6 +114,13 @@ class PsnController extends Controller
                 $ext       = $file->getClientOriginalExtension();
                 $fileName  = "{$pemilik}_{$fileKey}_{$timestamp}.{$ext}";
                 $data[$fileKey] = $file->storeAs('psn_docs', $fileName, 'public');
+            } elseif ($request->filled('temp_' . $fileKey) && \Illuminate\Support\Facades\Storage::disk('public')->exists($request->input('temp_' . $fileKey))) {
+                $tempPath = $request->input('temp_' . $fileKey);
+                $ext = pathinfo($tempPath, PATHINFO_EXTENSION);
+                $fileName = "{$pemilik}_{$fileKey}_{$timestamp}.{$ext}";
+                $newPath = 'psn_docs/' . $fileName;
+                \Illuminate\Support\Facades\Storage::disk('public')->copy($tempPath, $newPath);
+                $data[$fileKey] = $newPath;
             }
         }
 

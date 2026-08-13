@@ -186,13 +186,37 @@ class RevisiController extends Controller
                 $fileName = "REVISI_" . $type . "_" . $id . "_" . $dbColumn . "_" . $timestamp . "." . $extension;
                 $path = $file->storeAs("revisi_docs", $fileName, "public");
                 
-                // Simpan ke kolom aplikasi atau requirements
-                // Karena kita tidak yakin kolomnya ada di tabel atau tidak, kita masukkan semua ke persyaratan_lainnya jika error
-                // Cek apakah kolom benar-benar ada di tabel sebelum diset
                 if (\Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), $dbColumn)) {
                     $application->$dbColumn = $path;
                 } else {
                     $application->persyaratan_lainnya = $path;
+                }
+                $uploadedCount++;
+            }
+        }
+
+        foreach ($request->all() as $inputKey => $tempPath) {
+            if (strpos($inputKey, "temp_doc_") === 0 && !empty($tempPath) && \Illuminate\Support\Facades\Storage::disk('public')->exists($tempPath)) {
+                $originalName = str_replace("temp_doc_", "", $inputKey);
+                $originalName = str_replace("_", " ", $originalName);
+                
+                $dbColumn = "persyaratan_lainnya";
+                foreach($mapping as $k => $col) {
+                    if (strtolower(str_replace(" ", "", $k)) == strtolower(str_replace(" ", "", $originalName))) {
+                        $dbColumn = $col;
+                        break;
+                    }
+                }
+
+                $extension = pathinfo($tempPath, PATHINFO_EXTENSION);
+                $fileName = "REVISI_" . $type . "_" . $id . "_" . $dbColumn . "_" . $timestamp . "." . $extension;
+                $newPath = "revisi_docs/" . $fileName;
+                \Illuminate\Support\Facades\Storage::disk('public')->copy($tempPath, $newPath);
+
+                if (\Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), $dbColumn)) {
+                    $application->$dbColumn = $newPath;
+                } else {
+                    $application->persyaratan_lainnya = $newPath;
                 }
                 $uploadedCount++;
             }

@@ -15,11 +15,13 @@ use App\Http\Controllers\AdminDpnController;
 use App\Http\Controllers\KbliController;
 use App\Http\Controllers\WaTemplateController;
 use App\Http\Controllers\TemplateDokumenController;
+use App\Http\Controllers\TempUploadController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Review;
  
-// Internal API for WA Templates
+// Internal API for WA Templates & Temp Document Uploads
 Route::get("/api/wa-template", [WaTemplateController::class, "getTemplate"])->name("api.wa-template");
+Route::post("/api/temp-upload-document", [TempUploadController::class, "upload"])->name("api.temp-upload");
 
 // Halaman utama / Landing Page
 Route::get('/', function () {

@@ -127,6 +127,13 @@ class PpkprBerusahaController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $fileName = "{$pemilik}_{$fileKey}_{$timestamp}.{$extension}";
                 $data[$fileKey] = $file->storeAs('berusaha_docs', $fileName, 'public');
+            } elseif ($request->filled('temp_' . $fileKey) && \Illuminate\Support\Facades\Storage::disk('public')->exists($request->input('temp_' . $fileKey))) {
+                $tempPath = $request->input('temp_' . $fileKey);
+                $extension = pathinfo($tempPath, PATHINFO_EXTENSION);
+                $fileName = "{$pemilik}_{$fileKey}_{$timestamp}.{$extension}";
+                $newPath = 'berusaha_docs/' . $fileName;
+                \Illuminate\Support\Facades\Storage::disk('public')->copy($tempPath, $newPath);
+                $data[$fileKey] = $newPath;
             }
         }
  
@@ -522,6 +529,13 @@ class PpkprBerusahaController extends Controller
             foreach ($filesToStore as $fileKey) {
                 if ($request->hasFile($fileKey)) {
                     $application->$fileKey = $request->file($fileKey)->store('berusaha_docs', 'public');
+                } elseif ($request->filled('temp_' . $fileKey) && \Illuminate\Support\Facades\Storage::disk('public')->exists($request->input('temp_' . $fileKey))) {
+                    $tempPath = $request->input('temp_' . $fileKey);
+                    $extension = pathinfo($tempPath, PATHINFO_EXTENSION);
+                    $fileName = "reupload_{$fileKey}_" . time() . ".{$extension}";
+                    $newPath = 'berusaha_docs/' . $fileName;
+                    \Illuminate\Support\Facades\Storage::disk('public')->copy($tempPath, $newPath);
+                    $application->$fileKey = $newPath;
                 }
             }
 
