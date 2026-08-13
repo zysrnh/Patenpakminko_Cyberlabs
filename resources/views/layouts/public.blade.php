@@ -2399,6 +2399,18 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (e) {}
     }
 
+    function clearStoredTempFiles() {
+        try {
+            localStorage.removeItem(storageKey);
+        } catch (e) {}
+    }
+
+    // Auto-clear drafts if URL has ?new=1 or ?reset=1
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('new') || urlParams.has('reset') || urlParams.has('fresh')) {
+        clearStoredTempFiles();
+    }
+
     // Inject CSS styles for temp badges & upload animations
     const style = document.createElement('style');
     style.innerHTML = `
@@ -2495,6 +2507,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     `;
     document.head.appendChild(style);
+
+    // If on success page, wipe ALL temp upload keys in localStorage immediately
+    if (window.location.pathname.includes('pengajuan/sukses') || window.location.pathname.includes('pengajuan-sukses')) {
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('paten_temp_files_')) {
+                localStorage.removeItem(k);
+            }
+        }
+    }
 
     // Target all document file inputs inside form
     const forms = document.querySelectorAll('form');
@@ -2701,6 +2723,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         first.group.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 50);
                 }
+            } else {
+                clearStoredTempFiles();
             }
         });
 
