@@ -2358,12 +2358,18 @@
 
 })();
 </script>
-@if(file_exists(public_path('js/temp-upload-helper.js')))
+@php
+    $tempJsFile = base_path('public/js/temp-upload-helper.js');
+    if (!file_exists($tempJsFile)) {
+        $tempJsFile = public_path('js/temp-upload-helper.js');
+    }
+@endphp
+@if(file_exists($tempJsFile))
 <script>
-{!! file_get_contents(public_path('js/temp-upload-helper.js')) !!}
+{!! file_get_contents($tempJsFile) !!}
 </script>
 @else
-<script src="{{ asset('js/temp-upload-helper.js') }}"></script>
+<script src="{{ asset('js/temp-upload-helper.js') }}?v={{ time() }}"></script>
 @endif
 </body>
 </html>
