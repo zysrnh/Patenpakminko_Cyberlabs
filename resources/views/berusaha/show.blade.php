@@ -1089,7 +1089,7 @@
                                         <label style="font-size: 11.5px; color: var(--clr-muted); font-weight: 600;">✎ Edit Pesan WA (Opsional):</label>
                                         <textarea name="custom_wa_message" class="form-control-v" rows="2" placeholder="Tuliskan pesan khusus jika ingin mengganti template bawaan otomatis..."></textarea>
                                     </div>
-                                    <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas & Blast SPS WA</button>
+                                    <button type="submit" class="btn-submit-v">Simpan Verifikasi Berkas & Send WA</button>
                                     @else
                                         
                                     @endif
@@ -1101,7 +1101,7 @@
                                     <input type="hidden" name="step" value="resend_wa">
                                     <input type="hidden" name="wa_type" value="berkas_verifikasi">
                                     <button type="submit" class="btn-submit-v" style="background: var(--clr-green); width: 100%; justify-content: center;">
-                                        Kirim Ulang Notifikasi WhatsApp (Link SPS)
+                                        Kirim Ulang Notifikasi WhatsApp Verifikasi
                                     </button>
                                 </form>
                             @endif

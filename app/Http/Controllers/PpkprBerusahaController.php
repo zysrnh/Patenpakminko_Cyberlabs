@@ -247,16 +247,13 @@ class PpkprBerusahaController extends Controller
         // ==========================================
         if ($user->isBpn()) {
  
-            // BPN Langkah 1: Verifikasi Dokumen Persyaratan & Upload SPS (Sebelum Pembayaran)
+            // BPN Langkah 1: Verifikasi Dokumen Persyaratan (Sebelum Pembayaran)
             if ($step === 'bpn_berkas') {
                 $request->validate([
                     'action' => 'required|in:approve,reject',
                     'notes' => 'required|string|max:1000',
-                    'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
                 ], [
                     'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
-                    'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
-                    'sps_document.max' => 'Ukuran file SPS maksimal 5MB.',
                 ]);
 
                 $action = $request->input('action');
@@ -265,10 +262,6 @@ class PpkprBerusahaController extends Controller
                 $application->bpn_notes = $notes;
                 
                 if ($action === 'approve') {
-                    if ($request->hasFile('sps_document') && \Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), 'bpn_sps_document')) {
-                        $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
-                    }
-
                     $application->bpn_berkas_status = 'diterima';
                     $application->bpn_berkas_approved_at = $application->bpn_berkas_approved_at ?? now();
                     if ($application->status === 'menunggu_bpn') {
@@ -282,7 +275,7 @@ class PpkprBerusahaController extends Controller
                 }
                 $application->save();
 
-                // Kirim notifikasi WA ke Pelaku Usaha (Termasuk tautan dokumen SPS)
+                // Kirim notifikasi WA ke Pelaku Usaha
                 $this->sendNotificationWithMailbox($application, 'berkas_verifikasi', 'Pertimbangan Teknis Pertanahan PKKPR Berusaha', 'berusaha.show', $request->input('custom_wa_message'));
 
                 return redirect()->route('berusaha.show', $id)->with('success', $msg);
@@ -292,14 +285,9 @@ class PpkprBerusahaController extends Controller
             if ($step === 'bpn_pembayaran' || $step === 'bpn_konfirmasi_bayar') {
                 $request->validate([
                     'no_berkas' => 'required|string|max:100',
-                    'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
                 ], [
                     'no_berkas.required' => 'Nomor Berkas wajib diisi sebelum mengkonfirmasi pembayaran.',
                 ]);
-
-                if ($request->hasFile('sps_document') && \Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), 'bpn_sps_document')) {
-                    $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
-                }
 
                 // Simpan no berkas dan konfirmasi pembayaran
                 $application->no_berkas = $request->input('no_berkas');
