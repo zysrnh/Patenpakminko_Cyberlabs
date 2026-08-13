@@ -14,11 +14,11 @@ class TempUploadController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,zip,rar|max:10240',
+            'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,zip,rar|max:102400',
         ], [
             'file.required' => 'File wajib dipilih.',
             'file.mimes' => 'Format file harus PDF, JPG, PNG, DOC, DOCX, ZIP, atau RAR.',
-            'file.max' => 'Ukuran file maksimal 10MB.',
+            'file.max' => 'Ukuran file maksimal 100MB.',
         ]);
 
         $file = $request->file('file');

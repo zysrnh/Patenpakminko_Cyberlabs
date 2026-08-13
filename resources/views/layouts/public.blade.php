@@ -2358,6 +2358,6 @@
 
 })();
 </script>
-<script src="{{ asset('js/temp-upload-helper.js') }}"></script>
+<script src="{{ asset('js/temp-upload-helper.js') }}?v={{ time() }}"></script>
 </body>
 </html>

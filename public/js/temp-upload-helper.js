@@ -187,20 +187,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderTempBadge(wrapper, input, inputName, preservedName, `${fileSizeText} - Terunggah & Tersimpan`);
             }
 
-            // Handle file input change -> Instant background upload
+            // Handle file input change -> Instant visual feedback + background temp upload
             input.addEventListener('change', function () {
                 if (!this.files || this.files.length === 0) return;
                 const file = this.files[0];
 
-                // Show loading spinner
-                removeTempBadge(wrapper);
-                let loadingDiv = wrapper.querySelector('.temp-upload-loading');
-                if (!loadingDiv) {
-                    loadingDiv = document.createElement('div');
-                    loadingDiv.className = 'temp-upload-loading';
-                    wrapper.appendChild(loadingDiv);
-                }
-                loadingDiv.innerHTML = '<span class="temp-spinner"></span> Mengunggah & menyimpan file sementara...';
+                const initialSizeMB = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+                
+                // Immediately render custom green card with truncated filename
+                renderTempBadge(wrapper, input, inputName, file.name, `${initialSizeMB} - Menyimpan...`);
 
                 const formData = new FormData();
                 formData.append('file', file);
@@ -215,9 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(res => res.json())
                 .then(data => {
-                    if (loadingDiv) loadingDiv.remove();
                     if (data.success && data.temp_path) {
-                        // Create or update hidden inputs
                         let tInput = form.querySelector(`input[name="temp_${inputName}"]`);
                         if (!tInput) {
                             tInput = document.createElement('input');
@@ -241,12 +234,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         renderTempBadge(wrapper, input, inputName, data.original_name, `${data.file_size} - Terunggah & Tersimpan`);
                     } else {
-                        alert(data.message || 'Gagal mengunggah file sementara.');
+                        renderTempBadge(wrapper, input, inputName, file.name, `${initialSizeMB} - Terpilih`);
                     }
                 })
                 .catch(err => {
-                    if (loadingDiv) loadingDiv.remove();
                     console.error('Error temp upload:', err);
+                    renderTempBadge(wrapper, input, inputName, file.name, `${initialSizeMB} - Terpilih`);
                 });
             });
         });
