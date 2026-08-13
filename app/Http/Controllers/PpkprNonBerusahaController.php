@@ -530,6 +530,121 @@ class PpkprNonBerusahaController extends Controller
         return redirect()->route('non-berusaha.show', $id)->with('success', $msg);
     }
 
+    /**
+     * Tampilkan Pengaturan WhatsApp Gateway & Log.
+     */
+    public function whatsappSettings()
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengakses Integrasi WhatsApp.');
+        }
+
+        $settings = [
+            'connected' => true,
+            'phone_number' => '081234567890',
+            'fonnte_token' => '',
+            'provider' => 'fonnte',
+            'twilio_account_sid' => '',
+            'twilio_auth_token' => '',
+            'twilio_from_number' => '',
+            'twilio_channel' => 'whatsapp',
+            'template' => "Halo {nama_pemohon}, permohonan Anda ({nomor_registrasi}) saat ini memasuki tahap: {status_sekarang}.\n\nCatatan: {catatan_terakhir}\n\nPantau di: {tautan_detail}",
+            'template_non_berusaha' => '',
+            'template_berusaha' => '',
+            'template_kebijakan' => '',
+            'template_tanah_timbul' => '',
+            'template_psn' => '',
+            'template_lapolpa' => '',
+        ];
+
+        if (Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $saved = json_decode(Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+            if (is_array($saved)) {
+                $settings = array_merge($settings, $saved);
+            }
+        }
+
+        $logPath = storage_path('app/whatsapp_logs.json');
+        $logs = [];
+        if (file_exists($logPath)) {
+            $logs = json_decode(file_get_contents($logPath), true) ?: [];
+        }
+
+        return view('dpn.whatsapp', compact('settings', 'logs'));
+    }
+
+    /**
+     * Simpan Template Notifikasi WhatsApp per-modul.
+     */
+    public function saveWhatsappSettings(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengelola template WhatsApp.');
+        }
+
+        $data = $request->except('_token');
+        $settings = [];
+        if (Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+
+        $settings = array_merge($settings, $data);
+        Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
+
+        return redirect()->back()->with('success', 'Template Notifikasi WhatsApp berhasil disimpan!');
+    }
+
+    /**
+     * Simulasi toggle hubungkan/putuskan koneksi WhatsApp.
+     */
+    public function toggleWhatsappConnection(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengelola koneksi WhatsApp.');
+        }
+
+        $settings = [];
+        if (Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+
+        $currentlyConnected = $settings['connected'] ?? false;
+        $settings['connected'] = !$currentlyConnected;
+
+        if ($request->has('phone_number') && !empty($request->input('phone_number'))) {
+            $settings['phone_number'] = $request->input('phone_number');
+        }
+        if ($request->has('fonnte_token')) {
+            $settings['fonnte_token'] = $request->input('fonnte_token');
+        }
+
+        Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
+
+        $statusMsg = $settings['connected'] ? 'WhatsApp Gateway berhasil dihubungkan!' : 'Sesi WhatsApp Gateway berhasil diputuskan!';
+        return redirect()->back()->with('success', $statusMsg);
+    }
+
+    /**
+     * Simpan Pengaturan Provider (Fonnte / Twilio).
+     */
+    public function saveProviderSettings(Request $request)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Hanya Super Admin DPN yang dapat mengelola provider WhatsApp.');
+        }
+
+        $data = $request->except('_token');
+        $settings = [];
+        if (Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+
+        $settings = array_merge($settings, $data);
+        Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
+
+        return redirect()->back()->with('success', 'Konfigurasi Provider WhatsApp/SMS berhasil disimpan!');
+    }
+
     public function adminContacts()
     {
         if (!Auth::user()->isDpn()) {
