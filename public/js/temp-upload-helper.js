@@ -306,11 +306,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 `;
                 alertBox.style.display = 'block';
-            } else {
-                // Clear localStorage upon valid submit
-                clearStoredTempFiles();
             }
         });
+
+        // Clear all temp storage keys when landing on success page
+        if (window.location.pathname.includes('pengajuan/sukses') || window.location.pathname.includes('pengajuan-sukses')) {
+            for (let i = localStorage.length - 1; i >= 0; i--) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('paten_temp_files_')) {
+                    localStorage.removeItem(key);
+                }
+            }
+        }
     });
 
     function formatTruncatedFilename(name, maxLength = 19) {
