@@ -2518,6 +2518,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Global click handler for Kosongkan Field button
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.btn-reset-fields');
+        if (!btn) return;
+
+        if (!confirm('Apakah Anda yakin ingin mengosongkan seluruh isi formulir dan berkas yang telah diunggah?')) {
+            return;
+        }
+
+        clearStoredTempFiles();
+        window.location.href = window.location.pathname + '?new=1';
+    });
+
     // Target all document file inputs inside form
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
