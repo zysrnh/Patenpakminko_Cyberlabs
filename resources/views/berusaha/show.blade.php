@@ -1902,11 +1902,13 @@
 
                             <!-- STEP 1: Verifikasi Berkas Awal Kantor Pertanahan -->
                             @php
-                                $step2Status = 'active';
-                                if ($application->bpn_berkas_status === 'diterima' || $hasPassedSps) {
-                                    $step2Status = 'completed';
-                                } elseif ($application->bpn_berkas_status === 'tidak_sesuai') {
+                                $step2Status = '';
+                                if ($application->bpn_berkas_status === 'tidak_sesuai' || $application->bpn_berkas_status === 'ditolak') {
                                     $step2Status = 'rejected';
+                                } elseif ($application->bpn_berkas_status === 'diterima' || $hasPassedSps) {
+                                    $step2Status = 'completed';
+                                } else {
+                                    $step2Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step2Status }}" onclick="showBpnPanel(1)" style="cursor:pointer;">
@@ -1963,7 +1965,7 @@
                                 $step4Status = '';
                                 if ($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi) {
                                     $step4Status = 'completed';
-                                } elseif ($application->bpn_berkas_status === 'diterima' || in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])) {
+                                } elseif (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian']) || $hasPassedSps) {
                                     $step4Status = 'active';
                                 }
                             @endphp
@@ -1995,7 +1997,7 @@
                                 $step5Status = '';
                                 if ($hasPassedRapat || $cekLokasiLewat) {
                                     $step5Status = 'completed';
-                                } elseif ($hasPassedSps || !empty($application->bpn_cek_lokasi_dt)) {
+                                } elseif ($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi || !empty($application->bpn_cek_lokasi_dt)) {
                                     $step5Status = 'active';
                                 }
                             @endphp
@@ -2024,7 +2026,7 @@
                                 $step6Status = '';
                                 if ($hasPassedPertek || $rapatLewat) {
                                     $step6Status = 'completed';
-                                } elseif ($hasPassedCekLokasi || !empty($application->bpn_rapat_dt)) {
+                                } elseif (($hasPassedCekLokasi || $cekLokasiLewat || !empty($application->bpn_cek_lokasi_dt)) && !$hasPassedPertek) {
                                     $step6Status = 'active';
                                 }
                             @endphp
@@ -2055,7 +2057,7 @@
                                     $step7Status = 'rejected';
                                 } elseif ($hasPassedPertek || !empty($application->bpn_pertek_document)) {
                                     $step7Status = 'completed';
-                                } elseif ($hasPassedRapat || !empty($application->bpn_rapat_dt)) {
+                                } elseif (($hasPassedRapat || $rapatLewat || !empty($application->bpn_rapat_dt)) && empty($application->bpn_pertek_document)) {
                                     $step7Status = 'active';
                                 }
                             @endphp

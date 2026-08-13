@@ -1927,7 +1927,7 @@
                                 $step3Status = '';
                                 if ($hasPassedRapat || $cekLokasiLewat) {
                                     $step3Status = 'completed';
-                                } elseif ($hasPassedSps || !empty($application->bpn_cek_lokasi_dt)) {
+                                } elseif (($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi || !empty($application->bpn_cek_lokasi_dt)) && !$hasPassedRapat) {
                                     $step3Status = 'active';
                                 }
                             @endphp
@@ -1956,7 +1956,7 @@
                                 $step4Status = '';
                                 if ($hasPassedPertek || $rapatLewat) {
                                     $step4Status = 'completed';
-                                } elseif ($hasPassedCekLokasi || !empty($application->bpn_rapat_dt)) {
+                                } elseif (($hasPassedCekLokasi || $cekLokasiLewat || !empty($application->bpn_rapat_dt)) && !$hasPassedPertek) {
                                     $step4Status = 'active';
                                 }
                             @endphp
