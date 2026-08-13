@@ -265,8 +265,7 @@ class PpkprBerusahaController extends Controller
                     $application->bpn_berkas_status = 'diterima';
                     $application->bpn_berkas_approved_at = $application->bpn_berkas_approved_at ?? now();
                     if ($application->status === 'menunggu_bpn') {
-                        $application->status = 'menunggu_dinas_pu';
-                        $application->dinas_pu_status = 'menunggu_validasi_awal';
+                        $application->status = 'menunggu_pembayaran';
                     }
                     $msg = 'Berkas disetujui & notifikasi berhasil dikirim ke WhatsApp pemohon.';
                 } else {
