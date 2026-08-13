@@ -2654,11 +2654,17 @@ document.addEventListener('DOMContentLoaded', function() {
         
         currentIndex = index;
         const targetStep = timelineSteps[currentIndex];
-        const match = targetStep.getAttribute('onclick').match(/showBpnPanel\(['"]?([^'"]+)['"]?\)/);
+        const match = targetStep.getAttribute('onclick') ? targetStep.getAttribute('onclick').match(/showBpnPanel\(['"]?([^'"]+)['"]?\)/) : null;
         
         if(match) {
-            const tPanel = document.getElementById('Kantor Pertanahan-panel-' + match[1]);
-            document.querySelectorAll('.Kantor Pertanahan-panel-step').forEach(p => p.style.display = 'none');
+            const panelId = match[1];
+            // Hide all panel steps
+            document.querySelectorAll('[id*="-panel-"]').forEach(p => p.style.display = 'none');
+            
+            let tPanel = document.getElementById('Kantor Pertanahan-panel-' + panelId) 
+                      || document.getElementById('panel-' + panelId)
+                      || document.querySelector('[id$="-panel-' + panelId + '"]');
+            
             if(tPanel) { 
                 tPanel.style.display = 'block'; 
             }
@@ -2667,7 +2673,6 @@ document.addEventListener('DOMContentLoaded', function() {
             targetStep.classList.add('viewing-step');
             
             targetStep.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         updateNavButtons();
     }
@@ -2683,20 +2688,20 @@ document.addEventListener('DOMContentLoaded', function() {
     prevBtn.addEventListener('click', () => switchPanel(currentIndex - 1));
     nextBtn.addEventListener('click', () => switchPanel(currentIndex + 1));
     
-    // Initialize
+    // Initialize to current active step (or latest completed step)
     setTimeout(() => {
-        const activePanel = document.querySelector('.Kantor Pertanahan-panel-step[style*="display: block"]');
-        if(activePanel) {
-            const panelIdMatch = activePanel.id.replace('Kantor Pertanahan-panel-', '');
-            const activeStepIndex = timelineSteps.findIndex(s => s.getAttribute('onclick').includes(panelIdMatch));
-            if(activeStepIndex !== -1) {
-                switchPanel(activeStepIndex);
-            } else {
-                switchPanel(0);
+        let initialActiveIndex = timelineSteps.findIndex(s => s.classList.contains('active'));
+        if (initialActiveIndex === -1) {
+            for (let i = timelineSteps.length - 1; i >= 0; i--) {
+                if (timelineSteps[i].classList.contains('completed')) {
+                    initialActiveIndex = i;
+                    break;
+                }
             }
-        } else {
-            switchPanel(0);
         }
+        if (initialActiveIndex === -1) initialActiveIndex = 0;
+        
+        switchPanel(initialActiveIndex);
     }, 150);
 });
 </script>
