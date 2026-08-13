@@ -245,17 +245,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Form Submit Listener: Client-side validation to prevent page refresh & lost files
+        form.setAttribute('novalidate', 'novalidate');
         form.addEventListener('submit', function (e) {
             let missingFields = [];
-            const allFileInputs = form.querySelectorAll('input[type="file"]');
+            const allInputs = form.querySelectorAll('input[required], select[required], textarea[required], input[data-required="true"]');
 
+            // Clear previous missing error styles
+            form.querySelectorAll('.field-missing-error').forEach(el => {
+                el.classList.remove('field-missing-error');
+                el.style.border = '';
+                el.style.background = '';
+            });
+
+            // Check text inputs, selects, textareas
+            allInputs.forEach(input => {
+                if (input.type === 'file') return; // Handled separately below
+                const val = input.value ? input.value.trim() : '';
+                if (!val) {
+                    const group = input.closest('.form-group') || input.closest('.ptp-form-group') || input.parentNode;
+                    missingFields.push({
+                        input: input,
+                        group: group,
+                        label: getFieldLabel(group, input.name || 'Input Wajib')
+                    });
+                }
+            });
+
+            // Check file inputs
+            const allFileInputs = form.querySelectorAll('input[type="file"]');
             allFileInputs.forEach(input => {
                 const inputName = input.getAttribute('name');
                 if (!inputName) return;
 
-                // Clear previous error styles
-                const group = input.closest('.form-group');
-                if (group) group.classList.remove('field-missing-error');
+                const group = input.closest('.form-group') || input.closest('.ptp-form-group') || input.parentNode;
 
                 const isRequired = input.hasAttribute('required') || (input.dataset && input.dataset.required === 'true');
                 const hasFileSelected = input.files && input.files.length > 0;
@@ -275,37 +297,56 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (missingFields.length > 0) {
                 e.preventDefault();
+                e.stopPropagation();
 
-                // Highlight missing fields and scroll to first missing
+                const namesList = missingFields.map(f => f.label).join(', ');
+
+                // Highlight missing fields with red border and soft red background
                 missingFields.forEach(item => {
-                    if (item.group) item.group.classList.add('field-missing-error');
+                    if (item.group) {
+                        item.group.classList.add('field-missing-error');
+                        item.group.style.border = '2px solid #EF4444';
+                        item.group.style.background = '#FEF2F2';
+                        item.group.style.padding = '12px';
+                        item.group.style.borderRadius = '8px';
+                        item.group.style.transition = 'all 0.3s ease';
+                    }
                 });
 
-                const first = missingFields[0];
-                if (first.group) {
-                    first.group.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-
-                // Display top error alert
+                // Display error alert above form submit buttons & top of form
                 let alertBox = document.getElementById('ptpAlertError') || document.querySelector('.ptp-alert-error');
                 if (!alertBox) {
                     alertBox = document.createElement('div');
                     alertBox.className = 'ptp-alert ptp-alert-error';
                     alertBox.id = 'ptpAlertError';
-                    form.parentNode.insertBefore(alertBox, form);
                 }
 
-                const namesList = missingFields.map(f => f.label).join(', ');
                 alertBox.innerHTML = `
-                    <div class="ptp-alert-content" style="display:flex; gap:12px; align-items:flex-start; background:#FEF2F2; border:1px solid #FCA5A5; padding:14px 18px; border-radius:8px; margin-bottom:20px; color:#991B1B;">
+                    <div class="ptp-alert-content" style="display:flex; gap:12px; align-items:flex-start; background:#FEF2F2; border:1.5px solid #FCA5A5; padding:14px 18px; border-radius:8px; margin-bottom:20px; color:#991B1B; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);">
                         <svg viewBox="0 0 24 24" width="24" height="24" stroke="#EF4444" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                         <div>
-                            <strong style="font-size:14px; display:block; margin-bottom:4px;">Dokumen Belum Lengkap</strong>
-                            <span style="font-size:12.5px; line-height:1.5;">Mohon lengkapi berkas persyaratan berikut: <strong>${namesList}</strong>.<br><small style="color:#15803D; font-weight:700;">✓ Catatan: Dokumen yang sudah Anda upload sebelumnya tetap aman tersimpan.</small></span>
+                            <strong style="font-size:14px; display:block; margin-bottom:4px; color:#991B1B;">Dokumen Belum Lengkap (${missingFields.length} Berkas Kurang)</strong>
+                            <span style="font-size:12.5px; line-height:1.5; color:#7F1D1D;">Mohon lengkapi berkas berikut: <strong>${namesList}</strong>.<br><small style="color:#15803D; font-weight:700;">✓ Catatan: Dokumen yang sudah Anda upload sebelumnya tetap aman tersimpan.</small></span>
                         </div>
                     </div>
                 `;
                 alertBox.style.display = 'block';
+
+                // Insert alert above action buttons if possible, else top of form
+                const actionsContainer = form.querySelector('.ptp-actions') || form.querySelector('.form-actions') || form.querySelector('.ptp-footer-actions') || form.querySelector('button[type="submit"]')?.parentNode;
+                if (actionsContainer && actionsContainer.parentNode) {
+                    actionsContainer.parentNode.insertBefore(alertBox, actionsContainer);
+                } else {
+                    form.parentNode.insertBefore(alertBox, form);
+                }
+
+                // Scroll smoothly to the first missing field container
+                const first = missingFields[0];
+                if (first.group) {
+                    setTimeout(() => {
+                        first.group.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 50);
+                }
             }
         });
 
