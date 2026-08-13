@@ -1875,6 +1875,27 @@
                                 <div class="timeline-service-label">Pelacakan Permohonan</div>
                                 <div class="timeline-service-title">Pertimbangan Teknis Pertanahan PKKPR Berusaha</div>
                                 <div class="timeline-step-count">8 Tahapan · 3 Instansi</div>
+
+                                <!-- Downstream Helper Logic untuk Linimasa -->
+                            @php
+                                $hasPassedSps = ($application->bpn_pembayaran_status === 'sudah_bayar')
+                                    || !empty($application->bpn_cek_lokasi_dt)
+                                    || !empty($application->bpn_rapat_dt)
+                                    || !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+
+                                $hasPassedCekLokasi = $cekLokasiLewat
+                                    || !empty($application->bpn_rapat_dt)
+                                    || !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+
+                                $hasPassedRapat = $rapatLewat
+                                    || !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+
+                                $hasPassedPertek = !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+                            @endphp
                             </div>
                         </div>
 
@@ -1893,7 +1914,7 @@
                             <!-- STEP 1: Verifikasi Berkas Awal Kantor Pertanahan -->
                             @php
                                 $step2Status = 'active';
-                                if ($application->bpn_berkas_status === 'diterima') {
+                                if ($application->bpn_berkas_status === 'diterima' || $hasPassedSps) {
                                     $step2Status = 'completed';
                                 } elseif ($application->bpn_berkas_status === 'tidak_sesuai') {
                                     $step2Status = 'rejected';
@@ -1907,7 +1928,7 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">Validasi kelengkapan berkas dokumen persyaratan pemohon.</div>
-                                    @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
+                                    @if(($application->bpn_berkas_status === 'diterima' || $hasPassedSps) && $application->bpn_berkas_approved_at)
                                         <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Disetujui pada: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->format('d M Y, H:i') }} WIB</div>
                                     @endif
                                     @if($application->bpn_berkas_status === 'tidak_sesuai')
@@ -1921,14 +1942,12 @@
                             <!-- STEP 2: Validasi Permohonan Awal - Dinas Pekerjaan Umum dan Tata Ruang (PUTR) -->
                             @php
                                 $step3Status = '';
-                                if ($application->bpn_berkas_status === 'diterima') {
-                                    if ($application->dinas_pu_status === 'validasi_awal_diterima' || in_array($application->dinas_pu_status, ['menunggu_penilaian', 'sesuai', 'belum_sesuai'])) {
-                                        $step3Status = 'completed';
-                                    } elseif ($application->dinas_pu_status === 'validasi_awal_ditolak') {
-                                        $step3Status = 'rejected';
-                                    } else {
-                                        $step3Status = 'active';
-                                    }
+                                if ($application->dinas_pu_status === 'validasi_awal_ditolak') {
+                                    $step3Status = 'rejected';
+                                } elseif (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian']) || $hasPassedSps) {
+                                    $step3Status = 'completed';
+                                } elseif ($application->bpn_berkas_status === 'diterima') {
+                                    $step3Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step3Status }}" onclick="showBpnPanel('pu-1')" style="cursor:pointer;">
@@ -1939,7 +1958,7 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</span>
                                     </div>
                                     <div class="timeline-desc">Pemeriksaan awal kelayakan tata ruang. Notifikasi dikirim ke Kantor Pertanahan dan Pelaku Usaha.</div>
-                                    @if(in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai']) && $application->dinas_pu_approved_at)
+                                    @if((in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai']) || $hasPassedSps) && $application->dinas_pu_approved_at)
                                         <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Disetujui pada: {{ \Carbon\Carbon::parse($application->dinas_pu_approved_at)->format('d M Y, H:i') }} WIB</div>
                                     @endif
                                     @if($application->dinas_pu_status === 'validasi_awal_ditolak')
@@ -1953,8 +1972,10 @@
                             <!-- STEP 3: Pembayaran PNBP -->
                             @php
                                 $step4Status = '';
-                                if (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])) {
-                                    $step4Status = $application->bpn_pembayaran_status === 'sudah_bayar' ? 'completed' : 'active';
+                                if ($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi) {
+                                    $step4Status = 'completed';
+                                } elseif ($application->bpn_berkas_status === 'diterima' || in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])) {
+                                    $step4Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step4Status }}" onclick="showBpnPanel(2)" style="cursor:pointer;">
@@ -1965,7 +1986,7 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">
-                                        @if($application->bpn_pembayaran_status === 'sudah_bayar')
+                                        @if($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi)
                                             Pembayaran dikonfirmasi lunas. Kredensial dashboard dikirim ke WhatsApp pemohon.
                                             @if($application->no_berkas)
                                                 <br>No. Berkas: <strong>{{ $application->no_berkas }}</strong>
@@ -1974,7 +1995,7 @@
                                             Menunggu konfirmasi pembayaran PNBP dan input nomor berkas oleh Kantor Pertanahan.
                                         @endif
                                     </div>
-                                    @if($application->bpn_pembayaran_status === 'sudah_bayar' && $application->bpn_pembayaran_approved_at)
+                                    @if(($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi) && $application->bpn_pembayaran_approved_at)
                                         <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
                                     @endif
                                 </div>
@@ -1983,8 +2004,10 @@
                             <!-- STEP 4: Peninjauan Lapangan -->
                             @php
                                 $step5Status = '';
-                                if ($application->bpn_pembayaran_status === 'sudah_bayar') {
-                                    $step5Status = $application->bpn_cek_lokasi_dt ? ($cekLokasiLewat ? 'completed' : 'active') : 'active';
+                                if ($hasPassedRapat || $cekLokasiLewat) {
+                                    $step5Status = 'completed';
+                                } elseif ($hasPassedSps || !empty($application->bpn_cek_lokasi_dt)) {
+                                    $step5Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(3)" style="cursor:pointer;">
@@ -2010,8 +2033,10 @@
                             <!-- STEP 5: Rapat Pembahasan Pertek -->
                             @php
                                 $step6Status = '';
-                                if ($cekLokasiLewat) {
-                                    $step6Status = $application->bpn_rapat_dt ? ($rapatLewat ? 'completed' : 'active') : 'active';
+                                if ($hasPassedPertek || $rapatLewat) {
+                                    $step6Status = 'completed';
+                                } elseif ($hasPassedCekLokasi || !empty($application->bpn_rapat_dt)) {
+                                    $step6Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step6Status }}" onclick="showBpnPanel(4)" style="cursor:pointer;">
@@ -2037,14 +2062,12 @@
                             <!-- STEP 6: Penerbitan Pertek Pertanahan -->
                             @php
                                 $step7Status = '';
-                                if ($application->bpn_rapat_dt) {
-                                    if ($application->bpn_pertek_document) {
-                                        $step7Status = 'completed';
-                                    } elseif (isset($application->bpn_pertek_status) && $application->bpn_pertek_status === 'ditolak') {
-                                        $step7Status = 'rejected';
-                                    } else {
-                                        $step7Status = 'active';
-                                    }
+                                if (isset($application->bpn_pertek_status) && $application->bpn_pertek_status === 'ditolak') {
+                                    $step7Status = 'rejected';
+                                } elseif ($hasPassedPertek || !empty($application->bpn_pertek_document)) {
+                                    $step7Status = 'completed';
+                                } elseif ($hasPassedRapat || !empty($application->bpn_rapat_dt)) {
+                                    $step7Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step7Status }}" onclick="showBpnPanel(5)" style="cursor:pointer;">
@@ -2070,14 +2093,12 @@
                             <!-- STEP 7: Penilaian Pertimbangan Teknis Pertanahan Dinas Pekerjaan Umum dan Tata Ruang (PUTR) -->
                             @php
                                 $step8Status = '';
-                                if ($application->bpn_pertek_document) {
-                                    if ($application->dinas_pu_status === 'sesuai') {
-                                        $step8Status = 'completed';
-                                    } elseif ($application->dinas_pu_status === 'belum_sesuai') {
-                                        $step8Status = 'rejected';
-                                    } elseif ($application->status === 'menunggu_dinas_pu') {
-                                        $step8Status = 'active';
-                                    }
+                                if ($application->dinas_pu_status === 'belum_sesuai') {
+                                    $step8Status = 'rejected';
+                                } elseif ($application->dinas_pu_status === 'sesuai' || in_array($application->status, ['menunggu_satu_pintu', 'disetujui', 'terbit_pkpr'])) {
+                                    $step8Status = 'completed';
+                                } elseif ($hasPassedPertek || $application->status === 'menunggu_dinas_pu') {
+                                    $step8Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step8Status }}" onclick="showBpnPanel('pu-2')" style="cursor:pointer;">
@@ -2108,8 +2129,12 @@
                             <!-- STEP 8: Penerbitan Pertimbangan Teknis Pertanahan DPMPTSP -->
                             @php
                                 $step9Status = '';
-                                if ($application->dinas_pu_status === 'sesuai') {
-                                    $step9Status = $application->satu_pintu_document ? 'completed' : 'active';
+                                if ($application->status === 'ditolak') {
+                                    $step9Status = 'rejected';
+                                } elseif (in_array($application->status, ['disetujui', 'terbit_pkpr']) || !empty($application->satu_pintu_document)) {
+                                    $step9Status = 'completed';
+                                } elseif ($application->status === 'menunggu_satu_pintu' || $application->dinas_pu_status === 'sesuai') {
+                                    $step9Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step9Status }}" onclick="showBpnPanel('satu-pintu')" style="cursor:pointer;">

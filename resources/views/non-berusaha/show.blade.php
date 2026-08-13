@@ -1785,10 +1785,31 @@
                                 </div>
                             </div>
 
+                            <!-- Downstream Helper Logic untuk Linimasa -->
+                            @php
+                                $hasPassedSps = ($application->bpn_pembayaran_status === 'sudah_bayar')
+                                    || !empty($application->bpn_cek_lokasi_dt)
+                                    || !empty($application->bpn_rapat_dt)
+                                    || !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+
+                                $hasPassedCekLokasi = $cekLokasiLewat
+                                    || !empty($application->bpn_rapat_dt)
+                                    || !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+
+                                $hasPassedRapat = $rapatLewat
+                                    || !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+
+                                $hasPassedPertek = !empty($application->bpn_pertek_document)
+                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+                            @endphp
+
                             <!-- STEP 2: Verifikasi & Validasi -->
                             @php
                                 $step2Status = 'active';
-                                if ($application->bpn_berkas_status === 'diterima') {
+                                if ($application->bpn_berkas_status === 'diterima' || $hasPassedSps) {
                                     $step2Status = 'completed';
                                 } elseif ($application->bpn_berkas_status === 'ditolak') {
                                     $step2Status = 'rejected';
@@ -1810,7 +1831,7 @@
                                             </a>
                                         </div>
                                     @endif
-                                    @if($application->bpn_berkas_status === 'diterima' && $application->bpn_berkas_approved_at)
+                                    @if(($application->bpn_berkas_status === 'diterima' || $hasPassedSps) && $application->bpn_berkas_approved_at)
                                         <div style="font-size:11px;color:#558B2F;margin-top:6px;font-weight:600;"><svg style="width:14px;height:14px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Disetujui pada: {{ \Carbon\Carbon::parse($application->bpn_berkas_approved_at)->format('d M Y, H:i') }} WIB</div>
                                     @endif
                                 </div>
@@ -1819,12 +1840,10 @@
                             <!-- STEP 2: Pembayaran PNBP -->
                             @php
                                 $step2bStatus = '';
-                                if ($application->bpn_berkas_status === 'diterima') {
-                                    if ($application->bpn_pembayaran_status === 'sudah_bayar') {
-                                        $step2bStatus = 'completed';
-                                    } else {
-                                        $step2bStatus = 'active';
-                                    }
+                                if ($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi) {
+                                    $step2bStatus = 'completed';
+                                } elseif ($application->bpn_berkas_status === 'diterima') {
+                                    $step2bStatus = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step2bStatus }}" onclick="showBpnPanel(2)" style="cursor:pointer;">
@@ -1835,13 +1854,13 @@
                                         <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Kantor Pertanahan</span>
                                     </div>
                                     <div class="timeline-desc">Pembayaran biaya PNBP & aktivasi akun.</div>
-                                    @if($application->bpn_pembayaran_status === 'sudah_bayar')
+                                    @if($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi)
                                         <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
                                             <strong>No. Berkas:</strong> {{ $application->no_berkas }}<br>
                                             Status: <strong>LUNAS</strong>. Akun telah dikirim ke WA.
                                         </div>
                                     @endif
-                                    @if($application->bpn_pembayaran_status === 'sudah_bayar' && $application->bpn_pembayaran_approved_at)
+                                    @if(($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi) && $application->bpn_pembayaran_approved_at)
                                         <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 {{ \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at)->locale('id')->translatedFormat('l, d M Y · H:i') }} WIB</div>
                                     @endif
                                 </div>
@@ -1850,12 +1869,10 @@
                             <!-- STEP 3: Peninjauan Lapangan (Kantor Pertanahan) -->
                             @php
                                 $step3Status = '';
-                                if ($application->bpn_pembayaran_status === 'sudah_bayar') {
-                                    if ($application->bpn_cek_lokasi_dt) {
-                                        $step3Status = $cekLokasiLewat ? 'completed' : 'active';
-                                    } else {
-                                        $step3Status = 'active';
-                                    }
+                                if ($hasPassedRapat || $cekLokasiLewat) {
+                                    $step3Status = 'completed';
+                                } elseif ($hasPassedSps || !empty($application->bpn_cek_lokasi_dt)) {
+                                    $step3Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step3Status }}" onclick="showBpnPanel(3)" style="cursor:pointer;">
@@ -1882,12 +1899,10 @@
                             <!-- STEP 4: Rapat Pembahasan Pertek (Kantor Pertanahan) -->
                             @php
                                 $step4Status = '';
-                                if ($cekLokasiLewat) {
-                                    if ($application->bpn_rapat_dt) {
-                                        $step4Status = $rapatLewat ? 'completed' : 'active';
-                                    } else {
-                                        $step4Status = 'active';
-                                    }
+                                if ($hasPassedPertek || $rapatLewat) {
+                                    $step4Status = 'completed';
+                                } elseif ($hasPassedCekLokasi || !empty($application->bpn_rapat_dt)) {
+                                    $step4Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step4Status }}" onclick="showBpnPanel(4)" style="cursor:pointer;">
@@ -1913,14 +1928,12 @@
                             <!-- STEP 5: Penerbitan Pertek Kantor Pertanahan (Included in Kantor Pertanahan step above usually, but keeping it if needed) -->
                             @php
                                 $step5Status = '';
-                                if ($rapatLewat) {
-                                    if ($application->bpn_pertek_document) {
-                                        $step5Status = 'completed';
-                                    } elseif ($application->status === 'ditolak') {
-                                        $step5Status = 'rejected';
-                                    } else {
-                                        $step5Status = 'active';
-                                    }
+                                if ($hasPassedPertek || !empty($application->bpn_pertek_document)) {
+                                    $step5Status = 'completed';
+                                } elseif ($application->status === 'ditolak') {
+                                    $step5Status = 'rejected';
+                                } elseif ($hasPassedRapat || !empty($application->bpn_rapat_dt)) {
+                                    $step5Status = 'active';
                                 }
                             @endphp
                             <div class="timeline-step {{ $step5Status }}" onclick="showBpnPanel(5)" style="cursor:pointer;">
@@ -1946,12 +1959,14 @@
                             <!-- STEP 6: Penilaian Pertimbangan Teknis Pertanahan Dinas Pekerjaan Umum dan Tata Ruang (PUTR) -->
                             @php
                                 $step6Status = '';
-                                if ($application->bpn_pertek_document) {
-                                    if ($application->status === 'menunggu_satu_pintu' || $application->status === 'disetujui') {
-                                        $step6Status = 'completed';
-                                    } elseif ($application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr) {
-                                        $step6Status = 'rejected';
-                                    } elseif ($application->status === 'menunggu_dinas_pu') {
+                                if (in_array($application->status, ['menunggu_satu_pintu', 'disetujui'])) {
+                                    $step6Status = 'completed';
+                                } elseif ($application->status === 'ditolak' && !$application->satu_pintu_no_pkkpr) {
+                                    $step6Status = 'rejected';
+                                } elseif ($hasPassedPertek || $application->status === 'menunggu_dinas_pu') {
+                                    $step6Status = 'active';
+                                }
+                            @endphp
                                         $step6Status = 'active';
                                     }
                                 }
