@@ -989,24 +989,20 @@
                     $items = $query->latest()->take(5)->get();
                     foreach ($items as $item) {
                         $statusKey = 'pending';
-                        $statusLabel = 'Menunggu Review';
+                        $statusLabel = $item->status_label;
                         $statusColor = 'yellow';
 
                         if (in_array($item->status, ['disetujui', 'terbit_pkpr'])) {
                             $statusKey = 'approved';
-                            $statusLabel = 'Disetujui';
                             $statusColor = 'green';
                         } elseif ($item->status === 'ditolak') {
                             $statusKey = 'rejected';
-                            $statusLabel = 'Ditolak';
                             $statusColor = 'red';
                         } elseif ($item->bpn_pembayaran_status === 'sudah_bayar') {
                             $statusKey = 'review';
-                            $statusLabel = 'Proses Instansi';
                             $statusColor = 'blue';
                         } else {
                             $statusKey = 'unpaid';
-                            $statusLabel = 'Menunggu Pembayaran';
                             $statusColor = 'yellow';
                         }
 

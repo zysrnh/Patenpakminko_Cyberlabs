@@ -60,40 +60,10 @@ class PsnApplication extends Model
         'tgl_selesai_layanan'     => 'datetime',
     ];
 
+    use \App\Traits\HasApplicationStatus;
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function getStatusLabelAttribute(): string
-    {
-        if ($this->status === 'menunggu_bpn' && $this->bpn_berkas_status === 'diterima' && $this->bpn_pembayaran_status !== 'sudah_bayar') {
-            return 'Menunggu Pembayaran (SPS / PNBP)';
-        }
-
-        return match ($this->status) {
-            'menunggu_bpn'        => 'Verifikasi Dokumen (Kantor Pertanahan)',
-            'menunggu_dinas_pu'   => 'Penilaian PKKPR (Dinas PUTR)',
-            'menunggu_satu_pintu' => 'Penerbitan PKKPR (DPMPTSP)',
-            'disetujui'           => 'Layanan Selesai',
-            'ditolak'             => 'Permohonan Ditolak',
-            default               => 'Draft / Baru',
-        };
-    }
-
-    public function getStatusColorAttribute(): string
-    {
-        if ($this->status === 'menunggu_bpn' && $this->bpn_berkas_status === 'diterima' && $this->bpn_pembayaran_status !== 'sudah_bayar') {
-            return '#D97706'; // Amber/Yellow
-        }
-
-        return match ($this->status) {
-            'menunggu_bpn'        => '#ED8936',
-            'menunggu_dinas_pu'   => '#3182CE',
-            'menunggu_satu_pintu' => '#805AD5',
-            'disetujui'           => '#38A169',
-            'ditolak'             => '#E53E3E',
-            default               => '#718096',
-        };
     }
 }

@@ -62,51 +62,13 @@ class PpkprApplication extends Model
         'tgl_mulai_layanan'          => 'datetime',
         'tgl_selesai_layanan'        => 'datetime',
     ];
+    use \App\Traits\HasApplicationStatus;
+
     /**
      * Relasi ke User pembuat permohonan.
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Label Status Manusiawi.
-     */
-    public function getStatusLabelAttribute(): string
-    {
-        if ($this->status === 'menunggu_bpn' && $this->bpn_berkas_status === 'diterima' && $this->bpn_pembayaran_status !== 'sudah_bayar') {
-            return 'Menunggu Pembayaran (SPS / PNBP)';
-        }
-
-        return match ($this->status) {
-            'menunggu_bpn'        => 'Verifikasi Dokumen (Kantor Pertanahan)',
-            'menunggu_putr'       => 'Validasi Permohonan (Dinas PUTR)',
-            'menunggu_dinas_pu'   => 'Penilaian Tata Ruang (Dinas PUTR)',
-            'menunggu_satu_pintu' => 'Penerbitan Dokumen (DPMPTSP)',
-            'disetujui'           => 'Layanan Selesai',
-            'ditolak'             => 'Permohonan Ditolak',
-            default               => 'Draft / Baru',
-        };
-    }
-
-    /**
-     * Badge CSS Kelas warna status.
-     */
-    public function getStatusColorAttribute(): string
-    {
-        if ($this->status === 'menunggu_bpn' && $this->bpn_berkas_status === 'diterima' && $this->bpn_pembayaran_status !== 'sudah_bayar') {
-            return '#D97706'; // Amber/Yellow
-        }
-
-        return match ($this->status) {
-            'menunggu_bpn'        => '#ED8936', // Orange
-            'menunggu_putr'       => '#D69E2E', // Yellow-dark
-            'menunggu_dinas_pu'   => '#3182CE', // Blue
-            'menunggu_satu_pintu' => '#805AD5', // Purple
-            'disetujui'           => '#38A169', // Green
-            'ditolak'             => '#E53E3E', // Red
-            default               => '#718096', // Grey
-        };
     }
 }

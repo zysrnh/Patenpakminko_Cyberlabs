@@ -112,7 +112,7 @@
                 </thead>
                 <tbody>
                     @foreach($applications as $app)
-                        <tr style="border-bottom: 1px solid #F1F5F9;">
+                        <tr style="border-bottom: 1px solid #F1F5F9;" data-status-category="{{ $app->status_category }}">
                             @if(Auth::user()->isDpn())
                             <td style="text-align:center; padding: 12px;"><input type="checkbox" name="ids[]" value="{{ $app->id }}" class="row-check" style="cursor:pointer;"></td>
                             @endif
@@ -273,10 +273,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (slaVal === 'hampir' && (!slaBadge || !slaBadge.classList.contains('badge-yellow'))) matchSla = false;
             if (slaVal === 'melewati' && (!slaBadge || !slaBadge.classList.contains('badge-red'))) matchSla = false;
 
-            if (statusVal === 'diproses' && (textContent.includes('menunggu pembayaran') || textContent.includes('layanan selesai') || textContent.includes('permohonan ditolak'))) matchStatus = false;
-            if (statusVal === 'belum_bayar' && (!textContent.includes('menunggu pembayaran') && !textContent.includes('verifikasi dokumen'))) matchStatus = false;
-            if (statusVal === 'selesai' && !textContent.includes('layanan selesai')) matchStatus = false;
-            if (statusVal === 'ditolak' && !textContent.includes('permohonan ditolak')) matchStatus = false;
+            const cat = row.getAttribute('data-status-category');
+            if (statusVal !== 'all' && cat !== statusVal) matchStatus = false;
 
             row.style.display = (matchSearch && matchSla && matchStatus) ? '' : 'none';
         });
