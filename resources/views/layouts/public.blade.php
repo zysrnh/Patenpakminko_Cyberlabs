@@ -1879,7 +1879,7 @@
                 </a>
 
                 @php
-                    $isFormCreatePage = request()->routeIs('*.create') || request()->routeIs('ptp.create') || request()->is('*/baru') || request()->is('*/create');
+                    $isFormCreatePage = request()->routeIs('*.create') || request()->routeIs('ptp.create') || request()->routeIs('pengajuan.sukses') || request()->is('*/baru') || request()->is('*/create') || request()->is('pengajuan/sukses');
                 @endphp
 
                 @if(Auth::check())

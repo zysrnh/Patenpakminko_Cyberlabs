@@ -100,10 +100,10 @@
             </div>
         @endif
 
-        <!-- The user can go to their dashboard / timeline to see the application -->
-        @if(Auth::check())
+        <!-- Navigation back to Home / Dashboard depending on user active status -->
+        @if(Auth::check() && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
             <a href="{{ route('dashboard') }}" class="btn-home">
-                Kembali ke Dashboard &rarr;
+                Ke Dashboard Pelaku Usaha &rarr;
             </a>
         @else
             <a href="{{ url('/') }}" class="btn-home">
