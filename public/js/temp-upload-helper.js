@@ -347,7 +347,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         first.group.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 50);
                 }
-            }
+        // Dynamically clear red error styling when user types or selects input
+        form.querySelectorAll('input, select, textarea').forEach(el => {
+            ['input', 'change', 'keyup'].forEach(evtType => {
+                el.addEventListener(evtType, function () {
+                    const group = this.closest('.form-group') || this.closest('.ptp-form-group') || this.parentNode;
+                    if (group && group.classList.contains('field-missing-error')) {
+                        group.classList.remove('field-missing-error');
+                        group.style.border = '';
+                        group.style.background = '';
+                        group.style.padding = '';
+                        group.style.borderRadius = '';
+                    }
+                });
+            });
         });
 
         // Clear all temp storage keys when landing on success page
@@ -379,6 +392,16 @@ document.addEventListener('DOMContentLoaded', function () {
         removeTempBadge(wrapper, input);
 
         input.removeAttribute('required');
+
+        // Immediately clear red error styling from parent container when file is selected/uploaded
+        const fieldGroup = input.closest('.form-group') || input.closest('.ptp-form-group') || wrapper.closest('.form-group') || wrapper.parentNode;
+        if (fieldGroup) {
+            fieldGroup.classList.remove('field-missing-error');
+            fieldGroup.style.border = '';
+            fieldGroup.style.background = '';
+            fieldGroup.style.padding = '';
+            fieldGroup.style.borderRadius = '';
+        }
 
         // Hide wrapper completely so dashed border and extra padding don't surround the card
         if (wrapper && wrapper.classList.contains('file-input-wrapper')) {
