@@ -140,14 +140,18 @@
                     </div>
                 </div>
 
+                @php
+                    $isPemilikUsaha = ($ptpHubungan === 'Diri Sendiri' || $selectedHubungan === 'Pemilik Usaha / Pengguna Layanan');
+                @endphp
+
                 <!-- 2. Surat Kuasa -->
-                <div class="form-group">
+                <div class="form-group" id="group_surat_kuasa" style="display: {{ $isPemilikUsaha ? 'none' : 'block' }};">
                     <label class="form-label">
                         <span class="label-text">2. Surat Kuasa<span class="required">*</span></span>
-                        <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/3%20Surat%20Kuasa.pdf') }}', 'Contoh Surat Kuasa')">Lihat Contoh</button>
+                        <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_3_surat_kuasa', 'storage/Contoh_Format/3. Contoh Surat Kuasa Perusahaan.pdf') }}', 'Contoh Surat Kuasa')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" id="input_surat_kuasa" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png" {{ $isPemilikUsaha ? '' : 'required' }}>
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
                     </div>
                 </div>
@@ -317,23 +321,45 @@
         const selectHubungan = document.getElementById('hubungan_pengaju');
         const wrapperLainnya = document.getElementById('hubungan_pengaju_lainnya_wrapper');
         const inputLainnya = document.getElementById('hubungan_pengaju_lainnya');
+        const groupSuratKuasa = document.getElementById('group_surat_kuasa');
+        const inputSuratKuasa = document.getElementById('input_surat_kuasa');
 
         function toggleLainnya() {
-            if (selectHubungan.value === 'Lainnya' || selectHubungan.value === 'Pemilik Usaha / Pengguna Layanan') {
-                wrapperLainnya.style.display = 'block';
-                inputLainnya.setAttribute('required', 'required');
-                if (selectHubungan.value === 'Pemilik Usaha / Pengguna Layanan') {
-                    inputLainnya.placeholder = 'Ketik pemilik usaha/layanan apa (cth: Pemilik Toko Roti, dll)';
+            let val = selectHubungan ? selectHubungan.value : '';
+            if (!selectHubungan) {
+                const hiddenHub = document.querySelector('input[name="hubungan_pengaju"]');
+                if (hiddenHub) val = hiddenHub.value;
+            }
+
+            if (selectHubungan && wrapperLainnya && inputLainnya) {
+                if (val === 'Lainnya' || val === 'Pemilik Usaha / Pengguna Layanan') {
+                    wrapperLainnya.style.display = 'block';
+                    inputLainnya.setAttribute('required', 'required');
+                    if (val === 'Pemilik Usaha / Pengguna Layanan') {
+                        inputLainnya.placeholder = 'Ketik pemilik usaha/layanan apa (cth: Pemilik Toko Roti, dll)';
+                    } else {
+                        inputLainnya.placeholder = 'Masukkan hubungan pemohon secara manual (cth: Instansi, PT, dll)';
+                    }
                 } else {
-                    inputLainnya.placeholder = 'Masukkan hubungan Pemohon secara manual (cth: Instansi, PT, dll)';
+                    wrapperLainnya.style.display = 'none';
+                    inputLainnya.removeAttribute('required');
                 }
-            } else {
-                wrapperLainnya.style.display = 'none';
-                inputLainnya.removeAttribute('required');
+            }
+
+            if (groupSuratKuasa && inputSuratKuasa) {
+                if (val === 'Pemilik Usaha / Pengguna Layanan' || val === 'Diri Sendiri') {
+                    groupSuratKuasa.style.display = 'none';
+                    inputSuratKuasa.removeAttribute('required');
+                } else {
+                    groupSuratKuasa.style.display = 'block';
+                    inputSuratKuasa.setAttribute('required', 'required');
+                }
             }
         }
 
-        selectHubungan.addEventListener('change', toggleLainnya);
+        if (selectHubungan) {
+            selectHubungan.addEventListener('change', toggleLainnya);
+        }
         toggleLainnya();
     });
 
