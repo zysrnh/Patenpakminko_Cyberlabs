@@ -258,9 +258,6 @@ class PpkprBerusahaController extends Controller
                 $application->bpn_notes = $notes;
                 
                 if ($action === 'approve') {
-                    if (!$request->hasFile('sps_document') && !$application->bpn_sps_document) {
-                        return redirect()->back()->withErrors(['sps_document' => 'Dokumen SPS (Surat Perintah Setor) wajib diunggah saat menyetujui berkas.']);
-                    }
                     if ($request->hasFile('sps_document') && \Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), 'bpn_sps_document')) {
                         $application->bpn_sps_document = $request->file('sps_document')->store('sps_docs', 'public');
                     }
@@ -271,7 +268,7 @@ class PpkprBerusahaController extends Controller
                         $application->status = 'menunggu_dinas_pu';
                         $application->dinas_pu_status = 'menunggu_validasi_awal';
                     }
-                    $msg = 'Berkas disetujui, Dokumen SPS berhasil diunggah & tautan tagihan di-blast ke WhatsApp pemohon.';
+                    $msg = 'Berkas disetujui & notifikasi berhasil dikirim ke WhatsApp pemohon.';
                 } else {
                     $application->bpn_berkas_status = 'tidak_sesuai';
                     $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi.';
