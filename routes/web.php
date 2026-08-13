@@ -78,7 +78,7 @@ Route::get('/', function () {
     $visitorFile = 'visitor_stats.json';
     $statsData = [
         'count' => 0,
-        'permohonan_diproses' => '12k',
+        'permohonan_diproses' => '',
         'rata_rata_penyelesaian' => '10 hari',
         'rating_override' => '',
     ];
@@ -98,16 +98,15 @@ Route::get('/', function () {
         $isNewVisitor = true;
     }
 
-    // Hitung total permohonan otomatis dari semua layanan (hanya yang sudah bayar)
-    $totalPermohonan = \App\Models\PpkprApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
-        + \App\Models\PpkprBerusahaApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
-        + \App\Models\KebijakanApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
-        + \App\Models\PsnApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
-        + \App\Models\TanahTimbulApplication::where('bpn_pembayaran_status', 'sudah_bayar')->count()
-        + \App\Models\LapolpaBooking::count();
+    // Hitung total permohonan otomatis dari semua layanan di database
+    $totalPermohonan = \App\Models\PpkprApplication::count()
+        + \App\Models\PpkprBerusahaApplication::count()
+        + \App\Models\KebijakanApplication::count()
+        + \App\Models\PsnApplication::count()
+        + \App\Models\TanahTimbulApplication::count();
 
     // Gunakan override manual jika ada, jika tidak pakai hitungan DB
-    $hasPermOverride = isset($statsData['permohonan_diproses']) && $statsData['permohonan_diproses'] !== '';
+    $hasPermOverride = isset($statsData['permohonan_diproses']) && trim((string)$statsData['permohonan_diproses']) !== '';
     $statsData['permohonan_diproses_display'] = $hasPermOverride
         ? $statsData['permohonan_diproses']
         : number_format($totalPermohonan);

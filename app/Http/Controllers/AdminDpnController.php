@@ -15,7 +15,7 @@ class AdminDpnController extends Controller
     {
         $stats = [
             'count' => 0,
-            'permohonan_diproses' => '12k',
+            'permohonan_diproses' => '',
             'rata_rata_penyelesaian' => '10 hari',
             'rating_override' => '',
         ];
@@ -60,7 +60,7 @@ class AdminDpnController extends Controller
     {
         $stats = [
             'count' => 0,
-            'permohonan_diproses' => '12k',
+            'permohonan_diproses' => '',
             'rata_rata_penyelesaian' => '10 hari',
             'rating_override' => '',
         ];
