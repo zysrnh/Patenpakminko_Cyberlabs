@@ -515,13 +515,13 @@ class AuthController extends Controller
             'penggunaan_saat_ini.required' => 'Penggunaan tanah saat ini wajib diisi.',
         ]);
 
-        // Cari atau buat akun pelaku_usaha berdasarkan nomor WA
+        // Cari atau buat akun pelaku_usaha berdasarkan nomor WA (khusus role pelaku_usaha)
         $phoneClean = preg_replace('/[^0-9]/', '', $request->phone_number);
         
         if (Auth::check() && Auth::user()->isPelakuUsaha()) {
             $user = Auth::user();
         } else {
-            $user = User::where('phone_number', $phoneClean)->first();
+            $user = User::where('role', 'pelaku_usaha')->where('phone_number', $phoneClean)->first();
         }
 
         if (!$user) {
@@ -555,10 +555,8 @@ class AuthController extends Controller
             ]);
         }
 
-        // Login sementara dalam konteks pendaftaran permohonan
-        // Hanya login jika belum login, atau jika sedang login sebagai Pelaku Usaha
-        // Jangan override sesi Admin yang sedang aktif
-        if (!Auth::check() || Auth::user()->isPelakuUsaha()) {
+        // Login sementara hanya jika belum login (jangan override sesi Admin yang sedang aktif)
+        if (!Auth::check()) {
             Auth::login($user);
         }
 

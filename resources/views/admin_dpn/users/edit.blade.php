@@ -143,7 +143,7 @@
                     <input type="text" name="name" class="admin-form-control" value="{{ old('name', $user->name) }}">
                 </div>
                 <div class="admin-col">
-                    <label class="admin-form-label">Nomor WhatsApp</label>
+                    <label class="admin-form-label">Nomor WhatsApp <span style="font-weight: normal; color: #64748B; font-size: 12px;">(Opsional - Tidak Wajib)</span></label>
                     <input type="text" name="phone_number" class="admin-form-control" value="{{ old('phone_number', $user->phone_number) }}">
                 </div>
             </div>
