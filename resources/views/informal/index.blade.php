@@ -178,26 +178,108 @@
     /* Leaflet Overrides */
     .leaflet-popup-content { margin: 16px !important; }
 
+    /* Mobile Tab Navigation Bar */
+    .informal-mobile-tabs {
+        display: none;
+    }
+
     @media (max-width: 768px) {
-        .informal-container { height: calc(100vh - 60px); }
+        .informal-container { 
+            height: calc(100vh - 60px); 
+            position: relative;
+        }
+        
+        .informal-mobile-tabs {
+            display: flex;
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            z-index: 1001;
+            background: #FFFFFF;
+            padding: 4px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            gap: 4px;
+        }
+
+        .mobile-tab-btn {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 11.5px;
+            font-weight: 700;
+            border: none;
+            background: transparent;
+            color: #64748B;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .mobile-tab-btn.active {
+            background: #00223D;
+            color: #FFFFFF;
+            box-shadow: 0 2px 6px rgba(0,34,61,0.2);
+        }
+
         .map-sidebar-left {
             top: auto;
-            bottom: 24px;
-            left: 16px;
-            right: 16px;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
             width: auto;
-            max-height: 40vh;
+            max-height: 45vh;
+            padding: 16px;
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
-        .rating-sidebar { display: none; /* Hide rating on mobile for space */ }
+
+        .rating-sidebar {
+            display: none;
+            top: auto;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            width: auto;
+            max-height: 45vh;
+            padding: 16px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .rating-sidebar.mobile-active {
+            display: block !important;
+        }
+
+        .map-sidebar-left.mobile-hidden {
+            display: none !important;
+        }
+
         .leaflet-control-attribution { display: none; }
     }
 </style>
 
 <div class="informal-container">
+    <!-- Mobile Navigation Tab Switcher -->
+    <div class="informal-mobile-tabs">
+        <button type="button" class="mobile-tab-btn active" id="tab-cek-lokasi" onclick="switchMobileTab('cek-lokasi')">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            Cek Lokasi
+        </button>
+        <button type="button" class="mobile-tab-btn" id="tab-ulasan" onclick="switchMobileTab('ulasan')">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Ulasan Fitur Peta
+        </button>
+    </div>
+
     <div id="map"></div>
 
     <!-- Floating Card Left -->
-    <div class="map-sidebar-left">
+    <div class="map-sidebar-left" id="sidebar-cek-lokasi">
         <h2 class="ms-title">Pengecekan Lokasi</h2>
         <p class="ms-desc">Geser penanda (marker) pada peta ke koordinat yang ingin Anda periksa detail peruntukannya.</p>
 
@@ -243,7 +325,7 @@
     </div>
 
     <!-- Rating Sidebar Right -->
-    <div class="rating-sidebar">
+    <div class="rating-sidebar" id="sidebar-ulasan">
         <h2>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1c40f" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
             Ulasan Fitur Peta
@@ -651,6 +733,25 @@
 
     function flyToMarker(lat, lng) {
         map.flyTo([lat, lng], 16);
+    }
+
+    function switchMobileTab(targetTab) {
+        const tabCek = document.getElementById('tab-cek-lokasi');
+        const tabUlasan = document.getElementById('tab-ulasan');
+        const sidebarCek = document.getElementById('sidebar-cek-lokasi');
+        const sidebarUlasan = document.getElementById('sidebar-ulasan');
+
+        if (targetTab === 'ulasan') {
+            tabCek.classList.remove('active');
+            tabUlasan.classList.add('active');
+            sidebarCek.classList.add('mobile-hidden');
+            sidebarUlasan.classList.add('mobile-active');
+        } else {
+            tabUlasan.classList.remove('active');
+            tabCek.classList.add('active');
+            sidebarUlasan.classList.remove('mobile-active');
+            sidebarCek.classList.remove('mobile-hidden');
+        }
     }
 </script>
 @endsection
