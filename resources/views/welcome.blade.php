@@ -196,11 +196,7 @@
         <div class="stats-inner">
             @php
                 $statsData = $statsData ?? [];
-                $permValue = (isset($statsData['permohonan_diproses_display']) && $statsData['permohonan_diproses_display'] !== '')
-                    ? $statsData['permohonan_diproses_display']
-                    : ((isset($statsData['permohonan_diproses']) && $statsData['permohonan_diproses'] !== '')
-                        ? $statsData['permohonan_diproses']
-                        : number_format($totalPermohonan ?? 0));
+                $permValue = number_format($totalPermohonan ?? 0);
                 $penyValue = $statsData['rata_rata_penyelesaian'] ?? '10 hari';
                 $hasRatingOverride = isset($statsData['rating_override']) && $statsData['rating_override'] !== '' && $statsData['rating_override'] !== '0' && $statsData['rating_override'] !== '0.0';
                 $ratingVal = $hasRatingOverride ? $statsData['rating_override'] : (($averageRating && $averageRating !== '0.0' && $averageRating !== '0') ? $averageRating : '5.0');

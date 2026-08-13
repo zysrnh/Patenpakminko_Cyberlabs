@@ -89,6 +89,10 @@ Route::get('/', function () {
         }
     }
     
+    if (isset($statsData['permohonan_diproses']) && strtolower(trim((string)$statsData['permohonan_diproses'])) === '12k') {
+        $statsData['permohonan_diproses'] = '';
+    }
+    
     $visitorCount = (int) $statsData['count'];
     $isNewVisitor = false;
     if (!request()->cookie('visited')) {
@@ -98,18 +102,14 @@ Route::get('/', function () {
         $isNewVisitor = true;
     }
 
-    // Hitung total permohonan otomatis dari semua layanan di database
+    // Hitung total permohonan otomatis dari semua layanan di database (5 modul permohonan)
     $totalPermohonan = \App\Models\PpkprApplication::count()
         + \App\Models\PpkprBerusahaApplication::count()
         + \App\Models\KebijakanApplication::count()
         + \App\Models\PsnApplication::count()
         + \App\Models\TanahTimbulApplication::count();
 
-    // Gunakan override manual jika ada, jika tidak pakai hitungan DB
-    $hasPermOverride = isset($statsData['permohonan_diproses']) && trim((string)$statsData['permohonan_diproses']) !== '';
-    $statsData['permohonan_diproses_display'] = $hasPermOverride
-        ? $statsData['permohonan_diproses']
-        : number_format($totalPermohonan);
+    $statsData['permohonan_diproses_display'] = number_format($totalPermohonan);
 
     // Berita / Artikel
     $beritas = \App\Models\Berita::where('is_published', true)->latest()->take(10)->get();
