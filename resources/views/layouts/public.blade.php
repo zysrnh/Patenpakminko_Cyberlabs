@@ -1878,7 +1878,29 @@
                     Kontak Kami
                 </a>
 
-                @if(!Auth::check())
+                @php
+                    $isFormCreatePage = request()->routeIs('*.create') || request()->routeIs('ptp.create') || request()->is('*/baru') || request()->is('*/create');
+                @endphp
+
+                @if(Auth::check())
+                    @if(!$isFormCreatePage && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
+                        @if(Auth::user()->isAdminBerita())
+                            <a href="{{ route('admin.berita.index') }}" class="btn-nav">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                                </svg>
+                                Dashboard
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard') }}" class="btn-nav">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                                </svg>
+                                Dashboard
+                            </a>
+                        @endif
+                    @endif
+                @else
                     <a href="{{ route('login') }}" class="btn-nav">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
@@ -1935,7 +1957,25 @@
         <a href="{{ $fThreads }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Threads</a>
         <a href="{{ $fYoutube }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">YouTube</a>
         <a href="{{ $fFacebook }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Facebook</a>
-        @if(!Auth::check())
+        @if(Auth::check())
+            @if(!$isFormCreatePage && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
+                @if(Auth::user()->isAdminBerita())
+                    <a href="{{ route('admin.berita.index') }}" class="mobile-cta" onclick="closeMobileNav()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10l5 5v11a2 2 0 0 1-2 2z"></path>
+                        </svg>
+                        Kelola Berita
+                    </a>
+                @else
+                    <a href="{{ route('dashboard') }}" class="mobile-cta" onclick="closeMobileNav()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line>
+                        </svg>
+                        Dashboard
+                    </a>
+                @endif
+            @endif
+        @else
             <a href="{{ route('login') }}" class="mobile-cta" onclick="closeMobileNav()">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
