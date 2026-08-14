@@ -171,19 +171,7 @@
         <div class="hero-grid">
 
             <!-- Left: Copy -->
-
             <div>
-
-                <div class="hero-eyebrow">
-
-                    <span class="eyebrow-dot" aria-hidden="true"></span>
-
-                    Portal Layanan Pertanahan
-
-                </div>
-
-
-
                 <div class="hero-brand-flex">
 
                     <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" class="hero-logo-img">
