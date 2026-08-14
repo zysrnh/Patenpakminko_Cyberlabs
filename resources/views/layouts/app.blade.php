@@ -461,7 +461,14 @@
                     <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
                 <div class="nav-dropdown-menu {{ request()->routeIs('berkas.*') ? 'open' : '' }}">
-                    <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->routeIs('berkas.index') ? 'active' : '' }}">Berkas Otomatis</a>
+                    <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->routeIs('berkas.index') && !request('kategori') ? 'active' : '' }}">Berkas Otomatis</a>
+                    <a href="{{ route('berkas.index', ['kategori' => 'Pertek PKKPR Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PKKPR Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
+                    <a href="{{ route('berkas.index', ['kategori' => 'Pertek PKKPR Non Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PKKPR Non Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Non Berusaha</a>
+                    @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
+                    <a href="{{ route('berkas.index', ['kategori' => 'Pertek Kebijakan Khusus']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek Kebijakan Khusus' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>
+                    <a href="{{ route('berkas.index', ['kategori' => 'Pertek Tanah Timbul']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek Tanah Timbul' ? 'active' : '' }}">Pertimbangan Teknis Tanah Timbul</a>
+                    @endif
+                    <a href="{{ route('berkas.index', ['kategori' => 'Pertek PSN']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PSN' ? 'active' : '' }}">Pertimbangan Teknis PSN</a>
                 </div>
             </div>
             <a href="{{ route('dokumen.index') }}" class="nav-item {{ request()->routeIs('dokumen.*') ? 'active' : '' }}">
