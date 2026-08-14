@@ -9,6 +9,7 @@
     .filters { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
     .filters form { display: flex; gap: 12px; width: 100%; }
     .filters select, .filters input { padding: 8px 12px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13px; }
+    input[type="date"] { background-color: #ffffff !important; color: #0f172a !important; }
 
     /* Pagination Fix (Bootstrap Style) */
     .pagination {
@@ -294,15 +295,6 @@
             <form action="{{ route('berkas.index') }}" method="GET" class="filter-grid">
                 <div class="search-col">
                     <input type="text" name="search" class="form-control" placeholder="Cari nama berkas atau pengunggah..." value="{{ request('search') }}">
-                </div>
-                <div>
-                    <select name="user_id" class="form-control">
-                        <option value="">Semua Pemohon</option>
-                        @foreach($pemohonList as $pemohon)
-                            <option value="{{ $pemohon->id }}" {{ request('user_id') == $pemohon->id ? 'selected' : '' }}>
-                                {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}</option>
-                        @endforeach
-                    </select>
                 </div>
                 <div>
                     <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" title="Filter berdasarkan Tanggal Unggah">

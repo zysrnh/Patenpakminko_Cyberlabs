@@ -9,6 +9,7 @@
     .filters { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
     .filters form { display: flex; gap: 12px; width: 100%; }
     .filters select, .filters input { padding: 8px 12px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13px; }
+    input[type="date"] { background-color: #ffffff !important; color: #0f172a !important; }
 
     /* Pagination Fix (Bootstrap Style) */
     .pagination {

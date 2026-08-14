@@ -26,21 +26,12 @@ class DokumenController extends Controller
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke fitur ini.');
         }
 
-        // Auto-sync data berkas dari permohonan
+        // Auto-sync data berkas dari permohonan ke tabel dokumens
         try {
-            \Illuminate\Support\Facades\Artisan::call('berkas:sync');
+            $this->syncAllDokumens();
         } catch (\Throwable $e) {}
 
-        // Jika tabel dokumens belum ada/kosong, tampilkan data dari Berkas (hasil sync permohonan)
-        $useBerkas = true;
-        if (\Illuminate\Support\Facades\Schema::hasTable('dokumens')) {
-            try {
-                $useBerkas = !Dokumen::exists();
-            } catch (\Throwable $e) {
-                $useBerkas = true;
-            }
-        }
-        $query = $useBerkas ? \App\Models\Berkas::with('user')->latest() : Dokumen::with('user')->latest();
+        $query = Dokumen::with('user')->latest();
 
         // Filter berdasarkan kategori
         if ($request->has('kategori') && $request->kategori != '') {
@@ -55,9 +46,8 @@ class DokumenController extends Controller
         // Filter pencarian nama dokumen atau nama pengunggah
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $nameField = $useBerkas ? 'nama_berkas' : 'nama_dokumen';
-            $query->where(function($q) use ($search, $nameField) {
-                $q->where($nameField, 'like', '%' . $search . '%')
+            $query->where(function($q) use ($search) {
+                $q->where('nama_dokumen', 'like', '%' . $search . '%')
                   ->orWhereHas('user', function($qUser) use ($search) {
                       $qUser->where('name', 'like', '%' . $search . '%')
                             ->orWhere('business_name', 'like', '%' . $search . '%');
@@ -67,8 +57,11 @@ class DokumenController extends Controller
 
         // Filter berdasarkan layanan khusus (PKKPR Berusaha, Non Berusaha, dsb)
         if ($request->has('layanan') && $request->layanan != '') {
-            $nameField = $useBerkas ? 'nama_berkas' : 'nama_dokumen';
-            $query->where($nameField, 'like', '[' . $request->layanan . ']%');
+            $layanan = $request->layanan;
+            $query->where(function($q) use ($layanan) {
+                $q->where('nama_dokumen', 'like', '[' . $layanan . ']%')
+                  ->orWhere('kategori', 'like', '%' . $layanan . '%');
+            });
         }
 
         // Filter berdasarkan pemohon
@@ -80,19 +73,79 @@ class DokumenController extends Controller
         $dokumen = $query->paginate(10);
         
         // Ambil daftar pemohon yang sudah ada berkas/dokumennya atau role pelaku_usaha
-        $userIdsBerkas = \App\Models\Berkas::select('user_id')->distinct()->pluck('user_id')->toArray();
-        $userIdsDokumen = \Illuminate\Support\Facades\Schema::hasTable('dokumens')
-            ? Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray()
-            : [];
-        $allUserIds = array_unique(array_merge($userIdsBerkas, $userIdsDokumen));
-        
-        $pemohonList = \App\Models\User::whereIn('id', $allUserIds)->orWhere('role', 'pelaku_usaha')->get();
+        $userIdsDokumen = Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray();
+        $pemohonList = \App\Models\User::whereIn('id', $userIdsDokumen)->orWhere('role', 'pelaku_usaha')->get();
 
         // Ambil daftar kategori yang sudah ada untuk dropdown filter
-        $modelClass = $useBerkas ? \App\Models\Berkas::class : Dokumen::class;
-        $kategoriList = $modelClass::select('kategori')->distinct()->whereNotNull('kategori')->orderBy('kategori')->pluck('kategori');
+        $kategoriList = Dokumen::select('kategori')->distinct()->whereNotNull('kategori')->orderBy('kategori')->pluck('kategori');
 
         return view('dokumen.index', compact('dokumen', 'pemohonList', 'kategoriList'));
+    }
+
+    private function syncAllDokumens()
+    {
+        $fileFields = [
+            'peta_lokasi' => 'Peta Lokasi',
+            'surat_kuasa' => 'Surat Kuasa',
+            'fc_ktp' => 'FC KTP',
+            'fc_npwp' => 'FC NPWP',
+            'fc_akta_pendirian' => 'FC Akta Pendirian',
+            'rencana_penggunaan_tanah' => 'Rencana Penggunaan Tanah',
+            'nib' => 'NIB',
+            'kbli' => 'KBLI',
+            'proposal_kegiatan' => 'Proposal Kegiatan',
+            'persyaratan_lainnya' => 'Persyaratan Lainnya',
+            'bpn_pertek_document' => 'Dokumen Pertimbangan Teknis Pertanahan',
+            'dinas_pu_document' => 'Dokumen Penilaian (PU)',
+            'satu_pintu_document' => 'Dokumen PKKPR Final (PTSP)'
+        ];
+
+        $appsList = [
+            ['model' => \App\Models\PpkprBerusahaApplication::class, 'name' => 'PKKPR Berusaha'],
+            ['model' => \App\Models\PpkprApplication::class, 'name' => 'PKKPR Non-Berusaha'],
+            ['model' => \App\Models\KebijakanApplication::class, 'name' => 'Kebijakan'],
+            ['model' => \App\Models\PsnApplication::class, 'name' => 'PSN'],
+            ['model' => \App\Models\TanahTimbulApplication::class, 'name' => 'Tanah Timbul'],
+        ];
+
+        foreach ($appsList as $item) {
+            $apps = $item['model']::all();
+            $modulName = $item['name'];
+            foreach ($apps as $app) {
+                $namaDokumen = "[$modulName] {$app->application_number}";
+                foreach ($fileFields as $field => $labelJenis) {
+                    if (!empty($app->$field)) {
+                        $kategori = $labelJenis;
+                        if ($field === 'bpn_pertek_document') {
+                            $kategori = 'Pertimbangan Teknis ' . $modulName;
+                        }
+
+                        if (!Dokumen::where('user_id', $app->user_id)->where('nama_dokumen', $namaDokumen)->where('kategori', $kategori)->exists()) {
+                            $filePath = $app->$field;
+                            $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+                            if (empty($ext)) $ext = 'pdf';
+
+                            $fullPath = storage_path('app/public/' . $filePath);
+                            $ukuranStr = '0 KB';
+                            if (file_exists($fullPath)) {
+                                $ukuranKb = round(filesize($fullPath) / 1024, 2);
+                                $ukuranStr = $ukuranKb > 1024 ? round($ukuranKb / 1024, 2) . ' MB' : $ukuranKb . ' KB';
+                            }
+
+                            Dokumen::create([
+                                'user_id'      => $app->user_id,
+                                'nama_dokumen' => $namaDokumen,
+                                'kategori'     => $kategori,
+                                'file_path'    => $filePath,
+                                'tipe_file'    => strtolower($ext),
+                                'ukuran_file'  => $ukuranStr,
+                                'keterangan'   => "Auto-sync ($kategori)"
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function store(Request $request)
