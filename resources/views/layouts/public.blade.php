@@ -2785,7 +2785,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderTempBadge(wrapper, input, inputName, filename, statusText) {
         removeTempBadge(wrapper, input);
 
-        input.removeAttribute('required');
+        if (input.hasAttribute('required')) {
+            input.dataset.wasRequired = 'true';
+            input.removeAttribute('required');
+        }
 
         // Immediately clear red error styling from parent container when file is selected/uploaded
         const fieldGroup = input.closest('.form-group') || input.closest('.ptp-form-group') || wrapper.closest('.form-group') || wrapper.parentNode;
@@ -2865,7 +2868,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             removeStoredTempFile(inputName);
             input.value = '';
-            input.setAttribute('required', 'required');
+            if (input.dataset && input.dataset.wasRequired === 'true') {
+                input.setAttribute('required', 'required');
+            }
         });
     }
 

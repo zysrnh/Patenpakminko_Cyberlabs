@@ -177,11 +177,11 @@
                 <!-- 4. FC NPWP -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">4. Fotokopi NPWP<span class="required">*</span></span>
+                        <span class="label-text">4. Fotokopi NPWP<span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_5_npwp', 'storage/Contoh_Format/5. Contoh NPWP.pdf') }}', 'Contoh Fotokopi NPWP')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
                     </div>
                 </div>
@@ -189,10 +189,10 @@
                 <!-- 5. Akta Pendirian / Dokumen Penetapan -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">5. Surat Keterangan TANAH TIMBUL dari Kepala Desa / Lurah<span class="required">*</span></span>
+                        <span class="label-text">5. Surat Keterangan TANAH TIMBUL dari Kepala Desa / Lurah<span class="optional">(Opsional)</span></span>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 10MB</span>
                     </div>
                 </div>
@@ -200,11 +200,11 @@
                 <!-- 6. Rencana Penggunaan Tanah -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">6. Rencana Penggunaan & Pemanfaatan Tanah<span class="required">*</span></span>
+                        <span class="label-text">6. Rencana Penggunaan & Pemanfaatan Tanah<span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_7_rencana_pemanfaatan_tanah', 'storage/Contoh_Format/7. Rencana Penggunaan pemanfaatan tanah.pdf') }}', 'Contoh Rencana Pemanfaatan Tanah')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="rencana_penggunaan_tanah" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" name="rencana_penggunaan_tanah" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 10MB</span>
                     </div>
                 </div>
@@ -212,10 +212,10 @@
                 <!-- 7. NIB -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">7. Surat Pernyataan Penguasaan Fisik Bidang Tanah (Sporadik)<span class="required">*</span></span>
+                        <span class="label-text">7. Surat Pernyataan Penguasaan Fisik Bidang Tanah (Sporadik)<span class="optional">(Opsional)</span></span>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="nib" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" name="nib" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
                     </div>
                 </div>
@@ -235,11 +235,11 @@
                 <!-- 9. Proposal -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">9. Proposal Rencana Kegiatan Berusaha<span class="required">*</span></span>
+                        <span class="label-text">9. Proposal Rencana Kegiatan Berusaha<span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_10_proposal', 'storage/Contoh_Format/10. Contoh Bussiness Plan Proposal.pdf') }}', 'Contoh Proposal Kegiatan')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
+                        <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx">
                         <span class="file-help">Format : PDF, DOC, DOCX, Maks 10MB</span>
                     </div>
                 </div>
@@ -247,7 +247,7 @@
                 <!-- 10. Persyaratan Lainnya -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text" style="line-height: 1.4;">10. Persyaratan lainnya yang diperlukan<br><span style="font-size:11px; font-weight:500; color:#7A9BB5;">(Sertifikat HAK / SKT / Akta / Sewa Menyewa)</span><span class="required">*</span></span>
+                        <span class="label-text" style="line-height: 1.4;">10. Persyaratan lainnya yang diperlukan<br><span style="font-size:11px; font-weight:500; color:#7A9BB5;">(Sertifikat HAK / SKT / Akta / Sewa Menyewa)</span><span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_11_sertipikat', 'storage/Contoh_Format/11. Contoh serifikat elektronik, analog, akta sewa, perjanjian sewa.pdf') }}', 'Contoh Dokumen Pertek Pertanahan / Bukti Fisik')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">

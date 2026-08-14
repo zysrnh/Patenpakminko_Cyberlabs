@@ -177,11 +177,11 @@
                 <!-- 4. FC NPWP -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">4. Fotokopi NPWP<span class="required">*</span></span>
+                        <span class="label-text">4. Fotokopi NPWP<span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ asset('storage/Contoh_Format/5%20NPWP%20Badan%20Usaha.pdf') }}', 'Contoh Fotokopi NPWP')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
                     </div>
                 </div>
@@ -189,11 +189,11 @@
                 <!-- 5. Akta Pendirian -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum<span class="required">*</span></span>
+                        <span class="label-text">5. Fotokopi Akta Pendirian & Pengesahan Badan Hukum<span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_6_akta_pendirian', 'storage/Contoh_Format/6. contoh akta PENDIRIAN PERSEROAN TERBATAS.pdf') }}', 'Contoh Akta Pendirian')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 10MB</span>
                     </div>
                 </div>
@@ -201,11 +201,11 @@
                 <!-- 6. Rencana Penggunaan Tanah -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">6. Rencana Penggunaan & Pemanfaatan Tanah<span class="required">*</span></span>
+                        <span class="label-text">6. Rencana Penggunaan & Pemanfaatan Tanah<span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_7_rencana_pemanfaatan_tanah', 'storage/Contoh_Format/7. Rencana Penggunaan pemanfaatan tanah.pdf') }}', 'Contoh Rencana Pemanfaatan Tanah')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="rencana_penggunaan_tanah" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" name="rencana_penggunaan_tanah" accept=".pdf,.jpg,.jpeg,.png">
                         <span class="file-help">Format : PDF, JPG, PNG, Maks 10MB</span>
                     </div>
                 </div>
@@ -237,11 +237,11 @@
                 <!-- 9. Proposal -->
                 <div class="form-group">
                     <label class="form-label">
-                        <span class="label-text">9. Proposal Rencana Kegiatan PSN<span class="required">*</span></span>
+                        <span class="label-text">9. Proposal Rencana Kegiatan PSN<span class="optional">(Opsional)</span></span>
                         <button type="button" class="btn-contoh" onclick="openPreview('{{ \App\Models\TemplateDokumen::getPreviewUrl('contoh_10_proposal', 'storage/Contoh_Format/10. Contoh Bussiness Plan Proposal.pdf') }}', 'Contoh Proposal Kegiatan')">Lihat Contoh</button>
                     </label>
                     <div class="file-input-wrapper">
-                        <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx" required>
+                        <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx">
                         <span class="file-help">Format : PDF, DOC, DOCX, Maks 10MB</span>
                     </div>
                 </div>
