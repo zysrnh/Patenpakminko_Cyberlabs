@@ -562,6 +562,107 @@
         .schedule-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
         .schedule-info span { font-size: 11.5px; color: var(--muted); }
 
+        /* ─── WELCOME / HERO CARD (dulu inline style) ────────── */
+        .welcome-card {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            box-shadow: 0 2px 6px rgba(0,38,66,0.02);
+            flex-wrap: wrap;
+        }
+        .welcome-card-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 0;
+        }
+        .welcome-avatar {
+            width: 44px; height: 44px;
+            border-radius: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,59,100,0.12);
+        }
+        .welcome-avatar-fallback {
+            width: 44px; height: 44px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #003B64 0%, #218AC9 100%);
+            color: #fff; font-weight: 800; font-size: 16px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,59,100,0.12);
+        }
+        .welcome-card-title {
+            font-size: 18px; font-weight: 800; color: #003B64;
+            letter-spacing: -0.02em; margin: 0 0 4px;
+            overflow-wrap: break-word;
+        }
+        .welcome-card-sub {
+            font-size: 12.5px; color: #64748B; margin: 0;
+        }
+        .welcome-card-right {
+            display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .btn-complete-profile {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E;
+            padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700;
+            text-decoration: none; transition: all 0.2s; white-space: nowrap;
+        }
+        .btn-complete-profile:hover { background: #FEF3C7; }
+        .role-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #F1F5F9; border: 1px solid #E2E8F0; color: #334155;
+            padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* ─── SLA PANEL (dulu inline style) ─────────────────── */
+        .sla-panel {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            box-shadow: 0 2px 6px rgba(0,38,66,0.02);
+        }
+        .sla-panel-left {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .sla-icon {
+            width: 30px; height: 30px; border-radius: 4px;
+            background: #ECFDF5; color: #059669;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .sla-title { font-size: 13px; font-weight: 800; color: #0F172A; }
+        .sla-sub { font-size: 11.5px; color: #64748B; }
+        .sla-badges {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+        .sla-badge {
+            border-radius: 4px; padding: 6px 12px;
+            display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
+        }
+        .sla-badge.green  { background: #ECFDF5; border: 1px solid #A7F3D0; }
+        .sla-badge.yellow { background: #FFFBEB; border: 1px solid #FDE68A; }
+        .sla-badge.red    { background: #FEF2F2; border: 1px solid #FECACA; }
+        .sla-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
         /* ─── MOBILE RESPONSIVE ────────────────────────────── */
         .btn-menu {
             display: none;
@@ -577,12 +678,66 @@
             .sidebar { transform: translateX(-100%); transition: transform .3s ease; z-index: 100; }
             .sidebar.open { transform: translateX(0); }
             .sidebar-backdrop.show { display: block; opacity: 1; pointer-events: auto; }
-            .main-wrap { margin-left: 0; }
+            .main-wrap { margin-left: 0; width: 100%; }
             .topbar { padding: 0 16px; }
-            .content { padding: 16px; }
+            .content { padding: 14px; }
             .stat-grid { grid-template-columns: 1fr; }
             .hero-grid { grid-template-columns: 1fr; }
             .two-col { grid-template-columns: 1fr; }
+
+            /* KPI cards → 2 kolom, lalu 1 kolom di layar sangat sempit */
+            .kpi-row {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px;
+            }
+            .kpi-card { padding: 14px !important; }
+            .kpi-number { font-size: 20px !important; }
+            .kpi-label { font-size: 10px !important; }
+
+            /* Grid 2 kolom utama → stack */
+            .grid-2col {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Services grid → 1 kolom di HP kecil */
+            .services-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .service-card:nth-child(2n) { border-right: none !important; }
+            .service-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--line) !important; }
+            .service-card:last-child { border-bottom: none !important; grid-column: span 1 !important; }
+
+            /* Panel head & activity items rapetin */
+            .panel-head { padding: 14px 16px 12px; }
+            .activity-item { padding: 12px 14px; }
+
+            /* Welcome card */
+            .welcome-card { padding: 16px; gap: 12px; }
+            .welcome-card-left { width: 100%; }
+            .welcome-card-right { width: 100%; justify-content: flex-start; }
+            .welcome-card-title { font-size: 16px; }
+
+            /* SLA panel */
+            .sla-panel { padding: 14px; }
+            .sla-panel-left { width: 100%; }
+            .sla-badges { width: 100%; }
+            .sla-badge { flex: 1 1 auto; justify-content: center; font-size: 11px !important; padding: 6px 8px; }
+
+            /* Berita list item (admin) jadi vertical */
+            .berita-item { flex-direction: column !important; align-items: flex-start !important; }
+            .berita-item img, .berita-item .berita-thumb-empty { width: 100% !important; height: 160px !important; margin-bottom: 10px; }
+            .berita-item .activity-body { margin-left: 0 !important; }
+            .berita-item .activity-status { margin-top: 8px; }
+
+            /* Warning table souvenir: font lebih kecil biar muat di scroll horizontal */
+            .alert-warning table { font-size: 11px !important; }
+            .alert-warning th, .alert-warning td { padding: 6px 8px !important; }
+        }
+
+        @media (max-width: 420px) {
+            .kpi-row { grid-template-columns: 1fr !important; }
+            .welcome-card-title { font-size: 15px !important; }
+            .role-badge, .btn-complete-profile { font-size: 11px !important; padding: 5px 10px !important; }
         }
 
         /* ─── SIDEBAR DROPDOWN ───────────────── */
@@ -1023,20 +1178,18 @@
             @endphp
 
             <!-- Hero Header Card (Clean & Minimal) -->
-            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 6px; padding: 18px 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02);">
-                <div style="display: flex; align-items: center; gap: 16px;">
+            <div class="welcome-card">
+                <div class="welcome-card-left">
                     @if($user->profile_photo)
-                        <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" style="width: 44px; height: 44px; border-radius: 6px; object-fit: cover; flex-shrink: 0; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,59,100,0.12);">
+                        <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" class="welcome-avatar">
                     @else
-                        <div style="width: 44px; height: 44px; border-radius: 6px; background: linear-gradient(135deg, #003B64 0%, #218AC9 100%); color: #fff; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,59,100,0.12);">
+                        <div class="welcome-avatar-fallback">
                             {{ strtoupper(substr($user->username ?? 'U', 0, 2)) }}
                         </div>
                     @endif
                     <div>
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
-                            <h1 style="font-size: 18px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
-                        </div>
-                        <p style="font-size: 12.5px; color: #64748B; margin: 0;">
+                        <h1 class="welcome-card-title">Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
+                        <p class="welcome-card-sub">
                             @if(Auth::user()->isAdminBerita()) Kelola publikasi artikel dan informasi terbaru di sini.
                             @elseif(Auth::user()->isPelakuUsaha()) Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.
                             @else Kelola permohonan pemanfaatan ruang dan pantau status layanan secara real-time.
@@ -1045,15 +1198,15 @@
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+                <div class="welcome-card-right">
                     @if($isProfileIncomplete)
-                        <a href="{{ route('profile') }}" style="display: inline-flex; align-items: center; gap: 6px; background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#FEF3C7'" onmouseout="this.style.background='#FFFBEB'">
+                        <a href="{{ route('profile') }}" class="btn-complete-profile">
                             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                             Lengkapi Profil
                         </a>
                     @endif
 
-                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; border: 1px solid #E2E8F0; color: #334155; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700;">
+                    <div class="role-badge">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         <span>
                             @if(Auth::user()->isAdminBerita()) Admin Berita
@@ -1116,11 +1269,11 @@
                     </div>
                     <div class="activity-list">
                         @forelse($beritasList as $beritaItem)
-                        <div class="activity-item" style="align-items: center; padding: 18px 20px;">
+                        <div class="activity-item berita-item" style="align-items: center; padding: 18px 20px;">
                             @if($beritaItem->image_path)
                                 <img src="{{ route('file.view', ['path' => $beritaItem->image_path]) }}" alt="{{ $beritaItem->title }}" style="width: 180px; height: 110px; object-fit: cover; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--line);">
                             @else
-                                <div style="width: 180px; height: 110px; border-radius: 6px; background: var(--surface2); border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <div class="berita-thumb-empty" style="width: 180px; height: 110px; border-radius: 6px; background: var(--surface2); border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                     <svg width="32" height="32" fill="none" stroke="var(--muted)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                 </div>
                             @endif
@@ -1250,33 +1403,33 @@
 
             @if(!Auth::user()->isPelakuUsaha())
             <!-- ── SLA PENGENDALIAN INTERNAL (CLEAN INTEGRATED ROW) ──────────────────── -->
-            <div style="background: #ffffff; border: 1px solid var(--line); border-radius: 6px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: 0 2px 6px rgba(0,38,66,0.02);">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 30px; height: 30px; border-radius: 4px; background: #ECFDF5; color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <div class="sla-panel">
+                <div class="sla-panel-left">
+                    <div class="sla-icon">
                         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
                     <div>
-                        <div style="font-size: 13px; font-weight: 800; color: #0F172A;">Pengendalian SLA — Berkas Aktif</div>
-                        <div style="font-size: 11.5px; color: #64748B;">Total berkas berjalan: <strong>{{ $slaHijau + $slaKuning + $slaMerah }} berkas</strong></div>
+                        <div class="sla-title">Pengendalian SLA — Berkas Aktif</div>
+                        <div class="sla-sub">Total berkas berjalan: <strong>{{ $slaHijau + $slaKuning + $slaMerah }} berkas</strong></div>
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="sla-badges">
                     {{-- Hijau --}}
-                    <div style="background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 4px; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
-                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                    <div class="sla-badge green">
+                        <span class="sla-dot" style="background: #10B981;"></span>
                         <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaHijau }}</strong></span>
                     </div>
 
                     {{-- Kuning --}}
-                    <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 4px; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
-                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+                    <div class="sla-badge yellow">
+                        <span class="sla-dot" style="background: #F59E0B;"></span>
                         <span style="font-size: 12px; font-weight: 600; color: #92400E;">Mendekati Batas: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaKuning }}</strong></span>
                     </div>
 
                     {{-- Merah --}}
-                    <div style="background: #FEF2F2; border: 1px solid #FECACA; border-radius: 4px; padding: 6px 12px; display: flex; align-items: center; gap: 6px;">
-                        <span style="width: 7px; height: 7px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+                    <div class="sla-badge red">
+                        <span class="sla-dot" style="background: #EF4444;"></span>
                         <span style="font-size: 12px; font-weight: 600; color: #991B1B;">Terlambat: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaMerah }}</strong></span>
                     </div>
                 </div>

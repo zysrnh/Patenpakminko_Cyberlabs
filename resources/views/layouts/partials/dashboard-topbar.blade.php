@@ -27,6 +27,7 @@
     justify-content: space-between;
     height: 76px;
     padding: 0 28px;
+    gap: 12px;
 
     /* Glassmorphism */
     background: rgba(255, 255, 255, 0.72);
@@ -44,6 +45,25 @@
     top: 0;
     z-index: 100;
 }
+
+/* ─── Hamburger (mobile sidebar toggle) ─────────────────────── */
+.hamburger {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 4px;
+    background: transparent;
+    border: none;
+    color: #0d2d4f;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    margin-right: 2px;
+}
+.hamburger:hover { background: rgba(13, 45, 79, 0.07); }
+.hamburger svg { width: 22px; height: 22px; }
 
 /* ─── Kiri: breadcrumb ───────────────────────────────────────── */
 .topbar-left {
@@ -151,13 +171,6 @@
 .topbar-backup-btn:hover {
     background: #BEE3F8;
     color: #1A365D;
-}
-@media (max-width: 992px) {
-    .topbar-datepill { display: none; }
-}
-@media (max-width: 768px) {
-    .topbar { padding: 0 14px; }
-    .topbar-user-name { display: none; }
 }
 
 /* ─── Notif button ───────────────────────────────────────────────────────── */
@@ -272,13 +285,66 @@
     border-color: #dc2626;
     box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
 }
+
+/* ─── MOBILE RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 992px) {
+    .topbar-datepill { display: none; }
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        padding: 0 12px;
+        height: 60px;
+        gap: 6px;
+    }
+    .hamburger { display: flex; }
+
+    /* Breadcrumb: sembunyikan "PATEN PAK MIKO >" biar muat, sisain judul halaman aja */
+    .topbar-breadcrumb-parent,
+    .topbar-breadcrumb-sep {
+        display: none;
+    }
+    .topbar-breadcrumb-current {
+        font-size: 13.5px;
+        max-width: 40vw;
+    }
+
+    .topbar-right { gap: 4px; }
+    .topbar-divider { display: none; }
+
+    /* Backup DB: icon aja, teks disembunyikan */
+    .topbar-backup-btn span { display: none; }
+    .topbar-backup-btn { padding: 0; width: 34px; justify-content: center; }
+
+    .topbar-user-name { display: none; }
+    .topbar-user-chip { padding: 4px; gap: 0; }
+
+    /* Logout: icon aja di HP */
+    .topbar-logout-btn span { display: none; }
+    .topbar-logout-btn { padding: 0; width: 34px; height: 34px; justify-content: center; margin-left: 0; }
+}
+
+@media (max-width: 420px) {
+    .topbar { padding: 0 8px; }
+    .topbar-breadcrumb-current { max-width: 32vw; font-size: 13px; }
+    .topbar-notif-btn { width: 32px; height: 32px; }
+    .topbar-notif-btn svg { width: 17px; height: 17px; }
+}
 /* ─────────────────────────────────────────────────────────────────────────── */
 </style>
 
 <header class="topbar">
 
-    {{-- Left: breadcrumb title --}}
+    {{-- Left: hamburger (mobile) + breadcrumb title --}}
     <div class="topbar-left">
+
+        <button type="button" class="hamburger" onclick="toggleSidebar()" aria-label="Buka menu navigasi">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
 
         <div class="topbar-breadcrumb">
             <a href="{{ url('/') }}" class="topbar-breadcrumb-parent">PATEN PAK MIKO</a>
@@ -389,7 +455,7 @@
 </script>
 
 <!-- Toast Container -->
-<div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; pointer-events: none;"></div>
+<div id="toast-container" style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; pointer-events: none; max-width: calc(100vw - 32px);"></div>
 
 <style>
 /* Toast Notification Styles */
@@ -400,6 +466,7 @@
     border: 1px solid rgba(13, 45, 79, 0.1);
     padding: 16px;
     width: 320px;
+    max-width: calc(100vw - 32px);
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -407,6 +474,7 @@
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: auto;
+    box-sizing: border-box;
 }
 .toast-notif.show {
     transform: translateX(0);
@@ -424,13 +492,18 @@
     flex-shrink: 0;
 }
 .toast-icon svg { width: 20px; height: 20px; }
-.toast-content { flex: 1; }
+.toast-content { flex: 1; min-width: 0; }
 .toast-title { font-weight: 700; font-size: 13.5px; color: var(--ink); margin-bottom: 4px; line-height: 1.3; }
 .toast-message { font-size: 12px; color: #5a7a9a; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .toast-close {
     background: none; border: none; color: #a0aec0; cursor: pointer; padding: 4px; border-radius: 6px; transition: 0.2s; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
 }
 .toast-close:hover { background: #f1f5f9; color: #4a5568; }
+
+@media (max-width: 480px) {
+    #toast-container { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+    .toast-notif { width: 100%; }
+}
 </style>
 
 <script>
@@ -571,5 +644,3 @@ document.addEventListener('DOMContentLoaded', function() {
     checkNotifications();
 });
 </script>
-
-
