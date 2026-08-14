@@ -286,9 +286,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #EFF6FF; color: #1D4ED8; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
 
                             </div>
 
@@ -312,9 +312,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #F0FDF4; color: #15803D; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
 
                             </div>
 
@@ -338,9 +338,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #FEFCE8; color: #A16207; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
 
                             </div>
 
@@ -364,9 +364,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #F0F9FF; color: #0369A1; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
 
                             </div>
 
@@ -390,9 +390,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #FAF5FF; color: #7E22CE; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
 
                             </div>
 
