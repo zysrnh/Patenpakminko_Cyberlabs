@@ -104,13 +104,13 @@ class PpkprNonBerusahaController extends Controller
             'peta_lokasi'               => ($request->hasFile('peta_lokasi') || $request->filled('temp_peta_lokasi')) ? 'nullable' : 'required',
             'surat_kuasa'               => 'nullable',
             'fc_ktp'                    => ($request->hasFile('fc_ktp') || $request->filled('temp_fc_ktp')) ? 'nullable' : 'required',
-            'fc_npwp'                   => ($request->hasFile('fc_npwp') || $request->filled('temp_fc_npwp')) ? 'nullable' : 'required',
-            'fc_akta_pendirian'         => ($request->hasFile('fc_akta_pendirian') || $request->filled('temp_fc_akta_pendirian')) ? 'nullable' : 'required',
-            'rencana_penggunaan_tanah'  => ($request->hasFile('rencana_penggunaan_tanah') || $request->filled('temp_rencana_penggunaan_tanah')) ? 'nullable' : 'required',
+            'fc_npwp'                   => 'nullable',
+            'fc_akta_pendirian'         => 'nullable',
+            'rencana_penggunaan_tanah'  => 'nullable',
             'nib'                       => 'nullable',
             'kbli_kode'                 => 'nullable|string|max:20',
             'kbli'                      => 'nullable',
-            'proposal_kegiatan'         => ($request->hasFile('proposal_kegiatan') || $request->filled('temp_proposal_kegiatan')) ? 'nullable' : 'required',
+            'proposal_kegiatan'         => 'nullable',
             'persyaratan_lainnya'       => 'nullable',
         ], [
             'nama_pemilik_usaha.required'       => 'Nama pemilik usaha wajib diisi.',
@@ -118,10 +118,6 @@ class PpkprNonBerusahaController extends Controller
             'hubungan_pengaju.required'         => 'Hubungan pengaju / sebagai apa wajib diisi.',
             'peta_lokasi.required'              => 'Peta/sketsa lokasi wajib diunggah.',
             'fc_ktp.required'                   => 'Fotokopi KTP wajib diunggah.',
-            'fc_npwp.required'                  => 'Fotokopi NPWP wajib diunggah.',
-            'fc_akta_pendirian.required'        => 'FC Akta Pendirian / Dokumen Penetapan wajib diunggah.',
-            'rencana_penggunaan_tanah.required' => 'Rencana Penggunaan Tanah wajib diunggah.',
-            'proposal_kegiatan.required'        => 'Proposal Rencana Kegiatan wajib diunggah.',
         ]);
 
         $data = $request->only([
