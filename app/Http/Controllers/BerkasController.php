@@ -63,6 +63,26 @@ class BerkasController extends Controller
             });
         }
 
+        // Filter berdasarkan pengunggah (PTSP vs Pemohon)
+        if ($request->has('pengunggah') && $request->pengunggah != '') {
+            if ($request->pengunggah === 'ptsp') {
+                $query->where(function($q) {
+                    $q->where('is_ptsp', true)
+                      ->orWhere('uploaded_by_role', 'satu_pintu')
+                      ->orWhere('kategori', 'like', '%PTSP%')
+                      ->orWhere('kategori', 'like', '%Satu Pintu%');
+                });
+            } elseif ($request->pengunggah === 'pemohon') {
+                $query->where(function($q) {
+                    $q->where('is_ptsp', false)
+                      ->where(function($qInner) {
+                          $qInner->whereNull('uploaded_by_role')
+                                 ->orWhere('uploaded_by_role', 'pelaku_usaha');
+                      });
+                });
+            }
+        }
+
         // Filter berdasarkan layanan khusus (PKKPR Berusaha, Non Berusaha, dsb)
         if ($request->has('layanan') && $request->layanan != '') {
             $query->where('nama_berkas', 'like', '[' . $request->layanan . ']%');
@@ -108,14 +128,19 @@ class BerkasController extends Controller
         $ukuranKb = round($file->getSize() / 1024, 2);
         $ukuranStr = $ukuranKb > 1024 ? round($ukuranKb / 1024, 2) . ' MB' : $ukuranKb . ' KB';
 
+        $userRole = Auth::user()->role;
+        $isPtsp = in_array($userRole, ['satu_pintu', 'dpn']);
+
         Berkas::create([
-            'user_id'     => Auth::id(),
-            'nama_berkas' => $request->nama_berkas ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
-            'kategori'    => $request->kategori,
-            'file_path'   => $filePath,
-            'tipe_file'   => $file->getClientOriginalExtension(),
-            'ukuran_file' => $ukuranStr,
-            'keterangan'  => $request->keterangan
+            'user_id'          => Auth::id(),
+            'nama_berkas'      => $request->nama_berkas ?: pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME),
+            'kategori'         => $request->kategori,
+            'is_ptsp'          => $isPtsp,
+            'uploaded_by_role' => $userRole,
+            'file_path'        => $filePath,
+            'tipe_file'        => $file->getClientOriginalExtension(),
+            'ukuran_file'      => $ukuranStr,
+            'keterangan'       => $request->keterangan
         ]);
 
         return redirect()->route('berkas.index')->with('success', 'Berkas berhasil diupload.');

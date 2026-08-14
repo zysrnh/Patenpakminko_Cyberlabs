@@ -305,6 +305,13 @@
                     </select>
                 </div>
                 <div>
+                    <select name="pengunggah" class="form-control">
+                        <option value="">Semua Pengunggah</option>
+                        <option value="ptsp" {{ request('pengunggah') == 'ptsp' ? 'selected' : '' }}>🛡️ Uploaded by PTSP</option>
+                        <option value="pemohon" {{ request('pengunggah') == 'pemohon' ? 'selected' : '' }}>👤 Uploaded Pemohon</option>
+                    </select>
+                </div>
+                <div>
                     <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" title="Filter berdasarkan Tanggal Unggah">
                 </div>
                 <div>
@@ -326,7 +333,7 @@
                 </div>
                 <div class="action-col" style="display: flex; gap: 8px;">
                     <button type="submit" class="btn btn-secondary" style="padding: 8px 16px; height: 38px;">Filter</button>
-                    @if(request('search') || request('kategori') || request('tanggal') || request('layanan'))
+                    @if(request('search') || request('kategori') || request('tanggal') || request('layanan') || request('pengunggah'))
                         <a href="{{ route('berkas.index', request('layanan') ? ['layanan' => request('layanan'), 'kategori' => request('kategori')] : []) }}" class="btn btn-secondary" style="padding: 8px 16px; height: 38px; background: #fff; color: #ef4444; border-color: #fca5a5;">Reset</a>
                     @endif
                 </div>
@@ -361,8 +368,17 @@
                         </td>
                         <td>
                             <div style="font-weight: 600; color: #0f172a; font-size: 14px; margin-bottom: 4px;">{{ $item->nama_berkas }}</div>
-                            <div style="display: flex; gap: 8px; align-items: center; font-size: 12px;">
+                            <div style="display: flex; gap: 8px; align-items: center; font-size: 12px; flex-wrap: wrap;">
                                 <span style="color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: 500;">{{ $item->kategori ?? 'Umum' }}</span>
+                                @if($item->is_ptsp || $item->uploaded_by_role === 'satu_pintu' || str_contains(strtolower($item->kategori), 'ptsp'))
+                                    <span style="color: #047857; background: #D1FAE5; border: 1px solid #A7F3D0; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
+                                        🛡️ Uploaded by PTSP
+                                    </span>
+                                @else
+                                    <span style="color: #475569; background: #F1F5F9; border: 1px solid #E2E8F0; padding: 2px 8px; border-radius: 4px; font-weight: 500; font-size: 11px;">
+                                        👤 Pemohon
+                                    </span>
+                                @endif
                                 <span style="color: #94a3b8;">•</span>
                                 <span style="color: #64748b;">{{ $item->ukuran_file }}</span>
                             </div>

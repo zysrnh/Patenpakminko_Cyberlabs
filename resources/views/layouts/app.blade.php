@@ -462,7 +462,7 @@
                 </div>
                 <div class="nav-dropdown-menu {{ request()->routeIs('berkas.*') ? 'open' : '' }}">
                     <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->fullUrlIs(route('berkas.index')) ? 'active' : '' }}">Berkas Otomatis</a>
-                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha']) }}" class="nav-dropdown-item {{ request('layanan') == 'PKKPR Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
+                    <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Berusaha', 'kategori' => 'Pertimbangan Teknis Berusaha', 'pengunggah' => 'ptsp']) }}" class="nav-dropdown-item {{ request('layanan') == 'PKKPR Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
                     <a href="{{ route('berkas.index', ['layanan' => 'PKKPR Non-Berusaha', 'kategori' => 'Pertimbangan Teknis Non Berusaha']) }}" class="nav-dropdown-item {{ request('layanan') == 'PKKPR Non-Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Non Berusaha</a>
                     @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
                     <a href="{{ route('berkas.index', ['layanan' => 'Kebijakan', 'kategori' => 'Pertimbangan Teknis Kebijakan']) }}" class="nav-dropdown-item {{ request('layanan') == 'Kebijakan' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>

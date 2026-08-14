@@ -15,6 +15,8 @@ class Berkas extends Model
         'user_id',
         'nama_berkas',
         'kategori',
+        'is_ptsp',
+        'uploaded_by_role',
         'file_path',
         'tipe_file',
         'ukuran_file',

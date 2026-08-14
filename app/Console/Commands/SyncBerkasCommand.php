@@ -205,10 +205,14 @@ class SyncBerkasCommand extends Command
             $ukuranStr = $ukuranKb > 1024 ? round($ukuranKb / 1024, 2) . ' MB' : $ukuranKb . ' KB';
         }
 
+        $isPtsp = (str_contains($jenisLabel, 'PTSP') || str_contains($jenisLabel, 'Satu Pintu') || $modulName === 'PKKPR Berusaha');
+
         Berkas::create([
             'user_id' => $userId,
             'nama_berkas' => $namaBerkas,
             'kategori' => $jenisLabel,
+            'is_ptsp' => $isPtsp,
+            'uploaded_by_role' => $isPtsp ? 'satu_pintu' : 'pelaku_usaha',
             'file_path' => $filePath,
             'tipe_file' => strtolower($ext),
             'ukuran_file' => $ukuranStr,
