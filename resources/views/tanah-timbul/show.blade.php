@@ -1398,6 +1398,7 @@
                                 </form>
                             @endif
                         </div>
+            @endif
 
             <!-- PELAKU USAHA NOTIFIKASI: BERKAS LENGKAP -->
             @if($user->isPelakuUsaha() && $application->bpn_berkas_status === 'diterima')
@@ -2033,35 +2034,7 @@
 
 
 
-                            <!-- STEP 6: Penerbitan PKKPR Tanah Timbul DPMPTSP -->
-                            @php
-                                $step6Status = '';
-                                if (in_array($application->status, ['menunggu_satu_pintu', 'disetujui'])) {
-                                    $step6Status = $application->status === 'disetujui' ? 'completed' : 'active';
-                                }
-                            @endphp
-                            <div class="timeline-step {{ $step6Status }}" onclick="showBpnPanel('satu-pintu')" style="cursor:pointer;">
-                                <span class="timeline-dot"></span>
-                                <div class="timeline-content">
-                                    <div class="timeline-title">
-                                        6. Penerbitan PKKPR Tanah Timbul
-                                        <span style="font-size: 10px; font-weight: 600; color: var(--clr-muted); background: rgba(0,0,0,0.05); padding: 1px 6px; border-radius: 10px;">Dinas PMPTSP</span>
-                                    </div>
-                                    <div class="timeline-desc">
-                                        DPMPTSP menerbitkan dokumen PKKPR Tanah Timbul resmi.
-                                    </div>
-                                    @if($application->satu_pintu_no_pkkpr)
-                                        <div class="timeline-notes" style="border-left-color: var(--clr-green); background: #F4FBF7; color: #137333;">
-                                            <strong>No. PKKPR Tanah Timbul:</strong> {{ $application->satu_pintu_no_pkkpr }}
-                                        </div>
-                                    @endif
-                                    @if($application->satu_pintu_tanggal_terbit)
-                                        <div style="font-size:11px;color:#558B2F;margin-top:5px;font-weight:600;">📅 Terbit: {{ \Carbon\Carbon::parse($application->satu_pintu_tanggal_terbit)->locale('id')->translatedFormat('l, d M Y') }}</div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!-- STEP 7: Selesai / Ditolak -->
+                            <!-- STEP 8: Selesai / Ditolak -->
                             @php
                                 $doneStepStatus = '';
                                 if ($application->status === 'disetujui') {
