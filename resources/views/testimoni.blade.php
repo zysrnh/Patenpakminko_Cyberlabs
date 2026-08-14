@@ -29,6 +29,50 @@
         padding: 24px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     }
+
+    /* ═══ MOBILE RESPONSIVE FIXES ═══ */
+    @media (max-width: 768px) {
+        .page-header {
+            padding: 48px 0 40px;
+        }
+        .page-header h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            font-size: 14px;
+        }
+        .reviews-grid {
+            /* minmax 300px kekecilan container di HP → paksa 1 kolom penuh */
+            grid-template-columns: 1fr !important;
+            gap: 16px;
+            padding: 32px 0;
+        }
+        .review-card {
+            padding: 18px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .page-header {
+            padding: 36px 0 32px;
+        }
+        .page-header h1 {
+            font-size: 22px;
+        }
+        .page-header p {
+            font-size: 13px;
+        }
+        .review-card {
+            padding: 16px;
+        }
+        .review-header h4 {
+            font-size: 14px !important;
+        }
+        .review-text {
+            font-size: 13px !important;
+        }
+    }
 </style>
 
 <div class="page-header">
@@ -47,12 +91,12 @@
         <div class="reviews-grid">
             @foreach($reviews as $review)
             <div class="review-card">
-                <div class="review-header" style="display:flex; justify-content:space-between; margin-bottom:16px;">
-                    <div class="review-author" style="display:flex; flex-direction:column;">
-                        <h4 style="margin:0; font-size:16px; color:#1a202c;">{{ $review->reviewer_name }}</h4>
+                <div class="review-header" style="display:flex; justify-content:space-between; margin-bottom:16px; gap:12px;">
+                    <div class="review-author" style="display:flex; flex-direction:column; min-width:0;">
+                        <h4 style="margin:0; font-size:16px; color:#1a202c; overflow-wrap:break-word;">{{ $review->reviewer_name }}</h4>
                         <span style="font-size:12px; color:#718096;">Sukabumi • {{ $review->module_label_display }}</span>
                     </div>
-                    <div class="review-check" style="background:#EBF8FF; color:#3182CE; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                    <div class="review-check" style="background:#EBF8FF; color:#3182CE; width:24px; height:24px; min-width:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
                         <svg viewBox="0 0 24 24" style="width:14px;height:14px;" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
                     </div>
                 </div>
