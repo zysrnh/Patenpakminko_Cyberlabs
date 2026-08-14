@@ -259,10 +259,11 @@ class PpkprBerusahaController extends Controller
                 if ($action === 'approve') {
                     $application->bpn_berkas_status = 'diterima';
                     $application->bpn_berkas_approved_at = $application->bpn_berkas_approved_at ?? now();
-                    if ($application->status === 'menunggu_bpn') {
-                        $application->status = 'menunggu_pembayaran';
+                    if ($application->status === 'menunggu_bpn' || $application->status === 'menunggu_pembayaran') {
+                        $application->status = 'menunggu_dinas_pu';
+                        $application->dinas_pu_status = 'menunggu_validasi_awal';
                     }
-                    $msg = 'Berkas disetujui & notifikasi berhasil dikirim ke WhatsApp pemohon.';
+                    $msg = 'Berkas disetujui & permohonan diteruskan ke Dinas PUTR untuk validasi awal.';
                 } else {
                     $application->bpn_berkas_status = 'tidak_sesuai';
                     $msg = 'Berkas dinyatakan tidak sesuai. Pelaku usaha telah dinotifikasi.';
@@ -382,10 +383,10 @@ class PpkprBerusahaController extends Controller
         // ==========================================
         // 2. TAHAP DINAS PU / PUTR (Validasi Awal ATAU Penilaian Tata Ruang)
         // ==========================================
-        if ($user->isDinasPu() && $application->status === 'menunggu_dinas_pu') {
+        if (($user->isDinasPu() || $user->isDinasPutr() || $user->isDpn()) && (in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr']) || ($application->bpn_berkas_status === 'diterima' && $application->dinas_pu_status !== 'validasi_awal_diterima' && $application->dinas_pu_status !== 'sesuai'))) {
             
             // KASUS A: Validasi Permohonan Awal (Stage 3)
-            if ($application->dinas_pu_status === 'menunggu_validasi_awal') {
+            if (in_array($application->dinas_pu_status, ['menunggu_validasi_awal', 'menunggu', null, '']) && $application->dinas_pu_status !== 'validasi_awal_diterima') {
                 $request->validate([
                     'action' => 'required|in:approve,reject',
                     'notes' => 'required|string|max:1000',

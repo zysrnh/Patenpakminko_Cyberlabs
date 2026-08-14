@@ -1238,7 +1238,7 @@
 
 
                         <div id="Kantor Pertanahan-panel-pu-1" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_pertek_document && $application->status !== 'menunggu_satu_pintu' && $application->status !== 'disetujui' ? 'block' : 'none' }};">
-                            @php $isPuActive = (Auth::user()->isDinasPu() && $application->status === 'menunggu_dinas_pu'); @endphp
+                            @php $isPuActive = ((Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isDpn()) && (in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr']) || ($application->bpn_berkas_status === 'diterima' && $application->dinas_pu_status !== 'validasi_awal_diterima' && $application->dinas_pu_status !== 'sesuai'))); @endphp
                             <fieldset {{ $isPuActive ? '' : 'disabled' }}>
                                 <form action="{{ route('non-berusaha.verify', $application->id) }}" method="POST">
                                     @csrf

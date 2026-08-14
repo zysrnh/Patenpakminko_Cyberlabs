@@ -30,12 +30,12 @@ class User extends Authenticatable
 
     public function isDinasPu(): bool
     {
-        return $this->role === 'dinas_pu';
+        return in_array($this->role, ['dinas_pu', 'dinas_putr']);
     }
 
     public function isDinasPutr(): bool
     {
-        return $this->role === 'dinas_putr';
+        return in_array($this->role, ['dinas_pu', 'dinas_putr']);
     }
 
     public function isSatuPintu(): bool

@@ -1321,8 +1321,8 @@
                         </script>
 
             <!-- 2. DINAS PU PANEL -->
-            @if($user->isDinasPu() && $application->status === 'menunggu_dinas_pu')
-                @if($application->dinas_pu_status === 'menunggu_validasi_awal')
+            @if(($user->isDinasPu() || $user->isDinasPutr() || $user->isDpn()) && (in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr']) || ($application->bpn_berkas_status === 'diterima' && $application->dinas_pu_status !== 'validasi_awal_diterima' && $application->dinas_pu_status !== 'sesuai')))
+                @if(in_array($application->dinas_pu_status, ['menunggu_validasi_awal', 'menunggu', null, '']) && $application->dinas_pu_status !== 'validasi_awal_diterima')
                     <div class="verify-card" style="border-color: var(--clr-blue); background: #FAFDFE;">
                         <h3 class="verify-title">🏢 Panel Validasi Permohonan Awal — Dinas Pekerjaan Umum dan Tata Ruang (PUTR)</h3>
                         <form action="{{ route('berusaha.verify', $application->id) }}" method="POST">
