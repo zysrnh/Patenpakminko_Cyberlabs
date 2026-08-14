@@ -341,18 +341,30 @@
 
         /* Mobile Nav Overlay */
         .mobile-nav {
-            display: none;
+            display: flex;
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(-16px) scale(0.98);
+            pointer-events: none;
             position: fixed;
             inset: 0;
             z-index: 150;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             padding: 0;
             flex-direction: column;
             overflow-y: auto;
             overscroll-behavior: contain;
+            transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                        visibility 0.32s;
         }
         .mobile-nav.open {
-            display: flex;
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
         }
         .mobile-nav-header {
             display: flex;
@@ -362,7 +374,9 @@
             border-bottom: 1px solid var(--line);
             position: sticky;
             top: 0;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 10;
         }
         .mobile-nav-body {
@@ -370,25 +384,54 @@
             display: flex;
             flex-direction: column;
         }
+        .mobile-nav-body > * {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .mobile-nav.open .mobile-nav-body > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(1) { transition-delay: 0.03s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(2) { transition-delay: 0.06s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(3) { transition-delay: 0.09s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(4) { transition-delay: 0.12s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(5) { transition-delay: 0.15s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(6) { transition-delay: 0.18s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(7) { transition-delay: 0.21s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(8) { transition-delay: 0.24s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(9) { transition-delay: 0.27s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(10) { transition-delay: 0.30s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(11) { transition-delay: 0.33s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(12) { transition-delay: 0.36s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(13) { transition-delay: 0.39s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(14) { transition-delay: 0.42s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(15) { transition-delay: 0.45s; }
+
         .mobile-nav-body a,
         .mobile-nav-body button {
             font-size: 15px;
             font-weight: 600;
             color: var(--ink);
             text-decoration: none;
-            padding: 14px 0;
+            padding: 14px 10px;
             border: none;
             border-bottom: 1px solid var(--line);
             background: none;
             font-family: inherit;
             cursor: pointer;
             text-align: left;
-            transition: color .18s;
+            transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
             display: block;
             width: 100%;
+            border-radius: 8px;
         }
-        .mobile-nav-body a:hover {
+        .mobile-nav-body a:hover,
+        .mobile-nav-body a:active {
             color: var(--blue-dk);
+            background: rgba(33, 138, 201, 0.08);
+            transform: translateX(4px);
         }
         .mobile-nav-body a:last-child {
             border-bottom: none;
@@ -399,7 +442,7 @@
             text-transform: uppercase;
             letter-spacing: .08em;
             color: var(--muted);
-            padding: 20px 0 8px;
+            padding: 20px 10px 8px;
             border-bottom: none;
         }
         .mobile-nav-body .mobile-cta {
@@ -414,6 +457,12 @@
             border-radius: 10px;
             font-weight: 700;
             border-bottom: none !important;
+            transition: all 0.22s ease !important;
+        }
+        .mobile-nav-body .mobile-cta:hover,
+        .mobile-nav-body .mobile-cta:active {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(0, 59, 100, 0.25) !important;
         }
         .mobile-nav-close {
             width: 36px;
@@ -2134,6 +2183,26 @@
         if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
             closeMobileNav();
         }
+    });
+
+    document.querySelectorAll('.nav-dropdown-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const parent = this.closest('.nav-dropdown');
+            document.querySelectorAll('.nav-dropdown').forEach(function(d) {
+                if (d !== parent) d.classList.remove('active');
+            });
+            const isOpen = parent.classList.toggle('active');
+            this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+    });
+
+    document.addEventListener('click', function() {
+        document.querySelectorAll('.nav-dropdown').forEach(function(d) {
+            d.classList.remove('active');
+            const btn = d.querySelector('.nav-dropdown-trigger');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
     });
 
     const header = document.getElementById('site-header');
