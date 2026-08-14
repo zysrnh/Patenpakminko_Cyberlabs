@@ -7,12 +7,22 @@
     .alur-page {
         background-color: #F0F6FB;
         padding: 60px 20px 100px;
+        position: relative;
+        overflow: hidden;
     }
     
     .alur-header {
         text-align: center;
         margin-bottom: 60px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    .alur-header.animated {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     .alur-badge {
         display: inline-block;
         background: #EBF8FF;
@@ -26,7 +36,7 @@
         margin-bottom: 16px;
     }
     .alur-title {
-        font-size: clamp(28px, 4vw, 36px);
+        font-size: clamp(26px, 4vw, 36px);
         font-weight: 800;
         color: #00223D;
         margin-bottom: 12px;
@@ -45,25 +55,45 @@
         position: relative;
     }
 
-    /* Vertical Line */
-    .timeline-container::before {
-        content: '';
+    /* Vertical Background Line Track */
+    .timeline-line-track {
         position: absolute;
-        top: 20px;
-        bottom: 20px;
-        left: 32px; /* Center of the 64px circle */
-        width: 3px;
-        background-color: #00223D;
+        top: 32px;
+        bottom: 32px;
+        left: 32px;
+        width: 4px;
+        background-color: #CBD5E1;
+        border-radius: 2px;
         z-index: 1;
+    }
+
+    /* Dynamic Animated Progress Line Fill */
+    .timeline-line-progress {
+        position: absolute;
+        top: 32px;
+        left: 32px;
+        width: 4px;
+        height: 0%;
+        background: linear-gradient(to bottom, #3291A8 0%, #2563EB 100%);
+        border-radius: 2px;
+        z-index: 1;
+        transition: height 0.1s linear;
+        box-shadow: 0 0 10px rgba(50, 145, 168, 0.5);
     }
 
     .timeline-item {
         display: flex;
         gap: 40px;
-        margin-bottom: 40px;
+        margin-bottom: 48px;
         position: relative;
         z-index: 2;
-        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0;
+        transform: translateY(36px);
+        transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .timeline-item.animated {
+        opacity: 1;
+        transform: translateY(0);
     }
     .timeline-item:last-child {
         margin-bottom: 0;
@@ -82,12 +112,16 @@
         justify-content: center;
         flex-shrink: 0;
         box-shadow: 0 4px 14px rgba(0, 34, 61, 0.25);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 3px solid #F0F6FB;
     }
-    .timeline-item:hover .timeline-number {
-        transform: scale(1.1);
+
+    /* Active State for Step Circle when scroll reaches it */
+    .timeline-item.active-step .timeline-number {
         background-color: #3291A8;
-        box-shadow: 0 0 24px rgba(50, 145, 168, 0.5);
+        color: #FFFFFF;
+        transform: scale(1.12);
+        box-shadow: 0 0 24px rgba(50, 145, 168, 0.6);
     }
 
     .timeline-card {
@@ -109,14 +143,14 @@
     }
 
     .timeline-img-wrap {
-        flex: 0 0 280px;
+        flex: 0 0 260px;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .timeline-img-wrap img {
         width: 100%;
-        max-width: 280px;
+        max-width: 260px;
         height: auto;
         object-fit: contain;
         transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -192,7 +226,7 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: rgba(0, 34, 61, 0.85); /* Dark overlay */
+        background: rgba(0, 34, 61, 0.85);
     }
     .alur-cta-inner {
         position: relative;
@@ -201,7 +235,7 @@
         margin: 0 auto;
     }
     .alur-cta h2 {
-        font-size: clamp(28px, 4vw, 40px);
+        font-size: clamp(26px, 4vw, 40px);
         font-weight: 800;
         color: #FFFFFF;
         margin-bottom: 16px;
@@ -211,7 +245,7 @@
         color: #3291A8;
     }
     .alur-cta p {
-        font-size: 16px;
+        font-size: 15.5px;
         color: #E2E8F0;
         margin-bottom: 32px;
     }
@@ -221,6 +255,7 @@
         justify-content: center;
     }
 
+    /* Mobile Responsive Optimizations */
     @media (max-width: 992px) {
         .timeline-card {
             flex-direction: column;
@@ -237,70 +272,49 @@
             margin-bottom: 16px;
         }
         .timeline-img-wrap img {
-            max-width: 220px;
+            max-width: 200px;
         }
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 640px) {
         .alur-page {
-            padding: 32px 14px 60px !important;
+            padding: 28px 12px 60px !important;
         }
         .alur-header {
-            margin-bottom: 36px !important;
+            margin-bottom: 32px !important;
         }
-        .alur-badge {
-            font-size: 11px !important;
-            padding: 5px 12px !important;
-        }
-        .alur-title {
-            font-size: 24px !important;
-            margin-bottom: 10px !important;
-        }
-        .alur-subtitle {
-            font-size: 13px !important;
-            line-height: 1.5 !important;
-        }
-        .timeline-container::before {
-            left: 20px !important;
-            top: 10px !important;
-            bottom: 10px !important;
+        .timeline-line-track,
+        .timeline-line-progress {
+            left: 19px !important;
+            top: 20px !important;
+            bottom: 20px !important;
         }
         .timeline-item {
-            gap: 14px !important;
+            gap: 12px !important;
             margin-bottom: 28px !important;
         }
         .timeline-number {
-            width: 42px !important;
-            height: 42px !important;
-            font-size: 18px !important;
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 16px !important;
         }
         .timeline-card {
-            padding: 20px 16px !important;
+            padding: 18px 14px !important;
             border-radius: 14px !important;
         }
         .timeline-content h3 {
-            font-size: 18px !important;
-            margin-bottom: 8px !important;
+            font-size: 17px !important;
+            margin-bottom: 6px !important;
         }
         .timeline-content p {
             font-size: 13px !important;
-            margin-bottom: 14px !important;
+            margin-bottom: 12px !important;
         }
         .timeline-list-title {
-            font-size: 13px !important;
-        }
-        .timeline-list li {
             font-size: 12.5px !important;
         }
-        .alur-cta {
-            padding: 50px 16px !important;
-        }
-        .alur-cta h2 {
-            font-size: 24px !important;
-        }
-        .alur-cta p {
-            font-size: 13.5px !important;
-            margin-bottom: 24px !important;
+        .timeline-list li {
+            font-size: 12px !important;
         }
         .alur-cta-buttons {
             flex-direction: column !important;
@@ -317,16 +331,19 @@
 <div class="alur-page">
     <div class="container">
         
-        <div class="alur-header reveal">
+        <div class="alur-header">
             <span class="alur-badge">Info Layanan</span>
             <h1 class="alur-title">Proses Sederhana, Hanya Empat Tahap</h1>
             <p class="alur-subtitle">Ikuti langkah-langkah pengajuan layanan dengan mudah, cepat, dan transparan melalui sistem PATEN PAK MIKO.</p>
         </div>
 
         <div class="timeline-container">
+            <!-- Background & Dynamic Animated Progress Lines -->
+            <div class="timeline-line-track"></div>
+            <div class="timeline-line-progress"></div>
             
             <!-- Step 1 -->
-            <div class="timeline-item reveal">
+            <div class="timeline-item">
                 <div class="timeline-number">1</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -358,7 +375,7 @@
             </div>
 
             <!-- Step 2 -->
-            <div class="timeline-item reveal">
+            <div class="timeline-item">
                 <div class="timeline-number">2</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -388,7 +405,7 @@
             </div>
 
             <!-- Step 3 -->
-            <div class="timeline-item reveal">
+            <div class="timeline-item">
                 <div class="timeline-number">3</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -411,7 +428,7 @@
             </div>
 
             <!-- Step 4 -->
-            <div class="timeline-item reveal">
+            <div class="timeline-item">
                 <div class="timeline-number">4</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -438,7 +455,7 @@
     </div>
 </div>
 
-<section class="alur-cta reveal">
+<section class="alur-cta">
     <div class="alur-cta-inner">
         <h2>
             Mulai Pengajuan<br>
@@ -458,4 +475,50 @@
     </div>
 </section>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('.alur-header');
+    if (header) header.classList.add('animated');
+
+    const timelineContainer = document.querySelector('.timeline-container');
+    const progressBar = document.querySelector('.timeline-line-progress');
+    const items = document.querySelectorAll('.timeline-item');
+
+    function updateTimelineProgress() {
+        if (!timelineContainer || !progressBar || items.length === 0) return;
+
+        const containerRect = timelineContainer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Calculate progress fill dynamically based on scroll
+        const startY = containerRect.top;
+        const totalHeight = containerRect.height;
+        const currentY = (windowHeight * 0.55) - startY;
+
+        let progressPercent = (currentY / totalHeight) * 100;
+        progressPercent = Math.max(0, Math.min(100, progressPercent));
+
+        progressBar.style.height = progressPercent + '%';
+
+        // Animate each timeline step card into view and highlight active step circle
+        items.forEach(function(item) {
+            const rect = item.getBoundingClientRect();
+            
+            if (rect.top <= windowHeight * 0.88) {
+                item.classList.add('animated');
+            }
+
+            if (rect.top <= windowHeight * 0.6 && rect.bottom >= windowHeight * 0.2) {
+                item.classList.add('active-step');
+            } else {
+                item.classList.remove('active-step');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', updateTimelineProgress, { passive: true });
+    window.addEventListener('resize', updateTimelineProgress, { passive: true });
+    updateTimelineProgress();
+});
+</script>
 @endsection
