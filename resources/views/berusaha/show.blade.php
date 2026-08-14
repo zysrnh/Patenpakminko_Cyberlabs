@@ -1867,23 +1867,34 @@
 
                                 <!-- Downstream Helper Logic untuk Linimasa -->
                             @php
+                                // 'menunggu_dinas_pu' dapat terjadi di DUA titik berbeda:
+                                // 1. Step 2: Validasi Permohonan Awal (setelah BPN setujui berkas, SEBELUM Pertek terbit)
+                                // 2. Step 7: Penilaian PKKPR Berusaha (SETELAH Pertek terbit)
+                                // Kita hanya anggap "sudah melewati BPN stages" jika Pertek sudah ada.
+                                $dinasPuDariPertek = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr'])
+                                    && !empty($application->bpn_pertek_document);
+
                                 $hasPassedSps = ($application->bpn_pembayaran_status === 'sudah_bayar')
                                     || !empty($application->bpn_cek_lokasi_dt)
                                     || !empty($application->bpn_rapat_dt)
                                     || !empty($application->bpn_pertek_document)
-                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+                                    || $dinasPuDariPertek
+                                    || in_array($application->status, ['menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
 
                                 $hasPassedCekLokasi = $cekLokasiLewat
                                     || !empty($application->bpn_rapat_dt)
                                     || !empty($application->bpn_pertek_document)
-                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+                                    || $dinasPuDariPertek
+                                    || in_array($application->status, ['menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
 
                                 $hasPassedRapat = $rapatLewat
                                     || !empty($application->bpn_pertek_document)
-                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+                                    || $dinasPuDariPertek
+                                    || in_array($application->status, ['menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
 
                                 $hasPassedPertek = !empty($application->bpn_pertek_document)
-                                    || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr', 'menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
+                                    || $dinasPuDariPertek
+                                    || in_array($application->status, ['menunggu_satu_pintu', 'disetujui', 'terbit_pkpr']);
                             @endphp
                             </div>
                         </div>
@@ -1935,9 +1946,14 @@
                                 $step3Status = '';
                                 if ($application->dinas_pu_status === 'validasi_awal_ditolak') {
                                     $step3Status = 'rejected';
-                                } elseif (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian']) || $hasPassedSps) {
+                                } elseif (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])
+                                    || in_array($application->status, ['menunggu_satu_pintu', 'disetujui', 'terbit_pkpr'])
+                                    || ($application->bpn_pembayaran_status === 'sudah_bayar')
+                                    || !empty($application->bpn_cek_lokasi_dt)
+                                    || !empty($application->bpn_rapat_dt)
+                                    || !empty($application->bpn_pertek_document)) {
                                     $step3Status = 'completed';
-                                } elseif ($application->bpn_berkas_status === 'diterima') {
+                                } elseif ($application->bpn_berkas_status === 'diterima' || in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr'])) {
                                     $step3Status = 'active';
                                 }
                             @endphp
@@ -1965,7 +1981,7 @@
                                 $step4Status = '';
                                 if ($application->bpn_pembayaran_status === 'sudah_bayar' || $hasPassedCekLokasi) {
                                     $step4Status = 'completed';
-                                } elseif (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian']) || $hasPassedSps) {
+                                } elseif (in_array($application->dinas_pu_status, ['validasi_awal_diterima', 'sesuai', 'belum_sesuai', 'menunggu_penilaian'])) {
                                     $step4Status = 'active';
                                 }
                             @endphp
