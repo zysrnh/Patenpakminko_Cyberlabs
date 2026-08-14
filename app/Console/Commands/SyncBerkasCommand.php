@@ -86,50 +86,30 @@ class SyncBerkasCommand extends Command
             $count++;
         }
 
+        // Hapus (purge) record auto-sync berkas pemohon dari tabel berkas (murni PTSP)
+        Berkas::where('is_ptsp', false)
+            ->where(function($q) {
+                $q->whereNull('uploaded_by_role')
+                  ->orWhere('uploaded_by_role', 'pelaku_usaha');
+            })
+            ->where('kategori', 'not like', '%PTSP%')
+            ->where('kategori', 'not like', '%Satu Pintu%')
+            ->delete();
+
         $this->info("Sinkronisasi selesai! $count berkas berhasil diproses.");
     }
 
     private function processApp($app, $fileFields, $modulName)
     {
-        // Khusus PKKPR Berusaha: HANYA menampilkan dokumen yang di-upload oleh PTSP / Satu Pintu
-        if ($modulName === 'PKKPR Berusaha') {
-            if (!empty($app->satu_pintu_document)) {
-                $this->createBerkasIfNotExists(
-                    $app->user_id,
-                    'Dokumen PKKPR Final (PTSP)',
-                    $app->satu_pintu_document,
-                    $modulName,
-                    $app->application_number
-                );
-            }
-            return; // Skip formulir PTP dan berkas pemohon publik (KTP, NPWP, Peta, dll)
-        }
-
-        // 1. Ekstrak Formulir PTP jika ada untuk modul non-berusaha
-        if (!empty($app->ptp_data)) {
-            $this->generatePtpBerkas($app, $modulName);
-        }
-
-        // 2. Proses semua field dokumen
-        foreach ($fileFields as $field => $labelJenis) {
-            if (!empty($app->$field)) {
-                $kategori = $labelJenis;
-                // Jika ini adalah dokumen pertek BPN, buat spesifik sesuai layanan
-                if ($field === 'bpn_pertek_document') {
-                    if ($modulName === 'PKKPR Non-Berusaha') $kategori = 'Pertimbangan Teknis Non Berusaha';
-                    elseif ($modulName === 'Kebijakan') $kategori = 'Pertimbangan Teknis Kebijakan';
-                    elseif ($modulName === 'Tanah Timbul') $kategori = 'Pertimbangan Teknis Tanah Timbul';
-                    elseif ($modulName === 'PSN') $kategori = 'Pertimbangan Teknis PSN';
-                }
-
-                $this->createBerkasIfNotExists(
-                    $app->user_id, 
-                    $kategori, 
-                    $app->$field, 
-                    $modulName, 
-                    $app->application_number
-                );
-            }
+        // HANYA Sync Dokumen Final PTSP (Satu Pintu) jika ada
+        if (!empty($app->satu_pintu_document)) {
+            $this->createBerkasIfNotExists(
+                $app->user_id,
+                'Dokumen PKKPR Final (PTSP)',
+                $app->satu_pintu_document,
+                $modulName,
+                $app->application_number
+            );
         }
     }
 

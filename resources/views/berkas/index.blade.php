@@ -305,13 +305,6 @@
                     </select>
                 </div>
                 <div>
-                    <select name="pengunggah" class="form-control">
-                        <option value="">Semua Pengunggah</option>
-                        <option value="ptsp" {{ request('pengunggah') == 'ptsp' ? 'selected' : '' }}>🛡️ Uploaded by PTSP</option>
-                        <option value="pemohon" {{ request('pengunggah') == 'pemohon' ? 'selected' : '' }}>👤 Uploaded Pemohon</option>
-                    </select>
-                </div>
-                <div>
                     <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" title="Filter berdasarkan Tanggal Unggah">
                 </div>
                 <div>

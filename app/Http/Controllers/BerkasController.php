@@ -31,11 +31,24 @@ class BerkasController extends Controller
             \Illuminate\Support\Facades\Artisan::call('berkas:sync');
         } catch (\Throwable $e) {}
 
+        // Purge non-PTSP entries from berkas index table
+        try {
+            Berkas::where('is_ptsp', false)
+                ->where(function($q) {
+                    $q->whereNull('uploaded_by_role')
+                      ->orWhere('uploaded_by_role', 'pelaku_usaha');
+                })
+                ->where('kategori', 'not like', '%PTSP%')
+                ->where('kategori', 'not like', '%Satu Pintu%')
+                ->delete();
+        } catch (\Throwable $e) {}
+
         $query = Berkas::with('user')->latest();
 
-        // Khusus PKKPR Berusaha: Hanya tampilkan berkas murni upload-an PTSP / Satu Pintu
+        // 100% EXCLUSIVELY PTSP UPLOADS / SATU PINTU
         $query->where(function($q) {
-            $q->where('nama_berkas', 'not like', '[PKKPR Berusaha]%')
+            $q->where('is_ptsp', true)
+              ->orWhere('uploaded_by_role', 'satu_pintu')
               ->orWhere('kategori', 'like', '%PTSP%')
               ->orWhere('kategori', 'like', '%Satu Pintu%')
               ->orWhere('kategori', 'Dokumen PKKPR Final (PTSP)');
@@ -61,26 +74,6 @@ class BerkasController extends Controller
                             ->orWhere('business_name', 'like', '%' . $search . '%');
                   });
             });
-        }
-
-        // Filter berdasarkan pengunggah (PTSP vs Pemohon)
-        if ($request->has('pengunggah') && $request->pengunggah != '') {
-            if ($request->pengunggah === 'ptsp') {
-                $query->where(function($q) {
-                    $q->where('is_ptsp', true)
-                      ->orWhere('uploaded_by_role', 'satu_pintu')
-                      ->orWhere('kategori', 'like', '%PTSP%')
-                      ->orWhere('kategori', 'like', '%Satu Pintu%');
-                });
-            } elseif ($request->pengunggah === 'pemohon') {
-                $query->where(function($q) {
-                    $q->where('is_ptsp', false)
-                      ->where(function($qInner) {
-                          $qInner->whereNull('uploaded_by_role')
-                                 ->orWhere('uploaded_by_role', 'pelaku_usaha');
-                      });
-                });
-            }
         }
 
         // Filter berdasarkan layanan khusus (PKKPR Berusaha, Non Berusaha, dsb)
