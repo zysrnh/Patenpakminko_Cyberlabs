@@ -65,13 +65,36 @@
             flex-shrink: 0;
         }
 
+        .btn-close-sidebar-mobile {
+            display: none;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-close-sidebar-mobile:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 16px 16px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+        }
         .sidebar-logo {
             display: flex;
             align-items: center;
             gap: 11px;
-            padding: 24px 20px 20px;
-            border-bottom: 1px solid rgba(255,255,255,.08);
             text-decoration: none;
+            min-width: 0;
+            flex: 1;
         }
         .sidebar-logo-icon {
             width: 36px; height: 36px;
@@ -81,18 +104,19 @@
             flex-shrink: 0;
         }
         .sidebar-logo-icon svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .sidebar-logo-text strong { display: block; font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.02em; }
-        .sidebar-logo-text span { font-size: 10px; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .08em; }
+        .sidebar-logo-text { min-width: 0; }
+        .sidebar-logo-text strong { display: block; font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.02em; white-space: nowrap; }
+        .sidebar-logo-text span { display: block; font-size: 9.5px; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
 
-        .sidebar-section { padding: 20px 12px 8px; }
-        .sidebar-section-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: .1em; padding: 0 8px; margin-bottom: 6px; }
+        .sidebar-section { padding: 16px 12px 6px; }
+        .sidebar-section-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .08em; padding: 0 8px; margin-bottom: 6px; }
 
         .nav-item {
             display: flex; align-items: center; gap: 10px;
-            padding: 9px 10px; border-radius: var(--r-md);
-            text-decoration: none; color: rgba(255,255,255,.6);
-            font-size: 13.5px; font-weight: 600;
-            transition: all .18s; margin-bottom: 2px;
+            padding: 9.5px 12px; border-radius: var(--r-md);
+            text-decoration: none; color: rgba(255,255,255,.7);
+            font-size: 13px; font-weight: 600; line-height: 1.35;
+            transition: all .18s; margin-bottom: 3px;
         }
         .nav-item svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
         .nav-item:hover { color: #fff; background: rgba(255,255,255,.08); }
@@ -675,8 +699,17 @@
         }
         @media (max-width: 768px) {
             .btn-menu { display: block; margin-right: 12px; }
-            .sidebar { transform: translateX(-100%); transition: transform .3s ease; z-index: 100; }
+            .btn-close-sidebar-mobile { display: flex; align-items: center; justify-content: center; }
+            .sidebar {
+                width: 280px !important;
+                max-width: 84vw !important;
+                transform: translateX(-100%);
+                transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1000;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+            }
             .sidebar.open { transform: translateX(0); }
+            .sidebar-backdrop { z-index: 999; }
             .sidebar-backdrop.show { display: block; opacity: 1; pointer-events: auto; }
             .main-wrap { margin-left: 0; width: 100%; }
             .topbar { padding: 0 16px; }
@@ -831,22 +864,27 @@
     <!-- ─── SIDEBAR ─────────────────────────────── -->
     <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
     <aside class="sidebar" id="sidebar">
-        <a href="/dashboard" class="sidebar-logo">
-            <div class="sidebar-logo-icon" style="background:transparent;padding:0;overflow:hidden;width:40px;height:40px;border-radius:0;">
-                <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width:100%;height:100%;object-fit:contain;">
-            </div>
-            <div class="sidebar-logo-text">
-                <strong>PATEN PAK MIKO</strong>
-                <span>
-                    @if(Auth::user()->isPelakuUsaha()) Portal Layanan Instansi
-                    @elseif(Auth::user()->isBpn()) Portal Admin Instansi
-                    @elseif(Auth::user()->isDinasPu()) Portal Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
-                    @elseif(Auth::user()->isSatuPintu()) Portal DPMPTSP
-                    @elseif(Auth::user()->isDpn()) Portal Layanan Instansi
-                    @else Portal Manajemen @endif
-                </span>
-            </div>
-        </a>
+        <div class="sidebar-logo-wrap">
+            <a href="/dashboard" class="sidebar-logo">
+                <div class="sidebar-logo-icon" style="background:transparent;padding:0;overflow:hidden;width:38px;height:38px;border-radius:0;flex-shrink:0;">
+                    <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo PATEN PAK MIKO" style="width:100%;height:100%;object-fit:contain;">
+                </div>
+                <div class="sidebar-logo-text">
+                    <strong>PATEN PAK MIKO</strong>
+                    <span>
+                        @if(Auth::user()->isPelakuUsaha()) Portal Layanan Instansi
+                        @elseif(Auth::user()->isBpn()) Portal Admin Instansi
+                        @elseif(Auth::user()->isDinasPu()) Portal Dinas PUTR
+                        @elseif(Auth::user()->isSatuPintu()) Portal DPMPTSP
+                        @elseif(Auth::user()->isDpn()) Portal Layanan Instansi
+                        @else Portal Manajemen @endif
+                    </span>
+                </div>
+            </a>
+            <button type="button" class="btn-close-sidebar-mobile" onclick="closeSidebar()" aria-label="Tutup menu">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
 
         <div class="sidebar-section">
             <div class="sidebar-section-label">Menu Utama</div>
