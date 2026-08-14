@@ -91,7 +91,21 @@ class SyncBerkasCommand extends Command
 
     private function processApp($app, $fileFields, $modulName)
     {
-        // 1. Ekstrak Formulir PTP jika ada
+        // Khusus PKKPR Berusaha: HANYA menampilkan dokumen yang di-upload oleh PTSP / Satu Pintu
+        if ($modulName === 'PKKPR Berusaha') {
+            if (!empty($app->satu_pintu_document)) {
+                $this->createBerkasIfNotExists(
+                    $app->user_id,
+                    'Dokumen PKKPR Final (PTSP)',
+                    $app->satu_pintu_document,
+                    $modulName,
+                    $app->application_number
+                );
+            }
+            return; // Skip formulir PTP dan berkas pemohon publik (KTP, NPWP, Peta, dll)
+        }
+
+        // 1. Ekstrak Formulir PTP jika ada untuk modul non-berusaha
         if (!empty($app->ptp_data)) {
             $this->generatePtpBerkas($app, $modulName);
         }
@@ -102,8 +116,7 @@ class SyncBerkasCommand extends Command
                 $kategori = $labelJenis;
                 // Jika ini adalah dokumen pertek BPN, buat spesifik sesuai layanan
                 if ($field === 'bpn_pertek_document') {
-                    if ($modulName === 'PKKPR Berusaha') $kategori = 'Pertimbangan Teknis Berusaha';
-                    elseif ($modulName === 'PKKPR Non-Berusaha') $kategori = 'Pertimbangan Teknis Non Berusaha';
+                    if ($modulName === 'PKKPR Non-Berusaha') $kategori = 'Pertimbangan Teknis Non Berusaha';
                     elseif ($modulName === 'Kebijakan') $kategori = 'Pertimbangan Teknis Kebijakan';
                     elseif ($modulName === 'Tanah Timbul') $kategori = 'Pertimbangan Teknis Tanah Timbul';
                     elseif ($modulName === 'PSN') $kategori = 'Pertimbangan Teknis PSN';

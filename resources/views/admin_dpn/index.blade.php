@@ -13,9 +13,15 @@
             <span style="color: #64748B;">Statistik Web (Admin DPN)</span>
         </div>
         <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">
-            Kelola Statistik Beranda & Kunjungan
+            Kelola Statistik Beranda & Backup Database
         </h1>
-        <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Atur dan reset nilai 4 angka statistik utama yang tampil di beranda publik website.</p>
+        <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Atur nilai statistik utama beranda & unduh salinan backup cadangan seluruh data database.</p>
+    </div>
+    <div>
+        <a href="{{ route('admin_dpn.backup_database') }}" class="btn" style="background: #2563EB; color: #ffffff; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(37,99,235,0.2);" title="Download salinan database SQL lengkap">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download Backup Database (.SQL)
+        </a>
     </div>
 </div>
 

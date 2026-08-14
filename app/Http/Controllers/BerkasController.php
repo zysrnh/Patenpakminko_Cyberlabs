@@ -33,6 +33,14 @@ class BerkasController extends Controller
 
         $query = Berkas::with('user')->latest();
 
+        // Khusus PKKPR Berusaha: Hanya tampilkan berkas murni upload-an PTSP / Satu Pintu
+        $query->where(function($q) {
+            $q->where('nama_berkas', 'not like', '[PKKPR Berusaha]%')
+              ->orWhere('kategori', 'like', '%PTSP%')
+              ->orWhere('kategori', 'like', '%Satu Pintu%')
+              ->orWhere('kategori', 'Dokumen PKKPR Final (PTSP)');
+        });
+
         // Filter berdasarkan kategori
         if ($request->has('kategori') && $request->kategori != '') {
             $query->where('kategori', $request->kategori);

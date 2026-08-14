@@ -278,6 +278,13 @@
         {{-- Divider --}}
         <div class="topbar-divider"></div>
 
+        @if(Auth::check() && Auth::user()->isDpn())
+            <a href="{{ route('admin_dpn.backup_database') }}" class="topbar-notif-btn" title="Download Backup Database (.SQL)" style="background:#EBF8FF; color:#2B6CB0; border:1px solid #BEE3F8; border-radius:6px; padding:4px 10px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:4px; text-decoration:none; margin-right:4px;">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Backup DB</span>
+            </a>
+        @endif
+
         {{-- Mailbox / Notification --}}
         <a href="{{ route('mailbox.index') }}"
            class="topbar-notif-btn"

@@ -392,4 +392,78 @@ class AdminDpnController extends Controller
 
         return redirect()->route($redirectRoutes[$type], $id)->with("success", $msg);
     }
+
+    /**
+     * Download backup database SQL (Khusus Super Admin DPN).
+     */
+    public function downloadDatabaseBackup()
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            return redirect()->back()->with('error', 'Akses ditolak. Fitur backup database khusus Super Admin DPN.');
+        }
+
+        try {
+            $tables = \Illuminate\Support\Facades\DB::select('SHOW TABLES');
+            $dbName = config('database.connections.' . config('database.default') . '.database');
+            $tablesKey = 'Tables_in_' . $dbName;
+            
+            $sqlContent = "-- ========================================================\n";
+            $sqlContent .= "-- PATEN PAK MIKO DATABASE BACKUP DUMP\n";
+            $sqlContent .= "-- Generated: " . now()->format('Y-m-d H:i:s') . " WIB\n";
+            $sqlContent .= "-- Super Admin: " . \Illuminate\Support\Facades\Auth::user()->username . "\n";
+            $sqlContent .= "-- ========================================================\n\n";
+            $sqlContent .= "SET FOREIGN_KEY_CHECKS=0;\n\n";
+
+            foreach ($tables as $tableObj) {
+                $tableName = property_exists($tableObj, $tablesKey) ? $tableObj->$tablesKey : current((array) $tableObj);
+                
+                // Get Create Table query
+                $createTable = \Illuminate\Support\Facades\DB::select("SHOW CREATE TABLE `{$tableName}`");
+                if (!empty($createTable)) {
+                    $createSql = ((array)$createTable[0])['Create Table'] ?? '';
+                    $sqlContent .= "DROP TABLE IF EXISTS `{$tableName}`;\n";
+                    $sqlContent .= $createSql . ";\n\n";
+                }
+
+                // Get Records
+                $rows = \Illuminate\Support\Facades\DB::table($tableName)->get();
+                if ($rows->count() > 0) {
+                    foreach ($rows as $row) {
+                        $rowArray = (array) $row;
+                        $keys = array_map(fn($k) => "`{$k}`", array_keys($rowArray));
+                        $values = array_map(function($v) {
+                            if (is_null($v)) return 'NULL';
+                            return "'" . addslashes((string) $v) . "'";
+                        }, array_values($rowArray));
+
+                        $sqlContent .= "INSERT INTO `{$tableName}` (" . implode(', ', $keys) . ") VALUES (" . implode(', ', $values) . ");\n";
+                    }
+                    $sqlContent .= "\n";
+                }
+            }
+
+            $sqlContent .= "SET FOREIGN_KEY_CHECKS=1;\n";
+
+            $fileName = 'patenpakminko_backup_' . now()->format('Y-m-d_H-i-s') . '.sql';
+            
+            return response()->streamDownload(function() use ($sqlContent) {
+                echo $sqlContent;
+            }, $fileName, [
+                'Content-Type' => 'text/x-sql',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            ]);
+
+        } catch (\Throwable $e) {
+            // Fallback for SQLite / generic PDO
+            try {
+                $sqlitePath = database_path('database.sqlite');
+                if (file_exists($sqlitePath)) {
+                    $fileName = 'patenpakminko_backup_' . now()->format('Y-m-d_H-i-s') . '.sqlite';
+                    return response()->download($sqlitePath, $fileName);
+                }
+            } catch (\Throwable $ex) {}
+
+            return redirect()->back()->with('error', 'Gagal membuat backup database: ' . $e->getMessage());
+        }
+    }
 }
