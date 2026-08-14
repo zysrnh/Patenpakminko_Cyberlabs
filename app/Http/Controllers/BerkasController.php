@@ -26,33 +26,13 @@ class BerkasController extends Controller
             return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke fitur ini.');
         }
 
-        // Auto-sync data dari permohonan ke berkas
-        try {
-            \Illuminate\Support\Facades\Artisan::call('berkas:sync');
-        } catch (\Throwable $e) {}
-
-        // Purge non-PTSP entries from berkas index table
-        try {
-            Berkas::where('is_ptsp', false)
-                ->where(function($q) {
-                    $q->whereNull('uploaded_by_role')
-                      ->orWhere('uploaded_by_role', 'pelaku_usaha');
-                })
-                ->where('kategori', 'not like', '%PTSP%')
-                ->where('kategori', 'not like', '%Satu Pintu%')
-                ->delete();
-        } catch (\Throwable $e) {}
-
-        $query = Berkas::with('user')->latest();
-
-        // 100% EXCLUSIVELY PTSP UPLOADS / SATU PINTU
-        $query->where(function($q) {
-            $q->where('is_ptsp', true)
-              ->orWhere('uploaded_by_role', 'satu_pintu')
-              ->orWhere('kategori', 'like', '%PTSP%')
-              ->orWhere('kategori', 'like', '%Satu Pintu%')
-              ->orWhere('kategori', 'Dokumen PKKPR Final (PTSP)');
-        });
+        // Hanya tampilkan berkas yang di-upload manual oleh PTSP (is_ptsp = true)
+        $query = Berkas::with('user')
+            ->where(function($q) {
+                $q->where('is_ptsp', true)
+                  ->orWhereIn('uploaded_by_role', ['satu_pintu', 'dpn', 'bpn', 'dinas_pu', 'dinas_putr']);
+            })
+            ->latest();
 
         // Filter berdasarkan kategori
         if ($request->has('kategori') && $request->kategori != '') {
@@ -64,44 +44,30 @@ class BerkasController extends Controller
             $query->whereDate('created_at', $request->tanggal);
         }
 
-        // Filter pencarian nama berkas atau nama pengunggah
+        // Filter pencarian nama berkas atau judul dokumen
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nama_berkas', 'like', '%' . $search . '%')
-                  ->orWhereHas('user', function($qUser) use ($search) {
-                      $qUser->where('name', 'like', '%' . $search . '%')
-                            ->orWhere('business_name', 'like', '%' . $search . '%');
-                  });
+                  ->orWhere('keterangan', 'like', '%' . $search . '%')
+                  ->orWhere('kategori', 'like', '%' . $search . '%');
             });
         }
 
-        // Filter berdasarkan layanan khusus (PKKPR Berusaha, Non Berusaha, dsb)
-        if ($request->has('layanan') && $request->layanan != '') {
-            $query->where('nama_berkas', 'like', '[' . $request->layanan . ']%');
-        }
-
-        // Filter berdasarkan pemohon
-        if ($request->has('user_id') && $request->user_id != '') {
-            $query->where('user_id', $request->user_id);
-        }
-
-
         $berkas = $query->paginate(10);
-        
-        // Ambil daftar pemohon yang sudah ada berkas/dokumennya atau role pelaku_usaha
-        $userIdsBerkas = Berkas::select('user_id')->distinct()->pluck('user_id')->toArray();
-        $userIdsDokumen = \Illuminate\Support\Facades\Schema::hasTable('dokumens')
-            ? \App\Models\Dokumen::select('user_id')->distinct()->pluck('user_id')->toArray()
-            : [];
-        $allUserIds = array_unique(array_merge($userIdsBerkas, $userIdsDokumen));
-        
-        $pemohonList = \App\Models\User::whereIn('id', $allUserIds)->orWhere('role', 'pelaku_usaha')->get();
 
-        // Ambil daftar kategori yang sudah ada untuk dropdown filter
-        $kategoriList = Berkas::select('kategori')->distinct()->whereNotNull('kategori')->orderBy('kategori')->pluck('kategori');
+        // Ambil daftar kategori yang sudah tersimpan untuk dropdown filter
+        $kategoriList = Berkas::select('kategori')
+            ->where(function($q) {
+                $q->where('is_ptsp', true)
+                  ->orWhereIn('uploaded_by_role', ['satu_pintu', 'dpn', 'bpn', 'dinas_pu', 'dinas_putr']);
+            })
+            ->distinct()
+            ->whereNotNull('kategori')
+            ->orderBy('kategori')
+            ->pluck('kategori');
 
-        return view('berkas.index', compact('berkas', 'pemohonList', 'kategoriList'));
+        return view('berkas.index', compact('berkas', 'kategoriList'));
     }
 
     public function store(Request $request)

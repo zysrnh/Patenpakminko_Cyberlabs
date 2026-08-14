@@ -197,16 +197,7 @@
             <span>Pengelolaan Berkas</span>
         </div>
         <h1>Pengelolaan Berkas</h1>
-        <p>Unggah, simpan, dan kelola dokumen lintas instansi.</p>
-    </div>
-    <div>
-        <form action="{{ route('berkas.sync') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn btn-secondary">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0115-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 01-15 6.7L3 16"/></svg>
-                Tarik Data (Pemohon)
-            </button>
-        </form>
+        <p>Upload dan kelola dokumen hasil kerja PTSP secara mandiri. Tidak terkait data pengajuan pemohon.</p>
     </div>
 </div>
 
@@ -242,35 +233,38 @@
             @csrf
             <div class="form-grid">
                 <div class="form-group">
-                    <label class="form-label">Nama Pemohon/Pelaku Usaha</label>
-                    <input type="text" name="nama_berkas" class="form-control" required placeholder="Contoh: PT Telkom Pasero TBK">
+                    <label class="form-label">Judul / Nama Dokumen <span style="color:#e53e3e;">*</span></label>
+                    <input type="text" name="nama_berkas" class="form-control" required placeholder="Contoh: Sertifikat PKKPR No. 001/2026">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Kategori</label>
-                    <select name="kategori" class="form-control" required {!! request('kategori') ? 'style="pointer-events: none; background: #f1f5f9; color: var(--muted); font-weight: 500;" tabindex="-1"' : '' !!}>
-                        <option value="">-- Pilih Jenis Dokumen --</option>
-                        <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
-                        <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
-                        <option value="Surat Kuasa" {{ request('kategori') == 'Surat Kuasa' ? 'selected' : '' }}>Surat Kuasa</option>
-                        <option value="FC KTP" {{ request('kategori') == 'FC KTP' ? 'selected' : '' }}>FC KTP / Identitas</option>
-                        <option value="FC NPWP" {{ request('kategori') == 'FC NPWP' ? 'selected' : '' }}>FC NPWP</option>
-                        <option value="FC Akta Pendirian" {{ request('kategori') == 'FC Akta Pendirian' ? 'selected' : '' }}>FC Akta Pendirian</option>
-                        <option value="Rencana Penggunaan Tanah" {{ request('kategori') == 'Rencana Penggunaan Tanah' ? 'selected' : '' }}>Rencana Penggunaan Tanah</option>
-                        <option value="NIB" {{ request('kategori') == 'NIB' ? 'selected' : '' }}>NIB</option>
-                        <option value="KBLI" {{ request('kategori') == 'KBLI' ? 'selected' : '' }}>KBLI</option>
-                        <option value="Proposal Kegiatan" {{ request('kategori') == 'Proposal Kegiatan' ? 'selected' : '' }}>Proposal Kegiatan</option>
-                        <option value="Formulir PTP" {{ request('kategori') == 'Formulir PTP' ? 'selected' : '' }}>Formulir PTP</option>
-                        <option value="Pertimbangan Teknis Berusaha" {{ request('kategori') == 'Pertimbangan Teknis Berusaha' ? 'selected' : '' }}>Pertimbangan Teknis Berusaha</option>
-                        <option value="Pertimbangan Teknis Non Berusaha" {{ request('kategori') == 'Pertimbangan Teknis Non Berusaha' ? 'selected' : '' }}>Pertimbangan Teknis Non Berusaha</option>
-                        <option value="Pertimbangan Teknis Kebijakan" {{ request('kategori') == 'Pertimbangan Teknis Kebijakan' ? 'selected' : '' }}>Pertimbangan Teknis Kebijakan</option>
-                        <option value="Pertimbangan Teknis Tanah Timbul" {{ request('kategori') == 'Pertimbangan Teknis Tanah Timbul' ? 'selected' : '' }}>Pertimbangan Teknis Tanah Timbul</option>
-                        <option value="Pertimbangan Teknis PSN" {{ request('kategori') == 'Pertimbangan Teknis PSN' ? 'selected' : '' }}>Pertimbangan Teknis PSN</option>
-                        <option value="Dokumen Penilaian (PU)" {{ request('kategori') == 'Dokumen Penilaian (PU)' ? 'selected' : '' }}>Dokumen Penilaian (PU)</option>
-                        <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                    <label class="form-label">Kategori Dokumen <span style="color:#e53e3e;">*</span></label>
+                    <select name="kategori" class="form-control" required>
+                        <option value="">-- Pilih Kategori --</option>
+                        <optgroup label="📄 Dokumen PKKPR Berusaha">
+                            <option value="Dokumen PKKPR Final (PTSP)">Dokumen PKKPR Final (PTSP)</option>
+                            <option value="Sertifikat PKKPR Berusaha">Sertifikat PKKPR Berusaha</option>
+                            <option value="SK PKKPR Berusaha">SK PKKPR Berusaha</option>
+                        </optgroup>
+                        <optgroup label="📄 Dokumen Pertimbangan Teknis">
+                            <option value="Pertek PKKPR Berusaha">Pertek PKKPR Berusaha</option>
+                            <option value="Pertek PKKPR Non Berusaha">Pertek PKKPR Non Berusaha</option>
+                            <option value="Pertek Kebijakan Khusus">Pertek Kebijakan Khusus</option>
+                            <option value="Pertek Tanah Timbul">Pertek Tanah Timbul</option>
+                            <option value="Pertek PSN">Pertek PSN</option>
+                        </optgroup>
+                        <optgroup label="🏛️ Dokumen Resmi PTSP">
+                            <option value="Berita Acara PTSP">Berita Acara PTSP</option>
+                            <option value="Surat Keputusan PTSP">Surat Keputusan PTSP</option>
+                            <option value="Surat Pengantar PTSP">Surat Pengantar PTSP</option>
+                            <option value="Nota Dinas PTSP">Nota Dinas PTSP</option>
+                        </optgroup>
+                        <optgroup label="📋 Lainnya">
+                            <option value="Dokumen Lainnya (PTSP)">Dokumen Lainnya (PTSP)</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Pilih File (PDF, JPG, PNG, DOCX - Max 100MB)</label>
+                    <label class="form-label">Pilih File (PDF, JPG, PNG, DOCX - Maks 100MB) <span style="color:#e53e3e;">*</span></label>
                     <input type="file" name="file" class="form-control" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" style="background:#fff;">
                 </div>
             </div>
@@ -300,18 +294,34 @@
                     <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" title="Filter berdasarkan Tanggal Unggah">
                 </div>
                 <div>
-                    @if(request('layanan'))
-                        <input type="hidden" name="layanan" value="{{ request('layanan') }}">
-                    @endif
-                    <select name="kategori" class="form-control" style="{{ request('layanan') ? 'pointer-events: none; background: #e2e8f0; color: #475569; font-weight: 600; border-color: #cbd5e1;' : '' }}" {!! request('layanan') ? 'tabindex="-1"' : '' !!}>
-                        <option value="">Semua Jenis Dokumen</option>
+                    <select name="kategori" class="form-control">
+                        <option value="">Semua Kategori</option>
+                        <optgroup label="📄 PKKPR Berusaha">
+                            <option value="Dokumen PKKPR Final (PTSP)" {{ request('kategori') == 'Dokumen PKKPR Final (PTSP)' ? 'selected' : '' }}>Dokumen PKKPR Final (PTSP)</option>
+                            <option value="Sertifikat PKKPR Berusaha" {{ request('kategori') == 'Sertifikat PKKPR Berusaha' ? 'selected' : '' }}>Sertifikat PKKPR Berusaha</option>
+                            <option value="SK PKKPR Berusaha" {{ request('kategori') == 'SK PKKPR Berusaha' ? 'selected' : '' }}>SK PKKPR Berusaha</option>
+                        </optgroup>
+                        <optgroup label="📄 Pertimbangan Teknis">
+                            <option value="Pertek PKKPR Berusaha" {{ request('kategori') == 'Pertek PKKPR Berusaha' ? 'selected' : '' }}>Pertek PKKPR Berusaha</option>
+                            <option value="Pertek PKKPR Non Berusaha" {{ request('kategori') == 'Pertek PKKPR Non Berusaha' ? 'selected' : '' }}>Pertek PKKPR Non Berusaha</option>
+                            <option value="Pertek Kebijakan Khusus" {{ request('kategori') == 'Pertek Kebijakan Khusus' ? 'selected' : '' }}>Pertek Kebijakan Khusus</option>
+                            <option value="Pertek Tanah Timbul" {{ request('kategori') == 'Pertek Tanah Timbul' ? 'selected' : '' }}>Pertek Tanah Timbul</option>
+                            <option value="Pertek PSN" {{ request('kategori') == 'Pertek PSN' ? 'selected' : '' }}>Pertek PSN</option>
+                        </optgroup>
+                        <optgroup label="🏛️ Dokumen Resmi PTSP">
+                            <option value="Berita Acara PTSP" {{ request('kategori') == 'Berita Acara PTSP' ? 'selected' : '' }}>Berita Acara PTSP</option>
+                            <option value="Surat Keputusan PTSP" {{ request('kategori') == 'Surat Keputusan PTSP' ? 'selected' : '' }}>Surat Keputusan PTSP</option>
+                            <option value="Surat Pengantar PTSP" {{ request('kategori') == 'Surat Pengantar PTSP' ? 'selected' : '' }}>Surat Pengantar PTSP</option>
+                            <option value="Nota Dinas PTSP" {{ request('kategori') == 'Nota Dinas PTSP' ? 'selected' : '' }}>Nota Dinas PTSP</option>
+                        </optgroup>
+                        <optgroup label="📋 Lainnya">
+                            <option value="Dokumen Lainnya (PTSP)" {{ request('kategori') == 'Dokumen Lainnya (PTSP)' ? 'selected' : '' }}>Dokumen Lainnya (PTSP)</option>
+                        </optgroup>
                         @php
-                            $katList = $kategoriList->toArray();
-                            if(request('kategori') && !in_array(request('kategori'), $katList)) {
-                                $katList[] = request('kategori');
-                            }
+                            $ptspKats = ['Dokumen PKKPR Final (PTSP)','Sertifikat PKKPR Berusaha','SK PKKPR Berusaha','Pertek PKKPR Berusaha','Pertek PKKPR Non Berusaha','Pertek Kebijakan Khusus','Pertek Tanah Timbul','Pertek PSN','Berita Acara PTSP','Surat Keputusan PTSP','Surat Pengantar PTSP','Nota Dinas PTSP','Dokumen Lainnya (PTSP)'];
+                            $extraKats = $kategoriList->filter(fn($k) => !in_array($k, $ptspKats));
                         @endphp
-                        @foreach($katList as $kat)
+                        @foreach($extraKats as $kat)
                             <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
                         @endforeach
                     </select>
