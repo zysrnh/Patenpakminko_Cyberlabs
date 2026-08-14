@@ -63,6 +63,7 @@
         margin-bottom: 40px;
         position: relative;
         z-index: 2;
+        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .timeline-item:last-child {
         margin-bottom: 0;
@@ -80,18 +81,31 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(0, 34, 61, 0.2);
+        box-shadow: 0 4px 14px rgba(0, 34, 61, 0.25);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .timeline-item:hover .timeline-number {
+        transform: scale(1.1);
+        background-color: #3291A8;
+        box-shadow: 0 0 24px rgba(50, 145, 168, 0.5);
     }
 
     .timeline-card {
         background: #FFFFFF;
-        border-radius: 4px;
-        padding: 40px;
+        border-radius: 16px;
+        padding: 36px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        border: 1px solid #E2E8F0;
         flex: 1;
         display: flex;
         gap: 40px;
         align-items: center;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .timeline-item:hover .timeline-card {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 40px rgba(0, 34, 61, 0.08);
+        border-color: #CBD5E1;
     }
 
     .timeline-img-wrap {
@@ -105,6 +119,10 @@
         max-width: 280px;
         height: auto;
         object-fit: contain;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .timeline-item:hover .timeline-img-wrap img {
+        transform: translateY(-6px) scale(1.03);
     }
 
     .timeline-content {
@@ -141,11 +159,12 @@
     }
     .timeline-list li {
         position: relative;
-        padding-left: 16px;
+        padding-left: 18px;
         font-size: 13.5px;
         color: #4A5568;
-        line-height: 1.5;
+        line-height: 1.55;
         margin-bottom: 6px;
+        transition: all 0.2s ease;
     }
     .timeline-list li::before {
         content: '•';
@@ -154,6 +173,10 @@
         color: #3291A8;
         font-weight: bold;
         font-size: 16px;
+    }
+    .timeline-list li:hover {
+        transform: translateX(4px);
+        color: #00223D;
     }
 
     /* CTA Section */
@@ -202,38 +225,91 @@
         .timeline-card {
             flex-direction: column;
             text-align: center;
-            padding: 30px 24px;
+            padding: 28px 20px;
         }
-        .timeline-list li {
-            text-align: left;
-        }
+        .timeline-list li,
         .timeline-list-title {
             text-align: left;
         }
         .timeline-img-wrap {
             flex: none;
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         .timeline-img-wrap img {
-            max-width: 200px;
+            max-width: 220px;
         }
     }
 
-    @media (max-width: 768px) {
-        .timeline-container::before {
-            left: 24px;
+    @media (max-width: 576px) {
+        .alur-page {
+            padding: 32px 14px 60px !important;
         }
-        .timeline-number {
-            width: 48px;
-            height: 48px;
-            font-size: 20px;
+        .alur-header {
+            margin-bottom: 36px !important;
+        }
+        .alur-badge {
+            font-size: 11px !important;
+            padding: 5px 12px !important;
+        }
+        .alur-title {
+            font-size: 24px !important;
+            margin-bottom: 10px !important;
+        }
+        .alur-subtitle {
+            font-size: 13px !important;
+            line-height: 1.5 !important;
+        }
+        .timeline-container::before {
+            left: 20px !important;
+            top: 10px !important;
+            bottom: 10px !important;
         }
         .timeline-item {
-            gap: 20px;
+            gap: 14px !important;
+            margin-bottom: 28px !important;
+        }
+        .timeline-number {
+            width: 42px !important;
+            height: 42px !important;
+            font-size: 18px !important;
+        }
+        .timeline-card {
+            padding: 20px 16px !important;
+            border-radius: 14px !important;
+        }
+        .timeline-content h3 {
+            font-size: 18px !important;
+            margin-bottom: 8px !important;
+        }
+        .timeline-content p {
+            font-size: 13px !important;
+            margin-bottom: 14px !important;
+        }
+        .timeline-list-title {
+            font-size: 13px !important;
+        }
+        .timeline-list li {
+            font-size: 12.5px !important;
+        }
+        .alur-cta {
+            padding: 50px 16px !important;
+        }
+        .alur-cta h2 {
+            font-size: 24px !important;
+        }
+        .alur-cta p {
+            font-size: 13.5px !important;
+            margin-bottom: 24px !important;
         }
         .alur-cta-buttons {
-            flex-direction: column;
+            flex-direction: column !important;
+            gap: 10px !important;
+        }
+        .alur-cta-buttons a {
+            width: 100% !important;
+            text-align: center !important;
+            justify-content: center !important;
         }
     }
 </style>
@@ -241,7 +317,7 @@
 <div class="alur-page">
     <div class="container">
         
-        <div class="alur-header">
+        <div class="alur-header reveal">
             <span class="alur-badge">Info Layanan</span>
             <h1 class="alur-title">Proses Sederhana, Hanya Empat Tahap</h1>
             <p class="alur-subtitle">Ikuti langkah-langkah pengajuan layanan dengan mudah, cepat, dan transparan melalui sistem PATEN PAK MIKO.</p>
@@ -250,7 +326,7 @@
         <div class="timeline-container">
             
             <!-- Step 1 -->
-            <div class="timeline-item">
+            <div class="timeline-item reveal">
                 <div class="timeline-number">1</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -282,7 +358,7 @@
             </div>
 
             <!-- Step 2 -->
-            <div class="timeline-item">
+            <div class="timeline-item reveal">
                 <div class="timeline-number">2</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -312,7 +388,7 @@
             </div>
 
             <!-- Step 3 -->
-            <div class="timeline-item">
+            <div class="timeline-item reveal">
                 <div class="timeline-number">3</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -335,7 +411,7 @@
             </div>
 
             <!-- Step 4 -->
-            <div class="timeline-item">
+            <div class="timeline-item reveal">
                 <div class="timeline-number">4</div>
                 <div class="timeline-card">
                     <div class="timeline-img-wrap">
@@ -362,7 +438,7 @@
     </div>
 </div>
 
-<section class="alur-cta">
+<section class="alur-cta reveal">
     <div class="alur-cta-inner">
         <h2>
             Mulai Pengajuan<br>

@@ -234,10 +234,104 @@
     @media (max-width: 992px) {
         .contact-grid-main {
             grid-template-columns: 1fr;
-            gap: 40px;
+            gap: 36px;
         }
         .contact-main-heading {
             font-size: 34px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact-wrapper {
+            padding: 24px 0 32px !important;
+        }
+        .contact-grid-main {
+            gap: 28px !important;
+        }
+        .contact-tag-sub {
+            font-size: 12px !important;
+            margin-bottom: 8px !important;
+        }
+        .contact-main-heading {
+            font-size: 26px !important;
+            line-height: 1.25 !important;
+            margin-bottom: 12px !important;
+        }
+        .contact-lead-text {
+            font-size: 13.5px !important;
+            line-height: 1.55 !important;
+            margin-bottom: 24px !important;
+        }
+        .contact-detail-list {
+            gap: 14px !important;
+            margin-bottom: 24px !important;
+        }
+        .contact-detail-item {
+            gap: 12px !important;
+        }
+        .contact-detail-icon {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 10px !important;
+        }
+        .contact-detail-content {
+            font-size: 13.5px !important;
+        }
+        .contact-detail-content span {
+            font-size: 11.5px !important;
+        }
+        .btn-wa-direct {
+            width: 100% !important;
+            justify-content: center !important;
+            padding: 12px 18px !important;
+            font-size: 13.5px !important;
+            margin-bottom: 28px !important;
+            border-radius: 10px !important;
+        }
+        .form-card-minimal {
+            padding: 20px 16px !important;
+            border-radius: 16px !important;
+        }
+        .form-card-title {
+            font-size: 19px !important;
+            margin-bottom: 4px !important;
+        }
+        .form-card-sub {
+            font-size: 12.5px !important;
+            margin-bottom: 20px !important;
+        }
+        .form-field-group {
+            margin-bottom: 16px !important;
+        }
+        .form-field-label {
+            font-size: 12px !important;
+            margin-bottom: 5px !important;
+        }
+        .form-field-input {
+            padding: 11px 14px !important;
+            font-size: 14px !important;
+            border-radius: 8px !important;
+        }
+        textarea.form-field-input {
+            min-height: 96px !important;
+        }
+        .btn-send-message {
+            padding: 12px 18px !important;
+            font-size: 13.5px !important;
+            border-radius: 10px !important;
+        }
+        .social-icon-row {
+            gap: 10px !important;
+        }
+        .social-icon-btn {
+            width: 38px !important;
+            height: 38px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .contact-main-heading {
+            font-size: 23px !important;
         }
     }
 </style>
