@@ -305,8 +305,12 @@
         display: none;
     }
     .topbar-breadcrumb-current {
-        font-size: 13.5px;
-        max-width: 40vw;
+        font-size: 13px;
+        font-weight: 700;
+        max-width: 35vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .topbar-right { gap: 4px; }

@@ -685,14 +685,28 @@
             .hero-grid { grid-template-columns: 1fr; }
             .two-col { grid-template-columns: 1fr; }
 
-            /* KPI cards → 2 kolom, lalu 1 kolom di layar sangat sempit */
+            /* KPI cards → Carousel horizontal di HP */
             .kpi-row {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px;
+                display: flex !important;
+                overflow-x: auto !important;
+                scroll-snap-type: x mandatory !important;
+                -webkit-overflow-scrolling: touch !important;
+                gap: 12px !important;
+                padding-bottom: 8px !important;
+                margin-bottom: 20px !important;
             }
-            .kpi-card { padding: 14px !important; }
-            .kpi-number { font-size: 20px !important; }
-            .kpi-label { font-size: 10px !important; }
+            .kpi-row::-webkit-scrollbar {
+                display: none;
+            }
+            .kpi-card {
+                flex: 0 0 74% !important;
+                min-width: 210px !important;
+                scroll-snap-align: start !important;
+                padding: 16px !important;
+                border-radius: 12px !important;
+            }
+            .kpi-number { font-size: 24px !important; }
+            .kpi-label { font-size: 11px !important; }
 
             /* Grid 2 kolom utama → stack */
             .grid-2col {
@@ -707,9 +721,38 @@
             .service-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--line) !important; }
             .service-card:last-child { border-bottom: none !important; grid-column: span 1 !important; }
 
-            /* Panel head & activity items rapetin */
+            /* Panel head & activity items rapetin & rapih di HP */
             .panel-head { padding: 14px 16px 12px; }
-            .activity-item { padding: 12px 14px; }
+            .activity-item {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 6px !important;
+                padding: 14px 16px !important;
+            }
+            .activity-body {
+                width: 100% !important;
+            }
+            .activity-title {
+                font-size: 13.5px !important;
+                font-weight: 700 !important;
+                white-space: normal !important;
+                word-break: break-word !important;
+                line-height: 1.35 !important;
+            }
+            .activity-meta {
+                font-size: 11.5px !important;
+                margin-top: 2px !important;
+            }
+            .activity-status {
+                align-self: flex-start !important;
+                max-width: 100% !important;
+                white-space: normal !important;
+                font-size: 11px !important;
+                padding: 4px 10px !important;
+                border-radius: 12px !important;
+                margin-top: 2px !important;
+            }
 
             /* Welcome card */
             .welcome-card { padding: 16px; gap: 12px; }
@@ -735,7 +778,7 @@
         }
 
         @media (max-width: 420px) {
-            .kpi-row { grid-template-columns: 1fr !important; }
+            .kpi-card { flex: 0 0 85% !important; }
             .welcome-card-title { font-size: 15px !important; }
             .role-badge, .btn-complete-profile { font-size: 11px !important; padding: 5px 10px !important; }
         }
@@ -1303,8 +1346,8 @@
                     <p style="font-size: 12.5px; margin-bottom: 10px; line-height: 1.5;">
                         Terdapat <strong>{{ count($pendingSouvenirs) }}</strong> permohonan yang telah melebihi 10 hari sejak dokumen Pertek Pertanahan diunggah/diterbitkan, tetapi souvenir belum dikirimkan.
                     </p>
-                    <div style="overflow-x: auto; background: rgba(255, 255, 255, 0.7); border-radius: 4px; border: 1px solid rgba(217, 119, 6, 0.15);">
-                        <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; background: rgba(255, 255, 255, 0.7); border-radius: 6px; border: 1px solid rgba(217, 119, 6, 0.15);">
+                        <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-size: 12px; text-align: left;">
                             <thead>
                                 <tr style="border-bottom: 1px solid rgba(217, 119, 6, 0.15);">
                                     <th style="padding: 8px 12px; font-weight: 700; color: #744210; text-transform: uppercase; font-size: 10.5px;">No. Registrasi</th>
@@ -1579,20 +1622,25 @@
             }
         });
 
-        // Sidebar Toggle Logic for Mobile
-        const btnToggle = document.getElementById('toggle-sidebar');
-        const sidebar = document.getElementById('sidebar');
-        const backdrop = document.getElementById('sidebar-backdrop');
-        
-        btnToggle.addEventListener('click', () => {
-            sidebar.classList.add('open');
-            backdrop.classList.add('show');
-        });
-        
-        backdrop.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            backdrop.classList.remove('show');
-        });
+        // Global Sidebar Toggle Functions for Mobile
+        window.toggleSidebar = function() {
+            const sb = document.getElementById('sidebar') || document.querySelector('.sidebar');
+            const bd = document.getElementById('sidebar-backdrop');
+            if (sb) sb.classList.toggle('open');
+            if (bd) bd.classList.toggle('show');
+        };
+
+        window.closeSidebar = function() {
+            const sb = document.getElementById('sidebar') || document.querySelector('.sidebar');
+            const bd = document.getElementById('sidebar-backdrop');
+            if (sb) sb.classList.remove('open');
+            if (bd) bd.classList.remove('show');
+        };
+
+        const bd = document.getElementById('sidebar-backdrop');
+        if (bd) {
+            bd.addEventListener('click', window.closeSidebar);
+        }
     </script>
 
 </body>
