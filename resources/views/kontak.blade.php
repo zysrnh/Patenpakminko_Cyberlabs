@@ -234,10 +234,106 @@
     @media (max-width: 992px) {
         .contact-grid-main {
             grid-template-columns: 1fr;
-            gap: 40px;
+            gap: 36px;
         }
         .contact-main-heading {
-            font-size: 34px;
+            font-size: 32px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact-wrapper {
+            padding: 24px 0 32px !important;
+        }
+        .contact-grid-main {
+            gap: 28px !important;
+        }
+        .contact-tag-sub {
+            font-size: 12px !important;
+            margin-bottom: 8px !important;
+        }
+        .contact-main-heading {
+            font-size: 25px !important;
+            line-height: 1.25 !important;
+            margin-bottom: 12px !important;
+        }
+        .contact-lead-text {
+            font-size: 13px !important;
+            line-height: 1.55 !important;
+            margin-bottom: 24px !important;
+        }
+        .contact-detail-list {
+            gap: 14px !important;
+            margin-bottom: 24px !important;
+        }
+        .contact-detail-item {
+            gap: 12px !important;
+        }
+        .contact-detail-icon {
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 8px !important;
+        }
+        .contact-detail-content {
+            font-size: 13px !important;
+        }
+        .contact-detail-content span {
+            font-size: 11px !important;
+        }
+        .btn-wa-direct {
+            width: 100% !important;
+            justify-content: center !important;
+            padding: 12px 18px !important;
+            font-size: 13.5px !important;
+            margin-bottom: 28px !important;
+        }
+        .form-card-minimal {
+            padding: 20px 16px !important;
+            border-radius: 14px !important;
+        }
+        .form-card-title {
+            font-size: 18px !important;
+            margin-bottom: 4px !important;
+        }
+        .form-card-sub {
+            font-size: 12.5px !important;
+            margin-bottom: 20px !important;
+        }
+        .form-field-group {
+            margin-bottom: 14px !important;
+        }
+        .form-field-label {
+            font-size: 12px !important;
+            margin-bottom: 4px !important;
+        }
+        .form-field-input {
+            padding: 10px 12px !important;
+            font-size: 14px !important;
+            border-radius: 8px !important;
+        }
+        textarea.form-field-input {
+            min-height: 90px !important;
+        }
+        .btn-send-message {
+            padding: 12px 18px !important;
+            font-size: 13.5px !important;
+            border-radius: 8px !important;
+        }
+        .contact-map-section {
+            padding: 24px 0 40px !important;
+        }
+        .contact-map-frame {
+            height: 240px !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .contact-main-heading {
+            font-size: 22px !important;
+        }
+        .social-icon-btn {
+            width: 38px !important;
+            height: 38px !important;
         }
     }
 </style>
@@ -365,7 +461,7 @@
 </div>
 
 <!-- Map Section Wrapped in Container -->
-<div style="background: #F8FAFC; padding: 40px 0 80px; border-top: 1px solid #E2E8F0;">
+<div class="contact-map-section" style="background: #F8FAFC; padding: 40px 0 80px; border-top: 1px solid #E2E8F0;">
     <div class="container">
         <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 24px; box-shadow: 0 4px 16px rgba(0,38,66,0.03);">
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
@@ -377,7 +473,7 @@
                     Buka Google Maps ↗
                 </a>
             </div>
-            <div style="width: 100%; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0;">
+            <div class="contact-map-frame" style="width: 100%; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0;">
                 <iframe src="{{ $mapUrl }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
