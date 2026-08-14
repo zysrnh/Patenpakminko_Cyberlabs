@@ -344,7 +344,7 @@
             display: flex;
             visibility: hidden;
             opacity: 0;
-            transform: translateY(-16px) scale(0.98);
+            transform: translateY(-12px) scale(0.97);
             pointer-events: none;
             position: fixed;
             inset: 0;
@@ -356,106 +356,130 @@
             flex-direction: column;
             overflow-y: auto;
             overscroll-behavior: contain;
-            transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-                        visibility 0.32s;
+            transition: opacity 0.22s cubic-bezier(0.4, 0, 1, 1),
+                        transform 0.22s cubic-bezier(0.4, 0, 1, 1),
+                        visibility 0.22s;
         }
         .mobile-nav.open {
             visibility: visible;
             opacity: 1;
             transform: translateY(0) scale(1);
             pointer-events: auto;
+            transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+                        visibility 0.26s;
         }
         .mobile-nav-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--line);
+            padding: 10px 16px;
+            border-bottom: 1px solid #F1F5F9;
             position: sticky;
             top: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             z-index: 10;
         }
         .mobile-nav-body {
-            padding: 12px 20px 40px;
+            padding: 8px 12px 24px;
             display: flex;
             flex-direction: column;
         }
         .mobile-nav-body > * {
             opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(8px);
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .mobile-nav.open .mobile-nav-body > * {
             opacity: 1;
             transform: translateY(0);
         }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(1) { transition-delay: 0.03s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(2) { transition-delay: 0.06s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(3) { transition-delay: 0.09s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(4) { transition-delay: 0.12s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(5) { transition-delay: 0.15s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(6) { transition-delay: 0.18s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(7) { transition-delay: 0.21s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(8) { transition-delay: 0.24s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(9) { transition-delay: 0.27s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(10) { transition-delay: 0.30s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(11) { transition-delay: 0.33s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(12) { transition-delay: 0.36s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(13) { transition-delay: 0.39s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(14) { transition-delay: 0.42s; }
-        .mobile-nav.open .mobile-nav-body > *:nth-child(15) { transition-delay: 0.45s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(1) { transition-delay: 0.02s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(2) { transition-delay: 0.04s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(3) { transition-delay: 0.06s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(4) { transition-delay: 0.08s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(5) { transition-delay: 0.10s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(6) { transition-delay: 0.12s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(7) { transition-delay: 0.14s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(8) { transition-delay: 0.16s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(9) { transition-delay: 0.18s; }
+        .mobile-nav.open .mobile-nav-body > *:nth-child(10) { transition-delay: 0.20s; }
 
         .mobile-nav-body a,
         .mobile-nav-body button {
-            font-size: 15px;
+            font-size: 13.5px;
             font-weight: 600;
-            color: var(--ink);
+            color: #1E293B;
             text-decoration: none;
-            padding: 14px 10px;
+            padding: 9px 12px;
             border: none;
-            border-bottom: 1px solid var(--line);
+            border-bottom: none;
             background: none;
             font-family: inherit;
             cursor: pointer;
             text-align: left;
-            transition: all .2s cubic-bezier(0.16, 1, 0.3, 1);
-            display: block;
+            transition: all .18s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             width: 100%;
             border-radius: 8px;
+            margin-bottom: 2px;
         }
         .mobile-nav-body a:hover,
         .mobile-nav-body a:active {
             color: var(--blue-dk);
-            background: rgba(33, 138, 201, 0.08);
-            transform: translateX(4px);
+            background: #F1F5F9;
+            transform: translateX(3px);
         }
-        .mobile-nav-body a:last-child {
-            border-bottom: none;
-        }
-        .mobile-nav-body .mobile-section-label {
-            font-size: 10px;
+        .mobile-section-label {
+            font-size: 10.5px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: .08em;
-            color: var(--muted);
-            padding: 20px 10px 8px;
+            letter-spacing: .06em;
+            color: #94A3B8;
+            padding: 14px 12px 4px;
             border-bottom: none;
         }
+        .mobile-social-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 4px 10px 8px;
+        }
+        .social-pill {
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            padding: 6px 12px !important;
+            background: #F1F5F9 !important;
+            color: #334155 !important;
+            border-radius: 20px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            width: auto !important;
+            margin: 0 !important;
+        }
+        .social-pill:hover,
+        .social-pill:active {
+            background: var(--blue-lt) !important;
+            color: var(--blue-dk) !important;
+            transform: translateY(-1px) !important;
+        }
         .mobile-nav-body .mobile-cta {
-            margin-top: 20px;
+            margin-top: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             background: var(--blue-dk);
             color: #fff !important;
-            padding: 14px;
+            padding: 12px;
             border-radius: 10px;
             font-weight: 700;
+            font-size: 13.5px !important;
             border-bottom: none !important;
             transition: all 0.22s ease !important;
         }
@@ -2027,11 +2051,28 @@
         <a href="{{ route('testimoni') }}" onclick="closeMobileNav()">Ulasan</a>
         <a href="{{ route('kontak') }}" onclick="closeMobileNav()">Kontak Kami</a>
         <span class="mobile-section-label">Media Sosial</span>
-        <a href="{{ $fTiktok }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">TikTok</a>
-        <a href="{{ $fInstagram }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Instagram</a>
-        <a href="{{ $fThreads }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Threads</a>
-        <a href="{{ $fYoutube }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">YouTube</a>
-        <a href="{{ $fFacebook }}" target="_blank" rel="noopener noreferrer" onclick="closeMobileNav()">Facebook</a>
+        <div class="mobile-social-pills">
+            <a href="{{ $fTiktok }}" target="_blank" rel="noopener noreferrer" class="social-pill" onclick="closeMobileNav()">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 11-5.2-1.74 2.89 2.89 0 012.31-1.14V9.3a6.34 6.34 0 105.34 6.27V8.69a8.18 8.18 0 004.77 1.52v-3.52a4.85 4.85 0 01-3.34-1.63z"/></svg>
+                TikTok
+            </a>
+            <a href="{{ $fInstagram }}" target="_blank" rel="noopener noreferrer" class="social-pill" onclick="closeMobileNav()">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                Instagram
+            </a>
+            <a href="{{ $fThreads }}" target="_blank" rel="noopener noreferrer" class="social-pill" onclick="closeMobileNav()">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M12 21.75c-5.38 0-9.75-4.37-9.75-9.75S6.62 2.25 12 2.25s9.75 4.37 9.75 9.75c0 3.06-1.42 5.86-3.8 7.48-.48.33-1.12.19-1.44-.28-.33-.48-.19-1.12.28-1.44 1.95-1.33 3.11-3.62 3.11-6.13 0-4.35-3.53-7.88-7.88-7.88S4.12 7.28 4.12 11.63s3.53 7.88 7.88 7.88c1.84 0 3.56-.63 4.93-1.8.44-.38 1.1-.33 1.48.11.38.44.33 1.1-.11 1.48-1.7 1.45-3.84 2.23-6.12 2.23z"/></svg>
+                Threads
+            </a>
+            <a href="{{ $fYoutube }}" target="_blank" rel="noopener noreferrer" class="social-pill" onclick="closeMobileNav()">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                YouTube
+            </a>
+            <a href="{{ $fFacebook }}" target="_blank" rel="noopener noreferrer" class="social-pill" onclick="closeMobileNav()">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                Facebook
+            </a>
+        </div>
         @if(Auth::check())
             @if(!$isFormCreatePage && (Auth::user()->is_active || !Auth::user()->isPelakuUsaha()))
                 @if(Auth::user()->isAdminBerita())
