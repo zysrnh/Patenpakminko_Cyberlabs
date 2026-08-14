@@ -1398,7 +1398,6 @@
                                 </form>
                             @endif
                         </div>
-            @endif
 
             <!-- PELAKU USAHA NOTIFIKASI: BERKAS LENGKAP -->
             @if($user->isPelakuUsaha() && $application->bpn_berkas_status === 'diterima')
