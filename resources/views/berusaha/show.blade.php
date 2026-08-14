@@ -2088,7 +2088,7 @@
                                     $step8Status = 'rejected';
                                 } elseif ($application->dinas_pu_status === 'sesuai' || in_array($application->status, ['menunggu_satu_pintu', 'disetujui', 'terbit_pkpr'])) {
                                     $step8Status = 'completed';
-                                } elseif ($hasPassedPertek || $application->status === 'menunggu_dinas_pu') {
+                                } elseif ($hasPassedPertek || $application->dinas_pu_status === 'menunggu_penilaian' || (!empty($application->bpn_pertek_document) && in_array($application->status, ['menunggu_dinas_pu', 'menunggu_putr']))) {
                                     $step8Status = 'active';
                                 }
                             @endphp

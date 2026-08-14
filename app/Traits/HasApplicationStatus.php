@@ -24,6 +24,9 @@ trait HasApplicationStatus
         }
 
         if (in_array($this->status, ['menunggu_dinas_pu', 'menunggu_putr'])) {
+            if ($this->dinas_pu_status === 'menunggu_validasi_awal' || empty($this->bpn_pertek_document)) {
+                return 'Validasi Permohonan (Dinas PUTR)';
+            }
             return 'Penilaian Tata Ruang (Dinas PUTR)';
         }
 
