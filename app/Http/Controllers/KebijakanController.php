@@ -388,8 +388,8 @@ class KebijakanController extends Controller
                 $path = $request->file('bpn_pertek_document')->store('bpn_perteks', 'public');
                 $application->bpn_pertek_document = $path;
                 $application->bpn_pertek_uploaded_at = now();
-                                $application->status = 'menunggu_satu_pintu';
-                $msg = 'Dokumen Pertek Pertanahan berhasil diterbitkan. Berkas diteruskan ke Dinas PMPTSP (Satu Pintu).';
+                $application->status = 'disetujui';
+                $msg = 'Dokumen Pertek Pertanahan berhasil diterbitkan. Permohonan telah selesai (Disetujui).';
             } else {
                 $application->status = 'ditolak';
                 $msg = 'Permohonan ditolak pada tahap rekomendasi teknis BPN.';

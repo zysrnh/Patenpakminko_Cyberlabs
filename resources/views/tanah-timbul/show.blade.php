@@ -2034,10 +2034,10 @@
 
 
 
-                            <!-- STEP 8: Selesai / Ditolak -->
+                            <!-- STEP 6: Selesai / Ditolak -->
                             @php
                                 $doneStepStatus = '';
-                                if ($application->status === 'disetujui') {
+                                if (in_array($application->status, ['disetujui', 'menunggu_satu_pintu']) || !empty($application->bpn_pertek_document)) {
                                     $doneStepStatus = 'completed';
                                 } elseif ($application->status === 'ditolak') {
                                     $doneStepStatus = 'rejected';
@@ -2056,8 +2056,8 @@
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
                                             Layanan dihentikan/ditolak oleh instansi terkait.
-                                        @elseif($application->status === 'disetujui')
-                                            Seluruh alur selesai. Dokumen PKKPR Tanah Timbul siap diunduh dari portal.
+                                        @elseif(in_array($application->status, ['disetujui', 'menunggu_satu_pintu']) || !empty($application->bpn_pertek_document))
+                                            Seluruh alur selesai. Dokumen Pertek Pertanahan Tanah Timbul siap diunduh dari portal.
                                         @else
                                             Menunggu seluruh tahapan selesai disetujui semua instansi terkait.
                                         @endif

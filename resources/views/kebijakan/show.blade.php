@@ -1672,11 +1672,11 @@
                         
                         $isSelesai = false;
                         if (Auth::user()->isBpn()) {
-                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui']);
+                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui', 'menunggu_satu_pintu']) || !empty($application->bpn_pertek_document);
                         } elseif (Auth::user()->isDinasPu()) {
                             $isSelesai = ($application->dinas_pu_status === 'disetujui' || in_array($application->status, ['ditolak', 'menunggu_satu_pintu', 'disetujui']));
                         } else {
-                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui']);
+                            $isSelesai = in_array($application->status, ['ditolak', 'disetujui', 'menunggu_satu_pintu']) || !empty($application->bpn_pertek_document);
                         }
                         
                         if ($isSelesai) {
@@ -2000,7 +2000,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_pertek_document)
-                                            Dokumen Pertek resmi diterbitkan. Permohonan diteruskan ke instansi selanjutnya.
+                                            Dokumen Pertek resmi diterbitkan. Permohonan telah selesai disetujui.
                                         @else
                                             Menunggu rapat selesai untuk penerbitan rekomendasi teknis.
                                         @endif
@@ -2011,13 +2011,10 @@
                                 </div>
                             </div>
 
-
-
-
-                            <!-- STEP 8: Selesai / Ditolak -->
+                            <!-- STEP 6: Selesai / Ditolak -->
                             @php
                                 $doneStepStatus = '';
-                                if ($application->status === 'disetujui') {
+                                if (in_array($application->status, ['disetujui', 'menunggu_satu_pintu']) || !empty($application->bpn_pertek_document)) {
                                     $doneStepStatus = 'completed';
                                 } elseif ($application->status === 'ditolak') {
                                     $doneStepStatus = 'rejected';
@@ -2036,8 +2033,8 @@
                                     <div class="timeline-desc">
                                         @if($application->status === 'ditolak')
                                             Layanan dihentikan/ditolak oleh instansi terkait.
-                                        @elseif($application->status === 'disetujui')
-                                            Seluruh alur selesai. Dokumen PKKPR Kebijakan siap diunduh dari portal.
+                                        @elseif(in_array($application->status, ['disetujui', 'menunggu_satu_pintu']) || !empty($application->bpn_pertek_document))
+                                            Seluruh alur selesai. Dokumen Pertek Pertanahan Kebijakan siap diunduh dari portal.
                                         @else
                                             Menunggu seluruh tahapan selesai disetujui semua instansi terkait.
                                         @endif
