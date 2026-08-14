@@ -120,7 +120,7 @@
 
                 <h2 class="hero-sub-title">
 
-                    Pertimbangan Teknis <span class="accent">Pertanahan</span> terKoneksi Kantor Pertanahan Sukabumi Kota
+                    Pertimbangan Teknis <span class="accent">Pertanahan</span> Terintegrasi Kantor Pertanahan Kota Sukabumi
 
                 </h2>
 
@@ -154,12 +154,6 @@
 
                 </div>
 
-            </div> </svg>
-
-                    </a>
-
-                </div>
-
             </div>
 
 
@@ -168,179 +162,179 @@
 
             <div>
 
-                <div class="service-panel" id="modul">
+            <div class="service-panel" id="modul">
 
-                    <!-- Header -->
+                <!-- Header -->
 
-                    <div class="sp-header">
+                <div class="sp-header">
 
-                        <div class="sp-header-icon">
+                    <div class="sp-header-icon">
 
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
 
-                                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
 
-                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
 
-                            </svg>
-
-                        </div>
-
-                        <div class="sp-header-text">
-
-                            <strong>Pilih Jenis Layanan yang Anda Butuhkan</strong>
-
-                        </div>
+                        </svg>
 
                     </div>
 
+                    <div class="sp-header-text">
 
-
-                    <!-- Pertimbangan Teknis Pertanahan Slider Section -->
-
-                    <div class="sp-section-label">
-
-                        <span>Layanan Pertimbangan Teknis Pertanahan</span>
+                        <strong>Pilih Jenis Layanan yang Anda Butuhkan</strong>
 
                     </div>
 
+                </div>
 
 
-                    <div class="sp-rows" id="spRows">
 
-                        <!-- Slide 1 -->
+                <!-- Pertimbangan Teknis Pertanahan Slider Section -->
 
-                        <div class="sp-slide">
+                <div class="sp-section-label">
 
-                            <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="sp-row">
+                    <span>Layanan Pertimbangan Teknis Pertanahan</span>
 
-                                <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                </div>
 
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
 
-                                </div>
 
-                                <div class="sp-row-info">
+                <div class="sp-rows" id="spRows">
 
-                                    <strong>Pertimbangan Teknis Pertanahan PKKPR Berusaha</strong>
+                    <!-- Slide 1 -->
 
-                                    <span>Bisnis, usaha, industri</span>
+                    <div class="sp-slide">
 
-                                </div>
+                        <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="sp-row">
 
-                                <div class="sp-row-cta">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                    Daftar
+                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="PKKPR Berusaha" style="width:32px;height:32px;object-fit:contain;">
 
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
 
-                                </div>
+                            <div class="sp-row-info">
 
-                            </a>
+                                <strong>Pertimbangan Teknis Pertanahan PKKPR Berusaha</strong>
 
-                            <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="sp-row">
+                                <span>Bisnis, usaha, industri</span>
 
-                                <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            </div>
 
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                            <div class="sp-row-cta">
 
-                                </div>
+                                Daftar
 
-                                <div class="sp-row-info">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 
-                                    <strong>Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</strong>
+                            </div>
 
-                                    <span>Rumah, sosial, keagamaan</span>
+                        </a>
 
-                                </div>
+                        <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="sp-row">
 
-                                <div class="sp-row-cta">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--green-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                    Daftar
+                                <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="PKKPR Non Berusaha" style="width:32px;height:32px;object-fit:contain;">
 
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
 
-                                </div>
+                            <div class="sp-row-info">
 
-                            </a>
+                                <strong>Pertimbangan Teknis Pertanahan PKKPR Non Berusaha</strong>
 
-                            <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="sp-row">
+                                <span>Rumah, sosial, keagamaan</span>
 
-                                <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            </div>
 
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                            <div class="sp-row-cta">
 
-                                </div>
+                                Daftar
 
-                                <div class="sp-row-info">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 
-                                    <strong>Pertimbangan Teknis Pertanahan Kebijakan</strong>
+                            </div>
 
-                                    <span>Kebijakan pengguna &amp; pemanfaatan tanah</span>
+                        </a>
 
-                                </div>
+                        <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="sp-row">
 
-                                <div class="sp-row-cta">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--yellow-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                    Daftar
+                                <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="Kebijakan" style="width:32px;height:32px;object-fit:contain;">
 
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
 
-                                </div>
+                            <div class="sp-row-info">
 
-                            </a>
+                                <strong>Pertimbangan Teknis Pertanahan Kebijakan</strong>
 
-                            <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-row">
+                                <span>Kebijakan pengguna &amp; pemanfaatan tanah</span>
 
-                                <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            </div>
 
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                            <div class="sp-row-cta">
 
-                                </div>
+                                Daftar
 
-                                <div class="sp-row-info">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 
-                                    <strong>Pertimbangan Teknis Pertanahan Tanah Timbul</strong>
+                            </div>
 
-                                    <span>Layanan pendaftaran tanah timbul</span>
+                        </a>
 
-                                </div>
+                        <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-row">
 
-                                <div class="sp-row-cta">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                    Daftar
+                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="Tanah Timbul" style="width:32px;height:32px;object-fit:contain;">
 
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
 
-                                </div>
+                            <div class="sp-row-info">
 
-                            </a>
+                                <strong>Pertimbangan Teknis Pertanahan Tanah Timbul</strong>
 
-                            <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
+                                <span>Layanan pendaftaran tanah timbul</span>
 
-                                <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #f0f7ff; color: #1e40af; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            </div>
 
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 24px; height: 24px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                            <div class="sp-row-cta">
 
-                                </div>
+                                Daftar
 
-                                <div class="sp-row-info">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
 
-                                    <strong>Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</strong>
+                            </div>
 
-                                    <span>Layanan permohonan proyek strategis</span>
+                        </a>
 
-                                </div>
+                        <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
 
-                                <div class="sp-row-cta">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                    Daftar
+                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="PSN" style="width:32px;height:32px;object-fit:contain;">
 
-                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </div>
 
-                                </div>
+                            <div class="sp-row-info">
 
-                            </a>
+                                <strong>Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)</strong>
+
+                                <span>Layanan permohonan proyek strategis</span>
+
+                            </div>
+
+                            <div class="sp-row-cta">
+
+                                Daftar
+
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+
+                            </div>
+
+                        </a>
 
                         </div>
 
