@@ -19,6 +19,11 @@ trait HasApplicationStatus
             return 'Layanan Selesai';
         }
 
+        // Kebijakan & Tanah Timbul yang Pertek sudah terbit -> Layanan Selesai
+        if (($this instanceof \App\Models\KebijakanApplication || $this instanceof \App\Models\TanahTimbulApplication) && ($this->status === 'menunggu_satu_pintu' || !empty($this->bpn_pertek_document))) {
+            return 'Layanan Selesai';
+        }
+
         if ($this->status === 'menunggu_satu_pintu') {
             return 'Penerbitan Dokumen (DPMPTSP)';
         }
@@ -97,6 +102,10 @@ trait HasApplicationStatus
         }
 
         if (in_array($this->status, ['disetujui', 'terbit_pkpr'])) {
+            return '#16A34A'; // Green
+        }
+
+        if (($this instanceof \App\Models\KebijakanApplication || $this instanceof \App\Models\TanahTimbulApplication) && ($this->status === 'menunggu_satu_pintu' || !empty($this->bpn_pertek_document))) {
             return '#16A34A'; // Green
         }
 
