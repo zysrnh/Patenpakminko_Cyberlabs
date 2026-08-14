@@ -54,6 +54,15 @@
         background: var(--yellow);
         border-radius: 2px;
     }
+    @media (max-width: 991px) {
+        .hero {
+            padding: 28px 0 36px !important;
+        }
+        .hero-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+        }
+    }
     @media (max-width: 576px) {
         .hero-brand-flex {
             gap: 10px;
@@ -67,9 +76,71 @@
             line-height: 1.1;
         }
         .hero-sub-title {
-            font-size: clamp(13px, 3.8vw, 15px);
+            font-size: clamp(13.5px, 3.8vw, 16px);
             line-height: 1.4;
             margin-bottom: 14px;
+        }
+        .hero-sub {
+            font-size: 13px !important;
+            line-height: 1.55 !important;
+            margin-bottom: 20px !important;
+        }
+        .service-panel {
+            border-radius: 16px !important;
+            box-shadow: 0 10px 30px rgba(17, 52, 84, 0.08) !important;
+        }
+        .sp-header {
+            padding: 12px 14px !important;
+        }
+        .sp-header-text strong {
+            font-size: 13px !important;
+        }
+        .sp-section-label {
+            padding: 10px 14px 6px !important;
+            font-size: 11px !important;
+        }
+        .sp-slide {
+            padding: 0 10px 10px !important;
+            gap: 8px !important;
+        }
+        .sp-row {
+            padding: 10px 12px !important;
+            border-radius: 12px !important;
+            gap: 10px !important;
+        }
+        .sp-row-logo {
+            width: 42px !important;
+            height: 42px !important;
+            flex: 0 0 42px !important;
+            border-radius: 10px !important;
+        }
+        .sp-row-logo img {
+            width: 26px !important;
+            height: 26px !important;
+        }
+        .sp-row-info strong {
+            font-size: 12px !important;
+            line-height: 1.3 !important;
+            color: #0F172A !important;
+        }
+        .sp-row-info span {
+            font-size: 10.5px !important;
+            color: #64748B !important;
+            margin-top: 2px !important;
+        }
+        .sp-row-cta {
+            padding: 6px 10px !important;
+            font-size: 10.5px !important;
+            font-weight: 700 !important;
+            border-radius: 8px !important;
+        }
+        .sp-others {
+            padding: 10px 12px 14px !important;
+            gap: 8px !important;
+        }
+        .sp-other-card {
+            padding: 10px 12px !important;
+            border-radius: 10px !important;
         }
     }
     @media (max-width: 360px) {
@@ -84,6 +155,13 @@
         }
         .hero-sub-title {
             font-size: 12.5px;
+        }
+        .sp-row-info strong {
+            font-size: 11px !important;
+        }
+        .sp-row-cta {
+            padding: 4px 8px !important;
+            font-size: 10px !important;
         }
     }
 </style>
@@ -208,9 +286,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'berusaha']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #EFF6FF; color: #1D4ED8; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="PKKPR Berusaha" style="width:32px;height:32px;object-fit:contain;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
 
                             </div>
 
@@ -234,9 +312,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'non-berusaha']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--green-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #F0FDF4; color: #15803D; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <img src="{{ asset('storage/logo/PKKPRNon.png') }}" alt="PKKPR Non Berusaha" style="width:32px;height:32px;object-fit:contain;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
 
                             </div>
 
@@ -260,9 +338,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'kebijakan']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--yellow-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #FEFCE8; color: #A16207; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <img src="{{ asset('storage/logo/Kebijakan.png') }}" alt="Kebijakan" style="width:32px;height:32px;object-fit:contain;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
 
                             </div>
 
@@ -286,9 +364,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'tanah-timbul']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #F0F9FF; color: #0369A1; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="Tanah Timbul" style="width:32px;height:32px;object-fit:contain;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"></path><circle cx="12" cy="10" r="3"></circle></svg>
 
                             </div>
 
@@ -312,9 +390,9 @@
 
                         <a href="{{ route('ptp.create', ['layanan' => 'psn']) }}" class="sp-row">
 
-                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: var(--blue-lt); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                            <div class="sp-row-logo" style="flex: 0 0 48px; height: 48px; background: #FAF5FF; color: #7E22CE; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
 
-                                <img src="{{ asset('storage/logo/PKKPR.png') }}" alt="PSN" style="width:32px;height:32px;object-fit:contain;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
 
                             </div>
 
