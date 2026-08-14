@@ -24,10 +24,24 @@ trait HasApplicationStatus
         }
 
         if (in_array($this->status, ['menunggu_dinas_pu', 'menunggu_putr'])) {
-            if ($this->dinas_pu_status === 'menunggu_validasi_awal' || empty($this->bpn_pertek_document)) {
-                return 'Validasi Permohonan (Dinas PUTR)';
+            // Step 7: Pertek sudah terbit → PU sedang menilai PKKPR
+            if (!empty($this->bpn_pertek_document)) {
+                return 'Penilaian Tata Ruang (Dinas PUTR)';
             }
-            return 'Penilaian Tata Ruang (Dinas PUTR)';
+            // Step 6: Rapat sudah lewat → menunggu penerbitan Pertek BPN
+            if (!empty($this->bpn_rapat_dt)) {
+                return 'Penerbitan Pertek (Kantor Pertanahan)';
+            }
+            // Step 5: Cek lokasi sudah lewat → jadwal rapat
+            if (!empty($this->bpn_cek_lokasi_dt)) {
+                return 'Rapat Pembahasan (Kantor Pertanahan)';
+            }
+            // Step 4: Sudah bayar → BPN proses lapangan
+            if (($this->bpn_pembayaran_status ?? '') === 'sudah_bayar') {
+                return 'Peninjauan Lapangan (Kantor Pertanahan)';
+            }
+            // Step 2: Belum ada progres BPN → PU validasi awal
+            return 'Validasi Permohonan (Dinas PUTR)';
         }
 
         if ($this->status === 'menunggu_bpn') {
