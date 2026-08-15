@@ -290,7 +290,11 @@
 
             .sidebar {
                 transform: translateX(-100%);
-                width: 260px;
+                width: 280px;
+                max-width: 84vw;
+                transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1000;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
             }
             .sidebar.open { transform: translateX(0); }
 
@@ -298,7 +302,7 @@
 
             .hamburger { display: flex; }
 
-            .topbar { padding: 0 16px; height: 56px; }
+            .topbar { padding: 0 14px; height: 60px; }
             .topbar-date { display: none; }
 
             .content { padding: 16px; }

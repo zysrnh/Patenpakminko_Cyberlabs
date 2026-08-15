@@ -25,21 +25,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 76px;
-    padding: 0 28px;
-    gap: 12px;
+    height: 64px;
+    padding: 0 24px;
+    gap: 14px;
 
     /* Glassmorphism */
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 
-    /* Border bawah via shadow — lebih subtle dari solid line */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.55);
-    box-shadow:
-        0 1px 3px  rgba(15, 40, 70, 0.08),
-        0 4px 16px rgba(15, 40, 70, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 
     position: sticky;
     top: 0;
@@ -51,18 +47,18 @@
     display: none;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 4px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
     background: transparent;
     border: none;
-    color: #0d2d4f;
+    color: #0F172A;
     cursor: pointer;
     flex-shrink: 0;
     padding: 0;
     margin-right: 2px;
 }
-.hamburger:hover { background: rgba(13, 45, 79, 0.07); }
+.hamburger:hover { background: #F1F5F9; }
 .hamburger svg { width: 22px; height: 22px; }
 
 /* ─── Kiri: breadcrumb ───────────────────────────────────────── */
@@ -77,36 +73,37 @@
 .topbar-breadcrumb {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     min-width: 0;
     overflow: hidden;
 }
 
 .topbar-breadcrumb-parent {
-    font-size: 13px;
-    font-weight: 500;
-    color: #5a7a9a;
-    letter-spacing: 0.01em;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #64748B;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-decoration: none;
     outline: none;
     transition: color 0.15s;
     white-space: nowrap;
     flex-shrink: 0;
 }
-.topbar-breadcrumb-parent:hover { color: #1a3a5c; }
+.topbar-breadcrumb-parent:hover { color: #0F172A; }
 
 .topbar-breadcrumb-sep {
     width: 14px;
     height: 14px;
-    color: #b0c0d0;
+    color: #94A3B8;
     flex-shrink: 0;
 }
 
 .topbar-breadcrumb-current {
-    font-size: 14px;
-    font-weight: 600;
-    color: #0d2d4f;
-    letter-spacing: -0.01em;
+    font-size: 14.5px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.015em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -116,61 +113,62 @@
 .topbar-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     flex-shrink: 0;
 }
 
 .topbar-datepill {
     display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 5px 12px;
-    border-radius: 4px;
-    background: rgba(13, 45, 79, 0.06);
-    border: 0.5px solid rgba(13, 45, 79, 0.1);
-    color: #2a4f72;
-    font-size: 12.5px;
-    font-weight: 500;
+    gap: 8px;
+    padding: 0 14px;
+    height: 36px;
+    border-radius: 8px;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
     user-select: none;
     white-space: nowrap;
     flex-shrink: 0;
 }
 .topbar-datepill svg {
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
     flex-shrink: 0;
-    opacity: 0.7;
+    color: #64748B;
 }
 
 .topbar-divider {
     width: 1px;
     height: 22px;
-    background: rgba(13, 45, 79, 0.12);
-    margin: 0 4px;
+    background: #E2E8F0;
+    margin: 0 2px;
     flex-shrink: 0;
 }
 
 /* ─── Backup DB Button ─────────────────────────────────────────────────── */
 .topbar-backup-btn {
-    height: 32px;
-    padding: 0 10px;
-    border-radius: 6px;
-    background: #EBF8FF;
-    color: #2B6CB0;
-    border: 1px solid #BEE3F8;
-    font-size: 12px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 8px;
+    background: #E0F2FE;
+    color: #0284C7;
+    border: 1px solid #BAE6FD;
+    font-size: 12.5px;
     font-weight: 700;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 6px;
     text-decoration: none;
     white-space: nowrap;
     flex-shrink: 0;
     transition: all 0.15s ease;
 }
 .topbar-backup-btn:hover {
-    background: #BEE3F8;
-    color: #1A365D;
+    background: #BAE6FD;
+    color: #0369A1;
 }
 
 /* ─── Notif button ───────────────────────────────────────────────────────── */
@@ -178,36 +176,36 @@
     position: relative;
     width: 36px;
     height: 36px;
-    border-radius: 4px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1a3a5c;
+    color: #334155;
     text-decoration: none;
     transition: background 0.15s ease;
     flex-shrink: 0;
 }
-.topbar-notif-btn:hover  { background: rgba(13, 45, 79, 0.07); }
-.topbar-notif-btn:active { background: rgba(13, 45, 79, 0.12); }
+.topbar-notif-btn:hover  { background: #F1F5F9; color: #0F172A; }
+.topbar-notif-btn:active { background: #E2E8F0; }
 .topbar-notif-btn svg    { width: 19px; height: 19px; }
 
 .topbar-notif-badge {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    min-width: 16px;
-    height: 16px;
+    top: 3px;
+    right: 3px;
+    min-width: 15px;
+    height: 15px;
     padding: 0 4px;
     border-radius: 8px;
-    background: #e53935;
+    background: #EF4444;
     color: #fff;
     font-size: 9.5px;
-    font-weight: 700;
+    font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
-    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border: 1.5px solid #ffffff;
     letter-spacing: -0.02em;
     pointer-events: none;
 }
@@ -217,10 +215,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 4px 10px 4px 4px;
-    border-radius: 4px;
-    border: 0.5px solid rgba(13, 45, 79, 0.14);
-    background: rgba(13, 45, 79, 0.05);
+    padding: 3px 12px 3px 3px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    background: #F8FAFC;
     text-decoration: none;
     outline: none;
     transition: background 0.15s ease, border-color 0.15s ease;
@@ -228,14 +227,14 @@
     white-space: nowrap;
 }
 .topbar-user-chip:hover {
-    background: rgba(13, 45, 79, 0.10);
-    border-color: rgba(13, 45, 79, 0.22);
+    background: #F1F5F9;
+    border-color: #CBD5E1;
 }
 
 .topbar-user-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -248,42 +247,42 @@
 }
 
 .topbar-user-avatar--initials {
-    /* Navy gradient selaras palette PATEN PAK MIKO */
     background: linear-gradient(135deg, #0d3b6e 0%, #1565a8 100%);
     color: #fff;
-    font-size: 10.5px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.03em;
 }
 
 .topbar-user-name {
-    font-size: 12.5px;
-    font-weight: 500;
-    color: #0d2d4f;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A;
     letter-spacing: -0.01em;
 }
+
 .topbar-logout-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 14px;
-    border-radius: 4px;
-    border: 1px solid rgba(220, 38, 38, 0.25);
-    background: rgba(220, 38, 38, 0.08);
-    color: #dc2626;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid #FCA5A5;
+    background: #FEF2F2;
+    color: #EF4444;
     font-size: 12.5px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s ease-in-out;
     white-space: nowrap;
     outline: none;
-    margin-left: 4px;
 }
 .topbar-logout-btn:hover {
-    background: #dc2626;
+    background: #EF4444;
     color: #ffffff;
-    border-color: #dc2626;
-    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.25);
+    border-color: #EF4444;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
 }
 
 /* ─── MOBILE RESPONSIVE ──────────────────────────────────────── */
@@ -293,9 +292,9 @@
 
 @media (max-width: 768px) {
     .topbar {
-        padding: 0 12px;
+        padding: 0 14px;
         height: 60px;
-        gap: 6px;
+        gap: 8px;
     }
     .hamburger { display: flex; }
 
@@ -305,27 +304,27 @@
         display: none;
     }
     .topbar-breadcrumb-current {
-        font-size: 13px;
-        font-weight: 700;
-        max-width: 35vw;
+        font-size: 14px;
+        font-weight: 800;
+        max-width: 40vw;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    .topbar-right { gap: 4px; }
+    .topbar-right { gap: 6px; }
     .topbar-divider { display: none; }
 
     /* Backup DB: icon aja, teks disembunyikan */
     .topbar-backup-btn span { display: none; }
-    .topbar-backup-btn { padding: 0; width: 34px; justify-content: center; }
+    .topbar-backup-btn { padding: 0; width: 36px; height: 36px; justify-content: center; border-radius: 8px; }
 
     .topbar-user-name { display: none; }
-    .topbar-user-chip { padding: 4px; gap: 0; }
+    .topbar-user-chip { padding: 4px; gap: 0; height: 36px; border-radius: 8px; }
 
     /* Logout: icon aja di HP */
     .topbar-logout-btn span { display: none; }
-    .topbar-logout-btn { padding: 0; width: 34px; height: 34px; justify-content: center; margin-left: 0; }
+    .topbar-logout-btn { padding: 0; width: 36px; height: 36px; justify-content: center; margin-left: 0; border-radius: 8px; }
 }
 
 @media (max-width: 420px) {
