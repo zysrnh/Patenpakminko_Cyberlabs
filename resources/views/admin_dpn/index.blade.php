@@ -3,9 +3,31 @@
 @section('title', 'Kelola Statistik Web - PATEN PAK MIKO')
 @section('page-title', 'Statistik Web')
 
+@section('extra-styles')
+    @media (max-width: 768px) {
+        .stat-header-box {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 14px 12px !important;
+        }
+        .stat-header-box .btn {
+            width: 100% !important;
+            justify-content: center !important;
+        }
+        .stat-grid-wrap {
+            grid-template-columns: 1fr !important;
+        }
+        .form-control {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+    }
+@endsection
+
 @section('content')
 <!-- Header Card -->
-<div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 18px 24px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+<div class="stat-header-box" style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 18px 24px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
     <div>
         <div style="font-size: 12px; color: #64748B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
             <a href="{{ route('dashboard') }}" style="color: #218AC9; text-decoration: none; font-weight: 600;">Dashboard</a>
@@ -17,7 +39,7 @@
         </h1>
         <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Atur nilai statistik utama beranda & unduh salinan backup cadangan seluruh data database.</p>
     </div>
-    <div>
+    <div style="width: 100%; max-width: fit-content;">
         <a href="{{ route('admin_dpn.backup_database') }}" class="btn" style="background: #2563EB; color: #ffffff; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 2px 4px rgba(37,99,235,0.2);" title="Download salinan database SQL lengkap">
             <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
             Download Backup Database (.SQL)
@@ -32,7 +54,7 @@
     </div>
 @endif
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: start;">
+<div class="stat-grid-wrap" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: start;">
     <!-- Card Kelola Statistik -->
     <div class="panel" style="border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); overflow: hidden; background: #ffffff;">
         <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
