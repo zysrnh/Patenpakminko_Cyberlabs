@@ -284,6 +284,34 @@
             border-color: #218AC9 !important;
         }
 
+        /* ─── GLOBAL SMOOTH MICRO-ANIMATIONS ───────────────── */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel, .profile-card, .welcome-card, .kpi-card, .alert, .page-header {
+            animation: fadeSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .btn, .btn-primary, .btn-save, .btn-cancel, .avatar-upload-btn, .nav-item, .nav-dropdown-item {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .btn:active, .btn-primary:active, .btn-save:active, .avatar-upload-btn:active {
+            transform: scale(0.97) !important;
+        }
+
+        .nav-item:hover {
+            transform: translateX(3px);
+        }
+
         /* ─── MOBILE RESPONSIVE ──────────────── */
         @media (max-width: 768px) {
             body { display: block; }

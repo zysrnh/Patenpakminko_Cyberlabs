@@ -161,6 +161,56 @@
         transition: all 0.2s ease;
     }
     .btn-cancel:hover { background: #E2E8F0; color: #1E293B; }
+
+    /* ─── MOBILE RESPONSIVE ────────────────────────────── */
+    @media (max-width: 640px) {
+        .avatar-section {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px 16px;
+            gap: 16px;
+        }
+        .avatar-section > div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .avatar-section h2 {
+            justify-content: center;
+        }
+        .avatar-upload-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 9px 16px;
+        }
+        .section-header {
+            padding: 16px 16px 10px;
+        }
+        .form-body {
+            padding: 0 16px 20px;
+        }
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+        .form-footer {
+            flex-direction: column-reverse;
+            gap: 10px;
+            width: 100%;
+        }
+        .btn-save, .btn-cancel {
+            width: 100%;
+            justify-content: center;
+            padding: 11px 16px;
+        }
+        .header-card-inner {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+    }
 @endsection
 
 @section('content')

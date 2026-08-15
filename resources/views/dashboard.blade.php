@@ -516,7 +516,28 @@
         .progress-fill.blue   { background: var(--blue); }
         .progress-fill.green  { background: var(--green); }
         .progress-fill.yellow { background: var(--brown); }
-        .progress-fill.red    { background: #DC2626; }
+        /* ─── SMOOTH ANIMATIONS & INTERACTIONS ─────────────────── */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .welcome-card, .sla-panel, .kpi-card, .panel, .alert-warning, .alert-success {
+            animation: fadeSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .kpi-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,38,66,0.06); }
+        .btn-primary, .btn-complete-profile, .btn-logout-sidebar {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .btn-primary:active, .btn-complete-profile:active { transform: scale(0.97); }
+        .nav-item { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+        .nav-item:hover { transform: translateX(3px); }
 
         /* ─── CALENDAR / SCHEDULE PANEL ─────────────────────── */
         .schedule-empty {
