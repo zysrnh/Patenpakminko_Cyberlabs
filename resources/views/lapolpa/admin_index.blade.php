@@ -92,6 +92,21 @@
     .cal-booking-popup h4 { font-size: 12px; font-weight: 700; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 5px; }
     .cal-popup-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
     .cal-popup-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ─── MOBILE RESPONSIVE ────────────────────────────── */
+    @media (max-width: 640px) {
+        .cal-wrap { padding: 14px 12px; }
+        .cal-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+        .cal-header h2 { font-size: 14.5px; }
+        .cal-nav { width: 100%; justify-content: space-between; padding: 6px 12px; }
+        .cal-month-label { flex: 1; text-align: center; font-size: 13px; min-width: 0; }
+        .cal-cell { min-height: 44px; padding: 4px 2px; }
+        .cal-num { font-size: 12px; }
+        .cal-dot { width: 5px; height: 5px; }
+        .cal-legend { gap: 8px 12px; justify-content: center; padding-top: 10px; }
+        .cal-legend-item { font-size: 11px; }
+        .notification-banner { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
 @endsection
 
 @section('content')

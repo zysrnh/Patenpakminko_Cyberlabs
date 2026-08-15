@@ -23,7 +23,9 @@
     .star-rating { color: #D97706; font-size: 16px; font-weight: 700; }
     @media (max-width: 768px) {
         .info-grid { grid-template-columns: 1fr; }
-        .form-grid-3 { grid-template-columns: 1fr; }
+        .form-grid-3 { grid-template-columns: 1fr; gap: 10px; }
+        .detail-item { flex-direction: column; align-items: flex-start; gap: 4px; }
+        .status-booked { padding: 16px; }
     }
 @endsection
 

@@ -129,6 +129,16 @@
         .filter-grid .search-col { grid-column: 1 / -1; }
         .filter-grid .action-col { grid-column: 1 / -1; display: flex; gap: 8px; }
     }
+    @media (max-width: 640px) {
+        .filter-card { padding: 12px; }
+        .filter-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+        .filter-grid .action-col { grid-column: 1 / -1; display: flex; gap: 8px; width: 100%; }
+        .filter-grid .action-col .btn { flex: 1; justify-content: center; }
+        .panel-body button[type="submit"] { width: 100%; justify-content: center; }
+        .table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; width: 100% !important; }
+        .table-modern { min-width: 780px !important; }
+        .table-modern th, .table-modern td { white-space: nowrap !important; }
+    }
     .filter-grid .form-control {
         padding: 8px 12px;
         font-size: 13px;

@@ -155,6 +155,45 @@
         align-items: center;
         gap: 4px;
     }
+
+    /* ─── MOBILE RESPONSIVE ────────────────────────────── */
+    @media (max-width: 768px) {
+        .stat-cards-grid {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .stat-card-mini {
+            flex: 0 0 76%;
+            scroll-snap-align: start;
+        }
+        .table-wrap {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            width: 100% !important;
+        }
+        .table-wrap table {
+            min-width: 820px !important;
+        }
+        .review-filter-form {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+        }
+        .review-filter-form > div {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            width: 100% !important;
+        }
+        .review-filter-form select {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+    }
 @endsection
 
 @section('content')
@@ -220,7 +259,7 @@
 <!-- Filter Bar Card -->
 <div class="panel" style="margin-bottom: 20px; border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); background: #ffffff;">
     <div class="panel-body" style="padding: 14px 18px;">
-        <form method="GET" action="{{ route('admin.reviews.index') }}" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+        <form method="GET" action="{{ route('admin.reviews.index') }}" class="review-filter-form" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <label style="font-weight: 700; font-size: 13px; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" style="color: #218AC9;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
