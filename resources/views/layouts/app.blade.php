@@ -341,7 +341,12 @@
 
         /* ─── MOBILE RESPONSIVE ──────────────── */
         @media (max-width: 768px) {
-            body { display: block; }
+            html, body {
+                display: block;
+                overflow-x: hidden !important;
+                width: 100% !important;
+                max-width: 100vw !important;
+            }
 
             .sidebar {
                 transform: translateX(-100%);
@@ -353,14 +358,25 @@
             }
             .sidebar.open { transform: translateX(0); }
 
-            .main-wrap { margin-left: 0; }
+            .main-wrap {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                overflow-x: hidden !important;
+            }
 
             .hamburger { display: flex; }
 
-            .topbar { padding: 0 14px; height: 60px; }
+            .topbar { padding: 0 14px; height: 60px; width: 100% !important; max-width: 100% !important; }
             .topbar-date { display: none; }
 
-            .content { padding: 16px; }
+            .content {
+                padding: 12px 10px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                overflow-x: hidden !important;
+            }
 
             .form-grid { grid-template-columns: 1fr; }
 
