@@ -93,8 +93,8 @@
             </div>
         @endif
 
-        <div class="table-wrap" style="min-height: 180px;">
-            <table style="width: 100%; border-collapse: collapse;">
+        <div class="table-wrap" style="min-height: 180px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+            <table style="width: 100%; min-width: 780px; border-collapse: collapse;">
                 <thead>
                     <tr style="border-bottom: 1.5px solid #E2E8F0; background: #F8FAFC;">
                         @if(Auth::user()->isDpn())

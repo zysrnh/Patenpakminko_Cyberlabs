@@ -213,10 +213,37 @@
         .btn-full { width: 100%; }
 
         /* ─── TABLE ──────────────────────────── */
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--surface); border-bottom: 1px solid var(--line); white-space: nowrap; }
-        tbody td { padding: 12px 14px; border-bottom: 1px solid var(--line); color: var(--ink); vertical-align: middle; }
+        .table-wrap {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            width: 100% !important;
+            display: block !important;
+        }
+        .table-wrap table {
+            min-width: 780px !important;
+            width: 100% !important;
+            border-collapse: collapse !important;
+            font-size: 13px !important;
+        }
+        thead th {
+            padding: 10px 14px !important;
+            text-align: left;
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: var(--muted);
+            background: var(--surface);
+            border-bottom: 1px solid var(--line);
+            white-space: nowrap !important;
+        }
+        tbody td {
+            padding: 12px 14px !important;
+            border-bottom: 1px solid var(--line);
+            color: var(--ink);
+            vertical-align: middle;
+            white-space: nowrap !important;
+        }
         tbody tr:last-child td { border-bottom: none; }
         tbody tr:hover td { background: var(--surface); }
 
@@ -341,6 +368,20 @@
 
             table { font-size: 12px; }
             thead th, tbody td { padding: 10px 10px; }
+
+            .table-filter-wrap {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 10px !important;
+                padding: 12px 14px !important;
+            }
+            .table-filter-wrap > * {
+                width: 100% !important;
+                min-width: 0 !important;
+            }
+            .search-box {
+                width: 100% !important;
+            }
         }
 
         @media (max-width: 480px) {
