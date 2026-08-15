@@ -173,6 +173,58 @@
     .btn-submit-main:hover {
         background: #002B4A;
     }
+
+    /* ─── MOBILE RESPONSIVE ────────────────────────────── */
+    @media (max-width: 768px) {
+        .info-callout {
+            flex-direction: column;
+            gap: 10px;
+            padding: 14px 12px;
+        }
+        .info-callout-desc code {
+            word-break: break-all !important;
+            white-space: normal !important;
+            display: inline-block;
+            max-width: 100%;
+        }
+        .form-panel-box {
+            padding: 14px 10px !important;
+            border-radius: 10px !important;
+        }
+        .form-grid-item {
+            padding: 14px 10px !important;
+            border-radius: 8px !important;
+        }
+        .item-head {
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+        .item-icon-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+        }
+        .item-label {
+            font-size: 13px;
+        }
+        .item-sub {
+            font-size: 11.5px;
+            word-break: break-word;
+        }
+        .custom-input {
+            padding: 9px 11px;
+            font-size: 12.5px;
+            word-break: break-all;
+        }
+        .btn-submit-main {
+            width: 100%;
+            justify-content: center;
+        }
+        .map-preview-wrap {
+            height: 180px;
+        }
+    }
 @endsection
 
 @section('content')

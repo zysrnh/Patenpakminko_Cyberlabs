@@ -209,6 +209,40 @@
     .btn-submit-main:hover {
         background: #002B4A;
     }
+
+    /* ─── MOBILE RESPONSIVE ────────────────────────────── */
+    @media (max-width: 640px) {
+        .form-panel {
+            padding: 16px 14px;
+        }
+        .contact-input-row {
+            padding: 14px 12px;
+        }
+        .contact-row-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .input-group-wa {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .input-wa-field {
+            min-width: 140px;
+        }
+        .btn-test-wa {
+            width: 100%;
+            justify-content: center;
+            padding: 10px 14px;
+        }
+        .btn-submit-main {
+            width: 100%;
+            justify-content: center;
+        }
+        .contact-card-grid {
+            display: none !important;
+        }
+    }
 @endsection
 
 @section('content')
