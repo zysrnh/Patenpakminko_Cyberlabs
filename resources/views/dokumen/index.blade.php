@@ -109,6 +109,45 @@
         width: 100%; height: 100%;
         border: none; background: #f8fafc;
     }
+
+    /* ─── MOBILE RESPONSIVE ────────────────────────────── */
+    @media (max-width: 768px) {
+        .filters form {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px !important;
+        }
+        .filters input, .filters select, .filters button, .filters a {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+        .batch-bar-wrap {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 10px !important;
+        }
+        .batch-buttons-group {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            flex-wrap: nowrap !important;
+            padding-bottom: 4px !important;
+        }
+        .batch-buttons-group .btn {
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            font-size: 12px !important;
+            padding: 7px 12px !important;
+        }
+        .table-wrap {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            width: 100% !important;
+        }
+        .table-wrap table {
+            min-width: 860px !important;
+        }
+    }
 </style>
 @endsection
 
@@ -241,42 +280,43 @@
             @endif
         </div>
 
-        <div class="table-wrap">
-            <form action="{{ route('dokumen.download_batch') }}" method="POST" id="batchDownloadForm">
-                @csrf
-                <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;">
-                    <div style="font-size: 13px; color: var(--muted);">
-                        <span id="selectedCount">0</span> dokumen terpilih
-                    </div>
-                    <div style="display: flex; gap: 8px;">
-                        <button type="button" class="btn btn-primary" id="btnBatchDownload" disabled style="background-color: #6366f1; border-color: #6366f1;" onclick="submitBatchDoc('{{ route('dokumen.download_batch') }}')">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            Unduh Batch (Terpilih)
-                        </button>
-                        @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
-                        <button type="button" class="btn btn-danger" id="btnBatchDelete" disabled style="background-color: #e53e3e; border-color: #e53e3e; color:#fff;" onclick="submitBatchDoc('{{ route('dokumen.bulk-destroy') }}', 'Apakah Anda yakin ingin menghapus permanen semua dokumen yang dipilih? Data tidak bisa dikembalikan!')">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                            Hapus Batch (Terpilih)
-                        </button>
-                        <button type="button" class="btn btn-danger" style="background-color: #991b1b; border-color: #991b1b; color:#fff;" onclick="if(confirm('Apakah Anda yakin ingin menghapus SELURUH dokumen yang ada di sistem?')) { if(confirm('Tindakan ini TIDAK BISA DIBATALKAN! Kamu benar-benar yakin ingin menghapus semua dokumen sekarang?')) { document.getElementById('deleteAllForm').submit(); } }">
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                            Hapus Semua Dokumen
-                        </button>
-                        @endif
-                    </div>
+        <form action="{{ route('dokumen.download_batch') }}" method="POST" id="batchDownloadForm">
+            @csrf
+            <div class="batch-bar-wrap" style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div style="font-size: 13px; color: var(--muted); font-weight: 600;">
+                    <span id="selectedCount">0</span> dokumen terpilih
                 </div>
-            <table>
+                <div class="batch-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-primary" id="btnBatchDownload" disabled style="background-color: #6366f1; border-color: #6366f1; white-space: nowrap;" onclick="submitBatchDoc('{{ route('dokumen.download_batch') }}')">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Unduh Batch
+                    </button>
+                    @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
+                    <button type="button" class="btn btn-danger" id="btnBatchDelete" disabled style="background-color: #e53e3e; border-color: #e53e3e; color:#fff; white-space: nowrap;" onclick="submitBatchDoc('{{ route('dokumen.bulk-destroy') }}', 'Apakah Anda yakin ingin menghapus permanen semua dokumen yang dipilih? Data tidak bisa dikembalikan!')">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        Hapus Batch
+                    </button>
+                    <button type="button" class="btn btn-danger" style="background-color: #991b1b; border-color: #991b1b; color:#fff; white-space: nowrap;" onclick="if(confirm('Apakah Anda yakin ingin menghapus SELURUH dokumen yang ada di sistem?')) { if(confirm('Tindakan ini TIDAK BISA DIBATALKAN! Kamu benar-benar yakin ingin menghapus semua dokumen sekarang?')) { document.getElementById('deleteAllForm').submit(); } }">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        Hapus Semua
+                    </button>
+                    @endif
+                </div>
+            </div>
+
+            <div class="table-wrap" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                <table style="width: 100%; min-width: 950px; border-collapse: collapse;">
                 <thead>
                     <tr>
                         <th style="width: 40px; text-align: center;">
                             <input type="checkbox" id="selectAll" style="cursor: pointer; width: 16px; height: 16px;">
                         </th>
-                        <th>Nama Dokumen</th>
-                        <th>Kategori</th>
-                        <th>Informasi File</th>
-                        <th>Pemohon / Akun</th>
-                        <th>Tanggal</th>
-                        <th>Aksi</th>
+                        <th style="min-width: 320px;">Nama Dokumen</th>
+                        <th style="min-width: 180px;">Kategori</th>
+                        <th style="min-width: 150px;">Informasi File</th>
+                        <th style="min-width: 200px;">Pemohon / Akun</th>
+                        <th style="min-width: 120px;">Tanggal</th>
+                        <th style="min-width: 120px; text-align: center;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -285,7 +325,7 @@
                         <td style="text-align: center;">
                             <input type="checkbox" name="dokumen_ids[]" value="{{ $item->id }}" class="doc-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
                         </td>
-                        <td style="max-width: 250px; word-wrap: break-word;">
+                        <td style="min-width: 320px; padding: 12px 14px;">
                             <strong>{{ $item->nama_dokumen }}</strong>
                             @if($item->keterangan)
                                 <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">{{ Str::limit($item->keterangan, 50) }}</div>
