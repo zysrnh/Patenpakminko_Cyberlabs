@@ -511,6 +511,41 @@
     }
     .hl-form-panel { position: static; }
 }
+
+@media (max-width: 768px) {
+    .hl-wrapper {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+    .hl-form-panel {
+        position: static !important;
+    }
+    .hl-cal-body {
+        padding: 12px 8px !important;
+    }
+    .hl-day {
+        height: 44px !important;
+        font-size: 12px !important;
+    }
+    .hl-day-name {
+        font-size: 10px !important;
+        padding: 2px 0 !important;
+    }
+    .hl-legend {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        padding: 10px 14px !important;
+    }
+    .hl-table-scroll {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
+    }
+    .hl-table-scroll table {
+        min-width: 580px !important;
+        width: 100% !important;
+    }
+}
 </style>
 
 {{-- ── Page Header Card ────────────────────────────────────────────── --}}
