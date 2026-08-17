@@ -288,6 +288,14 @@ class PpkprBerusahaController extends Controller
                 $application->no_berkas = $request->input('no_berkas');
                 $application->bpn_pembayaran_status = 'sudah_bayar';
                 $application->bpn_pembayaran_approved_at = now();
+
+                if (!$application->tgl_mulai_layanan) {
+                    $application->tgl_mulai_layanan = $application->bpn_pembayaran_approved_at;
+                }
+                if (!$application->tgl_selesai_layanan) {
+                    $application->tgl_selesai_layanan = \Carbon\Carbon::parse($application->tgl_mulai_layanan)->copy()->addWorkingDaysWithHolidays(10);
+                }
+
                 $application->save();
                 $application->user->update(['is_active' => true]);
 

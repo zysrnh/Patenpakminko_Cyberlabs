@@ -59,7 +59,11 @@
             --sidebar:   248px;
         }
 
-        html, body { height: 100%; }
+        html, body {
+            height: 100%;
+            overflow-x: hidden !important;
+            max-width: 100vw;
+        }
 
         body {
             font-family: 'Poppins', sans-serif;
@@ -67,6 +71,8 @@
             color: var(--ink);
             -webkit-font-smoothing: antialiased;
             display: flex;
+            width: 100%;
+            overflow-x: hidden !important;
         }
 
         /* ─── OVERLAY (mobile) ───────────────── */
@@ -148,11 +154,14 @@
             margin-left: var(--sidebar);
             flex: 1; display: flex; flex-direction: column;
             min-height: 100vh;
+            min-width: 0;
+            width: calc(100% - var(--sidebar));
+            max-width: 100%;
         }
 
 
         /* ─── CONTENT ────────────────────────── */
-        .content { padding: 24px 28px; flex: 1; }
+        .content { padding: 24px 28px; flex: 1; min-width: 0; width: 100%; overflow-x: hidden; }
 
         /* ─── PAGE HEADER ────────────────────── */
         .page-header {

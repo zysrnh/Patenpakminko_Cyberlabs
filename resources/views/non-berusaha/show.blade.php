@@ -912,9 +912,6 @@
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Pengaturan Waktu Mulai & Selesai Layanan (SLA)
                     </h3>
-                    <p style="font-size: 13px; color: #2C5282; margin-bottom: 12px;">
-                        Gunakan fitur ini untuk menyesuaikan tanggal mulai atau berakhirnya layanan secara manual jika terdapat kendala sistem, terpotong hari libur, atau penundaan lainnya. Kosongkan jika ingin mengikuti waktu default.
-                    </p>
                     @php
                         $verifyRoute = match(Route::currentRouteName()) {
                             'berusaha.show' => 'berusaha.verify',
@@ -922,8 +919,22 @@
                             'kebijakan.show' => 'kebijakan.verify',
                             'tanah-timbul.show' => 'tanah-timbul.verify',
                             'psn.show' => 'psn.verify',
-                            default => 'berusaha.verify'
+                            default => 'non-berusaha.verify'
                         };
+
+                        $isPuPhaseOpt = in_array($application->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr', 'disetujui', 'terbit_pkpr']) || $application->bpn_pertek_document;
+                        $defaultDaysOpt = $isPuPhaseOpt ? 20 : 10;
+
+                        $autoStart = $application->tgl_mulai_layanan 
+                            ? \Carbon\Carbon::parse($application->tgl_mulai_layanan) 
+                            : ($application->bpn_pembayaran_approved_at ? \Carbon\Carbon::parse($application->bpn_pembayaran_approved_at) : $application->created_at);
+
+                        $autoTarget = $application->tgl_selesai_layanan 
+                            ? \Carbon\Carbon::parse($application->tgl_selesai_layanan) 
+                            : $autoStart->copy()->addWorkingDaysWithHolidays($defaultDaysOpt);
+
+                        $workingDaysDuration = (int)$autoStart->diffInWorkingDaysWithHolidays($autoTarget);
+                        $calendarDaysDuration = (int)$autoStart->diffInDays($autoTarget);
                     @endphp
                     <form action="{{ route($verifyRoute, $application->id) }}" method="POST">
                         @csrf
@@ -932,15 +943,20 @@
                             <div class="form-group-v">
                                 <label for="tgl_mulai_layanan" style="font-weight: 600; display: block; margin-bottom: 8px; font-size: 13px; color: #2B6CB0;">Tanggal Mulai Layanan</label>
                                 <input type="datetime-local" name="tgl_mulai_layanan" id="tgl_mulai_layanan" class="form-control-v" style="border: 1px solid #63B3ED;"
-                                       value="{{ $application->tgl_mulai_layanan ? $application->tgl_mulai_layanan->format('Y-m-d\TH:i') : '' }}">
+                                       value="{{ $autoStart->format('Y-m-d\TH:i') }}">
                             </div>
                             <div class="form-group-v">
-                                <label for="tgl_selesai_layanan" style="font-weight: 600; display: block; margin-bottom: 8px; font-size: 13px; color: #2B6CB0;">Tanggal Berakhir Layanan</label>
+                                <label for="tgl_selesai_layanan" style="font-weight: 600; display: block; margin-bottom: 8px; font-size: 13px; color: #2B6CB0;">Tanggal Berakhir Layanan (SLA)</label>
                                 <input type="datetime-local" name="tgl_selesai_layanan" id="tgl_selesai_layanan" class="form-control-v" style="border: 1px solid #63B3ED;"
-                                       value="{{ $application->tgl_selesai_layanan ? $application->tgl_selesai_layanan->format('Y-m-d\TH:i') : '' }}">
+                                       value="{{ $autoTarget->format('Y-m-d\TH:i') }}">
                             </div>
                         </div>
-                        <button type="submit" class="btn-submit-v" style="margin-top: 12px; background: #3182CE; padding: 8px 16px;">Simpan Pengaturan Waktu</button>
+                        <div id="slaDurationInfo" style="margin-top: 10px; font-size: 12.5px; font-weight: 700; color: #1A365D; background: #E2E8F0; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+                            <span>⏱️ Durasi Terpasang: <strong id="txtWorkingDays" style="color: #2B6CB0;">{{ $workingDaysDuration }}</strong> Hari Kerja Efektif (<span id="txtCalendarDays">{{ $calendarDaysDuration }}</span> Hari Kalender)</span>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn-submit-v" style="margin-top: 12px; background: #3182CE; padding: 8px 16px;">Simpan Pengaturan Waktu</button>
+                        </div>
                     </form>
                 </div>
             @endif
@@ -2357,6 +2373,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 return date;
             }
 
+            function updateSlaDurationUI() {
+                const startEl = document.getElementById('tgl_mulai_layanan');
+                const endEl = document.getElementById('tgl_selesai_layanan');
+                const txtWorking = document.getElementById('txtWorkingDays');
+                const txtCalendar = document.getElementById('txtCalendarDays');
+                
+                if (!startEl || !endEl || !txtWorking || !txtCalendar || !startEl.value || !endEl.value) return;
+                
+                let start = new Date(startEl.value);
+                let end = new Date(endEl.value);
+                if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
+                    txtWorking.innerText = '0';
+                    txtCalendar.innerText = '0';
+                    return;
+                }
+                
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                txtCalendar.innerText = diffDays;
+                
+                let holidays = window.appHolidays || [];
+                let workingCount = 0;
+                let curr = new Date(start);
+                curr.setHours(0,0,0,0);
+                let endLimit = new Date(end);
+                endLimit.setHours(0,0,0,0);
+                
+                while (curr < endLimit) {
+                    curr.setDate(curr.getDate() + 1);
+                    const y = curr.getFullYear();
+                    const m = String(curr.getMonth() + 1).padStart(2, '0');
+                    const d = String(curr.getDate()).padStart(2, '0');
+                    const dateStr = `${y}-${m}-${d}`;
+                    if (curr.getDay() !== 0 && curr.getDay() !== 6 && !holidays.includes(dateStr)) {
+                        workingCount++;
+                    }
+                }
+                txtWorking.innerText = workingCount;
+            }
+
+            const slaEndEl = document.getElementById('tgl_selesai_layanan');
+            const slaStartEl = document.getElementById('tgl_mulai_layanan');
+
             const selesaiPicker = flatpickr('#tgl_selesai_layanan', {
                 enableTime: true,
                 dateFormat: "Y-m-d\\TH:i",
@@ -2364,7 +2423,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 altFormat: "j F Y - H:i",
                 locale: "id",
                 allowInput: true,
-                disable: commonDisable
+                disable: commonDisable,
+                defaultDate: slaEndEl ? (slaEndEl.value || null) : null,
+                onChange: function() {
+                    updateSlaDurationUI();
+                }
             });
 
             flatpickr('#tgl_mulai_layanan', {
@@ -2375,11 +2438,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 locale: "id",
                 allowInput: true,
                 disable: commonDisable,
+                defaultDate: slaStartEl ? (slaStartEl.value || null) : null,
                 onChange: function(selectedDates, dateStr, instance) {
                     if (selectedDates.length > 0 && selesaiPicker) {
                         const target = addWorkingDays(selectedDates[0], {{ $isPuPhase ? 20 : 10 }}, window.appHolidays || []);
                         selesaiPicker.setDate(target, true);
                     }
+                    updateSlaDurationUI();
                 }
             });
 

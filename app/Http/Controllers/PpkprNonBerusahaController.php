@@ -324,6 +324,14 @@ class PpkprNonBerusahaController extends Controller
             $application->bpn_pembayaran_status = 'sudah_bayar';
             $application->bpn_pembayaran_approved_at = now();
             $application->credential_sent_at = now();
+
+            if (!$application->tgl_mulai_layanan) {
+                $application->tgl_mulai_layanan = $application->bpn_pembayaran_approved_at;
+            }
+            if (!$application->tgl_selesai_layanan) {
+                $application->tgl_selesai_layanan = \Carbon\Carbon::parse($application->tgl_mulai_layanan)->copy()->addWorkingDaysWithHolidays(10);
+            }
+
             $application->save();
             
             // Aktivasi Akun Pengguna
