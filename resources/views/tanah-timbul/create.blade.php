@@ -142,7 +142,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="peta_lokasi" accept=".pdf,.jpg,.jpeg,.png" required>
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -158,7 +158,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" id="input_surat_kuasa" name="surat_kuasa" accept=".pdf,.jpg,.jpeg,.png" {{ $isPemilikUsaha ? '' : 'required' }}>
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -170,7 +170,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="fc_ktp" accept=".pdf,.jpg,.jpeg,.png" required>
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -182,7 +182,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="fc_npwp" accept=".pdf,.jpg,.jpeg,.png">
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -193,7 +193,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="fc_akta_pendirian" accept=".pdf,.jpg,.jpeg,.png">
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 10MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -205,7 +205,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="rencana_penggunaan_tanah" accept=".pdf,.jpg,.jpeg,.png">
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 10MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -216,7 +216,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="nib" accept=".pdf,.jpg,.jpeg,.png">
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -228,7 +228,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="kbli" accept=".pdf,.jpg,.jpeg,.png">
-                        <span class="file-help">Format : PDF, JPG, PNG, Maks 5MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -240,7 +240,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="proposal_kegiatan" accept=".pdf,.doc,.docx">
-                        <span class="file-help">Format : PDF, DOC, DOCX, Maks 10MB</span>
+                        <span class="file-help">Format : PDF, DOC, DOCX, Maks 100MB</span>
                     </div>
                 </div>
 
@@ -252,7 +252,7 @@
                     </label>
                     <div class="file-input-wrapper">
                         <input type="file" name="persyaratan_lainnya" accept=".pdf,.jpg,.jpeg,.png,.zip,.rar" required>
-                        <span class="file-help">Format : PDF, JPG, PNG, ZIP, RAR, Maks 10MB</span>
+                        <span class="file-help">Format : PDF, JPG, PNG, ZIP, RAR, Maks 100MB</span>
                     </div>
                 </div>
             </div>

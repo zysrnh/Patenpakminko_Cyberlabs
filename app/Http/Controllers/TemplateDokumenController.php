@@ -45,7 +45,7 @@ class TemplateDokumenController extends Controller
             'nama_template' => 'required|string|max:255',
             'kode_template' => 'required|string|max:100|unique:template_dokumens,kode_template',
             'kategori'      => 'required|string|max:100',
-            'file'          => 'required|file|mimes:doc,docx,pdf|max:20480', // Max 20MB
+            'file'          => 'required|file|mimes:doc,docx,pdf|max:102400', // Max 100MB
             'keterangan'    => 'nullable|string',
         ]);
 
@@ -79,7 +79,7 @@ class TemplateDokumenController extends Controller
             'nama_template' => 'required|string|max:255',
             'kode_template' => 'required|string|max:100|unique:template_dokumens,kode_template,' . $id,
             'kategori'      => 'required|string|max:100',
-            'file'          => 'nullable|file|mimes:doc,docx,pdf|max:20480',
+            'file'          => 'nullable|file|mimes:doc,docx,pdf|max:102400',
             'keterangan'    => 'nullable|string',
         ]);
 

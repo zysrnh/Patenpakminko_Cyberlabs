@@ -1012,7 +1012,7 @@
                                     <div id="sps-upload-container" style="display: {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'block' : 'none' }}; margin-bottom: 20px;">
                                         <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
                                         <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ !$application->bpn_sps_document ? 'required' : '' }}>
-                                        <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 5MB. Wajib diisi jika Berkas Lengkap (Disetujui). File SPS ini akan dikirimkan otomatis ke WhatsApp Pemohon.</div>
+                                        <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 100MB. Wajib diisi jika Berkas Lengkap (Disetujui). File SPS ini akan dikirimkan otomatis ke WhatsApp Pemohon.</div>
                                         @if($application->bpn_sps_document)
                                             <div style="margin-top: 6px;">
                                                 <a href="{{ route('file.view', ['path' => $application->bpn_sps_document]) }}" target="_blank" style="font-size: 12px; color: #003B64; font-weight: 700; text-decoration: underline;">📄 Lihat Dokumen SPS yang Terunggah</a>
@@ -1317,7 +1317,7 @@
                                             @else
                                                 <label for="approval_document" class="form-label" style="font-weight:700;color:#744210;">Unggah Dokumen PKKPR Non Berusaha (opsional)</label>
                                                 <input type="file" id="approval_document" name="approval_document" class="form-control-v" accept="application/pdf" style="background:white;">
-                                                <span style="font-size:11.5px;color:#744210;margin-top:4px;display:block;">Format PDF, maks. 10MB. Dokumen ini dapat diunduh oleh pemohon.</span>
+                                                <span style="font-size:11.5px;color:#744210;margin-top:4px;display:block;">Format PDF, maks. 100MB. Dokumen ini dapat diunduh oleh pemohon.</span>
                                             @endif
                                         </div>
                                     </div>

@@ -75,7 +75,7 @@ class BerkasController extends Controller
         $request->validate([
             'nama_berkas' => 'nullable|string|max:255',
             'kategori'    => 'nullable|string|max:100',
-            'file'        => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:102400', // Max 10MB
+            'file'        => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx|max:102400', // Max 100MB
             'keterangan'  => 'nullable|string'
         ]);
 

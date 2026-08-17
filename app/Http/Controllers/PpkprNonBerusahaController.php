@@ -272,11 +272,11 @@ class PpkprNonBerusahaController extends Controller
             $request->validate([
                 'action' => 'required|in:approve,reject',
                 'notes' => 'required|string|max:1000',
-                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
             ], [
                 'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
                 'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
-                'sps_document.max' => 'Ukuran file SPS maksimal 5MB.',
+                'sps_document.max' => 'Ukuran file SPS maksimal 100MB.',
             ]);
 
             $action = $request->input('action');
@@ -313,7 +313,7 @@ class PpkprNonBerusahaController extends Controller
         if ($user->isBpn() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' && $step === 'bpn_konfirmasi_bayar') {
             $request->validate([
                 'no_berkas' => 'required|string|max:100',
-                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
             ], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
 
             if ($request->hasFile('sps_document') && \Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), 'bpn_sps_document')) {
@@ -396,7 +396,7 @@ class PpkprNonBerusahaController extends Controller
             ], [
                 'notes.required'            => 'Catatan rekomendasi teknis wajib diisi.',
                 'bpn_pertek_document.mimes' => 'Dokumen Pertek harus berformat PDF, DOC, atau DOCX.',
-                'bpn_pertek_document.max'   => 'Ukuran berkas Pertek maksimal 10MB.',
+                'bpn_pertek_document.max'   => 'Ukuran berkas Pertek maksimal 100MB.',
             ]);
 
             $action = $request->input('action');
@@ -487,7 +487,7 @@ class PpkprNonBerusahaController extends Controller
         ], [
             'notes.required' => 'Catatan verifikasi wajib diisi.',
             'approval_document.mimes' => 'Dokumen PPKPR harus berformat PDF.',
-            'approval_document.max' => 'Ukuran berkas dokumen PPKPR maksimal adalah 10MB.',
+            'approval_document.max' => 'Ukuran berkas dokumen PPKPR maksimal adalah 100MB.',
         ]);
 
         $action = $request->input('action');

@@ -267,7 +267,7 @@
                                     <span style="font-size: 11px; font-weight: 600; color: #E53E3E; background: #FFF5F5; padding: 2px 6px; border-radius: 4px; border: 1px solid #FED7D7;">Wajib</span>
                                 </label>
                                 <input type="file" name="doc_{{ str_replace(" ", "_", $file) }}" class="form-control" accept=".pdf,.png,.jpg,.jpeg,.zip" required>
-                                <span class="form-hint">Maksimal 10MB. Format yang didukung: PDF, JPG, PNG.</span>
+                                <span class="form-hint">Maksimal 100MB. Format yang didukung: PDF, JPG, PNG.</span>
                             </div>
                         @endforeach
                     @else
@@ -277,7 +277,7 @@
                                 <span style="font-size: 11px; font-weight: 600; color: #E53E3E; background: #FFF5F5; padding: 2px 6px; border-radius: 4px; border: 1px solid #FED7D7;">Wajib</span>
                             </label>
                             <input type="file" name="doc_Gabungan_Perbaikan" class="form-control" accept=".pdf,.zip,.rar" required>
-                            <span class="form-hint">Silakan satukan seluruh perbaikan dokumen dalam 1 file ZIP atau PDF (Max 10MB).</span>
+                            <span class="form-hint">Silakan satukan seluruh perbaikan dokumen dalam 1 file ZIP atau PDF (Max 100MB).</span>
                         </div>
                     @endif
 

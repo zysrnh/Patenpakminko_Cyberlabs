@@ -848,19 +848,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 ]
             });
 
-            /* ── Client-side File Size Validation (Max 5MB) ──────── */
+            /* ── Client-side File Size Validation (Max 100MB) ──────── */
             document.querySelectorAll('input[type="file"]').forEach(function(input) {
                 input.addEventListener('change', function() {
-                    const maxMB = 5;
+                    const maxMB = 100;
                     const maxBytes = maxMB * 1024 * 1024;
                     
                     let limitBytes = maxBytes;
                     let limitMB = maxMB;
-                    const name = this.name;
-                    if (['fc_akta_pendirian', 'rencana_penggunaan_tanah', 'proposal_kegiatan', 'persyaratan_lainnya'].includes(name)) {
-                        limitMB = 10;
-                        limitBytes = limitMB * 1024 * 1024;
-                    }
 
                     let totalSize = 0;
                     for (let i = 0; i < this.files.length; i++) {

@@ -247,11 +247,11 @@ class KebijakanController extends Controller
             $request->validate([
                 'action' => 'required|in:approve,reject',
                 'notes' => 'required|string|max:1000',
-                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
             ], [
                 'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
                 'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
-                'sps_document.max' => 'Ukuran file SPS maksimal 5MB.',
+                'sps_document.max' => 'Ukuran file SPS maksimal 100MB.',
             ]);
  
             $action = $request->input('action');
@@ -288,7 +288,7 @@ class KebijakanController extends Controller
         if ($user->isBpn() && $application->status === 'menunggu_bpn' && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' && $step === 'bpn_konfirmasi_bayar') {
             $request->validate([
                 'no_berkas' => 'required|string|max:100',
-                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+                'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
             ], ['no_berkas.required' => 'Nomor berkas wajib diisi.']);
 
             if ($request->hasFile('sps_document') && \Illuminate\Support\Facades\Schema::hasColumn($application->getTable(), 'bpn_sps_document')) {
@@ -381,7 +381,7 @@ class KebijakanController extends Controller
             ], [
                 'notes.required' => 'Catatan rekomendasi teknis wajib diisi.',
                 'bpn_pertek_document.mimes' => 'Dokumen Pertek Pertanahan harus berformat PDF, DOC, atau DOCX.',
-                'bpn_pertek_document.max' => 'Ukuran berkas Pertek maksimal adalah 10MB.',
+                'bpn_pertek_document.max' => 'Ukuran berkas Pertek maksimal adalah 100MB.',
             ]);
  
             $action = $request->input('action');

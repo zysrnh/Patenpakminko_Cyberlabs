@@ -1305,7 +1305,7 @@
                                         <div class="form-group-v">
                                             <label for="bpn_pertek_document">Dokumen Pertimbangan Teknis Pertanahan (PDF)</label>
                                             <input type="file" name="bpn_pertek_document" id="bpn_pertek_document" class="form-control-v" accept=".pdf">
-                                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib diunggah jika permohonan disetujui. Maksimal 10MB.</span>
+                                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib diunggah jika permohonan disetujui. Maksimal 100MB.</span>
                                         </div>
                                     @endif
                                     <div class="form-group-v">
@@ -1422,7 +1422,7 @@
                         <div class="form-group-v">
                             <label for="satu_pintu_document">Dokumentasi Produk Akhir PKKPR Berusaha</label>
                             <input type="file" name="satu_pintu_document" id="satu_pintu_document" class="form-control-v" accept=".pdf" required>
-                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen/SK PKKPR Berusaha hasil akhir. Maksimal 10MB.</span>
+                            <span style="font-size: 11px; color: var(--clr-muted);">*Wajib mengunggah Dokumen/SK PKKPR Berusaha hasil akhir. Maksimal 100MB.</span>
                         </div>
                         <div class="form-group-v">
                             <label for="notes">Catatan Tambahan (Opsional)</label>
