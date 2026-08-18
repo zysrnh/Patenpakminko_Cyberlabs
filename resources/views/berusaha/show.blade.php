@@ -2799,7 +2799,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <!-- POPUP MODAL REMINDER UNTUK DOKUMEN BELUM DIUNDUH -->
-@if($application->bpn_pertek_document || $application->satu_pintu_document || $application->approval_document)
+@if(Auth::check() && Auth::user()->isPelakuUsaha() && ($application->bpn_pertek_document || $application->satu_pintu_document || $application->approval_document))
     @php
         $docPertekUrl = $application->bpn_pertek_document ? route('file.view', ['path' => $application->bpn_pertek_document]) : '';
         

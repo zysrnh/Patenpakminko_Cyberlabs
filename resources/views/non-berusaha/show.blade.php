@@ -773,7 +773,7 @@
                     <span class="badge-status" style="background-color: {{ $application->status_color }}">
                         {{ $application->status_label }}
                     </span>
-
+                </div>
             </div>
 
             <!-- BANNER PERTEK TERBIT (AGAR PEMOHON TIDAK KELEWAT) -->
@@ -2500,7 +2500,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     </script>
 <!-- POPUP MODAL REMINDER UNTUK DOKUMEN BELUM DIUNDUH -->
-@if($application->bpn_pertek_document || $application->approval_document || ($application->bpn_sps_document && $application->bpn_pembayaran_status !== 'sudah_bayar'))
+@if(Auth::check() && Auth::user()->isPelakuUsaha() && ($application->bpn_pertek_document || $application->approval_document || ($application->bpn_sps_document && $application->bpn_pembayaran_status !== 'sudah_bayar')))
     @php
         $docPertekUrl = $application->bpn_pertek_document ? route('file.view', ['path' => $application->bpn_pertek_document]) : '';
         $docApprovalUrl = $application->approval_document ? route('file.view', ['path' => $application->approval_document]) : '';
