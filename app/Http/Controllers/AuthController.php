@@ -481,7 +481,7 @@ class AuthController extends Controller
             'phone_number' => 'required|string|min:9|max:15',
             'alamat' => 'required|string|max:500',
             'bertindak_atas_nama' => 'required|string|max:150',
-            'nama_instansi' => 'required_if:bertindak_atas_nama,Badan Hukum,Instansi Pemerintahan|nullable|string|max:150',
+            'nama_instansi' => 'required_if:bertindak_atas_nama,Instansi Pemerintahan|nullable|string|max:150',
             'nama_pemberi_kuasa' => 'required_if:bertindak_atas_nama,Penerima Kuasa|nullable|string|max:150',
             'anggaran_dasar_no' => 'nullable|string|max:100',
             'anggaran_dasar_tanggal' => 'nullable|date',
