@@ -328,70 +328,92 @@
         </h2>
     </div>
     <div class="panel-body" style="padding:0;">
-        <div class="table-wrap">
-            @if($bookings->isEmpty())
-                <div class="empty-state" style="padding: 40px 20px; text-align: center;">
-                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
-                    </svg>
-                    <p style="font-size: 13px; color: #64748B; margin-top: 10px;">Belum ada pendaftaran booking jadwal LAPOL PAK dari pelaku usaha.</p>
+        <form id="bulkForm" action="{{ route('lapolpa.bulk-destroy') }}" method="POST">
+            @csrf
+            <div style="padding: 10px 18px; background: #FEF2F2; border-bottom: 1px solid #FECACA; display: none; align-items: center; justify-content: space-between;" id="bulkBar">
+                <div style="font-size: 12.5px; font-weight: 700; color: #991B1B;">
+                    <span id="selectCount">0</span> antrean booking dipilih
                 </div>
-            @else
-                <table style="width: 100%; border-collapse: collapse;">
-                    <thead>
-                        <tr style="border-bottom: 1.5px solid #E2E8F0; background: #F8FAFC;">
-                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Pelaku Usaha (Pemohon)</th>
-                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Nomor WhatsApp</th>
-                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Tanggal Booking</th>
-                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Rentang Waktu</th>
-                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
-                            <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; min-width: 260px;">Aksi Admin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($bookings as $booking)
-                            <tr style="border-bottom: 1px solid #F1F5F9;">
-                                <td style="padding: 12px 14px;">
-                                    <strong style="color: #003B64; font-size: 13px;">{{ $booking->nama_pemohon ?? ($booking->user ? ($booking->user->name ?? $booking->user->username) : 'Tamu') }}</strong>
-                                    <div style="font-size: 11px; color: #64748B; margin-top: 2px;">{{ $booking->user ? 'Username: ' . $booking->user->username : 'Pendaftar Publik (Tanpa Akun)' }}</div>
-                                </td>
-                                <td style="padding: 12px 14px;">
-                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->whatsapp_number) }}" target="_blank" style="color: #25D366; text-decoration: none; font-weight: 700; font-size: 12.5px; display: inline-flex; align-items: center; gap: 4px;">
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                                        {{ $booking->whatsapp_number }}
-                                    </a>
-                                </td>
-                                <td style="padding: 12px 14px; color: #334155; font-size: 12.5px;">{{ $booking->formatted_date }}</td>
-                                <td style="padding: 12px 14px; color: #218AC9; font-weight: 700; font-size: 12.5px;">{{ $booking->formatted_time_range }}</td>
-                                <td style="padding: 12px 14px;">
-                                    <span class="badge" style="background-color: {{ $booking->status_color }}20; color: {{ $booking->status_color }}; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px;">
-                                        {{ $booking->status_label }}
-                                    </span>
-                                </td>
-                                <td style="padding: 12px 14px; min-width: 260px;">
-                                    <form action="{{ route('lapolpa.update', $booking->id) }}" method="POST" style="display: flex; flex-direction: column; gap: 6px;">
-                                        @csrf
-                                        @method('PUT')
-                                        <div style="display: flex; gap: 6px; align-items: center;">
-                                            <select name="status" class="status-select" style="flex: 1; height: 34px; box-sizing: border-box;">
-                                                @if($booking->status === 'booked')
-                                                <option value="booked" selected disabled>Menunggu Aksi</option>
-                                                @endif
-                                                <option value="diterima" {{ $booking->status === 'diterima' ? 'selected' : '' }}>Diterima</option>
-                                                <option value="selesai" {{ $booking->status === 'selesai' ? 'selected' : '' }}>Selesai</option>
-                                                <option value="ditolak" {{ $booking->status === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
-                                            </select>
-                                            <button type="submit" class="btn btn-primary btn-sm" style="border-radius: 4px; font-size: 12px; padding: 0 14px; font-weight: 700; height: 34px; white-space: nowrap; box-sizing: border-box;">Update</button>
-                                        </div>
-                                        <input type="text" name="admin_note" placeholder="Catatan untuk pemohon (Opsional)" value="{{ $booking->admin_note }}" class="form-control" style="font-size: 11.5px; padding: 6px 10px; border-radius: 4px; border: 1.5px solid #CBD5E1; height: 34px; box-sizing: border-box; width: 100%;">
-                                    </form>
-                                </td>
+                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus semua antrean yang dipilih? Data tidak bisa dikembalikan!')" style="background:#DC2626; border-color:#DC2626; color:#fff; border-radius: 4px; font-weight: 700; font-size: 12px; padding: 5px 12px;">
+                    <svg viewBox="0 0 24 24" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px;" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    Hapus Terpilih
+                </button>
+            </div>
+            <div class="table-wrap">
+                @if($bookings->isEmpty())
+                    <div class="empty-state" style="padding: 40px 20px; text-align: center;">
+                        <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
+                        </svg>
+                        <p style="font-size: 13px; color: #64748B; margin-top: 10px;">Belum ada pendaftaran booking jadwal LAPOL PAK dari pelaku usaha.</p>
+                    </div>
+                @else
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 1.5px solid #E2E8F0; background: #F8FAFC;">
+                                <th style="width:36px; text-align:center; padding: 10px 12px;"><input type="checkbox" id="checkAll" style="cursor:pointer;"></th>
+                                <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Pelaku Usaha (Pemohon)</th>
+                                <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Nomor WhatsApp</th>
+                                <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Tanggal Booking</th>
+                                <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Rentang Waktu</th>
+                                <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
+                                <th style="padding: 10px 14px; font-size: 11px; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; min-width: 320px;">Aksi Admin</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
-        </div>
+                        </thead>
+                        <tbody>
+                            @foreach($bookings as $booking)
+                                <tr style="border-bottom: 1px solid #F1F5F9;">
+                                    <td style="text-align:center; padding: 12px;"><input type="checkbox" name="ids[]" value="{{ $booking->id }}" class="row-check" style="cursor:pointer;"></td>
+                                    <td style="padding: 12px 14px;">
+                                        <strong style="color: #003B64; font-size: 13px;">{{ $booking->nama_pemohon ?? ($booking->user ? ($booking->user->name ?? $booking->user->username) : 'Tamu') }}</strong>
+                                        <div style="font-size: 11px; color: #64748B; margin-top: 2px;">{{ $booking->user ? 'Username: ' . $booking->user->username : 'Pendaftar Publik (Tanpa Akun)' }}</div>
+                                    </td>
+                                    <td style="padding: 12px 14px;">
+                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $booking->whatsapp_number) }}" target="_blank" style="color: #25D366; text-decoration: none; font-weight: 700; font-size: 12.5px; display: inline-flex; align-items: center; gap: 4px;">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                            {{ $booking->whatsapp_number }}
+                                        </a>
+                                    </td>
+                                    <td style="padding: 12px 14px; color: #334155; font-size: 12.5px;">{{ $booking->formatted_date }}</td>
+                                    <td style="padding: 12px 14px; color: #218AC9; font-weight: 700; font-size: 12.5px;">{{ $booking->formatted_time_range }}</td>
+                                    <td style="padding: 12px 14px;">
+                                        <span class="badge" style="background-color: {{ $booking->status_color }}20; color: {{ $booking->status_color }}; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px;">
+                                            {{ $booking->status_label }}
+                                        </span>
+                                    </td>
+                                    <td style="padding: 12px 14px; min-width: 320px;">
+                                        <form action="{{ route('lapolpa.update', $booking->id) }}" method="POST" style="display: flex; flex-direction: column; gap: 6px;">
+                                            @csrf
+                                            @method('PUT')
+                                            <div style="display: flex; gap: 6px; align-items: center;">
+                                                <select name="status" class="status-select" style="flex: 1; height: 34px; box-sizing: border-box;">
+                                                    @if($booking->status === 'booked')
+                                                    <option value="booked" selected disabled>Menunggu Aksi</option>
+                                                    @endif
+                                                    <option value="diterima" {{ $booking->status === 'diterima' ? 'selected' : '' }}>Diterima</option>
+                                                    <option value="selesai" {{ $booking->status === 'selesai' ? 'selected' : '' }}>Selesai</option>
+                                                    <option value="ditolak" {{ $booking->status === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                                                </select>
+                                                <button type="submit" class="btn btn-primary btn-sm" style="border-radius: 4px; font-size: 12px; padding: 0 12px; font-weight: 700; height: 34px; white-space: nowrap; box-sizing: border-box;">Update</button>
+                                                <button type="button" onclick="if(confirm('Apakah Anda yakin ingin menghapus data booking ini?')) { document.getElementById('delete-form-{{ $booking->id }}').submit(); }" class="btn btn-danger btn-sm" style="background: #DC2626; border-color: #DC2626; color: #fff; border-radius: 4px; font-size: 12px; padding: 0 12px; font-weight: 700; height: 34px; white-space: nowrap; box-sizing: border-box; display: inline-flex; align-items: center; gap: 4px;">
+                                                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                    Hapus
+                                                </button>
+                                            </div>
+                                            <input type="text" name="admin_note" placeholder="Catatan untuk pemohon (Opsional)" value="{{ $booking->admin_note }}" class="form-control" style="font-size: 11.5px; padding: 6px 10px; border-radius: 4px; border: 1.5px solid #CBD5E1; height: 34px; box-sizing: border-box; width: 100%;">
+                                        </form>
+                                        <form id="delete-form-{{ $booking->id }}" action="{{ route('lapolpa.destroy', $booking->id) }}" method="POST" style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
+            </div>
+        </form>
     </div>
 </div>
 @if(session('wa_links'))
@@ -429,4 +451,39 @@
         </script>
     </div>
 @endif
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkAll = document.getElementById('checkAll');
+        const rowChecks = document.querySelectorAll('.row-check');
+        const bulkBar = document.getElementById('bulkBar');
+        const selectCount = document.getElementById('selectCount');
+
+        function updateBulkBar() {
+            const checkedCount = document.querySelectorAll('.row-check:checked').length;
+            if (bulkBar && selectCount) {
+                if (checkedCount > 0) {
+                    bulkBar.style.display = 'flex';
+                    selectCount.innerText = checkedCount;
+                } else {
+                    bulkBar.style.display = 'none';
+                }
+            }
+        }
+
+        if (checkAll) {
+            checkAll.addEventListener('change', function() {
+                rowChecks.forEach(cb => cb.checked = checkAll.checked);
+                updateBulkBar();
+            });
+        }
+
+        rowChecks.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (!cb.checked && checkAll) checkAll.checked = false;
+                updateBulkBar();
+            });
+        });
+    });
+</script>
 @endsection

@@ -362,13 +362,32 @@ class LapolpaController extends Controller
 
     public function destroy($id)
     {
-        if (!\Illuminate\Support\Facades\Auth::user()->isDpn()) {
-            abort(403, 'Hanya Super Admin DPN yang dapat menghapus antrian.');
+        $user = Auth::user();
+        if (!$user || $user->isPelakuUsaha()) {
+            abort(403, 'Aksi tidak diizinkan.');
         }
-        $booking = \App\Models\LapolpaBooking::findOrFail($id);
-        $noRef = $booking->booking_number ?? "#$id";
+
+        $booking = LapolpaBooking::findOrFail($id);
+        $name = $booking->nama_pemohon ?? "#$id";
         $booking->delete();
-        return redirect()->route('lapolpa.index')->with('success', "Antrian LAPOL PAK {$noRef} berhasil dihapus.");
+
+        return redirect()->route('lapolpa.index')->with('success', "Data antrian LAPOL PAK ({$name}) berhasil dihapus.");
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user || $user->isPelakuUsaha()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $ids = $request->input('ids', []);
+        if (empty($ids)) {
+            return redirect()->back()->with('error', 'Tidak ada antrean yang dipilih untuk dihapus.');
+        }
+
+        $count = LapolpaBooking::whereIn('id', $ids)->delete();
+        return redirect()->route('lapolpa.index')->with('success', "Berhasil menghapus {$count} data antrean LAPOL PAK.");
     }
 }
 
