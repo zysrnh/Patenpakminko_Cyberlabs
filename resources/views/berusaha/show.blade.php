@@ -794,9 +794,29 @@
                     Kembali ke Dashboard
                 </a>
             </div>
- 
 
- 
+            <!-- BANNER PERTEK TERBIT (AGAR PEMOHON TIDAK KELEWAT) -->
+            @if($application->bpn_pertek_document)
+                <div style="background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 1.5px solid #6EE7B7; border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div style="width: 44px; height: 44px; background: #10B981; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; font-size: 22px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+                            📄
+                        </div>
+                        <div>
+                            <div style="font-size: 14.5px; font-weight: 800; color: #065F46; margin-bottom: 2px;">
+                                Dokumen Hasil Pertek Pertanahan (BPN) Telah Terbit!
+                            </div>
+                            <div style="font-size: 12.5px; color: #047857;">
+                                Dokumen resmi Pertimbangan Teknis Pertanahan dari Kantor Pertanahan telah selesai & dapat diunduh.
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; font-weight: 800; font-size: 13px; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Unduh Hasil Pertek (BPN)
+                    </a>
+                </div>
+            @endif
             <!-- DOWNLOAD DOKUMEN FINAL PRODUK AKHIR -->
             @if($application->status === 'disetujui' && $application->satu_pintu_document)
                 <a href="{{ route('file.view', ['path' => $application->satu_pintu_document]) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
@@ -1560,11 +1580,12 @@
                             @endif
  
                             @if($application->bpn_pertek_document)
-                                <li class="detail-item">
-                                    <span class="detail-label">Dokumen PKKPR Berusaha</span>
+                                <li class="detail-item" style="padding: 12px 0;">
+                                    <span class="detail-label" style="font-weight: 800; color: #065F46;">Dokumen Hasil Pertek Pertanahan (BPN)</span>
                                     <span class="detail-val">
-                                        <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" class="btn-doc">
-                                            Unduh Pertek Pertanahan
+                                        <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                            📄 Unduh Hasil Pertek Pertanahan (BPN)
                                         </a>
                                     </span>
                                 </li>

@@ -731,8 +731,30 @@
                         {{ $application->status_label }}
                     </span>
 
-                </div>
             </div>
+
+            <!-- BANNER PERTEK TERBIT (AGAR PEMOHON TIDAK KELEWAT) -->
+            @if($application->bpn_pertek_document)
+                <div style="background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 1.5px solid #6EE7B7; border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 14px;">
+                        <div style="width: 44px; height: 44px; background: #10B981; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; font-size: 22px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+                            📄
+                        </div>
+                        <div>
+                            <div style="font-size: 14.5px; font-weight: 800; color: #065F46; margin-bottom: 2px;">
+                                Dokumen Hasil Pertek Pertanahan (BPN) Telah Terbit!
+                            </div>
+                            <div style="font-size: 12.5px; color: #047857;">
+                                Dokumen resmi Pertimbangan Teknis Pertanahan dari Kantor Pertanahan telah selesai & dapat diunduh.
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; font-weight: 800; font-size: 13px; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Unduh Hasil Pertek (BPN)
+                    </a>
+                </div>
+            @endif
 
             <!-- BUTTON DOWNLOAD DOKUMEN Pertimbangan Teknis Pertanahan SELESAI -->
             @if($application->status === 'disetujui')
@@ -1576,11 +1598,13 @@
 
                             <!-- Pertek Pertanahan (Jika sudah diterbitkan) -->
                             @if($application->bpn_pertek_document)
-                                <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" class="doc-item" style="border-top: 1px solid var(--clr-line); padding-top: 12px; margin-top: 12px;">
-                                    <span class="doc-name" style="font-weight: 700; color: #1a202c;">Dokumen PKKPR PSN</span>
-                                    <span class="doc-status" style="color: var(--clr-green-dk);">
-                                        Unduh Pertek
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                                <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display: flex; align-items: center; justify-content: space-between; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; margin-top: 14px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                                    <span style="display: flex; align-items: center; gap: 8px;">
+                                        📄 Dokumen Hasil Pertek Pertanahan (BPN)
+                                    </span>
+                                    <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 6px;">
+                                        Unduh File
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                     </span>
                                 </a>
                             @endif
