@@ -2706,13 +2706,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (approvalUrl && !localStorage.getItem('downloaded_doc_approval_' + appId)) {
                 activeDocKey = 'approval_' + appId;
                 activeUrl = approvalUrl;
-                activeTitle = 'Dokumen PKKPR Tanah Timbul Telah Terbit!';
-                activeDesc = 'Selamat! Dokumen resmi PKKPR Tanah Timbul milik Anda telah diterbitkan secara lengkap.';
+                activeTitle = 'Dokumen Pertek Pertanahan Tanah Timbul Telah Terbit!';
+                activeDesc = 'Selamat! Dokumen resmi Pertek Pertanahan Tanah Timbul milik Anda telah diterbitkan secara lengkap.';
             } else if (pertekUrl && !localStorage.getItem('downloaded_doc_pertek_' + appId)) {
                 activeDocKey = 'pertek_' + appId;
                 activeUrl = pertekUrl;
                 activeTitle = 'Dokumen Pertek Pertanahan Tanah Timbul Telah Terbit!';
-                activeDesc = 'Dokumen Pertimbangan Teknis Pertanahan dari Kantor Pertanahan telah selesai diterbitkan.';
+                activeDesc = 'Selamat! Dokumen resmi Pertek Pertanahan Tanah Timbul milik Anda telah diterbitkan secara lengkap.';
             }
 
             if (activeUrl) {
