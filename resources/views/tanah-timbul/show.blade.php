@@ -1002,21 +1002,36 @@
                                     <div style="background:#FFFDF5;border:1px solid #F6AD55;padding:12px 16px;border-radius:8px;font-size:13px;color:#7B341E;margin-bottom:20px;">
                                         <strong>Langkah 1 dari 4 — Verifikasi Berkas Awal:</strong> Periksa kelengkapan dokumen persyaratan yang diunggah pemohon, sertakan file SPS (Surat Perintah Setor), lalu terima atau tolak. Notifikasi WA (beserta link SPS) akan terkirim otomatis.
                                     </div>
+                                    <script>
+                                        function toggleBpnSpsField(action) {
+                                            const container = document.getElementById('sps-upload-container');
+                                            const input = document.getElementById('sps_document');
+                                            if (action === 'approve') {
+                                                container.style.display = 'block';
+                                                input.setAttribute('required', 'required');
+                                                document.getElementById('revisi-berkas-container').style.display = 'none';
+                                            } else {
+                                                container.style.display = 'none';
+                                                input.removeAttribute('required');
+                                                document.getElementById('revisi-berkas-container').style.display = 'block';
+                                            }
+                                        }
+                                    </script>
                                     <div class="form-group-v" style="margin-bottom: 20px;">
                                         <label class="form-label" style="font-weight:700;color:#744210;margin-bottom:8px;display:block;">Tindakan Pemeriksaan Berkas:</label>
                                         <div style="display: flex; gap: 20px;">
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;cursor:pointer;">
-                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} onchange="document.getElementById('sps-upload-container').style.display='block'; document.getElementById('revisi-berkas-container').style.display='none';" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui / Lengkap
+                                                <input type="radio" name="action" value="approve" required {{ $application->bpn_berkas_status === 'diterima' ? 'checked' : ($application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? '' : 'checked') }} onchange="toggleBpnSpsField('approve')" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Disetujui / Lengkap
                                             </label>
                                             <label style="display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#E53E3E;cursor:pointer;">
-                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} onchange="document.getElementById('sps-upload-container').style.display='none'; document.getElementById('revisi-berkas-container').style.display='block';" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Lengkap
+                                                <input type="radio" name="action" value="reject" required {{ $application->bpn_berkas_status === 'ditolak' || $application->bpn_berkas_status === 'tidak_sesuai' ? 'checked' : '' }} onchange="toggleBpnSpsField('reject')" style="width:16px;height:16px;accent-color:var(--clr-blue);"> Tidak Lengkap
                                             </label>
                                         </div>
                                     </div>
                                     
-                                    <div id="sps-upload-container" style="display: {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'block' : 'none' }}; margin-bottom: 20px;">
+                                    <div id="sps-upload-container" style="display: {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) && $application->bpn_berkas_status !== 'tidak_sesuai' && $application->bpn_berkas_status !== 'ditolak' ? 'block' : 'none' }}; margin-bottom: 20px;">
                                         <label class="form-label" style="font-weight:700;color:var(--clr-ink);margin-bottom:6px;display:block;">Upload Surat Perintah Setor (SPS) <span style="color:#C53030;">*</span></label>
-                                        <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) ? 'required' : '' }}>
+                                        <input type="file" name="sps_document" id="sps_document" class="form-control-v" accept=".pdf,.jpg,.jpeg,.png" {{ in_array($application->bpn_berkas_status, ['diterima', 'menunggu']) && $application->bpn_berkas_status !== 'tidak_sesuai' && $application->bpn_berkas_status !== 'ditolak' ? 'required' : '' }}>
                                         <div style="font-size: 11.5px; color: var(--clr-muted); margin-top: 5px;">Maksimal 100MB. Wajib diisi jika Berkas Lengkap (Disetujui). File SPS ini akan dikirimkan otomatis ke WhatsApp Pemohon.</div>
                                     </div>
                                     
