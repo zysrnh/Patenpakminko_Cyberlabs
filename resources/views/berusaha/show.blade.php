@@ -2798,5 +2798,101 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 150);
 });
 </script>
+<!-- POPUP MODAL REMINDER UNTUK DOKUMEN BELUM DIUNDUH -->
+@if($application->bpn_pertek_document || $application->satu_pintu_document)
+    @php
+        $popupDocUrl = '';
+        $popupDocTitle = '';
+        $popupDocDesc = '';
+        $popupDocType = '';
+
+        if ($application->status === 'disetujui' && $application->satu_pintu_document) {
+            $popupDocUrl = route('file.view', ['path' => $application->satu_pintu_document]);
+            $popupDocTitle = 'Dokumen SK PKKPR (Final) Telah Terbit!';
+            $popupDocDesc = 'Selamat! Dokumen resmi SK PKKPR Berusaha milik Anda telah diterbitkan secara lengkap.';
+            $popupDocType = 'approval_' . $application->id;
+        } elseif ($application->bpn_pertek_document) {
+            $popupDocUrl = route('file.view', ['path' => $application->bpn_pertek_document]);
+            $popupDocTitle = 'Dokumen Pertek Pertanahan (BPN) Telah Terbit!';
+            $popupDocDesc = 'Dokumen Pertimbangan Teknis Pertanahan dari Kantor Pertanahan telah selesai diterbitkan.';
+            $popupDocType = 'pertek_' . $application->id;
+        }
+    @endphp
+
+    @if($popupDocUrl)
+        <div id="docReminderModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 460px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); overflow: hidden; border: 1px solid #E2E8F0; text-align: center; position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                <!-- Header Decorative -->
+                <div style="background: linear-gradient(135deg, #003B64 0%, #0284C7 100%); padding: 28px 24px 20px; color: #FFFFFF; position: relative;">
+                    <button type="button" onclick="closeDocReminderModal()" style="position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.2); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">✕</button>
+                    <div style="width: 56px; height: 56px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.3);">
+                        📄
+                    </div>
+                    <h3 style="font-size: 17px; font-weight: 800; margin: 0 0 6px; color: #ffffff;">{{ $popupDocTitle }}</h3>
+                    <div style="font-size: 12px; color: #E0F2FE;">Nomor Permohonan: <strong>{{ $application->application_number }}</strong></div>
+                </div>
+                
+                <!-- Body Content -->
+                <div style="padding: 24px;">
+                    <p style="font-size: 13.5px; color: #334155; line-height: 1.5; margin: 0 0 16px; font-weight: 500;">
+                        {{ $popupDocDesc }}
+                    </p>
+                    
+                    <div style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #92400E; margin-bottom: 20px; text-align: left; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 16px;">⚠️</span>
+                        <span>Anda belum pernah mengunduh berkas ini di perangkat Anda. Harap segera mengunduh & menyimpannya.</span>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <a href="{{ $popupDocUrl }}" target="_blank" onclick="markDocAsDownloaded('{{ $popupDocType }}'); closeDocReminderModal();" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 13.5px; font-weight: 800; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); transition: all 0.2s;">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            📥 Unduh Dokumen Sekarang
+                        </a>
+                        <button type="button" onclick="closeDocReminderModal()" style="background: transparent; border: none; color: #64748B; font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 6px;" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">
+                            Nanti Saja
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            @keyframes modalPop {
+                from { opacity: 0; transform: scale(0.9) translateY(10px); }
+                to { opacity: 1; transform: scale(1) translateY(0); }
+            }
+        </style>
+
+        <script>
+            function markDocAsDownloaded(docKey) {
+                localStorage.setItem('downloaded_doc_' + docKey, 'true');
+            }
+
+            function closeDocReminderModal() {
+                const modal = document.getElementById('docReminderModal');
+                if (modal) modal.style.display = 'none';
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const docKey = '{{ $popupDocType }}';
+                const isDownloaded = localStorage.getItem('downloaded_doc_' + docKey);
+                
+                if (!isDownloaded) {
+                    setTimeout(function() {
+                        const modal = document.getElementById('docReminderModal');
+                        if (modal) modal.style.display = 'flex';
+                    }, 500);
+                }
+
+                document.querySelectorAll('a[href*="{{ $popupDocUrl }}"]').forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        markDocAsDownloaded(docKey);
+                    });
+                });
+            });
+        </script>
+    @endif
+@endif
 </body>
 </html>
