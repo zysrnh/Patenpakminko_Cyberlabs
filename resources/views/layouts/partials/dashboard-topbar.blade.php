@@ -389,10 +389,61 @@
         <div class="topbar-divider"></div>
 
         @if(Auth::check() && Auth::user()->isDpn())
-            <a href="{{ route('admin_dpn.backup_database') }}" class="topbar-backup-btn" title="Download Backup Database (.SQL)">
+            <button type="button" onclick="openBackupChoiceModal()" class="topbar-backup-btn" title="Opsi Backup System & Database">
                 <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                 <span>Backup DB</span>
-            </a>
+            </button>
+
+            <!-- MODAL PILIHAN BACKUP -->
+            <div id="backupChoiceModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+                <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 480px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; position: relative;">
+                    <div style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); padding: 20px 24px; color: #ffffff; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 22px;">💾</span>
+                            <div>
+                                <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: #ffffff;">Pilih Jenis Backup System</h3>
+                                <div style="font-size: 12px; color: #94A3B8;">Pilih opsi cadangan data sesuai kebutuhan Anda</div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="closeBackupChoiceModal()" style="background: rgba(255,255,255,0.1); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px;">✕</button>
+                    </div>
+
+                    <div style="padding: 24px; display: flex; flex-direction: column; gap: 14px;">
+                        <!-- Opsi 1: SQL Only -->
+                        <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#3B82F6'; this.style.background='#EFF6FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
+                            <div style="width: 44px; height: 44px; background: #DBEAFE; color: #1D4ED8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                                ⚡
+                            </div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 700; color: #0F172A;">1. Backup Database SQL (Rekomendasi Cepat)</div>
+                                <div style="font-size: 12px; color: #64748B; margin-top: 2px;">Ukuran sangat ringan (~2-5 MB). Mengunduh data tabel DB (User, Permohonan, Tracking, Ulasan, dll).</div>
+                            </div>
+                        </a>
+
+                        <!-- Opsi 2: Full ZIP -->
+                        <a href="{{ route('admin_dpn.backup_database') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#10B981'; this.style.background='#ECFDF5';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
+                            <div style="width: 44px; height: 44px; background: #D1FAE5; color: #047857; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                                📦
+                            </div>
+                            <div>
+                                <div style="font-size: 14px; font-weight: 700; color: #0F172A;">2. Backup Sistem & Seluruh Dokumen (.ZIP)</div>
+                                <div style="font-size: 12px; color: #64748B; margin-top: 2px;">Ukuran besar (~874 MB). Mengunduh Database SQL + Seluruh Berkas PDF/Gambar Uploaded 5 Layanan.</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function openBackupChoiceModal() {
+                    const modal = document.getElementById('backupChoiceModal');
+                    if (modal) modal.style.display = 'flex';
+                }
+                function closeBackupChoiceModal() {
+                    const modal = document.getElementById('backupChoiceModal');
+                    if (modal) modal.style.display = 'none';
+                }
+            </script>
         @endif
 
         {{-- Mailbox / Notification --}}

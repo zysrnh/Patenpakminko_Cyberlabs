@@ -394,6 +394,30 @@ class AdminDpnController extends Controller
     }
 
     /**
+     * Download backup database SQL murni (~2-5 MB, Sangat Ringan) (Khusus Super Admin DPN).
+     */
+    public function downloadDatabaseSqlOnly()
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            return redirect()->back()->with('error', 'Akses ditolak.');
+        }
+
+        try {
+            $sqlContent = \App\Services\BackupService::generateSqlDump();
+            $fileName = 'patenpakminko_db_backup_' . now()->format('Y-m-d_H-i-s') . '.sql';
+
+            return response()->streamDownload(function() use ($sqlContent) {
+                echo $sqlContent;
+            }, $fileName, [
+                'Content-Type' => 'text/x-sql',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            ]);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Gagal ekspor database SQL: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Download backup sistem & database lengkap dalam format ZIP (Khusus Super Admin DPN).
      */
     public function downloadDatabaseBackup()
