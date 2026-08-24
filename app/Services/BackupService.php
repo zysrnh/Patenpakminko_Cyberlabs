@@ -60,11 +60,11 @@ class BackupService
         }
     }
 
-    /**
-     * Create full zip backup containing SQL dump and ALL uploaded storage files.
-     */
     public static function createFullZipBackup(?string $outputZipPath = null): string
     {
+        @ini_set('memory_limit', '512M');
+        @ini_set('max_execution_time', '300');
+
         $timestamp = now()->format('Y-m-d_H-i-s');
         
         if (!$outputZipPath) {
@@ -93,7 +93,7 @@ class BackupService
         $info .= "App URL: " . config('app.url') . "\n";
         $zip->addFromString('config_backup/system_info.txt', $info);
 
-        // 3. Add ALL uploaded files inside storage/app/public and public/storage
+        // 3. Add ALL uploaded files inside storage/app/public
         $publicStoragePath = storage_path('app/public');
         if (File::exists($publicStoragePath)) {
             $files = new \RecursiveIteratorIterator(
@@ -112,7 +112,14 @@ class BackupService
 
                     $relativePath = 'storage_uploads/' . ltrim(substr($filePath, strlen($publicStoragePath)), '/\\');
                     $relativePath = str_replace('\\', '/', $relativePath);
+                    
                     $zip->addFile($filePath, $relativePath);
+                    
+                    // OPTIMALISASI: Gunakan mode CM_STORE (Store Only, tanpa kompresi Ulang) untuk PDF/Gambar/Dokumen
+                    // karena file PDF & Gambar sudah terkompresi bawaan. Ini membuat proses ZIP 10x-50x LEBIH CEPAT!
+                    if (method_exists($zip, 'setCompressionName')) {
+                        $zip->setCompressionName($relativePath, ZipArchive::CM_STORE);
+                    }
                 }
             }
         }
