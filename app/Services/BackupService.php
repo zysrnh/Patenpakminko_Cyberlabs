@@ -185,13 +185,10 @@ class BackupService
     }
 
     /**
-     * Send Database SQL Dump via Email.
+     * Send Database SQL Dump or ZIP Archive via Email.
      */
-    public static function sendDatabaseBackupEmail(string|array|null $targetEmail = null): bool
+    public static function sendDatabaseBackupEmail(string|array|null $targetEmail = null, string $format = 'sql', array $categories = []): bool
     {
-        $sqlContent = static::generateSqlDump();
-        $fileName = 'patenpakminko_db_backup_' . now()->format('Y-m-d_H-i-s') . '.sql';
-
         if (empty($targetEmail)) {
             $recipients = ['penataanpertanahanmiko@gmail.com'];
         } elseif (is_array($targetEmail)) {
@@ -200,22 +197,57 @@ class BackupService
             $recipients = array_values(array_filter(array_unique(array_map('trim', explode(',', $targetEmail)))));
         }
 
-        try {
-            \Illuminate\Support\Facades\Mail::raw(
-                "Yth. Tim Penataan Pertanahan PATEN PAK MIKO,\n\nTerlampir adalah salinan cadangan Database SQL sistem PATEN PAK MIKO.\n\nTanggal Backup: " . now()->format('d F Y, H:i') . " WIB\nFile: " . $fileName . "\n\nHarap simpan berkas ini di tempat aman.\n\nSalam,\nSistem PATEN PAK MIKO",
-                function ($message) use ($recipients, $sqlContent, $fileName) {
-                    $message->to($recipients)
-                        ->subject('[PATEN PAK MIKO] Salinan Database SQL - ' . now()->format('d/m/Y'))
-                        ->attachData($sqlContent, $fileName, [
-                            'mime' => 'text/x-sql',
-                        ]);
-                }
-            );
+        if (empty($recipients)) {
+            return false;
+        }
 
-            return true;
+        try {
+            if ($format === 'zip') {
+                $zipPath = static::createFullZipBackup(null, $categories);
+                $fileName = basename($zipPath);
+                $fileSizeBytes = filesize($zipPath);
+                $fileSizeMb = round($fileSizeBytes / (1024 * 1024), 2);
+
+                if ($fileSizeBytes > 25 * 1024 * 1024) {
+                    @unlink($zipPath);
+                    throw new \Exception("Ukuran berkas ZIP ({$fileSizeMb} MB) melebihi batas lampiran email (25 MB). Silakan gunakan tombol Unduh Langsung atau persedikit kategori berkas terpilih.");
+                }
+
+                \Illuminate\Support\Facades\Mail::raw(
+                    "Yth. Tim Penataan Pertanahan PATEN PAK MIKO,\n\nTerlampir adalah salinan cadangan Berkas Dokumen (.ZIP) sistem PATEN PAK MIKO (Ukuran: {$fileSizeMb} MB).\n\nTanggal Backup: " . now()->format('d F Y, H:i') . " WIB\nFile: " . $fileName . "\n\nHarap simpan berkas ini di tempat aman.\n\nSalam,\nSistem PATEN PAK MIKO",
+                    function ($message) use ($recipients, $zipPath, $fileName) {
+                        $message->to($recipients)
+                            ->subject('[PATEN PAK MIKO] Salinan Berkas Dokumen ZIP - ' . now()->format('d/m/Y'))
+                            ->attach($zipPath, [
+                                'as' => $fileName,
+                                'mime' => 'application/zip',
+                            ]);
+                    }
+                );
+
+                @unlink($zipPath);
+                return true;
+
+            } else {
+                $sqlContent = static::generateSqlDump();
+                $fileName = 'patenpakminko_db_backup_' . now()->format('Y-m-d_H-i-s') . '.sql';
+
+                \Illuminate\Support\Facades\Mail::raw(
+                    "Yth. Tim Penataan Pertanahan PATEN PAK MIKO,\n\nTerlampir adalah salinan cadangan Database SQL sistem PATEN PAK MIKO.\n\nTanggal Backup: " . now()->format('d F Y, H:i') . " WIB\nFile: " . $fileName . "\n\nHarap simpan berkas ini di tempat aman.\n\nSalam,\nSistem PATEN PAK MIKO",
+                    function ($message) use ($recipients, $sqlContent, $fileName) {
+                        $message->to($recipients)
+                            ->subject('[PATEN PAK MIKO] Salinan Database SQL - ' . now()->format('d/m/Y'))
+                            ->attachData($sqlContent, $fileName, [
+                                'mime' => 'text/x-sql',
+                            ]);
+                    }
+                );
+
+                return true;
+            }
         } catch (\Throwable $e) {
             logger()->error("Gagal mengirim email backup database: " . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 }

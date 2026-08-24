@@ -447,7 +447,7 @@ class AdminDpnController extends Controller
     }
 
     /**
-     * Kirim backup database SQL ke email terpilih (Khusus Super Admin DPN).
+     * Kirim backup database SQL atau ZIP ke email terpilih (Khusus Super Admin DPN).
      */
     public function sendBackupEmailNow(\Illuminate\Http\Request $request)
     {
@@ -455,7 +455,13 @@ class AdminDpnController extends Controller
             return redirect()->back()->with('error', 'Akses ditolak.');
         }
 
-        $targetOption = $request->input('target_option', 'both'); // 'both', 'my_email', 'penataan_email'
+        $targetOption = $request->input('target_option', 'both');
+        $format = $request->input('backup_format', 'sql');
+        $selectedCategories = $request->input('categories', []);
+        if (is_string($selectedCategories)) {
+            $selectedCategories = array_filter(explode(',', $selectedCategories));
+        }
+
         $userEmail = \Illuminate\Support\Facades\Auth::user()->email;
         $penataanEmail = 'penataanpertanahanmiko@gmail.com';
 
@@ -477,13 +483,18 @@ class AdminDpnController extends Controller
             return redirect()->back()->with('error', 'Tidak ada alamat email tujuan pengiriman yang valid.');
         }
 
-        $success = \App\Services\BackupService::sendDatabaseBackupEmail($recipients);
+        try {
+            $success = \App\Services\BackupService::sendDatabaseBackupEmail($recipients, $format, (array)$selectedCategories);
 
-        if ($success) {
-            $recipientStr = implode(', ', $recipients);
-            return redirect()->back()->with('success', "Salinan Database SQL berhasil dikirimkan ke email: {$recipientStr}");
-        } else {
-            return redirect()->back()->with('error', 'Gagal mengirim email backup. Pastikan konfigurasi SMTP Email di server sudah aktif.');
+            if ($success) {
+                $recipientStr = implode(', ', $recipients);
+                $typeLabel = $format === 'zip' ? 'Berkas Dokumen (.ZIP)' : 'Database SQL';
+                return redirect()->back()->with('success', "Salinan {$typeLabel} berhasil dikirimkan ke email: {$recipientStr}");
+            } else {
+                return redirect()->back()->with('error', 'Gagal mengirim email backup. Pastikan konfigurasi SMTP Email di server sudah aktif.');
+            }
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Gagal mengirim email backup: ' . $e->getMessage());
         }
     }
 }
