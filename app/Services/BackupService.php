@@ -9,6 +9,52 @@ use ZipArchive;
 class BackupService
 {
     /**
+     * Get real-time file size in bytes for each category folder.
+     */
+    public static function getCategorySizes(): array
+    {
+        $categoryFolderMap = [
+            'database_sql' => [],
+            'berusaha' => ['berusaha_docs', 'bpn_perteks_berusaha', 'pkkpr_berusaha_finals'],
+            'non_berusaha' => ['ppkpr_docs', 'bpn_perteks', 'pkkpr_finals', 'ppkpr_approvals'],
+            'kebijakan' => ['kebijakan_docs'],
+            'tanah_timbul' => ['tanah-timbul_docs'],
+            'psn' => ['psn_docs'],
+            'templates_media' => ['Contoh_Format', 'doc', 'kbli2025', 'templates', 'dinas_pu_penilaians', 'ptp_forms', 'revisi_docs', 'shp_bpn', 'sps_docs', 'aset', 'berita', 'logo', 'profile_photos', 'ico', 'svg'],
+        ];
+
+        $sizes = [];
+        $publicPath = storage_path('app/public');
+
+        foreach ($categoryFolderMap as $catKey => $folders) {
+            if ($catKey === 'database_sql') {
+                try {
+                    $dbName = config('database.connections.' . config('database.default') . '.database');
+                    $result = DB::select("SELECT SUM(data_length + index_length) as db_size FROM information_schema.TABLES WHERE table_schema = ?", [$dbName]);
+                    $bytes = $result[0]->db_size ?? (2 * 1024 * 1024);
+                } catch (\Throwable $e) {
+                    $bytes = 2 * 1024 * 1024;
+                }
+                $sizes[$catKey] = (int) $bytes;
+                continue;
+            }
+
+            $catBytes = 0;
+            foreach ($folders as $folderName) {
+                $dir = $publicPath . '/' . $folderName;
+                if (File::exists($dir)) {
+                    $files = File::allFiles($dir);
+                    foreach ($files as $file) {
+                        $catBytes += $file->getSize();
+                    }
+                }
+            }
+            $sizes[$catKey] = (int) $catBytes;
+        }
+
+        return $sizes;
+    }
+    /**
      * Generate SQL dump of the database.
      */
     public static function generateSqlDump(): string

@@ -389,14 +389,41 @@
         <div class="topbar-divider"></div>
 
         @if(Auth::check() && Auth::user()->isDpn())
+            @php
+                $catSizes = \App\Services\BackupService::getCategorySizes();
+                $formatSize = function($bytes) {
+                    if ($bytes <= 0) return '< 10 KB';
+                    if ($bytes < 1024 * 1024) return round($bytes / 1024, 1) . ' KB';
+                    return round($bytes / (1024 * 1024), 1) . ' MB';
+                };
+            @endphp
+
             <button type="button" onclick="openBackupChoiceModal()" class="topbar-backup-btn" title="Opsi Backup System & Database">
                 <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                 <span>Backup DB</span>
             </button>
 
+            <style>
+                @keyframes modalFadeIn {
+                    from { opacity: 0; backdrop-filter: blur(0px); }
+                    to { opacity: 1; backdrop-filter: blur(6px); }
+                }
+                @keyframes modalSpringPop {
+                    0% { opacity: 0; transform: scale(0.92) translateY(14px); }
+                    65% { opacity: 1; transform: scale(1.012) translateY(-2px); }
+                    100% { opacity: 1; transform: scale(1) translateY(0); }
+                }
+                .backup-modal-backdrop {
+                    animation: modalFadeIn 0.25s ease-out forwards;
+                }
+                .backup-modal-box {
+                    animation: modalSpringPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                }
+            </style>
+
             <!-- MODAL PILIHAN BACKUP -->
-            <div id="backupChoiceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
-                <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 660px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto; animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div id="backupChoiceModal" class="backup-modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
+                <div class="backup-modal-box" style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 660px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto;">
                     
                     <!-- Header -->
                     <div style="background: #0F172A; padding: 16px 20px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; border-bottom: 1px solid #1E293B;">
@@ -417,41 +444,73 @@
                         
                         <!-- SEKSI 1: PILIHAN KATEGORI DOKUMEN -->
                         <div>
-                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B; margin-bottom: 8px;">
-                                Pilih Berkas & Dokumen Layanan:
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B;">
+                                    Pilih Berkas & Dokumen Layanan:
+                                </div>
+                                <div id="liveTotalSizeSummary" style="font-size: 11px; font-weight: 700; color: #0284C7; background: #E0F2FE; padding: 3px 10px; border-radius: 20px; border: 1px solid #BAE6FD; transition: all 0.25s;">
+                                    Total: ~0 MB
+                                </div>
                             </div>
 
                             <div style="border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; background: #F8FAFC;">
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; font-size: 12px; color: #1E293B;">
-                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
-                                        <input type="checkbox" name="modal_categories[]" value="database_sql" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                        <span style="font-weight: 600;">Database SQL Dump</span>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px; font-size: 12px; color: #1E293B;">
+                                    
+                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" name="modal_categories[]" value="database_sql" data-bytes="{{ $catSizes['database_sql'] ?? 2097152 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
+                                            <span style="font-weight: 600;">Database SQL Dump</span>
+                                        </div>
+                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['database_sql'] ?? 2097152) }}</span>
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
-                                        <input type="checkbox" name="modal_categories[]" value="berusaha" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                        <span>Dokumen Layanan Berusaha</span>
+
+                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" name="modal_categories[]" value="berusaha" data-bytes="{{ $catSizes['berusaha'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
+                                            <span>Dokumen Layanan Berusaha</span>
+                                        </div>
+                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['berusaha'] ?? 0) }}</span>
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
-                                        <input type="checkbox" name="modal_categories[]" value="non_berusaha" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                        <span>Dokumen Layanan Non-Berusaha</span>
+
+                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" name="modal_categories[]" value="non_berusaha" data-bytes="{{ $catSizes['non_berusaha'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
+                                            <span>Dokumen Layanan Non-Berusaha</span>
+                                        </div>
+                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['non_berusaha'] ?? 0) }}</span>
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
-                                        <input type="checkbox" name="modal_categories[]" value="kebijakan" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                        <span>Dokumen Layanan Kebijakan</span>
+
+                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" name="modal_categories[]" value="kebijakan" data-bytes="{{ $catSizes['kebijakan'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
+                                            <span>Dokumen Layanan Kebijakan</span>
+                                        </div>
+                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['kebijakan'] ?? 0) }}</span>
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
-                                        <input type="checkbox" name="modal_categories[]" value="tanah_timbul" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                        <span>Dokumen Layanan Tanah Timbul</span>
+
+                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" name="modal_categories[]" value="tanah_timbul" data-bytes="{{ $catSizes['tanah_timbul'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
+                                            <span>Dokumen Layanan Tanah Timbul</span>
+                                        </div>
+                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['tanah_timbul'] ?? 0) }}</span>
                                     </label>
-                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
-                                        <input type="checkbox" name="modal_categories[]" value="psn" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                        <span>Dokumen Layanan PSN</span>
+
+                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" name="modal_categories[]" value="psn" data-bytes="{{ $catSizes['psn'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
+                                            <span>Dokumen Layanan PSN</span>
+                                        </div>
+                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['psn'] ?? 0) }}</span>
                                     </label>
                                 </div>
                                 
-                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; font-size: 12px; color: #1E293B; margin-top: 8px;">
-                                    <input type="checkbox" name="modal_categories[]" value="templates_media" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                    <span>Template Dokumen, Master Form PTP, SPS & Assets</span>
+                                <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; font-size: 12px; color: #1E293B; margin-top: 8px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" name="modal_categories[]" value="templates_media" data-bytes="{{ $catSizes['templates_media'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
+                                        <span>Template Dokumen, Master Form PTP, SPS & Assets</span>
+                                    </div>
+                                    <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['templates_media'] ?? 0) }}</span>
                                 </label>
                             </div>
                         </div>
@@ -460,7 +519,7 @@
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px;">
                             
                             <!-- A. Form Download -->
-                            <form id="downloadBackupForm" action="{{ route('admin_dpn.backup_database') }}" method="GET" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
+                            <form id="downloadBackupForm" action="{{ route('admin_dpn.backup_database') }}" method="GET" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="this.style.borderColor='#E2E8F0';">
                                 <input type="hidden" name="categories" id="download_categories_input" value="">
                                 
                                 <div>
@@ -472,11 +531,11 @@
                                 </div>
 
                                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <button type="submit" onclick="submitDownloadForm()" style="width: 100%; padding: 10px 12px; background: #0F172A; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s;" onmouseover="this.style.background='#1E293B'" onmouseout="this.style.background='#0F172A'">
+                                    <button type="submit" onclick="submitDownloadForm()" style="width: 100%; padding: 10px 12px; background: #0F172A; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#1E293B';" onmouseout="this.style.background='#0F172A';">
                                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                        <span>Unduh Berkas (.ZIP)</span>
+                                        <span>Unduh Berkas (.ZIP) <span id="btnDownloadZipSizeText" style="font-weight: 400; opacity: 0.85;"></span></span>
                                     </button>
-                                    <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px 12px; background: #F0F9FF; color: #0284C7; border: 1px solid #BAE6FD; border-radius: 8px; font-weight: 600; font-size: 11.5px; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#E0F2FE'" onmouseout="this.style.background='#F0F9FF'">
+                                    <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px 12px; background: #F0F9FF; color: #0284C7; border: 1px solid #BAE6FD; border-radius: 8px; font-weight: 600; font-size: 11.5px; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#E0F2FE';" onmouseout="this.style.background='#F0F9FF';">
                                         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                         <span>Unduh DB SQL Saja (~2 MB)</span>
                                     </a>
@@ -484,7 +543,7 @@
                             </form>
 
                             <!-- B. Form Kirim Email -->
-                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px;">
+                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; transition: all 0.2s;" onmouseover="this.style.borderColor='#7C3AED';" onmouseout="this.style.borderColor='#E2E8F0';">
                                 @csrf
                                 <input type="hidden" name="categories" id="email_categories_input" value="">
                                 
@@ -527,7 +586,7 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" onclick="submitEmailForm()" style="width: 100%; padding: 10px 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; margin-top: 4px;" onmouseover="this.style.background='#6D28D9'" onmouseout="this.style.background='#7C3AED'">
+                                <button type="submit" onclick="submitEmailForm()" style="width: 100%; padding: 10px 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; margin-top: 4px;" onmouseover="this.style.background='#6D28D9';" onmouseout="this.style.background='#7C3AED';">
                                     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     <span>Kirim Ke Email Sekarang</span>
                                 </button>
@@ -540,6 +599,12 @@
             </div>
 
             <script>
+                function formatBytesJS(bytes) {
+                    if (bytes <= 0) return '0 KB';
+                    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                }
+
                 function openBackupChoiceModal() {
                     const modal = document.getElementById('backupChoiceModal');
                     if (modal) {
@@ -556,13 +621,36 @@
                 }
                 function syncCategoriesToForms() {
                     const checkboxes = document.querySelectorAll('input[name="modal_categories[]"]:checked');
-                    const selected = Array.from(checkboxes).map(cb => cb.value);
+                    let totalBytes = 0;
+                    const selected = [];
+
+                    checkboxes.forEach(cb => {
+                        selected.push(cb.value);
+                        totalBytes += parseInt(cb.getAttribute('data-bytes') || '0', 10);
+                        if (cb.parentElement && cb.parentElement.parentElement) {
+                            cb.parentElement.parentElement.style.borderColor = cb.checked ? '#0284C7' : '#E2E8F0';
+                        }
+                    });
+
                     const val = selected.join(',');
-                    
                     const dlInput = document.getElementById('download_categories_input');
                     const emailInput = document.getElementById('email_categories_input');
                     if (dlInput) dlInput.value = val;
                     if (emailInput) emailInput.value = val;
+
+                    const summaryBadge = document.getElementById('liveTotalSizeSummary');
+                    const btnSizeText = document.getElementById('btnDownloadZipSizeText');
+                    const formattedTotal = formatBytesJS(totalBytes);
+
+                    if (summaryBadge) {
+                        summaryBadge.textContent = 'Estimasi Total: ~' + formattedTotal + ' (' + checkboxes.length + ' Terpilih)';
+                        summaryBadge.style.background = checkboxes.length > 0 ? '#E0F2FE' : '#F1F5F9';
+                        summaryBadge.style.color = checkboxes.length > 0 ? '#0284C7' : '#64748B';
+                    }
+
+                    if (btnSizeText) {
+                        btnSizeText.textContent = '(' + formattedTotal + ')';
+                    }
                 }
                 function submitDownloadForm() {
                     syncCategoriesToForms();
