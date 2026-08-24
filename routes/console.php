@@ -31,3 +31,18 @@ Artisan::command('cleanup:unpaid', function () {
 
     $this->info("Berhasil menghapus {$deletedCount} permohonan PKKPR Berusaha yang tidak membayar dalam 7 hari.");
 })->purpose('Hapus permohonan PKKPR Berusaha yang belum membayar setelah 7 hari divalidasi awal.');
+
+// Auto Schedule Backup Sistem & Seluruh Dokumen (Harian jam 01:00 Malam)
+Schedule::call(function () {
+    \App\Services\BackupService::cleanOldBackups(30);
+    $zipPath = \App\Services\BackupService::createFullZipBackup();
+    logger()->info("Auto-backup: Berhasil membuat full backup sistem & seluruh dokumen di: {$zipPath}");
+})->dailyAt('01:00');
+
+// Command Artisan manual untuk Full Backup Sistem & Seluruh Dokumen
+Artisan::command('backup:full', function () {
+    $this->info("Sedang memproses full backup database & seluruh berkas dokumen...");
+    \App\Services\BackupService::cleanOldBackups(30);
+    $zipPath = \App\Services\BackupService::createFullZipBackup();
+    $this->info("SELESAI! File ZIP backup lengkap berhasil disimpan di: {$zipPath}");
+})->purpose('Buat file ZIP full backup sistem (Database SQL + Seluruh Berkas Dokumen Upload).');
