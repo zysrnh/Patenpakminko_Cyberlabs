@@ -372,6 +372,28 @@
     </div>
 
     {{-- Right: date · mailbox · user · logout --}}
+    <div class="topbar-right">
+
+        {{-- Date pill --}}
+        <div class="topbar-datepill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8"  y1="2" x2="8"  y2="6"/>
+                <line x1="3"  y1="10" x2="21" y2="10"/>
+            </svg>
+            <span id="current-date">—</span>
+        </div>
+
+        {{-- Divider --}}
+        <div class="topbar-divider"></div>
+
+        @if(Auth::check() && Auth::user()->isDpn())
+            <button type="button" onclick="openBackupChoiceModal()" class="topbar-backup-btn" title="Opsi Backup System & Database">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span>Backup DB</span>
+            </button>
+
             <!-- MODAL PILIHAN BACKUP -->
             <div id="backupChoiceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
                 <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 460px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.3); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto; animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
