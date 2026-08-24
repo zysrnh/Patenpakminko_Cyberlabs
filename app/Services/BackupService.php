@@ -254,11 +254,29 @@ class BackupService
                 $fileSizeBytes = filesize($zipPath);
                 $fileSizeMb = round($fileSizeBytes / (1024 * 1024), 2);
 
-                if ($fileSizeBytes > 25 * 1024 * 1024) {
-                    @unlink($zipPath);
-                    throw new \Exception("Ukuran berkas ZIP ({$fileSizeMb} MB) melebihi batas lampiran email (25 MB). Silakan gunakan tombol Unduh Langsung atau persedikit kategori berkas terpilih.");
+                // If file size > 20MB, send email with Direct Download Link instead of attachment to bypass 25MB SMTP limit
+                if ($fileSizeBytes > 20 * 1024 * 1024) {
+                    $publicBackupDir = storage_path('app/public/temp_backups');
+                    if (!File::exists($publicBackupDir)) {
+                        File::makeDirectory($publicBackupDir, 0755, true);
+                    }
+                    $publicZipPath = $publicBackupDir . '/' . $fileName;
+                    File::move($zipPath, $publicZipPath);
+
+                    $downloadUrl = url('storage/temp_backups/' . $fileName);
+
+                    \Illuminate\Support\Facades\Mail::raw(
+                        "Yth. Tim Penataan Pertanahan PATEN PAK MIKO,\n\nBerikut adalah salinan cadangan Berkas Dokumen (.ZIP) sistem PATEN PAK MIKO.\n\nUkuran Berkas: {$fileSizeMb} MB (Dikirim via Tautan Langsung karena melebihi batas lampiran 20 MB)\nTanggal Backup: " . now()->format('d F Y, H:i') . " WIB\nNama Berkas: " . $fileName . "\n\nSilakan klik tautan di bawah ini untuk mengunduh berkas ZIP Anda:\n" . $downloadUrl . "\n\nCatatan: Harap segera unduh & simpan berkas ini di tempat aman.\n\nSalam,\nSistem PATEN PAK MIKO",
+                        function ($message) use ($recipients, $fileSizeMb) {
+                            $message->to($recipients)
+                                ->subject('[PATEN PAK MIKO] Tautan Unduhan Berkas Dokumen ZIP (' . $fileSizeMb . ' MB) - ' . now()->format('d/m/Y'));
+                        }
+                    );
+
+                    return true;
                 }
 
+                // If <= 20MB, attach directly to email
                 \Illuminate\Support\Facades\Mail::raw(
                     "Yth. Tim Penataan Pertanahan PATEN PAK MIKO,\n\nTerlampir adalah salinan cadangan Berkas Dokumen (.ZIP) sistem PATEN PAK MIKO (Ukuran: {$fileSizeMb} MB).\n\nTanggal Backup: " . now()->format('d F Y, H:i') . " WIB\nFile: " . $fileName . "\n\nHarap simpan berkas ini di tempat aman.\n\nSalam,\nSistem PATEN PAK MIKO",
                     function ($message) use ($recipients, $zipPath, $fileName) {
