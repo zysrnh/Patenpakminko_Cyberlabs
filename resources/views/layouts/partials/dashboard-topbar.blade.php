@@ -549,27 +549,15 @@
                             </form>
 
                             <!-- B. Form Kirim Email -->
-                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; transition: all 0.2s;" onmouseover="this.style.borderColor='#7C3AED';" onmouseout="this.style.borderColor='#E2E8F0';">
+                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#7C3AED';" onmouseout="this.style.borderColor='#E2E8F0';">
                                 @csrf
                                 <input type="hidden" name="categories" id="email_categories_input" value="">
+                                <input type="hidden" name="backup_format" id="email_backup_format_input" value="zip">
                                 
                                 <div>
                                     <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #7C3AED; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
                                         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                         <span>Kirim Via Email</span>
-                                    </div>
-
-                                    <!-- Format -->
-                                    <div style="font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 4px;">Format Berkas:</div>
-                                    <div style="display: flex; gap: 10px; font-size: 11.5px; color: #1E293B; margin-bottom: 8px;">
-                                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
-                                            <input type="radio" name="backup_format" value="sql" checked style="accent-color: #7C3AED;">
-                                            <span>Database SQL</span>
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
-                                            <input type="radio" name="backup_format" value="zip" style="accent-color: #7C3AED;">
-                                            <span>Berkas ZIP Terpilih</span>
-                                        </label>
                                     </div>
 
                                     <!-- Email Target -->
@@ -592,10 +580,16 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" onclick="submitEmailForm()" style="width: 100%; padding: 10px 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background 0.2s; margin-top: 4px;" onmouseover="this.style.background='#6D28D9';" onmouseout="this.style.background='#7C3AED';">
-                                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                    <span>Kirim Ke Email Sekarang</span>
-                                </button>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <button type="button" onclick="submitEmailForm('zip')" style="width: 100%; padding: 10px 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#6D28D9';" onmouseout="this.style.background='#7C3AED';">
+                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                        <span>Kirim Berkas (.ZIP) ke Email <span id="btnEmailZipSizeText" style="font-weight: 400; opacity: 0.85;"></span></span>
+                                    </button>
+                                    <button type="button" onclick="submitEmailForm('sql')" style="width: 100%; padding: 8px 12px; background: #F5F3FF; color: #7C3AED; border: 1px solid #DDD6FE; border-radius: 8px; font-weight: 600; font-size: 11.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#EDE9FE';" onmouseout="this.style.background='#F5F3FF';">
+                                        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                        <span>Kirim DB SQL Saja ke Email (~2 MB)</span>
+                                    </button>
+                                </div>
                             </form>
 
                         </div>
@@ -664,6 +658,7 @@
 
                     const summaryBadge = document.getElementById('liveTotalSizeSummary');
                     const btnSizeText = document.getElementById('btnDownloadZipSizeText');
+                    const btnEmailZipSizeText = document.getElementById('btnEmailZipSizeText');
                     const formattedTotal = formatBytesJS(totalBytes);
 
                     if (summaryBadge) {
@@ -675,13 +670,20 @@
                     if (btnSizeText) {
                         btnSizeText.textContent = '(' + formattedTotal + ')';
                     }
+                    if (btnEmailZipSizeText) {
+                        btnEmailZipSizeText.textContent = '(' + formattedTotal + ')';
+                    }
                 }
                 function submitDownloadForm() {
                     syncCategoriesToForms();
                     closeBackupChoiceModal();
                 }
-                function submitEmailForm() {
+                function submitEmailForm(format) {
+                    const formatInput = document.getElementById('email_backup_format_input');
+                    if (formatInput) formatInput.value = format || 'zip';
                     syncCategoriesToForms();
+                    const form = document.getElementById('emailBackupForm');
+                    if (form) form.submit();
                     closeBackupChoiceModal();
                 }
             </script>
