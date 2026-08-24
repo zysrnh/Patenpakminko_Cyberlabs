@@ -372,88 +372,71 @@
     </div>
 
     {{-- Right: date · mailbox · user · logout --}}
-    <div class="topbar-right">
-
-        {{-- Date pill --}}
-        <div class="topbar-datepill">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2"/>
-                <line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8"  y1="2" x2="8"  y2="6"/>
-                <line x1="3"  y1="10" x2="21" y2="10"/>
-            </svg>
-            <span id="current-date">—</span>
-        </div>
-
-        {{-- Divider --}}
-        <div class="topbar-divider"></div>
-
-        @if(Auth::check() && Auth::user()->isDpn())
-            <button type="button" onclick="openBackupChoiceModal()" class="topbar-backup-btn" title="Opsi Backup System & Database">
-                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                <span>Backup DB</span>
-            </button>
-
             <!-- MODAL PILIHAN BACKUP -->
-            <div id="backupChoiceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
-                <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 460px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto; animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
-                    <div style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); padding: 16px 20px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span style="font-size: 20px;">💾</span>
+            <div id="backupChoiceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
+                <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 460px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.3); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto; animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                    
+                    <!-- Header -->
+                    <div style="background: #0F172A; padding: 18px 22px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; border-bottom: 1px solid #1E293B;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 36px; height: 36px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.15);">
+                                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                            </div>
                             <div>
-                                <h3 style="font-size: 15px; font-weight: 800; margin: 0; color: #ffffff;">Opsi Backup System & Database</h3>
-                                <div style="font-size: 11.5px; color: #94A3B8;">Pilih metode unduh langsung atau via email</div>
+                                <h3 style="font-size: 15px; font-weight: 700; margin: 0; color: #ffffff; letter-spacing: -0.2px;">Pilihan Cadangan Sistem & Database</h3>
+                                <div style="font-size: 11.5px; color: #94A3B8; margin-top: 1px;">Pilih opsi unduh berkas atau pengiriman via email</div>
                             </div>
                         </div>
-                        <button type="button" onclick="closeBackupChoiceModal()" style="background: rgba(255,255,255,0.15); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;">✕</button>
+                        <button type="button" onclick="closeBackupChoiceModal()" style="background: rgba(255,255,255,0.1); border: none; color: #94A3B8; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.color='#94A3B8'; this.style.background='rgba(255,255,255,0.1)'">✕</button>
                     </div>
 
-                    <div style="padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto;">
+                    <!-- Body Content -->
+                    <div style="padding: 20px 22px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto;">
                         
-                        <!-- SEKSI 1: DOWNLOAD LANGSUNG -->
+                        <!-- SEKSI 1: UNDUH LANGSUNG -->
                         <div>
-                            <div style="font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #64748B; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                                📥 UNDUH LANGSUNG KE PERANGKAT
+                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                                Unduh Langsung Ke Perangkat
                             </div>
-                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
                                 <!-- Opsi 1: SQL Only -->
-                                <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#3B82F6'; this.style.background='#EFF6FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
-                                    <div style="width: 36px; height: 36px; background: #DBEAFE; color: #1D4ED8; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
-                                        ⚡
+                                <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #FFFFFF; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#0284C7'; this.style.background='#F0F9FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#FFFFFF';">
+                                    <div style="width: 38px; height: 38px; background: #E0F2FE; color: #0284C7; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                     </div>
                                     <div style="flex: 1;">
-                                        <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Download Database SQL (~2 MB)</div>
-                                        <div style="font-size: 11px; color: #64748B; margin-top: 1px;">Sangat Cepat & Ringan. Berisi data tabel DB (User, Permohonan, Tracking, Ulasan).</div>
+                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Download Database SQL (~2 MB)</div>
+                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px; line-height: 1.4;">Ekspor cepat & ringan. Berisi seluruh data tabel database.</div>
                                     </div>
                                 </a>
 
                                 <!-- Opsi 2: Full ZIP -->
-                                <a href="{{ route('admin_dpn.backup_database') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#10B981'; this.style.background='#ECFDF5';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
-                                    <div style="width: 36px; height: 36px; background: #D1FAE5; color: #047857; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
-                                        📦
+                                <a href="{{ route('admin_dpn.backup_database') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #FFFFFF; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#059669'; this.style.background='#ECFDF5';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#FFFFFF';">
+                                    <div style="width: 38px; height: 38px; background: #D1FAE5; color: #059669; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 01-2-2v0a2 2 0 012-2h14a2 2 0 012 2v0a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                                     </div>
                                     <div style="flex: 1;">
-                                        <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Download Full ZIP (~874 MB)</div>
-                                        <div style="font-size: 11px; color: #64748B; margin-top: 1px;">Komplit. Database SQL + Seluruh Berkas PDF & Gambar Upload 5 Layanan.</div>
+                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Download Arsip Full ZIP (~874 MB)</div>
+                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px; line-height: 1.4;">Arsip komplit Database SQL + Seluruh berkas PDF & Gambar 5 Layanan.</div>
                                     </div>
                                 </a>
                             </div>
                         </div>
 
-                        <!-- SEKSI 2: KIRIM EMAIL -->
+                        <!-- SEKSI 2: PENGIRIMAN EMAIL -->
                         <div>
-                            <div style="font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #64748B; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                                ✉️ PENGIRIMAN VIA EMAIL
+                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                                Pengiriman Via Email
                             </div>
                             <form action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0;">
                                 @csrf
-                                <button type="submit" onclick="closeBackupChoiceModal()" style="width: 100%; text-align: left; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid #E2E8F0; border-radius: 10px; background: #F8FAFC; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#8B5CF6'; this.style.background='#F5F3FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
-                                    <div style="width: 36px; height: 36px; background: #EDE9FE; color: #6D28D9; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
-                                        📧
+                                <button type="submit" onclick="closeBackupChoiceModal()" style="width: 100%; text-align: left; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: 12px; background: #FFFFFF; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#7C3AED'; this.style.background='#F5F3FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#FFFFFF';">
+                                    <div style="width: 38px; height: 38px; background: #EDE9FE; color: #7C3AED; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     </div>
                                     <div style="flex: 1;">
-                                        <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Kirim Salinan Database SQL ke Email</div>
-                                        <div style="font-size: 11px; color: #64748B; margin-top: 1px;">Dikirim ke <strong>penataanpertanahanmiko@gmail.com</strong> (Auto 3 hari sekali).</div>
+                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Kirim Salinan Database SQL ke Email</div>
+                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px; line-height: 1.4;">Dikirimkan ke <strong style="color: #475569;">penataanpertanahanmiko@gmail.com</strong> (Jadwal otomatis setiap 3 hari).</div>
                                     </div>
                                 </button>
                             </form>
