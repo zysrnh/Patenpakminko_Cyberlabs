@@ -2023,10 +2023,6 @@
                                     $step6Status = 'active';
                                 }
                             @endphp
-                                        $step6Status = 'active';
-                                    }
-                                }
-                            @endphp
                             <div class="timeline-step {{ $step6Status }}" onclick="showBpnPanel('pu-1')" style="cursor:pointer;">
                                 <span class="timeline-dot"></span>
                                 <div class="timeline-content">

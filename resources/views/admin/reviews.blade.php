@@ -322,12 +322,12 @@
                                 if ($review->module_type === 'berusaha' && $review->module_id) {
                                     $appItem = \App\Models\PpkprBerusahaApplication::find($review->module_id);
                                     if ($appItem) {
-                                        $userName = $appItem->nama_pemilik_usaha ?: $appItem->nama_pengaju;
+                                        $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
                                     }
                                 } elseif ($review->module_type === 'non_berusaha' && $review->module_id) {
                                     $appItem = \App\Models\PpkprNonBerusahaApplication::find($review->module_id);
                                     if ($appItem) {
-                                        $userName = $appItem->nama_pemilik_usaha ?: $appItem->nama_pengaju;
+                                        $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
                                     }
                                 }
                                 if (!$userName || strtolower($userName) === 'petugas bpn') {

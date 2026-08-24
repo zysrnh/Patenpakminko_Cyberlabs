@@ -36,12 +36,12 @@ Route::get('/', function () {
             if ($item->module_type === 'berusaha' && $item->module_id) {
                 $app = \App\Models\PpkprBerusahaApplication::find($item->module_id);
                 if ($app) {
-                    $name = $app->nama_pemilik_usaha ?: $app->nama_pengaju;
+                    $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
                 }
             } elseif ($item->module_type === 'non_berusaha' && $item->module_id) {
                 $app = \App\Models\PpkprNonBerusahaApplication::find($item->module_id);
                 if ($app) {
-                    $name = $app->nama_pemilik_usaha ?: $app->nama_pengaju;
+                    $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
                 }
             }
             if (!$name || strtolower($name) === 'petugas bpn') {
