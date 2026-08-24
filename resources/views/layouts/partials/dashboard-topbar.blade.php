@@ -395,7 +395,7 @@
             </button>
 
             <!-- MODAL PILIHAN BACKUP -->
-            <div id="backupChoiceModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
+            <div id="backupChoiceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
                 <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 460px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto; animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
                     <div style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); padding: 16px 20px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
                         <div style="display: flex; align-items: center; gap: 10px;">
@@ -466,7 +466,12 @@
             <script>
                 function openBackupChoiceModal() {
                     const modal = document.getElementById('backupChoiceModal');
-                    if (modal) modal.style.display = 'flex';
+                    if (modal) {
+                        if (modal.parentElement !== document.body) {
+                            document.body.appendChild(modal);
+                        }
+                        modal.style.display = 'flex';
+                    }
                 }
                 function closeBackupChoiceModal() {
                     const modal = document.getElementById('backupChoiceModal');
