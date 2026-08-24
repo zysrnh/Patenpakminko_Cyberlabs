@@ -329,6 +329,11 @@
                                     if ($appItem) {
                                         $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
                                     }
+                                } elseif ($review->module_type === 'kebijakan' && $review->module_id) {
+                                    $appItem = \App\Models\KebijakanApplication::find($review->module_id);
+                                    if ($appItem) {
+                                        $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
+                                    }
                                 }
                                 if (!$userName || strtolower($userName) === 'petugas bpn') {
                                     $userName = ($review->user && strtolower($review->user->name) !== 'petugas bpn') ? $review->user->name : ($review->user->username ?? 'Pelaku Usaha');

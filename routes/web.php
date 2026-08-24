@@ -43,6 +43,11 @@ Route::get('/', function () {
                 if ($app) {
                     $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
                 }
+            } elseif ($item->module_type === 'kebijakan' && $item->module_id) {
+                $app = \App\Models\KebijakanApplication::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
+                }
             }
             if (!$name || strtolower($name) === 'petugas bpn') {
                 $name = ($item->user && strtolower($item->user->name) !== 'petugas bpn') ? $item->user->name : ($item->user->username ?? 'Pelaku Usaha');
