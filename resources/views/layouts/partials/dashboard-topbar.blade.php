@@ -444,9 +444,15 @@
                         
                         <!-- SEKSI 1: PILIHAN KATEGORI DOKUMEN -->
                         <div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
-                                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B;">
-                                    Pilih Berkas & Dokumen Layanan:
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B;">
+                                        Pilih Berkas & Dokumen Layanan:
+                                    </div>
+                                    <label style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: #0284C7; cursor: pointer; user-select: none;">
+                                        <input type="checkbox" id="selectAllCategoriesBtn" checked onchange="toggleSelectAllCategories(this)" style="accent-color: #0284C7; width: 14px; height: 14px; cursor: pointer;">
+                                        <span>Pilih Semua</span>
+                                    </label>
                                 </div>
                                 <div id="liveTotalSizeSummary" style="font-size: 11px; font-weight: 700; color: #0284C7; background: #E0F2FE; padding: 3px 10px; border-radius: 20px; border: 1px solid #BAE6FD; transition: all 0.25s;">
                                     Total: ~0 MB
@@ -619,14 +625,32 @@
                     const modal = document.getElementById('backupChoiceModal');
                     if (modal) modal.style.display = 'none';
                 }
+                function toggleSelectAllCategories(masterCb) {
+                    const checkboxes = document.querySelectorAll('input[name="modal_categories[]"]');
+                    checkboxes.forEach(cb => {
+                        cb.checked = masterCb.checked;
+                    });
+                    syncCategoriesToForms();
+                }
+
                 function syncCategoriesToForms() {
-                    const checkboxes = document.querySelectorAll('input[name="modal_categories[]"]:checked');
+                    const allCheckboxes = document.querySelectorAll('input[name="modal_categories[]"]');
+                    const checkedCheckboxes = document.querySelectorAll('input[name="modal_categories[]"]:checked');
+                    const masterCb = document.getElementById('selectAllCategoriesBtn');
+
+                    if (masterCb) {
+                        masterCb.checked = (allCheckboxes.length > 0 && checkedCheckboxes.length === allCheckboxes.length);
+                        masterCb.indeterminate = (checkedCheckboxes.length > 0 && checkedCheckboxes.length < allCheckboxes.length);
+                    }
+
                     let totalBytes = 0;
                     const selected = [];
 
-                    checkboxes.forEach(cb => {
-                        selected.push(cb.value);
-                        totalBytes += parseInt(cb.getAttribute('data-bytes') || '0', 10);
+                    allCheckboxes.forEach(cb => {
+                        if (cb.checked) {
+                            selected.push(cb.value);
+                            totalBytes += parseInt(cb.getAttribute('data-bytes') || '0', 10);
+                        }
                         if (cb.parentElement && cb.parentElement.parentElement) {
                             cb.parentElement.parentElement.style.borderColor = cb.checked ? '#0284C7' : '#E2E8F0';
                         }
@@ -643,9 +667,9 @@
                     const formattedTotal = formatBytesJS(totalBytes);
 
                     if (summaryBadge) {
-                        summaryBadge.textContent = 'Estimasi Total: ~' + formattedTotal + ' (' + checkboxes.length + ' Terpilih)';
-                        summaryBadge.style.background = checkboxes.length > 0 ? '#E0F2FE' : '#F1F5F9';
-                        summaryBadge.style.color = checkboxes.length > 0 ? '#0284C7' : '#64748B';
+                        summaryBadge.textContent = 'Estimasi Total: ~' + formattedTotal + ' (' + checkedCheckboxes.length + ' Terpilih)';
+                        summaryBadge.style.background = checkedCheckboxes.length > 0 ? '#E0F2FE' : '#F1F5F9';
+                        summaryBadge.style.color = checkedCheckboxes.length > 0 ? '#0284C7' : '#64748B';
                     }
 
                     if (btnSizeText) {
