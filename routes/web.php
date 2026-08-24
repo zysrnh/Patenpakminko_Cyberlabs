@@ -28,12 +28,27 @@ Route::get('/', function () {
     $formalReviews = Review::with('user')
         ->where('is_approved', true)
         ->latest()
-        ->take(6)
+        ->take(10)
         ->get()
         ->map(function ($item) {
             $item->module_label_display = $item->module_label;
-            $item->reviewer_name = $item->user->name ?? $item->user->username;
-            $item->reviewer_initial = strtoupper(substr($item->user->username ?? 'PU', 0, 2));
+            $name = null;
+            if ($item->module_type === 'berusaha' && $item->module_id) {
+                $app = \App\Models\PpkprBerusahaApplication::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pemilik_usaha ?: $app->nama_pengaju;
+                }
+            } elseif ($item->module_type === 'non_berusaha' && $item->module_id) {
+                $app = \App\Models\PpkprNonBerusahaApplication::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pemilik_usaha ?: $app->nama_pengaju;
+                }
+            }
+            if (!$name || strtolower($name) === 'petugas bpn') {
+                $name = ($item->user && strtolower($item->user->name) !== 'petugas bpn') ? $item->user->name : ($item->user->username ?? 'Pelaku Usaha');
+            }
+            $item->reviewer_name = $name;
+            $item->reviewer_initial = strtoupper(substr($name ?? 'PU', 0, 2));
             return $item;
         });
 
@@ -49,7 +64,7 @@ Route::get('/', function () {
             return $item;
         });
 
-    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('rating')->values()->take(6);
+    $reviews = $formalReviews->concat($informalReviews)->sortByDesc('created_at')->values()->take(12);
 
     // Kalkulasi rata-rata keseluruhan (Review + InformalRating)
     $countApprovedReview = Review::where('is_approved', true)->count();

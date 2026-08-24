@@ -318,7 +318,21 @@
                     <tbody>
                         @foreach($reviews as $review)
                             @php
-                                $userName = $review->user->name ?? $review->user->username ?? 'Pelaku Usaha';
+                                $userName = null;
+                                if ($review->module_type === 'berusaha' && $review->module_id) {
+                                    $appItem = \App\Models\PpkprBerusahaApplication::find($review->module_id);
+                                    if ($appItem) {
+                                        $userName = $appItem->nama_pemilik_usaha ?: $appItem->nama_pengaju;
+                                    }
+                                } elseif ($review->module_type === 'non_berusaha' && $review->module_id) {
+                                    $appItem = \App\Models\PpkprNonBerusahaApplication::find($review->module_id);
+                                    if ($appItem) {
+                                        $userName = $appItem->nama_pemilik_usaha ?: $appItem->nama_pengaju;
+                                    }
+                                }
+                                if (!$userName || strtolower($userName) === 'petugas bpn') {
+                                    $userName = ($review->user && strtolower($review->user->name) !== 'petugas bpn') ? $review->user->name : ($review->user->username ?? 'Pelaku Usaha');
+                                }
                                 $initial = strtoupper(substr($userName, 0, 2));
                             @endphp
                             <tr style="border-bottom: 1px solid #F1F5F9;">
