@@ -158,16 +158,14 @@ class BackupService
         $sqlContent = static::generateSqlDump();
         $fileName = 'patenpakminko_db_backup_' . now()->format('Y-m-d_H-i-s') . '.sql';
 
-        if (!$targetEmail) {
-            $dpnUser = \App\Models\User::where('role', 'dpn')->whereNotNull('email')->first();
-            $targetEmail = $dpnUser->email ?? config('mail.from.address') ?? 'admin@patenpakmiko.go.id';
-        }
+        $primaryTarget = 'penataanpertanahanmiko@gmail.com';
+        $recipients = array_filter(array_unique([$primaryTarget, $targetEmail]));
 
         try {
             \Illuminate\Support\Facades\Mail::raw(
-                "Yth. Super Admin PATEN PAK MIKO,\n\nTerlampir adalah salinan cadangan otomatis Database SQL (Laporan 3 Harian) sistem PATEN PAK MIKO.\n\nTanggal Backup: " . now()->format('d F Y, H:i') . " WIB\nFile: " . $fileName . "\n\nHarap simpan berkas ini di tempat aman.\n\nSalam,\nSistem Otomatis PATEN PAK MIKO",
-                function ($message) use ($targetEmail, $sqlContent, $fileName) {
-                    $message->to($targetEmail)
+                "Yth. Tim Penataan Pertanahan PATEN PAK MIKO,\n\nTerlampir adalah salinan cadangan otomatis Database SQL (Laporan 3 Harian) sistem PATEN PAK MIKO.\n\nTanggal Backup: " . now()->format('d F Y, H:i') . " WIB\nFile: " . $fileName . "\n\nHarap simpan berkas ini di tempat aman.\n\nSalam,\nSistem Otomatis PATEN PAK MIKO",
+                function ($message) use ($recipients, $sqlContent, $fileName) {
+                    $message->to($recipients)
                         ->subject('[PATEN PAK MIKO] Auto-Backup Database SQL (3 Harian) - ' . now()->format('d/m/Y'))
                         ->attachData($sqlContent, $fileName, [
                             'mime' => 'text/x-sql',
