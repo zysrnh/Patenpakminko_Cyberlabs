@@ -442,4 +442,27 @@ class AdminDpnController extends Controller
             return redirect()->back()->with('error', 'Gagal membuat backup sistem: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Kirim backup database SQL ke email Super Admin sekarang (Khusus Super Admin DPN).
+     */
+    public function sendBackupEmailNow()
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            return redirect()->back()->with('error', 'Akses ditolak.');
+        }
+
+        $email = \Illuminate\Support\Facades\Auth::user()->email;
+        if (!$email) {
+            return redirect()->back()->with('error', 'Akun Anda belum memiliki alamat email yang terdaftar.');
+        }
+
+        $success = \App\Services\BackupService::sendDatabaseBackupEmail($email);
+
+        if ($success) {
+            return redirect()->back()->with('success', "Salinan Database SQL berhasil dikirimkan ke email Anda: {$email}");
+        } else {
+            return redirect()->back()->with('error', 'Gagal mengirim email backup. Pastikan konfigurasi SMTP Email di server sudah aktif.');
+        }
+    }
 }

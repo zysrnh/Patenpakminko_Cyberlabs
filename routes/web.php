@@ -262,6 +262,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin_dpn/reset-visitor', [AdminDpnController::class, 'resetVisitorCount'])->name('admin_dpn.reset_visitor');
     Route::get('/admin_dpn/backup-database', [AdminDpnController::class, 'downloadDatabaseBackup'])->name('admin_dpn.backup_database');
     Route::get('/admin_dpn/backup-database-sql', [AdminDpnController::class, 'downloadDatabaseSqlOnly'])->name('admin_dpn.backup_database_sql');
+    Route::post('/admin_dpn/send-backup-email', [AdminDpnController::class, 'sendBackupEmailNow'])->name('admin_dpn.send_backup_email');
     Route::post('/souvenir/send/{type}/{id}', [AdminDpnController::class, 'markSouvenirSent'])->name('souvenir.mark_sent');
     Route::post('/application/rollback/{type}/{id}', [AdminDpnController::class, 'rollbackStatus'])->name('application.rollback');
     Route::post('/application/forward/{type}/{id}', [AdminDpnController::class, 'forwardStatus'])->name('application.forward');

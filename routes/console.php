@@ -46,3 +46,20 @@ Artisan::command('backup:full', function () {
     $zipPath = \App\Services\BackupService::createFullZipBackup();
     $this->info("SELESAI! File ZIP backup lengkap berhasil disimpan di: {$zipPath}");
 })->purpose('Buat file ZIP full backup sistem (Database SQL + Seluruh Berkas Dokumen Upload).');
+
+// Auto Schedule Email Backup Database SQL Setiap 3 Hari Sekali (Jam 02:00 Pagi)
+Schedule::call(function () {
+    \App\Services\BackupService::sendDatabaseBackupEmail();
+    logger()->info("Auto-backup-email: Berhasil mengirim salinan DB SQL 3 harian via Email.");
+})->cron('0 2 */3 * *');
+
+// Command Artisan manual untuk Pengiriman Email Backup Database SQL
+Artisan::command('backup:email', function () {
+    $this->info("Sedang mengirimkan email backup database SQL...");
+    $success = \App\Services\BackupService::sendDatabaseBackupEmail();
+    if ($success) {
+        $this->info("SELESAI! Email backup database SQL berhasil terkirim.");
+    } else {
+        $this->error("GAGAL! Gagal mengirim email backup. Cek log / SMTP.");
+    }
+})->purpose('Kirim salinan database SQL via Email.');
