@@ -408,42 +408,57 @@
                         <button type="button" onclick="closeBackupChoiceModal()" style="background: rgba(255,255,255,0.1); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px;">✕</button>
                     </div>
 
-                    <div style="padding: 24px; display: flex; flex-direction: column; gap: 14px;">
-                        <!-- Opsi 1: SQL Only -->
-                        <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#3B82F6'; this.style.background='#EFF6FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
-                            <div style="width: 44px; height: 44px; background: #DBEAFE; color: #1D4ED8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
-                                ⚡
+                    <div style="padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+                        
+                        <!-- SEKSI 1: DOWNLOAD LANGSUNG -->
+                        <div>
+                            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #64748B; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                📥 UNDUH LANGSUNG KE PERANGKAT
                             </div>
-                            <div>
-                                <div style="font-size: 14px; font-weight: 700; color: #0F172A;">1. Backup Database SQL (Rekomendasi Cepat)</div>
-                                <div style="font-size: 12px; color: #64748B; margin-top: 2px;">Ukuran sangat ringan (~2-5 MB). Mengunduh data tabel DB (User, Permohonan, Tracking, Ulasan, dll).</div>
-                            </div>
-                        </a>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <!-- Opsi 1: SQL Only -->
+                                <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#3B82F6'; this.style.background='#EFF6FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
+                                    <div style="width: 40px; height: 40px; background: #DBEAFE; color: #1D4ED8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+                                        ⚡
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Download Database SQL (~2 MB)</div>
+                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px;">Sangat Cepat & Ringan. Berisi data tabel DB (User, Permohonan, Tracking, Ulasan).</div>
+                                    </div>
+                                </a>
 
-                        <!-- Opsi 2: Full ZIP -->
-                        <a href="{{ route('admin_dpn.backup_database') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#10B981'; this.style.background='#ECFDF5';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
-                            <div style="width: 44px; height: 44px; background: #D1FAE5; color: #047857; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
-                                📦
+                                <!-- Opsi 2: Full ZIP -->
+                                <a href="{{ route('admin_dpn.backup_database') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #F8FAFC; transition: all 0.2s;" onmouseover="this.style.borderColor='#10B981'; this.style.background='#ECFDF5';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
+                                    <div style="width: 40px; height: 40px; background: #D1FAE5; color: #047857; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+                                        📦
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Download Full ZIP (~874 MB)</div>
+                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px;">Komplit. Database SQL + Seluruh Berkas PDF & Gambar Upload 5 Layanan.</div>
+                                    </div>
+                                </a>
                             </div>
-                            <div>
-                                <div style="font-size: 14px; font-weight: 700; color: #0F172A;">2. Backup Sistem & Seluruh Dokumen (.ZIP)</div>
-                                <div style="font-size: 12px; color: #64748B; margin-top: 2px;">Ukuran besar (~874 MB). Mengunduh Database SQL + Seluruh Berkas PDF/Gambar Uploaded 5 Layanan.</div>
-                            </div>
-                        </a>
+                        </div>
 
-                        <!-- Opsi 3: Kirim Email -->
-                        <form action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0;">
-                            @csrf
-                            <button type="submit" onclick="closeBackupChoiceModal()" style="width: 100%; text-align: left; display: flex; align-items: center; gap: 14px; padding: 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; background: #F8FAFC; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#8B5CF6'; this.style.background='#F5F3FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
-                                <div style="width: 44px; height: 44px; background: #EDE9FE; color: #6D28D9; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
-                                    ✉️
-                                </div>
-                                <div>
-                                    <div style="font-size: 14px; font-weight: 700; color: #0F172A;">3. Kirim Database SQL ke Email Saya</div>
-                                    <div style="font-size: 12px; color: #64748B; margin-top: 2px;">Kirimkan salinan DB SQL langsung ke email Anda. (Otomatis berjalan 3 hari sekali).</div>
-                                </div>
-                            </button>
-                        </form>
+                        <!-- SEKSI 2: KIRIM EMAIL -->
+                        <div>
+                            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #64748B; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                                ✉️ PENGIRIMAN VIA EMAIL
+                            </div>
+                            <form action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0;">
+                                @csrf
+                                <button type="submit" onclick="closeBackupChoiceModal()" style="width: 100%; text-align: left; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1.5px solid #E2E8F0; border-radius: 12px; background: #F8FAFC; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#8B5CF6'; this.style.background='#F5F3FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#F8FAFC';">
+                                    <div style="width: 40px; height: 40px; background: #EDE9FE; color: #6D28D9; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+                                        📧
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Kirim Salinan Database SQL ke Email</div>
+                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px;">Dikirim ke <strong>penataanpertanahanmiko@gmail.com</strong> (Auto 3 hari sekali).</div>
+                                    </div>
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
