@@ -594,11 +594,11 @@ class PpkprBerusahaController extends Controller
         }
         $app = PpkprBerusahaApplication::findOrFail($id);
         $appNo = $app->application_number;
-        // Hapus file-file yang tersimpan
-        $fileFields = ['peta_lokasi','surat_kuasa','fc_ktp','fc_npwp','fc_akta_pendirian','rencana_penggunaan_tanah','nib','kbli','proposal_kegiatan','persyaratan_lainnya','satu_pintu_document'];
-        foreach ($fileFields as $field) {
-            if (!empty($app->$field)) Storage::delete($app->$field);
-        }
+        // Berkas fisik di storage TIDAK dihapus agar tetap aman & tersimpan
+        // $fileFields = ['peta_lokasi','surat_kuasa','fc_ktp','fc_npwp','fc_akta_pendirian','rencana_penggunaan_tanah','nib','kbli','proposal_kegiatan','persyaratan_lainnya','satu_pintu_document'];
+        // foreach ($fileFields as $field) {
+        //     if (!empty($app->$field)) Storage::delete($app->$field);
+        // }
         $app->delete();
         return redirect()->route('berusaha.index')->with('success', "Permohonan {$appNo} berhasil dihapus dari antrean.");
     }
