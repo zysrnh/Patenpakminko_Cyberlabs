@@ -418,20 +418,23 @@ class AdminDpnController extends Controller
     }
 
     /**
-     * Download backup sistem & database lengkap dalam format ZIP (Khusus Super Admin DPN).
+     * Download backup sistem & database lengkap / custom dalam format ZIP (Khusus Super Admin DPN).
      */
-    public function downloadDatabaseBackup()
+    public function downloadDatabaseBackup(\Illuminate\Http\Request $request)
     {
         if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
             return redirect()->back()->with('error', 'Akses ditolak. Fitur backup sistem khusus Super Admin DPN.');
         }
 
         try {
-            // Pembersihan file backup lama (> 30 hari)
             \App\Services\BackupService::cleanOldBackups(30);
 
-            // Buat file ZIP backup lengkap (Database SQL + Seluruh Berkas Dokumen Upload)
-            $zipPath = \App\Services\BackupService::createFullZipBackup();
+            $selectedCategories = $request->input('categories', []);
+            if (is_string($selectedCategories)) {
+                $selectedCategories = array_filter(explode(',', $selectedCategories));
+            }
+
+            $zipPath = \App\Services\BackupService::createFullZipBackup(null, (array)$selectedCategories);
             $fileName = basename($zipPath);
 
             return response()->download($zipPath, $fileName, [
@@ -444,23 +447,41 @@ class AdminDpnController extends Controller
     }
 
     /**
-     * Kirim backup database SQL ke email Super Admin sekarang (Khusus Super Admin DPN).
+     * Kirim backup database SQL ke email terpilih (Khusus Super Admin DPN).
      */
-    public function sendBackupEmailNow()
+    public function sendBackupEmailNow(\Illuminate\Http\Request $request)
     {
         if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
             return redirect()->back()->with('error', 'Akses ditolak.');
         }
 
-        $email = \Illuminate\Support\Facades\Auth::user()->email;
-        if (!$email) {
-            return redirect()->back()->with('error', 'Akun Anda belum memiliki alamat email yang terdaftar.');
+        $targetOption = $request->input('target_option', 'both'); // 'both', 'my_email', 'penataan_email'
+        $userEmail = \Illuminate\Support\Facades\Auth::user()->email;
+        $penataanEmail = 'penataanpertanahanmiko@gmail.com';
+
+        $recipients = [];
+        if ($targetOption === 'my_email' && $userEmail) {
+            $recipients[] = $userEmail;
+        } elseif ($targetOption === 'penataan_email') {
+            $recipients[] = $penataanEmail;
+        } else {
+            if ($userEmail) {
+                $recipients[] = $userEmail;
+            }
+            $recipients[] = $penataanEmail;
         }
 
-        $success = \App\Services\BackupService::sendDatabaseBackupEmail($email);
+        $recipients = array_values(array_filter(array_unique($recipients)));
+
+        if (empty($recipients)) {
+            return redirect()->back()->with('error', 'Tidak ada alamat email tujuan pengiriman yang valid.');
+        }
+
+        $success = \App\Services\BackupService::sendDatabaseBackupEmail($recipients);
 
         if ($success) {
-            return redirect()->back()->with('success', "Salinan Database SQL berhasil dikirimkan ke email Anda: {$email}");
+            $recipientStr = implode(', ', $recipients);
+            return redirect()->back()->with('success', "Salinan Database SQL berhasil dikirimkan ke email: {$recipientStr}");
         } else {
             return redirect()->back()->with('error', 'Gagal mengirim email backup. Pastikan konfigurasi SMTP Email di server sudah aktif.');
         }

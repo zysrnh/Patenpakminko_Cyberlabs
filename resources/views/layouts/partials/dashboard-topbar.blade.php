@@ -395,8 +395,8 @@
             </button>
 
             <!-- MODAL PILIHAN BACKUP -->
-            <div id="backupChoiceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
-                <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 460px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.3); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto; animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
+            <div id="backupChoiceModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
+                <div style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 500px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto; animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);">
                     
                     <!-- Header -->
                     <div style="background: #0F172A; padding: 18px 22px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; border-bottom: 1px solid #1E293B;">
@@ -406,63 +406,99 @@
                             </div>
                             <div>
                                 <h3 style="font-size: 15px; font-weight: 700; margin: 0; color: #ffffff; letter-spacing: -0.2px;">Pilihan Cadangan Sistem & Database</h3>
-                                <div style="font-size: 11.5px; color: #94A3B8; margin-top: 1px;">Pilih opsi unduh berkas atau pengiriman via email</div>
+                                <div style="font-size: 11.5px; color: #94A3B8; margin-top: 1px;">Kustomisasi unduhan berkas & pengiriman via email</div>
                             </div>
                         </div>
                         <button type="button" onclick="closeBackupChoiceModal()" style="background: rgba(255,255,255,0.1); border: none; color: #94A3B8; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.color='#94A3B8'; this.style.background='rgba(255,255,255,0.1)'">✕</button>
                     </div>
 
                     <!-- Body Content -->
-                    <div style="padding: 20px 22px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto;">
+                    <div style="padding: 20px 22px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto;">
                         
-                        <!-- SEKSI 1: UNDUH LANGSUNG -->
-                        <div>
-                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                                Unduh Langsung Ke Perangkat
+                        <!-- SEKSI 1: UNDUH BERKAS ARSIP -->
+                        <form action="{{ route('admin_dpn.backup_database') }}" method="GET" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B; display: flex; align-items: center; justify-content: space-between;">
+                                <span>Unduh Berkas Arsip (.ZIP)</span>
+                                <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="font-size: 11px; color: #0284C7; text-decoration: none; font-weight: 600;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">⚡ Download DB SQL Saja (~2 MB)</a>
                             </div>
-                            <div style="display: flex; flex-direction: column; gap: 10px;">
-                                <!-- Opsi 1: SQL Only -->
-                                <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #FFFFFF; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#0284C7'; this.style.background='#F0F9FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#FFFFFF';">
-                                    <div style="width: 38px; height: 38px; background: #E0F2FE; color: #0284C7; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Download Database SQL (~2 MB)</div>
-                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px; line-height: 1.4;">Ekspor cepat & ringan. Berisi seluruh data tabel database.</div>
-                                    </div>
-                                </a>
 
-                                <!-- Opsi 2: Full ZIP -->
-                                <a href="{{ route('admin_dpn.backup_database') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: 12px; text-decoration: none; background: #FFFFFF; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#059669'; this.style.background='#ECFDF5';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#FFFFFF';">
-                                    <div style="width: 38px; height: 38px; background: #D1FAE5; color: #059669; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 01-2-2v0a2 2 0 012-2h14a2 2 0 012 2v0a2 2 0 01-2 2M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Download Arsip Full ZIP (~874 MB)</div>
-                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px; line-height: 1.4;">Arsip komplit Database SQL + Seluruh berkas PDF & Gambar 5 Layanan.</div>
-                                    </div>
-                                </a>
+                            <div style="border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #F8FAFC; display: flex; flex-direction: column; gap: 10px;">
+                                <div style="font-size: 11.5px; font-weight: 600; color: #334155; margin-bottom: 2px;">Pilih Berkas & Dokumen Layanan:</div>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; color: #1E293B;">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="checkbox" name="categories[]" value="database_sql" checked style="accent-color: #0284C7;">
+                                        <span>🗄️ Database SQL</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="checkbox" name="categories[]" value="berusaha" checked style="accent-color: #0284C7;">
+                                        <span>🏢 Layanan Berusaha</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="checkbox" name="categories[]" value="non_berusaha" checked style="accent-color: #0284C7;">
+                                        <span>🏡 Layanan Non-Berusaha</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="checkbox" name="categories[]" value="kebijakan" checked style="accent-color: #0284C7;">
+                                        <span>📜 Layanan Kebijakan</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="checkbox" name="categories[]" value="tanah_timbul" checked style="accent-color: #0284C7;">
+                                        <span>🏝️ Layanan Tanah Timbul</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="checkbox" name="categories[]" value="psn" checked style="accent-color: #0284C7;">
+                                        <span>🏗️ Layanan PSN</span>
+                                    </label>
+                                </div>
+                                
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; font-size: 12px; color: #1E293B;">
+                                    <input type="checkbox" name="categories[]" value="templates_media" checked style="accent-color: #0284C7;">
+                                    <span>📄 Template Dokumen, Form PTP, SPS & Asset</span>
+                                </label>
                             </div>
-                        </div>
+
+                            <button type="submit" onclick="closeBackupChoiceModal()" style="width: 100%; padding: 12px; background: #0F172A; color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;" onmouseover="this.style.background='#1E293B'" onmouseout="this.style.background='#0F172A'">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>Unduh Berkas Terpilih (.ZIP)</span>
+                            </button>
+                        </form>
+
+                        <div style="height: 1px; background: #E2E8F0;"></div>
 
                         <!-- SEKSI 2: PENGIRIMAN EMAIL -->
-                        <div>
-                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                                Pengiriman Via Email
+                        <form action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                            @csrf
+                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B;">
+                                Pengiriman Database SQL Via Email
                             </div>
-                            <form action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0;">
-                                @csrf
-                                <button type="submit" onclick="closeBackupChoiceModal()" style="width: 100%; text-align: left; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #E2E8F0; border-radius: 12px; background: #FFFFFF; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#7C3AED'; this.style.background='#F5F3FF';" onmouseout="this.style.borderColor='#E2E8F0'; this.style.background='#FFFFFF';">
-                                    <div style="width: 38px; height: 38px; background: #EDE9FE; color: #7C3AED; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                    </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">Kirim Salinan Database SQL ke Email</div>
-                                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px; line-height: 1.4;">Dikirimkan ke <strong style="color: #475569;">penataanpertanahanmiko@gmail.com</strong> (Jadwal otomatis setiap 3 hari).</div>
-                                    </div>
-                                </button>
-                            </form>
-                        </div>
+
+                            <div style="border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px 14px; background: #F8FAFC; display: flex; flex-direction: column; gap: 8px;">
+                                <div style="font-size: 11.5px; font-weight: 600; color: #334155;">Pilih Alamat Email Tujuan:</div>
+                                
+                                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #1E293B;">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="radio" name="target_option" value="both" checked style="accent-color: #7C3AED;">
+                                        <span><strong>Kirim ke Keduanya</strong> (Email Saya & Penataan Pertanahan)</span>
+                                    </label>
+                                    @if(Auth::user()->email)
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="radio" name="target_option" value="my_email" style="accent-color: #7C3AED;">
+                                        <span>Email Saya Saja (<strong>{{ Auth::user()->email }}</strong>)</span>
+                                    </label>
+                                    @endif
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                        <input type="radio" name="target_option" value="penataan_email" style="accent-color: #7C3AED;">
+                                        <span>Email Penataan Pertanahan (<strong>penataanpertanahanmiko@gmail.com</strong>)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" onclick="closeBackupChoiceModal()" style="width: 100%; padding: 12px; background: #7C3AED; color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s;" onmouseover="this.style.background='#6D28D9'" onmouseout="this.style.background='#7C3AED'">
+                                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                <span>Kirim Salinan SQL ke Email</span>
+                            </button>
+                        </form>
 
                     </div>
                 </div>
