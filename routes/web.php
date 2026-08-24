@@ -39,7 +39,7 @@ Route::get('/', function () {
                     $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
                 }
             } elseif ($item->module_type === 'non_berusaha' && $item->module_id) {
-                $app = \App\Models\PpkprNonBerusahaApplication::find($item->module_id);
+                $app = \App\Models\PpkprApplication::find($item->module_id);
                 if ($app) {
                     $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
                 }

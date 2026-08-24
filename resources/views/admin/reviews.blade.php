@@ -325,7 +325,7 @@
                                         $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
                                     }
                                 } elseif ($review->module_type === 'non_berusaha' && $review->module_id) {
-                                    $appItem = \App\Models\PpkprNonBerusahaApplication::find($review->module_id);
+                                    $appItem = \App\Models\PpkprApplication::find($review->module_id);
                                     if ($appItem) {
                                         $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
                                     }
