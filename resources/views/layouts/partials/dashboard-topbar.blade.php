@@ -444,104 +444,109 @@
                         
                         <!-- SEKSI 1: PILIHAN KATEGORI DOKUMEN -->
                         <div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #64748B;">
-                                        Pilih Berkas & Dokumen Layanan:
-                                    </div>
-                                    <label style="display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: #0284C7; cursor: pointer; user-select: none;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                                <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #475569;">
+                                    Pilih Berkas & Dokumen Layanan:
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #0284C7; cursor: pointer; user-select: none; background: #F0F9FF; padding: 4px 10px; border-radius: 20px; border: 1px solid #BAE6FD; transition: all 0.2s;">
                                         <input type="checkbox" id="selectAllCategoriesBtn" checked onchange="toggleSelectAllCategories(this)" style="accent-color: #0284C7; width: 14px; height: 14px; cursor: pointer;">
                                         <span>Pilih Semua</span>
                                     </label>
-                                </div>
-                                <div id="liveTotalSizeSummary" style="font-size: 11px; font-weight: 700; color: #0284C7; background: #E0F2FE; padding: 3px 10px; border-radius: 20px; border: 1px solid #BAE6FD; transition: all 0.25s;">
-                                    Total: ~0 MB
+                                    <div id="liveTotalSizeSummary" style="font-size: 11.5px; font-weight: 700; color: #0369A1; background: #E0F2FE; padding: 4px 12px; border-radius: 20px; border: 1px solid #7DD3FC; transition: all 0.25s;">
+                                        Total: ~0 MB
+                                    </div>
                                 </div>
                             </div>
 
                             <div style="border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; background: #F8FAFC;">
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 8px; font-size: 12px; color: #1E293B;">
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px; font-size: 12px; color: #1E293B;">
                                     
-                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" name="modal_categories[]" value="database_sql" data-bytes="{{ $catSizes['database_sql'] ?? 2097152 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                            <span style="font-weight: 600;">Database SQL Dump</span>
+                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                                            <input type="checkbox" name="modal_categories[]" value="database_sql" data-bytes="{{ $catSizes['database_sql'] ?? 2097152 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
+                                            <span style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Database SQL Dump</span>
                                         </div>
-                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['database_sql'] ?? 2097152) }}</span>
+                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['database_sql'] ?? 2097152) }}</span>
                                     </label>
 
-                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" name="modal_categories[]" value="berusaha" data-bytes="{{ $catSizes['berusaha'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                            <span>Dokumen Layanan Berusaha</span>
+                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                                            <input type="checkbox" name="modal_categories[]" value="berusaha" data-bytes="{{ $catSizes['berusaha'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
+                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Berusaha</span>
                                         </div>
-                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['berusaha'] ?? 0) }}</span>
+                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['berusaha'] ?? 0) }}</span>
                                     </label>
 
-                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" name="modal_categories[]" value="non_berusaha" data-bytes="{{ $catSizes['non_berusaha'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                            <span>Dokumen Layanan Non-Berusaha</span>
+                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                                            <input type="checkbox" name="modal_categories[]" value="non_berusaha" data-bytes="{{ $catSizes['non_berusaha'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
+                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Non-Berusaha</span>
                                         </div>
-                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['non_berusaha'] ?? 0) }}</span>
+                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['non_berusaha'] ?? 0) }}</span>
                                     </label>
 
-                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" name="modal_categories[]" value="kebijakan" data-bytes="{{ $catSizes['kebijakan'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                            <span>Dokumen Layanan Kebijakan</span>
+                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                                            <input type="checkbox" name="modal_categories[]" value="kebijakan" data-bytes="{{ $catSizes['kebijakan'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
+                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Kebijakan</span>
                                         </div>
-                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['kebijakan'] ?? 0) }}</span>
+                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['kebijakan'] ?? 0) }}</span>
                                     </label>
 
-                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" name="modal_categories[]" value="tanah_timbul" data-bytes="{{ $catSizes['tanah_timbul'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                            <span>Dokumen Layanan Tanah Timbul</span>
+                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                                            <input type="checkbox" name="modal_categories[]" value="tanah_timbul" data-bytes="{{ $catSizes['tanah_timbul'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
+                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Tanah Timbul</span>
                                         </div>
-                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['tanah_timbul'] ?? 0) }}</span>
+                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['tanah_timbul'] ?? 0) }}</span>
                                     </label>
 
-                                    <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px;">
-                                            <input type="checkbox" name="modal_categories[]" value="psn" data-bytes="{{ $catSizes['psn'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                            <span>Dokumen Layanan PSN</span>
+                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                                            <input type="checkbox" name="modal_categories[]" value="psn" data-bytes="{{ $catSizes['psn'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
+                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan PSN</span>
                                         </div>
-                                        <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['psn'] ?? 0) }}</span>
+                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['psn'] ?? 0) }}</span>
                                     </label>
                                 </div>
                                 
-                                <label style="display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 8px 10px; border-radius: 8px; border: 1px solid #E2E8F0; font-size: 12px; color: #1E293B; margin-top: 8px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                    <div style="display: flex; align-items: center; gap: 8px;">
-                                        <input type="checkbox" name="modal_categories[]" value="templates_media" data-bytes="{{ $catSizes['templates_media'] ?? 0 }}" checked style="accent-color: #0284C7;" onchange="syncCategoriesToForms()">
-                                        <span>Template Dokumen, Master Form PTP, SPS & Assets</span>
+                                <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; font-size: 12px; color: #1E293B; margin-top: 8px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
+                                    <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
+                                        <input type="checkbox" name="modal_categories[]" value="templates_media" data-bytes="{{ $catSizes['templates_media'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
+                                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Template Dokumen, Master Form PTP, SPS & Assets</span>
                                     </div>
-                                    <span style="font-size: 10.5px; font-weight: 600; color: #64748B; background: #F1F5F9; padding: 2px 7px; border-radius: 6px;">{{ $formatSize($catSizes['templates_media'] ?? 0) }}</span>
+                                    <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['templates_media'] ?? 0) }}</span>
                                 </label>
                             </div>
                         </div>
 
                         <!-- SEKSI 2: DUA OPSI TINDAKAN (DOWNLOAD VS KIRIM EMAIL) -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; align-items: stretch;">
                             
                             <!-- A. Form Download -->
-                            <form id="downloadBackupForm" action="{{ route('admin_dpn.backup_database') }}" method="GET" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="this.style.borderColor='#E2E8F0';">
+                            <form id="downloadBackupForm" action="{{ route('admin_dpn.backup_database') }}" method="GET" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="this.style.borderColor='#E2E8F0';">
                                 <input type="hidden" name="categories" id="download_categories_input" value="">
                                 
-                                <div>
-                                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #0284C7; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-                                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #0284C7; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                         <span>Unduh Ke Perangkat</span>
                                     </div>
-                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.4;">Unduh langsung berkas terkompresi (.ZIP) atau file SQL ke komputer Anda.</div>
+                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Unduh berkas terkompresi (.ZIP) atau database SQL langsung ke perangkat Anda.</div>
+
+                                    <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 8px 10px; background: #F8FAFC; min-height: 72px; display: flex; flex-direction: column; justify-content: center; gap: 2px;">
+                                        <div style="font-size: 10.5px; font-weight: 700; color: #0284C7; text-transform: uppercase;">Penyimpanan Berkas:</div>
+                                        <div style="font-size: 11px; color: #334155; font-weight: 500;">Langsung disimpan ke folder Downloads browser Anda.</div>
+                                    </div>
                                 </div>
 
                                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <button type="submit" onclick="submitDownloadForm()" style="width: 100%; padding: 10px 12px; background: #0F172A; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#1E293B';" onmouseout="this.style.background='#0F172A';">
+                                    <button type="submit" onclick="submitDownloadForm()" style="width: 100%; height: 40px; padding: 0 12px; background: #0F172A; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#1E293B';" onmouseout="this.style.background='#0F172A';">
                                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                         <span>Unduh Berkas (.ZIP) <span id="btnDownloadZipSizeText" style="font-weight: 400; opacity: 0.85;"></span></span>
                                     </button>
-                                    <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px 12px; background: #F0F9FF; color: #0284C7; border: 1px solid #BAE6FD; border-radius: 8px; font-weight: 600; font-size: 11.5px; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#E0F2FE';" onmouseout="this.style.background='#F0F9FF';">
+                                    <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 36px; padding: 0 12px; background: #F0F9FF; color: #0284C7; border: 1px solid #BAE6FD; border-radius: 8px; font-weight: 600; font-size: 11.5px; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#E0F2FE';" onmouseout="this.style.background='#F0F9FF';">
                                         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                         <span>Unduh DB SQL Saja (~2 MB)</span>
                                     </a>
@@ -549,43 +554,45 @@
                             </form>
 
                             <!-- B. Form Kirim Email -->
-                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#7C3AED';" onmouseout="this.style.borderColor='#E2E8F0';">
+                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%; transition: all 0.2s;" onmouseover="this.style.borderColor='#7C3AED';" onmouseout="this.style.borderColor='#E2E8F0';">
                                 @csrf
                                 <input type="hidden" name="categories" id="email_categories_input" value="">
                                 <input type="hidden" name="backup_format" id="email_backup_format_input" value="zip">
                                 
-                                <div>
-                                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #7C3AED; letter-spacing: 0.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #7C3AED; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
                                         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                         <span>Kirim Via Email</span>
                                     </div>
+                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Kirim salinan berkas .ZIP atau database SQL ke email pilihan.</div>
 
-                                    <!-- Email Target -->
-                                    <div style="font-size: 11px; font-weight: 600; color: #475569; margin-bottom: 4px;">Alamat Email Tujuan:</div>
-                                    <div style="display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; color: #1E293B;">
-                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                            <input type="radio" name="target_option" value="both" checked style="accent-color: #7C3AED;">
-                                            <span>Kirim ke Keduanya</span>
-                                        </label>
-                                        @if(Auth::user()->email)
-                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                            <input type="radio" name="target_option" value="my_email" style="accent-color: #7C3AED;">
-                                            <span>Email Saya (<strong>{{ Auth::user()->email }}</strong>)</span>
-                                        </label>
-                                        @endif
-                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                            <input type="radio" name="target_option" value="penataan_email" style="accent-color: #7C3AED;">
-                                            <span>Penataan Pertanahan</span>
-                                        </label>
+                                    <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 6px 10px; background: #F8FAFC; min-height: 72px; display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+                                        <div style="font-size: 10.5px; font-weight: 700; color: #7C3AED; text-transform: uppercase;">Alamat Email Tujuan:</div>
+                                        <div style="display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #1E293B;">
+                                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                                <input type="radio" name="target_option" value="both" checked style="accent-color: #7C3AED;">
+                                                <span>Kirim ke Keduanya</span>
+                                            </label>
+                                            @if(Auth::user()->email)
+                                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                                <input type="radio" name="target_option" value="my_email" style="accent-color: #7C3AED;">
+                                                <span>Email Saya (<strong>{{ Auth::user()->email }}</strong>)</span>
+                                            </label>
+                                            @endif
+                                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                                <input type="radio" name="target_option" value="penataan_email" style="accent-color: #7C3AED;">
+                                                <span>Penataan Pertanahan</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <button type="button" onclick="submitEmailForm('zip')" style="width: 100%; padding: 10px 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#6D28D9';" onmouseout="this.style.background='#7C3AED';">
+                                    <button type="button" onclick="submitEmailForm('zip')" style="width: 100%; height: 40px; padding: 0 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#6D28D9';" onmouseout="this.style.background='#7C3AED';">
                                         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                         <span>Kirim Berkas (.ZIP) ke Email <span id="btnEmailZipSizeText" style="font-weight: 400; opacity: 0.85;"></span></span>
                                     </button>
-                                    <button type="button" onclick="submitEmailForm('sql')" style="width: 100%; padding: 8px 12px; background: #F5F3FF; color: #7C3AED; border: 1px solid #DDD6FE; border-radius: 8px; font-weight: 600; font-size: 11.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#EDE9FE';" onmouseout="this.style.background='#F5F3FF';">
+                                    <button type="button" onclick="submitEmailForm('sql')" style="width: 100%; height: 36px; padding: 0 12px; background: #F5F3FF; color: #7C3AED; border: 1px solid #DDD6FE; border-radius: 8px; font-weight: 600; font-size: 11.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#EDE9FE';" onmouseout="this.style.background='#F5F3FF';">
                                         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                         <span>Kirim DB SQL Saja ke Email (~2 MB)</span>
                                     </button>
