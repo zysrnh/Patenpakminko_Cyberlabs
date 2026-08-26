@@ -133,6 +133,45 @@ Route::get('/', function () {
 
     $statsData['permohonan_diproses_display'] = number_format($totalPermohonan);
 
+    // Hitung realtime Rata-rata Penyelesaian dari Pertek BPN di seluruh permohonan
+    $modelsToCalculate = [
+        \App\Models\PpkprBerusahaApplication::class,
+        \App\Models\PpkprApplication::class,
+        \App\Models\KebijakanApplication::class,
+        \App\Models\PsnApplication::class,
+        \App\Models\TanahTimbulApplication::class,
+    ];
+
+    $totalPertekWorkingDays = 0;
+    $totalPertekAppsCount = 0;
+
+    foreach ($modelsToCalculate as $modelClass) {
+        $completedApps = $modelClass::where(function($q) {
+            $q->whereNotNull('bpn_pertek_uploaded_at')
+              ->orWhereIn('status', ['disetujui', 'ditolak', 'terbit_pkpr']);
+        })->get();
+
+        foreach ($completedApps as $appItem) {
+            $start = $appItem->tgl_mulai_layanan ? \Carbon\Carbon::parse($appItem->tgl_mulai_layanan) : $appItem->created_at;
+            $end = $appItem->bpn_pertek_uploaded_at 
+                ? \Carbon\Carbon::parse($appItem->bpn_pertek_uploaded_at) 
+                : ($appItem->tgl_selesai_layanan ? \Carbon\Carbon::parse($appItem->tgl_selesai_layanan) : $appItem->updated_at);
+
+            if ($start && $end) {
+                $workingDays = $start->getEffectiveWorkingDayNumber($end);
+                if ($workingDays > 0) {
+                    $totalPertekWorkingDays += $workingDays;
+                    $totalPertekAppsCount++;
+                }
+            }
+        }
+    }
+
+    if ($totalPertekAppsCount > 0) {
+        $realtimeAvgDays = (int) round($totalPertekWorkingDays / $totalPertekAppsCount);
+        $statsData['rata_rata_penyelesaian'] = $realtimeAvgDays . ' hari';
+    }
+
     // Berita / Artikel
     $beritas = \App\Models\Berita::where('is_published', true)->latest()->take(10)->get();
 
