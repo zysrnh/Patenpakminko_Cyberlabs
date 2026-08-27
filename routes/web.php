@@ -212,8 +212,32 @@ Route::get('/testimoni', function () {
         ->get()
         ->map(function ($item) {
             $item->module_label_display = $item->module_label;
-            $item->reviewer_name = $item->user->name ?? $item->user->username;
-            $item->reviewer_initial = strtoupper(substr($item->user->username ?? 'PU', 0, 2));
+            $name = null;
+            if ($item->module_type === 'berusaha' && $item->module_id) {
+                $app = \App\Models\PpkprBerusahaApplication::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
+                }
+            } elseif ($item->module_type === 'non_berusaha' && $item->module_id) {
+                $app = \App\Models\PpkprApplication::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
+                }
+            } elseif ($item->module_type === 'kebijakan' && $item->module_id) {
+                $app = \App\Models\KebijakanApplication::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
+                }
+            }
+            if (!$name || in_array(strtolower(trim($name)), ['petugas bpn', 'testttt', 'test'])) {
+                if ($item->user && !in_array(strtolower(trim($item->user->name)), ['petugas bpn', 'testttt', 'test'])) {
+                    $name = $item->user->name;
+                } else {
+                    $name = ($item->user->username && !in_array(strtolower(trim($item->user->username)), ['petugas bpn', 'testttt', 'test'])) ? $item->user->username : 'Irwan';
+                }
+            }
+            $item->reviewer_name = $name;
+            $item->reviewer_initial = strtoupper(substr($name ?? 'PU', 0, 2));
             return $item;
         });
 
@@ -223,8 +247,12 @@ Route::get('/testimoni', function () {
         ->get()
         ->map(function ($item) {
             $item->module_label_display = 'INFORMAL - ' . strtoupper($item->informal_type);
-            $item->reviewer_name = $item->name ?? ($item->user->name ?? ($item->user->username ?? 'Publik'));
-            $item->reviewer_initial = strtoupper(substr($item->reviewer_name, 0, 2));
+            $name = $item->name ?? ($item->user->name ?? ($item->user->username ?? 'Publik'));
+            if (in_array(strtolower(trim($name)), ['testttt', 'test', 'petugas bpn'])) {
+                $name = 'Publik';
+            }
+            $item->reviewer_name = $name;
+            $item->reviewer_initial = strtoupper(substr($name, 0, 2));
             return $item;
         });
 
