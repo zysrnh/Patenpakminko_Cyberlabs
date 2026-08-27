@@ -173,4 +173,68 @@ class ReviewController extends Controller
  
         return redirect()->back()->with('success', 'Ulasan Peta Informal berhasil dihapus.');
     }
+
+    /**
+     * Update / Edit Ulasan Formal oleh Admin DPN.
+     */
+    public function update(Request $request, $id)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+        ]);
+
+        $review = Review::findOrFail($id);
+        $rating = (int) $request->input('rating');
+        $ratingLabels = [
+            5 => 'Sangat Memuaskan',
+            4 => 'Memuaskan',
+            3 => 'Cukup',
+            2 => 'Kurang',
+            1 => 'Sangat Kurang'
+        ];
+
+        $review->rating = $rating;
+        $review->rating_label = $ratingLabels[$rating] ?? 'Memuaskan';
+        $review->comment = $request->input('comment');
+        if ($request->has('is_approved')) {
+            $review->is_approved = (bool) $request->input('is_approved');
+        }
+        $review->save();
+
+        return redirect()->back()->with('success', 'Ulasan berhasil diperbarui!');
+    }
+
+    /**
+     * Update / Edit Ulasan Informal oleh Admin DPN.
+     */
+    public function updateInformal(Request $request, $id)
+    {
+        if (!Auth::user()->isDpn()) {
+            abort(403, 'Aksi tidak diizinkan.');
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+            'name' => 'nullable|string|max:150',
+        ]);
+
+        $review = \App\Models\InformalRating::findOrFail($id);
+        $review->rating = (int) $request->input('rating');
+        $review->comment = $request->input('comment');
+        if ($request->filled('name')) {
+            $review->name = $request->input('name');
+        }
+        if ($request->has('is_approved')) {
+            $review->is_approved = (bool) $request->input('is_approved');
+        }
+        $review->save();
+
+        return redirect()->back()->with('success', 'Ulasan Informal berhasil diperbarui!');
+    }
 }

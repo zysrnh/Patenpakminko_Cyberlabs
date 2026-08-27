@@ -383,10 +383,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/admin/pelaku_usaha', \App\Http\Controllers\AdminPelakuUsahaController::class)->only(['index', 'edit', 'update', 'destroy'])->names('admin.pelaku_usaha');
     Route::get('/admin/reviews', [ReviewController::class, 'adminIndex'])->name('admin.reviews.index');
     Route::post('/admin/reviews/{id}/approve', [ReviewController::class, 'approve'])->name('admin.reviews.approve');
+    Route::put('/admin/reviews/{id}', [ReviewController::class, 'update'])->name('admin.reviews.update');
     Route::delete('/admin/reviews/{id}', [ReviewController::class, 'destroy'])->name('admin.reviews.destroy');
     
     // Moderasi Informal
     Route::post('/admin/informal-reviews/{id}/approve', [ReviewController::class, 'approveInformal'])->name('admin.informal-reviews.approve');
+    Route::put('/admin/informal-reviews/{id}', [ReviewController::class, 'updateInformal'])->name('admin.informal-reviews.update');
     Route::delete('/admin/informal-reviews/{id}', [ReviewController::class, 'destroyInformal'])->name('admin.informal-reviews.destroy');
  
     // WhatsApp Gateway Settings (DPN / Super Admin)
