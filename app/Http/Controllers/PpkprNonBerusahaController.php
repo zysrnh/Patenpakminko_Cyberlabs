@@ -268,19 +268,18 @@ class PpkprNonBerusahaController extends Controller
         // ==========================================
 
         // BPN Langkah 1: Verifikasi Berkas Awal
-        if ($user->isBpn() && $application->status === 'menunggu_bpn' && $step === 'bpn_berkas') {
+        if ($user->isBpn() && $step === 'bpn_berkas') {
             $request->validate([
                 'action' => 'required|in:approve,reject',
-                'notes' => 'required|string|max:1000',
+                'notes' => 'nullable|string|max:1000',
                 'sps_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:102400',
             ], [
-                'notes.required' => 'Catatan pemeriksaan berkas wajib diisi.',
                 'sps_document.mimes' => 'Format file SPS harus PDF, JPG, JPEG, atau PNG.',
                 'sps_document.max' => 'Ukuran file SPS maksimal 100MB.',
             ]);
 
             $action = $request->input('action');
-            $notes = $request->input('notes');
+            $notes = $request->input('notes') ?: ($action === 'approve' ? 'Berkas disetujui / lengkap.' : 'Berkas tidak lengkap.');
 
             $application->bpn_notes = $notes;
             if ($action === 'approve') {
@@ -292,7 +291,7 @@ class PpkprNonBerusahaController extends Controller
                 }
 
                 $application->bpn_berkas_status = 'diterima';
-                    $application->bpn_berkas_approved_at = now();
+                $application->bpn_berkas_approved_at = now();
                 $application->bpn_pembayaran_status = 'menunggu';
                 // Tetap menunggu BPN untuk langkah pembayaran PNBP
                 $msg = 'Berkas persyaratan berhasil diterima. Menunggu proses konfirmasi pembayaran PNBP.';
@@ -482,16 +481,15 @@ class PpkprNonBerusahaController extends Controller
         // ==========================================
         $request->validate([
             'action' => 'required|in:approve,reject',
-            'notes' => 'required|string|max:1000',
+            'notes' => 'nullable|string|max:1000',
             'approval_document' => 'nullable|file|mimes:pdf|max:102400', // Satu Pintu
         ], [
-            'notes.required' => 'Catatan verifikasi wajib diisi.',
             'approval_document.mimes' => 'Dokumen PPKPR harus berformat PDF.',
             'approval_document.max' => 'Ukuran berkas dokumen PPKPR maksimal adalah 100MB.',
         ]);
 
         $action = $request->input('action');
-        $notes = $request->input('notes');
+        $notes = $request->input('notes') ?: ($action === 'approve' ? 'Disetujui.' : 'Ditolak.');
 
         // 2. Verifikasi oleh Dinas PU
         if ($user->isDinasPu() && $application->status === 'menunggu_dinas_pu') {
