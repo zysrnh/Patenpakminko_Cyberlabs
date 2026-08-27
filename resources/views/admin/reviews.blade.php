@@ -414,9 +414,14 @@
                                                 </button>
                                             </form>
                                         @endif
-                                        <button type="button" class="btn-edit" onclick="openEditReviewModal({{ $review->id }}, '{{ addslashes($userName) }}', {{ $review->rating }}, '{{ addslashes($review->comment) }}', {{ $review->is_approved ? 'true' : 'false' }})">
-                                            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                            Edit
+                                        <button type="button" class="btn-edit btn-trigger-edit-formal"
+                                             data-id="{{ $review->id }}"
+                                             data-name="{{ e($userName) }}"
+                                             data-rating="{{ $review->rating }}"
+                                             data-comment="{{ e($review->comment) }}"
+                                             data-approved="{{ $review->is_approved ? '1' : '0' }}">
+                                             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                             Edit
                                         </button>
                                         <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')" style="display:inline;">
                                             @csrf
@@ -557,4 +562,133 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Edit Ulasan Formal -->
+<div id="editReviewModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+    <div style="background: #ffffff; border-radius: 8px; width: 100%; max-width: 520px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); overflow: hidden; margin: 16px;">
+        <div style="background: #003B64; color: #ffffff; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+            <h3 style="font-size: 15px; font-weight: 800; margin: 0; color: #ffffff;">Edit Ulasan Layanan</h3>
+            <button type="button" onclick="closeEditReviewModal()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+        <form id="editReviewForm" method="POST" action="" style="padding: 20px;">
+            @csrf
+            @method('PUT')
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Nama Pemohon / Pelaku Usaha:</label>
+                <input type="text" id="edit_reviewer_name" readonly class="form-control" style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; color: #334155; width: 100%;">
+            </div>
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Penilaian Bintang (1-5):</label>
+                <select name="rating" id="edit_review_rating" class="form-control" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
+                    <option value="5">⭐⭐⭐⭐⭐ 5 Bintang (Sangat Memuaskan)</option>
+                    <option value="4">⭐⭐⭐⭐ 4 Bintang (Memuaskan)</option>
+                    <option value="3">⭐⭐⭐ 3 Bintang (Cukup)</option>
+                    <option value="2">⭐⭐ 2 Bintang (Kurang)</option>
+                    <option value="1">⭐ 1 Bintang (Sangat Kurang)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Teks Catatan Ulasan / Testimoni:</label>
+                <textarea name="comment" id="edit_review_comment" rows="4" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 10px 12px; font-size: 13px; width: 100%; resize: vertical;" placeholder="Tulis ulasan..."></textarea>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Status Publikasi:</label>
+                <select name="is_approved" id="edit_review_is_approved" class="form-control" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
+                    <option value="1">✅ Tampil di Halaman Utama (Approved)</option>
+                    <option value="0">⏳ Menunggu Moderasi / Sembunyikan</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #E2E8F0; padding-top: 14px;">
+                <button type="button" onclick="closeEditReviewModal()" class="btn btn-secondary" style="border-radius: 4px; padding: 8px 16px; font-size: 13px; font-weight: 700;">Batal</button>
+                <button type="submit" class="btn btn-primary" style="background: #218AC9; border-color: #218AC9; border-radius: 4px; padding: 8px 18px; font-size: 13px; font-weight: 700; color: #ffffff;">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit Ulasan Informal -->
+<div id="editInformalModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+    <div style="background: #ffffff; border-radius: 8px; width: 100%; max-width: 520px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); overflow: hidden; margin: 16px;">
+        <div style="background: #003B64; color: #ffffff; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+            <h3 style="font-size: 15px; font-weight: 800; margin: 0; color: #ffffff;">Edit Ulasan Peta Informal</h3>
+            <button type="button" onclick="closeEditInformalModal()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+        <form id="editInformalForm" method="POST" action="" style="padding: 20px;">
+            @csrf
+            @method('PUT')
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Nama Pengguna / Publik:</label>
+                <input type="text" name="name" id="edit_informal_name" class="form-control" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
+            </div>
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Penilaian Bintang (1-5):</label>
+                <select name="rating" id="edit_informal_rating" class="form-control" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
+                    <option value="5">⭐⭐⭐⭐⭐ 5 Bintang (Sangat Memuaskan)</option>
+                    <option value="4">⭐⭐⭐⭐ 4 Bintang (Memuaskan)</option>
+                    <option value="3">⭐⭐⭐ 3 Bintang (Cukup)</option>
+                    <option value="2">⭐⭐ 2 Bintang (Kurang)</option>
+                    <option value="1">⭐ 1 Bintang (Sangat Kurang)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 14px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Teks Catatan Ulasan / Testimoni:</label>
+                <textarea name="comment" id="edit_informal_comment" rows="4" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 10px 12px; font-size: 13px; width: 100%; resize: vertical;" placeholder="Tulis ulasan..."></textarea>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Status Publikasi:</label>
+                <select name="is_approved" id="edit_informal_is_approved" class="form-control" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
+                    <option value="1">✅ Tampil di Halaman Utama (Approved)</option>
+                    <option value="0">⏳ Menunggu Moderasi / Sembunyikan</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #E2E8F0; padding-top: 14px;">
+                <button type="button" onclick="closeEditReviewModal()" class="btn btn-secondary" style="border-radius: 4px; padding: 8px 16px; font-size: 13px; font-weight: 700;">Batal</button>
+                <button type="submit" class="btn btn-primary" style="background: #218AC9; border-color: #218AC9; border-radius: 4px; padding: 8px 18px; font-size: 13px; font-weight: 700; color: #ffffff;">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-trigger-edit-formal');
+    if (btn) {
+        var id = btn.getAttribute('data-id');
+        var name = btn.getAttribute('data-name');
+        var rating = btn.getAttribute('data-rating');
+        var comment = btn.getAttribute('data-comment');
+        var approved = btn.getAttribute('data-approved');
+
+        document.getElementById('editReviewForm').action = '/admin/reviews/' + id;
+        document.getElementById('edit_reviewer_name').value = name;
+        document.getElementById('edit_review_rating').value = rating;
+        document.getElementById('edit_review_comment').value = comment;
+        document.getElementById('edit_review_is_approved').value = approved;
+        document.getElementById('editReviewModal').style.display = 'flex';
+    }
+
+    var btnInf = e.target.closest('.btn-trigger-edit-informal');
+    if (btnInf) {
+        var idInf = btnInf.getAttribute('data-id');
+        var nameInf = btnInf.getAttribute('data-name');
+        var ratingInf = btnInf.getAttribute('data-rating');
+        var commentInf = btnInf.getAttribute('data-comment');
+        var approvedInf = btnInf.getAttribute('data-approved');
+
+        document.getElementById('editInformalForm').action = '/admin/informal-reviews/' + idInf;
+        document.getElementById('edit_informal_name').value = nameInf;
+        document.getElementById('edit_informal_rating').value = ratingInf;
+        document.getElementById('edit_informal_comment').value = commentInf;
+        document.getElementById('edit_informal_is_approved').value = approvedInf;
+        document.getElementById('editInformalModal').style.display = 'flex';
+    }
+});
+
+function closeEditReviewModal() {
+    document.getElementById('editReviewModal').style.display = 'none';
+}
+function closeEditInformalModal() {
+    document.getElementById('editInformalModal').style.display = 'none';
+}
+</script>
 @endsection
