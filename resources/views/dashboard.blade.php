@@ -1186,7 +1186,7 @@
                     $processSla($allPendingBerusaha);
                     $processSla($allPendingKebijakan);
 
-                    // --- Kalkulasi Pending Souvenirs (> 10 hari post-pertek upload, belum dikirim) ---
+                    // --- Kalkulasi Pending Souvenirs (> 10 hari kerja SLA Pertek) ---
                     $pendingSouvenirs = [];
                     $souvenirModels = [
                         'ppkpr_non_berusaha' => \App\Models\PpkprApplication::class,
@@ -1210,9 +1210,14 @@
                             ->get();
 
                         foreach ($apps as $app) {
-                            $uploadedAt = $app->bpn_pertek_uploaded_at ?? $app->updated_at;
-                            $days = (int) $uploadedAt->diffInWorkingDaysWithHolidays(now());
-                            if ($days >= 10) {
+                            $startDate = $app->tgl_mulai_layanan ? \Carbon\Carbon::parse($app->tgl_mulai_layanan) : $app->created_at;
+                            $pertekDate = $app->bpn_pertek_uploaded_at ? \Carbon\Carbon::parse($app->bpn_pertek_uploaded_at) : $app->updated_at;
+
+                            // Durasi pengerjaan Pertek BPN (hari kerja) dari awal pengajuan s/d pertek terunggah
+                            $pertekWorkingDays = $startDate->getEffectiveWorkingDayNumber($pertekDate);
+
+                            // Gift / Souvenir HANYA dipicu jika pengerjaan Pertek BPN melebihi SLA 10 Hari Kerja (> 10)
+                            if ($pertekWorkingDays > 10) {
                                 $pendingSouvenirs[] = [
                                     'id'                 => $app->id,
                                     'application_number' => $app->application_number,
@@ -1220,8 +1225,8 @@
                                     'type_key'           => $typeKey,
                                     'pemilik'            => $app->nama_pemilik_usaha ?? ($app->user->name ?? $app->user->username),
                                     'phone'              => $app->user->phone_number ?? '—',
-                                    'days'               => $days,
-                                    'uploaded_at'        => $uploadedAt,
+                                    'days'               => $pertekWorkingDays,
+                                    'uploaded_at'        => $pertekDate,
                                 ];
                             }
                         }
