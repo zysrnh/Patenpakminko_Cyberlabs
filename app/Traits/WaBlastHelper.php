@@ -45,7 +45,10 @@ trait WaBlastHelper
                     }
                     return "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan *LENGKAP* oleh Kantor Pertanahan Kota Sukabumi.{$spsLink}\n\nSilakan lakukan pembayaran PNBP sesuai tagihan pada dokumen di atas. Setelah melakukan pembayaran, mohon balas/kirimkan bukti pembayaran Anda ke kontak WhatsApp ini atau ke Kantor Pertanahan Kota Sukabumi untuk verifikasi. Setelah pembayaran dikonfirmasi lunas, Anda akan menerima detail akun login dashboard.";
                 } else {
-                    return "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas');
+                    $settings = $this->getWhatsappSettings();
+                    $cpContact = !empty($settings['cp_admin']) ? $settings['cp_admin'] : ($settings['admin_bpn'] ?? '');
+                    $cpText = !empty($cpContact) ? " (Hubungi WA Admin BPN: {$cpContact})" : "";
+                    return "Halo {$nama}, berkas Permohonan {$layanan}{$no_berkas_text} Anda dinyatakan TIDAK LENGKAP oleh Kantor Pertanahan Kota Sukabumi.\nAlasan: \"{$app->bpn_notes}\"\n\nMohon siapkan perbaikan berkas sesuai arahan petugas atau hubungi admin Kantor Pertanahan Kota Sukabumi{$cpText}.\n\nSilakan klik link berikut untuk mengunggah ulang perbaikan berkas Anda:\n" . url('/revisi-berkas');
                 }
             })(),
 
@@ -164,8 +167,9 @@ trait WaBlastHelper
             $msg .= "\n\nKami akan menghubungi Anda untuk informasi selanjutnya.";
             $msg .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             
-            if (!empty($settings['cp_admin'])) {
-                $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+            $cpNumber = !empty($settings['cp_admin']) ? $settings['cp_admin'] : ($settings['admin_bpn'] ?? '');
+            if (!empty($cpNumber)) {
+                $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin WA: " . $cpNumber . "_";
             }
             $wa_links[] = [
                 'target' => 'Pemohon',

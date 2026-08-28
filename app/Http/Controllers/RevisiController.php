@@ -123,11 +123,25 @@ class RevisiController extends Controller
         $notes = $application->bpn_notes ?? $application->putr_notes ?? $application->dinas_pu_notes ?? "";
         $missingFiles = [];
         
-        if (strpos($notes, "Berkas yang harus diperbaiki:") !== false) {
-            $parts = explode("Berkas yang harus diperbaiki:", $notes);
-            $list = explode("\n", trim($parts[1]));
+        $separator = null;
+        if (stripos($notes, "Berkas yang harus diperbaiki:") !== false) {
+            $separator = "Berkas yang harus diperbaiki:";
+        } elseif (stripos($notes, "Mohon perbaiki dokumen berikut:") !== false) {
+            $separator = "Mohon perbaiki dokumen berikut:";
+        } elseif (stripos($notes, "dokumen berikut:") !== false) {
+            $separator = "dokumen berikut:";
+        }
+
+        if ($separator) {
+            $parts = explode($separator, $notes);
+            $subText = $parts[1] ?? '';
+            if (stripos($subText, "Catatan Tambahan:") !== false) {
+                $subParts = explode("Catatan Tambahan:", $subText);
+                $subText = $subParts[0];
+            }
+            $list = explode("\n", trim($subText));
             foreach($list as $l) {
-                $item = trim(str_replace("-", "", $l));
+                $item = trim(preg_replace('/^[\s\-\•\*\.]+/u', '', $l));
                 if(!empty($item)) {
                     $missingFiles[] = $item;
                 }
@@ -138,6 +152,46 @@ class RevisiController extends Controller
         }
 
         return view("revisi.upload", compact("application", "type", "missingFiles", "notes"));
+    }
+
+    private function resolveDbColumn(string $originalName, $application): string
+    {
+        $table = $application->getTable();
+        $nameLower = strtolower($originalName);
+
+        // Keyword & explicit mapping detection
+        if (str_contains($nameLower, 'rencana')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'rencana_penggunaan_tanah')) return 'rencana_penggunaan_tanah';
+        }
+        if (str_contains($nameLower, 'penguasaan') || str_contains($nameLower, 'sertifikat') || str_contains($nameLower, 'bukti')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'bukti_penguasaan_tanah')) return 'bukti_penguasaan_tanah';
+        }
+        if (str_contains($nameLower, 'peta') || str_contains($nameLower, 'sketsa')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'peta_lokasi')) return 'peta_lokasi';
+        }
+        if (str_contains($nameLower, 'ktp')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'fc_ktp')) return 'fc_ktp';
+        }
+        if (str_contains($nameLower, 'npwp')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'fc_npwp')) return 'fc_npwp';
+        }
+        if (str_contains($nameLower, 'kuasa')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'surat_kuasa')) return 'surat_kuasa';
+        }
+        if (str_contains($nameLower, 'nib') || str_contains($nameLower, 'kbli')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'nib')) return 'nib';
+        }
+        if (str_contains($nameLower, 'akta')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'fc_akta_pendirian')) return 'fc_akta_pendirian';
+        }
+        if (str_contains($nameLower, 'proposal')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'proposal_kegiatan')) return 'proposal_kegiatan';
+        }
+        if (str_contains($nameLower, 'ptp') || str_contains($nameLower, 'formulir')) {
+            if (\Illuminate\Support\Facades\Schema::hasColumn($table, 'formulir_ptp')) return 'formulir_ptp';
+        }
+
+        return "persyaratan_lainnya";
     }
 
     public function upload(Request $request, $type, $id)
@@ -151,19 +205,6 @@ class RevisiController extends Controller
 
         if(!$application) abort(404);
 
-        // Map nama berkas ke kolom database
-        $mapping = [
-            "Formulir PTP" => "formulir_ptp",
-            "Peta Lokasi / Sketsa" => "peta_lokasi",
-            "KTP Pemohon" => "fc_ktp",
-            "NPWP" => "fc_npwp",
-            "Surat Kuasa" => "surat_kuasa",
-            "NIB / KBLI" => "nib",
-            "Akta Pendirian" => "fc_akta_pendirian",
-            "Proposal Kegiatan" => "proposal_kegiatan",
-            "Dokumen Perbaikan (Gabungan PDF/ZIP)" => "persyaratan_lainnya"
-        ];
-
         $timestamp = date("Ymd_His");
         $uploadedCount = 0;
 
@@ -173,14 +214,7 @@ class RevisiController extends Controller
                 $originalName = str_replace("doc_", "", $key);
                 $originalName = str_replace("_", " ", $originalName); // revert back
                 
-                // Cari kolom db yang sesuai
-                $dbColumn = "persyaratan_lainnya"; // default fallback
-                foreach($mapping as $k => $col) {
-                    if (strtolower(str_replace(" ", "", $k)) == strtolower(str_replace(" ", "", $originalName))) {
-                        $dbColumn = $col;
-                        break;
-                    }
-                }
+                $dbColumn = $this->resolveDbColumn($originalName, $application);
 
                 $extension = $file->getClientOriginalExtension();
                 $fileName = "REVISI_" . $type . "_" . $id . "_" . $dbColumn . "_" . $timestamp . "." . $extension;
@@ -200,13 +234,7 @@ class RevisiController extends Controller
                 $originalName = str_replace("temp_doc_", "", $inputKey);
                 $originalName = str_replace("_", " ", $originalName);
                 
-                $dbColumn = "persyaratan_lainnya";
-                foreach($mapping as $k => $col) {
-                    if (strtolower(str_replace(" ", "", $k)) == strtolower(str_replace(" ", "", $originalName))) {
-                        $dbColumn = $col;
-                        break;
-                    }
-                }
+                $dbColumn = $this->resolveDbColumn($originalName, $application);
 
                 $extension = pathinfo($tempPath, PATHINFO_EXTENSION);
                 $fileName = "REVISI_" . $type . "_" . $id . "_" . $dbColumn . "_" . $timestamp . "." . $extension;
