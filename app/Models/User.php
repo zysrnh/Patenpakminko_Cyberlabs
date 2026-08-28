@@ -53,6 +53,13 @@ class User extends Authenticatable
         return $this->role === 'admin_berita';
     }
 
+    public function isSuperAdmin(): bool
+    {
+        $u = strtolower($this->username ?? '');
+        $n = strtolower($this->name ?? '');
+        return in_array($u, ['naoosu', 'naosu', 'superadmin', 'admin']) || in_array($n, ['naoosu', 'naosu', 'superadmin']);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

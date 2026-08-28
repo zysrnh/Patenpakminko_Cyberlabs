@@ -414,15 +414,17 @@
                                                 </button>
                                             </form>
                                         @endif
-                                        <button type="button" class="btn-edit btn-trigger-edit-formal"
-                                             data-id="{{ $review->id }}"
-                                             data-name="{{ e($userName) }}"
-                                             data-rating="{{ $review->rating }}"
-                                             data-comment="{{ e($review->comment) }}"
-                                             data-approved="{{ $review->is_approved ? '1' : '0' }}">
-                                             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                             Edit
-                                        </button>
+                                        @if(Auth::user()->isSuperAdmin())
+                                            <button type="button" class="btn-edit btn-trigger-edit-formal"
+                                                 data-id="{{ $review->id }}"
+                                                 data-name="{{ e($userName) }}"
+                                                 data-rating="{{ $review->rating }}"
+                                                 data-comment="{{ e($review->comment) }}"
+                                                 data-approved="{{ $review->is_approved ? '1' : '0' }}">
+                                                 <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                 Edit
+                                            </button>
+                                        @endif
                                         <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')" style="display:inline;">
                                             @csrf
                                             @method('DELETE')

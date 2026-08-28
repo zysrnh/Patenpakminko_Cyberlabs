@@ -179,8 +179,8 @@ class ReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Aksi edit ulasan hanya diizinkan untuk akun Super Admin NaooSU.');
         }
 
         $request->validate([
@@ -214,8 +214,8 @@ class ReviewController extends Controller
      */
     public function updateInformal(Request $request, $id)
     {
-        if (!Auth::user()->isDpn()) {
-            abort(403, 'Aksi tidak diizinkan.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Aksi edit ulasan hanya diizinkan untuk akun Super Admin NaooSU.');
         }
 
         $request->validate([
