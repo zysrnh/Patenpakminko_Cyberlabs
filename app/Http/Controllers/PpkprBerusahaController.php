@@ -574,16 +574,24 @@ class PpkprBerusahaController extends Controller
      */
     private function getWhatsappSettings()
     {
-        $path = storage_path('app/whatsapp_settings.json');
-        if (file_exists($path)) {
-            $settings = json_decode(file_get_contents($path), true);
-        } else {
+        $settings = [];
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
+        }
+        if (empty($settings)) {
+            $path = storage_path('app/whatsapp_settings.json');
+            if (file_exists($path)) {
+                $settings = json_decode(file_get_contents($path), true) ?? [];
+            }
+        }
+        if (empty($settings)) {
             $settings = [
                 'connected' => true,
                 'fonnte_token' => '',
                 'template' => "Halo {nama_pemohon}, permohonan Anda ({nomor_registrasi}) saat ini memasuki tahap: {status_sekarang}.\n\nCatatan: {catatan_terakhir}\n\nPantau di: {tautan_detail}",
             ];
-            file_put_contents($path, json_encode($settings, JSON_PRETTY_PRINT));
+            \Illuminate\Support\Facades\Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
+            @file_put_contents(storage_path('app/whatsapp_settings.json'), json_encode($settings, JSON_PRETTY_PRINT));
         }
         return $settings;
     }

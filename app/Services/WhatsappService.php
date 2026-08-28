@@ -177,12 +177,16 @@ class WhatsappService
 
     private function loadSettings(): array
     {
-        $path = storage_path('app/whatsapp_settings.json');
-
-        if (!file_exists($path)) {
-            return [];
+        $settings = [];
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
+            $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
         }
-
-        return json_decode(file_get_contents($path), true) ?? [];
+        if (empty($settings)) {
+            $path = storage_path('app/whatsapp_settings.json');
+            if (file_exists($path)) {
+                $settings = json_decode(file_get_contents($path), true) ?? [];
+            }
+        }
+        return $settings;
     }
 }

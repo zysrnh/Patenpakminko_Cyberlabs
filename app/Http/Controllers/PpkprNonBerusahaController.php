@@ -679,7 +679,9 @@ class PpkprNonBerusahaController extends Controller
             $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
         }
         $settings = array_merge($settings, $data);
-        \Illuminate\Support\Facades\Storage::disk('local')->put('whatsapp_settings.json', json_encode($settings, JSON_PRETTY_PRINT));
+        $encoded = json_encode($settings, JSON_PRETTY_PRINT);
+        \Illuminate\Support\Facades\Storage::disk('local')->put('whatsapp_settings.json', $encoded);
+        @file_put_contents(storage_path('app/whatsapp_settings.json'), $encoded);
 
         return redirect()->back()->with('success', 'Kontak Admin Instansi berhasil disimpan!');
     }
