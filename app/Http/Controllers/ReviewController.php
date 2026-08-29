@@ -14,17 +14,23 @@ class ReviewController extends Controller
     public function index()
     {
         $user = Auth::user();
- 
+
         // Admin DPN langsung diarahkan ke halaman moderasi ulasan
         if ($user->isDpn()) {
             return redirect()->route('admin.reviews.index');
         }
- 
+
         $myReviews = Review::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
- 
-        return view('ulasan.index', compact('myReviews'));
+
+        $approvedReviews = Review::with('user')
+            ->where('is_approved', true)
+            ->orderBy('created_at', 'desc')
+            ->take(20)
+            ->get();
+
+        return view('ulasan.index', compact('myReviews', 'approvedReviews'));
     }
  
     /**

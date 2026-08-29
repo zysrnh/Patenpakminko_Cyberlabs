@@ -116,7 +116,7 @@
         </div>
         <div class="panel-body" style="padding: 16px;">
             <div class="reviews-scroll">
-                @forelse($approvedReviews as $rev)
+                @forelse($approvedReviews ?? [] as $rev)
                     <div class="review-item">
                         <div class="review-header">
                             <div>
