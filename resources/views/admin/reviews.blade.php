@@ -8,29 +8,32 @@
         color: #F59E0B;
         display: inline-flex;
         align-items: center;
-        gap: 3px;
+        gap: 2px;
     }
     
     .actions-wrap {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 6px;
+        justify-content: center;
+        gap: 5px;
+        flex-wrap: nowrap;
     }
 
     .btn-approve {
         background: #DCFCE7;
         color: #15803D;
         border: 1px solid #86EFAC;
-        padding: 6px 12px;
+        padding: 5px 9px;
         border-radius: 4px;
         font-weight: 700;
-        font-size: 12px;
+        font-size: 11px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 4px;
         transition: all 0.18s ease;
         cursor: pointer;
+        white-space: nowrap;
     }
     .btn-approve:hover {
         background: #16A34A;
@@ -42,16 +45,17 @@
         background: #DC2626;
         color: #FFFFFF;
         border: 1px solid #DC2626;
-        padding: 6px 12px;
+        padding: 5px 9px;
         border-radius: 4px;
         font-weight: 700;
-        font-size: 12px;
+        font-size: 11px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 4px;
         transition: all 0.18s ease;
         cursor: pointer;
+        white-space: nowrap;
     }
     .btn-delete:hover {
         background: #B91C1C;
@@ -62,16 +66,17 @@
         background: #FEF3C7;
         color: #D97706;
         border: 1px solid #FCD34D;
-        padding: 6px 12px;
+        padding: 5px 9px;
         border-radius: 4px;
         font-weight: 700;
-        font-size: 12px;
+        font-size: 11px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 4px;
         transition: all 0.18s ease;
         cursor: pointer;
+        white-space: nowrap;
     }
     .btn-edit:hover {
         background: #F59E0B;
@@ -144,26 +149,28 @@
         background: #DCFCE7;
         color: #15803D;
         border: 1px solid #86EFAC;
-        padding: 4px 8px;
+        padding: 5px 9px;
         border-radius: 4px;
         font-size: 11px;
         font-weight: 700;
         display: inline-flex;
         align-items: center;
         gap: 4px;
+        white-space: nowrap;
     }
 
     .badge-pending {
         background: #FEF3C7;
         color: #B45309;
         border: 1px solid #FDE68A;
-        padding: 4px 8px;
+        padding: 5px 9px;
         border-radius: 4px;
         font-size: 11px;
         font-weight: 700;
         display: inline-flex;
         align-items: center;
         gap: 4px;
+        white-space: nowrap;
     }
 
     .coord-badge {
@@ -177,6 +184,37 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
+        white-space: nowrap;
+    }
+
+    .desktop-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .desktop-table-wrap table {
+        width: 100%;
+        min-width: 980px;
+        border-collapse: collapse;
+    }
+
+    .desktop-table-wrap th {
+        padding: 12px 14px;
+        background: #F8FAFC;
+        border-bottom: 1.5px solid #E2E8F0;
+        font-size: 11px;
+        color: #475569;
+        text-transform: uppercase;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+    }
+
+    .desktop-table-wrap td {
+        padding: 13px 14px;
+        border-bottom: 1px solid #F1F5F9;
+        vertical-align: middle;
     }
 
     .mobile-reviews-list {
@@ -375,7 +413,7 @@
     
     <div class="panel-body" style="padding: 0;">
         {{-- Desktop Table --}}
-        <div class="desktop-table-wrap" style="width:100%; overflow-x:auto;">
+        <div class="desktop-table-wrap">
             @if($reviews->isEmpty())
                 <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #64748B;">
                     <svg fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5" style="width: 40px; height: 40px; margin-bottom: 10px;">
@@ -384,16 +422,16 @@
                     <p style="font-weight: 600; font-size: 13px;">Tidak ada ulasan layanan formal yang sesuai dengan filter.</p>
                 </div>
             @else
-                <table style="width: 100%; border-collapse: collapse;">
+                <table>
                     <thead>
-                        <tr style="background: #F8FAFC; border-bottom: 1.5px solid #E2E8F0; font-size: 11px; color: #475569; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em;">
-                            <th style="padding: 10px 14px; text-align: left;">Pelaku Usaha</th>
-                            <th style="padding: 10px 14px; text-align: left;">Layanan / Modul</th>
-                            <th style="padding: 10px 14px; text-align: left;">Penilaian</th>
-                            <th style="padding: 10px 14px; text-align: left;">Catatan Ulasan</th>
-                            <th style="padding: 10px 14px; text-align: center;">Status Publikasi</th>
+                        <tr>
+                            <th style="text-align: left; width: 20%;">Pelaku Usaha</th>
+                            <th style="text-align: left; width: 16%;">Layanan / Modul</th>
+                            <th style="text-align: left; width: 14%;">Penilaian</th>
+                            <th style="text-align: left; width: 25%;">Catatan Ulasan</th>
+                            <th style="text-align: center; width: 12%;">Status Publikasi</th>
                             @if(Auth::user()->isDpn())
-                                <th style="padding: 10px 14px; text-align: center; width: 140px;">Aksi Admin</th>
+                                <th style="text-align: center; width: 13%;">Aksi Admin</th>
                             @endif
                         </tr>
                     </thead>
@@ -419,21 +457,21 @@
                                 }
                                 $initial = strtoupper(substr($userName, 0, 2));
                             @endphp
-                            <tr style="border-bottom: 1px solid #F1F5F9;">
-                                <td style="padding: 12px 14px;">
+                            <tr>
+                                <td>
                                     <div class="user-flex">
                                         <div class="user-avatar-badge">{{ $initial }}</div>
-                                        <div>
-                                            <strong style="font-size: 13px; color: #003B64; display: block;">{{ $userName }}</strong>
+                                        <div style="min-width:0; overflow:hidden;">
+                                            <strong style="font-size: 13px; color: #003B64; display: block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">{{ $userName }}</strong>
                                             <div style="font-size: 11px; color: #64748B; margin-top: 2px;">Tgl: {{ $review->created_at->format('d M Y, H:i') }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td style="padding: 12px 14px;">
-                                    <span style="font-weight: 700; font-size: 12.5px; color: #218AC9;">{{ $review->module_label }}</span>
+                                <td>
+                                    <span style="font-weight: 700; font-size: 12.5px; color: #218AC9; display:block;">{{ $review->module_label }}</span>
                                     <div style="font-size: 11px; color: #64748B; margin-top: 2px;">ID Permohonan: #{{ $review->module_id }}</div>
                                 </td>
-                                <td style="padding: 12px 14px;">
+                                <td>
                                     <div class="stars-yellow">
                                         @for($i=1; $i<=5; $i++)
                                             @if($i <= $review->rating)
@@ -445,10 +483,10 @@
                                     </div>
                                     <div style="font-size: 11px; font-weight: 700; color: #003B64; margin-top: 2px;">{{ $review->rating_label }}</div>
                                 </td>
-                                <td style="padding: 12px 14px; max-width: 280px; font-style: italic; color: #334155; font-size: 12.5px; line-height: 1.4;">
+                                <td style="font-style: italic; color: #334155; font-size: 12px; line-height: 1.45; word-break: break-word; overflow-wrap: break-word;">
                                     "{{ $review->comment }}"
                                 </td>
-                                <td style="padding: 12px 14px; text-align: center;">
+                                <td style="text-align: center; white-space: nowrap;">
                                     @if($review->is_approved)
                                         <span class="badge-approved">
                                             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -462,13 +500,13 @@
                                     @endif
                                 </td>
                                 @if(Auth::user()->isDpn())
-                                <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">
-                                    <div class="actions-wrap" style="justify-content: center;">
+                                <td style="text-align: center; white-space: nowrap;">
+                                    <div class="actions-wrap">
                                         @if(!$review->is_approved)
                                             <form action="{{ route('admin.reviews.approve', $review->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 <button type="submit" class="btn-approve">
-                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                                     Setujui
                                                 </button>
                                             </form>
@@ -480,7 +518,7 @@
                                                  data-rating="{{ $review->rating }}"
                                                  data-comment="{{ e($review->comment) }}"
                                                  data-approved="{{ $review->is_approved ? '1' : '0' }}">
-                                                 <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                 <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                                  Edit
                                             </button>
                                         @endif
@@ -488,7 +526,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-delete">
-                                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                                 Hapus
                                             </button>
                                         </form>
@@ -544,7 +582,7 @@
                     </div>
 
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                        <span style="font-weight: 700; font-size: 12px; color: #218AC9; background:#E3F0F9; padding:3px 8px; border-radius:3px;">
+                        <span style="font-weight: 700; font-size: 12px; color: #218AC9; background:#EFF6FF; padding:3px 8px; border-radius:3px;">
                             {{ $review->module_label }} #{{ $review->module_id }}
                         </span>
                         <div class="stars-yellow" style="font-size:12px;">
@@ -617,7 +655,7 @@
     
     <div class="panel-body" style="padding: 0;">
         {{-- Desktop Table --}}
-        <div class="desktop-table-wrap" style="width:100%; overflow-x:auto;">
+        <div class="desktop-table-wrap">
             @if($informalRatings->isEmpty())
                 <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #64748B;">
                     <svg fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5" style="width: 40px; height: 40px; margin-bottom: 10px;">
@@ -626,16 +664,16 @@
                     <p style="font-weight: 600; font-size: 13px;">Belum ada ulasan informal dari publik.</p>
                 </div>
             @else
-                <table style="width: 100%; border-collapse: collapse;">
+                <table>
                     <thead>
-                        <tr style="background: #F8FAFC; border-bottom: 1.5px solid #E2E8F0; font-size: 11px; color: #475569; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em;">
-                            <th style="padding: 10px 14px; text-align: left;">Pengguna / Publik</th>
-                            <th style="padding: 10px 14px; text-align: left;">Area Zonasi & Koordinat</th>
-                            <th style="padding: 10px 14px; text-align: left;">Penilaian</th>
-                            <th style="padding: 10px 14px; text-align: left;">Catatan Ulasan</th>
-                            <th style="padding: 10px 14px; text-align: center;">Status Publikasi</th>
+                        <tr>
+                            <th style="text-align: left; width: 20%;">Pengguna / Publik</th>
+                            <th style="text-align: left; width: 18%;">Area Zonasi & Koordinat</th>
+                            <th style="text-align: left; width: 14%;">Penilaian</th>
+                            <th style="text-align: left; width: 23%;">Catatan Ulasan</th>
+                            <th style="text-align: center; width: 12%;">Status Publikasi</th>
                             @if(Auth::user()->isDpn())
-                                <th style="padding: 10px 14px; text-align: center; width: 140px;">Aksi Admin</th>
+                                <th style="text-align: center; width: 13%;">Aksi Admin</th>
                             @endif
                         </tr>
                     </thead>
@@ -645,17 +683,17 @@
                                 $publicName = $rating->name ?: ($rating->user->name ?? 'Anonim');
                                 $publicInitial = strtoupper(substr($publicName, 0, 2));
                             @endphp
-                            <tr style="border-bottom: 1px solid #F1F5F9;">
-                                <td style="padding: 12px 14px;">
+                            <tr>
+                                <td>
                                     <div class="user-flex">
                                         <div class="user-avatar-badge" style="background: #0284C7;">{{ $publicInitial }}</div>
-                                        <div>
-                                            <strong style="font-size: 13px; color: #003B64; display: block;">{{ $publicName }}</strong>
+                                        <div style="min-width:0; overflow:hidden;">
+                                            <strong style="font-size: 13px; color: #003B64; display: block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">{{ $publicName }}</strong>
                                             <div style="font-size: 11px; color: #64748B; margin-top: 2px;">Tgl: {{ $rating->created_at->format('d M Y, H:i') }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td style="padding: 12px 14px;">
+                                <td>
                                     <span style="font-weight: 800; font-size: 12px; color: #218AC9; text-transform: uppercase;">{{ $rating->informal_type ?: 'PETA' }}</span>
                                     @if(!empty($rating->latitude) && (float)$rating->latitude != 0 && (float)$rating->longitude != 0)
                                         <div style="margin-top: 4px;">
@@ -668,7 +706,7 @@
                                         <div style="font-size: 11px; color: #64748B; font-style: italic; margin-top: 2px;">Ulasan Umum Peta</div>
                                     @endif
                                 </td>
-                                <td style="padding: 12px 14px;">
+                                <td>
                                     <div class="stars-yellow">
                                         @for($i=1; $i<=5; $i++)
                                             @if($i <= $rating->rating)
@@ -680,10 +718,10 @@
                                     </div>
                                     <div style="font-size: 11px; font-weight: 700; color: #003B64; margin-top: 2px;">Bintang {{ $rating->rating }}</div>
                                 </td>
-                                <td style="padding: 12px 14px; max-width: 280px; font-style: italic; color: #334155; font-size: 12.5px; line-height: 1.4;">
+                                <td style="font-style: italic; color: #334155; font-size: 12px; line-height: 1.45; word-break: break-word; overflow-wrap: break-word;">
                                     "{{ $rating->comment }}"
                                 </td>
-                                <td style="padding: 12px 14px; text-align: center;">
+                                <td style="text-align: center; white-space: nowrap;">
                                     @if($rating->is_approved)
                                         <span class="badge-approved">
                                             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -697,13 +735,13 @@
                                     @endif
                                 </td>
                                 @if(Auth::user()->isDpn())
-                                <td style="padding: 12px 14px; text-align: center; white-space: nowrap;">
-                                    <div class="actions-wrap" style="justify-content: center;">
+                                <td style="text-align: center; white-space: nowrap;">
+                                    <div class="actions-wrap">
                                         @if(!$rating->is_approved)
                                             <form action="{{ route('admin.informal-reviews.approve', $rating->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 <button type="submit" class="btn-approve">
-                                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                                    <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                                                     Setujui
                                                 </button>
                                             </form>
@@ -714,14 +752,14 @@
                                              data-rating="{{ $rating->rating }}"
                                              data-comment="{{ e($rating->comment) }}"
                                              data-approved="{{ $rating->is_approved ? '1' : '0' }}">
-                                             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                             <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                              Edit
                                         </button>
                                         <form action="{{ route('admin.informal-reviews.destroy', $rating->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-delete">
-                                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                                 Hapus
                                             </button>
                                         </form>
