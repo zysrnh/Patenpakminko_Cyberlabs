@@ -187,6 +187,49 @@
         white-space: nowrap;
     }
 
+    /* Comment Box Styling */
+    .review-comment-box {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 5px;
+        padding: 8px 10px;
+        font-size: 12px;
+        color: #334155;
+        line-height: 1.45;
+        max-width: 320px;
+        transition: all 0.15s ease;
+    }
+    .review-comment-box:hover {
+        border-color: #CBD5E1;
+        background: #F1F5F9;
+    }
+    .review-comment-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-style: italic;
+    }
+    .btn-detail-comment {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        margin-top: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #218AC9;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .btn-detail-comment:hover {
+        color: #003B64;
+        text-decoration: underline;
+    }
+
     .desktop-table-wrap {
         width: 100%;
         overflow-x: auto;
@@ -195,7 +238,6 @@
 
     .desktop-table-wrap table {
         width: 100%;
-        min-width: 980px;
         border-collapse: collapse;
     }
 
@@ -425,13 +467,13 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="text-align: left; width: 20%;">Pelaku Usaha</th>
-                            <th style="text-align: left; width: 16%;">Layanan / Modul</th>
-                            <th style="text-align: left; width: 14%;">Penilaian</th>
-                            <th style="text-align: left; width: 25%;">Catatan Ulasan</th>
-                            <th style="text-align: center; width: 12%;">Status Publikasi</th>
+                            <th style="text-align: left; width: 22%;">Pelaku Usaha</th>
+                            <th style="text-align: left; width: 17%;">Layanan / Modul</th>
+                            <th style="text-align: left; width: 15%;">Penilaian</th>
+                            <th style="text-align: left; width: 26%;">Catatan Ulasan</th>
+                            <th style="text-align: center; width: 10%;">Status Publikasi</th>
                             @if(Auth::user()->isDpn())
-                                <th style="text-align: center; width: 13%;">Aksi Admin</th>
+                                <th style="text-align: center; width: 10%;">Aksi Admin</th>
                             @endif
                         </tr>
                     </thead>
@@ -483,8 +525,17 @@
                                     </div>
                                     <div style="font-size: 11px; font-weight: 700; color: #003B64; margin-top: 2px;">{{ $review->rating_label }}</div>
                                 </td>
-                                <td style="font-style: italic; color: #334155; font-size: 12px; line-height: 1.45; word-break: break-word; overflow-wrap: break-word;">
-                                    "{{ $review->comment }}"
+                                <td>
+                                    <div class="review-comment-box">
+                                        <div class="review-comment-text">
+                                            “{{ $review->comment }}”
+                                        </div>
+                                        <button type="button" class="btn-detail-comment"
+                                            onclick="openDetailModal('{{ addslashes(e($userName)) }}', '{{ addslashes(e($review->module_label)) }} #{{ $review->module_id }}', '{{ $review->rating }}', '{{ addslashes(e($review->comment)) }}', '{{ $review->created_at->format('d M Y, H:i') }}')">
+                                            <span>Lihat Detail</span>
+                                            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                                 <td style="text-align: center; white-space: nowrap;">
                                     @if($review->is_approved)
@@ -667,13 +718,13 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="text-align: left; width: 20%;">Pengguna / Publik</th>
+                            <th style="text-align: left; width: 22%;">Pengguna / Publik</th>
                             <th style="text-align: left; width: 18%;">Area Zonasi & Koordinat</th>
-                            <th style="text-align: left; width: 14%;">Penilaian</th>
-                            <th style="text-align: left; width: 23%;">Catatan Ulasan</th>
-                            <th style="text-align: center; width: 12%;">Status Publikasi</th>
+                            <th style="text-align: left; width: 15%;">Penilaian</th>
+                            <th style="text-align: left; width: 25%;">Catatan Ulasan</th>
+                            <th style="text-align: center; width: 10%;">Status Publikasi</th>
                             @if(Auth::user()->isDpn())
-                                <th style="text-align: center; width: 13%;">Aksi Admin</th>
+                                <th style="text-align: center; width: 10%;">Aksi Admin</th>
                             @endif
                         </tr>
                     </thead>
@@ -718,8 +769,17 @@
                                     </div>
                                     <div style="font-size: 11px; font-weight: 700; color: #003B64; margin-top: 2px;">Bintang {{ $rating->rating }}</div>
                                 </td>
-                                <td style="font-style: italic; color: #334155; font-size: 12px; line-height: 1.45; word-break: break-word; overflow-wrap: break-word;">
-                                    "{{ $rating->comment }}"
+                                <td>
+                                    <div class="review-comment-box">
+                                        <div class="review-comment-text">
+                                            “{{ $rating->comment }}”
+                                        </div>
+                                        <button type="button" class="btn-detail-comment"
+                                            onclick="openDetailModal('{{ addslashes(e($publicName)) }}', 'INFORMAL: {{ addslashes(e($rating->informal_type ?: 'PETA')) }}', '{{ $rating->rating }}', '{{ addslashes(e($rating->comment)) }}', '{{ $rating->created_at->format('d M Y, H:i') }}')">
+                                            <span>Lihat Detail</span>
+                                            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                        </button>
+                                    </div>
                                 </td>
                                 <td style="text-align: center; white-space: nowrap;">
                                     @if($rating->is_approved)
@@ -858,6 +918,43 @@
 </div>
 @endif
 
+<!-- Modal Detail Catatan Ulasan Lengkap -->
+<div id="detailCommentModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px); padding:16px;">
+    <div style="background: #ffffff; border-radius: 6px; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); overflow: hidden; border: 1px solid #CBD5E1;">
+        <div style="background: #003B64; color: #ffffff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                <h3 style="font-size: 14.5px; font-weight: 800; margin: 0; color: #ffffff;">Detail Catatan Ulasan</h3>
+            </div>
+            <button type="button" onclick="closeDetailModal()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+        <div style="padding: 18px 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 10px;">
+                <div>
+                    <span style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase;">Pengulas:</span>
+                    <strong id="modal_detail_name" style="font-size: 14px; color: #003B64; display: block;">-</strong>
+                    <span id="modal_detail_service" style="font-size: 11.5px; color: #218AC9; font-weight: 600;">-</span>
+                </div>
+                <div style="text-align: right;">
+                    <div id="modal_detail_stars" class="stars-yellow" style="justify-content: flex-end;"></div>
+                    <div id="modal_detail_date" style="font-size: 11px; color: #64748B; margin-top: 2px;">-</div>
+                </div>
+            </div>
+
+            <div>
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Isi Lengkap Ulasan / Testimoni:</label>
+                <div id="modal_detail_comment" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 4px; padding: 12px 14px; font-size: 13px; color: #1E293B; line-height: 1.55; font-style: italic; white-space: pre-wrap; max-height: 240px; overflow-y: auto;">
+                    -
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+                <button type="button" onclick="closeDetailModal()" class="btn btn-secondary" style="border-radius: 4px; padding: 7px 16px; font-size: 12.5px; font-weight: 700;">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Edit Ulasan Formal -->
 <div id="editReviewModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px); padding:16px;">
     <div style="background: #ffffff; border-radius: 6px; width: 100%; max-width: 500px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden;">
@@ -945,6 +1042,29 @@
 </div>
 
 <script>
+function openDetailModal(name, service, rating, comment, date) {
+    document.getElementById('modal_detail_name').innerText = name || '-';
+    document.getElementById('modal_detail_service').innerText = service || '-';
+    document.getElementById('modal_detail_date').innerText = 'Tgl: ' + (date || '-');
+    document.getElementById('modal_detail_comment').innerText = '“' + comment + '”';
+
+    var starHtml = '';
+    var r = parseInt(rating) || 5;
+    for (var i = 1; i <= 5; i++) {
+        if (i <= r) {
+            starHtml += '<svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>';
+        } else {
+            starHtml += '<svg width="14" height="14" fill="none" stroke="#CBD5E1" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>';
+        }
+    }
+    document.getElementById('modal_detail_stars').innerHTML = starHtml;
+    document.getElementById('detailCommentModal').style.display = 'flex';
+}
+
+function closeDetailModal() {
+    document.getElementById('detailCommentModal').style.display = 'none';
+}
+
 document.addEventListener('click', function(e) {
     var btn = e.target.closest('.btn-trigger-edit-formal');
     if (btn) {
