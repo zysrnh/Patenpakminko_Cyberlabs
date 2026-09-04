@@ -21,12 +21,13 @@
         background: #DCFCE7;
         color: #15803D;
         border: 1px solid #86EFAC;
-        padding: 5px 10px;
+        padding: 6px 12px;
         border-radius: 4px;
         font-weight: 700;
         font-size: 12px;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 4px;
         transition: all 0.18s ease;
         cursor: pointer;
@@ -41,12 +42,13 @@
         background: #DC2626;
         color: #FFFFFF;
         border: 1px solid #DC2626;
-        padding: 5px 10px;
+        padding: 6px 12px;
         border-radius: 4px;
         font-weight: 700;
         font-size: 12px;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 4px;
         transition: all 0.18s ease;
         cursor: pointer;
@@ -60,12 +62,13 @@
         background: #FEF3C7;
         color: #D97706;
         border: 1px solid #FCD34D;
-        padding: 5px 10px;
+        padding: 6px 12px;
         border-radius: 4px;
         font-weight: 700;
         font-size: 12px;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 4px;
         transition: all 0.18s ease;
         cursor: pointer;
@@ -118,8 +121,8 @@
 
     /* User Avatar Initial */
     .user-avatar-badge {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 4px;
         background: #218AC9;
         color: #ffffff;
@@ -176,6 +179,10 @@
         gap: 4px;
     }
 
+    .mobile-reviews-list {
+        display: none;
+    }
+
     /* ─── MOBILE RESPONSIVE ────────────────────────────── */
     @media (max-width: 768px) {
         .stat-cards-grid {
@@ -184,25 +191,74 @@
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             padding-bottom: 8px;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 16px;
         }
         .stat-card-mini {
-            flex: 0 0 76%;
+            flex: 0 0 78%;
             scroll-snap-align: start;
+            padding: 14px 16px;
         }
-        .table-wrap {
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch !important;
-            width: 100% !important;
+        
+        .desktop-table-wrap {
+            display: none !important;
         }
-        .table-wrap table {
-            min-width: 820px !important;
+
+        .mobile-reviews-list {
+            display: flex !important;
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px 12px;
         }
+
+        .mobile-review-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0,38,66,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mobile-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .mobile-card-comment {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 4px;
+            padding: 10px 12px;
+            font-size: 12.5px;
+            font-style: italic;
+            color: #334155;
+            line-height: 1.45;
+        }
+
+        .mobile-card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+        .mobile-card-actions > form, 
+        .mobile-card-actions > button {
+            flex: 1;
+            min-width: 80px;
+        }
+        .mobile-card-actions form button {
+            width: 100%;
+        }
+
         .review-filter-form {
             flex-direction: column !important;
             align-items: stretch !important;
-            gap: 12px !important;
+            gap: 10px !important;
         }
         .review-filter-form > div {
             flex-direction: column !important;
@@ -233,9 +289,9 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success" style="border-radius: 4px; margin-bottom: 20px;">
+    <div class="alert alert-success" style="border-radius: 4px; margin-bottom: 20px; background:#F0FDF4; border:1px solid #86EFAC; color:#166534; padding:12px 16px; display:flex; align-items:center; gap:8px;">
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span>{{ session('success') }}</span>
+        <span style="font-size:13px; font-weight:600;">{{ session('success') }}</span>
     </div>
 @endif
 
@@ -298,22 +354,28 @@
                 </select>
             </div>
             @if(request('layanan'))
-                <a href="{{ route('admin.reviews.index') }}" class="btn btn-secondary btn-sm" style="border-radius: 4px; padding: 6px 12px; text-decoration: none; font-weight: 700; font-size: 12px;">Reset Filter</a>
+                <a href="{{ route('admin.reviews.index') }}" class="btn btn-secondary btn-sm" style="border-radius: 4px; padding: 6px 14px; text-decoration: none; font-weight: 700; font-size: 12px; text-align: center;">Reset Filter</a>
             @endif
         </form>
     </div>
 </div>
 
-<!-- Formal Reviews Card -->
+{{-- ═══════════════════════════════════════════════════════════ --}}
+{{-- TABEL / CARD ULASAN FORMAL (Tampil jika bukan filter 'informal') --}}
+{{-- ═══════════════════════════════════════════════════════════ --}}
+@if(request('layanan') !== 'informal')
 <div class="panel" style="margin-bottom: 24px; border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); overflow: hidden; background: #ffffff;">
-    <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+    <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display:flex; justify-content:space-between; align-items:center;">
         <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
             <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
             Daftar Ulasan Layanan Formal
         </h2>
+        <span style="font-size:12px; font-weight:700; color:#64748B;">{{ $reviews->count() }} Data</span>
     </div>
+    
     <div class="panel-body" style="padding: 0;">
-        <div class="table-wrap">
+        {{-- Desktop Table --}}
+        <div class="desktop-table-wrap" style="width:100%; overflow-x:auto;">
             @if($reviews->isEmpty())
                 <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #64748B;">
                     <svg fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5" style="width: 40px; height: 40px; margin-bottom: 10px;">
@@ -341,19 +403,16 @@
                                 $userName = null;
                                 if ($review->module_type === 'berusaha' && $review->module_id) {
                                     $appItem = \App\Models\PpkprBerusahaApplication::find($review->module_id);
-                                    if ($appItem) {
-                                        $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
-                                    }
+                                    if ($appItem) $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
                                 } elseif ($review->module_type === 'non_berusaha' && $review->module_id) {
                                     $appItem = \App\Models\PpkprApplication::find($review->module_id);
-                                    if ($appItem) {
-                                        $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
-                                    }
+                                    if ($appItem) $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
                                 } elseif ($review->module_type === 'kebijakan' && $review->module_id) {
                                     $appItem = \App\Models\KebijakanApplication::find($review->module_id);
-                                    if ($appItem) {
-                                        $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
-                                    }
+                                    if ($appItem) $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
+                                } elseif ($review->module_type === 'lapolpa' && $review->module_id) {
+                                    $appItem = \App\Models\LapolpaBooking::find($review->module_id);
+                                    if ($appItem) $userName = $appItem->nama_pemohon;
                                 }
                                 if (!$userName || strtolower($userName) === 'petugas bpn') {
                                     $userName = ($review->user && strtolower($review->user->name) !== 'petugas bpn') ? $review->user->name : ($review->user->username ?? 'Pelaku Usaha');
@@ -442,19 +501,123 @@
                 </table>
             @endif
         </div>
+
+        {{-- Mobile Cards Layout --}}
+        <div class="mobile-reviews-list">
+            @forelse($reviews as $review)
+                @php
+                    $userName = null;
+                    if ($review->module_type === 'berusaha' && $review->module_id) {
+                        $appItem = \App\Models\PpkprBerusahaApplication::find($review->module_id);
+                        if ($appItem) $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
+                    } elseif ($review->module_type === 'non_berusaha' && $review->module_id) {
+                        $appItem = \App\Models\PpkprApplication::find($review->module_id);
+                        if ($appItem) $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
+                    } elseif ($review->module_type === 'kebijakan' && $review->module_id) {
+                        $appItem = \App\Models\KebijakanApplication::find($review->module_id);
+                        if ($appItem) $userName = $appItem->nama_pengaju ?: $appItem->nama_pemilik_usaha;
+                    } elseif ($review->module_type === 'lapolpa' && $review->module_id) {
+                        $appItem = \App\Models\LapolpaBooking::find($review->module_id);
+                        if ($appItem) $userName = $appItem->nama_pemohon;
+                    }
+                    if (!$userName || strtolower($userName) === 'petugas bpn') {
+                        $userName = ($review->user && strtolower($review->user->name) !== 'petugas bpn') ? $review->user->name : ($review->user->username ?? 'Pelaku Usaha');
+                    }
+                    $initial = strtoupper(substr($userName, 0, 2));
+                @endphp
+                <div class="mobile-review-card">
+                    <div class="mobile-card-top">
+                        <div class="user-flex">
+                            <div class="user-avatar-badge">{{ $initial }}</div>
+                            <div>
+                                <strong style="font-size: 13.5px; color: #003B64; display: block;">{{ $userName }}</strong>
+                                <div style="font-size: 11px; color: #64748B;">{{ $review->created_at->format('d M Y, H:i') }}</div>
+                            </div>
+                        </div>
+                        <div>
+                            @if($review->is_approved)
+                                <span class="badge-approved">Approved</span>
+                            @else
+                                <span class="badge-pending">Pending</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                        <span style="font-weight: 700; font-size: 12px; color: #218AC9; background:#E3F0F9; padding:3px 8px; border-radius:3px;">
+                            {{ $review->module_label }} #{{ $review->module_id }}
+                        </span>
+                        <div class="stars-yellow" style="font-size:12px;">
+                            @for($i=1; $i<=5; $i++)
+                                @if($i <= $review->rating) ★ @else ☆ @endif
+                            @endfor
+                            <span style="font-weight:700; color:#003B64; margin-left:4px;">({{ $review->rating }}/5)</span>
+                        </div>
+                    </div>
+
+                    <div class="mobile-card-comment">
+                        "{{ $review->comment }}"
+                    </div>
+
+                    @if(Auth::user()->isDpn())
+                    <div class="mobile-card-actions">
+                        @if(!$review->is_approved)
+                            <form action="{{ route('admin.reviews.approve', $review->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn-approve">
+                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    Setujui
+                                </button>
+                            </form>
+                        @endif
+                        @if(Auth::user()->isSuperAdmin())
+                            <button type="button" class="btn-edit btn-trigger-edit-formal"
+                                 data-id="{{ $review->id }}"
+                                 data-name="{{ e($userName) }}"
+                                 data-rating="{{ $review->rating }}"
+                                 data-comment="{{ e($review->comment) }}"
+                                 data-approved="{{ $review->is_approved ? '1' : '0' }}">
+                                 <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                 Edit
+                            </button>
+                        @endif
+                        <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">
+                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                    @endif
+                </div>
+            @empty
+                <div style="text-align:center; padding:30px 14px; color:#64748B; font-size:12.5px;">
+                    Tidak ada ulasan formal.
+                </div>
+            @endforelse
+        </div>
     </div>
 </div>
+@endif
 
-<!-- Informal Ratings Card -->
-<div class="panel" style="border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); overflow: hidden; background: #ffffff;">
-    <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC;">
+{{-- ═══════════════════════════════════════════════════════════ --}}
+{{-- TABEL / CARD ULASAN INFORMAL (Tampil jika filter 'informal' atau 'semua') --}}
+{{-- ═══════════════════════════════════════════════════════════ --}}
+@if(!request('layanan') || request('layanan') === 'informal')
+<div class="panel" style="border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); overflow: hidden; background: #ffffff; margin-bottom: 24px;">
+    <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display:flex; justify-content:space-between; align-items:center;">
         <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
             <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
             Daftar Ulasan INFORMAL (Peta Digital & Zonasi)
         </h2>
+        <span style="font-size:12px; font-weight:700; color:#64748B;">{{ $informalRatings->count() }} Data</span>
     </div>
+    
     <div class="panel-body" style="padding: 0;">
-        <div class="table-wrap">
+        {{-- Desktop Table --}}
+        <div class="desktop-table-wrap" style="width:100%; overflow-x:auto;">
             @if($informalRatings->isEmpty())
                 <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #64748B;">
                     <svg fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.5" style="width: 40px; height: 40px; margin-bottom: 10px;">
@@ -493,8 +656,8 @@
                                     </div>
                                 </td>
                                 <td style="padding: 12px 14px;">
-                                    <span style="font-weight: 800; font-size: 12px; color: #218AC9; text-transform: uppercase;">{{ $rating->informal_type }}</span>
-                                    @if(!empty($rating->latitude) && (float)$rating->latitude != 0)
+                                    <span style="font-weight: 800; font-size: 12px; color: #218AC9; text-transform: uppercase;">{{ $rating->informal_type ?: 'PETA' }}</span>
+                                    @if(!empty($rating->latitude) && (float)$rating->latitude != 0 && (float)$rating->longitude != 0)
                                         <div style="margin-top: 4px;">
                                             <span class="coord-badge">
                                                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -502,7 +665,7 @@
                                             </span>
                                         </div>
                                     @else
-                                        <div style="font-size: 11px; color: #64748B; font-style: italic; margin-top: 2px;">Ulasan Umum (Tanpa Koordinat)</div>
+                                        <div style="font-size: 11px; color: #64748B; font-style: italic; margin-top: 2px;">Ulasan Umum Peta</div>
                                     @endif
                                 </td>
                                 <td style="padding: 12px 14px;">
@@ -545,6 +708,15 @@
                                                 </button>
                                             </form>
                                         @endif
+                                        <button type="button" class="btn-edit btn-trigger-edit-informal"
+                                             data-id="{{ $rating->id }}"
+                                             data-name="{{ e($publicName) }}"
+                                             data-rating="{{ $rating->rating }}"
+                                             data-comment="{{ e($rating->comment) }}"
+                                             data-approved="{{ $rating->is_approved ? '1' : '0' }}">
+                                             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                             Edit
+                                        </button>
                                         <form action="{{ route('admin.informal-reviews.destroy', $rating->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -562,25 +734,108 @@
                 </table>
             @endif
         </div>
+
+        {{-- Mobile Cards Layout --}}
+        <div class="mobile-reviews-list">
+            @forelse($informalRatings as $rating)
+                @php
+                    $publicName = $rating->name ?: ($rating->user->name ?? 'Anonim');
+                    $publicInitial = strtoupper(substr($publicName, 0, 2));
+                @endphp
+                <div class="mobile-review-card">
+                    <div class="mobile-card-top">
+                        <div class="user-flex">
+                            <div class="user-avatar-badge" style="background: #0284C7;">{{ $publicInitial }}</div>
+                            <div>
+                                <strong style="font-size: 13.5px; color: #003B64; display: block;">{{ $publicName }}</strong>
+                                <div style="font-size: 11px; color: #64748B;">{{ $rating->created_at->format('d M Y, H:i') }}</div>
+                            </div>
+                        </div>
+                        <div>
+                            @if($rating->is_approved)
+                                <span class="badge-approved">Approved</span>
+                            @else
+                                <span class="badge-pending">Pending</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                        <span style="font-weight: 700; font-size: 11.5px; color: #0284C7; background:#E0F2FE; padding:3px 8px; border-radius:3px;">
+                            {{ $rating->informal_type ?: 'PETA' }}
+                            @if(!empty($rating->latitude) && (float)$rating->latitude != 0 && (float)$rating->longitude != 0)
+                                ({{ number_format((float)$rating->latitude, 4) }}, {{ number_format((float)$rating->longitude, 4) }})
+                            @endif
+                        </span>
+                        <div class="stars-yellow" style="font-size:12px;">
+                            @for($i=1; $i<=5; $i++)
+                                @if($i <= $rating->rating) ★ @else ☆ @endif
+                            @endfor
+                            <span style="font-weight:700; color:#003B64; margin-left:4px;">({{ $rating->rating }}/5)</span>
+                        </div>
+                    </div>
+
+                    <div class="mobile-card-comment">
+                        "{{ $rating->comment }}"
+                    </div>
+
+                    @if(Auth::user()->isDpn())
+                    <div class="mobile-card-actions">
+                        @if(!$rating->is_approved)
+                            <form action="{{ route('admin.informal-reviews.approve', $rating->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn-approve">
+                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    Setujui
+                                </button>
+                            </form>
+                        @endif
+                        <button type="button" class="btn-edit btn-trigger-edit-informal"
+                             data-id="{{ $rating->id }}"
+                             data-name="{{ e($publicName) }}"
+                             data-rating="{{ $rating->rating }}"
+                             data-comment="{{ e($rating->comment) }}"
+                             data-approved="{{ $rating->is_approved ? '1' : '0' }}">
+                             <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                             Edit
+                        </button>
+                        <form action="{{ route('admin.informal-reviews.destroy', $rating->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus ulasan ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">
+                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                    @endif
+                </div>
+            @empty
+                <div style="text-align:center; padding:30px 14px; color:#64748B; font-size:12.5px;">
+                    Belum ada ulasan informal.
+                </div>
+            @endforelse
+        </div>
     </div>
 </div>
+@endif
 
 <!-- Modal Edit Ulasan Formal -->
-<div id="editReviewModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
-    <div style="background: #ffffff; border-radius: 8px; width: 100%; max-width: 520px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); overflow: hidden; margin: 16px;">
-        <div style="background: #003B64; color: #ffffff; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
-            <h3 style="font-size: 15px; font-weight: 800; margin: 0; color: #ffffff;">Edit Ulasan Layanan</h3>
+<div id="editReviewModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px); padding:16px;">
+    <div style="background: #ffffff; border-radius: 6px; width: 100%; max-width: 500px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden;">
+        <div style="background: #003B64; color: #ffffff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;">
+            <h3 style="font-size: 14.5px; font-weight: 800; margin: 0; color: #ffffff;">Edit Ulasan Layanan</h3>
             <button type="button" onclick="closeEditReviewModal()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; line-height: 1;">&times;</button>
         </div>
-        <form id="editReviewForm" method="POST" action="" style="padding: 20px;">
+        <form id="editReviewForm" method="POST" action="" style="padding: 18px;">
             @csrf
             @method('PUT')
-            <div style="margin-bottom: 14px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Nama Pemohon / Pelaku Usaha:</label>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Nama Pemohon / Pelaku Usaha:</label>
                 <input type="text" id="edit_reviewer_name" readonly class="form-control" style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; color: #334155; width: 100%;">
             </div>
-            <div style="margin-bottom: 14px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Penilaian Bintang (1-5):</label>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Penilaian Bintang (1-5):</label>
                 <select name="rating" id="edit_review_rating" class="form-control" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
                     <option value="5">⭐⭐⭐⭐⭐ 5 Bintang (Sangat Memuaskan)</option>
                     <option value="4">⭐⭐⭐⭐ 4 Bintang (Memuaskan)</option>
@@ -589,41 +844,41 @@
                     <option value="1">⭐ 1 Bintang (Sangat Kurang)</option>
                 </select>
             </div>
-            <div style="margin-bottom: 14px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Teks Catatan Ulasan / Testimoni:</label>
-                <textarea name="comment" id="edit_review_comment" rows="4" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 10px 12px; font-size: 13px; width: 100%; resize: vertical;" placeholder="Tulis ulasan..."></textarea>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Teks Catatan Ulasan / Testimoni:</label>
+                <textarea name="comment" id="edit_review_comment" rows="3" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 10px 12px; font-size: 13px; width: 100%; resize: vertical;" placeholder="Tulis ulasan..."></textarea>
             </div>
-            <div style="margin-bottom: 20px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Status Publikasi:</label>
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Status Publikasi:</label>
                 <select name="is_approved" id="edit_review_is_approved" class="form-control" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
                     <option value="1">✅ Tampil di Halaman Utama (Approved)</option>
                     <option value="0">⏳ Menunggu Moderasi / Sembunyikan</option>
                 </select>
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #E2E8F0; padding-top: 14px;">
-                <button type="button" onclick="closeEditReviewModal()" class="btn btn-secondary" style="border-radius: 4px; padding: 8px 16px; font-size: 13px; font-weight: 700;">Batal</button>
-                <button type="submit" class="btn btn-primary" style="background: #218AC9; border-color: #218AC9; border-radius: 4px; padding: 8px 18px; font-size: 13px; font-weight: 700; color: #ffffff;">Simpan Perubahan</button>
+            <div style="display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid #E2E8F0; padding-top: 12px;">
+                <button type="button" onclick="closeEditReviewModal()" class="btn btn-secondary" style="border-radius: 4px; padding: 7px 14px; font-size: 12.5px; font-weight: 700;">Batal</button>
+                <button type="submit" class="btn btn-primary" style="background: #218AC9; border-color: #218AC9; border-radius: 4px; padding: 7px 16px; font-size: 12.5px; font-weight: 700; color: #ffffff;">Simpan Perubahan</button>
             </div>
         </form>
     </div>
 </div>
 
 <!-- Modal Edit Ulasan Informal -->
-<div id="editInformalModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
-    <div style="background: #ffffff; border-radius: 8px; width: 100%; max-width: 520px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); overflow: hidden; margin: 16px;">
-        <div style="background: #003B64; color: #ffffff; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
-            <h3 style="font-size: 15px; font-weight: 800; margin: 0; color: #ffffff;">Edit Ulasan Peta Informal</h3>
+<div id="editInformalModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px); padding:16px;">
+    <div style="background: #ffffff; border-radius: 6px; width: 100%; max-width: 500px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden;">
+        <div style="background: #003B64; color: #ffffff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;">
+            <h3 style="font-size: 14.5px; font-weight: 800; margin: 0; color: #ffffff;">Edit Ulasan Peta Informal</h3>
             <button type="button" onclick="closeEditInformalModal()" style="background: none; border: none; color: #ffffff; font-size: 20px; cursor: pointer; line-height: 1;">&times;</button>
         </div>
-        <form id="editInformalForm" method="POST" action="" style="padding: 20px;">
+        <form id="editInformalForm" method="POST" action="" style="padding: 18px;">
             @csrf
             @method('PUT')
-            <div style="margin-bottom: 14px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Nama Pengguna / Publik:</label>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Nama Pengguna / Publik:</label>
                 <input type="text" name="name" id="edit_informal_name" class="form-control" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
             </div>
-            <div style="margin-bottom: 14px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Penilaian Bintang (1-5):</label>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Penilaian Bintang (1-5):</label>
                 <select name="rating" id="edit_informal_rating" class="form-control" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
                     <option value="5">⭐⭐⭐⭐⭐ 5 Bintang (Sangat Memuaskan)</option>
                     <option value="4">⭐⭐⭐⭐ 4 Bintang (Memuaskan)</option>
@@ -632,20 +887,20 @@
                     <option value="1">⭐ 1 Bintang (Sangat Kurang)</option>
                 </select>
             </div>
-            <div style="margin-bottom: 14px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Teks Catatan Ulasan / Testimoni:</label>
-                <textarea name="comment" id="edit_informal_comment" rows="4" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 10px 12px; font-size: 13px; width: 100%; resize: vertical;" placeholder="Tulis ulasan..."></textarea>
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Teks Catatan Ulasan / Testimoni:</label>
+                <textarea name="comment" id="edit_informal_comment" rows="3" required style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 10px 12px; font-size: 13px; width: 100%; resize: vertical;" placeholder="Tulis ulasan..."></textarea>
             </div>
-            <div style="margin-bottom: 20px;">
-                <label style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Status Publikasi:</label>
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 11.5px; font-weight: 700; color: #475569; display: block; margin-bottom: 6px;">Status Publikasi:</label>
                 <select name="is_approved" id="edit_informal_is_approved" class="form-control" style="border: 1px solid #CBD5E1; border-radius: 4px; padding: 8px 12px; font-size: 13px; width: 100%;">
                     <option value="1">✅ Tampil di Halaman Utama (Approved)</option>
                     <option value="0">⏳ Menunggu Moderasi / Sembunyikan</option>
                 </select>
             </div>
-            <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid #E2E8F0; padding-top: 14px;">
-                <button type="button" onclick="closeEditReviewModal()" class="btn btn-secondary" style="border-radius: 4px; padding: 8px 16px; font-size: 13px; font-weight: 700;">Batal</button>
-                <button type="submit" class="btn btn-primary" style="background: #218AC9; border-color: #218AC9; border-radius: 4px; padding: 8px 18px; font-size: 13px; font-weight: 700; color: #ffffff;">Simpan Perubahan</button>
+            <div style="display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid #E2E8F0; padding-top: 12px;">
+                <button type="button" onclick="closeEditInformalModal()" class="btn btn-secondary" style="border-radius: 4px; padding: 7px 14px; font-size: 12.5px; font-weight: 700;">Batal</button>
+                <button type="submit" class="btn btn-primary" style="background: #218AC9; border-color: #218AC9; border-radius: 4px; padding: 7px 16px; font-size: 12.5px; font-weight: 700; color: #ffffff;">Simpan Perubahan</button>
             </div>
         </form>
     </div>

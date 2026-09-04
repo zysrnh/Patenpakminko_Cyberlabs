@@ -107,7 +107,13 @@ class ReviewController extends Controller
         $layanan = $request->input('layanan');
 
         $queryReviews = Review::with('user')->orderBy('rating', 'desc')->orderBy('created_at', 'desc');
-        $queryInformal = \App\Models\InformalRating::with('user')->orderBy('rating', 'desc')->orderBy('created_at', 'desc');
+        $queryInformal = \App\Models\InformalRating::with('user')
+            ->where(function($q) {
+                $q->where('informal_type', '!=', 'LAPOLPA')
+                  ->orWhereNull('informal_type');
+            })
+            ->orderBy('rating', 'desc')
+            ->orderBy('created_at', 'desc');
 
         if ($layanan) {
             if ($layanan === 'informal') {

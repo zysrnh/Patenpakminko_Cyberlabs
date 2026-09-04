@@ -48,6 +48,11 @@ Route::get('/', function () {
                 if ($app) {
                     $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
                 }
+            } elseif ($item->module_type === 'lapolpa' && $item->module_id) {
+                $app = \App\Models\LapolpaBooking::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pemohon;
+                }
             }
             if (!$name || strtolower($name) === 'petugas bpn') {
                 $name = ($item->user && strtolower($item->user->name) !== 'petugas bpn') ? $item->user->name : ($item->user->username ?? 'Pelaku Usaha');
@@ -59,11 +64,15 @@ Route::get('/', function () {
 
     $informalReviews = \App\Models\InformalRating::with('user')
         ->where('is_approved', true)
+        ->where(function($q) {
+            $q->where('informal_type', '!=', 'LAPOLPA')
+              ->orWhereNull('informal_type');
+        })
         ->latest()
         ->take(6)
         ->get()
         ->map(function ($item) {
-            $item->module_label_display = 'INFORMAL - ' . strtoupper($item->informal_type);
+            $item->module_label_display = 'INFORMAL - ' . strtoupper($item->informal_type ?: 'PETA');
             $item->reviewer_name = $item->name ?? ($item->user->name ?? ($item->user->username ?? 'Publik'));
             $item->reviewer_initial = strtoupper(substr($item->reviewer_name, 0, 2));
             return $item;
@@ -228,12 +237,17 @@ Route::get('/testimoni', function () {
                 if ($app) {
                     $name = $app->nama_pengaju ?: $app->nama_pemilik_usaha;
                 }
+            } elseif ($item->module_type === 'lapolpa' && $item->module_id) {
+                $app = \App\Models\LapolpaBooking::find($item->module_id);
+                if ($app) {
+                    $name = $app->nama_pemohon;
+                }
             }
             if (!$name || in_array(strtolower(trim($name)), ['petugas bpn', 'testttt', 'test'])) {
                 if ($item->user && !in_array(strtolower(trim($item->user->name)), ['petugas bpn', 'testttt', 'test'])) {
                     $name = $item->user->name;
                 } else {
-                    $name = ($item->user->username && !in_array(strtolower(trim($item->user->username)), ['petugas bpn', 'testttt', 'test'])) ? $item->user->username : 'Irwan';
+                    $name = ($item->user->username && !in_array(strtolower(trim($item->user->username)), ['petugas bpn', 'testttt', 'test'])) ? $item->user->username : 'Pelaku Usaha';
                 }
             }
             $item->reviewer_name = $name;
@@ -243,10 +257,14 @@ Route::get('/testimoni', function () {
 
     $informalReviews = \App\Models\InformalRating::with('user')
         ->where('is_approved', true)
+        ->where(function($q) {
+            $q->where('informal_type', '!=', 'LAPOLPA')
+              ->orWhereNull('informal_type');
+        })
         ->latest()
         ->get()
         ->map(function ($item) {
-            $item->module_label_display = 'INFORMAL - ' . strtoupper($item->informal_type);
+            $item->module_label_display = 'INFORMAL - ' . strtoupper($item->informal_type ?: 'PETA');
             $name = $item->name ?? ($item->user->name ?? ($item->user->username ?? 'Publik'));
             if (in_array(strtolower(trim($name)), ['testttt', 'test', 'petugas bpn'])) {
                 $name = 'Publik';

@@ -321,9 +321,12 @@ class LapolpaController extends Controller
     {
         $booking = LapolpaBooking::findOrFail($id);
         
-        // Cek apakah sudah pernah diulas
-        $existingReview = \App\Models\InformalRating::where('informal_type', 'LAPOLPA')
-                            ->where('latitude', $booking->id) // pinjam kolom latitude buat nyimpen ID booking
+        // Cek apakah sudah pernah diulas di Review maupun legacy InformalRating
+        $existingReview = \App\Models\Review::where('module_type', 'lapolpa')
+                            ->where('module_id', $booking->id)
+                            ->first() 
+                            ?? \App\Models\InformalRating::where('informal_type', 'LAPOLPA')
+                            ->where('latitude', (string)$booking->id)
                             ->first();
                             
         if ($existingReview) {
@@ -334,7 +337,7 @@ class LapolpaController extends Controller
     }
 
     /**
-     * Simpan ulasan publik khusus LAPOLPAK.
+     * Simpan ulasan publik khusus LAPOLPAK ke tabel Review formal.
      */
     public function submitReview(Request $request, $id)
     {
@@ -345,19 +348,28 @@ class LapolpaController extends Controller
             'comment' => 'nullable|string'
         ]);
 
-        $isApproved = $request->rating >= 4;
+        $rating = (int) $request->rating;
+        $ratingLabels = [
+            5 => 'Sangat Baik',
+            4 => 'Baik',
+            3 => 'Cukup Baik',
+            2 => 'Kurang',
+            1 => 'Sangat Kurang'
+        ];
+        $label = $ratingLabels[$rating] ?? 'Baik';
+        $isApproved = $rating >= 4;
 
-        \App\Models\InformalRating::create([
+        \App\Models\Review::create([
             'user_id' => $booking->user_id,
-            'name' => $booking->nama_pemohon,
-            'informal_type' => 'LAPOLPA',
-            'latitude' => $booking->id, // pinjam kolom latitude buat foreign key ke booking
-            'rating' => $request->rating,
-            'comment' => $request->comment,
+            'module_type' => 'lapolpa',
+            'module_id' => $booking->id,
+            'rating' => $rating,
+            'rating_label' => $label,
+            'comment' => $request->comment ?: 'Pelayanan LAPOL PAK sangat baik.',
             'is_approved' => $isApproved,
         ]);
 
-        return redirect('/')->with('success', 'Terima kasih! Ulasan Anda telah berhasil dikirim.');
+        return redirect('/')->with('success', 'Terima kasih! Ulasan LAPOL PAK Anda telah berhasil dikirim.');
     }
 
     public function destroy($id)

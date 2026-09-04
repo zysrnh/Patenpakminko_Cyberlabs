@@ -12,7 +12,13 @@ class InformalController extends Controller
      */
     public function index()
     {
-        $ratings = \App\Models\InformalRating::where('is_approved', true)->latest()->get();
+        $ratings = \App\Models\InformalRating::where('is_approved', true)
+            ->where(function($q) {
+                $q->where('informal_type', '!=', 'LAPOLPA')
+                  ->orWhereNull('informal_type');
+            })
+            ->latest()
+            ->get();
         return view('informal.index', compact('ratings'));
     }
 
