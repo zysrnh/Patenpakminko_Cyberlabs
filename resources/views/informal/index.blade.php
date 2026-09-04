@@ -22,6 +22,7 @@
         width: 100%;
         height: 100%;
         z-index: 1;
+        touch-action: pan-x pan-y;
     }
 
     /* Floating Left Card */
@@ -523,7 +524,7 @@
         });
     }
 
-    // Map Init
+    // Map Init (Bebas tanpa maxBounds kaku agar gesture pan/swipe di HP tidak mental balik)
     if (typeof proj4 !== 'undefined') {
         proj4.defs("ESRI:54034", "+proj=cea +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs");
     }
@@ -531,14 +532,10 @@
     const map = L.map('map', {
         center: [-6.9277, 106.9300],
         zoom: 13,
-        minZoom: 10,
-        maxZoom: 18,
-        maxBounds: [
-            [-7.5000, 106.2000],
-            [-6.4000, 107.4000] 
-        ],
-        maxBoundsViscosity: 0.3, // Loose bounce so map dragging feels natural and smooth
-        zoomControl: false
+        minZoom: 8,
+        maxZoom: 19,
+        zoomControl: false,
+        bounceAtZoomLimits: false
     });
     
     // Move zoom control to bottom right
@@ -579,8 +576,8 @@
         const lat = marker.getLatLng().lat.toFixed(5);
         const lng = marker.getLatLng().lng.toFixed(5);
         coordDisplay.value = `${lat}, ${lng}`;
-        // Otomatis cek wilayah saat selesai digeser
-        btnCek.click();
+        // Pengecekan zonasi tanpa auto flyTo peta
+        analyzeCoordinates(parseFloat(lat), parseFloat(lng), false);
     });
 
     let geoData = { lp2b: null, lbs: null, lsd: null };
@@ -593,7 +590,6 @@
                 style: { color: color, weight: 2, fillOpacity: fillOpacity },
                 onEachFeature: function(feature, layer) {
                     layer.on('click', function(e) {
-                        map.fitBounds(layer.getBounds(), { maxZoom: 18, padding: [20, 20] });
                         const lat = e.latlng.lat.toFixed(6);
                         const lng = e.latlng.lng.toFixed(6);
                         layer.bindPopup(`<div style="text-align:center;"><strong>Area ${type.toUpperCase()}</strong><br>Koord: ${lat}, ${lng}</div>`).openPopup(e.latlng);
@@ -613,15 +609,9 @@
     fetch('/storage/shp_bpn/sukabumi_bounds.geojson').then(res => res.json()).then(geojson => {
         sukabumiGeojson = geojson;
         sukabumiBoundsLayer = L.geoJSON(geojson, { style: { color: '#003B64', weight: 3, opacity: 0.8, dashArray: '5, 5' }, interactive: false }).addTo(map);
-        const bounds = sukabumiBoundsLayer.getBounds();
-        // Berikan padding luas (0.4) agar pan/drag peta tidak mental
-        map.setMaxBounds(bounds.pad(0.4));
-        map.fitBounds(bounds);
-        map.setMinZoom(10);
     }).catch(e => console.log('Error bounds:', e));
 
     let sukabumiAsliGeojson = null;
-    // Ambil poligon asli Kota Sukabumi dari OpenStreetMap sebagai referensi akurat (Polygon murni)
     fetch('https://nominatim.openstreetmap.org/search.php?q=Kota+Sukabumi&polygon_geojson=1&format=json', {
         headers: { 'Accept-Language': 'id' }
     })
@@ -642,7 +632,7 @@
         });
     });
 
-    // Pindahkan marker kalau user nge-klik di sembarang area peta
+    // Pindahkan marker kalau user nge-klik di peta (tanpa memaksa flyTo yang bikin mental)
     map.on('click', function(e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
@@ -650,7 +640,7 @@
         coordDisplay.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
         resultArea.classList.remove('active');
         
-        btnCek.click();
+        analyzeCoordinates(lat, lng, false);
     });
 
     coordDisplay.addEventListener('change', function() {
@@ -661,35 +651,21 @@
             const lng = parseFloat(parts[1].trim());
             if(!isNaN(lat) && !isNaN(lng)) {
                 marker.setLatLng([lat, lng]);
-                map.flyTo([lat, lng], 16, { duration: 1.0 });
+                map.flyTo([lat, lng], 16, { duration: 0.8 });
                 resultArea.classList.remove('active');
             }
         }
     });
 
-    // Fly to marker on check
-    btnCek.addEventListener('click', function() {
-        const btn = this;
-        const originalText = btn.innerHTML;
-        btn.innerHTML = 'Menganalisis...';
-        btn.disabled = true;
+    // Fungsi utama analisis zonasi
+    function analyzeCoordinates(lat, lng, shouldFly = false) {
+        const originalText = btnCek.innerHTML;
+        btnCek.innerHTML = 'Menganalisis...';
+        btnCek.disabled = true;
 
-        // Sync input ke marker
-        const val = coordDisplay.value;
-        const parts = val.split(',');
-        if(parts.length === 2) {
-            const parsedLat = parseFloat(parts[0].trim());
-            const parsedLng = parseFloat(parts[1].trim());
-            if(!isNaN(parsedLat) && !isNaN(parsedLng)) {
-                marker.setLatLng([parsedLat, parsedLng]);
-            }
+        if (shouldFly) {
+            map.flyTo([lat, lng], 16, { duration: 0.8 });
         }
-
-        const lat = marker.getLatLng().lat;
-        const lng = marker.getLatLng().lng;
-        
-        // Panning map smoothly
-        map.flyTo([lat, lng], 16, { duration: 0.8 });
 
         // Auto expand bottom sheet di mobile jika sedang collapsed
         const sheet = document.getElementById('sidebar-cek-lokasi');
@@ -700,8 +676,8 @@
         }
 
         setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
+            btnCek.innerHTML = originalText;
+            btnCek.disabled = false;
 
             resCoord.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
             
@@ -810,7 +786,25 @@
             resultStatus.innerHTML = statusHtml + alertHtml;
 
             resultArea.classList.add('active');
-        }, 600);
+        }, 400);
+    }
+
+    // Tombol "Cek Wilayah" secara eksplisit
+    btnCek.addEventListener('click', function() {
+        const val = coordDisplay.value;
+        const parts = val.split(',');
+        if(parts.length === 2) {
+            const parsedLat = parseFloat(parts[0].trim());
+            const parsedLng = parseFloat(parts[1].trim());
+            if(!isNaN(parsedLat) && !isNaN(parsedLng)) {
+                marker.setLatLng([parsedLat, parsedLng]);
+                analyzeCoordinates(parsedLat, parsedLng, true);
+                return;
+            }
+        }
+        const lat = marker.getLatLng().lat;
+        const lng = marker.getLatLng().lng;
+        analyzeCoordinates(lat, lng, true);
     });
 
     function flyToMarker(lat, lng) {
