@@ -576,8 +576,8 @@
         const lat = marker.getLatLng().lat.toFixed(5);
         const lng = marker.getLatLng().lng.toFixed(5);
         coordDisplay.value = `${lat}, ${lng}`;
-        // Pengecekan zonasi tanpa auto flyTo peta
-        analyzeCoordinates(parseFloat(lat), parseFloat(lng), false);
+        // Otomatis fokus & zoom ke posisi marker baru
+        analyzeCoordinates(parseFloat(lat), parseFloat(lng), true);
     });
 
     let geoData = { lp2b: null, lbs: null, lsd: null };
@@ -632,7 +632,7 @@
         });
     });
 
-    // Pindahkan marker kalau user nge-klik di peta (tanpa memaksa flyTo yang bikin mental)
+    // Pindahkan marker kalau user nge-klik di peta dan otomatis zoom fokus ke titik tersebut
     map.on('click', function(e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
@@ -640,7 +640,7 @@
         coordDisplay.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
         resultArea.classList.remove('active');
         
-        analyzeCoordinates(lat, lng, false);
+        analyzeCoordinates(lat, lng, true);
     });
 
     coordDisplay.addEventListener('change', function() {
