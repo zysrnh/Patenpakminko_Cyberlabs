@@ -7,68 +7,70 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <style>
-        /* Styling khusus untuk halaman LAPOL PAK */
+    /* Styling khusus untuk halaman LAPOL PAK */
     body { background-color: #F0F6FB; }
     
     .lapolpa-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 60px 20px;
+        padding: 40px 16px;
         flex: 1;
         justify-content: center;
+        min-height: calc(100vh - 140px);
     }
     .lapolpa-badge {
         background-color: #E6F3FA;
         color: var(--blue-dk);
-        padding: 6px 16px;
-        border-radius: 5px;
-        font-size: 12px;
+        padding: 6px 14px;
+        border-radius: 4px;
+        font-size: 11.5px;
         font-weight: 700;
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
     .lapolpa-badge svg {
         width: 14px;
         height: 14px;
     }
     .lapolpa-title {
-        font-size: 28px;
+        font-size: 24px;
         font-weight: 800;
         color: var(--ink);
         text-align: center;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
     .lapolpa-title span {
-        color: #003B64; /* Dibuat lebih gelap */
+        color: #003B64;
     }
     .lapolpa-subtitle {
         text-align: center;
-        font-size: 14px;
+        font-size: 13px;
         color: var(--mid);
         max-width: 480px;
-        margin-bottom: 40px;
-        line-height: 1.6;
+        margin-bottom: 28px;
+        line-height: 1.5;
     }
     .lapolpa-card {
         background: #FFFFFF;
-        border-radius: 5px;
-        box-shadow: 0 10px 40px rgba(0, 59, 100, 0.08);
+        border-radius: 4px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 20px rgba(0, 59, 100, 0.06);
         width: 100%;
-        max-width: 600px;
-        padding: 40px;
-        margin-bottom: 30px;
+        max-width: 580px;
+        padding: 32px 28px;
+        margin-bottom: 24px;
     }
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 18px;
     }
     .form-label {
         display: block;
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 700;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         color: var(--ink);
     }
     .form-label span {
@@ -76,25 +78,25 @@
     }
     .form-control {
         width: 100%;
-        padding: 16px 20px;
+        padding: 12px 14px;
         font-family: inherit;
-        font-size: 14px;
+        font-size: 13.5px;
         background: #F4F7FA;
-        border: 1px solid #E2E8F0;
-        border-radius: 5px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
         outline: none;
         transition: border .2s, background .2s;
         color: #0A1C2C;
         font-weight: 500;
     }
     .form-control:focus {
-        border-color: #3291A8;
+        border-color: #218AC9;
         background: #FFFFFF;
     }
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: 14px;
     }
 
     /* Icon Input Wrapper */
@@ -102,11 +104,11 @@
         position: relative;
     }
     .input-with-icon input {
-        padding-right: 48px;
+        padding-right: 42px;
     }
     .input-with-icon svg {
         position: absolute;
-        right: 18px;
+        right: 14px;
         top: 50%;
         transform: translateY(-50%);
         width: 18px;
@@ -122,59 +124,60 @@
         top: 100%;
         left: 0; right: 0;
         background: #fff;
-        border-radius: 5px;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        margin-top: 8px;
+        border-radius: 4px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        margin-top: 6px;
         z-index: 100;
         display: none;
-        padding: 12px; /* Increased padding */
-        border: 1px solid #E2E8F0;
+        padding: 10px;
+        border: 1px solid #CBD5E1;
     }
     .custom-select-dropdown.show { display: block; }
     .custom-option {
-        padding: 16px; /* Taller options */
+        padding: 12px;
         text-align: center;
         background: #F4F7FA;
         color: #0A1C2C;
-        border-radius: 4px;
-        margin-bottom: 12px; /* Bigger gap between options to match mockup */
+        border-radius: 3px;
+        margin-bottom: 8px;
         cursor: pointer;
-        font-weight: 500;
-        font-size: 13.5px;
+        font-weight: 600;
+        font-size: 13px;
         transition: background .2s, color .2s;
     }
     .custom-option:last-child { margin-bottom: 0; }
     .custom-option:hover, .custom-option.selected {
-        background: #0F3750; /* Match the dark blue in mockup */
+        background: #003B64;
         color: #fff;
     }
 
-    /* Flatpickr Customization */
+    /* Flatpickr Customization Responsive */
     .flatpickr-calendar {
-        width: 340px !important;
-        padding: 16px !important;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important;
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 8px !important;
+        width: calc(100vw - 32px) !important;
+        max-width: 320px !important;
+        padding: 12px !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12) !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 4px !important;
         font-family: 'Poppins', sans-serif !important;
-        margin-top: 8px !important;
+        margin-top: 6px !important;
     }
     .flatpickr-calendar.arrowTop:before, .flatpickr-calendar.arrowTop:after,
     .flatpickr-calendar.arrowBottom:before, .flatpickr-calendar.arrowBottom:after {
         display: none !important;
     }
     .flatpickr-months {
-        margin-bottom: 16px;
+        margin-bottom: 12px;
     }
     .flatpickr-current-month {
-        font-size: 120% !important;
+        font-size: 110% !important;
         font-weight: 600 !important;
         padding-top: 4px !important;
     }
     .flatpickr-weekday {
         color: #0A1C2C !important;
         font-weight: 700 !important;
-        font-size: 13px !important;
+        font-size: 12px !important;
     }
     .flatpickr-days, .dayContainer {
         width: 100% !important;
@@ -182,18 +185,18 @@
         max-width: 100% !important;
     }
     .flatpickr-day {
-        max-width: 40px !important;
-        height: 40px !important;
-        line-height: 40px !important;
-        font-size: 14px !important;
+        max-width: 36px !important;
+        height: 36px !important;
+        line-height: 36px !important;
+        font-size: 13px !important;
         font-weight: 500 !important;
-        color: #555 !important;
-        border-radius: 4px !important;
-        margin-top: 4px !important;
+        color: #475569 !important;
+        border-radius: 3px !important;
+        margin-top: 2px !important;
     }
     .flatpickr-day.selected {
-        background: #0F3750 !important;
-        border-color: #0F3750 !important;
+        background: #003B64 !important;
+        border-color: #003B64 !important;
         color: #fff !important;
     }
     .flatpickr-day:hover {
@@ -213,65 +216,64 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
         width: 100%;
-        padding: 16px;
-        background: var(--blue-dk);
+        padding: 13px;
+        background: #003B64;
         color: #fff;
         border: none;
-        border-radius: 5px;
+        border-radius: 4px;
         font-family: inherit;
-        font-size: 14px;
+        font-size: 13.5px;
         font-weight: 700;
         cursor: pointer;
-        transition: background .2s, transform .2s;
-        margin-top: 10px;
+        transition: background .2s;
+        margin-top: 8px;
     }
     .btn-submit:hover {
-        background: #001f35;
-        transform: translateY(-1px);
+        background: #00223D;
     }
     .btn-back {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 10px 20px;
+        gap: 6px;
+        padding: 9px 16px;
         background: #E6F3FA;
         color: var(--blue-dk);
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 700;
         text-decoration: none;
-        border-radius: 5px;
+        border-radius: 4px;
         transition: background .2s;
     }
     .btn-back:hover {
         background: #d4ecf8;
     }
     .alert {
-        padding: 14px 16px;
-        border-radius: 5px;
-        font-size: 13.5px;
+        padding: 12px 14px;
+        border-radius: 4px;
+        font-size: 13px;
         font-weight: 500;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
         display: flex;
         gap: 10px;
     }
-    .alert svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .alert svg { width: 18px; height: 18px; flex-shrink: 0; }
     .alert-error { background: #FCE8E6; border: 1px solid #F8B4B4; color: #C5221F; }
     
     /* Popup Modal Styling */
     .lapolpa-popup-overlay {
         position: fixed;
         top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 40, 70, 0.6); /* Lebih gelap sedikit untuk gantiin efek blur */
+        background: rgba(0, 34, 61, 0.65);
         z-index: 9999;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 20px;
+        padding: 16px;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
     }
     .lapolpa-popup-overlay.show {
         opacity: 1;
@@ -279,14 +281,16 @@
     }
     .lapolpa-popup-card {
         background: #fff;
-        border-radius: 5px;
+        border-radius: 4px;
         width: 100%;
         max-width: 420px;
-        padding: 32px 24px;
+        max-height: 88vh;
+        overflow-y: auto;
+        padding: 28px 20px;
         text-align: center;
         position: relative;
         transform: translateY(20px) scale(0.95);
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* Efek membal halus */
+        transition: transform 0.3s ease;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
     .lapolpa-popup-overlay.show .lapolpa-popup-card {
@@ -294,43 +298,44 @@
     }
     .lapolpa-popup-close {
         position: absolute;
-        top: 12px;
-        right: 12px;
+        top: 10px;
+        right: 10px;
         background: transparent;
         border: none;
-        font-size: 24px;
+        font-size: 22px;
         line-height: 1;
-        color: #999;
+        color: #94A3B8;
         cursor: pointer;
+        padding: 4px;
         transition: color 0.2s;
     }
     .lapolpa-popup-close:hover {
         color: #003B64;
     }
     .lapolpa-popup-icon {
-        width: 50px;
-        height: 50px;
+        width: 46px;
+        height: 46px;
         background: #E6F3FA;
         color: #218AC9;
-        border-radius: 5px;
+        border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 16px;
+        margin: 0 auto 14px;
     }
     .lapolpa-popup-icon svg {
-        width: 26px;
-        height: 26px;
+        width: 24px;
+        height: 24px;
     }
     .lapolpa-popup-title {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 800;
         color: #003B64;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     .lapolpa-popup-text {
-        font-size: 14px;
-        color: #7A9BB5;
+        font-size: 13px;
+        color: #475569;
         line-height: 1.5;
         margin-bottom: 0;
     }
@@ -339,15 +344,25 @@
     }
 
     @media (max-width: 767px) {
-        .form-grid { grid-template-columns: 1fr; gap: 20px; }
-        .lapolpa-card { padding: 24px; }
-        .lapolpa-title { font-size: 24px; }
+        .lapolpa-wrapper {
+            padding: 24px 12px;
+        }
+        .form-grid { 
+            grid-template-columns: 1fr; 
+            gap: 14px; 
+        }
+        .lapolpa-card { 
+            padding: 20px 16px; 
+        }
+        .lapolpa-title { 
+            font-size: 20px; 
+        }
     }
 </style>
 
 <div class="lapolpa-wrapper">
-    <!-- Logo sebagai pengganti Judul Utama -->
-    <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="Logo LAPOL PAK" style="width: 280px; height: auto; margin-bottom: 30px;">
+    <!-- Logo LAPOL PAK -->
+    <img src="{{ asset('storage/logo/Lapolpak.png') }}" alt="Logo LAPOL PAK" style="max-width: 85%; width: 260px; height: auto; margin-bottom: 24px;">
 
     <div class="lapolpa-card">
         @if($errors->any())
@@ -393,7 +408,6 @@
                         </svg>
                         
                         <div class="custom-select-dropdown" id="timeDropdown">
-                            <!-- Dikembalikan ke 3 waktu asli sesuai sistem -->
                             <div class="custom-option" data-value="08:00 - 10:00">08:00 - 10:00</div>
                             <div class="custom-option" data-value="10:00 - 12:00">10:00 - 12:00</div>
                             <div class="custom-option" data-value="13:00 - 15:00">13:00 - 15:00</div>
@@ -425,104 +439,98 @@
     </div>
 </div>
 
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. Popup Informasi H-1
-            const popup = document.getElementById('lapolpa-popup');
-            let popupTimer;
-            
-            setTimeout(() => {
-                popup.classList.add('show');
-                popupTimer = setTimeout(() => { closePopup(); }, 10000);
-            }, 300);
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Popup Informasi H-1
+        const popup = document.getElementById('lapolpa-popup');
+        let popupTimer;
+        
+        setTimeout(() => {
+            popup.classList.add('show');
+            popupTimer = setTimeout(() => { closePopup(); }, 10000);
+        }, 300);
 
-            window.closePopup = function() {
-                popup.classList.remove('show');
-                clearTimeout(popupTimer); 
-            };
+        window.closePopup = function() {
+            popup.classList.remove('show');
+            clearTimeout(popupTimer); 
+        };
 
-            popup.addEventListener('click', function(e) {
-                if (e.target === popup) closePopup();
-            });
+        popup.addEventListener('click', function(e) {
+            if (e.target === popup) closePopup();
+        });
 
-            // 2. Inisialisasi Flatpickr untuk Tanggal
-            const holidays = @json($holidays ?? []);
+        // 2. Inisialisasi Flatpickr untuk Tanggal
+        const holidays = @json($holidays ?? []);
 
-            flatpickr("#booking_date", {
-                locale: "id",
-                dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "l, j F Y", /* Contoh: Senin, 31 April 2026 */
-                minDate: new Date().fp_incr(1), // Minimal besok
-                disableMobile: "true",
-                disable: [
-                    function(date) {
-                        const y = date.getFullYear();
-                        const m = String(date.getMonth() + 1).padStart(2, '0');
-                        const d = String(date.getDate()).padStart(2, '0');
-                        const formattedDate = `${y}-${m}-${d}`;
-
-                        return (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate));
-                    }
-                ],
-                onDayCreate: function(dObj, dStr, fp, dayElem) {
-                    const date = dayElem.dateObj;
+        flatpickr("#booking_date", {
+            locale: "id",
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "l, j F Y",
+            minDate: new Date().fp_incr(1),
+            disableMobile: "true",
+            disable: [
+                function(date) {
                     const y = date.getFullYear();
                     const m = String(date.getMonth() + 1).padStart(2, '0');
                     const d = String(date.getDate()).padStart(2, '0');
                     const formattedDate = `${y}-${m}-${d}`;
 
-                    if (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate)) {
-                        dayElem.classList.add('holiday-or-weekend');
-                    }
+                    return (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate));
                 }
-            });
+            ],
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
+                const date = dayElem.dateObj;
+                const y = date.getFullYear();
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const d = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${y}-${m}-${d}`;
 
-            // 3. Custom Dropdown Logic untuk Waktu
-            const timeDisplay = document.getElementById('time_range_display');
-            const timeValue = document.getElementById('time_range_value');
-            const dropdown = document.getElementById('timeDropdown');
-            const options = dropdown.querySelectorAll('.custom-option');
-
-            // Set initial selected visual if old() value exists
-            if (timeValue.value) {
-                options.forEach(opt => {
-                    if (opt.dataset.value === timeValue.value) opt.classList.add('selected');
-                });
+                if (date.getDay() === 0 || date.getDay() === 6 || holidays.includes(formattedDate)) {
+                    dayElem.classList.add('holiday-or-weekend');
+                }
             }
+        });
 
-            // Toggle dropdown
-            timeDisplay.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdown.classList.toggle('show');
-            });
+        // 3. Custom Dropdown Logic untuk Waktu
+        const timeDisplay = document.getElementById('time_range_display');
+        const timeValue = document.getElementById('time_range_value');
+        const dropdown = document.getElementById('timeDropdown');
+        const options = dropdown.querySelectorAll('.custom-option');
 
-            // Pilih opsi
+        if (timeValue.value) {
             options.forEach(opt => {
-                opt.addEventListener('click', function() {
-                    // Update value
-                    const val = this.dataset.value;
-                    const text = this.innerText;
-                    timeDisplay.value = text;
-                    timeValue.value = val;
-
-                    // Update UI
-                    options.forEach(o => o.classList.remove('selected'));
-                    this.classList.add('selected');
-                    
-                    dropdown.classList.remove('show');
-                });
+                if (opt.dataset.value === timeValue.value) opt.classList.add('selected');
             });
+        }
 
-            // Tutup dropdown kalau klik di luar
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.custom-select-wrapper')) {
-                    dropdown.classList.remove('show');
-                }
+        timeDisplay.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', function() {
+                const val = this.dataset.value;
+                const text = this.innerText;
+                timeDisplay.value = text;
+                timeValue.value = val;
+
+                options.forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                dropdown.classList.remove('show');
             });
         });
-    </script>
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.custom-select-wrapper')) {
+                dropdown.classList.remove('show');
+            }
+        });
+    });
+</script>
 @endsection

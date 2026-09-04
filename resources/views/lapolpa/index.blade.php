@@ -23,9 +23,11 @@
     .star-rating { color: #D97706; font-size: 16px; font-weight: 700; }
     @media (max-width: 768px) {
         .info-grid { grid-template-columns: 1fr; }
-        .form-grid-3 { grid-template-columns: 1fr; gap: 10px; }
+        .form-grid-3 { grid-template-columns: 1fr; gap: 12px; }
+        .form-grid-3 > div { grid-column: span 1 !important; }
         .detail-item { flex-direction: column; align-items: flex-start; gap: 4px; }
         .status-booked { padding: 16px; }
+        .flatpickr-calendar { width: calc(100vw - 32px) !important; max-width: 320px !important; }
     }
 @endsection
 
