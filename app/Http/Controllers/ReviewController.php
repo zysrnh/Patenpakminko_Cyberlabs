@@ -96,6 +96,10 @@ class ReviewController extends Controller
  
     /**
      * Tampilkan halaman pengelolaan ulasan bagi Admin (DPN).
+     * Terbagi 3 kategori terpisah:
+     * 1. Layanan Perizinan & Pertimbangan Teknis (PKKPR, Kebijakan, dll.)
+     * 2. Layanan LAPOL PAK (Pelaporan & Tatap Muka)
+     * 3. Layanan INFORMAL (Peta Digital & Zonasi)
      */
     public function adminIndex(Request $request)
     {
@@ -106,7 +110,19 @@ class ReviewController extends Controller
 
         $layanan = $request->input('layanan');
 
-        $queryReviews = Review::with('user')->orderBy('rating', 'desc')->orderBy('created_at', 'desc');
+        // 1. Ulasan Layanan Perizinan & Kebijakan
+        $queryPerizinan = Review::with('user')
+            ->whereIn('module_type', ['berusaha', 'non_berusaha', 'kebijakan', 'tanah_timbul', 'psn', 'umum'])
+            ->orderBy('rating', 'desc')
+            ->orderBy('created_at', 'desc');
+
+        // 2. Ulasan Layanan LAPOL PAK
+        $queryLapolpa = Review::with('user')
+            ->where('module_type', 'lapolpa')
+            ->orderBy('rating', 'desc')
+            ->orderBy('created_at', 'desc');
+
+        // 3. Ulasan Peta Digital INFORMAL
         $queryInformal = \App\Models\InformalRating::with('user')
             ->where(function($q) {
                 $q->where('informal_type', '!=', 'LAPOLPA')
@@ -116,18 +132,27 @@ class ReviewController extends Controller
             ->orderBy('created_at', 'desc');
 
         if ($layanan) {
-            if ($layanan === 'informal') {
-                $queryReviews->whereRaw('1 = 0');
+            if ($layanan === 'lapolpa') {
+                $queryPerizinan->whereRaw('1 = 0');
+                $queryInformal->whereRaw('1 = 0');
+            } elseif ($layanan === 'informal') {
+                $queryPerizinan->whereRaw('1 = 0');
+                $queryLapolpa->whereRaw('1 = 0');
+            } elseif ($layanan === 'perizinan') {
+                $queryLapolpa->whereRaw('1 = 0');
+                $queryInformal->whereRaw('1 = 0');
             } else {
-                $queryReviews->where('module_type', $layanan);
+                $queryPerizinan->where('module_type', $layanan);
+                $queryLapolpa->whereRaw('1 = 0');
                 $queryInformal->whereRaw('1 = 0');
             }
         }
 
-        $reviews = $queryReviews->get();
+        $reviews = $queryPerizinan->get();
+        $lapolpaReviews = $queryLapolpa->get();
         $informalRatings = $queryInformal->get();
         
-        return view('admin.reviews', compact('reviews', 'informalRatings', 'layanan'));
+        return view('admin.reviews', compact('reviews', 'lapolpaReviews', 'informalRatings', 'layanan'));
     }
  
     /**
