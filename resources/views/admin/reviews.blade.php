@@ -423,7 +423,7 @@
                 </label>
                 <select name="layanan" onchange="this.form.submit()" style="padding: 8px 12px; border-radius: 4px; border: 1.5px solid #CBD5E1; font-size: 13px; font-weight: 600; color: #0F172A; background: #ffffff; min-width: 280px; outline: none; cursor: pointer;">
                     <option value="">-- Tampilkan Semua Kategori --</option>
-                    <optgroup label="📋 Layanan Perizinan & Pertimbangan Teknis">
+                    <optgroup label="📋 Layanan Perizinan & Kebijakan">
                         <option value="perizinan" {{ request('layanan') == 'perizinan' ? 'selected' : '' }}>Semua Layanan Perizinan</option>
                         <option value="berusaha" {{ request('layanan') == 'berusaha' ? 'selected' : '' }}>• PKKPR Berusaha</option>
                         <option value="non_berusaha" {{ request('layanan') == 'non_berusaha' ? 'selected' : '' }}>• PKKPR Non-Berusaha</option>
@@ -432,11 +432,11 @@
                         <option value="psn" {{ request('layanan') == 'psn' ? 'selected' : '' }}>• Proyek Strategis Nasional (PSN)</option>
                         <option value="umum" {{ request('layanan') == 'umum' ? 'selected' : '' }}>• Ulasan Umum</option>
                     </optgroup>
-                    <optgroup label="🏛️ Layanan Pelaporan BPN">
-                        <option value="lapolpa" {{ request('layanan') == 'lapolpa' ? 'selected' : '' }}>LAPOL PAK (Layanan Pelaporan & Tatap Muka)</option>
+                    <optgroup label="🏛️ Layanan LAPOL PAK">
+                        <option value="lapolpa" {{ request('layanan') == 'lapolpa' ? 'selected' : '' }}>LAPOL PAK</option>
                     </optgroup>
-                    <optgroup label="🗺️ Informasi Publik Peta">
-                        <option value="informal" {{ request('layanan') == 'informal' ? 'selected' : '' }}>INFORMAL (Peta Digital & Zonasi)</option>
+                    <optgroup label="🗺️ Informasi Peta Informal">
+                        <option value="informal" {{ request('layanan') == 'informal' ? 'selected' : '' }}>INFORMAL (Peta Digital)</option>
                     </optgroup>
                 </select>
             </div>
@@ -455,7 +455,7 @@
     <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display:flex; justify-content:space-between; align-items:center;">
         <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
             <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            Daftar Ulasan Layanan Perizinan & Pertimbangan Teknis (PKKPR & Kebijakan)
+            Daftar Ulasan Layanan Perizinan & Kebijakan
         </h2>
         <span style="font-size:12px; font-weight:700; color:#64748B;">{{ $reviews->count() }} Data</span>
     </div>
@@ -608,7 +608,7 @@
     <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #BAE6FD; background: #F0F9FF; display:flex; justify-content:space-between; align-items:center;">
         <h2 style="font-size: 15px; font-weight: 800; color: #0369A1; margin: 0; display: flex; align-items: center; gap: 8px;">
             <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#0284C7" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" /></svg>
-            Daftar Ulasan Layanan LAPOL PAK (Pelaporan & Konsultasi Tatap Muka BPN)
+            Daftar Ulasan Layanan LAPOL PAK
         </h2>
         <span style="font-size:12px; font-weight:700; color:#0369A1;">{{ $lapolpaReviews->count() }} Data</span>
     </div>
@@ -736,14 +736,14 @@
 @endif
 
 {{-- ═══════════════════════════════════════════════════════════ --}}
-{{-- PANEL 3: DAFTAR ULASAN INFORMAL (PETA DIGITAL & ZONASI) --}}
+{{-- PANEL 3: DAFTAR ULASAN INFORMAL (PETA DIGITAL) --}}
 {{-- ═══════════════════════════════════════════════════════════ --}}
 @if(!request('layanan') || request('layanan') === 'informal')
 <div class="panel" style="border-radius: 6px; border: 1px solid #E2E8F0; box-shadow: 0 2px 6px rgba(0,38,66,0.02); overflow: hidden; background: #ffffff; margin-bottom: 24px;">
     <div class="panel-head" style="padding: 14px 18px; border-bottom: 1px solid #E2E8F0; background: #F8FAFC; display:flex; justify-content:space-between; align-items:center;">
         <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
             <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
-            Daftar Ulasan INFORMAL (Peta Digital & Zonasi Tata Ruang)
+            Daftar Ulasan INFORMAL (Peta Digital)
         </h2>
         <span style="font-size:12px; font-weight:700; color:#64748B;">{{ $informalRatings->count() }} Data</span>
     </div>
