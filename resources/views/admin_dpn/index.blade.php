@@ -9,7 +9,7 @@
         background: #FFFFFF;
         border: 1px solid #E2E8F0;
         border-radius: 4px;
-        padding: 18px 22px;
+        padding: 16px 20px;
         margin-bottom: 20px;
         display: flex;
         align-items: center;
@@ -40,7 +40,7 @@
         gap: 8px;
     }
     .preview-card-title {
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 700;
         color: #64748B;
         text-transform: uppercase;
@@ -78,7 +78,7 @@
     }
     .stat-main-grid {
         display: grid;
-        grid-template-columns: 1.6fr 1fr;
+        grid-template-columns: 1.55fr 1fr;
         gap: 20px;
         align-items: start;
     }
@@ -96,7 +96,7 @@
         .stat-header-box {
             flex-direction: column;
             align-items: flex-start;
-            padding: 14px 14px;
+            padding: 14px;
         }
         .stat-header-box .btn {
             width: 100%;
@@ -110,46 +110,28 @@
 @endsection
 
 @section('content')
-<!-- Header Card -->
+<!-- Header Box -->
 <div class="stat-header-box">
     <div>
         <div style="font-size: 12px; color: #64748B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
             <a href="{{ route('dashboard') }}" style="color: #218AC9; text-decoration: none; font-weight: 600;">Dashboard</a>
             <span>›</span>
-            <span style="color: #64748B;">Kelola Web (Super Admin)</span>
+            <span style="color: #64748B;">Kelola Web</span>
         </div>
         <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">
-            Kelola Statistik Web & Backup Sistem
+            Kelola Statistik Beranda
         </h1>
         <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">
-            Kelola parameter tampilan beranda publik, pantau perbandingan angka real database, serta unduh salinan cadangan data.
+            Atur parameter nilai statistik beranda publik serta pantau perbandingan metrik otomatis database.
         </p>
     </div>
-    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-        <a href="{{ url('/') }}" target="_blank" class="btn btn-secondary" style="font-weight: 700; font-size: 12.5px; padding: 9px 14px; border-radius: 4px;" title="Buka beranda publik di tab baru">
+    <div>
+        <a href="{{ url('/') }}" target="_blank" class="btn btn-secondary" style="font-weight: 700; font-size: 12.5px; padding: 9px 15px; border-radius: 4px;" title="Buka beranda publik di tab baru">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
             Lihat Beranda Publik
         </a>
-        <a href="{{ route('admin_dpn.backup_database_sql') }}" class="btn btn-primary" style="font-weight: 700; font-size: 12.5px; padding: 9px 15px; border-radius: 4px;" title="Download salinan database SQL dump langsung">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-            Download Database (.SQL)
-        </a>
     </div>
 </div>
-
-@if(session('success'))
-    <div class="alert alert-success" style="border-radius: 4px; margin-bottom: 20px;">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span>{{ session('success') }}</span>
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-error" style="border-radius: 4px; margin-bottom: 20px;">
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span>{{ session('error') }}</span>
-    </div>
-@endif
 
 <!-- LIVE PREVIEW BERANDA -->
 @php
@@ -207,7 +189,7 @@
     <div class="preview-card">
         <div class="preview-card-top">
             <span class="preview-card-title">Rata-rata Selesai</span>
-            <span class="preview-card-badge manual">Durasi Kerja</span>
+            <span class="preview-card-badge manual">Durasi Layanan</span>
         </div>
         <div class="preview-card-val">{{ $livePenyVal }}</div>
         <div class="preview-card-sub">
@@ -238,7 +220,7 @@
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2" style="display:inline-block; vertical-align:middle; margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
                 Form Pengaturan Statistik Beranda
             </h2>
-            <span style="font-size: 11.5px; color: #64748B; font-weight: 600;">Disimpan ke visitor_stats.json</span>
+            <span style="font-size: 11.5px; color: #64748B; font-weight: 600;">visitor_stats.json</span>
         </div>
         <div class="panel-body">
             <form action="{{ route('admin_dpn.update') }}" method="POST">
@@ -250,7 +232,7 @@
                     </label>
                     <input type="text" name="permohonan_diproses" class="form-control" value="{{ $stats['permohonan_diproses'] ?? '' }}" placeholder="Biarkan kosong untuk otomatis hitung dari database..." style="font-size: 13.5px; padding: 10px 14px;">
                     <div class="form-hint" style="font-size: 11.5px; color: #64748B; margin-top: 5px; line-height: 1.45;">
-                        • <strong>Dikosongkan</strong>: Sistem otomatis menghitung total real semua layanan di database (saat ini: <strong>{{ number_format($totalPermohonanDb) }}</strong> permohonan).<br>
+                        • <strong>Dikosongkan</strong>: Sistem otomatis menghitung total real seluruh layanan di database (saat ini: <strong>{{ number_format($totalPermohonanDb) }}</strong> permohonan).<br>
                         • <strong>Diisi</strong>: Nilai kustom ini yang akan tampil di beranda (contoh: <code>15k</code> atau <code>1,250</code>).
                     </div>
                 </div>
@@ -261,7 +243,7 @@
                     </label>
                     <input type="text" name="rata_rata_penyelesaian" class="form-control" value="{{ $stats['rata_rata_penyelesaian'] ?? '10 hari' }}" placeholder="Contoh: 10 hari atau 5 hari kerja" required style="font-size: 13.5px; padding: 10px 14px;">
                     <div class="form-hint" style="font-size: 11.5px; color: #64748B; margin-top: 5px;">
-                        Teks estimasi waktu penyelesaian layanan yang tampil pada kartu statistik beranda.
+                        Teks estimasi durasi penyelesaian layanan yang tampil pada kartu statistik beranda.
                     </div>
                 </div>
 
@@ -293,31 +275,29 @@
         </div>
     </div>
 
-    <!-- Kolom Kanan: Panel Aksi Tambahan (Backup & Reset) -->
+    <!-- Kolom Kanan: Panel Panduan & Reset -->
     <div style="display: flex; flex-direction: column; gap: 18px;">
 
-        <!-- Panel Backup Database -->
+        <!-- Panel Panduan Cara Kerja -->
         <div class="panel" style="border-radius: 4px;">
             <div class="panel-head" style="background: #F8FAFC;">
                 <h2>
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2563EB" stroke-width="2.2" style="display:inline-block; vertical-align:middle; margin-right:6px;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                    Cadangan Data (Backup)
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2" style="display:inline-block; vertical-align:middle; margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Panduan & Cara Kerja
                 </h2>
             </div>
-            <div class="panel-body" style="padding: 18px;">
-                <p style="font-size: 12.5px; color: #64748B; line-height: 1.5; margin-bottom: 14px;">
-                    Unduh file salinan cadangan database untuk keperluan arsip, pemulihan data, atau migrasi server:
-                </p>
-
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <a href="{{ route('admin_dpn.backup_database_sql') }}" class="btn btn-primary" style="width: 100%; justify-content: center; font-size: 12.5px; padding: 10px 14px;">
-                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        Download DB SQL Saja (~2 MB)
-                    </a>
-                    <a href="{{ route('admin_dpn.backup_database') }}" class="btn btn-secondary" style="width: 100%; justify-content: center; font-size: 12.5px; padding: 10px 14px;">
-                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Download Backup Lengkap (.ZIP)
-                    </a>
+            <div class="panel-body" style="padding: 18px; font-size: 12px; color: #334155; line-height: 1.55;">
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #003B64; display: block; margin-bottom: 2px;">⚡ Otomatisasi Database:</strong>
+                    Jika input override dikosongkan, angka beranda akan selalu sinkron dengan data asli transaksi permohonan dan ulasan kepuasan masyarakat.
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong style="color: #003B64; display: block; margin-bottom: 2px;">✏️ Override Manual:</strong>
+                    Gunakan kolom override jika Anda ingin menampilkan angka publisitas tertentu (misal pembulatan atau promosi layanan).
+                </div>
+                <div>
+                    <strong style="color: #003B64; display: block; margin-bottom: 2px;">💾 Backup Database:</strong>
+                    Untuk melakukan unduhan atau pengiriman cadangan database ke email, gunakan tombol <strong>Backup DB</strong> di bilah navigasi atas (topbar).
                 </div>
             </div>
         </div>
@@ -332,7 +312,7 @@
             </div>
             <div class="panel-body" style="padding: 18px;">
                 <p style="font-size: 12.5px; color: #64748B; line-height: 1.5; margin-bottom: 14px;">
-                    Kembalikan akumulasi hitungan jumlah kunjungan website kembali ke <strong style="color: #0F172A;">0 (nol)</strong>.
+                    Kembalikan hitungan total kunjungan pengunjung website kembali ke <strong style="color: #0F172A;">0 (nol)</strong>.
                 </p>
 
                 <form action="{{ route('admin_dpn.reset_visitor') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin me-reset jumlah kunjungan pengunjung kembali ke 0?')">
