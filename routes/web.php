@@ -178,7 +178,9 @@ Route::get('/', function () {
 
     if ($totalPertekAppsCount > 0) {
         $realtimeAvgDays = (int) round($totalPertekWorkingDays / $totalPertekAppsCount);
-        $statsData['rata_rata_penyelesaian'] = $realtimeAvgDays . ' hari';
+        if (empty($statsData['rata_rata_penyelesaian']) || $statsData['rata_rata_penyelesaian'] === '10 hari') {
+            $statsData['rata_rata_penyelesaian'] = $realtimeAvgDays . ' hari';
+        }
     }
 
     // Berita / Artikel

@@ -13,6 +13,10 @@ class AdminDpnController extends Controller
 
     public function index()
     {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
         $stats = [
             'count' => 0,
             'permohonan_diproses' => '',
@@ -29,11 +33,70 @@ class AdminDpnController extends Controller
 
         $count = $stats['count'];
 
-        return view('admin_dpn.index', compact('stats', 'count'));
+        // Realtime counts from Database for comparison & live preview
+        $totalPermohonanDb = \App\Models\PpkprApplication::count()
+            + \App\Models\PpkprBerusahaApplication::count()
+            + \App\Models\KebijakanApplication::count()
+            + \App\Models\PsnApplication::count()
+            + \App\Models\TanahTimbulApplication::count();
+
+        $countApprovedReview = \App\Models\Review::where('is_approved', true)->count();
+        $countApprovedInformal = \App\Models\InformalRating::where('is_approved', true)->count();
+        $totalApprovedCount = $countApprovedReview + $countApprovedInformal;
+
+        if ($totalApprovedCount > 0) {
+            $avgReview = \App\Models\Review::where('is_approved', true)->avg('rating') ?? 0;
+            $avgInformal = \App\Models\InformalRating::where('is_approved', true)->avg('rating') ?? 0;
+            $realAverageRating = (($avgReview * $countApprovedReview) + ($avgInformal * $countApprovedInformal)) / $totalApprovedCount;
+        } else {
+            $realAverageRating = 5.0;
+        }
+        $realAverageRating = number_format((float)$realAverageRating, 1);
+
+        $modelsToCalculate = [
+            \App\Models\PpkprBerusahaApplication::class,
+            \App\Models\PpkprApplication::class,
+            \App\Models\KebijakanApplication::class,
+            \App\Models\PsnApplication::class,
+            \App\Models\TanahTimbulApplication::class,
+        ];
+
+        $totalPertekWorkingDays = 0;
+        $totalPertekAppsCount = 0;
+
+        foreach ($modelsToCalculate as $modelClass) {
+            $completedApps = $modelClass::where(function($q) {
+                $q->whereNotNull('bpn_pertek_uploaded_at')
+                  ->orWhereIn('status', ['disetujui', 'ditolak', 'terbit_pkpr']);
+            })->get();
+
+            foreach ($completedApps as $appItem) {
+                $start = $appItem->tgl_mulai_layanan ? \Carbon\Carbon::parse($appItem->tgl_mulai_layanan) : $appItem->created_at;
+                $end = $appItem->bpn_pertek_uploaded_at 
+                    ? \Carbon\Carbon::parse($appItem->bpn_pertek_uploaded_at) 
+                    : ($appItem->tgl_selesai_layanan ? \Carbon\Carbon::parse($appItem->tgl_selesai_layanan) : $appItem->updated_at);
+
+                if ($start && $end) {
+                    $workingDays = $start->getEffectiveWorkingDayNumber($end);
+                    if ($workingDays > 0) {
+                        $totalPertekWorkingDays += $workingDays;
+                        $totalPertekAppsCount++;
+                    }
+                }
+            }
+        }
+
+        $realAvgDays = ($totalPertekAppsCount > 0) ? ((int) round($totalPertekWorkingDays / $totalPertekAppsCount) . ' hari') : '10 hari';
+
+        return view('admin_dpn.index', compact('stats', 'count', 'totalPermohonanDb', 'realAverageRating', 'realAvgDays', 'totalApprovedCount'));
     }
 
     public function update(Request $request)
     {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
         $request->validate([
             'count' => 'required|integer|min:0',
             'permohonan_diproses' => 'nullable|string|max:50',
@@ -58,6 +121,10 @@ class AdminDpnController extends Controller
 
     public function resetVisitorCount()
     {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
         $stats = [
             'count' => 0,
             'permohonan_diproses' => '',

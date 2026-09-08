@@ -486,11 +486,12 @@
 
                 $statsData = $statsData ?? [];
 
-                $permValue = number_format($totalPermohonan ?? 0);
+                $hasPermOverride = isset($statsData['permohonan_diproses']) && trim((string)$statsData['permohonan_diproses']) !== '';
+                $permValue = $hasPermOverride ? $statsData['permohonan_diproses'] : number_format($totalPermohonan ?? 0);
 
-                $penyValue = $statsData['rata_rata_penyelesaian'] ?? '10 hari';
+                $penyValue = !empty($statsData['rata_rata_penyelesaian']) ? $statsData['rata_rata_penyelesaian'] : '10 hari';
 
-                $hasRatingOverride = isset($statsData['rating_override']) && $statsData['rating_override'] !== '' && $statsData['rating_override'] !== '0' && $statsData['rating_override'] !== '0.0';
+                $hasRatingOverride = isset($statsData['rating_override']) && trim((string)$statsData['rating_override']) !== '' && $statsData['rating_override'] !== '0' && $statsData['rating_override'] !== '0.0';
 
                 $ratingVal = $hasRatingOverride ? $statsData['rating_override'] : (($averageRating && $averageRating !== '0.0' && $averageRating !== '0') ? $averageRating : '5.0');
 
