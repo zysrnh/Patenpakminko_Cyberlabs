@@ -139,5 +139,13 @@ class AppServiceProvider extends ServiceProvider
             
             return $isNegative ? -$days : $days;
         });
+
+        // ─── Auto-Backup Observer Permohonan Baru ───────────────────────────
+        // Memicu pencadangan otomatis & blast email setiap ada permohonan baru
+        \App\Models\PpkprApplication::observe(\App\Observers\PermohonanBackupObserver::class);
+        \App\Models\PpkprBerusahaApplication::observe(\App\Observers\PermohonanBackupObserver::class);
+        \App\Models\KebijakanApplication::observe(\App\Observers\PermohonanBackupObserver::class);
+        \App\Models\PsnApplication::observe(\App\Observers\PermohonanBackupObserver::class);
+        \App\Models\TanahTimbulApplication::observe(\App\Observers\PermohonanBackupObserver::class);
     }
 }

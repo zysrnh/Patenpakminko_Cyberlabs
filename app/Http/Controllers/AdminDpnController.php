@@ -88,7 +88,9 @@ class AdminDpnController extends Controller
 
         $realAvgDays = ($totalPertekAppsCount > 0) ? ((int) round($totalPertekWorkingDays / $totalPertekAppsCount) . ' hari') : '10 hari';
 
-        return view('admin_dpn.index', compact('stats', 'count', 'totalPermohonanDb', 'realAverageRating', 'realAvgDays', 'totalApprovedCount'));
+        $backupArchives = \App\Services\BackupService::getBackupArchives();
+
+        return view('admin_dpn.index', compact('stats', 'count', 'totalPermohonanDb', 'realAverageRating', 'realAvgDays', 'totalApprovedCount', 'backupArchives'));
     }
 
     public function update(Request $request)
@@ -562,6 +564,66 @@ class AdminDpnController extends Controller
             }
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Gagal mengirim email backup: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Unduh file arsip backup tertentu dari rak arsip (Khusus Super Admin DPN).
+     */
+    public function downloadBackupArchive($filename)
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
+        $cleanFileName = basename($filename);
+        $filePath = storage_path('app/backups/' . $cleanFileName);
+
+        if (!\Illuminate\Support\Facades\File::exists($filePath)) {
+            return redirect()->back()->with('error', 'Berkas cadangan tidak ditemukan.');
+        }
+
+        return response()->download($filePath, $cleanFileName, [
+            'Content-Type' => 'text/x-sql',
+        ]);
+    }
+
+    /**
+     * Hapus berkas cadangan dari rak arsip (Khusus Super Admin DPN).
+     */
+    public function deleteBackupArchive($filename)
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
+        $cleanFileName = basename($filename);
+        \App\Services\BackupService::deleteBackupArchive($cleanFileName);
+
+        return redirect()->back()->with('success', "Berkas cadangan {$cleanFileName} berhasil dihapus dari rak arsip.");
+    }
+
+    /**
+     * Trigger manual backup instan dari tombol rak arsip (Khusus Super Admin DPN).
+     */
+    public function createManualBackupArchive()
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
+        try {
+            $userName = \Illuminate\Support\Facades\Auth::user()->name ?? 'Super Admin';
+            $entry = \App\Services\BackupService::createTriggeredBackup("Manual oleh {$userName}");
+
+            $msg = "Cadangan database berhasil dibuat ({$entry['size_formatted']}) dan telah disimpan di rak arsip.";
+            if (!empty($entry['email_sent'])) {
+                $msg .= " Salinan SQL juga sukses diblast ke penataanpertanahanmiko@gmail.com dan zakiyh782@gmail.com.";
+            }
+
+            return redirect()->back()->with('success', $msg);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Gagal membuat cadangan: ' . $e->getMessage());
         }
     }
 }

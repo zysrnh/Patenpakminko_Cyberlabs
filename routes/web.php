@@ -370,6 +370,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin_dpn/backup-database', [AdminDpnController::class, 'downloadDatabaseBackup'])->name('admin_dpn.backup_database');
     Route::get('/admin_dpn/backup-database-sql', [AdminDpnController::class, 'downloadDatabaseSqlOnly'])->name('admin_dpn.backup_database_sql');
     Route::post('/admin_dpn/send-backup-email', [AdminDpnController::class, 'sendBackupEmailNow'])->name('admin_dpn.send_backup_email');
+    
+    // Rak Arsip Cadangan Data (Auto-Backup & Manual)
+    Route::get('/admin_dpn/backup-archive/download/{filename}', [AdminDpnController::class, 'downloadBackupArchive'])->name('admin_dpn.backup_archive.download');
+    Route::delete('/admin_dpn/backup-archive/delete/{filename}', [AdminDpnController::class, 'deleteBackupArchive'])->name('admin_dpn.backup_archive.delete');
+    Route::post('/admin_dpn/backup-archive/manual', [AdminDpnController::class, 'createManualBackupArchive'])->name('admin_dpn.backup_archive.manual');
+
     Route::post('/souvenir/send/{type}/{id}', [AdminDpnController::class, 'markSouvenirSent'])->name('souvenir.mark_sent');
     Route::post('/application/rollback/{type}/{id}', [AdminDpnController::class, 'rollbackStatus'])->name('application.rollback');
     Route::post('/application/forward/{type}/{id}', [AdminDpnController::class, 'forwardStatus'])->name('application.forward');

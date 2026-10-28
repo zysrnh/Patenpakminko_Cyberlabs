@@ -314,4 +314,173 @@ class BackupService
             throw $e;
         }
     }
+
+    /**
+     * Create automated triggered backup, write to manifest, rotate old backups, and blast to email.
+     */
+    public static function createTriggeredBackup(string $label = 'Auto Backup', ?array $targetEmails = null): array
+    {
+        @ini_set('memory_limit', '512M');
+        @ini_set('max_execution_time', '300');
+
+        $backupDir = storage_path('app/backups');
+        if (!File::exists($backupDir)) {
+            File::makeDirectory($backupDir, 0755, true);
+        }
+
+        $timestamp = now()->format('Y-m-d_H-i-s');
+        $fileName = 'patenpakminko_auto_backup_' . $timestamp . '.sql';
+        $filePath = $backupDir . '/' . $fileName;
+
+        // 1. Generate SQL dump
+        $sqlContent = static::generateSqlDump();
+        File::put($filePath, $sqlContent);
+
+        $fileSizeBytes = File::size($filePath);
+        $fileSizeMb = round($fileSizeBytes / (1024 * 1024), 2);
+
+        // 2. Target Recipients (penataanpertanahanmiko@gmail.com dan zakiyh782@gmail.com)
+        $defaultRecipients = [
+            'penataanpertanahanmiko@gmail.com',
+            'zakiyh782@gmail.com'
+        ];
+
+        $recipients = !empty($targetEmails) 
+            ? array_values(array_filter(array_unique($targetEmails))) 
+            : $defaultRecipients;
+
+        // 3. Send email blast with attachment
+        $emailSent = false;
+        try {
+            $subject = "[AUTO-BACKUP] {$label} - Database SQL (" . now()->format('d/m/Y H:i') . " WIB)";
+            $body = "Yth. Tim Penataan Pertanahan & Admin PATEN PAK MIKO,\n\n"
+                  . "Pemberitahuan Otomatis Pencadangan Sistem:\n"
+                  . "--------------------------------------------------\n"
+                  . "Pemicu Cadangan : {$label}\n"
+                  . "Waktu Dibuat    : " . now()->format('d F Y, H:i:s') . " WIB\n"
+                  . "Ukuran Berkas   : {$fileSizeMb} MB (" . number_format($fileSizeBytes) . " bytes)\n"
+                  . "Nama Berkas     : {$fileName}\n"
+                  . "Status Simpan   : Tersimpan di Rak Arsip Super Admin & Server Lokal\n"
+                  . "--------------------------------------------------\n\n"
+                  . "Terlampir adalah salinan cadangan Database SQL utuh sistem PATEN PAK MIKO.\n"
+                  . "Harap simpan berkas ini di tempat aman. Salinan ini dapat dipergunakan sewaktu-waktu untuk pemulihan instan jika terjadi kendala pada server.\n\n"
+                  . "Salam,\n"
+                  . "Sistem Otomatisasi PATEN PAK MIKO";
+
+            \Illuminate\Support\Facades\Mail::raw($body, function ($message) use ($recipients, $subject, $sqlContent, $fileName) {
+                $message->to($recipients)
+                    ->subject($subject)
+                    ->attachData($sqlContent, $fileName, [
+                        'mime' => 'text/x-sql',
+                    ]);
+            });
+
+            $emailSent = true;
+        } catch (\Throwable $e) {
+            logger()->error("Gagal blast email auto backup: " . $e->getMessage());
+        }
+
+        // 4. Update manifest
+        $manifestPath = $backupDir . '/manifest.json';
+        $manifest = [];
+        if (File::exists($manifestPath)) {
+            $decoded = json_decode(File::get($manifestPath), true);
+            if (is_array($decoded)) {
+                $manifest = $decoded;
+            }
+        }
+
+        $newEntry = [
+            'filename' => $fileName,
+            'label' => $label,
+            'size' => $fileSizeBytes,
+            'size_formatted' => $fileSizeMb . ' MB',
+            'created_at' => now()->format('Y-m-d H:i:s'),
+            'email_sent' => $emailSent,
+            'recipients' => $recipients,
+        ];
+
+        array_unshift($manifest, $newEntry);
+
+        // 5. Auto-rotation: keep latest 30 backups
+        if (count($manifest) > 30) {
+            $toKeep = array_slice($manifest, 0, 30);
+            $toDelete = array_slice($manifest, 30);
+
+            foreach ($toDelete as $item) {
+                $oldFile = $backupDir . '/' . ($item['filename'] ?? '');
+                if (File::exists($oldFile)) {
+                    @unlink($oldFile);
+                }
+            }
+
+            $manifest = $toKeep;
+        }
+
+        File::put($manifestPath, json_encode($manifest, JSON_PRETTY_PRINT));
+
+        return $newEntry;
+    }
+
+    /**
+     * Get list of all backup archives in the rack.
+     */
+    public static function getBackupArchives(): array
+    {
+        $backupDir = storage_path('app/backups');
+        $manifestPath = $backupDir . '/manifest.json';
+
+        if (!File::exists($backupDir)) {
+            return [];
+        }
+
+        $manifest = [];
+        if (File::exists($manifestPath)) {
+            $decoded = json_decode(File::get($manifestPath), true);
+            if (is_array($decoded)) {
+                $manifest = $decoded;
+            }
+        }
+
+        // Filter and verify physical files exist
+        $validArchives = [];
+        foreach ($manifest as $item) {
+            $filePath = $backupDir . '/' . ($item['filename'] ?? '');
+            if (File::exists($filePath)) {
+                $item['size'] = File::size($filePath);
+                $item['size_formatted'] = round($item['size'] / (1024 * 1024), 2) . ' MB';
+                $validArchives[] = $item;
+            }
+        }
+
+        return $validArchives;
+    }
+
+    /**
+     * Delete a single backup archive from rack and disk.
+     */
+    public static function deleteBackupArchive(string $fileName): bool
+    {
+        $cleanFileName = basename($fileName);
+        $backupDir = storage_path('app/backups');
+        $filePath = $backupDir . '/' . $cleanFileName;
+
+        if (File::exists($filePath)) {
+            @unlink($filePath);
+        }
+
+        $manifestPath = $backupDir . '/manifest.json';
+        if (File::exists($manifestPath)) {
+            $decoded = json_decode(File::get($manifestPath), true);
+            if (is_array($decoded)) {
+                $updated = array_values(array_filter($decoded, function ($item) use ($cleanFileName) {
+                    return ($item['filename'] ?? '') !== $cleanFileName;
+                }));
+                File::put($manifestPath, json_encode($updated, JSON_PRETTY_PRINT));
+            }
+        }
+
+        return true;
+    }
 }
+

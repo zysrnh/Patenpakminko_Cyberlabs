@@ -327,4 +327,123 @@
     </div>
 
 </div>
+
+<!-- RAK ARSIP CADANGAN DATA (AUTO-BACKUP PERMOHONAN & EMAIL BLAST) -->
+<div class="panel" style="border-radius: 4px; margin-top: 24px;">
+    <div class="panel-head" style="background: #F8FAFC; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div>
+            <h2 style="font-size: 15.5px; font-weight: 800; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#003B64" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                Rak Arsip Cadangan Data (Auto-Backup Permohonan)
+            </h2>
+            <div style="font-size: 12px; color: #64748B; margin-top: 3px;">
+                Tiap 1 permohonan baru masuk, database otomatis dicadangkan &amp; di-blast ke <strong>penataanpertanahanmiko@gmail.com</strong> dan <strong>zakiyh782@gmail.com</strong> (tanpa cronjob).
+            </div>
+        </div>
+        <form action="{{ route('admin_dpn.backup_archive.manual') }}" method="POST" onsubmit="return confirm('Mulai proses pencadangan database manual sekarang?')">
+            @csrf
+            <button type="submit" class="btn btn-primary" style="padding: 8px 14px; font-size: 12px; font-weight: 700; border-radius: 4px; display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Buat Cadangan Manual Sekarang</span>
+            </button>
+        </form>
+    </div>
+    <div class="panel-body" style="padding: 0;">
+        @if(empty($backupArchives) || count($backupArchives) === 0)
+            <div style="padding: 36px 20px; text-align: center; color: #64748B;">
+                <div style="margin-bottom: 8px;">
+                    <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#94A3B8" stroke-width="1.6" style="margin: auto;"><path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                </div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #334155; margin-bottom: 4px;">Rak Arsip Masih Kosong</div>
+                <div style="font-size: 12px; color: #64748B; max-width: 480px; margin: auto;">
+                    Belum ada berkas cadangan tersimpan. Berkas akan otomatis dibuat saat ada pemohon mengajukan permohonan baru, atau Anda dapat menekan tombol <strong>Buat Cadangan Manual Sekarang</strong> di atas.
+                </div>
+            </div>
+        @else
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: left;">
+                    <thead>
+                        <tr style="background: #F1F5F9; border-bottom: 1px solid #E2E8F0; color: #475569; font-weight: 700; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.03em;">
+                            <th style="padding: 10px 14px; width: 40px; text-align: center;">#</th>
+                            <th style="padding: 10px 14px;">Nama Berkas</th>
+                            <th style="padding: 10px 14px;">Pemicu (Trigger)</th>
+                            <th style="padding: 10px 14px;">Waktu Pencadangan</th>
+                            <th style="padding: 10px 14px;">Ukuran</th>
+                            <th style="padding: 10px 14px;">Status Email Blast</th>
+                            <th style="padding: 10px 14px; text-align: right;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($backupArchives as $idx => $archive)
+                            @php
+                                $isManual = str_starts_with($archive['label'] ?? '', 'Manual');
+                            @endphp
+                            <tr style="border-bottom: 1px solid #E2E8F0; transition: background 0.15s;" onmouseover="this.style.background='#F8FAFC'" onmouseout="this.style.background='transparent'">
+                                <td style="padding: 10px 14px; text-align: center; color: #64748B; font-weight: 600;">
+                                    {{ $idx + 1 }}
+                                </td>
+                                <td style="padding: 10px 14px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#0284C7" stroke-width="2" style="flex-shrink: 0;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                                        <span style="font-family: monospace; font-size: 12px; font-weight: 700; color: #0F172A;">
+                                            {{ $archive['filename'] }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td style="padding: 10px 14px;">
+                                    @if($isManual)
+                                        <span style="display: inline-block; padding: 2px 7px; background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; border-radius: 3px; font-size: 10.5px; font-weight: 700;">
+                                            {{ $archive['label'] }}
+                                        </span>
+                                    @else
+                                        <span style="display: inline-block; padding: 2px 7px; background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; border-radius: 3px; font-size: 10.5px; font-weight: 700;">
+                                            {{ $archive['label'] }}
+                                        </span>
+                                    @endif
+                                </td>
+                                <td style="padding: 10px 14px; color: #334155; white-space: nowrap;">
+                                    {{ \Carbon\Carbon::parse($archive['created_at'])->format('d M Y, H:i') }} WIB
+                                </td>
+                                <td style="padding: 10px 14px; font-weight: 700; color: #003B64; white-space: nowrap;">
+                                    {{ $archive['size_formatted'] ?? '-' }}
+                                </td>
+                                <td style="padding: 10px 14px; white-space: nowrap;">
+                                    @if(!empty($archive['email_sent']))
+                                        <span style="display: inline-flex; align-items: center; gap: 4px; color: #166534; font-size: 11px; font-weight: 600;">
+                                            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                            Terkirim ke 2 Email
+                                        </span>
+                                    @else
+                                        <span style="display: inline-flex; align-items: center; gap: 4px; color: #94A3B8; font-size: 11px;">
+                                            Lokal Saja
+                                        </span>
+                                    @endif
+                                </td>
+                                <td style="padding: 10px 14px; text-align: right; white-space: nowrap;">
+                                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
+                                        <a href="{{ route('admin_dpn.backup_archive.download', $archive['filename']) }}" class="btn btn-secondary" style="padding: 5px 10px; font-size: 11.5px; font-weight: 600; border-radius: 3px; display: inline-flex; align-items: center; gap: 4px;" title="Unduh Berkas SQL">
+                                            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                            Unduh
+                                        </a>
+                                        <form action="{{ route('admin_dpn.backup_archive.delete', $archive['filename']) }}" method="POST" style="margin: 0; display: inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus arsip cadangan ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger" style="padding: 5px 8px; font-size: 11.5px; border-radius: 3px;" title="Hapus Dari Rak Arsip">
+                                                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div style="padding: 10px 16px; background: #F8FAFC; border-top: 1px solid #E2E8F0; font-size: 11.5px; color: #64748B; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                <span>Total Arsip Tersimpan: <strong>{{ count($backupArchives) }} berkas</strong> (Maksimal 30 berkas rotasi otomatis)</span>
+                <span>Format: <strong>SQL Dump (~2-3 MB)</strong></span>
+            </div>
+        @endif
+    </div>
+</div>
 @endsection
