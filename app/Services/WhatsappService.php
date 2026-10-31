@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -55,7 +56,7 @@ class WhatsappService
      *
      * @param  string $phone  Nomor tujuan (format bebas)
      * @param  string $otp    Kode verifikasi (misal: 6 digit)
-     * @return array  ['success' => bool, 'status' => string, 'provider' => string, 'sid' => ?string]
+     * @return array  ['success' => bool, 'status' => string, 'provider' => string, 'sid' => ?string, 'response' => ?array]
      */
     public function sendOtpTemplate(string $phone, string $otp): array
     {
@@ -73,6 +74,7 @@ class WhatsappService
                 'status'   => $msg,
                 'provider' => 'twilio',
                 'sid'      => null,
+                'response' => null,
             ];
         }
 
@@ -89,44 +91,42 @@ class WhatsappService
             'ContentVariables' => json_encode(['1' => (string) $otp]),
         ];
 
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 25,
-            CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => http_build_query($payload),
-            CURLOPT_USERPWD        => $accountSid . ':' . $authToken,
-            CURLOPT_HTTPHEADER     => ['Content-Type: application/x-www-form-urlencoded'],
-        ]);
+        try {
+            $response = Http::withBasicAuth($accountSid, $authToken)
+                ->timeout(25)
+                ->asForm()
+                ->post($url, $payload);
 
-        $response = curl_exec($curl);
-        $err      = curl_error($curl);
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
+            $decoded = $response->json() ?? [];
+            $httpCode = $response->status();
+            $isOk = $response->successful() && isset($decoded['sid']);
 
-        if ($err) {
-            Log::error('[Twilio-OTP] cURL error: ' . $err);
-            $statusText = 'Gagal (Koneksi Twilio cURL Error)';
+            $statusText = $isOk 
+                ? 'Terkirim via Twilio Template (' . $decoded['sid'] . ')' 
+                : 'Gagal Twilio (' . $httpCode . '): ' . ($decoded['message'] ?? 'Error tidak diketahui');
+
             $this->writeLog($phone, "OTP: {$otp} (Template {$contentSid})", $statusText);
-            return ['success' => false, 'status' => $statusText, 'provider' => 'twilio', 'sid' => null];
+
+            return [
+                'success'  => $isOk,
+                'status'   => $statusText,
+                'provider' => 'twilio',
+                'sid'      => $decoded['sid'] ?? null,
+                'response' => $decoded,
+            ];
+        } catch (\Throwable $e) {
+            Log::error('[Twilio-OTP] HTTP error: ' . $e->getMessage());
+            $statusText = 'Gagal (Koneksi Twilio HTTP Error: ' . $e->getMessage() . ')';
+            $this->writeLog($phone, "OTP: {$otp} (Template {$contentSid})", $statusText);
+
+            return [
+                'success'  => false,
+                'status'   => $statusText,
+                'provider' => 'twilio',
+                'sid'      => null,
+                'response' => ['error' => $e->getMessage()],
+            ];
         }
-
-        $decoded = json_decode($response, true);
-        $isOk = isset($decoded['sid']) && $httpCode >= 200 && $httpCode < 300;
-        $statusText = $isOk 
-            ? 'Terkirim via Twilio Template (' . $decoded['sid'] . ')' 
-            : 'Gagal Twilio: ' . ($decoded['message'] ?? 'HTTP ' . $httpCode);
-
-        $this->writeLog($phone, "OTP: {$otp} (Template {$contentSid})", $statusText);
-
-        return [
-            'success'  => $isOk,
-            'status'   => $statusText,
-            'provider' => 'twilio',
-            'sid'      => $decoded['sid'] ?? null,
-            'response' => $decoded,
-        ];
     }
 
     /**
@@ -157,33 +157,27 @@ class WhatsappService
             return ['success' => false, 'status' => 'Simulasi (Token Fonnte kosong)', 'provider' => 'fonnte'];
         }
 
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => 'https://api.fonnte.com/send',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 20,
-            CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => ['target' => $phone, 'message' => $message],
-            CURLOPT_HTTPHEADER     => ['Authorization: ' . $token],
-        ]);
+        try {
+            $response = Http::withHeaders(['Authorization' => $token])
+                ->timeout(20)
+                ->asForm()
+                ->post('https://api.fonnte.com/send', [
+                    'target'  => $phone,
+                    'message' => $message,
+                ]);
 
-        $response = curl_exec($curl);
-        $err      = curl_error($curl);
-        curl_close($curl);
+            $decoded = $response->json() ?? [];
+            $ok = (bool) ($decoded['status'] ?? false);
 
-        if ($err) {
-            Log::error('[WA-Fonnte] cURL error: ' . $err);
+            return [
+                'success'  => $ok,
+                'status'   => $ok ? 'Terkirim (Fonnte)' : 'Gagal (Fonnte: ' . ($decoded['reason'] ?? 'Token Error') . ')',
+                'provider' => 'fonnte',
+            ];
+        } catch (\Throwable $e) {
+            Log::error('[WA-Fonnte] HTTP error: ' . $e->getMessage());
             return ['success' => false, 'status' => 'Gagal (Koneksi Fonnte Error)', 'provider' => 'fonnte'];
         }
-
-        $decoded = json_decode($response, true);
-        $ok      = $decoded['status'] ?? false;
-
-        return [
-            'success'  => (bool) $ok,
-            'status'   => $ok ? 'Terkirim (Fonnte)' : 'Gagal (Fonnte: ' . ($decoded['reason'] ?? 'Token Error') . ')',
-            'provider' => 'fonnte',
-        ];
     }
 
     /* ──────────────────────────────────────────────────────────── */
@@ -205,38 +199,27 @@ class WhatsappService
         $to   = $useWhatsapp ? 'whatsapp:+' . $phone : '+' . $phone;
         $from = $useWhatsapp ? 'whatsapp:' . $fromNumberClean : $fromNumberClean;
 
-        $url     = "https://api.twilio.com/2010-04-01/Accounts/{$accountSid}/Messages.json";
-        $payload = http_build_query(['To' => $to, 'From' => $from, 'Body' => $message]);
+        $url = "https://api.twilio.com/2010-04-01/Accounts/{$accountSid}/Messages.json";
+        $payload = ['To' => $to, 'From' => $from, 'Body' => $message];
 
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 20,
-            CURLOPT_CUSTOMREQUEST  => 'POST',
-            CURLOPT_POSTFIELDS     => $payload,
-            CURLOPT_USERPWD        => $accountSid . ':' . $authToken,
-            CURLOPT_HTTPHEADER     => ['Content-Type: application/x-www-form-urlencoded'],
-        ]);
+        try {
+            $response = Http::withBasicAuth($accountSid, $authToken)
+                ->timeout(20)
+                ->asForm()
+                ->post($url, $payload);
 
-        $response = curl_exec($curl);
-        $err      = curl_error($curl);
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
+            $decoded = $response->json() ?? [];
+            $ok = $response->successful() && isset($decoded['sid']);
 
-        if ($err) {
-            Log::error('[WA-Twilio] cURL error: ' . $err);
+            return [
+                'success'  => $ok,
+                'status'   => $ok ? 'Terkirim (Twilio)' : 'Gagal (Twilio: ' . ($decoded['message'] ?? 'HTTP ' . $response->status()) . ')',
+                'provider' => 'twilio',
+            ];
+        } catch (\Throwable $e) {
+            Log::error('[WA-Twilio] HTTP error: ' . $e->getMessage());
             return ['success' => false, 'status' => 'Gagal (Koneksi Twilio Error)', 'provider' => 'twilio'];
         }
-
-        $decoded = json_decode($response, true);
-        $ok      = isset($decoded['sid']) && $httpCode >= 200 && $httpCode < 300;
-
-        return [
-            'success'  => $ok,
-            'status'   => $ok ? 'Terkirim (Twilio)' : 'Gagal (Twilio: ' . ($decoded['message'] ?? 'HTTP ' . $httpCode) . ')',
-            'provider' => 'twilio',
-        ];
     }
 
     /* ──────────────────────────────────────────────────────────── */
