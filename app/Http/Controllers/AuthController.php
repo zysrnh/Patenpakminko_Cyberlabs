@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\WhatsappService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -240,17 +241,14 @@ class AuthController extends Controller
             'reset_otp_expires_at' => now()->addMinutes(10)
         ]);
  
-        // Siapkan pesan notifikasi WhatsApp OTP
-        $name = $user->name ?? $user->username;
-        $message = "Halo *{$name}*,\n\n"
-                 . "Berikut adalah Kode OTP untuk menyetel ulang password akun PATEN PAK MIKO Anda:\n\n"
-                 . "💬 Kode OTP: *{$otp}*\n\n"
-                 . "Kode ini berlaku selama *10 menit*. Mohon untuk tidak membagikan kode ini kepada siapapun demi keamanan akun Anda.";
+        // Kirim WhatsApp OTP via WhatsappService (Twilio WhatsApp Authentication Template / Fonnte)
+        $waService = app(WhatsappService::class);
+        $res = $waService->sendOtpTemplate($user->phone_number, $otp);
  
-        // Kirim WhatsApp via Fonnte
-        $this->executeFonnteSend($user->phone_number, $message);
- 
-        return redirect()->route('password.otp.verify.form')->with('success', 'Kode OTP berhasil dikirim via WhatsApp ke nomor ' . $user->phone_number . '.');
+        return redirect()->route('password.otp.verify.form')->with(
+            'success', 
+            'Kode OTP verifikasi berhasil dikirimkan via WhatsApp ke nomor ' . $user->phone_number . '.'
+        );
     }
  
     /**
@@ -273,64 +271,66 @@ class AuthController extends Controller
             'otp' => 'required|string|size:6',
         ], [
             'otp.required' => 'Kode OTP wajib diisi.',
-            'otp.size' => 'Kode OTP harus terdiri dari 6 digit.',
+            'otp.size' => 'Kode OTP harus berupa 6 digit angka.',
         ]);
  
-        $userOtp = $request->input('otp');
-        $sessionOtp = session('reset_otp');
-        $expiresAt = session('reset_otp_expires_at');
- 
-        if (!$sessionOtp || !$expiresAt || now()->gt($expiresAt)) {
-            return redirect()->route('password.request')->with('error', 'Kode OTP telah kedaluwarsa atau tidak valid. Silakan kirim ulang.');
+        if (!session()->has('reset_otp') || !session()->has('reset_user_id')) {
+            return redirect()->route('password.request')->with('error', 'Sesi verifikasi OTP Anda telah berakhir. Silakan minta kode baru.');
         }
  
-        if ($userOtp !== $sessionOtp) {
-            return redirect()->back()->with('error', 'Kode OTP yang Anda masukkan salah.');
+        if (now()->greaterThan(session('reset_otp_expires_at'))) {
+            session()->forget(['reset_otp', 'reset_user_id', 'reset_otp_expires_at']);
+            return redirect()->route('password.request')->with('error', 'Kode OTP sudah kedaluwarsa. Silakan ajukan reset password baru.');
         }
  
-        // Tandai OTP telah sukses diverifikasi
+        if ($request->input('otp') !== session('reset_otp')) {
+            return redirect()->back()->with('error', 'Kode OTP yang Anda masukkan salah. Silakan periksa kembali.');
+        }
+ 
+        // OTP valid, tandai session
         session(['otp_verified' => true]);
  
-        return redirect()->route('password.reset.form')->with('success', 'Verifikasi OTP berhasil! Silakan masukkan password baru Anda.');
+        return redirect()->route('password.reset.form')->with('success', 'Verifikasi berhasil! Silakan tentukan password baru Anda.');
     }
  
     /**
-     * Tampilkan halaman reset password baru.
+     * Tampilkan formulir penetapan password baru.
      */
-    public function showResetPassword()
+    public function showResetPasswordForm()
     {
-        if (!session('otp_verified')) {
-            return redirect()->route('password.request')->with('error', 'Silakan lakukan verifikasi OTP terlebih dahulu.');
+        if (!session('otp_verified') || !session('reset_user_id')) {
+            return redirect()->route('password.request')->with('error', 'Silakan verifikasi kode OTP Anda terlebih dahulu.');
         }
         return view('auth.reset-password');
     }
  
     /**
-     * Proses reset/update password baru.
+     * Proses pembaruan password setelah OTP terverifikasi.
      */
     public function resetPassword(Request $request)
     {
-        if (!session('otp_verified')) {
-            return redirect()->route('password.request')->with('error', 'Sesi verifikasi Anda telah kedaluwarsa.');
-        }
- 
         $request->validate([
             'password' => 'required|string|min:6|confirmed',
         ], [
             'password.required' => 'Password baru wajib diisi.',
             'password.min' => 'Password minimal terdiri dari 6 karakter.',
-            'password.confirmed' => 'Konfirmasi password baru tidak cocok.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
  
-        $userId = session('reset_user_id');
-        $user = User::findOrFail($userId);
-        $newPassword = $request->input('password');
+        if (!session('otp_verified') || !session('reset_user_id')) {
+            return redirect()->route('password.request')->with('error', 'Sesi tidak sah. Silakan ulangi langkah reset password.');
+        }
  
-        // Update password baru
+        $user = User::find(session('reset_user_id'));
+        if (!$user) {
+            return redirect()->route('password.request')->with('error', 'Pengguna tidak ditemukan.');
+        }
+ 
+        $newPassword = $request->input('password');
         $user->password = Hash::make($newPassword);
         $user->save();
  
-        // Kirim WhatsApp konfirmasi password baru
+        // Kirim WhatsApp konfirmasi password baru via WhatsappService
         if (!empty($user->phone_number)) {
             $name = $user->name ?? $user->username;
             $message = "Halo *{$name}*,\n\n"
@@ -341,7 +341,8 @@ class AuthController extends Controller
                      . "Simpan pesan ini dengan baik dan jangan sebarkan password Anda kepada siapa pun demi keamanan.\n"
                      . "Link login: " . route('login');
                      
-            $this->executeFonnteSend($user->phone_number, $message);
+            $waService = app(WhatsappService::class);
+            $waService->send($user->phone_number, $message);
         }
  
         // Bersihkan session OTP
@@ -363,73 +364,6 @@ class AuthController extends Controller
             'connected' => true,
             'fonnte_token' => '',
         ];
-    }
- 
-    /**
-     * Kirim notifikasi WA ke Fonnte API dan catat ke JSON log.
-     */
-    private function executeFonnteSend($phone, $message)
-    {
-        $settings = $this->getWhatsappSettings();
-        $statusText = 'Simulasi';
- 
-        if (!empty($settings['fonnte_token'])) {
-            $recipientClean = preg_replace('/[^0-9]/', '', $phone);
-            if (str_starts_with($recipientClean, '0')) {
-                $recipientClean = '62' . substr($recipientClean, 1);
-            }
- 
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.fonnte.com/send',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 20,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => array(
-                    'target' => $recipientClean,
-                    'message' => $message,
-                ),
-                CURLOPT_HTTPHEADER => array(
-                    'Authorization: ' . $settings['fonnte_token']
-                ),
-            ));
-            
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
- 
-            if (!$err) {
-                $fonnteResponse = json_decode($response, true);
-                if (isset($fonnteResponse['status']) && $fonnteResponse['status'] == true) {
-                    $statusText = 'Terkirim (Fonnte API)';
-                } else {
-                    $statusText = 'Gagal (Fonnte: ' . ($fonnteResponse['reason'] ?? 'Kesalahan Token') . ')';
-                }
-            } else {
-                $statusText = 'Gagal (Koneksi API Error)';
-            }
-        }
- 
-        $logPath = storage_path('app/whatsapp_logs.json');
-        $logs = [];
-        if (file_exists($logPath)) {
-            $logs = json_decode(file_get_contents($logPath), true) ?: [];
-        }
- 
-        $newLog = [
-            'id' => uniqid(),
-            'recipient' => $phone,
-            'message' => $message,
-            'timestamp' => now()->format('d M Y, H:i:s'),
-            'status' => $statusText,
-        ];
- 
-        array_unshift($logs, $newLog);
-        file_put_contents($logPath, json_encode($logs, JSON_PRETTY_PRINT));
     }
 
     /**
