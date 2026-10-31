@@ -140,9 +140,6 @@
         padding: 0;
         display: flex;
     }
-    .forgot-pw-wrap {
-        /* Removed as we move it to label row */
-    }
     .forgot-pw {
         font-size: 13px;
         color: #3291A8;
@@ -222,7 +219,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Password</label>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label class="form-label" style="margin-bottom: 0;">Password</label>
+                            <a href="{{ route('password.request') }}" class="forgot-pw">Lupa Password?</a>
+                        </div>
                         <div class="form-input-wrap">
                             <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
                             <button type="button" class="pw-toggle" id="togglePassword">
