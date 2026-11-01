@@ -2,7 +2,9 @@
 
 namespace App\Traits;
 
+use App\Services\WhatsappService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 trait WaBlastHelper
 {
@@ -121,6 +123,25 @@ trait WaBlastHelper
             default => null,
         };
     }
+
+    /**
+     * Helper untuk mengeksekusi pengiriman Twilio Template resmi Meta secara aman (graceful).
+     */
+    public static function dispatchTwilioAdminTemplate(string $phone, string $templateKey, array $variables): void
+    {
+        try {
+            $settings = self::getWhatsappSettingsStatic();
+            $templateSid = $settings[$templateKey] ?? env(strtoupper($templateKey), '');
+            
+            if (!empty($templateSid) && !empty($phone)) {
+                $waService = app(WhatsappService::class);
+                $waService->sendTemplateMessage($phone, $templateSid, $variables);
+            }
+        } catch (\Throwable $e) {
+            Log::warning("[WaBlastHelper] Gagal dispatch Twilio Admin Template ({$templateKey}): " . $e->getMessage());
+        }
+    }
+
     public function sendNotificationWithMailbox($app, $type, $layananTitle, $routeName, $customMsg = null)
     {
         if ($app->exists) {
@@ -141,6 +162,8 @@ trait WaBlastHelper
             }
             return $phone;
         };
+
+        $cpNumber = !empty($settings['cp_admin']) ? $settings['cp_admin'] : ($settings['admin_bpn'] ?? '083861669565');
 
         if ($msg && $pemohon) {
             $postPnbpTypes = [
@@ -167,7 +190,6 @@ trait WaBlastHelper
             $msg .= "\n\nKami akan menghubungi Anda untuk informasi selanjutnya.";
             $msg .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
             
-            $cpNumber = !empty($settings['cp_admin']) ? $settings['cp_admin'] : ($settings['admin_bpn'] ?? '');
             if (!empty($cpNumber)) {
                 $msg .= "\n\n_Jika ada pertanyaan, hubungi CP Admin WA: " . $cpNumber . "_";
             }
@@ -195,8 +217,7 @@ trait WaBlastHelper
         $nama = $app->nama_pengaju ?: ($app->user->name ?? ($app->user->username ?? ''));
         
         $adminBpn = $settings['admin_bpn'] ?? '';
-        $adminPutr = $settings['admin_putr'] ?? '';
-        $adminPu = $settings['admin_dinas_pu'] ?? '';
+        $adminPutr = $settings['admin_putr'] ?? ($settings['admin_dinas_pu'] ?? '');
         $adminPtsp = $settings['admin_satu_pintu'] ?? '';
 
         $infoPemohon = "Pemohon: {$nama}\nLayanan: {$layananTitle}";
@@ -208,6 +229,7 @@ trait WaBlastHelper
                              ? str_replace('PPKPR', 'PKKPR', $layananTitle) 
                              : "Dokumen {$layananTitle}";
 
+        // 1. Pengajuan Baru Masuk -> Notifikasi ke Admin BPN
         if (($type === 'submit' || $type === 'submit_berkas') && $adminBpn) {
             $text = "Halo Admin Kantor Pertanahan Kota Sukabumi, ada pengajuan permohonan baru untuk {$layananTitle} atas nama {$nama}. Silakan login untuk melakukan verifikasi berkas awal di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
@@ -222,8 +244,18 @@ trait WaBlastHelper
                 'message' => "Ada pengajuan permohonan baru yang memerlukan verifikasi berkas awal.\n\n{$infoPemohon}",
                 'link' => $url,
             ];
+
+            // Auto Twilio Template Admin
+            self::dispatchTwilioAdminTemplate($adminBpn, 'twilio_tpl_admin_pengajuan_baru', [
+                '1' => 'Kota Sukabumi',
+                '2' => $layananTitle,
+                '3' => $nama,
+                '4' => $url,
+                '5' => $cpNumber,
+            ]);
         }
 
+        // 2. Berkas Revisi Diunggah Pemohon -> Notifikasi ke Admin BPN
         if ($type === 'berkas_revisi_bpn' && $adminBpn) {
             $text = "Notifikasi Kantor Pertanahan Kota Sukabumi: Pelaku Usaha {$nama} telah mengunggah ulang berkas revisi/perbaikan untuk permohonan {$layananTitle}. Silakan cek dan verifikasi ulang dokumen di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
@@ -238,12 +270,23 @@ trait WaBlastHelper
                 'message' => "Pelaku Usaha telah mengunggah ulang berkas revisi/perbaikan. Silakan cek dan verifikasi ulang.\n\n{$infoPemohon}",
                 'link' => $url,
             ];
+
+            // Auto Twilio Template Admin (Approved)
+            self::dispatchTwilioAdminTemplate($adminBpn, 'twilio_tpl_admin_berkas_revisi', [
+                '1' => 'Kota Sukabumi',
+                '2' => $nama,
+                '3' => $layananTitle,
+                '4' => $url,
+                '5' => $cpNumber,
+            ]);
         }
+
         $isBpnOnly = ($app instanceof \App\Models\KebijakanApplication 
             || $app instanceof \App\Models\TanahTimbulApplication 
             || stripos($layananTitle, 'Kebijakan') !== false 
             || stripos($layananTitle, 'Tanah Timbul') !== false);
 
+        // 3. Berkas Diterima BPN -> Validasi Tata Ruang Awal Masuk ke PUTR
         if ($type === 'berkas_verifikasi' && $app->bpn_berkas_status === 'diterima' && $adminPutr && !$isBpnOnly) {
             $text = "Notifikasi Dinas PUTR: Berkas permohonan {$no_berkas_text} atas nama {$nama} telah selesai divalidasi awal oleh Kantor Pertanahan Kota Sukabumi. Silakan lakukan Validasi Awal Tata Ruang di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
@@ -258,24 +301,18 @@ trait WaBlastHelper
                 'message' => "Berkas permohonan telah selesai divalidasi awal oleh BPN. Menunggu Validasi Awal Tata Ruang.\n\n{$infoPemohon}",
                 'link' => $url,
             ];
+
+            // Auto Twilio Template Admin
+            self::dispatchTwilioAdminTemplate($adminPutr, 'twilio_tpl_admin_validasi_putr', [
+                '1' => 'PUTR Kota Sukabumi',
+                '2' => !empty($app->no_berkas) ? $app->no_berkas : $layananTitle,
+                '3' => $nama,
+                '4' => $url,
+                '5' => $cpNumber,
+            ]);
         }
         
-        if ($type === 'credential_blast' && false) { // DISABLED: Tahap Credential hanya ke pemohon tidak ke admin
-            $text = "Halo Admin Kantor Pertanahan Kota Sukabumi, pemohon atas nama {$nama} telah selesai melakukan pembayaran PNBP untuk layanan {$layananTitle}. Silakan login untuk verifikasi bayar dan aktifkan akun pemohon di: {$url}";
-            $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
-            $wa_links[] = [
-                'target' => 'Admin BPN',
-                'url' => 'https://wa.me/' . $formatPhone($adminBpn) . '?text=' . urlencode($text)
-            ];
-            $mailboxes[] = [
-                'target_user_id' => null,
-                'target_role' => 'bpn',
-                'title' => 'Pembayaran Selesai',
-                'message' => "Pemohon telah selesai melakukan pembayaran PNBP. Silakan verifikasi bayar dan aktifkan akun.\n\n{$infoPemohon}",
-                'link' => $url,
-            ];
-        }
-        
+        // 4. Validasi PUTR Selesai -> Notifikasi ke BPN
         if ($type === 'putr_validasi' && $adminBpn) {
             $text = "Notifikasi Dinas PUTR: Berkas permohonan {$layananTitle}{$no_berkas_text} atas nama {$nama} telah selesai divalidasi awal oleh Dinas PUTR Kota Sukabumi. Silakan cek sistem untuk pendaftaran / tagihan PNBP di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
@@ -290,10 +327,19 @@ trait WaBlastHelper
                 'message' => "Permohonan telah divalidasi tata ruangnya oleh PUTR. Silakan buat pendaftaran / tagihan PNBP.\n\n{$infoPemohon}",
                 'link' => $url,
             ];
+
+            // Auto Twilio Template Admin
+            self::dispatchTwilioAdminTemplate($adminBpn, 'twilio_tpl_admin_putr_selesai', [
+                '1' => 'PUTR Kota Sukabumi',
+                '2' => $layananTitle,
+                '3' => !empty($app->no_berkas) ? $app->no_berkas : '-',
+                '4' => $nama,
+                '5' => $url,
+                '6' => $cpNumber,
+            ]);
         }
 
         if ($type === 'pkkpr_terbit') {
-            // Already sent to Pemohon via $msg block above.
             if ($adminBpn) {
                 $text = "Notifikasi DPMPTSP: {$dokumenFinalAdmin}{$no_berkas_text} atas nama {$nama} telah diterbitkan. Proses permohonan selesai. Cek di: {$url}";
                 $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
@@ -327,6 +373,7 @@ trait WaBlastHelper
             ];
         }
         
+        // 5. Penilaian PU Selesai -> Notifikasi ke DPMPTSP (Siap Terbit)
         if ($type === 'pu_selesai' && $adminPtsp && !$isBpnOnly) {
             $text = "Notifikasi DPMPTSP: {$layananTitle}{$no_berkas_text} Telah selesai di Verifikasi oleh Dinas PUTR. Silakan proses penerbitan {$dokumenFinalAdmin} di: {$url}";
             $text .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
@@ -341,6 +388,15 @@ trait WaBlastHelper
                 'message' => "Telah selesai di Verifikasi oleh Dinas PUTR. Menunggu proses penerbitan {$dokumenFinalAdmin}.\n\n{$infoPemohon}",
                 'link' => $url,
             ];
+
+            // Auto Twilio Template Admin
+            self::dispatchTwilioAdminTemplate($adminPtsp, 'twilio_tpl_admin_siap_terbit', [
+                '1' => 'DPMPTSP Kota Sukabumi',
+                '2' => $layananTitle,
+                '3' => !empty($app->no_berkas) ? $app->no_berkas : '-',
+                '4' => $url,
+                '5' => $cpNumber,
+            ]);
         }
         
         if ($type === 'pu_selesai' && $adminBpn) {
@@ -359,7 +415,6 @@ trait WaBlastHelper
             ];
         }
         
-        
         $isBpnPemohonOnly = (
             stripos($layananTitle, 'Kebijakan') !== false ||
             stripos($layananTitle, 'Tanah Timbul') !== false ||
@@ -368,13 +423,11 @@ trait WaBlastHelper
         );
 
         if ($isBpnPemohonOnly) {
-        
             $wa_links = array_values(array_filter($wa_links, function ($link) {
                 $target = $link['target'] ?? '';
                 return $target === 'Pemohon' || stripos($target, 'BPN') !== false;
             }));
 
-        
             $mailboxes = array_values(array_filter($mailboxes, function ($box) {
                 return $box['target_user_id'] !== null || ($box['target_role'] ?? '') === 'bpn';
             }));
@@ -384,7 +437,6 @@ trait WaBlastHelper
             session()->flash('wa_links', $wa_links);
         }
 
-        
         foreach ($mailboxes as $box) {
             \App\Models\Mailbox::create([
                 'target_user_id' => $box['target_user_id'],

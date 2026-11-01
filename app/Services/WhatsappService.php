@@ -51,24 +51,23 @@ class WhatsappService
     }
 
     /**
-     * Kirim OTP menggunakan Twilio Content Template (WhatsApp Authentication).
-     * Template SID: HX0b7d9a5ca52ebc88204445328ee24569 (Approved Meta).
+     * Kirim pesan WhatsApp menggunakan Twilio Content Template resmi Meta.
      *
-     * @param  string $phone  Nomor tujuan (format bebas)
-     * @param  string $otp    Kode verifikasi (misal: 6 digit)
+     * @param  string $phone       Nomor tujuan
+     * @param  string $contentSid  Twilio Template SID (HX...)
+     * @param  array  $variables   Variabel template, contoh: ['1' => 'Budi', '2' => 'PKKPR']
      * @return array  ['success' => bool, 'status' => string, 'provider' => string, 'sid' => ?string, 'response' => ?array]
      */
-    public function sendOtpTemplate(string $phone, string $otp): array
+    public function sendTemplateMessage(string $phone, string $contentSid, array $variables = []): array
     {
         $normalizedPhone = $this->normalizePhone($phone);
         $accountSid = $this->settings['twilio_account_sid'] ?? env('TWILIO_ACCOUNT_SID', '');
         $authToken  = $this->settings['twilio_auth_token']  ?? env('TWILIO_AUTH_TOKEN', '');
         $fromNumber = $this->settings['twilio_from_number'] ?? env('TWILIO_FROM_NUMBER', '+6285724455503');
-        $contentSid = $this->settings['twilio_otp_content_sid'] ?? env('TWILIO_OTP_CONTENT_SID', 'HX0b7d9a5ca52ebc88204445328ee24569');
 
         if (empty($accountSid) || empty($authToken)) {
-            $msg = 'Simulasi OTP (Twilio Auth Token belum diisi di settings/env)';
-            $this->writeLog($phone, "OTP: {$otp} (Template {$contentSid})", $msg);
+            $msg = 'Simulasi WhatsApp (Twilio Auth Token belum diisi)';
+            $this->writeLog($phone, "Template {$contentSid}: " . json_encode($variables), $msg);
             return [
                 'success'  => false,
                 'status'   => $msg,
@@ -78,17 +77,22 @@ class WhatsappService
             ];
         }
 
-        // Format nomor untuk Twilio WhatsApp
         $fromNumberClean = '+' . preg_replace('/[^0-9]/', '', $fromNumber);
         $to   = 'whatsapp:+' . $normalizedPhone;
         $from = 'whatsapp:' . $fromNumberClean;
+
+        // Format semua variabel menjadi array string bertipe "1" => "isi"
+        $formattedVars = [];
+        foreach ($variables as $k => $v) {
+            $formattedVars[(string) $k] = (string) $v;
+        }
 
         $url = "https://api.twilio.com/2010-04-01/Accounts/{$accountSid}/Messages.json";
         $payload = [
             'To'               => $to,
             'From'             => $from,
             'ContentSid'       => $contentSid,
-            'ContentVariables' => json_encode(['1' => (string) $otp]),
+            'ContentVariables' => json_encode($formattedVars),
         ];
 
         try {
@@ -105,7 +109,7 @@ class WhatsappService
                 ? 'Terkirim via Twilio Template (' . $decoded['sid'] . ')' 
                 : 'Gagal Twilio (' . $httpCode . '): ' . ($decoded['message'] ?? 'Error tidak diketahui');
 
-            $this->writeLog($phone, "OTP: {$otp} (Template {$contentSid})", $statusText);
+            $this->writeLog($phone, "Template {$contentSid}: " . json_encode($variables), $statusText);
 
             return [
                 'success'  => $isOk,
@@ -115,9 +119,9 @@ class WhatsappService
                 'response' => $decoded,
             ];
         } catch (\Throwable $e) {
-            Log::error('[Twilio-OTP] HTTP error: ' . $e->getMessage());
+            Log::error('[Twilio-Template] HTTP error: ' . $e->getMessage());
             $statusText = 'Gagal (Koneksi Twilio HTTP Error: ' . $e->getMessage() . ')';
-            $this->writeLog($phone, "OTP: {$otp} (Template {$contentSid})", $statusText);
+            $this->writeLog($phone, "Template {$contentSid}: " . json_encode($variables), $statusText);
 
             return [
                 'success'  => false,
@@ -127,6 +131,20 @@ class WhatsappService
                 'response' => ['error' => $e->getMessage()],
             ];
         }
+    }
+
+    /**
+     * Kirim OTP menggunakan Twilio Content Template (WhatsApp Authentication).
+     * Template SID: HX0b7d9a5ca52ebc88204445328ee24569 (Approved Meta).
+     *
+     * @param  string $phone  Nomor tujuan (format bebas)
+     * @param  string $otp    Kode verifikasi (misal: 6 digit)
+     * @return array  ['success' => bool, 'status' => string, 'provider' => string, 'sid' => ?string, 'response' => ?array]
+     */
+    public function sendOtpTemplate(string $phone, string $otp): array
+    {
+        $contentSid = $this->settings['twilio_otp_content_sid'] ?? env('TWILIO_OTP_CONTENT_SID', 'HX0b7d9a5ca52ebc88204445328ee24569');
+        return $this->sendTemplateMessage($phone, $contentSid, ['1' => (string) $otp]);
     }
 
     /**
