@@ -1884,6 +1884,7 @@
     $fThreads = $footerSettings['social_threads'] ?? 'https://www.threads.com/@kantahkotasukabumi';
     $fYoutube = $footerSettings['social_youtube'] ?? 'https://www.youtube.com/@kantahkotasukabumi';
     $fFacebook = $footerSettings['social_facebook'] ?? 'https://www.facebook.com/share/1L6H5iMc8H/';
+    $showDevBadge = ($footerSettings['show_developer_badge'] ?? '1') == '1';
 @endphp
 
 <!-- ══ HEADER ═══════════════════════════════════════════════ -->
@@ -2122,7 +2123,7 @@
                         <span>Kantor Pertanahan Kota Sukabumi</span>
                     </div>
                 </a>
-                <p class="footer-desc">Sistem pelayanan pertanahan digital yang cepat, transparan, dan terintegrasi untuk masyarakat Kota Sukabumi.</p>
+                <p class="footer-desc">Sistem pelayanan pertanahan digital yang cepat, transparan, dan terintegrasi untuk masyarakat Kota Sukabumi.@if($showDevBadge) Dikembangkan &amp; dikelola secara resmi oleh <strong>PT. ATOM REKADAYA CIPTA</strong>.@endif</p>
             </div>
 
             <div>
@@ -2171,7 +2172,7 @@
 
     <div class="footer-bottom">
         <div class="container footer-bottom-inner">
-            <p class="footer-copy">&copy; 2026 PATEN PAK MIKO. All rights reserved</p>
+            <p class="footer-copy">&copy; 2026 PATEN PAK MIKO. All rights reserved.@if($showDevBadge) Mitra Teknologi &amp; Pengembang: <strong>PT. ATOM REKADAYA CIPTA</strong>.@endif</p>
             <nav class="footer-legal" aria-label="Legal links">
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms &amp; Conditions</a>

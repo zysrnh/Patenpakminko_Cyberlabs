@@ -23,6 +23,7 @@
         $cleanPhone = '62' . substr($cleanPhone, 1);
     }
     $waUrl = 'https://wa.me/' . $cleanPhone;
+    $showDevBadge = ($settings['show_developer_badge'] ?? '1') == '1';
 @endphp
 
 @section('content')
@@ -377,7 +378,7 @@
                     <!-- Email -->
                     <div class="contact-detail-item">
                         <div class="contact-detail-icon">
-                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         </div>
                         <div class="contact-detail-content">
                             <span>Email Official</span>
@@ -385,6 +386,18 @@
                         </div>
                     </div>
                 </div>
+
+                @if($showDevBadge)
+                <!-- Legal Entity Information (PT ATOM REKADAYA CIPTA) -->
+                <div style="margin-bottom: 28px; padding: 18px 20px; background: #F8FAFC; border: 1.5px solid #E2E8F0; border-left: 4px solid #218AC9; border-radius: 8px;">
+                    <div style="font-size: 11px; font-weight: 800; color: #0284C7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Pengembang &amp; Mitra Teknologi Sistem</div>
+                    <div style="font-size: 15px; font-weight: 800; color: #003B64; margin-bottom: 4px;">PT. ATOM REKADAYA CIPTA</div>
+                    <div style="font-size: 13px; color: #475569; line-height: 1.6;">
+                        Alamat Kantor: Jl. Guntur Sari II No. 37 RT. 003 RW. 004, Kel. Turangga, Kec. Lengkong, Kota Bandung, Jawa Barat 40264<br>
+                        Telepon: (022) 73514006 &bull; Email: info@patenpakmiko.com
+                    </div>
+                </div>
+                @endif
 
                 <!-- WhatsApp CS Direct Button -->
                 <a href="{{ $waUrl }}" target="_blank" class="btn-wa-direct">

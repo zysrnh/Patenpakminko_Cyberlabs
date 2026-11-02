@@ -452,6 +452,31 @@
             <input type="url" name="social_facebook" class="custom-input" placeholder="https://www.facebook.com/share/1L6H5iMc8H/" value="{{ old('social_facebook', $settings['social_facebook'] ?? 'https://www.facebook.com/share/1L6H5iMc8H/') }}">
         </div>
 
+        <!-- Opsi Tampilkan Legal Entity & Pengembang (Twilio Compliance) -->
+        <div class="form-grid-item" style="grid-column: 1 / -1; background: #F8FAFC; border: 1.5px solid #E2E8F0; padding: 20px; border-radius: 8px;">
+            <div class="item-head" style="margin-bottom: 12px;">
+                <div class="item-icon-badge" style="background: #0284C7;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <div>
+                    <div class="item-label" style="font-size: 15px; font-weight: 700; color: #1E293B;">Tampilkan Legal Entity & Pengembang (PT Atom Rekadaya Cipta)</div>
+                    <div class="item-sub" style="font-size: 13px; color: #64748B; margin-top: 2px;">
+                        Wajib diaktifkan saat verifikasi Twilio WhatsApp (mengatasi Error 18601). Bisa dinonaktifkan kapan saja jika verifikasi sudah lolos.
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 24px; align-items: center; margin-top: 14px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600; color: #0F172A;">
+                    <input type="radio" name="show_developer_badge" value="1" {{ old('show_developer_badge', $settings['show_developer_badge'] ?? '1') == '1' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #0284C7;">
+                    <span>Aktifkan (Tampilkan di Footer & Kontak)</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600; color: #64748B;">
+                    <input type="radio" name="show_developer_badge" value="0" {{ old('show_developer_badge', $settings['show_developer_badge'] ?? '1') == '0' ? 'checked' : '' }} style="width: 18px; height: 18px; accent-color: #EF4444;">
+                    <span>Nonaktifkan (Sembunyikan)</span>
+                </label>
+            </div>
+        </div>
+
         <div style="margin-top: 32px; padding-top: 20px; border-top: 1.5px solid #F1F5F9; display: flex; justify-content: flex-end;">
             <button type="submit" class="btn-submit-main">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
