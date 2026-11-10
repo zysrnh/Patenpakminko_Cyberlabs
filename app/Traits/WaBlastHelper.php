@@ -130,8 +130,24 @@ trait WaBlastHelper
     public static function dispatchTwilioAdminTemplate(string $phone, string $templateKey, array $variables): void
     {
         try {
+            $defaultSids = [
+                'twilio_tpl_admin_pengajuan_baru'      => 'HX01522b323b8587486c94f11eb82529ec',
+                'twilio_tpl_admin_berkas_revisi'       => 'HXad0b9226baeee04b03f570b3e593ac23',
+                'twilio_tpl_admin_validasi_putr'       => 'HXc06c27930b78ab5dd9a361fd0f8a1a16',
+                'twilio_tpl_admin_putr_selesai'        => 'HX72b7305e55e06d129a34794c6666f7f1',
+                'twilio_tpl_admin_siap_terbit'         => 'HX91ba5051d69c2cbab1527caf9b5e156e',
+                'twilio_tpl_pemohon_pengajuan_masuk'   => 'HXf963b32442235133f0adf7dbfb6edcf0',
+                'twilio_tpl_pemohon_berkas_lengkap'    => 'HXd76acd3f3f92097fc99a6c5d6582f14f',
+                'twilio_tpl_pemohon_berkas_revisi'     => 'HX160b664130c735c3a1248c74da06d8b1',
+                'twilio_tpl_pemohon_pnbp_lunas'        => 'HX2e8ed627c7fa242d5a6003da25ea1741',
+                'twilio_tpl_pemohon_jadwal_lokasi'     => 'HX30e47f7a001b0ae702204a05ebd54346',
+                'twilio_tpl_pemohon_jadwal_rapat'      => 'HXdde8c3f0e34351b71406cc00dfd39962',
+                'twilio_tpl_pemohon_dokumen_terbit'    => 'HXb9758a22a27c4f249225b5ab8435d0ff',
+                'twilio_tpl_pemohon_informasi_layanan' => 'HX7e4005d5350a49c703d8c61f8cde8cc3',
+            ];
+
             $settings = self::getWhatsappSettingsStatic();
-            $templateSid = $settings[$templateKey] ?? env(strtoupper($templateKey), '');
+            $templateSid = $settings[$templateKey] ?? ($defaultSids[$templateKey] ?? env(strtoupper($templateKey), ''));
             
             if (!empty($templateSid) && !empty($phone)) {
                 $waService = app(WhatsappService::class);
@@ -139,6 +155,124 @@ trait WaBlastHelper
             }
         } catch (\Throwable $e) {
             Log::warning("[WaBlastHelper] Gagal dispatch Twilio Admin Template ({$templateKey}): " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Helper otomatis blasting WhatsApp ke Pemohon menggunakan Twilio Template Resmi Meta.
+     */
+    public static function dispatchTwilioPemohonTemplate(string $phone, string $type, $app, string $layananTitle, string $url, string $cpNumber, ?string $customMsg = null): void
+    {
+        if (empty($phone)) {
+            return;
+        }
+
+        $nama = $app->nama_pengaju ?: ($app->user->name ?? ($app->user->username ?? 'Pemohon'));
+        $cpContact = !empty($cpNumber) ? $cpNumber : '085724455503';
+
+        try {
+            // Jika ada pesan kustom khusus, gunakan template dinamis pemohon_informasi_layanan
+            if (!empty($customMsg)) {
+                $customClean = trim(preg_replace('/\s+/', ' ', $customMsg));
+                self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_informasi_layanan', [
+                    '1' => $nama,
+                    '2' => $layananTitle,
+                    '3' => $customClean,
+                    '4' => $url,
+                    '5' => $cpContact,
+                ]);
+                return;
+            }
+
+            switch ($type) {
+                case 'submit':
+                case 'submit_berkas':
+                    // pemohon_pengajuan_masuk
+                    self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_pengajuan_masuk', [
+                        '1' => $nama,
+                        '2' => $layananTitle,
+                        '3' => $url,
+                        '4' => $cpContact,
+                    ]);
+                    break;
+
+                case 'berkas_verifikasi':
+                    if ($app->bpn_berkas_status === 'diterima') {
+                        // pemohon_berkas_lengkap
+                        self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_berkas_lengkap', [
+                            '1' => $nama,
+                            '2' => $layananTitle,
+                            '3' => $url,
+                            '4' => $cpContact,
+                        ]);
+                    } else {
+                        // pemohon_berkas_revisi
+                        $notes = !empty($app->bpn_notes) ? $app->bpn_notes : 'Mohon lengkapi dan perbaiki dokumen persyaratan Anda.';
+                        $notesClean = trim(preg_replace('/\s+/', ' ', $notes));
+                        self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_berkas_revisi', [
+                            '1' => $nama,
+                            '2' => $layananTitle,
+                            '3' => $notesClean,
+                            '4' => url('/revisi-berkas'),
+                            '5' => $cpContact,
+                        ]);
+                    }
+                    break;
+
+                case 'credential':
+                case 'credential_blast':
+                    // pemohon_pnbp_lunas
+                    $noBerkas = !empty($app->no_berkas) ? $app->no_berkas : '-';
+                    self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_pnbp_lunas', [
+                        '1' => $nama,
+                        '2' => $layananTitle,
+                        '3' => $noBerkas,
+                        '4' => 'https://patenpakmiko.com/login',
+                        '5' => $cpContact,
+                    ]);
+                    break;
+
+                case 'cek_lokasi':
+                case 'cek_lokasi_ubah':
+                    // pemohon_jadwal_lokasi
+                    $waktu = $app->bpn_cek_lokasi_date ?: ($app->bpn_cek_lokasi_dt ? \Carbon\Carbon::parse($app->bpn_cek_lokasi_dt)->locale('id')->translatedFormat('l, d F Y Jam H:i WIB') : '-');
+                    $cpLapang = !empty($app->bpn_cek_lokasi_cp) ? $app->bpn_cek_lokasi_cp : $cpContact;
+                    self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_jadwal_lokasi', [
+                        '1' => $nama,
+                        '2' => $layananTitle,
+                        '3' => $waktu,
+                        '4' => $cpLapang,
+                        '5' => $cpContact,
+                    ]);
+                    break;
+
+                case 'rapat':
+                case 'rapat_ubah':
+                    // pemohon_jadwal_rapat
+                    $waktuRapat = $app->bpn_rapat_date ?: ($app->bpn_rapat_dt ? \Carbon\Carbon::parse($app->bpn_rapat_dt)->locale('id')->translatedFormat('l, d F Y Jam H:i WIB') : '-');
+                    self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_jadwal_rapat', [
+                        '1' => $nama,
+                        '2' => $layananTitle,
+                        '3' => $waktuRapat,
+                        '4' => $url,
+                        '5' => $cpContact,
+                    ]);
+                    break;
+
+                case 'pkkpr_terbit':
+                case 'pertek_terbit':
+                    // pemohon_dokumen_terbit
+                    self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_dokumen_terbit', [
+                        '1' => $nama,
+                        '2' => $layananTitle,
+                        '3' => $url,
+                        '4' => 'https://patenpakmiko.com/lapolpa',
+                        '5' => $cpContact,
+                    ]);
+                    break;
+            }
+        } catch (\Throwable $e) {
+            Log::warning("[WaBlastHelper] Gagal dispatch Twilio Pemohon Template ({$type}): " . $e->getMessage());
         }
     }
 
@@ -211,6 +345,9 @@ trait WaBlastHelper
                 'message' => $msg,
                 'link' => $url,
             ];
+
+            // Auto Twilio Template Pemohon (WhatsApp Business Resmi)
+            self::dispatchTwilioPemohonTemplate($pemohon, $type, $app, $layananTitle, $url, $cpNumber, $customMsg);
         }
 
         $no_berkas_text = !empty($app->no_berkas) ? " (No. Berkas: {$app->no_berkas})" : "";

@@ -15,6 +15,10 @@
             opacity: 1 !important;
             border-radius: 4px;
         }
+        div:has(> textarea[name="custom_wa_message"]),
+        div:has(textarea[name="custom_wa_message"]) {
+            display: none !important;
+        }
         .form-control-v.flatpickr-input[readonly], .flatpickr-input[readonly] {
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="%232B6CB0"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>');
             background-repeat: no-repeat;
