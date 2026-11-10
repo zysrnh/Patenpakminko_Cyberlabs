@@ -132,9 +132,9 @@ trait WaBlastHelper
         try {
             $defaultSids = [
                 'twilio_tpl_admin_pengajuan_baru'      => 'HX01522b323b8587486c94f11eb82529ec',
-                'twilio_tpl_admin_berkas_revisi'       => 'HXad0b9226baeee04b03f570b3e593ac23',
+                'twilio_tpl_admin_berkas_revisi'       => 'HXad0b9226baeee84b83f570b3e593ac23',
                 'twilio_tpl_admin_validasi_putr'       => 'HXc06c27930b78ab5dd9a361fd0f8a1a16',
-                'twilio_tpl_admin_putr_selesai'        => 'HX72b7305e55e06d129a34794c6666f7f1',
+                'twilio_tpl_admin_putr_selesai'        => 'HX72b7305e55e06d129a34794c6666f711',
                 'twilio_tpl_admin_siap_terbit'         => 'HX91ba5051d69c2cbab1527caf9b5e156e',
                 'twilio_tpl_pemohon_pengajuan_masuk'   => 'HXf963b32442235133f0adf7dbfb6edcf0',
                 'twilio_tpl_pemohon_berkas_lengkap'    => 'HXd76acd3f3f92097fc99a6c5d6582f14f',
