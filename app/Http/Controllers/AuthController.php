@@ -303,6 +303,11 @@ class AuthController extends Controller
         }
         return view('auth.reset-password');
     }
+
+    public function showResetPassword()
+    {
+        return $this->showResetPasswordForm();
+    }
  
     /**
      * Proses pembaruan password setelah OTP terverifikasi.
