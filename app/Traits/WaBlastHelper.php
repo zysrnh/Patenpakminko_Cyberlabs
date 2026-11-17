@@ -221,12 +221,24 @@ trait WaBlastHelper
 
                 case 'credential':
                 case 'credential_blast':
-                    // pemohon_pnbp_lunas
+                    // Kirim Kredensial Akun & No. Berkas menggunakan template dinamis pemohon_informasi_layanan
                     $noBerkas = !empty($app->no_berkas) ? $app->no_berkas : '-';
-                    self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_pnbp_lunas', [
+                    $ptpData  = json_decode($app->ptp_data, true) ?? [];
+                    $nik      = $ptpData['nik'] ?? '';
+                    $username = $app->user->username ?? ($app->user->name ?? '-');
+
+                    $isPasswordNik = false;
+                    if ($nik && !empty($app->user->password) && \Illuminate\Support\Facades\Hash::check($nik, $app->user->password)) {
+                        $isPasswordNik = true;
+                    }
+                    $passwordText = $isPasswordNik ? $nik : 'Gunakan NIK Anda';
+
+                    $rincianAkun = "No. Berkas: {$noBerkas} | Username: {$username} | Sandi: {$passwordText} | Status: Akun Aktif";
+
+                    self::dispatchTwilioAdminTemplate($phone, 'twilio_tpl_pemohon_informasi_layanan', [
                         '1' => $nama,
-                        '2' => $layananTitle,
-                        '3' => $noBerkas,
+                        '2' => 'Konfirmasi Pembayaran PNBP & Akun Login',
+                        '3' => $rincianAkun,
                         '4' => 'https://patenpakmiko.com/login',
                         '5' => $cpContact,
                     ]);
