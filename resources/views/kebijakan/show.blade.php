@@ -16,8 +16,7 @@
             opacity: 1 !important;
             border-radius: 4px;
         }
-        div:has(> textarea[name="custom_wa_message"]),
-        div:has(textarea[name="custom_wa_message"]) {
+        textarea[name="custom_wa_message"] {
             display: none !important;
         }
         .form-control-v.flatpickr-input[readonly], .flatpickr-input[readonly] {
@@ -2593,5 +2592,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     </script>
 @endif
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('textarea[name="custom_wa_message"]').forEach(function(ta) {
+        var wrapper = ta.closest('.form-group-v') || ta.parentElement;
+        if (wrapper) wrapper.style.display = 'none';
+    });
+});
+</script>
 </body>
 </html>
