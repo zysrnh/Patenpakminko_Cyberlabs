@@ -570,9 +570,10 @@ trait WaBlastHelper
             }));
         }
 
-        if (count($wa_links) > 0) {
-            session()->flash('wa_links', $wa_links);
-        }
+        // Notifikasi manual wa_links dinonaktifkan karena sudah menggunakan auto-blast Twilio resmi
+        // if (count($wa_links) > 0) {
+        //     session()->flash('wa_links', $wa_links);
+        // }
 
         foreach ($mailboxes as $box) {
             \App\Models\Mailbox::create([
