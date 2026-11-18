@@ -211,8 +211,8 @@
                     @csrf
                     
                     <div class="form-group">
-                        <label class="form-label">Email / Username</label>
-                        <input type="text" name="login" id="login" class="form-control" placeholder="Email / Username" value="{{ old('login') }}" required autofocus>
+                        <label class="form-label">Username / No. WhatsApp / NIK / Email</label>
+                        <input type="text" name="login" id="login" class="form-control" placeholder="Masukkan Username, No. WhatsApp, NIK, atau Email" value="{{ old('login') }}" required autofocus>
                         @error('login')
                             <span style="color: #E53E3E; font-size: 12px; margin-top: 6px; display: block;">{{ $message }}</span>
                         @enderror

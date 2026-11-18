@@ -80,32 +80,122 @@ class AuthController extends Controller
             'login' => 'required|string',
             'password' => 'required|string',
         ], [
-            'login.required' => 'Username, No Telepon, atau Email wajib diisi.',
+            'login.required' => 'Username, No Telepon, NIK, atau Email wajib diisi.',
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        $login = $request->input('login');
-        $password = $request->input('password');
+        $loginInput = trim($request->input('login'));
+        $passwordInput = $request->input('password');
 
-        // Deteksi field login (email, phone_number, atau username)
-        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
-            $field = 'email';
-        } elseif (is_numeric($login)) {
-            $field = 'phone_number';
-        } else {
-            $field = 'username';
+        // 1. Cari user kandidat secara cerdas & fleksibel
+        // Prioritas A: Cek username (case-insensitive) atau email
+        $user = User::whereRaw('LOWER(username) = ?', [strtolower($loginInput)])
+                    ->orWhere('email', $loginInput)
+                    ->first();
+
+        // Prioritas B: Jika input numerik, periksa nomor WhatsApp/Telepon atau 16-digit NIK
+        if (!$user && is_numeric($loginInput)) {
+            $cleanNumeric = preg_replace('/[^0-9]/', '', $loginInput);
+
+            // Format nomor telepon (08... & 628...)
+            $phoneVariations = [$cleanNumeric];
+            if (str_starts_with($cleanNumeric, '62')) {
+                $phoneVariations[] = '0' . substr($cleanNumeric, 2);
+            } elseif (str_starts_with($cleanNumeric, '0')) {
+                $phoneVariations[] = '62' . substr($cleanNumeric, 1);
+            }
+
+            $user = User::whereIn('phone_number', $phoneVariations)->first();
+
+            // Jika belum ketemu dan panjangnya 16 digit (NIK pendaftaran)
+            if (!$user && strlen($cleanNumeric) === 16) {
+                $appModels = [
+                    \App\Models\PpkprBerusahaApplication::class,
+                    \App\Models\PpkprNonBerusahaApplication::class,
+                    \App\Models\PsnApplication::class,
+                    \App\Models\TanahTimbulApplication::class,
+                    \App\Models\KebijakanApplication::class,
+                ];
+
+                foreach ($appModels as $modelClass) {
+                    $foundApp = $modelClass::where('ptp_data', 'like', '%"nik":"' . $cleanNumeric . '"%')->latest()->first();
+                    if ($foundApp && $foundApp->user) {
+                        $user = $foundApp->user;
+                        break;
+                    }
+                }
+            }
         }
 
-        if (Auth::attempt([$field => $login, 'password' => $password], $request->filled('remember'))) {
-            $user = Auth::user();
-            if ($user->role === 'pelaku_usaha' && !$user->is_active) {
-                Auth::logout();
-                return redirect()->back()->withErrors([
-                    'login' => 'Akun belum aktif. Anda baru bisa login setelah permohonan Anda mencapai tahap verifikasi pembayaran (Step 3) dan kredensial dikirimkan ke WhatsApp.',
-                ])->withInput();
+        // 2. Verifikasi Password jika user ditemukan
+        if ($user) {
+            $isPasswordValid = false;
+
+            // Cek hash standar
+            if (Hash::check($passwordInput, $user->password)) {
+                $isPasswordValid = true;
+            } else {
+                // Cek apakah password yang dimasukkan adalah NIK dari permohonan milik user ini
+                $appModels = [
+                    \App\Models\PpkprBerusahaApplication::class,
+                    \App\Models\PpkprNonBerusahaApplication::class,
+                    \App\Models\PsnApplication::class,
+                    \App\Models\TanahTimbulApplication::class,
+                    \App\Models\KebijakanApplication::class,
+                ];
+
+                foreach ($appModels as $modelClass) {
+                    $hasNik = $modelClass::where('user_id', $user->id)
+                        ->where('ptp_data', 'like', '%"nik":"' . $passwordInput . '"%')
+                        ->exists();
+
+                    if ($hasNik) {
+                        // Password yang diinput adalah NIK pemohon resmi!
+                        // Sinkronkan password akun ke NIK ini agar ke depannya selalu instan cocok
+                        $user->password = Hash::make($passwordInput);
+                        $user->save();
+                        $isPasswordValid = true;
+                        break;
+                    }
+                }
             }
-            $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'))->with('success', 'Berhasil masuk ke sistem.');
+
+            if ($isPasswordValid) {
+                // Cek status keaktifan untuk pelaku_usaha
+                if ($user->role === 'pelaku_usaha' && !$user->is_active) {
+                    // Cek apakah user sudah punya permohonan yang sudah bayar atau berproses lanjut
+                    $appModels = [
+                        \App\Models\PpkprBerusahaApplication::class,
+                        \App\Models\PpkprNonBerusahaApplication::class,
+                        \App\Models\PsnApplication::class,
+                        \App\Models\TanahTimbulApplication::class,
+                        \App\Models\KebijakanApplication::class,
+                    ];
+                    $alreadyPassedPnbp = false;
+                    foreach ($appModels as $modelClass) {
+                        if ($modelClass::where('user_id', $user->id)->where(function($q) {
+                            $q->where('bpn_pembayaran_status', 'sudah_bayar')
+                              ->orWhereNotNull('no_berkas')
+                              ->orWhere('status', '!=', 'menunggu_bpn');
+                        })->exists()) {
+                            $alreadyPassedPnbp = true;
+                            break;
+                        }
+                    }
+
+                    if ($alreadyPassedPnbp) {
+                        $user->update(['is_active' => true]);
+                    } else {
+                        return redirect()->back()->withErrors([
+                            'login' => 'Akun belum aktif. Anda baru bisa login setelah permohonan Anda mencapai tahap verifikasi pembayaran (Step 3) dan kredensial dikirimkan ke WhatsApp.',
+                        ])->withInput();
+                    }
+                }
+
+                Auth::login($user, $request->filled('remember'));
+                $request->session()->regenerate();
+                return redirect()->intended(route('dashboard'))->with('success', 'Berhasil masuk ke sistem.');
+            }
         }
 
         return redirect()->back()->withErrors([
@@ -491,6 +581,13 @@ class AuthController extends Controller
                 'password'     => Hash::make($passwordText),
                 'role'         => 'pelaku_usaha',
                 'is_active'    => false, // Kredensial belum aktif untuk login dashboard sebelum diterbitkan admin
+            ]);
+        } else {
+            // Update nama dan password ke NIK pengajuan terbaru agar selalu sinkron
+            $user->update([
+                'name'     => $request->nama,
+                'address'  => $request->alamat,
+                'password' => Hash::make($request->nik),
             ]);
         }
 

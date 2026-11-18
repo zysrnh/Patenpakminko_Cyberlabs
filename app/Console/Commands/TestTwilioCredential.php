@@ -47,6 +47,19 @@ class TestTwilioCredential extends Command
             $app->no_berkas = $noBerkas;
         }
 
+        // Ambil NIK dari ptp_data
+        $ptpData = !empty($app->ptp_data) ? (is_array($app->ptp_data) ? $app->ptp_data : json_decode($app->ptp_data, true)) : [];
+        $nik = $ptpData['nik'] ?? '';
+
+        // Pastikan akun user diaktifkan dan passwordnya tersinkron ke NIK
+        if ($app->user) {
+            $userUpdates = ['is_active' => true];
+            if (!empty($nik)) {
+                $userUpdates['password'] = \Illuminate\Support\Facades\Hash::make($nik);
+            }
+            $app->user->update($userUpdates);
+        }
+
         $url = "https://patenpakmiko.com/berusaha/{$app->id}";
 
         $this->newLine();
@@ -55,8 +68,11 @@ class TestTwilioCredential extends Command
         $this->info("==============================================================");
         $this->line("Permohonan ID : <fg=yellow>#{$app->id}</>");
         $this->line("Nama Pemohon  : <fg=yellow>{$nama}</>");
+        $this->line("Username Akun : <fg=cyan>" . ($app->user->username ?? '-') . "</>");
+        $this->line("Sandi (NIK)   : <fg=cyan>" . ($nik ?: '-') . "</>");
         $this->line("Nomor Tujuan  : <fg=yellow>{$phone}</>");
         $this->line("No. Berkas    : <fg=yellow>{$noBerkas}</>");
+        $this->line("Status Akun   : <fg=green>AKTIF (Siap Login)</>");
         $this->newLine();
 
         $this->output->write("Mengirim notifikasi akun via Twilio WhatsApp resmi ... ");
