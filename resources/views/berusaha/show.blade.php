@@ -2069,7 +2069,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_cek_lokasi_dt)
-                                            Tinjau: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>Petugas: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
+                                            Petugas Lapang: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
                                         @else
                                             Menunggu jadwal peninjauan lapangan dari Kantor Pertanahan.
                                         @endif
@@ -2098,7 +2098,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_rapat_dt)
-                                            Waktu Sidang: <strong>{{ $application->bpn_rapat_date }}</strong>
+                                            Sidang koordinasi teknis pertanahan.
                                         @else
                                             Menunggu jadwal sidang/rapat koordinasi teknis pertanahan.
                                         @endif

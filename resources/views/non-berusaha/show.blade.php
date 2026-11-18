@@ -1943,7 +1943,6 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_cek_lokasi_dt)
-                                            Dijadwalkan pada: <strong>{{ $application->bpn_cek_lokasi_date }}</strong><br>
                                             Contact Person Petugas Lapang: <strong>{{ $application->bpn_cek_lokasi_cp }}</strong>
                                         @else
                                             Menunggu penentuan jadwal peninjauan lapangan offline.
@@ -1973,7 +1972,7 @@
                                     </div>
                                     <div class="timeline-desc">
                                         @if($application->bpn_rapat_dt)
-                                            Dijadwalkan pada: <strong>{{ $application->bpn_rapat_date }}</strong>
+                                            Sidang koordinasi teknis pertanahan.
                                         @else
                                             Menunggu penentuan jadwal rapat koordinasi pertanahan.
                                         @endif
