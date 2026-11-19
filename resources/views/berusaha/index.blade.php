@@ -9,6 +9,17 @@
         border-color: #218AC9 !important;
         box-shadow: 0 0 0 3px rgba(33,138,201,0.12) !important;
     }
+    .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+    }
+    .clickable-row:hover {
+        background-color: #F1F5F9 !important;
+    }
+    .clickable-row:hover .app-row-title {
+        color: #218AC9 !important;
+        text-decoration: underline;
+    }
 </style>
 @endpush
 
@@ -112,12 +123,12 @@
                 </thead>
                 <tbody>
                     @foreach($applications as $app)
-                        <tr style="border-bottom: 1px solid #F1F5F9;" data-status-category="{{ $app->status_category }}">
+                        <tr class="clickable-row" data-href="{{ route('berusaha.show', $app->id) }}" style="border-bottom: 1px solid #F1F5F9;" data-status-category="{{ $app->status_category }}">
                             @if(Auth::user()->isDpn())
                             <td style="text-align:center; padding: 12px;"><input type="checkbox" name="ids[]" value="{{ $app->id }}" class="row-check" style="cursor:pointer;"></td>
                             @endif
                             <td style="padding: 12px 14px;">
-                                <div style="font-weight:700; color:#003B64; font-size: 13px;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</div>
+                                <a href="{{ route('berusaha.show', $app->id) }}" class="app-row-title" style="font-weight:700; color:#003B64; font-size: 13px; text-decoration:none; display:block;">{{ $app->nama_pengaju ?: ($app->user->name ?? $app->user->username) }}</a>
                                 <div style="font-size:11px; color:#64748B;">
                                     Akun: PMH{{ str_pad($app->user->id, 3, '0', STR_PAD_LEFT) }} • 
                                     <span style="font-family:'DM Mono',monospace; font-weight:600; color:#003B64;">{{ $app->application_number }}</span>
@@ -166,9 +177,11 @@
                                 </td>
                             @endif
                             <td style="padding: 12px 14px;">
-                                <span class="badge" style="background-color:{{ $app->status_color }}20;color:{{ $app->status_color }}; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px;">
-                                    {{ $app->status_label }}
-                                </span>
+                                <a href="{{ route('berusaha.show', $app->id) }}" style="text-decoration:none; display:inline-block;">
+                                    <span class="badge" style="background-color:{{ $app->status_color }}20;color:{{ $app->status_color }}; border-radius: 4px; padding: 4px 8px; font-weight: 700; font-size: 11px; cursor:pointer;">
+                                        {{ $app->status_label }}
+                                    </span>
+                                </a>
                             </td>
                             <td style="padding: 12px 14px; white-space: nowrap; text-align: center;">
                                 <div style="display:inline-flex; gap:6px; align-items:center;">
@@ -283,6 +296,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if(searchInput) searchInput.addEventListener('input', filterTable);
     if(filterSla) filterSla.addEventListener('change', filterTable);
     if(filterStatus) filterStatus.addEventListener('change', filterTable);
+
+    // Klik baris antrean berkas
+    document.querySelectorAll('.table-wrap table tbody tr.clickable-row').forEach(row => {
+        row.addEventListener('click', function(e) {
+            if (e.target.closest('input, button, a, select, label')) {
+                return;
+            }
+            const href = this.getAttribute('data-href');
+            if (href) {
+                window.location.href = href;
+            }
+        });
+    });
 
     // Initial filter execution on load
     filterTable();
