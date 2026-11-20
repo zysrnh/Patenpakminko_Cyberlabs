@@ -182,7 +182,8 @@ class LapolpaController extends Controller
         $messagePemohon .= "\n\nWebsite Resmi: https://patenpakmiko.com/";
         
         if (!empty($settings['cp_admin'])) {
-            $messagePemohon .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+            $cpText = is_array($settings['cp_admin']) ? implode(', ', $settings['cp_admin']) : $settings['cp_admin'];
+            $messagePemohon .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $cpText . "_";
         }
         $wa_links = [];
         $mailboxes = [];
@@ -282,7 +283,8 @@ class LapolpaController extends Controller
  
         $settings = $this->getWhatsappSettings();
         if (!empty($settings['cp_admin'])) {
-            $message .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $settings['cp_admin'] . "_";
+            $cpText = is_array($settings['cp_admin']) ? implode(', ', $settings['cp_admin']) : $settings['cp_admin'];
+            $message .= "\n\n_Jika ada pertanyaan, hubungi CP Admin: " . $cpText . "_";
         }
  
         $formatPhone = function($phone) {

@@ -191,6 +191,44 @@
         background: #1EBE57;
         color: white;
     }
+    .btn-remove-number {
+        background: #FEE2E2;
+        color: #DC2626;
+        border: 1px solid #FECACA;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+    }
+    .btn-remove-number:hover {
+        background: #FCA5A5;
+        color: #991B1B;
+    }
+    .btn-add-number {
+        background: #F1F5F9;
+        color: #003B64;
+        border: 1.5px dashed #CBD5E1;
+        padding: 8px 16px;
+        font-size: 12px;
+        font-weight: 700;
+        border-radius: 6px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.15s ease;
+    }
+    .btn-add-number:hover {
+        background: #E2E8F0;
+        border-color: #94A3B8;
+        color: #00223D;
+    }
+    .contact-number-item + .contact-number-item {
+        margin-top: 10px;
+    }
 
     .btn-submit-main {
         background: #003B64;
@@ -235,6 +273,13 @@
             justify-content: center;
             padding: 10px 14px;
         }
+        .btn-remove-number {
+            padding: 10px 14px;
+        }
+        .btn-add-number {
+            width: 100%;
+            justify-content: center;
+        }
         .btn-submit-main {
             width: 100%;
             justify-content: center;
@@ -246,6 +291,31 @@
 @endsection
 
 @section('content')
+@php
+    $normalizeList = function($val) {
+        if (is_array($val)) {
+            return array_values(array_filter(array_map('trim', $val), fn($x) => $x !== '' && $x !== null));
+        }
+        if (is_string($val) && trim($val) !== '') {
+            $parts = preg_split('/[\r\n,;]+/', trim($val));
+            return array_values(array_filter(array_map('trim', $parts), fn($x) => $x !== '' && $x !== null));
+        }
+        return [];
+    };
+
+    $bpnNumbers = $normalizeList(old('admin_bpn', $settings['admin_bpn'] ?? []));
+    if (empty($bpnNumbers)) $bpnNumbers = [''];
+
+    $puNumbers = $normalizeList(old('admin_dinas_pu', $settings['admin_dinas_pu'] ?? []));
+    if (empty($puNumbers)) $puNumbers = [''];
+
+    $ptspNumbers = $normalizeList(old('admin_satu_pintu', $settings['admin_satu_pintu'] ?? []));
+    if (empty($ptspNumbers)) $ptspNumbers = [''];
+
+    $cpNumbers = $normalizeList(old('cp_admin', $settings['cp_admin'] ?? []));
+    if (empty($cpNumbers)) $cpNumbers = [''];
+@endphp
+
 <div class="page-header">
     <div class="page-header-left">
         <div class="breadcrumb">
@@ -257,7 +327,7 @@
             <svg style="width:24px;height:24px;vertical-align:-4px;margin-right:8px;color:var(--blue);" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
             Pengaturan Kontak Notifikasi WhatsApp
         </h1>
-        <p>Kelola nomor telepon penerima notifikasi WhatsApp otomatis untuk setiap instansi terkait dalam alur layanan.</p>
+        <p>Kelola nomor telepon penerima notifikasi WhatsApp otomatis untuk setiap instansi terkait dalam alur layanan. Anda dapat menambahkan lebih dari satu nomor admin per instansi.</p>
     </div>
 </div>
 
@@ -316,20 +386,23 @@
                 <svg width="20" height="20" fill="none" stroke="#003B64" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 Nomor Telepon Admin Instansi Terkait
             </div>
-            <span style="font-size: 12px; color: #64748B;">Format: <code>628...</code> atau <code>08...</code></span>
+            <span style="font-size: 12px; color: #64748B;">Format: <code>628...</code> atau <code>08...</code> (Bisa tambah banyak nomor)</span>
         </div>
 
         <!-- 1. Admin Kantor Pertanahan (BPN) -->
-        <div class="contact-input-row">
+        <div class="contact-input-row" id="section-admin_bpn">
             <div class="contact-row-header">
                 <div class="contact-row-title">
                     <span style="width:10px; height:10px; border-radius:50%; background:#003B64; display:inline-block;"></span>
                     Admin Kantor Pertanahan (BPN)
                 </div>
-                @if(!empty($settings['admin_bpn']))
+                @php
+                    $validBpn = count(array_filter($bpnNumbers, fn($x) => !empty($x)));
+                @endphp
+                @if($validBpn > 0)
                     <span class="contact-badge-pill status-filled">
                         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-                        Tersimpan: {{ $settings['admin_bpn'] }}
+                        {{ $validBpn }} Nomor Tersimpan
                     </span>
                 @else
                     <span class="contact-badge-pill status-empty">
@@ -341,36 +414,56 @@
             <div class="contact-row-desc">
                 Menerima notifikasi WhatsApp saat ada permohonan baru, penyelesaian validasi PUTR, serta penyelesaian penilaian PUTR.
             </div>
-            <div class="input-group-wa">
-                <div class="input-prefix">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                    WA
-                </div>
-                <input type="text" name="admin_bpn" class="input-wa-field" id="admin_bpn" placeholder="Contoh: 6281234567890" value="{{ old('admin_bpn', $settings['admin_bpn'] ?? '') }}" inputmode="numeric">
-                @if(!empty($settings['admin_bpn']))
-                    @php
-                        $cleanBpn = preg_replace('/[^0-9]/', '', $settings['admin_bpn']);
-                        if (str_starts_with($cleanBpn, '0')) $cleanBpn = '62' . substr($cleanBpn, 1);
-                    @endphp
-                    <a href="https://wa.me/{{ $cleanBpn }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                        Tes WA
-                    </a>
-                @endif
+            
+            <div class="contact-number-list" id="list-admin_bpn">
+                @foreach($bpnNumbers as $num)
+                    <div class="contact-number-item">
+                        <div class="input-group-wa">
+                            <div class="input-prefix">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                WA
+                            </div>
+                            <input type="text" name="admin_bpn[]" class="input-wa-field" placeholder="Contoh: 081234567890" value="{{ $num }}" inputmode="numeric">
+                            @if(!empty($num))
+                                @php
+                                    $cleanBpn = preg_replace('/[^0-9]/', '', $num);
+                                    if (str_starts_with($cleanBpn, '0')) $cleanBpn = '62' . substr($cleanBpn, 1);
+                                @endphp
+                                <a href="https://wa.me/{{ $cleanBpn }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                    Tes WA
+                                </a>
+                            @endif
+                            <button type="button" class="btn-remove-number" onclick="removeContactNumber(this)" title="Hapus baris nomor ini">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            
+            <div style="margin-top: 12px;">
+                <button type="button" class="btn-add-number" onclick="addContactNumber('list-admin_bpn', 'admin_bpn[]', '081234567890')">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                    Tambah Nomor Admin BPN
+                </button>
             </div>
         </div>
 
         <!-- 2. Admin PUTR -->
-        <div class="contact-input-row">
+        <div class="contact-input-row" id="section-admin_dinas_pu">
             <div class="contact-row-header">
                 <div class="contact-row-title">
                     <span style="width:10px; height:10px; border-radius:50%; background:#DD6B20; display:inline-block;"></span>
                     Admin Dinas PUTR (PU)
                 </div>
-                @if(!empty($settings['admin_dinas_pu']))
+                @php
+                    $validPu = count(array_filter($puNumbers, fn($x) => !empty($x)));
+                @endphp
+                @if($validPu > 0)
                     <span class="contact-badge-pill status-filled">
                         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-                        Tersimpan: {{ $settings['admin_dinas_pu'] }}
+                        {{ $validPu }} Nomor Tersimpan
                     </span>
                 @else
                     <span class="contact-badge-pill status-empty">
@@ -382,36 +475,56 @@
             <div class="contact-row-desc">
                 Menerima notifikasi WhatsApp saat Pertek Kantor Pertanahan (BPN) terbit untuk proses verifikasi & penilaian lokasi.
             </div>
-            <div class="input-group-wa">
-                <div class="input-prefix">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                    WA
-                </div>
-                <input type="text" name="admin_dinas_pu" class="input-wa-field" id="admin_dinas_pu" placeholder="Contoh: 6281234567892" value="{{ old('admin_dinas_pu', $settings['admin_dinas_pu'] ?? '') }}" inputmode="numeric">
-                @if(!empty($settings['admin_dinas_pu']))
-                    @php
-                        $cleanPu = preg_replace('/[^0-9]/', '', $settings['admin_dinas_pu']);
-                        if (str_starts_with($cleanPu, '0')) $cleanPu = '62' . substr($cleanPu, 1);
-                    @endphp
-                    <a href="https://wa.me/{{ $cleanPu }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                        Tes WA
-                    </a>
-                @endif
+
+            <div class="contact-number-list" id="list-admin_dinas_pu">
+                @foreach($puNumbers as $num)
+                    <div class="contact-number-item">
+                        <div class="input-group-wa">
+                            <div class="input-prefix">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                WA
+                            </div>
+                            <input type="text" name="admin_dinas_pu[]" class="input-wa-field" placeholder="Contoh: 081234567892" value="{{ $num }}" inputmode="numeric">
+                            @if(!empty($num))
+                                @php
+                                    $cleanPu = preg_replace('/[^0-9]/', '', $num);
+                                    if (str_starts_with($cleanPu, '0')) $cleanPu = '62' . substr($cleanPu, 1);
+                                @endphp
+                                <a href="https://wa.me/{{ $cleanPu }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                    Tes WA
+                                </a>
+                            @endif
+                            <button type="button" class="btn-remove-number" onclick="removeContactNumber(this)" title="Hapus baris nomor ini">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div style="margin-top: 12px;">
+                <button type="button" class="btn-add-number" onclick="addContactNumber('list-admin_dinas_pu', 'admin_dinas_pu[]', '081234567892')">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                    Tambah Nomor Admin PUTR
+                </button>
             </div>
         </div>
 
         <!-- 3. Admin DPMPTSP (Satu Pintu) -->
-        <div class="contact-input-row">
+        <div class="contact-input-row" id="section-admin_satu_pintu">
             <div class="contact-row-header">
                 <div class="contact-row-title">
                     <span style="width:10px; height:10px; border-radius:50%; background:#6B46C1; display:inline-block;"></span>
                     Admin DPMPTSP (Satu Pintu)
                 </div>
-                @if(!empty($settings['admin_satu_pintu']))
+                @php
+                    $validPtsp = count(array_filter($ptspNumbers, fn($x) => !empty($x)));
+                @endphp
+                @if($validPtsp > 0)
                     <span class="contact-badge-pill status-filled">
                         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-                        Tersimpan: {{ $settings['admin_satu_pintu'] }}
+                        {{ $validPtsp }} Nomor Tersimpan
                     </span>
                 @else
                     <span class="contact-badge-pill status-empty">
@@ -423,36 +536,56 @@
             <div class="contact-row-desc">
                 Menerima notifikasi WhatsApp saat penilaian PUTR selesai untuk penerbitan dokumen PKKPR resmi.
             </div>
-            <div class="input-group-wa">
-                <div class="input-prefix">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                    WA
-                </div>
-                <input type="text" name="admin_satu_pintu" class="input-wa-field" id="admin_satu_pintu" placeholder="Contoh: 6281234567893" value="{{ old('admin_satu_pintu', $settings['admin_satu_pintu'] ?? '') }}" inputmode="numeric">
-                @if(!empty($settings['admin_satu_pintu']))
-                    @php
-                        $cleanPtsp = preg_replace('/[^0-9]/', '', $settings['admin_satu_pintu']);
-                        if (str_starts_with($cleanPtsp, '0')) $cleanPtsp = '62' . substr($cleanPtsp, 1);
-                    @endphp
-                    <a href="https://wa.me/{{ $cleanPtsp }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                        Tes WA
-                    </a>
-                @endif
+
+            <div class="contact-number-list" id="list-admin_satu_pintu">
+                @foreach($ptspNumbers as $num)
+                    <div class="contact-number-item">
+                        <div class="input-group-wa">
+                            <div class="input-prefix">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                WA
+                            </div>
+                            <input type="text" name="admin_satu_pintu[]" class="input-wa-field" placeholder="Contoh: 081234567893" value="{{ $num }}" inputmode="numeric">
+                            @if(!empty($num))
+                                @php
+                                    $cleanPtsp = preg_replace('/[^0-9]/', '', $num);
+                                    if (str_starts_with($cleanPtsp, '0')) $cleanPtsp = '62' . substr($cleanPtsp, 1);
+                                @endphp
+                                <a href="https://wa.me/{{ $cleanPtsp }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                    Tes WA
+                                </a>
+                            @endif
+                            <button type="button" class="btn-remove-number" onclick="removeContactNumber(this)" title="Hapus baris nomor ini">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div style="margin-top: 12px;">
+                <button type="button" class="btn-add-number" onclick="addContactNumber('list-admin_satu_pintu', 'admin_satu_pintu[]', '081234567893')">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                    Tambah Nomor Admin DPMPTSP
+                </button>
             </div>
         </div>
 
         <!-- 4. Contact Person (Pemohon) -->
-        <div class="contact-input-row">
+        <div class="contact-input-row" id="section-cp_admin">
             <div class="contact-row-header">
                 <div class="contact-row-title">
                     <span style="width:10px; height:10px; border-radius:50%; background:#059669; display:inline-block;"></span>
                     Contact Person Layanan (Bantuan Pemohon)
                 </div>
-                @if(!empty($settings['cp_admin']))
+                @php
+                    $validCp = count(array_filter($cpNumbers, fn($x) => !empty($x)));
+                @endphp
+                @if($validCp > 0)
                     <span class="contact-badge-pill status-filled">
                         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
-                        Tersimpan: {{ $settings['cp_admin'] }}
+                        {{ $validCp }} Nomor Tersimpan
                     </span>
                 @else
                     <span class="contact-badge-pill status-empty">
@@ -464,22 +597,39 @@
             <div class="contact-row-desc">
                 Nomor ini disisipkan secara otomatis pada bagian akhir setiap notifikasi WhatsApp blast kepada pemohon sebagai nomor bantuan/call center.
             </div>
-            <div class="input-group-wa">
-                <div class="input-prefix">
-                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                    WA
-                </div>
-                <input type="text" name="cp_admin" class="input-wa-field" id="cp_admin" placeholder="Contoh: 081234567890" value="{{ old('cp_admin', $settings['cp_admin'] ?? '') }}" inputmode="numeric">
-                @if(!empty($settings['cp_admin']))
-                    @php
-                        $cleanCp = preg_replace('/[^0-9]/', '', $settings['cp_admin']);
-                        if (str_starts_with($cleanCp, '0')) $cleanCp = '62' . substr($cleanCp, 1);
-                    @endphp
-                    <a href="https://wa.me/{{ $cleanCp }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
-                        Tes WA
-                    </a>
-                @endif
+
+            <div class="contact-number-list" id="list-cp_admin">
+                @foreach($cpNumbers as $num)
+                    <div class="contact-number-item">
+                        <div class="input-group-wa">
+                            <div class="input-prefix">
+                                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                WA
+                            </div>
+                            <input type="text" name="cp_admin[]" class="input-wa-field" placeholder="Contoh: 081234567890" value="{{ $num }}" inputmode="numeric">
+                            @if(!empty($num))
+                                @php
+                                    $cleanCp = preg_replace('/[^0-9]/', '', $num);
+                                    if (str_starts_with($cleanCp, '0')) $cleanCp = '62' . substr($cleanCp, 1);
+                                @endphp
+                                <a href="https://wa.me/{{ $cleanCp }}" target="_blank" class="btn-test-wa" title="Tes chat WhatsApp ke nomor ini">
+                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                                    Tes WA
+                                </a>
+                            @endif
+                            <button type="button" class="btn-remove-number" onclick="removeContactNumber(this)" title="Hapus baris nomor ini">
+                                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div style="margin-top: 12px;">
+                <button type="button" class="btn-add-number" onclick="addContactNumber('list-cp_admin', 'cp_admin[]', '081234567890')">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                    Tambah Nomor CP Pemohon
+                </button>
             </div>
         </div>
 
@@ -491,4 +641,46 @@
         </div>
     </div>
 </form>
+@endsection
+
+@section('scripts')
+<script>
+function addContactNumber(listId, inputName, placeholder) {
+    const list = document.getElementById(listId);
+    if (!list) return;
+
+    const div = document.createElement('div');
+    div.className = 'contact-number-item';
+    div.innerHTML = `
+        <div class="input-group-wa">
+            <div class="input-prefix">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                WA
+            </div>
+            <input type="text" name="${inputName}" class="input-wa-field" placeholder="Contoh: ${placeholder}" value="" inputmode="numeric">
+            <button type="button" class="btn-remove-number" onclick="removeContactNumber(this)" title="Hapus baris nomor ini">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+        </div>
+    `;
+    list.appendChild(div);
+    const input = div.querySelector('input');
+    if (input) input.focus();
+}
+
+function removeContactNumber(btn) {
+    const item = btn.closest('.contact-number-item');
+    if (!item) return;
+    const list = item.closest('.contact-number-list');
+    if (list && list.querySelectorAll('.contact-number-item').length > 1) {
+        item.remove();
+    } else {
+        // Jika tinggal 1 baris, kosongkan isinya
+        const input = item.querySelector('input');
+        if (input) input.value = '';
+        const testBtn = item.querySelector('.btn-test-wa');
+        if (testBtn) testBtn.remove();
+    }
+}
+</script>
 @endsection

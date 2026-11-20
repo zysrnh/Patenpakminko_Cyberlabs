@@ -674,6 +674,29 @@ class PpkprNonBerusahaController extends Controller
         }
 
         $data = $request->except('_token');
+
+        // Normalisasi input array nomor telepon admin & cp
+        $keys = ['admin_bpn', 'admin_dinas_pu', 'admin_satu_pintu', 'cp_admin'];
+        foreach ($keys as $key) {
+            if ($request->has($key)) {
+                $raw = $request->input($key);
+                if (is_array($raw)) {
+                    $cleaned = array_values(array_filter(array_map('trim', $raw), function($val) {
+                        return $val !== '' && $val !== null;
+                    }));
+                    $data[$key] = $cleaned;
+                } elseif (is_string($raw)) {
+                    $val = trim($raw);
+                    $data[$key] = $val !== '' ? [$val] : [];
+                }
+            }
+        }
+
+        // Sinkronkan alias admin_putr dengan admin_dinas_pu
+        if (isset($data['admin_dinas_pu'])) {
+            $data['admin_putr'] = $data['admin_dinas_pu'];
+        }
+
         $settings = [];
         if (\Illuminate\Support\Facades\Storage::disk('local')->exists('whatsapp_settings.json')) {
             $settings = json_decode(\Illuminate\Support\Facades\Storage::disk('local')->get('whatsapp_settings.json'), true) ?? [];
