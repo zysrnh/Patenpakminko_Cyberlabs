@@ -111,7 +111,7 @@ class AuthController extends Controller
             if (!$user && strlen($cleanNumeric) === 16) {
                 $appModels = [
                     \App\Models\PpkprBerusahaApplication::class,
-                    \App\Models\PpkprNonBerusahaApplication::class,
+                    \App\Models\PpkprApplication::class,
                     \App\Models\PsnApplication::class,
                     \App\Models\TanahTimbulApplication::class,
                     \App\Models\KebijakanApplication::class,
@@ -138,7 +138,7 @@ class AuthController extends Controller
                 // Cek apakah password yang dimasukkan adalah NIK dari permohonan milik user ini
                 $appModels = [
                     \App\Models\PpkprBerusahaApplication::class,
-                    \App\Models\PpkprNonBerusahaApplication::class,
+                    \App\Models\PpkprApplication::class,
                     \App\Models\PsnApplication::class,
                     \App\Models\TanahTimbulApplication::class,
                     \App\Models\KebijakanApplication::class,
@@ -166,7 +166,7 @@ class AuthController extends Controller
                     // Cek apakah user sudah punya permohonan yang sudah bayar atau berproses lanjut
                     $appModels = [
                         \App\Models\PpkprBerusahaApplication::class,
-                        \App\Models\PpkprNonBerusahaApplication::class,
+                        \App\Models\PpkprApplication::class,
                         \App\Models\PsnApplication::class,
                         \App\Models\TanahTimbulApplication::class,
                         \App\Models\KebijakanApplication::class,

@@ -397,9 +397,9 @@
                                     if (strpos($appNo, 'BERUSAHA-') === 0) {
                                         $app = \App\Models\PpkprBerusahaApplication::where('application_number', $appNo)->first();
                                         $pengajuInfo = $app ? ($app->nama_pengaju ?: $app->nama_pemilik_usaha) : null;
-                                    } elseif (strpos($appNo, 'NON-BERUSAHA-') === 0) {
-                                        $app = \App\Models\PpkprNonBerusahaApplication::where('application_number', $appNo)->first();
-                                        $pengajuInfo = $app ? $app->nama_pengaju : null;
+                                    } elseif (strpos($appNo, 'NON-BERUSAHA-') === 0 || strpos($appNo, 'PPKPR-NON-') === 0) {
+                                        $app = \App\Models\PpkprApplication::where('application_number', $appNo)->first();
+                                        $pengajuInfo = $app ? ($app->nama_pengaju ?: $app->nama_pemilik_usaha) : null;
                                     } elseif (strpos($appNo, 'PSN-') === 0) {
                                         $app = \App\Models\PsnApplication::where('application_number', $appNo)->first();
                                         $pengajuInfo = $app ? $app->nama_pengaju : null;
