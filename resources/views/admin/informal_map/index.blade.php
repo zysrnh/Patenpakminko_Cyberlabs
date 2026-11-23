@@ -371,6 +371,22 @@
                                 <span class="info-label">Pembaruan</span>
                                 <span class="info-value">{{ $l['updated_at'] }}</span>
                             </div>
+                            @if(!empty($l['original_filename']))
+                            <div style="grid-column: span 2; border-top: 1px dashed #E2E8F0; padding-top: 6px; margin-top: 2px;">
+                                <span class="info-label">File Sumber Diupload</span>
+                                <span class="info-value" style="font-size: 11px; color: #218AC9; word-break: break-all;">
+                                    📁 {{ $l['original_filename'] }}
+                                </span>
+                            </div>
+                            @endif
+                            @if(!empty($l['latest_backup_file']))
+                            <div style="grid-column: span 2; background: #FEF3C7; padding: 6px 8px; border-radius: 4px; margin-top: 2px;">
+                                <span class="info-label" style="color: #92400E;">Cadangan Terakhir (File Lama)</span>
+                                <span class="info-value" style="font-size: 10.5px; color: #B45309; word-break: break-all; font-family: 'DM Mono', monospace;">
+                                    💾 {{ $l['latest_backup_file'] }}
+                                </span>
+                            </div>
+                            @endif
                         </div>
                     </div>
 
@@ -457,7 +473,7 @@
                     <input type="file" name="map_file" id="modalFileInput" style="display:none;" accept=".geojson,.json,.zip" required onchange="handleModalFileChange(this)">
 
                     <div style="background:#F0FDF4; border:1px solid #BBF7D0; border-radius:4px; padding:10px 12px; margin-top:14px; font-size:11.5px; color:#166534; line-height:1.5;">
-                        🛡️ <strong>Aman:</strong> File data yang aktif saat ini akan di-backup otomatis oleh sistem sebelum digantikan file baru.
+                        🛡️ <strong>Aman & Ada Riwayatnya:</strong> File yang sedang aktif di server akan otomatis dicadangkan (di-backup) ke folder cadangan dengan nama <code>[layer]_bak_[tanggal]_[jam].geojson</code> sebelum ditimpa file baru ini.
                     </div>
 
                     <button type="submit" id="btnSubmitModal" class="btn-submit-modal">

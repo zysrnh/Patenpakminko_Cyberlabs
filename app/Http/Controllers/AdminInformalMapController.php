@@ -100,7 +100,7 @@ class AdminInformalMapController extends Controller
             }
         }
 
-        // Hitung info file aktual
+        // Hitung info file aktual & riwayat backup
         foreach ($defaults as $k => &$layer) {
             $path = storage_path('app/public/shp_bpn/' . $layer['file_name']);
             if (File::exists($path)) {
@@ -115,6 +115,20 @@ class AdminInformalMapController extends Controller
                 $layer['size_human'] = '0 KB';
                 $layer['updated_at'] = '-';
                 $layer['url'] = asset('storage/shp_bpn/' . $layer['file_name']);
+            }
+
+            // Cari file backup terbaru di folder backup
+            $backupDir = storage_path('app/public/shp_bpn/backup');
+            if (File::isDirectory($backupDir)) {
+                $prefix = pathinfo($layer['file_name'], PATHINFO_FILENAME) . '_bak_';
+                $backupFiles = File::glob($backupDir . '/' . $prefix . '*.geojson');
+                if (!empty($backupFiles)) {
+                    usort($backupFiles, function($a, $b) {
+                        return filemtime($b) - filemtime($a);
+                    });
+                    $layer['latest_backup_file'] = basename($backupFiles[0]);
+                    $layer['latest_backup_time'] = date('d M Y H:i:s', filemtime($backupFiles[0]));
+                }
             }
         }
 
@@ -132,6 +146,43 @@ class AdminInformalMapController extends Controller
         $pow = min($pow, count($units) - 1);
         $bytes /= (1 << (10 * $pow));
         return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+
+    /**
+     * Fungsi helper menulis file dengan aman di Linux/cPanel (auto chmod & unlink bypass).
+     */
+    protected function safeWriteFile(string $path, string $content): bool
+    {
+        $dir = dirname($path);
+        if (!File::isDirectory($dir)) {
+            @File::makeDirectory($dir, 0777, true, true);
+        }
+        @chmod($dir, 0777);
+
+        // Jika file sudah ada, coba ubah permission lalu unlink
+        if (File::exists($path)) {
+            @chmod($path, 0666);
+            @unlink($path);
+        }
+
+        // Tulis ulang file
+        $written = @file_put_contents($path, $content);
+        if ($written !== false) {
+            @chmod($path, 0666);
+            return true;
+        }
+
+        // Fallback: tulis ke file temporary lalu rename
+        $tmp = $dir . '/tmp_' . uniqid() . '.json';
+        if (@file_put_contents($tmp, $content) !== false) {
+            @chmod($tmp, 0666);
+            if (@rename($tmp, $path)) {
+                @chmod($path, 0666);
+                return true;
+            }
+        }
+
+        throw new \Exception("Gagal menulis ke {$path}. Harap pastikan folder storage memiliki izin tulis (jalankan 'chmod -R 775 storage' di terminal cPanel).");
     }
 
     /**
@@ -171,27 +222,35 @@ class AdminInformalMapController extends Controller
         $targetFileName = $layers[$layerKey]['file_name'];
         $storageDir = storage_path('app/public/shp_bpn');
         if (!File::isDirectory($storageDir)) {
-            File::makeDirectory($storageDir, 0755, true, true);
+            @File::makeDirectory($storageDir, 0777, true, true);
         }
+        @chmod($storageDir, 0777);
 
         $publicDir = public_path('storage/shp_bpn');
         if (!File::isDirectory($publicDir)) {
-            File::makeDirectory($publicDir, 0755, true, true);
+            @File::makeDirectory($publicDir, 0777, true, true);
         }
+        @chmod($publicDir, 0777);
 
         $targetStoragePath = $storageDir . '/' . $targetFileName;
         $targetPublicPath  = $publicDir . '/' . $targetFileName;
 
         // Backup file lama jika ada
+        $backupName = null;
         if (File::exists($targetStoragePath)) {
             $backupDir = storage_path('app/public/shp_bpn/backup');
             if (!File::isDirectory($backupDir)) {
-                File::makeDirectory($backupDir, 0755, true, true);
+                @File::makeDirectory($backupDir, 0777, true, true);
             }
-            File::copy($targetStoragePath, $backupDir . '/' . pathinfo($targetFileName, PATHINFO_FILENAME) . '_bak_' . date('Ymd_His') . '.geojson');
+            @chmod($backupDir, 0777);
+
+            $backupName = pathinfo($targetFileName, PATHINFO_FILENAME) . '_bak_' . date('Ymd_His') . '.geojson';
+            @File::copy($targetStoragePath, $backupDir . '/' . $backupName);
+            @chmod($backupDir . '/' . $backupName, 0666);
         }
 
         $uploadedFile = $request->file('map_file');
+        $originalFileName = $uploadedFile->getClientOriginalName();
         $extension = strtolower($uploadedFile->getClientOriginalExtension());
 
         if (in_array($extension, ['geojson', 'json'])) {
@@ -203,17 +262,36 @@ class AdminInformalMapController extends Controller
                 return back()->with('error', 'Format file tidak valid. Pastikan file berupa GeoJSON valid yang memiliki atribut "type" (FeatureCollection / Feature).');
             }
 
-            // Simpan ke storage dan copy ke public
-            File::put($targetStoragePath, $content);
-            File::put($targetPublicPath, $content);
+            // Simpan ke storage dan copy ke public menggunakan safeWriteFile
+            try {
+                $this->safeWriteFile($targetStoragePath, $content);
+                if (File::isDirectory(public_path('storage/shp_bpn')) || !is_link(public_path('storage'))) {
+                    @$this->safeWriteFile($targetPublicPath, $content);
+                }
+            } catch (\Exception $e) {
+                return back()->with('error', $e->getMessage());
+            }
+
+            // Simpan metadata riwayat file ke json config
+            $configFile = storage_path('app/informal_layers_config.json');
+            $saved = File::exists($configFile) ? (json_decode(File::get($configFile), true) ?? []) : [];
+            if (!isset($saved[$layerKey])) {
+                $saved[$layerKey] = [];
+            }
+            $saved[$layerKey]['original_filename']  = $originalFileName;
+            $saved[$layerKey]['latest_backup_file'] = $backupName ?? ($saved[$layerKey]['latest_backup_file'] ?? null);
+            $saved[$layerKey]['latest_backup_time'] = $backupName ? date('d M Y H:i:s') : ($saved[$layerKey]['latest_backup_time'] ?? null);
+            $saved[$layerKey]['uploaded_by']        = auth()->user()->name ?? auth()->user()->username;
+            @File::put($configFile, json_encode($saved, JSON_PRETTY_PRINT));
 
             $featureCount = isset($json['features']) ? count($json['features']) : 1;
-            return back()->with('success', "Layer {$layers[$layerKey]['short_name']} berhasil diperbarui! Terdeteksi {$featureCount} poligon/fitur.");
+            $backupInfo = $backupName ? " File lama berhasil dicadangkan sebagai `{$backupName}`." : "";
+            return back()->with('success', "Layer {$layers[$layerKey]['short_name']} berhasil diperbarui dari '{$originalFileName}'! ({$featureCount} fitur poligon).{$backupInfo}");
         } 
         elseif ($extension === 'zip') {
             // Ekstrak ZIP dan proses Shapefile
             $tempDir = storage_path('app/temp_shp_' . uniqid());
-            File::makeDirectory($tempDir, 0755, true, true);
+            @File::makeDirectory($tempDir, 0777, true, true);
 
             $zip = new ZipArchive();
             if ($zip->open($uploadedFile->getRealPath()) === true) {
@@ -281,7 +359,7 @@ except Exception as e:
     print(f"ERROR: {str(e)}")
     sys.exit(1)
 PY;
-                File::put($scriptPath, $pyScript);
+                @File::put($scriptPath, $pyScript);
             }
 
             // Eksekusi script python
@@ -294,12 +372,34 @@ PY;
             $outputStr = implode("\n", $output);
 
             if ($returnVar === 0 && File::exists($tempOutput)) {
-                File::copy($tempOutput, $targetStoragePath);
-                File::copy($tempOutput, $targetPublicPath);
+                $convertedContent = File::get($tempOutput);
+                try {
+                    $this->safeWriteFile($targetStoragePath, $convertedContent);
+                    if (File::isDirectory(public_path('storage/shp_bpn')) || !is_link(public_path('storage'))) {
+                        @$this->safeWriteFile($targetPublicPath, $convertedContent);
+                    }
+                } catch (\Exception $e) {
+                    File::deleteDirectory($tempDir);
+                    return back()->with('error', $e->getMessage());
+                }
+
                 File::deleteDirectory($tempDir);
 
+                // Simpan metadata riwayat file ke json config
+                $configFile = storage_path('app/informal_layers_config.json');
+                $saved = File::exists($configFile) ? (json_decode(File::get($configFile), true) ?? []) : [];
+                if (!isset($saved[$layerKey])) {
+                    $saved[$layerKey] = [];
+                }
+                $saved[$layerKey]['original_filename']  = $originalFileName;
+                $saved[$layerKey]['latest_backup_file'] = $backupName ?? ($saved[$layerKey]['latest_backup_file'] ?? null);
+                $saved[$layerKey]['latest_backup_time'] = $backupName ? date('d M Y H:i:s') : ($saved[$layerKey]['latest_backup_time'] ?? null);
+                $saved[$layerKey]['uploaded_by']        = auth()->user()->name ?? auth()->user()->username;
+                @File::put($configFile, json_encode($saved, JSON_PRETTY_PRINT));
+
                 $matchCount = preg_match('/SUCCESS:(\d+)/', $outputStr, $m) ? $m[1] : 'beberapa';
-                return back()->with('success', "Shapefile {$layers[$layerKey]['short_name']} berhasil dikonversi dan disimpan ke sistem! ({$matchCount} fitur).");
+                $backupInfo = $backupName ? " File lama berhasil dicadangkan sebagai `{$backupName}`." : "";
+                return back()->with('success', "Shapefile {$layers[$layerKey]['short_name']} berhasil dikonversi dan disimpan dari '{$originalFileName}'! ({$matchCount} fitur).{$backupInfo}");
             } else {
                 File::deleteDirectory($tempDir);
                 Log::error("Gagal convert SHP: " . $outputStr);
