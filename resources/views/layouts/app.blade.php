@@ -526,10 +526,16 @@
 
         <div class="sidebar-section">
             <div class="sidebar-section-label">Fasilitas & Manajemen</div>
-            <a href="{{ route('informal.index') }}" class="nav-item {{ request()->routeIs('informal.*') ? 'active' : '' }}">
+            <a href="{{ route('informal.index') }}" class="nav-item {{ request()->routeIs('informal.*') && !request()->routeIs('admin.informal_map.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                 INFORMAL
             </a>
+            @if(Auth::check() && (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->isSuperAdmin()))
+            <a href="{{ route('admin.informal_map.index') }}" class="nav-item {{ request()->routeIs('admin.informal_map.*') ? 'active' : '' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                Kelola Peta INFORMAL
+            </a>
+            @endif
             <a href="{{ route('lapolpa.index') }}" class="nav-item {{ request()->routeIs('lapolpa.*') ? 'active' : '' }}">
                 <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
                 LAPOL PAK

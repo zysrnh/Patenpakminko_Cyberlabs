@@ -444,6 +444,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/informal-reviews/{id}/approve', [ReviewController::class, 'approveInformal'])->name('admin.informal-reviews.approve');
     Route::put('/admin/informal-reviews/{id}', [ReviewController::class, 'updateInformal'])->name('admin.informal-reviews.update');
     Route::delete('/admin/informal-reviews/{id}', [ReviewController::class, 'destroyInformal'])->name('admin.informal-reviews.destroy');
+
+    // Pengelolaan Layer Spasial Peta INFORMAL (Admin BPN & Super Admin)
+    Route::get('/admin/informal-map', [\App\Http\Controllers\AdminInformalMapController::class, 'index'])->name('admin.informal_map.index');
+    Route::post('/admin/informal-map/upload', [\App\Http\Controllers\AdminInformalMapController::class, 'upload'])->name('admin.informal_map.upload');
+    Route::get('/admin/informal-map/download/{layer}', [\App\Http\Controllers\AdminInformalMapController::class, 'download'])->name('admin.informal_map.download');
+    Route::post('/admin/informal-map/settings', [\App\Http\Controllers\AdminInformalMapController::class, 'updateSettings'])->name('admin.informal_map.settings');
  
     // WhatsApp Gateway Settings (DPN / Super Admin)
     Route::get('/dpn/whatsapp', [PpkprNonBerusahaController::class, 'whatsappSettings'])->name('dpn.whatsapp');
