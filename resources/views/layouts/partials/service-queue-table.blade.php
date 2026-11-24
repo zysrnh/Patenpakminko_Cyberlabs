@@ -265,9 +265,17 @@
         vertical-align: middle !important;
         white-space: normal !important;
     }
+    @keyframes sqRowFade {
+        from { opacity: 0; transform: translateY(4px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
     .sq-table tbody tr.clickable-row {
         cursor: pointer;
         transition: background-color .14s ease;
+    }
+    .sq-table tbody tr.clickable-row.is-row-anim {
+        animation: sqRowFade .2s cubic-bezier(0.22, 1, 0.36, 1) both;
+        animation-delay: calc(var(--row-idx, 0) * 18ms);
     }
     .sq-table tbody tr.clickable-row:hover td {
         background-color: #F0F7FC !important;
@@ -275,6 +283,9 @@
     .sq-table tbody tr.clickable-row:hover .sq-row-name {
         color: #218AC9;
         text-decoration: underline;
+    }
+    .sq-table tbody tr.clickable-row:hover .sq-btn-detail svg {
+        transform: translateX(2px);
     }
     .sq-row-name {
         font-weight: 700;
@@ -308,14 +319,17 @@
     .sq-badge {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: 5px;
         border-radius: 4px;
-        padding: 4px 8px;
+        padding: 4px 9px;
         font-weight: 700;
         font-size: 11px;
-        line-height: 1.3;
-        max-width: 210px;
-        white-space: normal;
+        line-height: 1.25;
+        white-space: nowrap;
+        transition: transform .14s ease;
+    }
+    .sq-table tbody tr.clickable-row:hover .sq-badge {
+        transform: translateY(-0.5px);
     }
     .sq-actions-cell {
         white-space: nowrap !important;
@@ -341,6 +355,9 @@
         font-weight: 700;
         text-decoration: none;
         transition: background .14s ease, border-color .14s ease, transform .1s ease;
+    }
+    .sq-btn-detail svg {
+        transition: transform .15s ease;
     }
     .sq-btn-detail:hover {
         background: #E3F0F9;
@@ -476,8 +493,12 @@
         }
     }
     @media (prefers-reduced-motion: reduce) {
-        .sq-header, .sq-panel {
+        .sq-header, .sq-panel, .sq-table tbody tr.clickable-row.is-row-anim {
             animation: none !important;
+        }
+        .sq-table tbody tr.clickable-row:hover .sq-btn-detail svg,
+        .sq-table tbody tr.clickable-row:hover .sq-badge {
+            transform: none !important;
         }
     }
 </style>
@@ -586,22 +607,43 @@
                         <th style="width: 38px; text-align: center;"><input type="checkbox" id="checkAll" style="cursor:pointer;" aria-label="Pilih semua di halaman ini"></th>
                         @endif
                         <th>Pemohon &amp; Berkas</th>
-                        <th style="width: 98px;">Tanggal</th>
+                        <th style="width: 96px;">Tanggal</th>
                         @if(!$isPelaku)
-                        <th style="width: 165px;">SLA</th>
+                        <th style="width: 138px;">SLA</th>
                         @endif
-                        <th style="width: 215px;">Status</th>
+                        <th style="width: 165px;">Status</th>
                         <th style="text-align: right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="sqTableBody">
+                    @php
+                        $shortStatusMap = [
+                            'Permohonan Ditolak' => 'Ditolak',
+                            'Layanan Selesai' => 'Selesai',
+                            'Penerbitan Dokumen (DPMPTSP)' => 'Terbit · DPMPTSP',
+                            'Penilaian Tata Ruang (Dinas PUTR)' => 'Penilaian · PUTR',
+                            'Penerbitan Pertek (Kantor Pertanahan)' => 'Pertek · BPN',
+                            'Pertek Diterbitkan (Kantor Pertanahan)' => 'Pertek · BPN',
+                            'Rapat Pembahasan (Kantor Pertanahan)' => 'Rapat · BPN',
+                            'Peninjauan Lapangan (Kantor Pertanahan)' => 'Cek Lokasi · BPN',
+                            'Validasi Permohonan (Dinas PUTR)' => 'Validasi · PUTR',
+                            'Berkas Tidak Sesuai (Perlu Perbaikan)' => 'Perlu Perbaikan',
+                            'Menunggu Pembayaran (SPS / PNBP)' => 'Belum Bayar',
+                            'Verifikasi Dokumen (Kantor Pertanahan)' => 'Verifikasi · BPN',
+                            'Draft / Baru' => 'Baru',
+                        ];
+                    @endphp
                     @foreach($applications as $app)
                         @php
                             $pemohonName = $app->nama_pengaju ?: ($app->user->name ?? $app->user->username ?? '-');
                             $accountCode = $app->user ? 'PMH' . str_pad($app->user->id, 3, '0', STR_PAD_LEFT) : '-';
                             $phoneText = $app->user->phone_number ?? '-';
 
+                            $fullStatusLabel = $app->status_label;
+                            $shortStatusLabel = $shortStatusMap[$fullStatusLabel] ?? \Illuminate\Support\Str::limit($fullStatusLabel, 22);
+
                             $slaGroup = 'selesai';
+                            $slaTitle = '';
                             if (!$isPelaku) {
                                 $isSelesai = in_array($app->status, ['disetujui', 'ditolak', 'terbit_pkpr']);
                                 $startDate = $app->tgl_mulai_layanan ? \Carbon\Carbon::parse($app->tgl_mulai_layanan) : $app->created_at;
@@ -615,33 +657,38 @@
 
                                 if ($isSelesai) {
                                     $slaClass = 'badge-green';
-                                    $slaText = $hariKe > 0 ? 'Selesai (Hari ' . $hariKe . ')' : 'Selesai';
+                                    $slaText = $hariKe > 0 ? 'Selesai · ' . $hariKe . ' Hr' : 'Selesai';
+                                    $slaTitle = $hariKe > 0 ? 'Selesai (Hari ke-' . $hariKe . ' Kerja)' : 'Selesai';
                                     $slaGroup = 'selesai';
                                     $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>';
                                 } elseif ($hariKe == 0) {
                                     $slaClass = 'badge-yellow';
-                                    $slaText = 'Libur / Hari 0';
+                                    $slaText = 'Hari 0';
+                                    $slaTitle = 'Libur / Belum Hari Kerja';
                                     $slaGroup = 'hampir';
                                     $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                 } elseif ($hariKe >= $batasMerah) {
                                     $slaClass = 'badge-red';
-                                    $slaText = 'Terlambat (Hari ' . $hariKe . ')';
+                                    $slaText = 'Telat · ' . $hariKe . ' Hr';
+                                    $slaTitle = 'Terlambat (Hari ke-' . $hariKe . ' Kerja)';
                                     $slaGroup = 'melewati';
                                     $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                 } elseif ($hariKe >= $batasKuning) {
                                     $slaClass = 'badge-yellow';
-                                    $slaText = 'Hari ke-' . $hariKe . ' Kerja';
+                                    $slaText = 'Hampir · ' . $hariKe . ' Hr';
+                                    $slaTitle = 'Hari ke-' . $hariKe . ' Kerja (Mendekati Batas SLA)';
                                     $slaGroup = 'hampir';
                                     $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                 } else {
                                     $slaClass = 'badge-green';
-                                    $slaText = 'Hari ke-' . $hariKe . ' Kerja';
+                                    $slaText = 'Proses · ' . $hariKe . ' Hr';
+                                    $slaTitle = 'Hari ke-' . $hariKe . ' Kerja';
                                     $slaGroup = 'berjalan';
                                     $slaIcon = '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
                                 }
                             }
 
-                            $searchBlob = strtolower(trim($pemohonName . ' ' . $app->application_number . ' ' . $accountCode . ' ' . $phoneText . ' ' . $app->status_label));
+                            $searchBlob = strtolower(trim($pemohonName . ' ' . $app->application_number . ' ' . $accountCode . ' ' . $phoneText . ' ' . $fullStatusLabel . ' ' . $shortStatusLabel));
                         @endphp
                         <tr class="clickable-row"
                             data-href="{{ route($routePrefix . '.show', $app->id) }}"
@@ -664,16 +711,16 @@
                             <td class="sq-date-cell">{{ $app->created_at->format('d-m-Y') }}</td>
                             @if(!$isPelaku)
                             <td>
-                                <span class="badge sla-badge sq-badge {{ $slaClass }}">
+                                <span class="badge sla-badge sq-badge {{ $slaClass }}" title="{{ $slaTitle }}">
                                     <svg style="width:12px;height:12px;flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">{!! $slaIcon !!}</svg>
                                     <span>{{ $slaText }}</span>
                                 </span>
                             </td>
                             @endif
                             <td>
-                                <a href="{{ route($routePrefix . '.show', $app->id) }}" style="text-decoration:none; display:inline-block;">
+                                <a href="{{ route($routePrefix . '.show', $app->id) }}" style="text-decoration:none; display:inline-block;" title="{{ $fullStatusLabel }}">
                                     <span class="badge sq-badge" style="background-color:{{ $app->status_color }}20; color:{{ $app->status_color }};">
-                                        {{ $app->status_label }}
+                                        {{ $shortStatusLabel }}
                                     </span>
                                 </a>
                             </td>
@@ -834,7 +881,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const totalPages = Math.max(1, Math.ceil(total / perPage));
         if (currentPage > totalPages) currentPage = totalPages;
 
-        allRows.forEach(r => { r.style.display = 'none'; });
+        allRows.forEach(r => {
+            r.style.display = 'none';
+            r.classList.remove('is-row-anim');
+        });
 
         if (total === 0) {
             if (tableWrap) tableWrap.style.display = 'none';
@@ -853,6 +903,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         for (let i = startIdx; i < endIdx; i++) {
             matched[i].style.display = '';
+            matched[i].style.setProperty('--row-idx', String(i - startIdx));
+        }
+        void tableBody.offsetWidth;
+        for (let i = startIdx; i < endIdx; i++) {
+            matched[i].classList.add('is-row-anim');
         }
 
         if (countInfo) {
