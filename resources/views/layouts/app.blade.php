@@ -430,8 +430,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const textareas = document.querySelectorAll('textarea[name="custom_wa_message"]');
     textareas.forEach(ta => {
         const form = ta.closest('form');
+        if (!form || form.dataset.waInit === '1' || form.querySelector('.btn-edit-wa')) return;
         const waTypeInput = form.querySelector('input[name="wa_type"]');
         if (waTypeInput) {
+            form.dataset.waInit = '1';
             ta.readOnly = true;
             ta.style.backgroundColor = '#f4f7f9';
             ta.style.color = '#555';
@@ -495,34 +497,39 @@ document.addEventListener('DOMContentLoaded', function() {
         window.appHolidays = {!! json_encode($holidays) !!};
         
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Flatpickr on all datetime-local inputs
-            flatpickr('input[type="datetime-local"]', {
-                enableTime: true,
-                dateFormat: "Y-m-d\\TH:i",
-                altInput: true,
-                altFormat: "j F Y - H:i",
-                locale: "id",
-                disable: [
-                    function(date) {
-                        // Disable weekends (0 = Sunday, 6 = Saturday)
-                        return (date.getDay() === 0 || date.getDay() === 6);
-                    },
-                    ...window.appHolidays
-                ]
+            // Initialize Flatpickr on all datetime-local inputs (skip already initialized)
+            document.querySelectorAll('input[type="datetime-local"]:not(.flatpickr-input)').forEach(function(el) {
+                if (el._flatpickr) return;
+                flatpickr(el, {
+                    enableTime: true,
+                    dateFormat: "Y-m-d\\TH:i",
+                    altInput: true,
+                    altFormat: "j F Y - H:i",
+                    locale: "id",
+                    disable: [
+                        function(date) {
+                            return (date.getDay() === 0 || date.getDay() === 6);
+                        },
+                        ...window.appHolidays
+                    ]
+                });
             });
-            
+
             // Initialize Flatpickr on date inputs without time if needed
-            flatpickr('input[type="date"]', {
-                dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "j F Y",
-                locale: "id",
-                disable: [
-                    function(date) {
-                        return (date.getDay() === 0 || date.getDay() === 6);
-                    },
-                    ...window.appHolidays
-                ]
+            document.querySelectorAll('input[type="date"]:not(.flatpickr-input)').forEach(function(el) {
+                if (el._flatpickr) return;
+                flatpickr(el, {
+                    dateFormat: "Y-m-d",
+                    altInput: true,
+                    altFormat: "j F Y",
+                    locale: "id",
+                    disable: [
+                        function(date) {
+                            return (date.getDay() === 0 || date.getDay() === 6);
+                        },
+                        ...window.appHolidays
+                    ]
+                });
             });
 
             /* ── Client-side File Size Validation (Max 100MB) ──────── */

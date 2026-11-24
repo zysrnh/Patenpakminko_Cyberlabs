@@ -1,787 +1,67 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Permohonan {{ $application->application_number }} — PATEN PAK MIKO</title>
-    
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
-    <style>
-        .flatpickr-calendar .flatpickr-day.flatpickr-disabled:not(.prevMonthDay):not(.nextMonthDay) {
-            color: #E53E3E !important;
-            background-color: #FFF5F5 !important;
-            font-weight: bold !important;
-            opacity: 1 !important;
-            border-radius: 4px;
-        }
-        textarea[name="custom_wa_message"] {
-            display: none !important;
-        }
-        .form-control-v.flatpickr-input[readonly], .flatpickr-input[readonly] {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="%232B6CB0"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            padding-right: 36px;
-            cursor: pointer;
-            background-color: #fff;
-        }
-    </style>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+@extends('layouts.app')
 
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@section('title', 'Detail Permohonan ' . $application->application_number . ' — PATEN PAK MIKO')
+@section('page-title', 'Detail Pertek Kebijakan')
 
-        :root {
-            --clr-blue:    #218AC9;
-            --clr-blue-dk: #003B64;
-            --clr-blue-lt: #E3F0F9;
-            --clr-yellow:  #FFCB05;
-            --clr-green:   #85C341;
-            --clr-ink:     #003B64;
-            --clr-mid:     #2C5272;
-            --clr-muted:   #7A9BB5;
-            --clr-line:    #D6E4EF;
-            --clr-surface: #F0F6FB;
-            --clr-white:   #FFFFFF;
-            --radius-sm:   5px;
-            --radius-md:   5px;
-            --radius-lg:   5px;
-            --radius-xl:   5px;
-        }
+@section('extra-styles')
+@include('layouts.partials.application-detail-styles')
+@endsection
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--clr-surface);
-            color: var(--clr-ink);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ─── CONTAINER: diperlebar, penuhi gap kiri kanan ──── */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-
-        /* ─── HEADER ─────────────────────────────────────────── */
-        header {
-            background: var(--clr-white);
-            border-bottom: 1px solid var(--clr-line);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .header-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 72px;
-        }
-
-        .logo-wrap {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
-            background: var(--clr-blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: #fff;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-        .logo-text strong {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--clr-ink);
-            letter-spacing: -.02em;
-        }
-        .logo-text span {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--clr-muted);
-            text-transform: uppercase;
-            letter-spacing: .1em;
-            margin-top: 3px;
-        }
-
-        .nav-menu {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-        .nav-link {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--clr-mid);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: var(--clr-blue);
-        }
-
-        .btn-logout {
-            background: transparent;
-            border: 1px solid var(--clr-line);
-            color: var(--clr-mid);
-            padding: 8px 14px;
-            font-family: inherit;
-            font-size: 12.5px;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-        .btn-logout:hover {
-            color: #E53E3E;
-            border-color: #FED7D7;
-            background: #FFF5F5;
-        }
-
-        .user-nav {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .header-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1.5px solid var(--clr-blue);
-        }
-        .header-avatar-placeholder {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--clr-blue-lt);
-            color: var(--clr-blue);
-            font-weight: 700;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid var(--clr-blue);
-            text-transform: uppercase;
-        }
-        .user-badge {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-        .user-badge strong {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--clr-ink);
-        }
-        .user-badge span {
-            font-size: 11px;
-            color: var(--clr-muted);
-            font-weight: 600;
-        }
-
-        /* ─── MAIN CONTENT ───────────────────────────────────── */
-        fieldset {
-            border: none;
-            padding: 0;
-            margin: 0;
-            min-width: 0;
-        }
-
-        main {
-            padding: 40px 0;
-        }
- 
-        /* ─── SLA BANNER ─────────────────────────────────────── */
-        .sla-banner {
-            margin-bottom: 24px;
-        }
-        .sla-item {
-            background: #FFF;
-            border: 1.5px solid var(--clr-line);
-            padding: 16px 20px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-        }
-        .sla-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .sla-title {
-            font-size: 11.5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .sla-value {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--clr-ink);
-        }
-        .sla-desc {
-            font-size: 12px;
-            font-weight: 600;
-            opacity: 0.8;
-        }
-        .sla-badge {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 20px;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .alert-success {
-            background: #E6F4EA;
-            border: 1px solid #B8E2C8;
-            color: #137333;
-            padding: 12px 16px;
-            border-radius: var(--radius-md);
-            font-size: 13.5px;
-            font-weight: 600;
-            margin-bottom: 28px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .page-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 28px;
-        }
-
-        .back-btn {
-            font-size: 13.5px;
-            font-weight: 600;
-            color: var(--clr-muted);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .back-btn:hover {
-            color: var(--clr-blue);
-        }
-
-        .badge-status {
-            font-size: 12px;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 20px;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-
-        /* ─── GRID LAYOUT ────────────────────────────────────── */
-        .layout-grid {
-            display: grid;
-            grid-template-columns: 1.55fr 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-        @media (max-width: 900px) {
-            .layout-grid { grid-template-columns: 1fr; }
-        }
-
-        /* ─── CARDS ──────────────────────────────────────────── */
-        .card {
-            background: var(--clr-white);
-            border: 1px solid var(--clr-line);
-            border-radius: var(--radius-lg);
-            padding: 28px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
-            margin-bottom: 32px;
-        }
-        .card:last-child {
-            margin-bottom: 0;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-            color: var(--clr-ink);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1.5px solid var(--clr-surface);
-        }
-
-        /* ─── DATA TABLE / DETAIL ────────────────────────────── */
-        .detail-list {
-            list-style: none;
-        }
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px dashed var(--clr-line);
-            font-size: 13.5px;
-        }
-        .detail-item:last-child {
-            border-bottom: none;
-        }
-        .detail-label {
-            font-weight: 600;
-            color: var(--clr-mid);
-        }
-        .detail-val {
-            font-weight: 700;
-            color: var(--clr-ink);
-            text-align: right;
-        }
-        .app-num {
-            font-family: 'DM Mono', monospace;
-            color: var(--clr-blue);
-            font-size: 14px;
-        }
-        .detail-val.mono {
-            font-family: 'DM Mono', monospace;
-            color: var(--clr-blue);
-        }
-
-        /* ─── DOCK ATTACHMENT / BUTTONS ──────────────────────── */
-        .btn-doc {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--clr-blue);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 13px;
-        }
-        .btn-doc:hover {
-            color: var(--clr-blue-dk);
-            text-decoration: underline;
-        }
-
-        /* ─── TIMELINE CARD HEADER (service identifier) ──────── */
-        .timeline-card-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 22px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--clr-surface);
-        }
-        .timeline-service-logo {
-            width: 64px;
-            height: 64px;
-            object-fit: contain;
-            background: transparent;
-            padding: 0;
-            flex-shrink: 0;
-            transform: scale(1.6);
-        }
-        .timeline-service-meta {
-            flex: 1;
-        }
-        .timeline-service-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--clr-blue);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 3px;
-        }
-        .timeline-service-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--clr-ink);
-            letter-spacing: -0.01em;
-            line-height: 1.2;
-        }
-        .timeline-step-count {
-            font-size: 11px;
-            color: var(--clr-muted);
-            font-weight: 600;
-            margin-top: 3px;
-        }
-
-        /* ─── TIMELINE ───────────────────────────────────────── */
-        .timeline {
-            position: relative;
-            padding-left: 38px;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 12px;
-            left: 10px;
-            bottom: 12px;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--clr-blue) 0%, var(--clr-line) 60%);
-            opacity: 0.35;
-        }
-
-        .timeline-step {
-            position: relative;
-            margin-bottom: 10px;
-        }
-        .timeline-step:last-child {
-            margin-bottom: 0;
-        }
-
-        /* The dot marker */
-        .timeline-dot {
-            position: absolute;
-            left: -38px;
-            top: 10px;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--clr-white);
-            border: 2px solid var(--clr-line);
-            transition: all 0.2s;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0; /* hide ::after text from interfering */
-        }
-
-        /* Content bubble per step */
-        .timeline-content {
-            border-radius: 8px;
-            padding: 10px 14px;
-            transition: all 0.15s;
-            border: 1.5px solid transparent;
-        }
-        .timeline-step:not(.completed):not(.active):not(.rejected) .timeline-content {
-            padding: 6px 0;
-        }
-
-        .timeline-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--clr-mid);
-            margin-bottom: 2px;
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .timeline-desc {
-            font-size: 11.5px;
-            color: var(--clr-muted);
-            line-height: 1.55;
-        }
-
-        /* ── COMPLETED ── */
-        .timeline-step.completed .timeline-dot {
-            background: var(--clr-green);
-            border-color: var(--clr-green);
-        }
-        .timeline-step.completed .timeline-dot::after {
-            content: '✓';
-            color: white;
-            font-size: 12px;
-            font-weight: 900;
-            line-height: 1;
-        }
-        .timeline-step.completed .timeline-content {
-            background: var(--clr-green-lt);
-            border-color: #C6E5A0;
-        }
-        .timeline-step.completed .timeline-title {
-            color: #3A6B1A;
-        }
-        .timeline-step.completed .timeline-desc {
-            color: #558B2F;
-        }
-
-        /* ── ACTIVE ── */
-        .timeline-step.active .timeline-dot {
-            border-color: var(--clr-blue);
-            background: var(--clr-white);
-            box-shadow: 0 0 0 4px rgba(33, 138, 201, 0.15);
-        }
-        .timeline-step.active .timeline-dot::after {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--clr-blue);
-            display: block;
-        }
-        .timeline-step.active .timeline-content {
-            background: var(--clr-blue-lt);
-            border-color: #9ECCEA;
-            box-shadow: 0 2px 8px rgba(33, 138, 201, 0.08);
-        }
-        .timeline-step.active .timeline-title {
-            color: var(--clr-blue);
-        }
-        .timeline-step.active .timeline-desc {
-            color: var(--clr-mid);
-        }
-
-        /* ── REJECTED ── */
-        .timeline-step.rejected .timeline-dot {
-            background: #E53E3E;
-            border-color: #E53E3E;
-        }
-        .timeline-step.rejected .timeline-dot::after {
-            content: '✕';
-            color: white;
-            font-size: 11px;
-            font-weight: 800;
-            line-height: 1;
-        }
-        .timeline-step.rejected .timeline-content {
-            background: #FFF5F5;
-            border-color: #FED7D7;
-        }
-        .timeline-step.rejected .timeline-title {
-            color: #C53030;
-        }
-
-        /* Notes inside timeline */
-        .timeline-notes {
-            margin-top: 8px;
-            padding: 7px 10px;
-            background: rgba(255,255,255,0.65);
-            border-left: 3px solid #E53E3E;
-            color: #C53030;
-            font-size: 11.5px;
-            border-radius: 0 5px 5px 0;
-            line-height: 1.5;
-        }
-        .timeline-step.completed .timeline-notes {
-            border-left-color: var(--clr-blue);
-            color: var(--clr-mid);
-        }
-
-        /* Hover interaction on clickable steps */
-        .timeline-step[onclick]:hover .timeline-content {
-            filter: brightness(0.97);
-        }
-
-        /* ─── VERIFICATION PANEL ────────────────────────────── */
-        /* ─── PANEL VERIFIKATOR ──────────────────────────────── */
-        .verify-card {
-            background: var(--clr-white);
-            border: 2px solid var(--clr-blue-lt);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            margin-bottom: 32px;
-            box-shadow: 0 4px 16px rgba(19, 147, 204, 0.04);
-        }
-        .verify-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--clr-blue-dk);
-            margin-bottom: 16px;
-        }
- 
-        .form-group-v {
-            margin-bottom: 16px;
-        }
-        .form-group-v label {
-            display: block;
-            font-size: 12.5px;
-            font-weight: 700;
-            color: var(--clr-ink);
-            margin-bottom: 6px;
-        }
-        .form-control-v {
-            width: 100%;
-            padding: 10px 12px;
-            font-family: inherit;
-            font-size: 13px;
-            border: 1.5px solid var(--clr-line);
-            border-radius: var(--radius-md);
-            outline: none;
-            transition: border-color 0.15s;
-        }
-        .form-control-v:focus {
-            border-color: var(--clr-blue);
-        }
-        .form-select-v {
-            width: 100%;
-            padding: 10px 12px;
-            font-family: inherit;
-            font-size: 13px;
-            border: 1.5px solid var(--clr-line);
-            border-radius: var(--radius-md);
-            background: var(--clr-white);
-            outline: none;
-        }
-        .btn-submit-v {
-            background: var(--clr-blue);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            font-family: inherit;
-            font-weight: 700;
-            font-size: 13px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: background 0.15s;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 14px;
-            margin-bottom: 8px;
-        }
-        .btn-submit-v:hover {
-            background: var(--clr-blue-dk);
-        }
-        
-        .verify-step-badge {
-            background: var(--clr-blue-lt);
-            color: var(--clr-blue-dk);
-            font-weight: 700;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            margin-left: 6px;
-            letter-spacing: 0.05em;
-        }
-
-        .btn-download-cert {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            background: var(--clr-green);
-            color: var(--clr-white);
-            padding: 14px;
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            font-weight: 700;
-            text-decoration: none;
-            margin-bottom: 28px;
-            box-shadow: 0 4px 14px rgba(149, 185, 62, 0.25);
-            transition: all 0.2s;
-        }
-        .btn-download-cert:hover {
-            background: var(--clr-green-dk);
-            transform: translateY(-0.5px);
-            box-shadow: 0 6px 20px rgba(149, 185, 62, 0.35);
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="header-inner">
-                <a href="/dashboard" class="logo-wrap">
-                    <div class="logo-icon" style="background: transparent;">
-                        <img src="{{ asset('storage/logo/PATEN PAK MIKO LOGO.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
-                    </div>
-                    <div class="logo-text">
-                        <strong>PATEN PAK MIKO</strong>
-                        <span>Kantor Pertanahan Sukabumi</span>
-                    </div>
-                </a>
-
-                <div class="nav-menu">
-                    <a href="/" class="nav-link">Beranda</a>
-                    @if(Auth::user()->isDpn())
-                        <a href="{{ route('dpn.whatsapp') }}" class="nav-link">Integrasi WhatsApp</a>
-                    @endif
-                    <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-                    <a href="{{ route('profile') }}" class="nav-link">Profil Saya</a>
-                    
-                    <div class="user-nav" style="margin-left: 12px; padding-left: 12px; border-left: 1.5px solid var(--clr-line);">
-                        @if(Auth::user()->profile_photo)
-                            <img src="{{ route('file.view', ['path' => Auth::user()->profile_photo]) }}" alt="Foto Profil" class="header-avatar">
-                        @else
-                            <div class="header-avatar-placeholder">
-                                {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 2)) }}
-                            </div>
-                        @endif
-                        <div class="user-badge">
-                            <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
-                            <span>{{ Auth::user()->phone_number ?? '' }}</span>
-                        </div>
-                    </div>
-
-                    <form action="{{ route('logout') }}" method="POST" style="margin-left: 8px;">
-                        @csrf
-                        <button type="submit" class="btn-logout">
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                            Keluar
-                        </button>
-                    </form>
-                </div>
-            </div>
+@section('content')
+<div class="container">
+    @if($errors->any())
+        <div class="alert-error" style="background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;padding:12px 16px;border-radius:4px;margin-bottom:16px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span>{{ $errors->first() }}</span>
         </div>
-    </header>
+    @endif
 
-    <!-- Main -->
-    <main>
-        <div class="container">
+    <div class="detail-hero-card">
+        <div class="detail-hero-left">
+            <div class="detail-hero-top-row">
+                <a href="{{ route('kebijakan.index') }}" class="detail-back-btn">
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    Kembali ke Antrean
+                </a>
+                <span class="detail-reg-pill">{{ $application->application_number }}</span>
+                <span class="detail-status-pill" style="background-color: {{ $application->status_color }}">
+                    {{ $application->status_label }}
+                </span>
+            </div>
+            <h1 class="detail-hero-title">Pertimbangan Teknis Pertanahan Kebijakan</h1>
+            <div class="detail-hero-meta">
+                <span>Pemohon: <strong>{{ $application->nama_pemohon ?? ($application->user->name ?? '-') }}</strong></span>
+                <span>•</span>
+                <span>Diajukan: {{ $application->created_at->locale('id')->translatedFormat('d M Y, H:i') }} WIB</span>
+            </div>
 
-            @if(session('success'))
-                <div class="alert-success">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    {{ session('success') }}
+            @php
+                $showRollbackBtn = Auth::user()->isDpn() && !($application->status === 'menunggu_bpn' && ($application->bpn_berkas_status === 'menunggu' || !$application->bpn_berkas_status));
+                $showSlaBtn = (Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar';
+            @endphp
+            @if($showRollbackBtn || $showSlaBtn)
+                <div class="detail-admin-tools">
+                    @if($showSlaBtn)
+                        <button type="button" class="detail-tool-btn" onclick="toggleAdminDrawer('sla', this)">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Atur Waktu SLA
+                        </button>
+                    @endif
+                    @if($showRollbackBtn)
+                        <button type="button" class="detail-tool-btn detail-tool-btn--warn" onclick="toggleAdminDrawer('rollback', this)">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                            Rollback Tahap
+                        </button>
+                    @endif
                 </div>
             @endif
-
-            <div class="page-header">
-                <div>
-                    <a href="{{ route('kebijakan.index') }}" class="back-btn">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                        Kembali ke Daftar
-                    </a>
-                    <h1 class="page-title" style="margin-top: 8px;">Detail Permohonan <span style="font-family: 'DM Mono', monospace; font-size: 20px; color: var(--clr-blue);">{{ $application->application_number }}</span></h1>
-                </div>
-                
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span class="badge-status" style="background-color: {{ $application->status_color }}">
-                        {{ $application->status_label }}
-                    </span>
-                </div>
-            </div>
+        </div>
+        <div class="detail-hero-sla-slot" id="detailSlaSlot"></div>
+    </div>
 
             <!-- BANNER PERTEK TERBIT (AGAR PEMOHON TIDAK KELEWAT) -->
             @if($application->bpn_pertek_document)
-                <div style="background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); border: 1.5px solid #6EE7B7; border-radius: 10px; padding: 16px 20px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                <div class="pertek-ready-banner" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
                     <div style="display: flex; align-items: center; gap: 14px;">
                         <div style="width: 44px; height: 44px; background: #10B981; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; font-size: 22px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
                             📄
@@ -795,7 +75,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; font-weight: 800; font-size: 13px; padding: 10px 20px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                    <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" class="pertek-ready-btn" style="color: #ffffff; font-weight: 700; font-size: 13px; padding: 9px 18px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
                         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         Unduh Hasil Pertek (BPN)
                     </a>
@@ -892,7 +172,7 @@
 
             <!-- KEMBALI KE TAHAP SEBELUMNYA (ROLLBACK STATUS & NOTIFIKASI WA) -->
             @if(Auth::user()->isDpn() && !($application->status === 'menunggu_bpn' && ($application->bpn_berkas_status === 'menunggu' || !$application->bpn_berkas_status)))
-                <div class="verify-card" style="border: 1px solid #FBD38D; background: #FFFAF0; margin-bottom: 24px; padding: 16px; border-radius: 8px;">
+                <div class="verify-card admin-drawer-card" data-drawer="rollback" style="border: 1px solid #FBD38D; background: #FFFBEB; padding: 18px 20px;">
                     <h3 class="verify-title" style="color: #C05621; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
                         Kembali ke Tahap Sebelumnya (Rollback Status & Notifikasi WA)
@@ -932,7 +212,7 @@
 
             <!-- PENGATURAN SLA WAKTU LAYANAN (HANYA ADMIN Kantor Pertanahan / DPN) -->
             @if((Auth::user()->isBpn() || Auth::user()->isDpn()) && $application->bpn_pembayaran_status === 'sudah_bayar')
-                <div class="verify-card" style="border-color: #3182CE; background: #EBF8FF; margin-bottom: 24px; padding: 16px;">
+                <div class="verify-card admin-drawer-card" data-drawer="sla" style="border: 1px solid #93C5FD; background: #F0F9FF; padding: 18px 20px;">
                     <h3 class="verify-title" style="color: #2B6CB0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Pengaturan Waktu Mulai & Selesai Layanan (SLA)
@@ -1020,7 +300,7 @@
 
                     @if($user->isBpn())
                         {{-- ====== TABS / PANELS UNTUK SETIAP LANGKAH ====== --}}
-                        <div id="Kantor Pertanahan-panel-1" class="Kantor Pertanahan-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
+                        <div id="bpn-panel-1" class="bpn-panel-step" style="display: {{ in_array($application->bpn_berkas_status, ['menunggu', 'tidak_sesuai', 'ditolak']) ? 'block' : 'none' }};">
                             @php $isStep1Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status !== 'sudah_bayar'); @endphp
                             <fieldset {{ $isStep1Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -1131,7 +411,7 @@
                             @endif
                         </div>
 
-                        <div id="Kantor Pertanahan-panel-2" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' ? 'block' : 'none' }};">
+                        <div id="bpn-panel-2" class="bpn-panel-step" style="display: {{ $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu' ? 'block' : 'none' }};">
                             @php $isStep2Active = (Auth::user()->isBpn() && $application->bpn_berkas_status === 'diterima' && $application->bpn_pembayaran_status === 'menunggu'); @endphp
                             <fieldset {{ $isStep2Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
@@ -1168,7 +448,7 @@
                             @endif
                         </div>
 
-                        <div id="Kantor Pertanahan-panel-3" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
+                        <div id="bpn-panel-3" class="bpn-panel-step" style="display: {{ $application->bpn_pembayaran_status === 'sudah_bayar' && (!$application->bpn_cek_lokasi_dt || !$cekLokasiLewat) ? 'block' : 'none' }};">
                             @php $isStep3Active = (Auth::user()->isBpn() && $application->bpn_pembayaran_status === 'sudah_bayar'); @endphp
                             <fieldset {{ $isStep3Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
@@ -1226,7 +506,7 @@
                             @endif
                         </div>
 
-                        <div id="Kantor Pertanahan-panel-4" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
+                        <div id="bpn-panel-4" class="bpn-panel-step" style="display: {{ $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat) ? 'block' : 'none' }};">
                             @php $isStep4Active = (Auth::user()->isBpn() && $application->bpn_cek_lokasi_dt && $cekLokasiLewat && (!$application->bpn_rapat_dt || !$rapatLewat)); @endphp
                             <fieldset {{ $isStep4Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST">
@@ -1273,7 +553,7 @@
                             @endif
                         </div>
 
-                        <div id="Kantor Pertanahan-panel-5" class="Kantor Pertanahan-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
+                        <div id="bpn-panel-5" class="bpn-panel-step" style="display: {{ $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document ? 'block' : 'none' }};">
                             @php $isStep5Active = (Auth::user()->isBpn() && $application->bpn_rapat_dt && $rapatLewat && !$application->bpn_pertek_document); @endphp
                             <fieldset {{ $isStep5Active ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -1330,11 +610,11 @@
                         <script>
                             function showBpnPanel(stepNum) {
                                 // hide all
-                                document.querySelectorAll('.Kantor Pertanahan-panel-step').forEach(function(el) {
+                                document.querySelectorAll('.bpn-panel-step').forEach(function(el) {
                                     el.style.display = 'none';
                                 });
                                 // show the selected one
-                                var target = document.getElementById('Kantor Pertanahan-panel-' + stepNum);
+                                var target = document.getElementById('bpn-panel-' + stepNum);
                                 if(target) {
                                     target.style.display = 'block';
                                     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1346,7 +626,7 @@
 
 
                     @if($user->isSatuPintu())
-                        <div id="Kantor Pertanahan-panel-satu-pintu" class="Kantor Pertanahan-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
+                        <div id="bpn-panel-satu-pintu" class="bpn-panel-step" style="display: {{ in_array($application->status, ['menunggu_satu_pintu', 'disetujui']) ? 'block' : 'none' }};">
                             @php $isSpActive = (Auth::user()->isSatuPintu() && $application->status === 'menunggu_satu_pintu'); @endphp
                             <fieldset {{ $isSpActive ? '' : 'disabled' }}>
                                 <form action="{{ route('kebijakan.verify', $application->id) }}" method="POST" enctype="multipart/form-data">
@@ -1580,7 +860,7 @@
                                 <li class="detail-item" style="padding: 12px 0;">
                                     <span class="detail-label" style="font-weight: 800; color: #065F46;">Dokumen Pertek Pertanahan Kebijakan (BPN)</span>
                                     <span class="detail-val">
-                                        <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                                        <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #16A34A; color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
                                             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                             📄 Unduh Pertek Pertanahan Kebijakan (BPN)
                                         </a>
@@ -1600,7 +880,7 @@
                                 <li class="detail-item" style="padding: 12px 0;">
                                     <span class="detail-label" style="font-weight: 800; color: #B45309;">Dokumen PKKPR Kebijakan (Final)</span>
                                     <span class="detail-val">
-                                        <a href="{{ route('file.view', ['path' => $application->approval_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                                        <a href="{{ route('file.view', ['path' => $application->approval_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #D97706; color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
                                             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                             📜 Unduh Dokumen PKKPR (Final)
                                         </a>
@@ -2106,8 +1386,10 @@
                 </div>
 
             </div>
-        </div>
-    </main>
+</div>
+@endsection
+
+@section('scripts')
 
 <!-- TIMELINE UX ENHANCEMENTS -->
 <style>
@@ -2262,7 +1544,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Hide all panel steps
             document.querySelectorAll('[id*="-panel-"]').forEach(p => p.style.display = 'none');
             
-            let tPanel = document.getElementById('Kantor Pertanahan-panel-' + panelId) 
+            let tPanel = document.getElementById('bpn-panel-' + panelId) 
                       || document.getElementById('panel-' + panelId)
                       || document.querySelector('[id$="-panel-' + panelId + '"]');
             
@@ -2450,7 +1732,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div id="docReminderModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
         <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 460px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); overflow: hidden; border: 1px solid #E2E8F0; text-align: center; position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
             <!-- Header Decorative -->
-            <div style="background: linear-gradient(135deg, #003B64 0%, #0284C7 100%); padding: 28px 24px 20px; color: #FFFFFF; position: relative;">
+            <div style="background: #003B64; padding: 28px 24px 20px; color: #FFFFFF; position: relative;">
                 <button type="button" onclick="closeDocReminderModal()" style="position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.2); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">✕</button>
                 <div style="width: 56px; height: 56px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.3);">
                     📄
@@ -2472,7 +1754,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 <!-- Actions -->
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <a id="reminderModalBtn" href="#" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 13.5px; font-weight: 800; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); transition: all 0.2s;">
+                    <a id="reminderModalBtn" href="#" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #16A34A; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 13.5px; font-weight: 800; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); transition: all 0.2s;">
                         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         📥 Unduh Dokumen Sekarang
                     </a>
@@ -2564,5 +1846,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-</body>
-</html>
+@endsection
