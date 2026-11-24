@@ -379,10 +379,13 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin_dpn/backup-archive/delete/{filename}', [AdminDpnController::class, 'deleteBackupArchive'])->name('admin_dpn.backup_archive.delete');
     Route::post('/admin_dpn/backup-archive/manual', [AdminDpnController::class, 'createManualBackupArchive'])->name('admin_dpn.backup_archive.manual');
 
-    // Integrasi Google Drive Cloud Backup
+    // Integrasi Google Drive Cloud Backup (OAuth 2.0 & Service Account)
     Route::post('/admin_dpn/gdrive-settings', [AdminDpnController::class, 'saveGdriveSettings'])->name('admin_dpn.gdrive_settings');
     Route::post('/admin_dpn/gdrive-test', [AdminDpnController::class, 'testGdriveConnection'])->name('admin_dpn.gdrive_test');
     Route::post('/admin_dpn/backup-gdrive', [AdminDpnController::class, 'uploadToGoogleDrive'])->name('admin_dpn.backup_gdrive');
+    Route::get('/admin_dpn/gdrive-auth', [AdminDpnController::class, 'redirectToGdriveAuth'])->name('admin_dpn.gdrive_auth');
+    Route::get('/admin_dpn/gdrive-callback', [AdminDpnController::class, 'handleGdriveCallback'])->name('admin_dpn.gdrive_callback');
+    Route::post('/admin_dpn/gdrive-disconnect', [AdminDpnController::class, 'disconnectGdrive'])->name('admin_dpn.gdrive_disconnect');
 
     Route::post('/souvenir/send/{type}/{id}', [AdminDpnController::class, 'markSouvenirSent'])->name('souvenir.mark_sent');
     Route::post('/application/rollback/{type}/{id}', [AdminDpnController::class, 'rollbackStatus'])->name('application.rollback');

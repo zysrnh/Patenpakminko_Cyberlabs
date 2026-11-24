@@ -67,70 +67,121 @@ class GoogleDriveBackupService
     }
 
     /**
+     * Cek mode autentikasi aktif: 'oauth' atau 'service_account' atau null.
+     */
+    public static function getAuthMode(): ?string
+    {
+        if (!empty(SiteSetting::get('gdrive_refresh_token'))) {
+            return 'oauth';
+        }
+        if (!empty(static::getCredentials())) {
+            return 'service_account';
+        }
+        return null;
+    }
+
+    /**
+     * Ambil email akun Google yang sedang terhubung.
+     */
+    public static function getConnectedEmail(): ?string
+    {
+        if (static::getAuthMode() === 'oauth') {
+            return SiteSetting::get('gdrive_connected_email') ?? 'Akun Google Pribadi';
+        }
+
+        $creds = static::getCredentials();
+        return $creds['client_email'] ?? null;
+    }
+
+    /**
      * Cek apakah konfigurasi Google Drive sudah lengkap.
      */
     public static function isConfigured(): bool
     {
-        return !empty(static::getCredentials()) && !empty(static::getFolderId());
+        $hasAuth = !empty(static::getAuthMode());
+        return $hasAuth && !empty(static::getFolderId());
     }
 
     /**
-     * Generate OAuth2 Access Token menggunakan Google Service Account JWT (RFC 7523).
-     * Tanpa dependensi pihak ketiga (pure PHP openssl).
+     * Generate / Refresh OAuth2 Access Token.
+     * Prioritas 1: OAuth 2.0 Refresh Token (Akun Gmail Pribadi / Workspace).
+     * Prioritas 2: Google Service Account JWT (Pure PHP OpenSSL).
      */
     public static function getAccessToken(): string
     {
+        // 1. Cek apakah menggunakan OAuth 2.0 (Akun Gmail Pribadi)
+        $refreshToken = SiteSetting::get('gdrive_refresh_token');
+        $clientId     = SiteSetting::get('gdrive_client_id');
+        $clientSecret = SiteSetting::get('gdrive_client_secret');
+
+        if (!empty($refreshToken) && !empty($clientId) && !empty($clientSecret)) {
+            $response = Http::asForm()->timeout(20)->post('https://oauth2.googleapis.com/token', [
+                'client_id'     => $clientId,
+                'client_secret' => $clientSecret,
+                'refresh_token' => $refreshToken,
+                'grant_type'    => 'refresh_token',
+            ]);
+
+            if ($response->successful()) {
+                $accessToken = $response->json('access_token');
+                if (!empty($accessToken)) {
+                    return $accessToken;
+                }
+            } else {
+                $err = $response->json('error_description') ?? $response->body();
+                throw new \Exception("Gagal me-refresh Google Drive Access Token: {$err}");
+            }
+        }
+
+        // 2. Fallback ke Service Account JWT jika ada
         $creds = static::getCredentials();
-        if (!$creds) {
-            throw new \Exception('Kredensial Google Service Account JSON belum dikonfigurasi.');
+        if ($creds) {
+            $now = time();
+            $jwtHeader = [
+                'alg' => 'RS256',
+                'typ' => 'JWT',
+            ];
+
+            $jwtClaim = [
+                'iss'   => $creds['client_email'],
+                'scope' => 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive',
+                'aud'   => $creds['token_uri'] ?? 'https://oauth2.googleapis.com/token',
+                'exp'   => $now + 3600,
+                'iat'   => $now,
+            ];
+
+            $base64UrlHeader = static::base64UrlEncode(json_encode($jwtHeader));
+            $base64UrlPayload = static::base64UrlEncode(json_encode($jwtClaim));
+            $dataToSign = $base64UrlHeader . '.' . $base64UrlPayload;
+
+            $privateKey = $creds['private_key'];
+            $signature = '';
+
+            $signSuccess = openssl_sign($dataToSign, $signature, $privateKey, OPENSSL_ALGO_SHA256);
+            if (!$signSuccess) {
+                throw new \Exception('Gagal menandatangani JWT Service Account: ' . openssl_error_string());
+            }
+
+            $jwt = $dataToSign . '.' . static::base64UrlEncode($signature);
+            $tokenUri = $creds['token_uri'] ?? 'https://oauth2.googleapis.com/token';
+
+            $response = Http::asForm()->timeout(20)->post($tokenUri, [
+                'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                'assertion'  => $jwt,
+            ]);
+
+            if ($response->successful()) {
+                $accessToken = $response->json('access_token');
+                if (!empty($accessToken)) {
+                    return $accessToken;
+                }
+            } else {
+                $errorDetail = $response->json('error_description') ?? $response->body();
+                throw new \Exception('Gagal mendapatkan Access Token dari Google: ' . $errorDetail);
+            }
         }
 
-        $now = time();
-        $jwtHeader = [
-            'alg' => 'RS256',
-            'typ' => 'JWT',
-        ];
-
-        $jwtClaim = [
-            'iss'   => $creds['client_email'],
-            'scope' => 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive',
-            'aud'   => $creds['token_uri'] ?? 'https://oauth2.googleapis.com/token',
-            'exp'   => $now + 3600,
-            'iat'   => $now,
-        ];
-
-        $base64UrlHeader = static::base64UrlEncode(json_encode($jwtHeader));
-        $base64UrlPayload = static::base64UrlEncode(json_encode($jwtClaim));
-        $dataToSign = $base64UrlHeader . '.' . $base64UrlPayload;
-
-        $privateKey = $creds['private_key'];
-        $signature = '';
-
-        $signSuccess = openssl_sign($dataToSign, $signature, $privateKey, OPENSSL_ALGO_SHA256);
-        if (!$signSuccess) {
-            throw new \Exception('Gagal menandatangani JWT Service Account: ' . openssl_error_string());
-        }
-
-        $jwt = $dataToSign . '.' . static::base64UrlEncode($signature);
-
-        $tokenUri = $creds['token_uri'] ?? 'https://oauth2.googleapis.com/token';
-
-        $response = Http::asForm()->timeout(20)->post($tokenUri, [
-            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion'  => $jwt,
-        ]);
-
-        if (!$response->successful()) {
-            $errorDetail = $response->json('error_description') ?? $response->body();
-            throw new \Exception('Gagal mendapatkan Access Token dari Google: ' . $errorDetail);
-        }
-
-        $accessToken = $response->json('access_token');
-        if (empty($accessToken)) {
-            throw new \Exception('Google tidak mengembalikan access token yang valid.');
-        }
-
-        return $accessToken;
+        throw new \Exception('Koneksi Google Drive belum dikonfigurasi. Hubungkan akun Google Drive atau lengkapi Service Account JSON.');
     }
 
     /**
@@ -139,11 +190,11 @@ class GoogleDriveBackupService
     public static function testConnection(): array
     {
         try {
-            $creds = static::getCredentials();
-            if (!$creds) {
+            $authMode = static::getAuthMode();
+            if (!$authMode) {
                 return [
                     'success' => false,
-                    'message' => 'Credentials Service Account JSON belum diisi atau tidak valid.',
+                    'message' => 'Autentikasi Google Drive belum dikonfigurasi. Hubungkan akun Google Drive atau upload Service Account JSON.',
                 ];
             }
 
@@ -156,6 +207,7 @@ class GoogleDriveBackupService
             }
 
             $accessToken = static::getAccessToken();
+            $connectedEmail = static::getConnectedEmail() ?? 'Google Account';
 
             // Request cek metadata folder Google Drive
             $response = Http::withToken($accessToken)
@@ -169,7 +221,7 @@ class GoogleDriveBackupService
                 if ($status === 404) {
                     return [
                         'success' => false,
-                        'message' => "Folder Google Drive tidak ditemukan (404). Pastikan Folder ID benar dan Service Account ({$creds['client_email']}) sudah diberi izin Editor pada folder tersebut.",
+                        'message' => "Folder Google Drive tidak ditemukan (404). Pastikan Folder ID benar dan akun ({$connectedEmail}) memiliki akses ke folder tersebut.",
                     ];
                 }
 
@@ -182,13 +234,15 @@ class GoogleDriveBackupService
             $data = $response->json();
             $folderName = $data['name'] ?? 'Folder Terpilih';
             $canAddChildren = $data['capabilities']['canAddChildren'] ?? true;
+            $authModeText = $authMode === 'oauth' ? 'OAuth 2.0 (Akun Pribadi)' : 'Service Account';
 
             return [
-                'success' => true,
-                'message' => "Koneksi berhasil! Terhubung ke folder '{$folderName}' (ID: {$folderId}). Service Account: {$creds['client_email']}.",
-                'folder_name' => $folderName,
-                'client_email' => $creds['client_email'],
-                'can_upload' => $canAddChildren,
+                'success'        => true,
+                'message'        => "Koneksi berhasil! Terhubung ke folder '{$folderName}' (ID: {$folderId}). Akun: {$connectedEmail} [Mode: {$authModeText}].",
+                'folder_name'    => $folderName,
+                'client_email'   => $connectedEmail,
+                'auth_mode'      => $authMode,
+                'can_upload'     => $canAddChildren,
             ];
 
         } catch (\Throwable $e) {
@@ -323,6 +377,245 @@ class GoogleDriveBackupService
             @unlink($tempPath);
             throw $e;
         }
+    }
+
+    /**
+     * Dapatkan atau buat subfolder di dalam folder Google Drive tertentu.
+     */
+    public static function getOrCreateSubfolder(string $folderName, ?string $parentFolderId = null): string
+    {
+        $parentId = $parentFolderId ?: static::getFolderId();
+        if (empty($parentId)) {
+            throw new \Exception('Parent Folder ID Google Drive belum disetel.');
+        }
+
+        $cleanName = trim(str_replace(["\r", "\n", '"', "'"], '', $folderName));
+        if (empty($cleanName)) {
+            $cleanName = 'Folder_Tanpa_Nama';
+        }
+
+        $accessToken = static::getAccessToken();
+
+        // 1. Cek apakah folder sudah ada di dalam parentId
+        $escapedSearch = str_replace("'", "\\'", $cleanName);
+        $q = "'{$parentId}' in parents and name = '{$escapedSearch}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false";
+
+        $response = Http::withToken($accessToken)
+            ->timeout(15)
+            ->get("https://www.googleapis.com/drive/v3/files", [
+                'q'      => $q,
+                'fields' => 'files(id, name)',
+            ]);
+
+        if ($response->successful()) {
+            $files = $response->json('files');
+            if (!empty($files) && !empty($files[0]['id'])) {
+                return $files[0]['id'];
+            }
+        }
+
+        // 2. Buat folder baru jika belum ada
+        $createResponse = Http::withToken($accessToken)
+            ->timeout(20)
+            ->post("https://www.googleapis.com/drive/v3/files", [
+                'name'     => $cleanName,
+                'mimeType' => 'application/vnd.google-apps.folder',
+                'parents'  => [$parentId],
+            ]);
+
+        if (!$createResponse->successful()) {
+            $err = $createResponse->json('error.message') ?? $createResponse->body();
+            throw new \Exception("Gagal membuat folder '{$cleanName}' di Google Drive: {$err}");
+        }
+
+        $newFolderId = $createResponse->json('id');
+        if (empty($newFolderId)) {
+            throw new \Exception("Google Drive tidak mengembalikan ID folder baru.");
+        }
+
+        return $newFolderId;
+    }
+
+    /**
+     * Tentukan nama folder kategori berdasarkan class model permohonan.
+     */
+    public static function getApplicationCategoryFolder(string $modelClass): string
+    {
+        $baseName = class_basename($modelClass);
+        return match ($baseName) {
+            'PpkprBerusahaApplication' => '01_PKKPR_Berusaha',
+            'PpkprApplication'         => '02_PKKPR_Non_Berusaha',
+            'KebijakanApplication'     => '03_Kebijakan',
+            'PsnApplication'           => '04_PSN',
+            'TanahTimbulApplication'   => '05_Tanah_Timbul',
+            default                    => '06_Layanan_Lainnya',
+        };
+    }
+
+    /**
+     * Buat nama folder rapi untuk permohonan spesifik: [NO_PERMOHONAN] NAMA_PEMOHON.
+     */
+    public static function getApplicationFolderName(\Illuminate\Database\Eloquent\Model $model): string
+    {
+        $code = $model->application_number ?? $model->no_berkas ?? ('ID_' . $model->id);
+        $name = $model->nama_pemilik_usaha ?? $model->nama_pengaju ?? null;
+
+        if (empty($name) && method_exists($model, 'user') && $model->relationLoaded('user') && $model->user) {
+            $name = $model->user->name;
+        }
+
+        if (empty($name)) {
+            $name = 'Pemohon';
+        }
+
+        // Bersihkan karakter terlarang untuk nama folder
+        $cleanCode = preg_replace('/[\\/\\\\:*?"<>|]/', '-', trim($code));
+        $cleanName = preg_replace('/[\\/\\\\:*?"<>|]/', ' ', trim($name));
+        $cleanName = preg_replace('/\s+/', ' ', $cleanName);
+
+        return "[{$cleanCode}] {$cleanName}";
+    }
+
+    /**
+     * Ekstrak seluruh file fisik yang diunggah dari atribut model permohonan.
+     */
+    public static function extractModelPhysicalFiles(\Illuminate\Database\Eloquent\Model $model): array
+    {
+        $files = [];
+        $attributes = $model->getAttributes();
+        $allowedExts = ['pdf', 'jpg', 'jpeg', 'png', 'docx', 'doc', 'zip', 'geojson', 'shp', 'kml', 'kmz'];
+
+        foreach ($attributes as $key => $val) {
+            if (!is_string($val) || empty(trim($val))) {
+                continue;
+            }
+
+            $valTrim = trim($val);
+            $ext = strtolower(pathinfo($valTrim, PATHINFO_EXTENSION));
+            if (!in_array($ext, $allowedExts)) {
+                continue;
+            }
+
+            // Cek berbagai kandidat path file di storage server
+            $candidates = [
+                storage_path('app/public/' . ltrim($valTrim, '/\\')),
+                storage_path('app/' . ltrim($valTrim, '/\\')),
+                public_path('storage/' . ltrim($valTrim, '/\\')),
+                public_path(ltrim($valTrim, '/\\')),
+            ];
+
+            $resolvedPath = null;
+            foreach ($candidates as $cand) {
+                if (File::exists($cand) && is_file($cand)) {
+                    $resolvedPath = $cand;
+                    break;
+                }
+            }
+
+            if ($resolvedPath) {
+                $fileName = basename($resolvedPath);
+                $files[$key] = [
+                    'attribute' => $key,
+                    'path'      => $resolvedPath,
+                    'filename'  => $fileName,
+                    'size'      => File::size($resolvedPath),
+                ];
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Cek apakah berkas dengan nama tertentu sudah ada di dalam folder Google Drive.
+     */
+    public static function fileExistsInFolder(string $fileName, string $folderId): bool
+    {
+        try {
+            $accessToken = static::getAccessToken();
+            $escaped = str_replace("'", "\\'", $fileName);
+            $q = "'{$folderId}' in parents and name = '{$escaped}' and trashed = false";
+
+            $res = Http::withToken($accessToken)
+                ->timeout(10)
+                ->get("https://www.googleapis.com/drive/v3/files", [
+                    'q'      => $q,
+                    'fields' => 'files(id, name)',
+                ]);
+
+            if ($res->successful()) {
+                $files = $res->json('files');
+                return !empty($files) && count($files) > 0;
+            }
+        } catch (\Throwable $e) {}
+
+        return false;
+    }
+
+    /**
+     * Sinkronkan otomatis seluruh berkas dokumen pemohon ke Google Drive secara terstruktur.
+     */
+    public static function syncApplicationFilesToDrive(\Illuminate\Database\Eloquent\Model $model): array
+    {
+        if (!static::isConfigured()) {
+            return [
+                'synced' => false,
+                'reason' => 'Google Drive belum dikonfigurasi.',
+            ];
+        }
+
+        $rootFolderId = static::getFolderId();
+        if (empty($rootFolderId)) {
+            return [
+                'synced' => false,
+                'reason' => 'Folder ID utama Google Drive belum disetel.',
+            ];
+        }
+
+        // 1. Buat / Dapatkan Folder Kategori Layanan (misal: 01_PKKPR_Berusaha)
+        $catFolder = static::getApplicationCategoryFolder(get_class($model));
+        $catFolderId = static::getOrCreateSubfolder($catFolder, $rootFolderId);
+
+        // 2. Buat / Dapatkan Folder Spesifik Pemohon (misal: [BERUSAHA-20261124-IEDIX] PT Sumber Makmur)
+        $appFolder = static::getApplicationFolderName($model);
+        $appFolderId = static::getOrCreateSubfolder($appFolder, $catFolderId);
+
+        // 3. Ekstrak seluruh berkas fisik yang diunggah
+        $files = static::extractModelPhysicalFiles($model);
+        if (empty($files)) {
+            return [
+                'synced'          => true,
+                'uploaded_count'  => 0,
+                'folder_name'     => $appFolder,
+                'category_folder' => $catFolder,
+            ];
+        }
+
+        // 4. Upload berkas satu per satu ke dalam folder pemohon
+        $uploaded = 0;
+        foreach ($files as $fileItem) {
+            try {
+                // Lewati jika file dengan nama persis sudah ada di folder tersebut (menghindari duplikasi)
+                if (static::fileExistsInFolder($fileItem['filename'], $appFolderId)) {
+                    continue;
+                }
+
+                static::uploadFile($fileItem['path'], $fileItem['filename'], $appFolderId);
+                $uploaded++;
+            } catch (\Throwable $e) {
+                Log::warning("Gagal mengunggah berkas {$fileItem['filename']} ke folder Google Drive: " . $e->getMessage());
+            }
+        }
+
+        Log::info("Auto-Sync Google Drive: Berhasil menyinkronkan {$uploaded} berkas untuk permohonan '{$appFolder}' di kategori '{$catFolder}'.");
+
+        return [
+            'synced'          => true,
+            'uploaded_count'  => $uploaded,
+            'app_folder_id'   => $appFolderId,
+            'folder_name'     => $appFolder,
+            'category_folder' => $catFolder,
+        ];
     }
 
     /**

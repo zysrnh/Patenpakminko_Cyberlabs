@@ -346,23 +346,34 @@
             </div>
             <div>
                 <h2 style="font-size: 16px; font-weight: 800; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
-                    Google Drive Cloud Backup
+                    Google Drive Cloud Backup (Akun Pribadi &amp; Workspace)
                 </h2>
                 <div style="font-size: 12px; color: #64748B; margin-top: 2px;">
-                    Pencadangan berkas dokumen fisik (PDF/DOCX) &amp; database langsung ke Google Drive institusi (Zero-Dependency API).
+                    Pencadangan otomatis dokumen pemohon ke Google Drive terstruktur per folder pemohon tanpa batas kuota robot.
                 </div>
             </div>
         </div>
-        <div>
-            @if($gdriveIsConfigured)
+        <div style="display: flex; align-items: center; gap: 8px;">
+            @if(!empty($gdriveRefreshToken))
                 <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; border-radius: 20px; font-size: 11.5px; font-weight: 700;">
                     <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
-                    Terhubung ke Google Drive
+                    Terhubung: {{ $gdriveClientEmail ?: 'Akun Google Pribadi' }}
+                </span>
+                <form action="{{ route('admin_dpn.gdrive_disconnect') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan koneksi akun Google Drive ini?')" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="btn btn-danger" style="padding: 5px 10px; font-size: 11px; font-weight: 600; border-radius: 4px;" title="Putuskan koneksi untuk ganti akun">
+                        Putuskan
+                    </button>
+                </form>
+            @elseif($gdriveAuthMode === 'service_account')
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; border-radius: 20px; font-size: 11.5px; font-weight: 700;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                    Service Account: {{ $gdriveClientEmail }}
                 </span>
             @else
                 <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; border-radius: 20px; font-size: 11.5px; font-weight: 700;">
                     <span style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
-                    Belum Dikonfigurasi
+                    Belum Terhubung
                 </span>
             @endif
         </div>
@@ -376,40 +387,79 @@
                 <form action="{{ route('admin_dpn.gdrive_settings') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
+                    <!-- 1. Folder ID -->
                     <div class="form-group" style="margin-bottom: 16px;">
                         <label class="form-label" style="font-size: 13px; font-weight: 700; color: #003B64; margin-bottom: 5px;">
                             1. Google Drive Folder ID / URL Folder
                         </label>
-                        <input type="text" name="gdrive_folder_id" class="form-control" value="{{ $gdriveFolderId }}" placeholder="Contoh: 1A2B3C4D5E... atau paste link folder Google Drive" required style="font-size: 13.5px; padding: 10px 14px;">
+                        <input type="text" name="gdrive_folder_id" class="form-control" value="{{ $gdriveFolderId }}" placeholder="Contoh: 1K6Ia8IwVS9woiZmsNw6Y7C8ZxMrB3t-y atau paste link folder Google Drive" required style="font-size: 13.5px; padding: 10px 14px;">
                         <div class="form-hint" style="font-size: 11.5px; color: #64748B; margin-top: 5px; line-height: 1.45;">
-                            Anda dapat menyalin ID folder atau link URL lengkap folder Google Drive (contoh: <code>https://drive.google.com/drive/folders/1A2B3C...</code>). Sistem akan otomatis mengekstrak ID folder tersebut.
+                            Salin ID folder atau link URL lengkap folder Google Drive Anda (contoh: <code>https://drive.google.com/drive/folders/1K6Ia8Iw...</code>). Sistem akan otomatis mengekstrak ID folder ini.
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 16px;">
-                        <label class="form-label" style="font-size: 13px; font-weight: 700; color: #003B64; margin-bottom: 5px;">
-                            2. Unggah File Credentials Service Account (.json)
-                        </label>
-                        <input type="file" name="gdrive_credentials_file" accept=".json,application/json" class="form-control" style="font-size: 12.5px; padding: 8px 12px;">
-                        <div class="form-hint" style="font-size: 11.5px; color: #64748B; margin-top: 5px;">
-                            Unggah berkas kunci JSON Service Account yang diunduh dari Google Cloud Console.
-                            @if(!empty($gdriveClientEmail))
-                                <br><span style="color: #059669; font-weight: 600;">Email Akun Saat Ini:</span> <code>{{ $gdriveClientEmail }}</code>
-                            @endif
+                    <!-- 2. OAuth 2.0 Credentials (Gmail Pribadi) -->
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                            <div style="font-size: 12.5px; font-weight: 800; color: #003B64; text-transform: uppercase; letter-spacing: 0.3px;">
+                                🔑 Otorisasi Akun Gmail Pribadi (OAuth 2.0)
+                            </div>
+                            <span style="font-size: 10.5px; font-weight: 700; color: #059669; background: #ECFDF5; padding: 2px 8px; border-radius: 12px; border: 1px solid #A7F3D0;">Direkomendasikan</span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label" style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">
+                                Google Client ID:
+                            </label>
+                            <input type="text" name="gdrive_client_id" class="form-control" value="{{ $gdriveClientId }}" placeholder="Contoh: 1028915868517-xxxx.apps.googleusercontent.com" style="font-size: 12.5px; padding: 8px 12px; font-family: monospace;">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 12px;">
+                            <label class="form-label" style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">
+                                Google Client Secret:
+                            </label>
+                            <input type="password" name="gdrive_client_secret" class="form-control" value="{{ $gdriveClientSecret }}" placeholder="Contoh: GOCSPX-xxxx" style="font-size: 12.5px; padding: 8px 12px; font-family: monospace;">
+                        </div>
+
+                        <div style="font-size: 11px; color: #64748B; line-height: 1.4; margin-top: 6px;">
+                            Didapatkan dari menu <strong>Credentials &gt; OAuth client ID (Web application)</strong> di Google Cloud Console.
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label class="form-label" style="font-size: 12.5px; font-weight: 600; color: #475569; margin-bottom: 4px;">
-                            Atau Tempel (Paste) Isi JSON Kredensial Langsung:
-                        </label>
-                        <textarea name="gdrive_credentials_json" rows="3" class="form-control" placeholder='{"type": "service_account", "project_id": "...", "private_key": "...", ...}' style="font-family: monospace; font-size: 11.5px;"></textarea>
+                    <!-- 3. Opsional: Service Account JSON (Fallback) -->
+                    <div style="margin-bottom: 20px;">
+                        <details style="font-size: 12px; color: #475569;">
+                            <summary style="font-weight: 600; cursor: pointer; color: #64748B;">
+                                ⚙️ Opsi Tambahan: Service Account JSON (Untuk Google Workspace / Shared Drive)
+                            </summary>
+                            <div style="margin-top: 10px; padding: 12px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 6px;">
+                                <div class="form-group" style="margin-bottom: 10px;">
+                                    <label class="form-label" style="font-size: 11.5px; font-weight: 600; color: #475569; margin-bottom: 3px;">
+                                        Upload File Credentials .json:
+                                    </label>
+                                    <input type="file" name="gdrive_credentials_file" accept=".json,application/json" class="form-control" style="font-size: 12px; padding: 6px 10px;">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label class="form-label" style="font-size: 11.5px; font-weight: 600; color: #475569; margin-bottom: 3px;">
+                                        Atau Tempel (Paste) Isi JSON:
+                                    </label>
+                                    <textarea name="gdrive_credentials_json" rows="2" class="form-control" placeholder='{"type": "service_account", ...}' style="font-family: monospace; font-size: 11px;"></textarea>
+                                </div>
+                            </div>
+                        </details>
                     </div>
 
                     <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                         <button type="submit" class="btn btn-primary" style="padding: 10px 18px; font-size: 13px; font-weight: 700;">
                             Simpan Pengaturan Google Drive
                         </button>
+
+                        @if(empty($gdriveRefreshToken))
+                            <a href="{{ route('admin_dpn.gdrive_auth') }}" class="btn btn-secondary" style="padding: 10px 16px; font-size: 13px; font-weight: 700; background: #059669; color: #fff; border-color: #059669; display: inline-flex; align-items: center; gap: 6px;" title="Hubungkan akun Google Drive pribadi Anda">
+                                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                <span>Hubungkan Akun Google Saya</span>
+                            </a>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -417,14 +467,14 @@
             <!-- Panel Uji Koneksi & Aksi Instan -->
             <div style="display: flex; flex-direction: column; gap: 14px;">
                 
-                <!-- Uji Koneksi -->
+                <!-- Status & Uji Koneksi -->
                 <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px; background: #F8FAFC;">
                     <div style="font-size: 12px; font-weight: 800; color: #003B64; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
                         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <span>Uji Status Koneksi</span>
                     </div>
                     <p style="font-size: 11.5px; color: #64748B; margin-bottom: 10px; line-height: 1.4;">
-                        Periksa apakah Service Account Google Anda dapat membaca dan menulis ke folder Google Drive tujuan.
+                        Periksa apakah folder Google Drive dan izin akun yang terhubung dapat membaca dan menulis dokumen.
                     </p>
                     <form action="{{ route('admin_dpn.gdrive_test') }}" method="POST">
                         @csrf
@@ -470,32 +520,36 @@
 
         <!-- Panduan Setup Ringkas -->
         <div style="margin-top: 20px; border-top: 1px solid #E2E8F0; padding-top: 16px;">
-            <details style="font-size: 12px; color: #334155; cursor: pointer;">
+            <details style="font-size: 12px; color: #334155; cursor: pointer;" open>
                 <summary style="font-weight: 700; color: #0284C7; user-select: none;">
-                    📖 Klik di sini untuk melihat Panduan Ringkas Cara Membuat Service Account Google Drive (Gratis &amp; Aman)
+                    📖 Panduan 2 Menit: Cara Membuat OAuth Client ID di Google Cloud Console (Untuk Akun Gmail Pribadi)
                 </summary>
                 <div style="margin-top: 10px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 14px 18px; line-height: 1.6;">
                     <ol style="margin: 0; padding-left: 20px;">
-                        <li style="margin-bottom: 6px;">
-                            Buka <a href="https://console.cloud.google.com/" target="_blank" style="color: #0284C7; font-weight: 600;">Google Cloud Console</a>, lalu buat atau pilih Project yang ada.
+                        <li style="margin-bottom: 8px;">
+                            Buka <a href="https://console.cloud.google.com/" target="_blank" style="color: #0284C7; font-weight: 600;">Google Cloud Console</a> pada project <strong>PatenPakMiko</strong> Anda.
                         </li>
-                        <li style="margin-bottom: 6px;">
-                            Masuk ke menu <strong>APIs &amp; Services &gt; Library</strong>, cari <strong>Google Drive API</strong>, lalu klik <strong>Enable (Aktifkan)</strong>.
+                        <li style="margin-bottom: 8px;">
+                            Buka menu <strong>APIs &amp; Services &gt; OAuth consent screen</strong>:
+                            <br>• Pilih <strong>External</strong> &gt; klik <strong>Create</strong>.
+                            <br>• Masukkan <strong>App name</strong> (misal: <code>PATEN PAK MIKO</code>) dan isi email admin Anda.
+                            <br>• Klik <strong>Save and Continue</strong> sampai selesai.
                         </li>
-                        <li style="margin-bottom: 6px;">
-                            Buka menu <strong>IAM &amp; Admin &gt; Service Accounts</strong>, klik <strong>Create Service Account</strong> (beri nama misal: <code>paten-backup-drive</code>).
-                        </li>
-                        <li style="margin-bottom: 6px;">
-                            Klik Service Account yang baru dibuat, buka tab <strong>Keys</strong> &gt; klik <strong>Add Key &gt; Create new key &gt; JSON</strong>. File JSON kredensial akan otomatis terunduh.
-                        </li>
-                        <li style="margin-bottom: 6px;">
-                            Buka Google Drive pribadi atau Drive Bersama institusi Anda, buat folder khusus (misal: <code>Backup PATEN PAK MIKO</code>).
-                        </li>
-                        <li style="margin-bottom: 6px;">
-                            Klik kanan folder tersebut &gt; pilih <strong>Share (Bagikan)</strong> &gt; tempelkan alamat email Service Account Anda (berakhiran <code>@...iam.gserviceaccount.com</code>) dengan peran <strong>Editor</strong>.
+                        <li style="margin-bottom: 8px;">
+                            Buka menu <strong>APIs &amp; Services &gt; Credentials</strong>:
+                            <br>• Klik tombol <strong>+ Create Credentials &gt; OAuth client ID</strong> di bagian atas.
+                            <br>• Application type pilih: <strong>Web application</strong>.
+                            <br>• Di bagian <strong>Authorized redirect URIs</strong>, klik <strong>+ Add URI</strong> dan masukkan URL berikut persis:
+                            <div style="margin-top: 4px;">
+                                <code style="background: #E2E8F0; padding: 4px 8px; border-radius: 4px; font-weight: 700; color: #0F172A; user-select: all;">{{ route('admin_dpn.gdrive_callback') }}</code>
+                            </div>
+                            <div style="font-size: 11px; color: #64748B; margin-top: 2px;">
+                                (Jika testing di komputer lokal, bisa tambahkan juga: <code>http://127.0.0.1:8000/admin_dpn/gdrive-callback</code>).
+                            </div>
+                            • Klik tombol <strong>Create</strong>. Google akan memunculkan pop-up yang berisi <strong>Client ID</strong> dan <strong>Client Secret</strong>.
                         </li>
                         <li>
-                            Salin ID folder atau link URL folder tersebut dan unggah berkas JSON kredensial pada formulir di atas. Selesai!
+                            Salin <strong>Client ID</strong> dan <strong>Client Secret</strong> tersebut ke dalam formulir di atas, klik <strong>Simpan Pengaturan</strong>, lalu klik tombol hijau <strong>Hubungkan Akun Google Saya</strong>. Selesai!
                         </li>
                     </ol>
                 </div>

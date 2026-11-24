@@ -100,8 +100,11 @@ class AdminDpnController extends Controller
         // Status Google Drive Cloud Backup
         $gdriveFolderId = GoogleDriveBackupService::getFolderId() ?? '';
         $gdriveIsConfigured = GoogleDriveBackupService::isConfigured();
-        $gdriveCreds = GoogleDriveBackupService::getCredentials();
-        $gdriveClientEmail = $gdriveCreds['client_email'] ?? null;
+        $gdriveAuthMode = GoogleDriveBackupService::getAuthMode();
+        $gdriveClientEmail = GoogleDriveBackupService::getConnectedEmail();
+        $gdriveClientId = SiteSetting::get('gdrive_client_id', '');
+        $gdriveClientSecret = SiteSetting::get('gdrive_client_secret', '');
+        $gdriveRefreshToken = SiteSetting::get('gdrive_refresh_token', '');
 
         return view('admin_dpn.index', compact(
             'stats',
@@ -113,7 +116,11 @@ class AdminDpnController extends Controller
             'backupArchives',
             'gdriveFolderId',
             'gdriveIsConfigured',
-            'gdriveClientEmail'
+            'gdriveAuthMode',
+            'gdriveClientEmail',
+            'gdriveClientId',
+            'gdriveClientSecret',
+            'gdriveRefreshToken'
         ));
     }
 

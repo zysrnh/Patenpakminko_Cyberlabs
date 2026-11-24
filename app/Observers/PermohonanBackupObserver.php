@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Services\BackupService;
+use App\Services\GoogleDriveBackupService;
 use Illuminate\Database\Eloquent\Model;
 
 class PermohonanBackupObserver
@@ -17,11 +18,11 @@ class PermohonanBackupObserver
         $modelName = class_basename($model);
 
         $typeNames = [
-            'PpkprApplication' => 'PKKPR Non-Berusaha',
+            'PpkprApplication'         => 'PKKPR Non-Berusaha',
             'PpkprBerusahaApplication' => 'PKKPR Berusaha',
-            'KebijakanApplication' => 'Kebijakan Khusus',
-            'PsnApplication' => 'Proyek Strategis Nasional (PSN)',
-            'TanahTimbulApplication' => 'Tanah Timbul',
+            'KebijakanApplication'     => 'Kebijakan Khusus',
+            'PsnApplication'           => 'Proyek Strategis Nasional (PSN)',
+            'TanahTimbulApplication'   => 'Tanah Timbul',
         ];
 
         $friendlyType = $typeNames[$modelName] ?? $modelName;
@@ -29,11 +30,34 @@ class PermohonanBackupObserver
 
         // Dispatch background backup setelah HTTP response selesai dikirim ke pemohon
         // Pemohon sama sekali tidak mengalami delay/loading tambahan
-        app()->terminating(function () use ($label) {
+        app()->terminating(function () use ($label, $model) {
+            // 1. Cadangan SQL Database ke Rak Arsip & Email Blast
             try {
                 BackupService::createTriggeredBackup($label);
             } catch (\Throwable $e) {
-                logger()->error("Gagal menjalankan Auto-Backup pada event permohonan baru: " . $e->getMessage());
+                logger()->error("Gagal menjalankan Auto-Backup Database pada event permohonan baru: " . $e->getMessage());
+            }
+
+            // 2. Sinkronkan seluruh berkas fisik (PDF/KTP/Peta/NIB) ke subfolder rapi di Google Drive
+            try {
+                GoogleDriveBackupService::syncApplicationFilesToDrive($model);
+            } catch (\Throwable $e) {
+                logger()->error("Gagal auto-sync berkas pemohon ke Google Drive: " . $e->getMessage());
+            }
+        });
+    }
+
+    /**
+     * Handle the Model "updated" event.
+     * Dijalankan otomatis jika ada penambahan dokumen lanjutan (Pertek BPN, SK PKKPR, Berkas Revisi).
+     */
+    public function updated(Model $model): void
+    {
+        app()->terminating(function () use ($model) {
+            try {
+                GoogleDriveBackupService::syncApplicationFilesToDrive($model);
+            } catch (\Throwable $e) {
+                logger()->error("Gagal auto-sync update dokumen pemohon ke Google Drive: " . $e->getMessage());
             }
         });
     }
