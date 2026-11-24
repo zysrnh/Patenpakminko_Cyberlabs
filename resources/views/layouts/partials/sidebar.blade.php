@@ -206,6 +206,9 @@
         color: #fff;
         background: rgba(255, 255, 255, .09);
     }
+    .nav-item:active {
+        transform: scale(0.985);
+    }
     .nav-item.active {
         color: var(--blue-dk);
         background: var(--yellow);
@@ -224,6 +227,10 @@
         justify-content: space-between;
         cursor: pointer;
     }
+    @keyframes sideDropIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
     .nav-dropdown-menu {
         display: none;
         flex-direction: column;
@@ -234,6 +241,7 @@
     }
     .nav-dropdown-menu.open {
         display: flex;
+        animation: sideDropIn .16s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
     .nav-dropdown-item {
         padding: 6.5px 10px;

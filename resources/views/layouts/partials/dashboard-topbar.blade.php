@@ -183,15 +183,22 @@
     white-space: nowrap;
     flex-shrink: 0;
     cursor: pointer;
-    transition: background .15s ease, border-color .15s ease, color .15s ease;
+    transition: background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
 }
 .topbar-backup-btn svg {
     color: #218AC9;
+    transition: transform .16s ease;
 }
 .topbar-backup-btn:hover {
     background: #E3F0F9;
     border-color: #218AC9;
     color: #003B64;
+}
+.topbar-backup-btn:hover svg {
+    transform: translateY(1px);
+}
+.topbar-backup-btn:active {
+    transform: scale(0.97);
 }
 
 /* ─── Notif button ───────────────────────────────────────────────────────── */
@@ -205,11 +212,11 @@
     justify-content: center;
     color: #475569;
     text-decoration: none;
-    transition: background 0.15s ease, color 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
     flex-shrink: 0;
 }
 .topbar-notif-btn:hover  { background: #F1F5F9; color: #003B64; }
-.topbar-notif-btn:active { background: #E2E8F0; }
+.topbar-notif-btn:active { background: #E2E8F0; transform: scale(0.96); }
 .topbar-notif-btn svg    { width: 18px; height: 18px; }
 
 .topbar-notif-badge {
@@ -298,6 +305,10 @@
     transform: rotate(180deg);
 }
 
+@keyframes topbarDropIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
 .topbar-user-dropdown {
     display: none;
     position: absolute;
@@ -312,6 +323,10 @@
 }
 .topbar-user-menu.open .topbar-user-dropdown {
     display: block;
+    animation: topbarDropIn .15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.topbar-user-chip:active {
+    transform: scale(0.98);
 }
 .topbar-dd-head {
     padding: 6px 10px 8px;
@@ -491,20 +506,423 @@
             </button>
 
             <style>
-                @keyframes modalFadeIn {
-                    from { opacity: 0; backdrop-filter: blur(0px); }
-                    to { opacity: 1; backdrop-filter: blur(6px); }
+                @keyframes backupBackdropIn {
+                    from { opacity: 0; }
+                    to   { opacity: 1; }
                 }
-                @keyframes modalSpringPop {
-                    0% { opacity: 0; transform: scale(0.92) translateY(14px); }
-                    65% { opacity: 1; transform: scale(1.012) translateY(-2px); }
-                    100% { opacity: 1; transform: scale(1) translateY(0); }
+                @keyframes backupModalIn {
+                    from { opacity: 0; transform: translateY(10px) scale(0.985); }
+                    to   { opacity: 1; transform: translateY(0) scale(1); }
                 }
                 .backup-modal-backdrop {
-                    animation: modalFadeIn 0.25s ease-out forwards;
+                    display: none;
+                    position: fixed;
+                    inset: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0, 30, 56, 0.52);
+                    z-index: 999999;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 16px;
+                    overflow-y: auto;
+                    animation: backupBackdropIn 0.18s ease-out forwards;
                 }
                 .backup-modal-box {
-                    animation: modalSpringPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+                    background: #FFFFFF;
+                    border: 1px solid #CBD5E1;
+                    border-radius: 6px;
+                    width: 100%;
+                    max-width: 860px;
+                    max-height: calc(100vh - 32px);
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                    text-align: left;
+                    margin: auto;
+                    animation: backupModalIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                }
+                .backup-modal-head {
+                    background: #003B64;
+                    padding: 14px 18px;
+                    color: #FFFFFF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    flex-shrink: 0;
+                    border-bottom: 1px solid #002D4D;
+                }
+                .backup-modal-head-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 11px;
+                    min-width: 0;
+                }
+                .backup-modal-icon {
+                    width: 34px;
+                    height: 34px;
+                    background: rgba(255, 255, 255, 0.12);
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                    color: #FFFFFF;
+                }
+                .backup-modal-title {
+                    font-size: 14.5px;
+                    font-weight: 700;
+                    margin: 0;
+                    color: #FFFFFF;
+                    letter-spacing: -0.01em;
+                }
+                .backup-modal-sub {
+                    font-size: 11.5px;
+                    color: #B8D4E8;
+                    margin-top: 1px;
+                }
+                .backup-modal-close {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 4px;
+                    border: 1px solid rgba(255, 255, 255, 0.16);
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #DCEBF7;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+                }
+                .backup-modal-close:hover {
+                    background: rgba(255, 255, 255, 0.18);
+                    color: #FFFFFF;
+                }
+                .backup-modal-close:active {
+                    transform: scale(0.95);
+                }
+                .backup-modal-body {
+                    padding: 18px 20px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                    overflow-y: auto;
+                    background: #FFFFFF;
+                }
+                .backup-sec-head {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    margin-bottom: 10px;
+                }
+                .backup-sec-label {
+                    font-size: 11px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.06em;
+                    color: #64748B;
+                }
+                .backup-sec-controls {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                }
+                .backup-select-all {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 11.5px;
+                    font-weight: 600;
+                    color: #003B64;
+                    cursor: pointer;
+                    user-select: none;
+                    padding: 4px 10px;
+                    border-radius: 4px;
+                    border: 1px solid #CBD5E1;
+                    background: #F8FAFC;
+                    transition: background 0.14s ease, border-color 0.14s ease;
+                }
+                .backup-select-all:hover {
+                    background: #F0F7FC;
+                    border-color: #94B8D4;
+                }
+                .backup-select-all input {
+                    accent-color: #003B64;
+                    width: 13px;
+                    height: 13px;
+                    cursor: pointer;
+                }
+                .backup-size-total {
+                    font-size: 11.5px;
+                    font-weight: 700;
+                    color: #003B64;
+                    background: #E3F0F9;
+                    border: 1px solid #BFD9EC;
+                    padding: 4px 10px;
+                    border-radius: 4px;
+                    font-variant-numeric: tabular-nums;
+                    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+                }
+                .backup-cat-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 8px;
+                    padding: 10px;
+                    border: 1px solid #E2E8F0;
+                    border-radius: 4px;
+                    background: #F8FAFC;
+                }
+                .backup-cat-item {
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 10px;
+                    padding: 0 12px;
+                    border-radius: 4px;
+                    border: 1px solid #E2E8F0;
+                    background: #FFFFFF;
+                    cursor: pointer;
+                    font-size: 12px;
+                    color: #1E293B;
+                    user-select: none;
+                    transition: border-color 0.14s ease, background 0.14s ease;
+                }
+                .backup-cat-item:hover {
+                    border-color: #94B8D4;
+                }
+                .backup-cat-item.is-checked {
+                    border-color: #94B8D4;
+                    background: #F0F7FC;
+                }
+                .backup-cat-item--full {
+                    grid-column: 1 / -1;
+                }
+                .backup-cat-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 9px;
+                    min-width: 0;
+                    overflow: hidden;
+                }
+                .backup-cat-left input[type="checkbox"] {
+                    accent-color: #003B64;
+                    width: 14px;
+                    height: 14px;
+                    flex-shrink: 0;
+                    cursor: pointer;
+                }
+                .backup-cat-name {
+                    font-weight: 600;
+                    color: #0F172A;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .backup-cat-size {
+                    font-size: 11px;
+                    font-weight: 600;
+                    color: #64748B;
+                    font-variant-numeric: tabular-nums;
+                    flex-shrink: 0;
+                    white-space: nowrap;
+                }
+                .backup-methods-grid {
+                    display: grid;
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                    gap: 12px;
+                    align-items: stretch;
+                }
+                .backup-method-card {
+                    margin: 0;
+                    border: 1px solid #D6E4EF;
+                    border-radius: 4px;
+                    padding: 14px;
+                    background: #FFFFFF;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    gap: 12px;
+                    transition: border-color 0.15s ease;
+                }
+                .backup-method-card:hover {
+                    border-color: #94B8D4;
+                }
+                .backup-method-top {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                .backup-method-title {
+                    display: flex;
+                    align-items: center;
+                    gap: 7px;
+                    font-size: 11.5px;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 0.04em;
+                    color: #003B64;
+                }
+                .backup-method-title svg {
+                    width: 15px;
+                    height: 15px;
+                    flex-shrink: 0;
+                    color: #218AC9;
+                }
+                .backup-method-desc {
+                    font-size: 11.5px;
+                    color: #64748B;
+                    line-height: 1.4;
+                }
+                .backup-method-meta {
+                    padding-top: 8px;
+                    border-top: 1px solid #E8F0F6;
+                    font-size: 11px;
+                    color: #475569;
+                    line-height: 1.4;
+                }
+                .backup-radio-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    font-size: 11px;
+                    color: #1E293B;
+                }
+                .backup-radio-opt {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 6px;
+                    cursor: pointer;
+                    line-height: 1.35;
+                }
+                .backup-radio-opt input[type="radio"] {
+                    accent-color: #003B64;
+                    margin-top: 2px;
+                    flex-shrink: 0;
+                }
+                .backup-radio-email {
+                    word-break: break-all;
+                }
+                .backup-status-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    margin-bottom: 2px;
+                }
+                .backup-status-dot {
+                    width: 7px;
+                    height: 7px;
+                    border-radius: 50%;
+                    flex-shrink: 0;
+                }
+                .backup-actions {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                }
+                .backup-btn {
+                    width: 100%;
+                    height: 36px;
+                    padding: 0 12px;
+                    border-radius: 4px;
+                    font-family: inherit;
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    border: 1px solid transparent;
+                    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+                }
+                .backup-btn:active {
+                    transform: scale(0.98);
+                }
+                .backup-btn svg {
+                    width: 14px;
+                    height: 14px;
+                    flex-shrink: 0;
+                }
+                .backup-btn--navy {
+                    background: #003B64;
+                    color: #FFFFFF;
+                }
+                .backup-btn--navy:hover {
+                    background: #002C4B;
+                }
+                .backup-btn--blue {
+                    background: #218AC9;
+                    color: #FFFFFF;
+                }
+                .backup-btn--blue:hover {
+                    background: #1A76AD;
+                }
+                .backup-btn--green {
+                    background: #16A34A;
+                    color: #FFFFFF;
+                }
+                .backup-btn--green:hover {
+                    background: #15803D;
+                }
+                .backup-btn--outline {
+                    background: #F8FAFC;
+                    color: #003B64;
+                    border-color: #CBD5E1;
+                }
+                .backup-btn--outline:hover {
+                    background: #E3F0F9;
+                    border-color: #94B8D4;
+                }
+                .backup-btn--green-outline {
+                    background: #F0FDF4;
+                    color: #15803D;
+                    border-color: #BBF7D0;
+                }
+                .backup-btn--green-outline:hover {
+                    background: #DCFCE7;
+                    border-color: #86EFAC;
+                }
+                .backup-btn--muted-outline {
+                    background: #F8FAFC;
+                    color: #475569;
+                    border: 1px dashed #CBD5E1;
+                }
+                .backup-btn--muted-outline:hover {
+                    background: #F1F5F9;
+                    color: #003B64;
+                }
+
+                @media (max-width: 768px) {
+                    .backup-methods-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .backup-modal-body {
+                        padding: 14px;
+                    }
+                }
+                @media (max-width: 640px) {
+                    .backup-cat-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .backup-cat-item--full {
+                        grid-column: auto;
+                    }
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    .backup-modal-backdrop,
+                    .backup-modal-box,
+                    .topbar-user-menu.open .topbar-user-dropdown {
+                        animation: none !important;
+                    }
                 }
             </style>
 
@@ -512,223 +930,212 @@
             @php
                 $isGdriveConfigured = \App\Services\GoogleDriveBackupService::isConfigured();
             @endphp
-            <div id="backupChoiceModal" class="backup-modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
-                <div class="backup-modal-box" style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 960px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto;">
-                    
+            <div id="backupChoiceModal" class="backup-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="backupModalTitle">
+                <div class="backup-modal-box">
+
                     <!-- Header -->
-                    <div style="background: #0F172A; padding: 16px 20px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; border-bottom: 1px solid #1E293B;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="width: 36px; height: 36px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.15);">
-                                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                    <div class="backup-modal-head">
+                        <div class="backup-modal-head-left">
+                            <div class="backup-modal-icon">
+                                <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
                             </div>
                             <div>
-                                <h3 style="font-size: 15px; font-weight: 700; margin: 0; color: #ffffff; letter-spacing: -0.2px;">Pilihan Cadangan Sistem & Database</h3>
-                                <div style="font-size: 11.5px; color: #94A3B8; margin-top: 1px;">Kustomisasi unduhan berkas & pengiriman via email</div>
+                                <h3 id="backupModalTitle" class="backup-modal-title">Pilihan Cadangan Sistem &amp; Database</h3>
+                                <div class="backup-modal-sub">Pilih berkas layanan dan metode cadangan data</div>
                             </div>
                         </div>
-                        <button type="button" onclick="closeBackupChoiceModal()" style="background: rgba(255,255,255,0.1); border: none; color: #94A3B8; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.color='#94A3B8'; this.style.background='rgba(255,255,255,0.1)'">✕</button>
+                        <button type="button" class="backup-modal-close" onclick="closeBackupChoiceModal()" aria-label="Tutup modal">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
                     </div>
 
                     <!-- Body Content -->
-                    <div style="padding: 18px 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto;">
-                        
+                    <div class="backup-modal-body">
+
                         <!-- SEKSI 1: PILIHAN KATEGORI DOKUMEN -->
                         <div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                                <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; color: #475569;">
-                                    Pilih Berkas & Dokumen Layanan:
-                                </div>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <label style="display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #0284C7; cursor: pointer; user-select: none; background: #F0F9FF; padding: 4px 10px; border-radius: 20px; border: 1px solid #BAE6FD; transition: all 0.2s;">
-                                        <input type="checkbox" id="selectAllCategoriesBtn" checked onchange="toggleSelectAllCategories(this)" style="accent-color: #0284C7; width: 14px; height: 14px; cursor: pointer;">
+                            <div class="backup-sec-head">
+                                <div class="backup-sec-label">Pilih Berkas &amp; Dokumen Layanan</div>
+                                <div class="backup-sec-controls">
+                                    <label class="backup-select-all">
+                                        <input type="checkbox" id="selectAllCategoriesBtn" checked onchange="toggleSelectAllCategories(this)">
                                         <span>Pilih Semua</span>
                                     </label>
-                                    <div id="liveTotalSizeSummary" style="font-size: 11.5px; font-weight: 700; color: #0369A1; background: #E0F2FE; padding: 4px 12px; border-radius: 20px; border: 1px solid #7DD3FC; transition: all 0.25s;">
+                                    <div id="liveTotalSizeSummary" class="backup-size-total">
                                         Total: ~0 MB
                                     </div>
                                 </div>
                             </div>
 
-                            <div style="border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; background: #F8FAFC;">
-                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px; font-size: 12px; color: #1E293B;">
-                                    
-                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                            <input type="checkbox" name="modal_categories[]" value="database_sql" data-bytes="{{ $catSizes['database_sql'] ?? 2097152 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
-                                            <span style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Database SQL Dump</span>
-                                        </div>
-                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['database_sql'] ?? 2097152) }}</span>
-                                    </label>
-
-                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                            <input type="checkbox" name="modal_categories[]" value="berusaha" data-bytes="{{ $catSizes['berusaha'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
-                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Berusaha</span>
-                                        </div>
-                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['berusaha'] ?? 0) }}</span>
-                                    </label>
-
-                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                            <input type="checkbox" name="modal_categories[]" value="non_berusaha" data-bytes="{{ $catSizes['non_berusaha'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
-                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Non-Berusaha</span>
-                                        </div>
-                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['non_berusaha'] ?? 0) }}</span>
-                                    </label>
-
-                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                            <input type="checkbox" name="modal_categories[]" value="kebijakan" data-bytes="{{ $catSizes['kebijakan'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
-                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Kebijakan</span>
-                                        </div>
-                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['kebijakan'] ?? 0) }}</span>
-                                    </label>
-
-                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                            <input type="checkbox" name="modal_categories[]" value="tanah_timbul" data-bytes="{{ $catSizes['tanah_timbul'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
-                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan Tanah Timbul</span>
-                                        </div>
-                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['tanah_timbul'] ?? 0) }}</span>
-                                    </label>
-
-                                    <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                        <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                            <input type="checkbox" name="modal_categories[]" value="psn" data-bytes="{{ $catSizes['psn'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
-                                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dokumen Layanan PSN</span>
-                                        </div>
-                                        <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['psn'] ?? 0) }}</span>
-                                    </label>
-                                </div>
-                                
-                                <label style="height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; background: #fff; padding: 0 12px; border-radius: 9px; border: 1px solid #E2E8F0; font-size: 12px; color: #1E293B; margin-top: 8px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#E2E8F0';">
-                                    <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                        <input type="checkbox" name="modal_categories[]" value="templates_media" data-bytes="{{ $catSizes['templates_media'] ?? 0 }}" checked style="accent-color: #0284C7; flex-shrink: 0;" onchange="syncCategoriesToForms()">
-                                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Template Dokumen, Master Form PTP, SPS & Assets</span>
+                            <div class="backup-cat-grid">
+                                <label class="backup-cat-item is-checked">
+                                    <div class="backup-cat-left">
+                                        <input type="checkbox" name="modal_categories[]" value="database_sql" data-bytes="{{ $catSizes['database_sql'] ?? 2097152 }}" checked onchange="syncCategoriesToForms()">
+                                        <span class="backup-cat-name">Database SQL Dump</span>
                                     </div>
-                                    <span style="font-size: 10.5px; font-weight: 700; color: #64748B; background: #F1F5F9; padding: 3px 8px; border-radius: 6px; flex-shrink: 0; white-space: nowrap;">{{ $formatSize($catSizes['templates_media'] ?? 0) }}</span>
+                                    <span class="backup-cat-size">{{ $formatSize($catSizes['database_sql'] ?? 2097152) }}</span>
+                                </label>
+
+                                <label class="backup-cat-item is-checked">
+                                    <div class="backup-cat-left">
+                                        <input type="checkbox" name="modal_categories[]" value="berusaha" data-bytes="{{ $catSizes['berusaha'] ?? 0 }}" checked onchange="syncCategoriesToForms()">
+                                        <span class="backup-cat-name">PKKPR Berusaha</span>
+                                    </div>
+                                    <span class="backup-cat-size">{{ $formatSize($catSizes['berusaha'] ?? 0) }}</span>
+                                </label>
+
+                                <label class="backup-cat-item is-checked">
+                                    <div class="backup-cat-left">
+                                        <input type="checkbox" name="modal_categories[]" value="non_berusaha" data-bytes="{{ $catSizes['non_berusaha'] ?? 0 }}" checked onchange="syncCategoriesToForms()">
+                                        <span class="backup-cat-name">PKKPR Non-Berusaha</span>
+                                    </div>
+                                    <span class="backup-cat-size">{{ $formatSize($catSizes['non_berusaha'] ?? 0) }}</span>
+                                </label>
+
+                                <label class="backup-cat-item is-checked">
+                                    <div class="backup-cat-left">
+                                        <input type="checkbox" name="modal_categories[]" value="kebijakan" data-bytes="{{ $catSizes['kebijakan'] ?? 0 }}" checked onchange="syncCategoriesToForms()">
+                                        <span class="backup-cat-name">Kebijakan</span>
+                                    </div>
+                                    <span class="backup-cat-size">{{ $formatSize($catSizes['kebijakan'] ?? 0) }}</span>
+                                </label>
+
+                                <label class="backup-cat-item is-checked">
+                                    <div class="backup-cat-left">
+                                        <input type="checkbox" name="modal_categories[]" value="tanah_timbul" data-bytes="{{ $catSizes['tanah_timbul'] ?? 0 }}" checked onchange="syncCategoriesToForms()">
+                                        <span class="backup-cat-name">Tanah Timbul</span>
+                                    </div>
+                                    <span class="backup-cat-size">{{ $formatSize($catSizes['tanah_timbul'] ?? 0) }}</span>
+                                </label>
+
+                                <label class="backup-cat-item is-checked">
+                                    <div class="backup-cat-left">
+                                        <input type="checkbox" name="modal_categories[]" value="psn" data-bytes="{{ $catSizes['psn'] ?? 0 }}" checked onchange="syncCategoriesToForms()">
+                                        <span class="backup-cat-name">PSN</span>
+                                    </div>
+                                    <span class="backup-cat-size">{{ $formatSize($catSizes['psn'] ?? 0) }}</span>
+                                </label>
+
+                                <label class="backup-cat-item backup-cat-item--full is-checked">
+                                    <div class="backup-cat-left">
+                                        <input type="checkbox" name="modal_categories[]" value="templates_media" data-bytes="{{ $catSizes['templates_media'] ?? 0 }}" checked onchange="syncCategoriesToForms()">
+                                        <span class="backup-cat-name">Template Dokumen, Master Form PTP, SPS &amp; Assets</span>
+                                    </div>
+                                    <span class="backup-cat-size">{{ $formatSize($catSizes['templates_media'] ?? 0) }}</span>
                                 </label>
                             </div>
                         </div>
 
                         <!-- SEKSI 2: TIGA OPSI TINDAKAN (DOWNLOAD, EMAIL, GOOGLE DRIVE) -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; align-items: stretch;">
-                            
-                            <!-- A. Form Download -->
-                            <form id="downloadBackupForm" action="{{ route('admin_dpn.backup_database') }}" method="GET" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="this.style.borderColor='#E2E8F0';">
-                                <input type="hidden" name="categories" id="download_categories_input" value="">
-                                
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #0284C7; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                        <span>Unduh Ke Perangkat</span>
-                                    </div>
-                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Unduh berkas terkompresi (.ZIP) atau database SQL langsung ke komputer Anda.</div>
+                        <div class="backup-methods-grid">
 
-                                    <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 8px 10px; background: #F8FAFC; min-height: 72px; display: flex; flex-direction: column; justify-content: center; gap: 2px;">
-                                        <div style="font-size: 10.5px; font-weight: 700; color: #0284C7; text-transform: uppercase;">Penyimpanan Berkas:</div>
-                                        <div style="font-size: 11px; color: #334155; font-weight: 500;">Langsung disimpan ke folder Downloads browser Anda.</div>
+                            <!-- A. Form Download -->
+                            <form id="downloadBackupForm" action="{{ route('admin_dpn.backup_database') }}" method="GET" class="backup-method-card">
+                                <input type="hidden" name="categories" id="download_categories_input" value="">
+
+                                <div class="backup-method-top">
+                                    <div class="backup-method-title">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        <span>Unduh ke Perangkat</span>
+                                    </div>
+                                    <div class="backup-method-desc">Unduh berkas terkompresi (.ZIP) atau database SQL ke komputer Anda.</div>
+                                    <div class="backup-method-meta">
+                                        Disimpan langsung ke folder <strong>Downloads</strong> browser.
                                     </div>
                                 </div>
 
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <button type="submit" onclick="submitDownloadForm()" style="width: 100%; height: 40px; padding: 0 12px; background: #0F172A; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#1E293B';" onmouseout="this.style.background='#0F172A';">
-                                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                        <span>Unduh Berkas (.ZIP) <span id="btnDownloadZipSizeText" style="font-weight: 400; opacity: 0.85;"></span></span>
+                                <div class="backup-actions">
+                                    <button type="submit" onclick="submitDownloadForm()" class="backup-btn backup-btn--navy">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        <span>Unduh Berkas (.ZIP) <span id="btnDownloadZipSizeText" style="font-weight: 500; opacity: 0.85;"></span></span>
                                     </button>
-                                    <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 36px; padding: 0 12px; background: #F0F9FF; color: #0284C7; border: 1px solid #BAE6FD; border-radius: 8px; font-weight: 600; font-size: 11.5px; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.background='#E0F2FE';" onmouseout="this.style.background='#F0F9FF';">
-                                        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                    <a href="{{ route('admin_dpn.backup_database_sql') }}" onclick="closeBackupChoiceModal()" class="backup-btn backup-btn--outline">
                                         <span>Unduh DB SQL Saja (~2 MB)</span>
                                     </a>
                                 </div>
                             </form>
 
                             <!-- B. Form Kirim Email -->
-                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%; transition: all 0.2s;" onmouseover="this.style.borderColor='#7C3AED';" onmouseout="this.style.borderColor='#E2E8F0';">
+                            <form id="emailBackupForm" action="{{ route('admin_dpn.send_backup_email') }}" method="POST" class="backup-method-card">
                                 @csrf
                                 <input type="hidden" name="backup_format" value="sql">
-                                
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #7C3AED; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                        <span>Kirim Via Email</span>
-                                    </div>
-                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Kirim salinan database SQL (~2 MB) langsung ke alamat email pilihan Anda.</div>
 
-                                    <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 6px 10px; background: #F8FAFC; min-height: 72px; display: flex; flex-direction: column; justify-content: center; gap: 3px;">
-                                        <div style="font-size: 10.5px; font-weight: 700; color: #7C3AED; text-transform: uppercase;">Alamat Email Tujuan:</div>
-                                        <div style="display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #1E293B;">
-                                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                                 <input type="radio" name="target_option" value="both" checked style="accent-color: #7C3AED;">
+                                <div class="backup-method-top">
+                                    <div class="backup-method-title">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                        <span>Kirim via Email</span>
+                                    </div>
+                                    <div class="backup-method-desc">Kirim salinan database SQL (~2 MB) ke alamat email pilihan Anda.</div>
+
+                                    <div class="backup-method-meta">
+                                        <div class="backup-radio-list">
+                                            <label class="backup-radio-opt">
+                                                <input type="radio" name="target_option" value="both" checked>
                                                 <span>Kirim ke Keduanya</span>
                                             </label>
                                             @if(Auth::user()->email)
-                                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                                <input type="radio" name="target_option" value="my_email" style="accent-color: #7C3AED;">
-                                                <span>Email Saya (<strong>{{ Auth::user()->email }}</strong>)</span>
+                                            <label class="backup-radio-opt">
+                                                <input type="radio" name="target_option" value="my_email">
+                                                <span>Email Saya (<strong class="backup-radio-email">{{ Auth::user()->email }}</strong>)</span>
                                             </label>
                                             @endif
-                                            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                                <input type="radio" name="target_option" value="penataan_email" style="accent-color: #7C3AED;">
+                                            <label class="backup-radio-opt">
+                                                <input type="radio" name="target_option" value="penataan_email">
                                                 <span>Penataan Pertanahan</span>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <button type="submit" onclick="submitEmailForm()" style="width: 100%; height: 42px; padding: 0 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#6D28D9';" onmouseout="this.style.background='#7C3AED';">
-                                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                        <span>Kirim Database SQL ke Email</span>
+                                <div class="backup-actions">
+                                    <button type="submit" onclick="submitEmailForm()" class="backup-btn backup-btn--blue">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                        <span>Kirim DB SQL ke Email</span>
                                     </button>
                                 </div>
                             </form>
 
                             <!-- C. Form Google Drive Cloud -->
-                            <form id="gdriveBackupForm" action="{{ route('admin_dpn.backup_gdrive') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%; transition: all 0.2s;" onmouseover="this.style.borderColor='#059669';" onmouseout="this.style.borderColor='#E2E8F0';">
+                            <form id="gdriveBackupForm" action="{{ route('admin_dpn.backup_gdrive') }}" method="POST" class="backup-method-card">
                                 @csrf
                                 <input type="hidden" name="backup_format" id="gdrive_backup_format" value="zip">
                                 <input type="hidden" name="categories" id="gdrive_categories_input" value="">
-                                
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
-                                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #059669; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+
+                                <div class="backup-method-top">
+                                    <div class="backup-method-title">
+                                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                                         <span>Google Drive Cloud</span>
                                     </div>
-                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Simpan berkas fisik atau database langsung ke Google Drive tanpa membebani email.</div>
+                                    <div class="backup-method-desc">Simpan berkas fisik atau database ke Google Drive resmi sistem.</div>
 
-                                    <div style="border: 1px solid {{ $isGdriveConfigured ? '#A7F3D0' : '#FED7AA' }}; border-radius: 8px; padding: 8px 10px; background: {{ $isGdriveConfigured ? '#ECFDF5' : '#FFF7ED' }}; min-height: 72px; display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+                                    <div class="backup-method-meta">
                                         @if($isGdriveConfigured)
-                                            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #065F46;">
-                                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                                            <div class="backup-status-row" style="color: #15803D;">
+                                                <span class="backup-status-dot" style="background: #16A34A;"></span>
                                                 <span>Google Drive Terhubung</span>
                                             </div>
-                                            <div style="font-size: 10.5px; color: #047857;">File tersimpan langsung ke Google Drive resmi sistem.</div>
+                                            <div>Siap mengunggah berkas cadangan langsung ke folder Drive.</div>
                                         @else
-                                            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #9A3412;">
-                                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #F97316; display: inline-block;"></span>
+                                            <div class="backup-status-row" style="color: #B45309;">
+                                                <span class="backup-status-dot" style="background: #D97706;"></span>
                                                 <span>Belum Dikonfigurasi</span>
                                             </div>
-                                            <div style="font-size: 10.5px; color: #C2410C;">
-                                                Atur Google Drive di menu <a href="{{ route('admin_dpn.index') }}" style="color: #0369A1; font-weight: 700; text-decoration: underline;">Kelola Web</a>.
-                                            </div>
+                                            <div>Atur koneksi di menu <a href="{{ route('admin_dpn.index') }}" style="color: #003B64; font-weight: 700; text-decoration: underline;">Kelola Web</a>.</div>
                                         @endif
                                     </div>
                                 </div>
 
-                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                <div class="backup-actions">
                                     @if($isGdriveConfigured)
-                                        <button type="submit" onclick="submitGdriveForm('zip')" style="width: 100%; height: 40px; padding: 0 12px; background: #059669; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#047857';" onmouseout="this.style.background='#059669';">
-                                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                                            <span>Upload Berkas (.ZIP) ke Drive</span>
+                                        <button type="submit" onclick="submitGdriveForm('zip')" class="backup-btn backup-btn--green">
+                                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                            <span>Upload Berkas (.ZIP)</span>
                                         </button>
-                                        <button type="submit" onclick="submitGdriveForm('sql')" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 36px; padding: 0 12px; background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; border-radius: 8px; font-weight: 600; font-size: 11.5px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#D1FAE5';" onmouseout="this.style.background='#ECFDF5';">
-                                            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                            <span>Upload DB SQL ke Drive (~2 MB)</span>
+                                        <button type="submit" onclick="submitGdriveForm('sql')" class="backup-btn backup-btn--green-outline">
+                                            <span>Upload DB SQL (~2 MB)</span>
                                         </button>
                                     @else
-                                        <a href="{{ route('admin_dpn.index') }}#gdrive-config-section" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 40px; padding: 0 12px; background: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1; border-radius: 8px; font-weight: 700; font-size: 11.5px; text-decoration: none;">
-                                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        <a href="{{ route('admin_dpn.index') }}#gdrive-config-section" onclick="closeBackupChoiceModal()" class="backup-btn backup-btn--muted-outline">
                                             <span>Buka Pengaturan Google Drive</span>
                                         </a>
                                     @endif
@@ -762,6 +1169,22 @@
                     const modal = document.getElementById('backupChoiceModal');
                     if (modal) modal.style.display = 'none';
                 }
+
+                document.addEventListener('click', function(e) {
+                    const modal = document.getElementById('backupChoiceModal');
+                    if (modal && modal.style.display === 'flex' && e.target === modal) {
+                        closeBackupChoiceModal();
+                    }
+                });
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        const modal = document.getElementById('backupChoiceModal');
+                        if (modal && modal.style.display === 'flex') {
+                            closeBackupChoiceModal();
+                        }
+                    }
+                });
+
                 function toggleSelectAllCategories(masterCb) {
                     const checkboxes = document.querySelectorAll('input[name="modal_categories[]"]');
                     checkboxes.forEach(cb => {
@@ -788,8 +1211,9 @@
                             selected.push(cb.value);
                             totalBytes += parseInt(cb.getAttribute('data-bytes') || '0', 10);
                         }
-                        if (cb.parentElement && cb.parentElement.parentElement) {
-                            cb.parentElement.parentElement.style.borderColor = cb.checked ? '#0284C7' : '#E2E8F0';
+                        const card = cb.closest('.backup-cat-item');
+                        if (card) {
+                            card.classList.toggle('is-checked', cb.checked);
                         }
                     });
 
@@ -804,9 +1228,10 @@
                     const formattedTotal = formatBytesJS(totalBytes);
 
                     if (summaryBadge) {
-                        summaryBadge.textContent = 'Estimasi Total: ~' + formattedTotal + ' (' + checkedCheckboxes.length + ' Terpilih)';
-                        summaryBadge.style.background = checkedCheckboxes.length > 0 ? '#E0F2FE' : '#F1F5F9';
-                        summaryBadge.style.color = checkedCheckboxes.length > 0 ? '#0284C7' : '#64748B';
+                        summaryBadge.textContent = 'Total: ~' + formattedTotal + ' (' + checkedCheckboxes.length + '/' + allCheckboxes.length + ')';
+                        summaryBadge.style.background = checkedCheckboxes.length > 0 ? '#E3F0F9' : '#F1F5F9';
+                        summaryBadge.style.color = checkedCheckboxes.length > 0 ? '#003B64' : '#64748B';
+                        summaryBadge.style.borderColor = checkedCheckboxes.length > 0 ? '#BFD9EC' : '#CBD5E1';
                     }
 
                     if (btnSizeText) {
