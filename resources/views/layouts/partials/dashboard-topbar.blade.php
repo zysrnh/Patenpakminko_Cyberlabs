@@ -25,9 +25,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
-    padding: 0 24px;
-    gap: 14px;
+    height: 58px;
+    padding: 0 20px;
+    gap: 12px;
 
     background: #FFFFFF;
     border-bottom: 1px solid #D6E4EF;
@@ -42,8 +42,8 @@
     display: none;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 4px;
     background: transparent;
     border: none;
@@ -54,26 +54,25 @@
     margin-right: 2px;
 }
 .hamburger:hover { background: #F1F5F9; }
-.hamburger svg { width: 22px; height: 22px; }
+.hamburger svg { width: 20px; height: 20px; }
 
 .desktop-sidebar-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     border-radius: 4px;
-    background: #F8FAFC;
-    border: 1px solid #E2E8F0;
-    color: #334155;
+    background: transparent;
+    border: none;
+    color: #475569;
     cursor: pointer;
     flex-shrink: 0;
     padding: 0;
-    transition: background .15s ease, border-color .15s ease, color .15s ease;
+    transition: background .15s ease, color .15s ease;
 }
 .desktop-sidebar-toggle:hover {
-    background: #E3F0F9;
-    border-color: #B3D4EC;
+    background: #F1F5F9;
     color: #003B64;
 }
 .desktop-sidebar-toggle svg {
@@ -143,29 +142,25 @@
 .topbar-datepill {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 0 12px;
-    height: 36px;
-    border-radius: 4px;
-    background: #F8FAFC;
-    border: 1px solid #E2E8F0;
-    color: #334155;
-    font-size: 13px;
-    font-weight: 600;
+    gap: 6px;
+    padding: 0 4px;
+    color: #64748B;
+    font-size: 12.5px;
+    font-weight: 500;
     user-select: none;
     white-space: nowrap;
     flex-shrink: 0;
 }
 .topbar-datepill svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     flex-shrink: 0;
-    color: #64748B;
+    color: #94A3B8;
 }
 
 .topbar-divider {
     width: 1px;
-    height: 22px;
+    height: 20px;
     background: #E2E8F0;
     margin: 0 2px;
     flex-shrink: 0;
@@ -173,14 +168,14 @@
 
 /* ─── Backup DB Button ─────────────────────────────────────────────────── */
 .topbar-backup-btn {
-    height: 36px;
-    padding: 0 14px;
+    height: 34px;
+    padding: 0 12px;
     border-radius: 4px;
-    background: #E0F2FE;
-    color: #0284C7;
-    border: 1px solid #BAE6FD;
+    background: #FFFFFF;
+    color: #003B64;
+    border: 1px solid #CBD5E1;
     font-size: 12.5px;
-    font-weight: 700;
+    font-weight: 600;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -188,30 +183,34 @@
     white-space: nowrap;
     flex-shrink: 0;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.topbar-backup-btn svg {
+    color: #218AC9;
 }
 .topbar-backup-btn:hover {
-    background: #BAE6FD;
-    color: #0369A1;
+    background: #E3F0F9;
+    border-color: #218AC9;
+    color: #003B64;
 }
 
 /* ─── Notif button ───────────────────────────────────────────────────────── */
 .topbar-notif-btn {
     position: relative;
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #334155;
+    color: #475569;
     text-decoration: none;
-    transition: background 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease;
     flex-shrink: 0;
 }
-.topbar-notif-btn:hover  { background: #F1F5F9; color: #0F172A; }
+.topbar-notif-btn:hover  { background: #F1F5F9; color: #003B64; }
 .topbar-notif-btn:active { background: #E2E8F0; }
-.topbar-notif-btn svg    { width: 19px; height: 19px; }
+.topbar-notif-btn svg    { width: 18px; height: 18px; }
 
 .topbar-notif-badge {
     position: absolute;
@@ -234,30 +233,35 @@
     pointer-events: none;
 }
 
-/* ─── User chip ──────────────────────────────────────────────────────────── */
+/* ─── User Dropdown Menu ────────────────────────────────────────────────── */
+.topbar-user-menu {
+    position: relative;
+    flex-shrink: 0;
+}
 .topbar-user-chip {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 3px 12px 3px 3px;
-    height: 36px;
+    padding: 3px 10px 3px 4px;
+    height: 34px;
     border-radius: 4px;
     border: 1px solid #E2E8F0;
-    background: #F8FAFC;
-    text-decoration: none;
+    background: #FFFFFF;
+    font-family: inherit;
     outline: none;
     transition: background 0.15s ease, border-color 0.15s ease;
     cursor: pointer;
     white-space: nowrap;
 }
-.topbar-user-chip:hover {
-    background: #F1F5F9;
+.topbar-user-chip:hover,
+.topbar-user-menu.open .topbar-user-chip {
+    background: #F8FAFC;
     border-color: #CBD5E1;
 }
 
 .topbar-user-avatar {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border-radius: 4px;
     flex-shrink: 0;
     display: flex;
@@ -273,39 +277,94 @@
 .topbar-user-avatar--initials {
     background: #003B64;
     color: #fff;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     letter-spacing: 0.03em;
 }
 
 .topbar-user-name {
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: 700;
     color: #0F172A;
     letter-spacing: -0.01em;
 }
+.topbar-user-caret {
+    width: 14px;
+    height: 14px;
+    color: #64748B;
+    transition: transform .15s ease;
+}
+.topbar-user-menu.open .topbar-user-caret {
+    transform: rotate(180deg);
+}
 
-.topbar-logout-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    height: 36px;
-    padding: 0 14px;
+.topbar-user-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    min-width: 196px;
+    background: #FFFFFF;
+    border: 1px solid #D6E4EF;
     border-radius: 4px;
-    border: 1px solid #FCA5A5;
-    background: #FEF2F2;
-    color: #EF4444;
+    padding: 6px;
+    z-index: 300;
+}
+.topbar-user-menu.open .topbar-user-dropdown {
+    display: block;
+}
+.topbar-dd-head {
+    padding: 6px 10px 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #E8F0F6;
+}
+.topbar-dd-head strong {
+    display: block;
     font-size: 12.5px;
     font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    color: #003B64;
     white-space: nowrap;
-    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.topbar-logout-btn:hover {
-    background: #EF4444;
-    color: #ffffff;
-    border-color: #EF4444;
+.topbar-dd-head span {
+    display: block;
+    font-size: 11px;
+    color: #64748B;
+}
+.topbar-dd-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #334155;
+    background: transparent;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background .14s ease, color .14s ease;
+}
+.topbar-dd-item svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+.topbar-dd-item:hover {
+    background: #F1F5F9;
+    color: #003B64;
+}
+.topbar-dd-item--danger {
+    color: #DC2626;
+}
+.topbar-dd-item--danger:hover {
+    background: #FEF2F2;
+    color: #B91C1C;
 }
 
 /* ─── MOBILE RESPONSIVE ──────────────────────────────────────── */
@@ -315,8 +374,8 @@
 
 @media (max-width: 768px) {
     .topbar {
-        padding: 0 14px;
-        height: 60px;
+        padding: 0 12px;
+        height: 56px;
         gap: 8px;
     }
     .hamburger { display: flex; }
@@ -327,9 +386,9 @@
         display: none;
     }
     .topbar-breadcrumb-current {
-        font-size: 14px;
+        font-size: 13.5px;
         font-weight: 800;
-        max-width: 40vw;
+        max-width: 44vw;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -340,14 +399,10 @@
 
     /* Backup DB: icon aja, teks disembunyikan */
     .topbar-backup-btn span { display: none; }
-    .topbar-backup-btn { padding: 0; width: 36px; height: 36px; justify-content: center; border-radius: 8px; }
+    .topbar-backup-btn { padding: 0; width: 34px; height: 34px; justify-content: center; border-radius: 4px; }
 
     .topbar-user-name { display: none; }
-    .topbar-user-chip { padding: 4px; gap: 0; height: 36px; border-radius: 8px; }
-
-    /* Logout: icon aja di HP */
-    .topbar-logout-btn span { display: none; }
-    .topbar-logout-btn { padding: 0; width: 36px; height: 36px; justify-content: center; margin-left: 0; border-radius: 8px; }
+    .topbar-user-chip { padding: 3px 6px 3px 3px; gap: 4px; height: 34px; border-radius: 4px; }
 }
 
 @media (max-width: 420px) {
@@ -791,34 +846,50 @@
             @endif
         </a>
 
-        {{-- User chip --}}
-        <a href="{{ route('profile') }}" class="topbar-user-chip" title="Profil Pengguna">
-            @if(Auth::user()->profile_photo)
-                <img
-                    src="{{ route('file.view', ['path' => Auth::user()->profile_photo]) }}"
-                    alt="Foto Profil"
-                    class="topbar-user-avatar topbar-user-avatar--img"
-                >
-            @else
-                <div class="topbar-user-avatar topbar-user-avatar--initials">
-                    {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 2)) }}
-                </div>
-            @endif
-            <span class="topbar-user-name">{{ Str::limit(Auth::user()->name ?? Auth::user()->username, 18) }}</span>
-        </a>
-
-        {{-- Topbar Logout Button --}}
-        <form action="{{ route('logout') }}" method="POST" style="margin: 0; display: inline-flex;">
-            @csrf
-            <button type="submit" class="topbar-logout-btn" title="Keluar dari Akun">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 15px; height: 15px;">
-                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
+        {{-- User menu dropdown (Profil + Keluar) --}}
+        <div class="topbar-user-menu" id="topbarUserMenu">
+            <button type="button" class="topbar-user-chip" onclick="toggleTopbarUserMenu(event)" aria-expanded="false" aria-haspopup="true" title="Menu Akun">
+                @if(Auth::user()->profile_photo)
+                    <img
+                        src="{{ route('file.view', ['path' => Auth::user()->profile_photo]) }}"
+                        alt="Foto Profil"
+                        class="topbar-user-avatar topbar-user-avatar--img"
+                    >
+                @else
+                    <div class="topbar-user-avatar topbar-user-avatar--initials">
+                        {{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username, 0, 2)) }}
+                    </div>
+                @endif
+                <span class="topbar-user-name">{{ Str::limit(Auth::user()->name ?? Auth::user()->username, 18) }}</span>
+                <svg class="topbar-user-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
                 </svg>
-                <span>Keluar</span>
             </button>
-        </form>
+
+            <div class="topbar-user-dropdown" role="menu">
+                <div class="topbar-dd-head">
+                    <strong>{{ Auth::user()->name ?? Auth::user()->username }}</strong>
+                    <span>{{ Auth::user()->email ?? Auth::user()->username }}</span>
+                </div>
+                <a href="{{ route('profile') }}" class="topbar-dd-item" role="menuitem">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Profil Saya
+                </a>
+                <form action="{{ route('logout') }}" method="POST" style="margin: 2px 0 0;">
+                    @csrf
+                    <button type="submit" class="topbar-dd-item topbar-dd-item--danger" role="menuitem">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Keluar dari Akun
+                    </button>
+                </form>
+            </div>
+        </div>
         @else
         <a href="{{ route('login') }}" class="topbar-backup-btn" title="Masuk ke Akun">
             Masuk ke Akun
@@ -831,12 +902,31 @@
 <script>
     (function () {
         const el = document.getElementById('current-date');
-        if (!el) return;
-        const d = new Date();
-        const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-        const months = ['Januari','Februari','Maret','April','Mei','Juni',
-                        'Juli','Agustus','September','Oktober','November','Desember'];
-        el.textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        if (el) {
+            const d = new Date();
+            const days   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+            const months = ['Januari','Februari','Maret','April','Mei','Juni',
+                            'Juli','Agustus','September','Oktober','November','Desember'];
+            el.textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+        }
+
+        window.toggleTopbarUserMenu = function (e) {
+            if (e) e.stopPropagation();
+            const wrap = document.getElementById('topbarUserMenu');
+            if (!wrap) return;
+            const isOpen = wrap.classList.toggle('open');
+            const btn = wrap.querySelector('.topbar-user-chip');
+            if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        };
+
+        document.addEventListener('click', function (e) {
+            const wrap = document.getElementById('topbarUserMenu');
+            if (wrap && !wrap.contains(e.target)) {
+                wrap.classList.remove('open');
+                const btn = wrap.querySelector('.topbar-user-chip');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+            }
+        });
     })();
 </script>
 

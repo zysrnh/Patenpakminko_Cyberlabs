@@ -179,11 +179,15 @@
             background: #FFFFFF;
             border: 1px solid #D6E4EF;
             border-radius: 4px;
+            min-width: 0;
+            overflow: hidden;
         }
         .panel-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
             padding: 13px 18px;
             border-bottom: 1px solid #D6E4EF;
             background: #F8FAFC;
@@ -224,7 +228,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 10px 12px;
             padding: 12px 14px;
             background: #F8FAFC;
             border: 1px solid #E2E8F0;
@@ -468,54 +473,43 @@
             display: none; position: fixed; inset: 0; background: rgba(0,30,50,.5);
             z-index: 99; opacity: 0; transition: opacity .3s; pointer-events: none;
         }
-        @media (max-width: 768px) {
-            .btn-menu { display: block; margin-right: 12px; }
-            .btn-close-sidebar-mobile { display: flex; align-items: center; justify-content: center; }
-            .sidebar {
-                width: 280px !important;
-                max-width: 84vw !important;
-                transform: translateX(-100%);
-                transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
-                z-index: 1000;
-                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
-            }
-            .sidebar.open { transform: translateX(0); }
-            .sidebar-backdrop { z-index: 999; }
-            .sidebar-backdrop.show { display: block; opacity: 1; pointer-events: auto; }
-            .main-wrap { margin-left: 0; width: 100%; }
-            .topbar { padding: 0 16px; }
-            .content { padding: 14px; }
-            .stat-grid { grid-template-columns: 1fr; }
-            .hero-grid { grid-template-columns: 1fr; }
-            .two-col { grid-template-columns: 1fr; }
-
-            /* KPI cards → Carousel horizontal di HP */
-            .kpi-row {
-                display: flex !important;
-                overflow-x: auto !important;
-                scroll-snap-type: x mandatory !important;
-                -webkit-overflow-scrolling: touch !important;
-                gap: 12px !important;
-                padding-bottom: 8px !important;
-                margin-bottom: 20px !important;
-            }
-            .kpi-row::-webkit-scrollbar {
-                display: none;
-            }
-            .kpi-card {
-                flex: 0 0 74% !important;
-                min-width: 210px !important;
-                scroll-snap-align: start !important;
-                padding: 16px !important;
-                border-radius: 4px !important;
-            }
-            .kpi-number { font-size: 24px !important; }
-            .kpi-label { font-size: 11px !important; }
-
-            /* Grid 2 kolom utama → stack */
+        @media (max-width: 1024px) {
             .grid-overview {
                 grid-template-columns: 1fr !important;
             }
+        }
+
+        @media (max-width: 768px) {
+            body { display: block; }
+            .btn-menu { display: block; margin-right: 12px; }
+            .btn-close-sidebar-mobile { display: flex; align-items: center; justify-content: center; }
+            .sidebar-backdrop { z-index: 999; }
+            .sidebar-backdrop.show { display: block; opacity: 1; pointer-events: auto; }
+            .main-wrap {
+                margin-left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0;
+            }
+            .content { padding: 14px; }
+
+            /* KPI cards → Grid 2 kolom rapi di HP */
+            .kpi-row {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 10px !important;
+                margin-bottom: 16px !important;
+            }
+            .kpi-card:first-child {
+                grid-column: 1 / -1;
+            }
+            .kpi-card {
+                padding: 14px !important;
+                border-radius: 4px !important;
+            }
+            .kpi-number { font-size: 22px !important; }
+            .kpi-label { font-size: 10.5px !important; }
+
             .chart-wrap {
                 height: 200px;
             }
@@ -570,10 +564,20 @@
             .alert-warning th, .alert-warning td { padding: 6px 8px !important; }
         }
 
+        @media (max-width: 640px) {
+            .chart-wrap-services {
+                height: 250px !important;
+            }
+            .panel-body-chart {
+                padding: 14px;
+            }
+        }
+
         @media (max-width: 420px) {
-            .kpi-card { flex: 0 0 85% !important; }
+            .content { padding: 12px; }
             .welcome-card-title { font-size: 15px !important; }
-            .role-badge, .btn-complete-profile { font-size: 11px !important; padding: 5px 10px !important; }
+            .btn-complete-profile { font-size: 11px !important; padding: 5px 10px !important; }
+            .review-meta-right { text-align: left; width: 100%; }
         }
 
     </style>
@@ -979,7 +983,7 @@
                         <span class="panel-head-meta">{{ $totalSeluruhLayanan }} Total Data</span>
                     </div>
                     <div class="panel-body-chart">
-                        <div class="chart-wrap">
+                        <div class="chart-wrap chart-wrap-services">
                             <canvas id="serviceStatsChart"></canvas>
                         </div>
                     </div>
@@ -1102,6 +1106,7 @@
 
             const serviceCtx = document.getElementById('serviceStatsChart');
             if (serviceCtx) {
+                const isMobileChart = window.innerWidth <= 640;
                 new Chart(serviceCtx, {
                     type: 'bar',
                     data: {
@@ -1111,10 +1116,11 @@
                             data: @json($serviceChartCounts),
                             backgroundColor: ['#003B64', '#218AC9', '#2C5272', '#475569', '#0284C7', '#D97706', '#16A34A'],
                             borderRadius: 3,
-                            barPercentage: 0.56
+                            barPercentage: isMobileChart ? 0.65 : 0.56
                         }]
                     },
                     options: {
+                        indexAxis: isMobileChart ? 'y' : 'x',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
@@ -1127,13 +1133,22 @@
                         },
                         scales: {
                             x: {
-                                grid: { display: false },
-                                ticks: { color: '#334155', font: { family: 'Poppins', size: 11, weight: '600' } }
+                                beginAtZero: isMobileChart,
+                                grid: { display: isMobileChart, color: '#E8F0F6' },
+                                ticks: {
+                                    precision: 0,
+                                    color: isMobileChart ? '#64748B' : '#334155',
+                                    font: { family: 'Poppins', size: 10.5, weight: isMobileChart ? '500' : '600' }
+                                }
                             },
                             y: {
-                                beginAtZero: true,
-                                grid: { color: '#E8F0F6' },
-                                ticks: { precision: 0, color: '#64748B', font: { family: 'Poppins', size: 11 } }
+                                beginAtZero: !isMobileChart,
+                                grid: { display: !isMobileChart, color: '#E8F0F6' },
+                                ticks: {
+                                    precision: 0,
+                                    color: isMobileChart ? '#003B64' : '#64748B',
+                                    font: { family: 'Poppins', size: 11, weight: isMobileChart ? '600' : '500' }
+                                }
                             }
                         }
                     }
