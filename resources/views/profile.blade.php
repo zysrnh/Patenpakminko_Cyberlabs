@@ -4,63 +4,89 @@
 @section('page-title', 'Profil Saya')
 
 @section('extra-styles')
+    .profile-intro {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        padding: 16px 20px;
+        margin-bottom: 18px;
+        animation: fadeSlideUp .22s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .profile-intro h1 {
+        font-size: 17px;
+        font-weight: 800;
+        color: #003B64;
+        letter-spacing: -0.02em;
+        margin: 0 0 2px;
+    }
+    .profile-intro p {
+        font-size: 12.5px;
+        color: #64748B;
+        margin: 0;
+    }
     .profile-card {
-        background: #ffffff;
-        border: 1px solid #E2E8F0;
-        border-radius: 6px;
-        box-shadow: 0 2px 8px rgba(0,38,66,0.03);
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
         margin-bottom: 24px;
         overflow: hidden;
+        animation: fadeSlideUp .26s cubic-bezier(0.22, 1, 0.36, 1) .05s both;
     }
     .avatar-section {
         display: flex;
         align-items: center;
-        gap: 24px;
-        padding: 24px 28px;
-        border-bottom: 1px solid #F1F5F9;
-        background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+        gap: 20px;
+        padding: 20px 24px;
+        border-bottom: 1px solid #D6E4EF;
+        background: #F8FAFC;
     }
     .avatar-preview-lg {
-        width: 76px; height: 76px;
-        border-radius: 6px;
+        width: 72px; height: 72px;
+        border-radius: 4px;
         object-fit: cover;
-        border: 2px solid #ffffff;
-        box-shadow: 0 2px 8px rgba(0,59,100,0.12);
+        border: 1px solid #D6E4EF;
         flex-shrink: 0;
     }
     .avatar-placeholder-lg {
-        width: 76px; height: 76px;
-        border-radius: 6px;
-        background: linear-gradient(135deg, #003B64 0%, #218AC9 100%);
-        color: #ffffff;
-        font-size: 24px;
+        width: 72px; height: 72px;
+        border-radius: 4px;
+        background: #003B64;
+        color: #FFFFFF;
+        font-size: 22px;
         font-weight: 800;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        border: 2px solid #ffffff;
-        box-shadow: 0 2px 8px rgba(0,59,100,0.12);
+    }
+    .avatar-role-badge {
+        background: #E3F0F9;
+        color: #003B64;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
     }
     .avatar-upload-btn {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: #ffffff;
-        border: 1.5px solid #CBD5E1;
+        gap: 7px;
+        background: #FFFFFF;
+        border: 1px solid #CBD5E1;
         border-radius: 4px;
-        padding: 7px 14px;
+        padding: 7px 13px;
         font-size: 12px;
-        font-weight: 700;
-        color: #334155;
+        font-weight: 600;
+        color: #003B64;
         cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
     }
     .avatar-upload-btn:hover {
         border-color: #218AC9;
-        color: #218AC9;
-        background: #F0F9FF;
+        background: #E3F0F9;
+    }
+    .avatar-upload-btn:active {
+        transform: scale(0.98);
     }
     #profile_photo { display: none; }
     .badge-optional {
@@ -75,8 +101,10 @@
     .section-header {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 20px 28px 12px;
+        gap: 8px;
+        padding: 16px 24px 12px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid #E8F0F6;
         font-size: 12px;
         font-weight: 800;
         text-transform: uppercase;
@@ -84,35 +112,35 @@
         color: #003B64;
     }
     .section-header svg {
-        width: 16px; height: 16px; stroke: #218AC9; stroke-width: 2; fill: none;
+        width: 15px; height: 15px; stroke: #218AC9; stroke-width: 2; fill: none;
     }
     .form-body {
-        padding: 0 28px 24px;
+        padding: 0 24px 24px;
     }
     .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 18px;
     }
     .form-label {
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 700;
-        color: #1E293B;
+        color: #003B64;
         margin-bottom: 6px;
         display: block;
     }
     .form-control {
         width: 100%;
         padding: 9px 12px;
-        font-size: 13px;
-        border: 1.5px solid #CBD5E1;
+        font-size: 13.5px;
+        border: 1px solid #CBD5E1;
         border-radius: 4px;
-        background: #F8FAFC;
+        background: #FFFFFF;
         color: #0F172A;
-        transition: all 0.2s ease;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
     }
     .form-control:focus {
         border-color: #218AC9;
         background: #FFFFFF;
-        box-shadow: 0 0 0 3px rgba(33, 138, 201, 0.12);
+        box-shadow: 0 0 0 2px #E3F0F9;
         outline: none;
     }
     .form-grid {
@@ -124,52 +152,66 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 12px;
-        padding-top: 20px;
-        border-top: 1px solid #F1F5F9;
-        margin-top: 24px;
+        gap: 10px;
+        padding-top: 18px;
+        border-top: 1px solid #E8F0F6;
+        margin-top: 22px;
     }
     .btn-save {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: linear-gradient(135deg, #003B64 0%, #218AC9 100%);
-        color: #ffffff;
-        border: none;
-        padding: 9px 18px;
+        gap: 7px;
+        background: #003B64;
+        color: #FFFFFF;
+        border: 1px solid #003B64;
+        padding: 8px 18px;
         border-radius: 4px;
         font-size: 13px;
-        font-weight: 700;
+        font-weight: 600;
         cursor: pointer;
-        box-shadow: 0 2px 6px rgba(0,59,100,0.15);
-        transition: all 0.2s ease;
+        transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
     }
     .btn-save:hover {
-        opacity: 0.95;
+        background: #218AC9;
+        border-color: #218AC9;
+    }
+    .btn-save:active {
+        transform: scale(0.98);
     }
     .btn-cancel {
         display: inline-flex;
         align-items: center;
-        padding: 9px 16px;
-        background: #F1F5F9;
-        border: 1px solid #E2E8F0;
+        padding: 8px 16px;
+        background: #FFFFFF;
+        border: 1px solid #CBD5E1;
         border-radius: 4px;
         color: #475569;
         font-size: 13px;
-        font-weight: 700;
+        font-weight: 600;
         text-decoration: none;
-        transition: all 0.2s ease;
+        transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
     }
-    .btn-cancel:hover { background: #E2E8F0; color: #1E293B; }
+    .btn-cancel:hover {
+        background: #F1F5F9;
+        color: #003B64;
+        border-color: #94B8D4;
+    }
+    .btn-cancel:active {
+        transform: scale(0.98);
+    }
 
     /* ─── MOBILE RESPONSIVE ────────────────────────────── */
     @media (max-width: 640px) {
+        .profile-intro {
+            padding: 14px 16px;
+            margin-bottom: 14px;
+        }
         .avatar-section {
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 20px 16px;
-            gap: 16px;
+            padding: 18px 16px;
+            gap: 14px;
         }
         .avatar-section > div {
             display: flex;
@@ -177,8 +219,9 @@
             align-items: center;
             width: 100%;
         }
-        .avatar-section h2 {
+        .avatar-user-head {
             justify-content: center;
+            flex-wrap: wrap;
         }
         .avatar-upload-btn {
             width: 100%;
@@ -186,7 +229,8 @@
             padding: 9px 16px;
         }
         .section-header {
-            padding: 16px 16px 10px;
+            padding: 14px 16px 10px;
+            margin-bottom: 14px;
         }
         .form-body {
             padding: 0 16px 20px;
@@ -203,12 +247,7 @@
         .btn-save, .btn-cancel {
             width: 100%;
             justify-content: center;
-            padding: 11px 16px;
-        }
-        .header-card-inner {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
+            padding: 10px 16px;
         }
     }
 @endsection
@@ -217,18 +256,9 @@
 @php $user = Auth::user(); @endphp
 
 <!-- Header Card -->
-<div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 18px 24px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02);">
-    <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
-        <div>
-            <div style="font-size: 12px; color: #64748B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                <a href="{{ route('dashboard') }}" style="color: #218AC9; text-decoration: none; font-weight: 600;">Dashboard</a>
-                <span>›</span>
-                <span style="color: #64748B;">Profil Saya</span>
-            </div>
-            <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">Lengkapi Data Profil</h1>
-            <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Pastikan data Anda akurat untuk mempercepat proses verifikasi dokumen.</p>
-        </div>
-    </div>
+<div class="profile-intro">
+    <h1>Pengaturan Profil</h1>
+    <p>Pastikan data akun Anda akurat untuk mempercepat proses verifikasi dokumen.</p>
 </div>
 
 <div class="profile-card">
@@ -243,9 +273,9 @@
                 <div class="avatar-placeholder-lg" id="avatarPlaceholder">{{ strtoupper(substr($user->username, 0, 2)) }}</div>
             @endif
             <div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <div class="avatar-user-head" style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
                     <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0;">{{ $user->name ?? $user->username }}</h2>
-                    <span style="background: #E0F2FE; color: #0369A1; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">
+                    <span class="avatar-role-badge">
                         @if($user->isDpn()) Super Admin
                         @elseif($user->isBpn()) Admin Instansi
                         @elseif($user->isDinasPu()) Admin PUTR
@@ -254,7 +284,7 @@
                         @else Pengguna Terverifikasi @endif
                     </span>
                 </div>
-                <div style="font-size: 12.5px; color: #64748B; margin-bottom: 12px; font-weight: 500;">WA: {{ $user->phone_number }}</div>
+                <div style="font-size: 12px; color: #64748B; margin-bottom: 10px; font-weight: 500;">WhatsApp: {{ $user->phone_number }}</div>
                 
                 <label for="profile_photo" class="avatar-upload-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>

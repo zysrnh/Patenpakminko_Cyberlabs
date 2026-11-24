@@ -121,7 +121,7 @@
 
 
         /* ─── CONTENT ────────────────────────── */
-        .content { padding: 24px 28px; flex: 1; min-width: 0; width: 100%; overflow-x: hidden; }
+        .content { padding: 24px 28px; flex: 1; min-width: 0; width: 100%; overflow-x: hidden; background: #F4F7FA; }
 
         /* ─── PAGE HEADER ────────────────────── */
         .page-header {
@@ -284,7 +284,7 @@
         @keyframes fadeSlideUp {
             from {
                 opacity: 0;
-                transform: translateY(12px);
+                transform: translateY(8px);
             }
             to {
                 opacity: 1;
@@ -293,15 +293,21 @@
         }
 
         .panel, .profile-card, .welcome-card, .kpi-card, .alert, .page-header {
-            animation: fadeSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+            animation: fadeSlideUp 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         .btn, .btn-primary, .btn-save, .btn-cancel, .avatar-upload-btn {
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, transform 0.1s ease !important;
         }
 
-        .btn:active, .btn-primary:active, .btn-save:active, .avatar-upload-btn:active {
-            transform: scale(0.97) !important;
+        .btn:active, .btn-primary:active, .btn-save:active, .btn-cancel:active, .avatar-upload-btn:active {
+            transform: scale(0.98) !important;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .panel, .profile-card, .welcome-card, .kpi-card, .alert, .page-header, .profile-intro {
+                animation: none !important;
+            }
         }
 
         /* ─── MOBILE RESPONSIVE ──────────────── */
@@ -313,16 +319,6 @@
                 max-width: 100vw !important;
             }
 
-            .sidebar {
-                transform: translateX(-100%);
-                width: 280px;
-                max-width: 84vw;
-                transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
-                z-index: 1000;
-                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
-            }
-            .sidebar.open { transform: translateX(0); }
-
             .main-wrap {
                 margin-left: 0 !important;
                 width: 100% !important;
@@ -330,13 +326,8 @@
                 overflow-x: hidden !important;
             }
 
-            .hamburger { display: flex; }
-
-            .topbar { padding: 0 14px; height: 60px; width: 100% !important; max-width: 100% !important; }
-            .topbar-date { display: none; }
-
             .content {
-                padding: 12px 10px !important;
+                padding: 14px !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
