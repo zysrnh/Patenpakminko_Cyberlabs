@@ -20,6 +20,8 @@
 /public/storage
 /storage/*.key
 /storage/pail
+google_drive_credentials.json
+*credentials*.json
 /vendor
 _ide_helper.php
 Homestead.json
