@@ -56,6 +56,34 @@
 .hamburger:hover { background: #F1F5F9; }
 .hamburger svg { width: 22px; height: 22px; }
 
+.desktop-sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    color: #334155;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.desktop-sidebar-toggle:hover {
+    background: #E3F0F9;
+    border-color: #B3D4EC;
+    color: #003B64;
+}
+.desktop-sidebar-toggle svg {
+    width: 17px;
+    height: 17px;
+}
+@media (max-width: 768px) {
+    .desktop-sidebar-toggle { display: none; }
+}
+
 /* ─── Kiri: breadcrumb ───────────────────────────────────────── */
 .topbar-left {
     display: flex;
@@ -341,6 +369,13 @@
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <line x1="3" y1="12" x2="21" y2="12"/>
                 <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+
+        <button type="button" class="desktop-sidebar-toggle" onclick="toggleDesktopSidebar()" title="Buka / Tutup Sidebar" aria-label="Buka atau tutup sidebar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <line x1="9" y1="3" x2="9" y2="21"/>
             </svg>
         </button>
 

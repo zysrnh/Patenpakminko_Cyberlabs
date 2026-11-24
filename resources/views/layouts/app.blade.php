@@ -116,6 +116,7 @@
             min-width: 0;
             width: calc(100% - var(--sidebar));
             max-width: 100%;
+            transition: margin-left .2s ease, width .2s ease;
         }
 
 

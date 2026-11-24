@@ -79,6 +79,8 @@
             margin-left: var(--sidebar);
             flex: 1; display: flex; flex-direction: column;
             min-height: 100vh;
+            min-width: 0;
+            transition: margin-left .2s ease;
         }
 
 
