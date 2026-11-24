@@ -72,96 +72,7 @@
             display: flex;
         }
 
-        /* ─── SIDEBAR ────────────────────────── */
-        .sidebar {
-            width: var(--sidebar);
-            background: var(--blue-dk);
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0; left: 0; bottom: 0;
-            z-index: 20;
-            overflow-y: auto;
-            transition: transform .25s ease;
-        }
-        .sidebar > * {
-            flex-shrink: 0;
-        }
-
-        .btn-close-sidebar-mobile {
-            display: none;
-            background: transparent;
-            border: none;
-            color: rgba(255,255,255,0.7);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 6px;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-        .btn-close-sidebar-mobile:hover {
-            color: #ffffff;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .sidebar-logo-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 16px 16px;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-        }
-        .sidebar-logo {
-            display: flex;
-            align-items: center;
-            gap: 11px;
-            text-decoration: none;
-            min-width: 0;
-            flex: 1;
-        }
-        .sidebar-logo-icon {
-            width: 36px; height: 36px;
-            border-radius: var(--r-md);
-            background: var(--blue);
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .sidebar-logo-icon svg { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .sidebar-logo-text { min-width: 0; }
-        .sidebar-logo-text strong { display: block; font-size: 14px; font-weight: 800; color: #fff; letter-spacing: -.02em; white-space: nowrap; }
-        .sidebar-logo-text span { display: block; font-size: 9.5px; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
-
-        .sidebar-section { padding: 16px 12px 6px; }
-        .sidebar-section-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .08em; padding: 0 8px; margin-bottom: 6px; }
-
-        .nav-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 9.5px 12px; border-radius: var(--r-md);
-            text-decoration: none; color: rgba(255,255,255,.7);
-            font-size: 13px; font-weight: 600; line-height: 1.35;
-            transition: all .18s; margin-bottom: 3px;
-        }
-        .nav-item svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
-        .nav-item:hover { color: #fff; background: rgba(255,255,255,.08); }
-        .nav-item.active { color: var(--blue-dk); background: var(--yellow); font-weight: 700; }
-        .nav-item.active svg { color: var(--blue-dk); }
-
-        .sidebar-bottom { margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,.08); }
-        .sidebar-user { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: var(--r-md); background: rgba(255,255,255,.06); margin-bottom: 8px; }
-        .sidebar-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--blue); color: #fff; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1.5px solid rgba(255,255,255,.2); object-fit: cover; }
-        .sidebar-user-info strong { display: block; font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
-        .sidebar-user-info span { font-size: 11px; color: rgba(255,255,255,.45); }
-
-        .btn-logout-sidebar {
-            display: flex; align-items: center; gap: 8px;
-            width: 100%; padding: 9px 10px;
-            background: transparent; border: 1px solid rgba(255,255,255,.12);
-            border-radius: var(--r-md); color: rgba(255,255,255,.55);
-            font-family: inherit; font-size: 13px; font-weight: 600;
-            cursor: pointer; transition: all .18s;
-        }
-        .btn-logout-sidebar svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .btn-logout-sidebar:hover { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.3); color: #FC8181; }
+        /* ─── SIDEBAR CSS DI-HANDLE PARTIAL sidebar.blade.php ─── */
 
         /* ─── MAIN AREA ──────────────────────── */
         .main-wrap {
@@ -858,47 +769,6 @@
             .kpi-card { flex: 0 0 85% !important; }
             .welcome-card-title { font-size: 15px !important; }
             .role-badge, .btn-complete-profile { font-size: 11px !important; padding: 5px 10px !important; }
-        }
-
-        /* ─── SIDEBAR DROPDOWN ───────────────── */
-        .nav-item-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .nav-item.has-dropdown {
-            justify-content: space-between;
-            cursor: pointer;
-        }
-        .nav-dropdown-menu {
-            display: none;
-            flex-direction: column;
-            padding-left: 44px;
-            margin-top: 4px;
-            margin-bottom: 8px;
-            gap: 4px;
-        }
-        .nav-dropdown-menu.open {
-            display: flex;
-        }
-        .nav-dropdown-item {
-            padding: 8px 12px;
-            color: var(--muted);
-            font-size: 12.5px;
-            text-decoration: none;
-            border-radius: var(--r-sm);
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-        .nav-dropdown-item:hover, .nav-dropdown-item.active {
-            color: var(--blue);
-            background: var(--surface2);
-        }
-        .chevron {
-            width: 16px; height: 16px;
-            transition: transform 0.2s;
-        }
-        .nav-item.has-dropdown.open .chevron {
-            transform: rotate(180deg);
         }
 
     </style>

@@ -62,6 +62,8 @@
     .sidebar-logo-icon {
         width: 38px;
         height: 38px;
+        background: transparent;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -109,35 +111,43 @@
     }
 
     .sidebar-section {
-        padding: 14px 12px 4px;
+        padding: 12px 12px 6px;
+    }
+    .sidebar-section + .sidebar-section {
+        border-top: 1px solid rgba(255, 255, 255, .07);
+        margin-top: 2px;
+        padding-top: 12px;
     }
     .sidebar-section-label {
         font-size: 10px;
         font-weight: 700;
-        color: rgba(255, 255, 255, .38);
+        color: rgba(255, 255, 255, .4);
         text-transform: uppercase;
         letter-spacing: .08em;
         padding: 0 8px;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
     }
 
     .nav-item {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 9px 11px;
+        gap: 9px;
+        padding: 7.5px 10px;
         border-radius: 4px;
         text-decoration: none;
-        color: rgba(255, 255, 255, .72);
-        font-size: 13px;
-        font-weight: 600;
-        line-height: 1.35;
-        transition: background .16s ease, color .16s ease;
+        color: rgba(255, 255, 255, .74);
+        font-size: 12.5px;
+        font-weight: 500;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background .15s ease, color .15s ease;
         margin-bottom: 2px;
     }
     .nav-item svg {
-        width: 17px;
-        height: 17px;
+        width: 16px;
+        height: 16px;
         fill: none;
         stroke: currentColor;
         stroke-width: 2;
@@ -170,8 +180,8 @@
     .nav-dropdown-menu {
         display: none;
         flex-direction: column;
-        margin: 2px 0 6px 19px;
-        padding-left: 12px;
+        margin: 2px 0 6px 17px;
+        padding-left: 11px;
         border-left: 1px solid rgba(255, 255, 255, .14);
         gap: 2px;
     }
@@ -179,14 +189,17 @@
         display: flex;
     }
     .nav-dropdown-item {
-        padding: 7px 10px;
-        color: rgba(255, 255, 255, .66);
+        padding: 6.5px 10px;
+        color: rgba(255, 255, 255, .68);
         font-size: 12px;
         text-decoration: none;
         border-radius: 4px;
-        transition: background .16s ease, color .16s ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: background .15s ease, color .15s ease;
         font-weight: 500;
-        line-height: 1.35;
+        line-height: 1.3;
     }
     .nav-dropdown-item:hover {
         color: #fff;
@@ -347,23 +360,23 @@
     @if(!Auth::check() || !Auth::user()->isAdminBerita())
     <div class="sidebar-section">
         <div class="sidebar-section-label">Layanan</div>
-        <a href="{{ route('berusaha.index') }}" class="nav-item {{ request()->routeIs('berusaha.*') ? 'active' : '' }}">
+        <a href="{{ route('berusaha.index') }}" class="nav-item {{ request()->routeIs('berusaha.*') ? 'active' : '' }}" title="Pertimbangan Teknis Pertanahan PKKPR Berusaha">
             <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
-            Pertimbangan Teknis Pertanahan PKKPR Berusaha
+            Pertek PKKPR Berusaha
         </a>
-        <a href="{{ route('non-berusaha.index') }}" class="nav-item {{ request()->routeIs('non-berusaha.*') ? 'active' : '' }}">
+        <a href="{{ route('non-berusaha.index') }}" class="nav-item {{ request()->routeIs('non-berusaha.*') ? 'active' : '' }}" title="Pertimbangan Teknis Pertanahan PKKPR Non Berusaha">
             <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Pertimbangan Teknis Pertanahan PKKPR Non Berusaha
+            Pertek PKKPR Non Berusaha
         </a>
-        <a href="{{ route('kebijakan.index') }}" class="nav-item {{ request()->routeIs('kebijakan.*') ? 'active' : '' }}">
+        <a href="{{ route('kebijakan.index') }}" class="nav-item {{ request()->routeIs('kebijakan.*') ? 'active' : '' }}" title="Pertimbangan Teknis Pertanahan Kebijakan">
             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            Pertimbangan Teknis Pertanahan Kebijakan
+            Pertek Kebijakan
         </a>
-        <a href="{{ route('tanah-timbul.index') }}" class="nav-item {{ request()->routeIs('tanah-timbul.*') ? 'active' : '' }}">
+        <a href="{{ route('tanah-timbul.index') }}" class="nav-item {{ request()->routeIs('tanah-timbul.*') ? 'active' : '' }}" title="Pertimbangan Teknis Pertanahan Tanah Timbul">
             <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-            Pertimbangan Teknis Pertanahan Tanah Timbul
+            Pertek Tanah Timbul
         </a>
-        <a href="{{ route('psn.index') }}" class="nav-item {{ request()->routeIs('psn.*') ? 'active' : '' }}">
+        <a href="{{ route('psn.index') }}" class="nav-item {{ request()->routeIs('psn.*') ? 'active' : '' }}" title="Pertimbangan Teknis Pertanahan Proyek Strategis Nasional (PSN)">
             <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
             PSN (Proyek Nasional)
         </a>
@@ -411,13 +424,13 @@
             </div>
             <div class="nav-dropdown-menu {{ request()->routeIs('berkas.*') ? 'open' : '' }}">
                 <a href="{{ route('berkas.index') }}" class="nav-dropdown-item {{ request()->routeIs('berkas.index') && !request('kategori') ? 'active' : '' }}">Berkas Otomatis</a>
-                <a href="{{ route('berkas.index', ['kategori' => 'Pertek PKKPR Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PKKPR Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Berusaha</a>
-                <a href="{{ route('berkas.index', ['kategori' => 'Pertek PKKPR Non Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PKKPR Non Berusaha' ? 'active' : '' }}">Pertimbangan Teknis Non Berusaha</a>
+                <a href="{{ route('berkas.index', ['kategori' => 'Pertek PKKPR Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PKKPR Berusaha' ? 'active' : '' }}" title="Pertimbangan Teknis Berusaha">Pertek Berusaha</a>
+                <a href="{{ route('berkas.index', ['kategori' => 'Pertek PKKPR Non Berusaha']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PKKPR Non Berusaha' ? 'active' : '' }}" title="Pertimbangan Teknis Non Berusaha">Pertek Non Berusaha</a>
                 @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
-                <a href="{{ route('berkas.index', ['kategori' => 'Pertek Kebijakan Khusus']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek Kebijakan Khusus' ? 'active' : '' }}">Pertimbangan Teknis Kebijakan</a>
-                <a href="{{ route('berkas.index', ['kategori' => 'Pertek Tanah Timbul']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek Tanah Timbul' ? 'active' : '' }}">Pertimbangan Teknis Tanah Timbul</a>
+                <a href="{{ route('berkas.index', ['kategori' => 'Pertek Kebijakan Khusus']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek Kebijakan Khusus' ? 'active' : '' }}" title="Pertimbangan Teknis Kebijakan">Pertek Kebijakan</a>
+                <a href="{{ route('berkas.index', ['kategori' => 'Pertek Tanah Timbul']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek Tanah Timbul' ? 'active' : '' }}" title="Pertimbangan Teknis Tanah Timbul">Pertek Tanah Timbul</a>
                 @endif
-                <a href="{{ route('berkas.index', ['kategori' => 'Pertek PSN']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PSN' ? 'active' : '' }}">Pertimbangan Teknis PSN</a>
+                <a href="{{ route('berkas.index', ['kategori' => 'Pertek PSN']) }}" class="nav-dropdown-item {{ request('kategori') == 'Pertek PSN' ? 'active' : '' }}" title="Pertimbangan Teknis PSN">Pertek PSN</a>
             </div>
         </div>
         <a href="{{ route('dokumen.index') }}" class="nav-item {{ request()->routeIs('dokumen.*') ? 'active' : '' }}">
