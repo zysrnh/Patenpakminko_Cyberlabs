@@ -164,8 +164,231 @@
             font-size: 10px !important;
         }
     }
+
+    /* ─── DESKTOP: SATU LAYAR PER SECTION (1025px+) ─────────── */
+    @media (min-width: 1025px) and (min-height: 580px) {
+        html:has(.home-section) {
+            scroll-snap-type: y proximity;
+        }
+        .home-section {
+            scroll-snap-align: start;
+            scroll-margin-top: 68px;
+        }
+
+        /* Screen 1: Hero & Panel Layanan */
+        .hero.home-section {
+            min-height: calc(100dvh - 68px);
+            display: flex;
+            align-items: center;
+            padding: clamp(14px, 2.4vh, 40px) 0;
+        }
+        .hero-grid {
+            align-items: center;
+            gap: clamp(24px, 3vw, 48px);
+        }
+        .hero-brand-flex {
+            gap: clamp(12px, 1.5vw, 18px);
+            margin-bottom: clamp(8px, 1.3vh, 16px);
+        }
+        .hero-logo-img {
+            width: clamp(60px, 8.5vh, 132px);
+        }
+        .hero-heading-title {
+            font-size: clamp(28px, 4.2vw, 60px);
+        }
+        .hero-sub-title {
+            font-size: clamp(14.5px, 1.7vw, 23px);
+            margin-bottom: clamp(10px, 1.5vh, 18px);
+        }
+        .hero-sub {
+            font-size: clamp(12.5px, 1.5vh, 14px);
+            line-height: 1.65;
+            margin-bottom: clamp(14px, 2.2vh, 26px);
+        }
+        .hero .sp-header {
+            padding: clamp(10px, 1.4vh, 16px) 18px;
+        }
+        .hero .sp-section-label {
+            padding: clamp(6px, 0.9vh, 10px) 18px clamp(4px, 0.6vh, 6px);
+        }
+        .hero .sp-slide {
+            gap: clamp(5px, 0.75vh, 8px) !important;
+            padding: 0 14px clamp(6px, 0.9vh, 10px);
+        }
+        .hero .sp-row {
+            padding: clamp(5px, 0.85vh, 9px) 12px !important;
+        }
+        .hero .sp-row-logo {
+            width: clamp(34px, 4.4vh, 44px) !important;
+            height: clamp(34px, 4.4vh, 44px) !important;
+            flex: 0 0 clamp(34px, 4.4vh, 44px) !important;
+        }
+        .hero .sp-others {
+            padding: clamp(6px, 1vh, 12px) 14px clamp(10px, 1.4vh, 16px) !important;
+            gap: 8px !important;
+        }
+        .hero .sp-other-card {
+            padding: clamp(7px, 1vh, 11px) 12px !important;
+        }
+
+        /* Screen 2: Statistik + Tahapan Permohonan */
+        .home-screen-process {
+            min-height: calc(100dvh - 68px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .home-screen-process .stats-band {
+            padding: clamp(16px, 2.4vh, 32px) 0;
+            flex-shrink: 0;
+        }
+        .home-screen-process .stat-icon {
+            width: clamp(46px, 6vh, 64px);
+            height: clamp(46px, 6vh, 64px);
+            margin-bottom: clamp(6px, 0.9vh, 12px);
+        }
+        .home-screen-process .stat-icon svg,
+        .home-screen-process .stat-icon img {
+            width: clamp(22px, 3vh, 30px);
+            height: clamp(22px, 3vh, 30px);
+        }
+        .home-screen-process .stat-num {
+            font-size: clamp(22px, 3.1vh, 32px);
+            margin-bottom: 3px;
+        }
+        .home-screen-process .stat-label {
+            font-size: clamp(11.5px, 1.4vh, 13px);
+        }
+        .home-screen-process .process {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: clamp(16px, 2.8vh, 44px) 0;
+        }
+        .home-screen-process .section-header {
+            margin-bottom: clamp(14px, 2.2vh, 36px);
+        }
+        .home-screen-process .eyebrow-badge {
+            margin-bottom: clamp(8px, 1vh, 14px);
+        }
+        .home-screen-process .process-track {
+            padding-top: clamp(6px, 1vh, 16px);
+        }
+        .home-screen-process .step-img-wrapper {
+            height: clamp(80px, 11.5vh, 122px);
+            margin-bottom: clamp(10px, 1.4vh, 18px);
+        }
+        .home-screen-process .step-img-wrapper img {
+            max-height: clamp(76px, 10.5vh, 114px);
+        }
+
+        /* Screen 3: Testimoni & Ulasan */
+        .reviews.home-section {
+            min-height: calc(100dvh - 68px);
+            display: flex;
+            align-items: center;
+            padding: clamp(22px, 3.4vh, 52px) 0;
+        }
+        .reviews.home-section .section-header {
+            margin-bottom: clamp(16px, 2.4vh, 36px);
+        }
+        .reviews.home-section .reviews-layout {
+            margin-top: clamp(12px, 2vh, 28px);
+        }
+
+        /* Screen 4: Artikel & Informasi */
+        .artikel-section.home-section {
+            min-height: calc(100dvh - 68px);
+            display: flex;
+            align-items: center;
+            padding: clamp(20px, 2.8vh, 44px) 0;
+        }
+        .artikel-section.home-section .section-header {
+            margin-bottom: clamp(12px, 1.8vh, 26px);
+        }
+        .artikel-section.home-section .eyebrow-badge {
+            margin-bottom: clamp(6px, 0.9vh, 12px);
+        }
+        .artikel-section.home-section .artikel-top-grid {
+            gap: clamp(14px, 1.8vw, 24px);
+            margin-bottom: clamp(14px, 2vh, 24px);
+        }
+        .artikel-section.home-section .art-featured {
+            min-height: clamp(185px, 27vh, 330px);
+            padding: clamp(14px, 2vh, 24px);
+        }
+        .artikel-section.home-section .art-latest-title {
+            margin-bottom: clamp(8px, 1.2vh, 14px);
+        }
+        .artikel-section.home-section .art-latest-list {
+            gap: clamp(8px, 1.1vh, 14px);
+        }
+        .artikel-section.home-section .art-list-img {
+            width: clamp(54px, 7.2vh, 84px);
+            height: clamp(54px, 7.2vh, 84px);
+        }
+        .artikel-section.home-section .art-carousel-wrap {
+            margin-top: 0 !important;
+            padding-bottom: 0;
+        }
+        .artikel-section.home-section .art-card-img {
+            height: clamp(92px, 13.5vh, 165px);
+        }
+        .artikel-section.home-section .art-card-body {
+            padding: clamp(10px, 1.4vh, 16px);
+        }
+        .artikel-section.home-section .art-card-desc {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .artikel-section.home-section .art-dots {
+            margin: clamp(8px, 1.2vh, 14px) 0 0;
+        }
+
+        /* Screen 5: CTA Band + Footer pas dalam 1 layar bawah */
+        .cta-band.home-section {
+            padding: clamp(20px, 3.6vh, 64px) 0;
+        }
+        .cta-band.home-section .cta-heading {
+            font-size: clamp(22px, 3vw, 38px);
+            margin-bottom: clamp(6px, 1vh, 12px);
+        }
+        .cta-band.home-section .cta-sub {
+            font-size: clamp(12.5px, 1.45vh, 14px);
+            margin-bottom: clamp(14px, 2.2vh, 26px);
+        }
+        .cta-band.home-section .btn-cta-primary,
+        .cta-band.home-section .btn-cta-outline {
+            padding: clamp(9px, 1.3vh, 13px) clamp(18px, 2vw, 26px);
+            font-size: clamp(12.5px, 1.45vh, 14px);
+        }
+        body:has(.home-section) .site-footer {
+            padding-top: clamp(22px, 3.2vh, 48px);
+        }
+        body:has(.home-section) .footer-grid {
+            gap: clamp(18px, 2.2vw, 32px);
+            padding-bottom: clamp(18px, 2.8vh, 42px);
+        }
+        body:has(.home-section) .f-col-title {
+            margin-bottom: clamp(8px, 1.2vh, 14px);
+        }
+        body:has(.home-section) .f-links {
+            gap: clamp(6px, 0.9vh, 10px);
+        }
+        body:has(.home-section) .footer-desc {
+            font-size: clamp(11.5px, 1.35vh, 13px);
+            margin-top: 10px;
+        }
+        body:has(.home-section) .f-links a,
+        body:has(.home-section) .f-contact-item {
+            font-size: clamp(11.5px, 1.35vh, 12.5px);
+        }
+    }
 </style>
-<section class="hero">
+<section class="hero home-section">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="container">
         <div class="hero-grid">
@@ -474,8 +697,8 @@
 
 
 
-<!--  STATS  -->
-
+<!--  SCREEN 2: STATS + PROCESS  -->
+<div class="home-screen-process home-section">
 <div class="stats-band">
 
     <div class="container">
@@ -656,14 +879,11 @@
     </div>
 
 </section>
-
-
-
-
+</div>
 
 <!--  REVIEWS  -->
 
-<section id="ulasan" class="reviews">
+<section id="ulasan" class="reviews home-section">
 
     <div class="container">
 
@@ -797,7 +1017,7 @@
 
 <!--  ARTIKEL & INFORMASI  -->
 
-<section id="artikel" class="artikel-section">
+<section id="artikel" class="artikel-section home-section">
 
     <div class="container">
 
@@ -945,7 +1165,7 @@
 
 <!--  CTA BAND  -->
 
-<section class="cta-band" style="background-image: url('{{ asset('storage/aset/Footer.png') }}');">
+<section class="cta-band home-section" style="background-image: url('{{ asset('storage/aset/Footer.png') }}');">
 
     <div class="container">
 
