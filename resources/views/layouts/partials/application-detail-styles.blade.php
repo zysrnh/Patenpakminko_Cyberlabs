@@ -1127,7 +1127,14 @@
                     head.appendChild(h2);
                     head.appendChild(countChip);
                     card.appendChild(head);
-                    card.appendChild(listGrid);
+                    if (rows.length === 0) {
+                        const emptyMsg = document.createElement('div');
+                        emptyMsg.style.cssText = 'padding:14px 16px;background:#F8FAFC;border:1px dashed #CBD5E1;border-radius:4px;font-size:12.5px;color:#64748B;text-align:center;';
+                        emptyMsg.textContent = 'Belum ada berkas lampiran yang diunggah pemohon.';
+                        card.appendChild(emptyMsg);
+                    } else {
+                        card.appendChild(listGrid);
+                    }
 
                     if (infoCard && infoCard.parentElement === leftCol) {
                         leftCol.insertBefore(card, infoCard);

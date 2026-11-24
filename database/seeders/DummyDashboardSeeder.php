@@ -4,15 +4,165 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class DummyDashboardSeeder extends Seeder
 {
     /**
-     * Kosongkan data transaksi lokal dan isi 500 data dummy permohonan + ulasan + jadwal konsultasi.
+     * Buat file PDF dan gambar PNG sampel valid di storage/app/public/samples
+     * agar tombol Preview dan Buka Tab Baru di halaman detail langsung berfungsi.
+     */
+    private function ensureSampleFiles(): void
+    {
+        $disk = Storage::disk('public');
+        $disk->makeDirectory('samples');
+
+        $pdfs = [
+            'samples/identitas-pemohon.pdf' => [
+                'DOKUMEN CONTOH - IDENTITAS PEMOHON',
+                'Salinan KTP Elektronik & NPWP Pemohon Layanan Pertimbangan Teknis Pertanahan',
+                'PATEN PAK MIKO - Kantor Pertanahan Kota Sukabumi',
+            ],
+            'samples/surat-kuasa.pdf' => [
+                'DOKUMEN CONTOH - SURAT KUASA PERMOHONAN',
+                'Surat Kuasa Penunjukan Perwakilan Pengurusan PKKPR / Pertek',
+                'Status: Berkas Persyaratan Valid',
+            ],
+            'samples/akta-legalitas.pdf' => [
+                'DOKUMEN CONTOH - AKTA PENDIRIAN & LEGALITAS USAHA',
+                'Akta Pendirian Badan Usaha, NIB (OSS RBA), & Klasifikasi KBLI Terlampir',
+                'Kantor Pertanahan Kota Sukabumi',
+            ],
+            'samples/rencana-proposal.pdf' => [
+                'DOKUMEN CONTOH - RENCANA PENGGUNAAN TANAH & PROPOSAL',
+                'Rencana Tapak, Luasan Lahan, dan Uraian Kegiatan Pemanfaatan Ruang',
+                'Lokasi: Kota Sukabumi, Jawa Barat',
+            ],
+            'samples/sps-pnbp.pdf' => [
+                'SURAT PERINTAH SETOR (SPS) PNBP - CONTOH',
+                'Tagihan Penerimaan Negara Bukan Pajak (PNBP) Pertimbangan Teknis Pertanahan',
+                'Status Pembayaran: Terverifikasi / Lunas',
+            ],
+            'samples/pertek-bpn.pdf' => [
+                'PERTIMBANGAN TEKNIS PERTANAHAN (PERTEK) - CONTOH',
+                'Dokumen Resmi Rekomendasi Teknis Kantor Pertanahan Kota Sukabumi',
+                'Berdasarkan Hasil Peninjauan Lapangan & Rapat Pembahasan Teknis',
+            ],
+            'samples/pkkpr-final.pdf' => [
+                'DOKUMEN PERSETUJUAN PKKPR FINAL - CONTOH',
+                'Kesesuaian Kegiatan Pemanfaatan Ruang (PKKPR) Terbit Lengkap',
+                'DPMPTSP & Kantor Pertanahan Kota Sukabumi',
+            ],
+        ];
+
+        foreach ($pdfs as $relPath => $lines) {
+            $disk->put($relPath, $this->buildSimplePdf($lines));
+        }
+
+        // Gambar sketsa peta lokasi (PNG valid)
+        $disk->put('samples/sketsa-lokasi.png', $this->buildSampleMapPng());
+    }
+
+    /**
+     * Generator PDF minimal valid (PDF 1.4, font Helvetica) tanpa dependency eksternal.
+     */
+    private function buildSimplePdf(array $lines): string
+    {
+        $escape = static fn (string $s): string => str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $s);
+
+        $streamLines = ["BT", "/F1 15 Tf", "50 750 Td", "(" . $escape($lines[0] ?? 'DOKUMEN CONTOH') . ") Tj"];
+        $streamLines[] = "/F2 11 Tf";
+        $y = 720;
+        for ($i = 1; $i < count($lines); $i++) {
+            $streamLines[] = "0 -26 Td";
+            $streamLines[] = "(" . $escape($lines[$i]) . ") Tj";
+            $y -= 26;
+        }
+        $streamLines[] = "0 -34 Td";
+        $streamLines[] = "(Dokumen ini adalah berkas sampel lokal untuk pengujian preview petugas PATEN PAK MIKO.) Tj";
+        $streamLines[] = "ET";
+
+        $stream = implode("\n", $streamLines);
+
+        $objects = [
+            1 => "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n",
+            2 => "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n",
+            3 => "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>\nendobj\n",
+            4 => "4 0 obj\n<< /Length " . strlen($stream) . " >>\nstream\n{$stream}\nendstream\nendobj\n",
+            5 => "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n",
+            6 => "6 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n",
+        ];
+
+        $pdf = "%PDF-1.4\n";
+        $offsets = [0 => 0];
+        foreach ($objects as $num => $body) {
+            $offsets[$num] = strlen($pdf);
+            $pdf .= $body;
+        }
+        $xrefOffset = strlen($pdf);
+        $pdf .= "xref\n0 " . (count($objects) + 1) . "\n";
+        $pdf .= "0000000000 65535 f \n";
+        for ($i = 1; $i <= count($objects); $i++) {
+            $pdf .= sprintf("%010d 00000 n \n", $offsets[$i]);
+        }
+        $pdf .= "trailer\n<< /Size " . (count($objects) + 1) . " /Root 1 0 R >>\nstartxref\n{$xrefOffset}\n%%EOF\n";
+
+        return $pdf;
+    }
+
+    /**
+     * Generator PNG sketsa bidang tanah sederhana untuk preview gambar peta lokasi.
+     */
+    private function buildSampleMapPng(): string
+    {
+        if (function_exists('imagecreatetruecolor')) {
+            $im = imagecreatetruecolor(800, 500);
+            $bg = imagecolorallocate($im, 241, 245, 249);
+            $grid = imagecolorallocate($im, 214, 228, 239);
+            $navy = imagecolorallocate($im, 0, 59, 100);
+            $blue = imagecolorallocate($im, 33, 138, 201);
+            $green = imagecolorallocate($im, 22, 163, 74);
+            $fill = imagecolorallocate($im, 227, 240, 249);
+            $white = imagecolorallocate($im, 255, 255, 255);
+
+            imagefilledrectangle($im, 0, 0, 800, 500, $bg);
+            for ($x = 0; $x <= 800; $x += 40) {
+                imageline($im, $x, 0, $x, 500, $grid);
+            }
+            for ($y = 0; $y <= 500; $y += 40) {
+                imageline($im, 0, $y, 800, $y, $grid);
+            }
+            imagefilledrectangle($im, 0, 0, 800, 52, $navy);
+            imagestring($im, 5, 24, 18, 'SKETSA PETA LOKASI BIDANG TANAH (CONTOH) - PATEN PAK MIKO', $white);
+
+            $pts = [180, 140, 560, 120, 620, 340, 220, 390];
+            imagefilledpolygon($im, $pts, $fill);
+            imagepolygon($im, $pts, $blue);
+            imagefilledellipse($im, 400, 250, 18, 18, $green);
+            imagestring($im, 4, 265, 245, 'Titik Koordinat: -6.9215, 106.9261', $navy);
+            imagestring($im, 3, 24, 465, 'Kota Sukabumi | Dokumen Simulasi Verifikasi Petugas', $navy);
+
+            ob_start();
+            imagepng($im);
+            $png = ob_get_clean();
+            imagedestroy($im);
+            if ($png !== false) {
+                return $png;
+            }
+        }
+
+        // Fallback 1x1 transparent PNG
+        return base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+    }
+
+    /**
+     * Kosongkan data transaksi lokal dan isi 500 data dummy permohonan + berkas contoh + ulasan + jadwal konsultasi.
      */
     public function run(): void
     {
+        $this->ensureSampleFiles();
+
         $pelakuIds = DB::table('users')
             ->where('role', 'pelaku_usaha')
             ->pluck('id')
@@ -68,6 +218,9 @@ class DummyDashboardSeeder extends Seeder
 
         foreach ($serviceDistribution as $svc) {
             $rows = [];
+            $isPsn = $svc['table'] === 'psn_applications';
+            $isBerusaha = $svc['table'] === 'ppkpr_berusaha_applications';
+
             for ($i = 0; $i < $svc['count']; $i++) {
                 $createdAt = $now->copy()->subDays(rand(0, 175))->subHours(rand(0, 23))->subMinutes(rand(0, 59));
                 $roll = rand(1, 100);
@@ -95,21 +248,46 @@ class DummyDashboardSeeder extends Seeder
                 $appNumber = $svc['prefix'] . '-' . $createdAt->format('Ymd') . '-' . str_pad((string) $seq, 4, '0', STR_PAD_LEFT);
                 $seq++;
 
-                $rows[] = [
-                    'user_id'               => $pelakuIds[array_rand($pelakuIds)],
-                    'application_number'    => $appNumber,
-                    'no_berkas'             => $pembayaran === 'sudah_bayar' ? 'BRK-' . rand(10000, 99999) : null,
-                    'nama_pemilik_usaha'    => $ownerName,
-                    'nama_pengaju'          => $ownerName,
-                    'hubungan_pengaju'      => $relations[array_rand($relations)],
-                    'status'                => $status,
-                    'bpn_berkas_status'     => $berkas,
-                    'bpn_pembayaran_status' => $pembayaran,
-                    'tgl_mulai_layanan'     => $pembayaran === 'sudah_bayar' ? $createdAt->copy()->addHours(2) : null,
-                    'tgl_selesai_layanan'   => $status === 'disetujui' ? $createdAt->copy()->addDays(rand(3, 9)) : null,
-                    'created_at'            => $createdAt,
-                    'updated_at'            => $createdAt->copy()->addHours(rand(1, 48)),
+                $hasPertek = $status === 'disetujui' || in_array($status, ['menunggu_dinas_pu', 'menunggu_satu_pintu'], true);
+
+                $row = [
+                    'user_id'                   => $pelakuIds[array_rand($pelakuIds)],
+                    'application_number'        => $appNumber,
+                    'no_berkas'                 => $pembayaran === 'sudah_bayar' ? 'BRK-' . rand(10000, 99999) : null,
+                    'nama_pemilik_usaha'        => $ownerName,
+                    'nama_pengaju'              => $ownerName,
+                    'hubungan_pengaju'          => $relations[array_rand($relations)],
+                    'status'                    => $status,
+                    'bpn_berkas_status'         => $berkas,
+                    'bpn_pembayaran_status'     => $pembayaran,
+                    'peta_lokasi'               => 'samples/sketsa-lokasi.png',
+                    'surat_kuasa'               => 'samples/surat-kuasa.pdf',
+                    'fc_ktp'                    => 'samples/identitas-pemohon.pdf',
+                    'fc_npwp'                   => 'samples/identitas-pemohon.pdf',
+                    'fc_akta_pendirian'         => 'samples/akta-legalitas.pdf',
+                    'rencana_penggunaan_tanah'  => 'samples/rencana-proposal.pdf',
+                    'proposal_kegiatan'         => 'samples/rencana-proposal.pdf',
+                    'persyaratan_lainnya'       => $i % 2 === 0 ? 'samples/surat-kuasa.pdf' : null,
+                    'bpn_sps_document'          => ($berkas === 'diterima') ? 'samples/sps-pnbp.pdf' : null,
+                    'bpn_pertek_document'       => $hasPertek ? 'samples/pertek-bpn.pdf' : null,
+                    'tgl_mulai_layanan'         => $pembayaran === 'sudah_bayar' ? $createdAt->copy()->addHours(2) : null,
+                    'tgl_selesai_layanan'       => $status === 'disetujui' ? $createdAt->copy()->addDays(rand(3, 9)) : null,
+                    'created_at'                => $createdAt,
+                    'updated_at'                => $createdAt->copy()->addHours(rand(1, 48)),
                 ];
+
+                if (!$isPsn) {
+                    $row['nib'] = 'samples/akta-legalitas.pdf';
+                    $row['kbli'] = 'samples/akta-legalitas.pdf';
+                }
+
+                if ($isBerusaha) {
+                    $row['satu_pintu_document'] = $status === 'disetujui' ? 'samples/pkkpr-final.pdf' : null;
+                } else {
+                    $row['approval_document'] = $status === 'disetujui' ? 'samples/pkkpr-final.pdf' : null;
+                }
+
+                $rows[] = $row;
             }
 
             foreach (array_chunk($rows, 100) as $chunk) {
