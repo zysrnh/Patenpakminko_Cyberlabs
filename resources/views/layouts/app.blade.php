@@ -59,13 +59,35 @@
             --sidebar:   248px;
         }
 
-        html, body {
-            min-height: 100%;
+        html {
             overflow-x: clip !important;
             max-width: 100vw;
         }
 
+        html::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        html::-webkit-scrollbar-track,
+        html::-webkit-scrollbar-track-piece {
+            background: #E8F2FA;
+        }
+        html::-webkit-scrollbar-thumb {
+            background: #94B8D4;
+            border-radius: 2px;
+        }
+        html::-webkit-scrollbar-thumb:hover {
+            background: #218AC9;
+        }
+        html::-webkit-scrollbar-button,
+        html::-webkit-scrollbar-corner {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+
         body {
+            min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             background: var(--surface);
             color: var(--ink);
