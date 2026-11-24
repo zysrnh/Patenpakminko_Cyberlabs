@@ -87,99 +87,20 @@
 
         /* ─── CONTENT ──────────────────────────────────────── */
         .content {
-            padding: 28px 32px;
+            padding: 24px 28px;
             flex: 1;
+            background: #F4F7FA;
         }
 
-        /* ─── WELCOME STRIP ────────────────────────────────── */
-        .welcome-strip {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--ink);
-            border-radius: var(--r-lg);
-            padding: 22px 28px;
-            margin-bottom: 24px;
-            border-left: 5px solid var(--yellow);
-            position: relative;
-            overflow: hidden;
-        }
-        .welcome-strip::after {
-            content: '';
-            position: absolute;
-            right: -30px; top: -40px;
-            width: 200px; height: 200px;
-            border-radius: 50%;
-            background: rgba(255,255,255,.03);
-        }
-        .welcome-strip h1 {
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 4px;
-            letter-spacing: -.02em;
-        }
-        .welcome-strip p {
-            font-size: 13.5px;
-            color: rgba(255,255,255,.65);
-        }
-        .welcome-strip-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,.08);
-            border: 1px solid rgba(255,255,255,.12);
-            border-radius: var(--r-lg);
-            padding: 10px 16px;
-            flex-shrink: 0;
-        }
-        .welcome-strip-badge svg {
-            width: 18px; height: 18px; fill: none;
-            stroke: var(--yellow); stroke-width: 2;
-            stroke-linecap: round; stroke-linejoin: round;
-        }
-        .welcome-strip-badge span {
-            font-size: 12.5px;
-            font-weight: 600;
-            color: rgba(255,255,255,.8);
-        }
-
-        /* ─── ALERTS ───────────────────────────────────────── */
-        .alert-profile {
-            background: #FFFDF0;
-            border: 1.5px solid #FBE89F;
-            color: #744210;
-            padding: 14px 18px;
-            border-radius: var(--r-lg);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-        }
-        .alert-text { font-size: 13px; line-height: 1.5; font-weight: 500; }
-        .alert-link {
-            background: var(--yellow);
-            color: #744210;
-            border: none;
-            padding: 8px 14px;
-            border-radius: var(--r-md);
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            white-space: nowrap;
-        }
         .alert-success {
             background: #E6F4EA;
             border: 1px solid #B8E2C8;
             color: #137333;
             padding: 12px 16px;
-            border-radius: var(--r-md);
+            border-radius: 4px;
             font-size: 13px;
             font-weight: 600;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -188,95 +109,88 @@
         /* ─── KPI CARDS ─────────────────────────────────────── */
         .kpi-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
         }
         .kpi-card {
-            background: var(--white);
-            border: 1px solid var(--line);
-            border-radius: var(--r-lg);
-            padding: 20px;
+            background: #FFFFFF;
+            border: 1px solid #D6E4EF;
+            border-top: 3px solid #003B64;
+            border-radius: 4px;
+            padding: 16px 18px;
         }
+        .kpi-card.is-navy  { border-top-color: #003B64; }
+        .kpi-card.is-amber { border-top-color: #D97706; }
+        .kpi-card.is-blue  { border-top-color: #218AC9; }
+        .kpi-card.is-green { border-top-color: #16A34A; }
+        .kpi-card.is-red   { border-top-color: #DC2626; }
+
         .kpi-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
+            gap: 8px;
+            margin-bottom: 12px;
         }
         .kpi-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
             text-transform: uppercase;
             letter-spacing: .05em;
         }
         .kpi-icon {
-            width: 34px; height: 34px;
-            border-radius: var(--r-md);
+            width: 30px; height: 30px;
+            border-radius: 4px;
             display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
         }
         .kpi-icon svg {
-            width: 17px; height: 17px;
+            width: 16px; height: 16px;
             fill: none; stroke: currentColor;
             stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
         }
-        .kpi-icon.blue   { background: var(--blue-lt); color: var(--blue); }
-        .kpi-icon.yellow { background: var(--yellow-lt); color: var(--brown); }
-        .kpi-icon.green  { background: var(--green-lt); color: var(--green-dk); }
-        .kpi-icon.red    { background: #FFF5F5; color: #C53030; }
+        .kpi-icon.navy   { background: #EEF4FA; color: #003B64; }
+        .kpi-icon.blue   { background: #E3F0F9; color: #218AC9; }
+        .kpi-icon.yellow { background: #FEF3C7; color: #D97706; }
+        .kpi-icon.green  { background: #DCFCE7; color: #16A34A; }
+        .kpi-icon.red    { background: #FEE2E2; color: #DC2626; }
 
         .kpi-number {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
-            color: var(--ink);
+            color: #003B64;
             letter-spacing: -.03em;
             line-height: 1;
-            margin-bottom: 6px;
         }
-        .kpi-sub {
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 500;
-        }
-        .kpi-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 20px;
-        }
-        .kpi-badge.up   { background: var(--green-lt); color: var(--green-dk); }
-        .kpi-badge.down { background: #FFF5F5; color: #C53030; }
-        .kpi-badge.neutral { background: var(--blue-lt); color: var(--blue); }
 
         /* ─── TWO-COL LAYOUT ─────────────────────────────────── */
         .grid-2col {
             display: grid;
             grid-template-columns: 1fr 360px;
-            gap: 20px;
+            gap: 18px;
             align-items: start;
         }
 
-        /* ─── SERVICES PANEL ─────────────────────────────────── */
+        /* ─── PANEL ──────────────────────────────────────────── */
         .panel {
-            background: var(--white);
-            border: 1px solid var(--line);
-            border-radius: var(--r-lg);
+            background: #FFFFFF;
+            border: 1px solid #D6E4EF;
+            border-radius: 4px;
         }
         .panel-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 18px 20px 14px;
-            border-bottom: 1px solid var(--line);
+            padding: 14px 18px;
+            border-bottom: 1px solid #D6E4EF;
+            background: #F8FAFC;
         }
         .panel-head h2 {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
-            color: var(--ink);
+            color: #003B64;
         }
         .panel-head-link {
             font-size: 12px;
@@ -284,114 +198,23 @@
             color: var(--blue);
             text-decoration: none;
         }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-        }
-        .service-card {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 18px;
-            border-right: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
-            text-decoration: none;
-            transition: all .18s;
-            position: relative;
-            overflow: hidden;
-        }
-        .service-card:nth-child(2n) { border-right: none; }
-        .service-card:nth-last-child(-n+2) { border-bottom: none; }
-        .service-card:nth-last-child(1):nth-child(2n+1) { border-bottom: none; border-right: none; grid-column: span 2; }
-
-        .service-card:hover {
-            background: var(--surface);
-        }
-        .service-card:hover .service-arrow {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        .service-card-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-        }
-        .service-icon {
-            width: 40px; height: 40px;
-            border-radius: var(--r-md);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .service-icon svg {
-            width: 19px; height: 19px;
-            fill: none; stroke: currentColor;
-            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-        }
-        .service-icon.green  { background: var(--green-lt); color: var(--green-dk); }
-        .service-icon.yellow { background: rgba(255,203,5,.12); color: var(--brown); }
-        .service-icon.blue   { background: var(--blue-lt); color: var(--blue); }
-        .service-icon.orange { background: rgba(211,115,36,.12); color: #D37324; }
-        .service-icon.gold   { background: rgba(214,158,46,.1); color: #D69E2E; }
-
-        .service-arrow {
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            background: var(--blue-lt);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0;
-            transform: translateX(-6px);
-            transition: all .18s;
-        }
-        .service-arrow svg { width: 13px; height: 13px; fill: none; stroke: var(--blue); stroke-width: 2.5; stroke-linecap: round; }
-
-        .service-card h3 {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: var(--ink);
-            margin-bottom: 3px;
-        }
-        .service-card p {
-            font-size: 12px;
-            color: var(--muted);
-            line-height: 1.45;
-        }
-        .service-count {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--blue-lt);
-            color: var(--blue);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 20px;
-            margin-top: 4px;
+        .panel-head-link:hover {
+            text-decoration: underline;
         }
 
         /* ─── ACTIVITY PANEL ─────────────────────────────────── */
-        .activity-list { padding: 8px 0; }
+        .activity-list { padding: 0; }
         .activity-item {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: space-between;
             gap: 12px;
-            padding: 12px 18px;
-            border-bottom: 1px solid var(--line);
+            padding: 13px 18px;
+            border-bottom: 1px solid #E8F0F6;
             transition: background .15s;
         }
         .activity-item:last-child { border-bottom: none; }
-        .activity-item:hover { background: var(--surface); }
-        .activity-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            margin-top: 5px;
-            flex-shrink: 0;
-        }
-        .activity-dot.blue   { background: var(--blue); }
-        .activity-dot.green  { background: var(--green); }
-        .activity-dot.yellow { background: var(--brown); }
-        .activity-dot.red    { background: #DC2626; }
-        .activity-dot.gray   { background: var(--muted); }
+        .activity-item:hover { background: #F8FAFC; }
 
         .activity-body {
             flex: 1;
@@ -399,8 +222,8 @@
         }
         .activity-title {
             font-size: 13px;
-            font-weight: 600;
-            color: var(--ink);
+            font-weight: 700;
+            color: #003B64;
             margin-bottom: 2px;
             white-space: nowrap;
             overflow: hidden;
@@ -408,26 +231,27 @@
         }
         .activity-meta {
             font-size: 11.5px;
-            color: var(--muted);
+            color: #64748B;
         }
         .activity-status {
             flex-shrink: 0;
-            font-size: 10.5px;
+            font-size: 11px;
             font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 20px;
+            padding: 4px 8px;
+            border-radius: 4px;
         }
-        .status-pending  { background: var(--yellow-lt); color: #92600A; }
-        .status-review   { background: var(--blue-lt); color: var(--blue); }
-        .status-approved { background: var(--green-lt); color: var(--green-dk); }
-        .status-rejected { background: #FFF5F5; color: #C53030; }
+        .status-pending,
+        .status-unpaid   { background: #FEF3C7; color: #92400E; }
+        .status-review   { background: #E3F0F9; color: #003B64; }
+        .status-approved { background: #DCFCE7; color: #166534; }
+        .status-rejected { background: #FEE2E2; color: #991B1B; }
 
         /* ─── QUICK STATS SIDEBAR ────────────────────────────── */
-        .right-col { display: flex; flex-direction: column; gap: 20px; }
+        .right-col { display: flex; flex-direction: column; gap: 18px; }
 
         .progress-item {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--line);
+            padding: 14px 18px;
+            border-bottom: 1px solid #E8F0F6;
         }
         .progress-item:last-child { border-bottom: none; }
         .progress-head {
@@ -436,78 +260,60 @@
             justify-content: space-between;
             margin-bottom: 8px;
         }
-        .progress-head span { font-size: 13px; font-weight: 600; color: var(--ink); }
-        .progress-head strong { font-size: 13px; font-weight: 700; color: var(--mid); }
+        .progress-head span { font-size: 12.5px; font-weight: 600; color: #003B64; }
+        .progress-head strong { font-size: 12.5px; font-weight: 700; color: #334155; }
         .progress-bar {
             height: 6px;
-            border-radius: 4px;
-            background: var(--surface2);
+            border-radius: 2px;
+            background: #E8F2FA;
             overflow: hidden;
         }
         .progress-fill {
             height: 100%;
-            border-radius: 4px;
-            transition: width .5s ease;
+            border-radius: 2px;
+            transition: width .4s ease;
         }
-        .progress-fill.blue   { background: var(--blue); }
-        .progress-fill.green  { background: var(--green); }
-        .progress-fill.yellow { background: var(--brown); }
-        /* ─── SMOOTH ANIMATIONS & INTERACTIONS ─────────────────── */
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .progress-fill.blue   { background: #218AC9; }
+        .progress-fill.green  { background: #16A34A; }
+        .progress-fill.yellow { background: #D97706; }
+        .progress-fill.red    { background: #DC2626; }
+
+        .btn-primary, .btn-complete-profile {
+            transition: background .16s ease, border-color .16s ease;
         }
-        .welcome-card, .sla-panel, .kpi-card, .panel, .alert-warning, .alert-success {
-            animation: fadeSlideUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
-        }
-        .kpi-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,38,66,0.06); }
-        .btn-primary, .btn-complete-profile, .btn-logout-sidebar {
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-        .btn-primary:active, .btn-complete-profile:active { transform: scale(0.97); }
-        .nav-item { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-        .nav-item:hover { transform: translateX(3px); }
 
         /* ─── CALENDAR / SCHEDULE PANEL ─────────────────────── */
         .schedule-empty {
-            padding: 28px 18px;
+            padding: 26px 18px;
             text-align: center;
         }
         .schedule-empty svg {
-            width: 36px; height: 36px;
+            width: 34px; height: 34px;
             fill: none; stroke: var(--blue-md);
             stroke-width: 1.5; stroke-linecap: round;
             margin-bottom: 10px;
         }
         .schedule-empty p {
-            font-size: 13px;
-            color: var(--muted);
+            font-size: 12.5px;
+            color: #64748B;
             margin-bottom: 12px;
         }
         .btn-primary {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: var(--blue);
+            background: #003B64;
             color: #fff;
             border: none;
-            padding: 9px 16px;
-            border-radius: var(--r-md);
+            padding: 8px 14px;
+            border-radius: 4px;
             font-family: inherit;
             font-size: 12.5px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            transition: opacity .18s;
         }
-        .btn-primary:hover { opacity: .88; }
+        .btn-primary:hover { background: #218AC9; }
         .btn-primary svg { width: 14px; height: 14px; fill: none; stroke: #fff; stroke-width: 2.5; }
 
         .schedule-item {
@@ -515,13 +321,13 @@
             align-items: center;
             gap: 12px;
             padding: 12px 18px;
-            border-bottom: 1px solid var(--line);
+            border-bottom: 1px solid #E8F0F6;
         }
         .schedule-item:last-child { border-bottom: none; }
         .schedule-date-box {
-            width: 40px; height: 44px;
-            border-radius: var(--r-md);
-            background: var(--blue-lt);
+            width: 40px; height: 42px;
+            border-radius: 4px;
+            background: #E3F0F9;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -529,60 +335,58 @@
             flex-shrink: 0;
         }
         .schedule-date-box .day {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
-            color: var(--blue);
+            color: #003B64;
             line-height: 1;
         }
         .schedule-date-box .month {
             font-size: 9px;
             font-weight: 700;
-            color: var(--muted);
+            color: #64748B;
             text-transform: uppercase;
         }
-        .schedule-info h4 { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-        .schedule-info span { font-size: 11.5px; color: var(--muted); }
+        .schedule-info h4 { font-size: 13px; font-weight: 700; color: #003B64; margin-bottom: 2px; }
+        .schedule-info span { font-size: 11.5px; color: #64748B; }
 
-        /* ─── WELCOME / HERO CARD (dulu inline style) ────────── */
+        /* ─── WELCOME / HERO CARD ───────────────────────────── */
         .welcome-card {
-            background: #ffffff;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            padding: 18px 22px;
-            margin-bottom: 20px;
+            background: #FFFFFF;
+            border: 1px solid #D6E4EF;
+            border-left: 4px solid #003B64;
+            border-radius: 4px;
+            padding: 14px 20px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            box-shadow: 0 2px 6px rgba(0,38,66,0.02);
+            gap: 16px;
             flex-wrap: wrap;
         }
         .welcome-card-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             min-width: 0;
         }
         .welcome-avatar {
-            width: 44px; height: 44px;
-            border-radius: 6px;
+            width: 42px; height: 42px;
+            border-radius: 4px;
             object-fit: cover;
             flex-shrink: 0;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 8px rgba(0,59,100,0.12);
+            border: 1px solid #D6E4EF;
         }
         .welcome-avatar-fallback {
-            width: 44px; height: 44px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, #003B64 0%, #218AC9 100%);
-            color: #fff; font-weight: 800; font-size: 16px;
+            width: 42px; height: 42px;
+            border-radius: 4px;
+            background: #003B64;
+            color: #fff; font-weight: 800; font-size: 15px;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(0,59,100,0.12);
         }
         .welcome-card-title {
-            font-size: 18px; font-weight: 800; color: #003B64;
-            letter-spacing: -0.02em; margin: 0 0 4px;
+            font-size: 17px; font-weight: 800; color: #003B64;
+            letter-spacing: -0.02em; margin: 0 0 2px;
             overflow-wrap: break-word;
         }
         .welcome-card-sub {
@@ -594,55 +398,48 @@
         }
         .btn-complete-profile {
             display: inline-flex; align-items: center; gap: 6px;
-            background: #FFFBEB; border: 1px solid #FCD34D; color: #92400E;
+            background: #FEF3C7; border: 1px solid #F59E0B; color: #92400E;
             padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700;
-            text-decoration: none; transition: all 0.2s; white-space: nowrap;
+            text-decoration: none; white-space: nowrap;
         }
-        .btn-complete-profile:hover { background: #FEF3C7; }
-        .role-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: #F1F5F9; border: 1px solid #E2E8F0; color: #334155;
-            padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700;
-            white-space: nowrap;
-        }
+        .btn-complete-profile:hover { background: #FDE68A; }
 
-        /* ─── SLA PANEL (dulu inline style) ─────────────────── */
+        /* ─── SLA PANEL ─────────────────────────────────────── */
         .sla-panel {
-            background: #ffffff;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            padding: 14px 18px;
-            margin-bottom: 20px;
+            background: #FFFFFF;
+            border: 1px solid #D6E4EF;
+            border-radius: 4px;
+            padding: 13px 18px;
+            margin-bottom: 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 16px;
-            box-shadow: 0 2px 6px rgba(0,38,66,0.02);
+            gap: 14px;
         }
         .sla-panel-left {
             display: flex; align-items: center; gap: 10px;
         }
         .sla-icon {
             width: 30px; height: 30px; border-radius: 4px;
-            background: #ECFDF5; color: #059669;
+            background: #E3F0F9; color: #003B64;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
         }
-        .sla-title { font-size: 13px; font-weight: 800; color: #0F172A; }
+        .sla-title { font-size: 13px; font-weight: 800; color: #003B64; }
         .sla-sub { font-size: 11.5px; color: #64748B; }
         .sla-badges {
             display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
         }
         .sla-badge {
             border-radius: 4px; padding: 6px 12px;
-            display: flex; align-items: center; gap: 6px;
-            white-space: nowrap;
+            display: inline-flex; align-items: center; gap: 6px;
+            white-space: nowrap; font-size: 12px; font-weight: 600;
         }
-        .sla-badge.green  { background: #ECFDF5; border: 1px solid #A7F3D0; }
-        .sla-badge.yellow { background: #FFFBEB; border: 1px solid #FDE68A; }
-        .sla-badge.red    { background: #FEF2F2; border: 1px solid #FECACA; }
-        .sla-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+        .sla-badge strong { font-weight: 800; }
+        .sla-badge.green  { background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; }
+        .sla-badge.yellow { background: #FEF3C7; border: 1px solid #FCD34D; color: #92400E; }
+        .sla-badge.red    { background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; }
 
         /* ─── MOBILE RESPONSIVE ────────────────────────────── */
         .btn-menu {
@@ -693,7 +490,7 @@
                 min-width: 210px !important;
                 scroll-snap-align: start !important;
                 padding: 16px !important;
-                border-radius: 12px !important;
+                border-radius: 4px !important;
             }
             .kpi-number { font-size: 24px !important; }
             .kpi-label { font-size: 11px !important; }
@@ -703,16 +500,8 @@
                 grid-template-columns: 1fr !important;
             }
 
-            /* Services grid → 1 kolom di HP kecil */
-            .services-grid {
-                grid-template-columns: 1fr !important;
-            }
-            .service-card:nth-child(2n) { border-right: none !important; }
-            .service-card:nth-last-child(-n+2) { border-bottom: 1px solid var(--line) !important; }
-            .service-card:last-child { border-bottom: none !important; grid-column: span 1 !important; }
-
             /* Panel head & activity items rapetin & rapih di HP */
-            .panel-head { padding: 14px 16px 12px; }
+            .panel-head { padding: 14px 16px; }
             .activity-item {
                 display: flex !important;
                 flex-direction: column !important;
@@ -739,8 +528,8 @@
                 max-width: 100% !important;
                 white-space: normal !important;
                 font-size: 11px !important;
-                padding: 4px 10px !important;
-                border-radius: 12px !important;
+                padding: 4px 8px !important;
+                border-radius: 4px !important;
                 margin-top: 2px !important;
             }
 
@@ -799,7 +588,9 @@
 
             @php
                 $user = Auth::user();
-                $isProfileIncomplete = empty($user->name) || empty($user->email) || empty($user->address) || empty($user->business_name) || empty($user->business_role);
+                $isProfileIncomplete = $user->isPelakuUsaha()
+                    ? (empty($user->name) || empty($user->email) || empty($user->address) || empty($user->business_name) || empty($user->business_role))
+                    : (empty($user->name) || empty($user->email));
                 
                 // --- Kalkulasi Statistik ---
                 if ($user->isPelakuUsaha()) {
@@ -985,7 +776,7 @@
                 $recentActivities = $recentActivities->sortByDesc('created_at')->take(5);
             @endphp
 
-            <!-- Hero Header Card (Clean & Minimal) -->
+            <!-- Header Sambutan Flat & Clean -->
             <div class="welcome-card">
                 <div class="welcome-card-left">
                     @if($user->profile_photo)
@@ -996,37 +787,24 @@
                         </div>
                     @endif
                     <div>
-                        <h1 class="welcome-card-title">Selamat Datang, {{ $user->name ?? $user->username }}!</h1>
+                        <h1 class="welcome-card-title">Selamat Datang, {{ $user->name ?? $user->username }}</h1>
                         <p class="welcome-card-sub">
-                            @if(Auth::user()->isAdminBerita()) Kelola publikasi artikel dan informasi terbaru di sini.
-                            @elseif(Auth::user()->isPelakuUsaha()) Pantau status permohonan dan akses layanan pemanfaatan ruang Anda.
-                            @else Kelola permohonan pemanfaatan ruang dan pantau status layanan secara real-time.
+                            @if(Auth::user()->isAdminBerita()) Ringkasan publikasi berita dan informasi.
+                            @elseif(Auth::user()->isPelakuUsaha()) Ringkasan status permohonan layanan Anda.
+                            @else Ringkasan permohonan layanan dan status berkas aktif.
                             @endif
                         </p>
                     </div>
                 </div>
 
+                @if($isProfileIncomplete)
                 <div class="welcome-card-right">
-                    @if($isProfileIncomplete)
-                        <a href="{{ route('profile') }}" class="btn-complete-profile">
-                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            Lengkapi Profil
-                        </a>
-                    @endif
-
-                    <div class="role-badge">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                        <span>
-                            @if(Auth::user()->isAdminBerita()) Admin Berita
-                            @elseif(Auth::user()->isPelakuUsaha()) Pelaku Usaha
-                            @elseif(Auth::user()->isBpn()) Admin Instansi
-                            @elseif(Auth::user()->isDinasPu()) Admin PUTR
-                            @elseif(Auth::user()->isSatuPintu()) Admin DPMPTSP
-                            @elseif(Auth::user()->isDpn()) Super Admin
-                            @else Pengguna Terverifikasi @endif
-                        </span>
-                    </div>
+                    <a href="{{ route('profile') }}" class="btn-complete-profile">
+                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        Lengkapi Profil
+                    </a>
                 </div>
+                @endif
             </div>
 
             @if(Auth::user()->isAdminBerita())
@@ -1038,39 +816,36 @@
                     $beritasList = \App\Models\Berita::latest()->take(5)->get();
                 @endphp
                 <div class="kpi-row">
-                    <div class="kpi-card" style="border-radius: 6px;">
+                    <div class="kpi-card is-navy">
                         <div class="kpi-top">
                             <span class="kpi-label">Total Berita</span>
-                            <div class="kpi-icon blue" style="border-radius: 4px;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v10a2 2 0 01-2 2z"/></svg>
+                            <div class="kpi-icon navy">
+                                <svg viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l6 6v10a2 2 0 01-2 2z"/></svg>
                             </div>
                         </div>
                         <div class="kpi-number">{{ $totalBerita }}</div>
-                        <div class="kpi-sub"><span class="kpi-badge neutral">Semua Berita</span></div>
                     </div>
-                    <div class="kpi-card" style="border-radius: 6px;">
+                    <div class="kpi-card is-green">
                         <div class="kpi-top">
                             <span class="kpi-label">Dipublikasi</span>
-                            <div class="kpi-icon green" style="border-radius: 4px;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            <div class="kpi-icon green">
+                                <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                             </div>
                         </div>
-                        <div class="kpi-number">{{ $publishedBerita }}</div>
-                        <div class="kpi-sub"><span class="kpi-badge up">Tampil Publik</span></div>
+                        <div class="kpi-number" style="color: #16A34A;">{{ $publishedBerita }}</div>
                     </div>
-                    <div class="kpi-card" style="border-radius: 6px;">
+                    <div class="kpi-card is-amber">
                         <div class="kpi-top">
                             <span class="kpi-label">Draft</span>
-                            <div class="kpi-icon yellow" style="border-radius: 4px;">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <div class="kpi-icon yellow">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                             </div>
                         </div>
-                        <div class="kpi-number">{{ $draftBerita }}</div>
-                        <div class="kpi-sub"><span class="kpi-badge neutral">Belum Tampil</span></div>
+                        <div class="kpi-number" style="color: #D97706;">{{ $draftBerita }}</div>
                     </div>
                 </div>
 
-                <div class="panel" style="border-radius: 6px;">
+                <div class="panel">
                     <div class="panel-head">
                         <h2>Berita Terbaru</h2>
                         <a href="{{ route('admin.berita.index') }}" class="panel-head-link">Lihat Semua &rarr;</a>
@@ -1151,95 +926,76 @@
                 </div>
             @endif
 
-            <!-- Clean Executive KPI Row -->
-            <div class="kpi-row" style="margin-bottom: 20px;">
-                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
+            <!-- KPI Row Solid & Clean -->
+            <div class="kpi-row">
+                <div class="kpi-card is-navy">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #64748B;">TOTAL PERMOHONAN</span>
-                        <div class="kpi-icon blue" style="border-radius: 4px; width: 30px; height: 30px;">
+                        <span class="kpi-label">Total Permohonan</span>
+                        <div class="kpi-icon navy">
                             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #0F172A;">{{ $totalPermohonan ?? 0 }}</div>
-                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Semua jenis berkas</div>
+                    <div class="kpi-number">{{ $totalPermohonan ?? 0 }}</div>
                 </div>
 
-                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
+                <div class="kpi-card is-amber">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #D97706;">BELUM BAYAR / VERIFIKASI</span>
-                        <div class="kpi-icon yellow" style="border-radius: 4px; width: 30px; height: 30px; background: #FEF3C7; color: #D97706;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span class="kpi-label">Belum Bayar</span>
+                        <div class="kpi-icon yellow">
+                            <svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #D97706;">{{ $totalUnpaid ?? 0 }}</div>
-                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Menunggu SPS / Bayar</div>
+                    <div class="kpi-number" style="color: #D97706;">{{ $totalUnpaid ?? 0 }}</div>
                 </div>
 
-                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
+                <div class="kpi-card is-blue">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #2563EB;">SEDANG DIPROSES (LUNAS)</span>
-                        <div class="kpi-icon blue" style="border-radius: 4px; width: 30px; height: 30px; background: #EFF6FF; color: #2563EB;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        <span class="kpi-label">Sedang Diproses</span>
+                        <div class="kpi-icon blue">
+                            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #2563EB;">{{ $totalPending ?? 0 }}</div>
-                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Proses kajian instansi</div>
+                    <div class="kpi-number" style="color: #218AC9;">{{ $totalPending ?? 0 }}</div>
                 </div>
 
-                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
+                <div class="kpi-card is-green">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #16A34A;">DISETUJUI</span>
-                        <div class="kpi-icon green" style="border-radius: 4px; width: 30px; height: 30px; background: #DCFCE7; color: #16A34A;">
+                        <span class="kpi-label">Disetujui</span>
+                        <div class="kpi-icon green">
                             <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #16A34A;">{{ $totalDisetujui ?? 0 }}</div>
-                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Permohonan selesai</div>
+                    <div class="kpi-number" style="color: #16A34A;">{{ $totalDisetujui ?? 0 }}</div>
                 </div>
 
-                <div class="kpi-card" style="box-shadow: 0 2px 6px rgba(0,38,66,0.02); border-radius: 6px; padding: 16px 18px;">
+                <div class="kpi-card is-red">
                     <div class="kpi-top">
-                        <span class="kpi-label" style="font-size: 11px; letter-spacing: 0.05em; color: #DC2626;">DITOLAK</span>
-                        <div class="kpi-icon red" style="border-radius: 4px; width: 30px; height: 30px; background: #FEE2E2; color: #DC2626;">
+                        <span class="kpi-label">Ditolak</span>
+                        <div class="kpi-icon red">
                             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                         </div>
                     </div>
-                    <div class="kpi-number" style="font-size: 24px; font-weight: 800; color: #DC2626;">{{ $totalDitolak ?? 0 }}</div>
-                    <div class="kpi-sub" style="font-size: 11px; color: #94A3B8;">Perlu perbaikan/ditolak</div>
+                    <div class="kpi-number" style="color: #DC2626;">{{ $totalDitolak ?? 0 }}</div>
                 </div>
             </div>
 
             @if(!Auth::user()->isPelakuUsaha())
-            <!-- ── SLA PENGENDALIAN INTERNAL (CLEAN INTEGRATED ROW) ──────────────────── -->
+            <!-- ── SLA PENGENDALIAN INTERNAL ──────────────────── -->
             <div class="sla-panel">
                 <div class="sla-panel-left">
                     <div class="sla-icon">
                         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     </div>
                     <div>
-                        <div class="sla-title">Pengendalian SLA — Berkas Aktif</div>
-                        <div class="sla-sub">Total berkas berjalan: <strong>{{ $slaHijau + $slaKuning + $slaMerah }} berkas</strong></div>
+                        <div class="sla-title">Pengendalian SLA Berkas Aktif</div>
+                        <div class="sla-sub">{{ $slaHijau + $slaKuning + $slaMerah }} berkas berjalan</div>
                     </div>
                 </div>
 
                 <div class="sla-badges">
-                    {{-- Hijau --}}
-                    <div class="sla-badge green">
-                        <span class="sla-dot" style="background: #10B981;"></span>
-                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Aman: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaHijau }}</strong></span>
-                    </div>
-
-                    {{-- Kuning --}}
-                    <div class="sla-badge yellow">
-                        <span class="sla-dot" style="background: #F59E0B;"></span>
-                        <span style="font-size: 12px; font-weight: 600; color: #92400E;">Mendekati Batas: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaKuning }}</strong></span>
-                    </div>
-
-                    {{-- Merah --}}
-                    <div class="sla-badge red">
-                        <span class="sla-dot" style="background: #EF4444;"></span>
-                        <span style="font-size: 12px; font-weight: 600; color: #991B1B;">Terlambat: <strong style="font-size: 12.5px; font-weight: 800;">{{ $slaMerah }}</strong></span>
-                    </div>
+                    <div class="sla-badge green">Aman: <strong>{{ $slaHijau }}</strong></div>
+                    <div class="sla-badge yellow">Mendekati Batas: <strong>{{ $slaKuning }}</strong></div>
+                    <div class="sla-badge red">Terlambat: <strong>{{ $slaMerah }}</strong></div>
                 </div>
             </div>
             @endif
@@ -1247,22 +1003,18 @@
             <!-- Two-column grid -->
             <div class="grid-2col" {!! Auth::user()->isPelakuUsaha() ? 'style="grid-template-columns: 1fr;"' : '' !!}>
 
-                <!-- Left: Service modules + Recent activity -->
-                <div style="display:flex;flex-direction:column;gap:20px;">
-
-
-                    <!-- Recent Activity -->
+                <!-- Left: Recent activity -->
+                <div style="display:flex;flex-direction:column;gap:18px;">
                     <div class="panel">
                         <div class="panel-head">
                             <h2>Aktivitas Terkini</h2>
-                            <span style="font-size: 12px; color: var(--muted); font-weight: 500;">5 Permohonan Terbaru</span>
+                            <span style="font-size: 11.5px; color: #64748B; font-weight: 600;">5 Terbaru</span>
                         </div>
                         <div class="activity-list">
                             @forelse($recentActivities as $activity)
-                                <a href="{{ $activity->url }}" class="activity-item" style="text-decoration: none; display: flex; align-items: center;">
-                                    <span class="activity-dot {{ $activity->status_color }}"></span>
-                                    <div class="activity-body" style="margin-left: 10px;">
-                                        <div class="activity-title" style="font-weight: 700; color: #003B64;">{{ $activity->title }}</div>
+                                <a href="{{ $activity->url }}" class="activity-item" style="text-decoration: none;">
+                                    <div class="activity-body">
+                                        <div class="activity-title">{{ $activity->title }}</div>
                                         <div class="activity-meta">{{ $activity->type }} · {{ $activity->created_at->diffForHumans() }}</div>
                                     </div>
                                     <span class="activity-status status-{{ $activity->status_key }}">
@@ -1271,13 +1023,12 @@
                                 </a>
                             @empty
                                 <div class="activity-item" style="padding:24px 18px;justify-content:center;flex-direction:column;text-align:center;gap:8px;">
-                                    <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#B3D4EC" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                                    <span style="font-size:13px;color:var(--muted);">Belum ada aktivitas permohonan.</span>
+                                    <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="#B3D4EC" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                    <span style="font-size:12.5px;color:#64748B;">Belum ada aktivitas permohonan.</span>
                                 </div>
                             @endforelse
                         </div>
                     </div>
-
                 </div>
 
                 <!-- Right Column -->
@@ -1293,10 +1044,10 @@
                             @php
                                 $total = max(($totalPermohonan ?? 1), 1);
                                 $statuses = [
-                                    ['label' => 'Disetujui',                'value' => $totalDisetujui ?? 0, 'color' => 'green'],
-                                    ['label' => 'Sedang Diproses (Lunas)',  'value' => $totalPending ?? 0,   'color' => 'blue'],
-                                    ['label' => 'Belum Bayar',              'value' => $totalUnpaid ?? 0,    'color' => 'yellow'],
-                                    ['label' => 'Ditolak',                  'value' => $totalDitolak ?? 0,   'color' => 'red'],
+                                    ['label' => 'Disetujui',        'value' => $totalDisetujui ?? 0, 'color' => 'green'],
+                                    ['label' => 'Sedang Diproses',  'value' => $totalPending ?? 0,   'color' => 'blue'],
+                                    ['label' => 'Belum Bayar',      'value' => $totalUnpaid ?? 0,    'color' => 'yellow'],
+                                    ['label' => 'Ditolak',          'value' => $totalDitolak ?? 0,   'color' => 'red'],
                                 ];
                             @endphp
                             @foreach($statuses as $s)
