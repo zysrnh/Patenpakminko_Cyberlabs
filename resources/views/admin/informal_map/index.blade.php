@@ -147,9 +147,9 @@
         background: #FFFFFF;
         color: #475569;
         border: 1px solid #CBD5E1;
-        padding: 9px 10px;
+        padding: 9px 8px;
         border-radius: 4px;
-        font-size: 12px;
+        font-size: 11.5px;
         font-weight: 600;
         cursor: pointer;
         text-decoration: none;
@@ -162,6 +162,50 @@
     .btn-backup-action:hover {
         background: #F1F5F9;
         color: #0F172A;
+    }
+
+    .btn-delete-action {
+        flex: 1;
+        background: #FEF2F2;
+        color: #DC2626;
+        border: 1px solid #FECACA;
+        padding: 9px 8px;
+        border-radius: 4px;
+        font-size: 11.5px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: all 0.15s;
+    }
+    .btn-delete-action:hover {
+        background: #DC2626;
+        color: #FFFFFF;
+        border-color: #DC2626;
+    }
+
+    .btn-restore-action {
+        flex: 1;
+        background: #F0FDF4;
+        color: #166534;
+        border: 1px solid #BBF7D0;
+        padding: 9px 10px;
+        border-radius: 4px;
+        font-size: 11.5px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: all 0.15s;
+    }
+    .btn-restore-action:hover {
+        background: #166534;
+        color: #FFFFFF;
+        border-color: #166534;
     }
 
     /* ─── SECTION PREVIEW PETA ─────────────────────────── */
@@ -390,16 +434,28 @@
                         </div>
                     </div>
 
-                    <div class="card-btn-group">
-                        <button type="button" class="btn-upload-action" onclick="openUploadModal('{{ $k }}', '{{ $l['name'] }}')">
-                            <svg style="width:15px;height:15px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                            Ganti / Upload File
+                    <div class="card-btn-group" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <button type="button" class="btn-upload-action" onclick="openUploadModal('{{ $k }}', '{{ $l['name'] }}')" style="flex: {{ $l['exists'] ? '1.3' : '2' }};">
+                            <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                            {{ $l['exists'] ? 'Ganti File' : 'Upload File' }}
                         </button>
                         @if($l['exists'])
-                            <a href="{{ route('admin.informal_map.download', $k) }}" class="btn-backup-action" title="Unduh backup file data saat ini">
-                                <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                            <a href="{{ route('admin.informal_map.download', $k) }}" class="btn-backup-action" title="Unduh backup file data aktif ke laptop">
+                                <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 Backup
                             </a>
+                            <button type="button" class="btn-delete-action" onclick="confirmDeleteLayer('{{ $k }}', '{{ $l['short_name'] }}')" title="Hapus file data dari peta aktif (otomatis dicadangkan terlebih dahulu)">
+                                <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                Hapus
+                            </button>
+                        @elseif(!empty($l['latest_backup_file']))
+                            <form action="{{ route('admin.informal_map.restore', $k) }}" method="POST" style="flex: 1; margin: 0; display: inline-flex;" onsubmit="return confirm('Pulihkan data layer {{ $l['short_name'] }} dari cadangan terakhir ({{ $l['latest_backup_file'] }})?')">
+                                @csrf
+                                <button type="submit" class="btn-restore-action" style="width: 100%;" title="Pulihkan kembali dari file cadangan terakhir">
+                                    <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    Pulihkan
+                                </button>
+                            </form>
                         @endif
                     </div>
                 </div>
@@ -485,6 +541,11 @@
         </div>
     </div>
 
+    <!-- Form Hapus Layer Tersembunyi -->
+    <form id="deleteLayerForm" method="POST" style="display:none;">
+        @csrf
+    </form>
+
 @endsection
 
 @section('scripts')
@@ -494,6 +555,14 @@
     let map;
     let layersData = @json($layers);
     let mapLayers = {};
+
+    function confirmDeleteLayer(layerKey, layerName) {
+        if (confirm('Apakah Anda yakin ingin MENGHAPUS layer ' + layerName + ' dari peta?\n\nFile data aktif akan otomatis dicadangkan ke folder backup terlebih dahulu.')) {
+            const form = document.getElementById('deleteLayerForm');
+            form.action = "{{ url('admin/informal-map/delete') }}/" + layerKey;
+            form.submit();
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         initMap();

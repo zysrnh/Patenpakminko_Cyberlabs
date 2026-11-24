@@ -461,6 +461,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/informal-map/upload', [\App\Http\Controllers\AdminInformalMapController::class, 'upload'])->name('admin.informal_map.upload');
     Route::get('/admin/informal-map/download/{layer}', [\App\Http\Controllers\AdminInformalMapController::class, 'download'])->name('admin.informal_map.download');
     Route::post('/admin/informal-map/settings', [\App\Http\Controllers\AdminInformalMapController::class, 'updateSettings'])->name('admin.informal_map.settings');
+    Route::post('/admin/informal-map/delete/{layer}', [\App\Http\Controllers\AdminInformalMapController::class, 'destroy'])->name('admin.informal_map.delete');
+    Route::post('/admin/informal-map/restore/{layer}', [\App\Http\Controllers\AdminInformalMapController::class, 'restore'])->name('admin.informal_map.restore');
  
     // WhatsApp Gateway Settings (DPN / Super Admin)
     Route::get('/dpn/whatsapp', [PpkprNonBerusahaController::class, 'whatsappSettings'])->name('dpn.whatsapp');

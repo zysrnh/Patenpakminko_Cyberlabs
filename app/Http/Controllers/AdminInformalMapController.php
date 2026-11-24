@@ -120,15 +120,27 @@ class AdminInformalMapController extends Controller
             // Cari file backup terbaru di folder backup
             $backupDir = storage_path('app/public/shp_bpn/backup');
             if (File::isDirectory($backupDir)) {
-                $prefix = pathinfo($layer['file_name'], PATHINFO_FILENAME) . '_bak_';
+                $base = pathinfo($layer['file_name'], PATHINFO_FILENAME);
+                $prefix = $base . '_bak_';
                 $backupFiles = File::glob($backupDir . '/' . $prefix . '*.geojson');
+                if (empty($backupFiles)) {
+                    $directBackup = $backupDir . '/' . $layer['file_name'];
+                    if (File::exists($directBackup)) {
+                        $backupFiles = [$directBackup];
+                    }
+                }
                 if (!empty($backupFiles)) {
                     usort($backupFiles, function($a, $b) {
                         return filemtime($b) - filemtime($a);
                     });
                     $layer['latest_backup_file'] = basename($backupFiles[0]);
                     $layer['latest_backup_time'] = date('d M Y H:i:s', filemtime($backupFiles[0]));
+                    $layer['has_backup'] = true;
+                } else {
+                    $layer['has_backup'] = false;
                 }
+            } else {
+                $layer['has_backup'] = false;
             }
         }
 
@@ -459,5 +471,135 @@ PY;
         File::put($configFile, json_encode($saved, JSON_PRETTY_PRINT));
 
         return back()->with('success', 'Pengaturan layer berhasil disimpan.');
+    }
+
+    /**
+     * Hapus / Kosongkan Layer Peta (Otomatis Backup Terlebih Dahulu).
+     */
+    public function destroy($layerKey)
+    {
+        $this->authorizeAdmin();
+        $layers = self::defaultLayers();
+
+        if (!isset($layers[$layerKey])) {
+            return back()->with('error', 'Layer peta tidak valid.');
+        }
+
+        $targetFileName = $layers[$layerKey]['file_name'];
+        $storageDir = storage_path('app/public/shp_bpn');
+        $publicDir = public_path('storage/shp_bpn');
+        $backupDir = $storageDir . '/backup';
+
+        if (!File::isDirectory($backupDir)) {
+            @File::makeDirectory($backupDir, 0777, true, true);
+        }
+        @chmod($backupDir, 0777);
+
+        $targetStoragePath = $storageDir . '/' . $targetFileName;
+        $targetPublicPath  = $publicDir . '/' . $targetFileName;
+
+        if (!File::exists($targetStoragePath) && !File::exists($targetPublicPath)) {
+            return back()->with('error', 'File layer sudah tidak ada atau kosong.');
+        }
+
+        // Backup file lama sebelum dihapus
+        $backupName = pathinfo($targetFileName, PATHINFO_FILENAME) . '_bak_' . date('Ymd_His') . '.geojson';
+        if (File::exists($targetStoragePath)) {
+            @File::copy($targetStoragePath, $backupDir . '/' . $backupName);
+            @chmod($backupDir . '/' . $backupName, 0666);
+        } elseif (File::exists($targetPublicPath)) {
+            @File::copy($targetPublicPath, $backupDir . '/' . $backupName);
+            @chmod($backupDir . '/' . $backupName, 0666);
+        }
+
+        // Hapus file aktif dari storage dan public
+        if (File::exists($targetStoragePath)) {
+            @chmod($targetStoragePath, 0666);
+            @unlink($targetStoragePath);
+        }
+        if (File::exists($targetPublicPath)) {
+            @chmod($targetPublicPath, 0666);
+            @unlink($targetPublicPath);
+        }
+
+        // Simpan metadata riwayat file ke json config
+        $configFile = storage_path('app/informal_layers_config.json');
+        $saved = File::exists($configFile) ? (json_decode(File::get($configFile), true) ?? []) : [];
+        if (!isset($saved[$layerKey])) {
+            $saved[$layerKey] = [];
+        }
+        $saved[$layerKey]['latest_backup_file'] = $backupName;
+        $saved[$layerKey]['latest_backup_time'] = date('d M Y H:i:s');
+        $saved[$layerKey]['deleted_at']         = date('d M Y H:i:s');
+        $saved[$layerKey]['deleted_by']         = auth()->user()->name ?? auth()->user()->username;
+        @File::put($configFile, json_encode($saved, JSON_PRETTY_PRINT));
+
+        return back()->with('success', "Layer {$layers[$layerKey]['short_name']} berhasil dihapus dari peta. Cadangan aman otomatis tersimpan sebagai `{$backupName}`.");
+    }
+
+    /**
+     * Pulihkan Layer Peta dari Cadangan Terakhir.
+     */
+    public function restore($layerKey)
+    {
+        $this->authorizeAdmin();
+        $layers = self::defaultLayers();
+
+        if (!isset($layers[$layerKey])) {
+            return back()->with('error', 'Layer peta tidak valid.');
+        }
+
+        $targetFileName = $layers[$layerKey]['file_name'];
+        $storageDir = storage_path('app/public/shp_bpn');
+        $publicDir = public_path('storage/shp_bpn');
+        $backupDir = $storageDir . '/backup';
+
+        if (!File::isDirectory($backupDir)) {
+            return back()->with('error', 'Folder backup belum tersedia.');
+        }
+
+        $base = pathinfo($targetFileName, PATHINFO_FILENAME);
+        $backupFiles = File::glob($backupDir . '/' . $base . '_bak_*.geojson');
+        if (empty($backupFiles)) {
+            $directBackup = $backupDir . '/' . $targetFileName;
+            if (File::exists($directBackup)) {
+                $backupFiles = [$directBackup];
+            }
+        }
+
+        if (empty($backupFiles)) {
+            return back()->with('error', 'Tidak ditemukan file cadangan untuk layer ini.');
+        }
+
+        // Urutkan backup terbaru
+        usort($backupFiles, function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        });
+
+        $sourceBackupPath = $backupFiles[0];
+        $backupFileName = basename($sourceBackupPath);
+        $content = File::get($sourceBackupPath);
+
+        try {
+            $this->safeWriteFile($storageDir . '/' . $targetFileName, $content);
+            if (File::isDirectory($publicDir) || !is_link(public_path('storage'))) {
+                @$this->safeWriteFile($publicDir . '/' . $targetFileName, $content);
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
+        // Simpan info restore di config
+        $configFile = storage_path('app/informal_layers_config.json');
+        $saved = File::exists($configFile) ? (json_decode(File::get($configFile), true) ?? []) : [];
+        if (!isset($saved[$layerKey])) {
+            $saved[$layerKey] = [];
+        }
+        $saved[$layerKey]['restored_at']   = date('d M Y H:i:s');
+        $saved[$layerKey]['restored_from'] = $backupFileName;
+        $saved[$layerKey]['restored_by']   = auth()->user()->name ?? auth()->user()->username;
+        @File::put($configFile, json_encode($saved, JSON_PRETTY_PRINT));
+
+        return back()->with('success', "Layer {$layers[$layerKey]['short_name']} berhasil dipulihkan dari cadangan `{$backupFileName}` dan kembali aktif di peta!");
     }
 }
