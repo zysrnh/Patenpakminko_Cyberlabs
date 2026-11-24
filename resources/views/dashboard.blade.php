@@ -116,15 +116,9 @@
         .kpi-card {
             background: #FFFFFF;
             border: 1px solid #D6E4EF;
-            border-top: 3px solid #003B64;
             border-radius: 4px;
             padding: 16px 18px;
         }
-        .kpi-card.is-navy  { border-top-color: #003B64; }
-        .kpi-card.is-amber { border-top-color: #D97706; }
-        .kpi-card.is-blue  { border-top-color: #218AC9; }
-        .kpi-card.is-green { border-top-color: #16A34A; }
-        .kpi-card.is-red   { border-top-color: #DC2626; }
 
         .kpi-top {
             display: flex;
@@ -353,7 +347,6 @@
         .welcome-card {
             background: #FFFFFF;
             border: 1px solid #D6E4EF;
-            border-left: 4px solid #003B64;
             border-radius: 4px;
             padding: 14px 20px;
             margin-bottom: 18px;
@@ -403,43 +396,6 @@
             text-decoration: none; white-space: nowrap;
         }
         .btn-complete-profile:hover { background: #FDE68A; }
-
-        /* ─── SLA PANEL ─────────────────────────────────────── */
-        .sla-panel {
-            background: #FFFFFF;
-            border: 1px solid #D6E4EF;
-            border-radius: 4px;
-            padding: 13px 18px;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-        .sla-panel-left {
-            display: flex; align-items: center; gap: 10px;
-        }
-        .sla-icon {
-            width: 30px; height: 30px; border-radius: 4px;
-            background: #E3F0F9; color: #003B64;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .sla-title { font-size: 13px; font-weight: 800; color: #003B64; }
-        .sla-sub { font-size: 11.5px; color: #64748B; }
-        .sla-badges {
-            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-        }
-        .sla-badge {
-            border-radius: 4px; padding: 6px 12px;
-            display: inline-flex; align-items: center; gap: 6px;
-            white-space: nowrap; font-size: 12px; font-weight: 600;
-        }
-        .sla-badge strong { font-weight: 800; }
-        .sla-badge.green  { background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; }
-        .sla-badge.yellow { background: #FEF3C7; border: 1px solid #FCD34D; color: #92400E; }
-        .sla-badge.red    { background: #FEE2E2; border: 1px solid #FCA5A5; color: #991B1B; }
 
         /* ─── MOBILE RESPONSIVE ────────────────────────────── */
         .btn-menu {
@@ -538,12 +494,6 @@
             .welcome-card-left { width: 100%; }
             .welcome-card-right { width: 100%; justify-content: flex-start; }
             .welcome-card-title { font-size: 16px; }
-
-            /* SLA panel */
-            .sla-panel { padding: 14px; }
-            .sla-panel-left { width: 100%; }
-            .sla-badges { width: 100%; }
-            .sla-badge { flex: 1 1 auto; justify-content: center; font-size: 11px !important; padding: 6px 8px; }
 
             /* Berita list item (admin) jadi vertical */
             .berita-item { flex-direction: column !important; align-items: flex-start !important; }
@@ -646,38 +596,8 @@
                 $countNonBerusaha = $totalNon;
                 $countBerusaha = $totalBerusaha;
                 $countKebijakan = $totalKebijakan;
-                
-                // --- Kalkulasi SLA Pengendalian (Hanya untuk Admin) ---
-                $slaHijau = 0; $slaKuning = 0; $slaMerah = 0;
+
                 if (!$user->isPelakuUsaha()) {
-                    $allPendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->where('bpn_pembayaran_status', 'sudah_bayar')->get();
-                    $allPendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->where('bpn_pembayaran_status', 'sudah_bayar')->get();
-                    $allPendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak', 'terbit_pkpr'])->where('bpn_pembayaran_status', 'sudah_bayar')->get();
-
-                    $processSla = function($apps) use (&$slaHijau, &$slaKuning, &$slaMerah) {
-                        foreach($apps as $app) {
-                            $startDate = $app->tgl_mulai_layanan ? \Carbon\Carbon::parse($app->tgl_mulai_layanan) : $app->created_at;
-                            $endDate = $app->tgl_selesai_layanan ? \Carbon\Carbon::parse($app->tgl_selesai_layanan) : now();
-                            $hariKe = $startDate->getEffectiveWorkingDayNumber($endDate);
-
-                            $isPuPhase = in_array($app->status, ['menunggu_dinas_pu', 'menunggu_satu_pintu', 'menunggu_putr']);
-                            
-                            if ($isPuPhase) {
-                                if($hariKe <= 16) $slaHijau++;
-                                elseif($hariKe >= 17 && $hariKe <= 19) $slaKuning++;
-                                else $slaMerah++;
-                            } else {
-                                if($hariKe <= 7) $slaHijau++;
-                                elseif($hariKe >= 8 && $hariKe <= 9) $slaKuning++;
-                                else $slaMerah++;
-                            }
-                        }
-                    };
-                    
-                    $processSla($allPendingNon);
-                    $processSla($allPendingBerusaha);
-                    $processSla($allPendingKebijakan);
-
                     // --- Kalkulasi Pending Souvenirs (> 10 hari kerja SLA Pertek) ---
                     $pendingSouvenirs = [];
                     $souvenirModels = [
@@ -978,27 +898,6 @@
                     <div class="kpi-number" style="color: #DC2626;">{{ $totalDitolak ?? 0 }}</div>
                 </div>
             </div>
-
-            @if(!Auth::user()->isPelakuUsaha())
-            <!-- ── SLA PENGENDALIAN INTERNAL ──────────────────── -->
-            <div class="sla-panel">
-                <div class="sla-panel-left">
-                    <div class="sla-icon">
-                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    </div>
-                    <div>
-                        <div class="sla-title">Pengendalian SLA Berkas Aktif</div>
-                        <div class="sla-sub">{{ $slaHijau + $slaKuning + $slaMerah }} berkas berjalan</div>
-                    </div>
-                </div>
-
-                <div class="sla-badges">
-                    <div class="sla-badge green">Aman: <strong>{{ $slaHijau }}</strong></div>
-                    <div class="sla-badge yellow">Mendekati Batas: <strong>{{ $slaKuning }}</strong></div>
-                    <div class="sla-badge red">Terlambat: <strong>{{ $slaMerah }}</strong></div>
-                </div>
-            </div>
-            @endif
 
             <!-- Two-column grid -->
             <div class="grid-2col" {!! Auth::user()->isPelakuUsaha() ? 'style="grid-template-columns: 1fr;"' : '' !!}>
