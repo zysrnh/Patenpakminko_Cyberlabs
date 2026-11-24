@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -159,12 +160,18 @@
             line-height: 1;
         }
 
-        /* ─── TWO-COL LAYOUT ─────────────────────────────────── */
-        .grid-2col {
+        /* ─── OVERVIEW GRID (PROPORTIONAL 2-COL) ────────────── */
+        .grid-overview {
             display: grid;
-            grid-template-columns: 1fr 360px;
+            grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
             gap: 18px;
-            align-items: start;
+            align-items: stretch;
+            margin-bottom: 18px;
+        }
+        .grid-overview > .panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         /* ─── PANEL ──────────────────────────────────────────── */
@@ -177,7 +184,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 18px;
+            padding: 13px 18px;
             border-bottom: 1px solid #D6E4EF;
             background: #F8FAFC;
         }
@@ -185,6 +192,11 @@
             font-size: 14px;
             font-weight: 800;
             color: #003B64;
+        }
+        .panel-head-meta {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #64748B;
         }
         .panel-head-link {
             font-size: 12px;
@@ -194,6 +206,55 @@
         }
         .panel-head-link:hover {
             text-decoration: underline;
+        }
+        .panel-body-chart {
+            padding: 16px 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 14px;
+        }
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+            height: 220px;
+        }
+        .review-summary-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 4px;
+        }
+        .review-score-group {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+        .review-score-big {
+            font-size: 26px;
+            font-weight: 800;
+            color: #003B64;
+            line-height: 1;
+        }
+        .review-score-max {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748B;
+        }
+        .review-meta-right {
+            text-align: right;
+            font-size: 11.5px;
+            color: #475569;
+            line-height: 1.45;
+        }
+        .review-meta-right strong {
+            color: #003B64;
+            font-weight: 700;
         }
 
         /* ─── ACTIVITY PANEL ─────────────────────────────────── */
@@ -452,8 +513,11 @@
             .kpi-label { font-size: 11px !important; }
 
             /* Grid 2 kolom utama → stack */
-            .grid-2col {
+            .grid-overview {
                 grid-template-columns: 1fr !important;
+            }
+            .chart-wrap {
+                height: 200px;
             }
 
             /* Panel head & activity items rapetin & rapih di HP */
@@ -541,61 +605,122 @@
                 $isProfileIncomplete = $user->isPelakuUsaha()
                     ? (empty($user->name) || empty($user->email) || empty($user->address) || empty($user->business_name) || empty($user->business_role))
                     : (empty($user->name) || empty($user->email));
-                
-                // --- Kalkulasi Statistik ---
-                if ($user->isPelakuUsaha()) {
-                    $totalNon = \App\Models\PpkprApplication::where('user_id', $user->id)->count();
-                    $totalBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->count();
-                    $totalKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->count();
-                    $countLapolpak = \App\Models\LapolpaBooking::where('user_id', $user->id)->count();
 
-                    $unpaidNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
-                    $unpaidBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
-                    $unpaidKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+                // --- Kalkulasi Statistik Terpadu Across 5 Layanan ---
+                $serviceModels = [
+                    ['class' => \App\Models\PpkprBerusahaApplication::class, 'label' => 'PKKPR Berusaha',     'short' => 'Berusaha',     'route' => 'berusaha.show'],
+                    ['class' => \App\Models\PpkprApplication::class,        'label' => 'PKKPR Non Berusaha', 'short' => 'Non Berusaha', 'route' => 'non-berusaha.show'],
+                    ['class' => \App\Models\KebijakanApplication::class,    'label' => 'Kebijakan',          'short' => 'Kebijakan',    'route' => 'kebijakan.show'],
+                    ['class' => \App\Models\TanahTimbulApplication::class,  'label' => 'Tanah Timbul',       'short' => 'Tanah Timbul', 'route' => 'tanah-timbul.show'],
+                    ['class' => \App\Models\PsnApplication::class,          'label' => 'PSN',                'short' => 'PSN',          'route' => 'psn.show'],
+                ];
 
-                    $pendingNon = \App\Models\PpkprApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
-                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
-                    $pendingKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
+                $totalPermohonan = 0;
+                $totalUnpaid = 0;
+                $totalPending = 0;
+                $totalDisetujui = 0;
+                $totalDitolak = 0;
+                $serviceChartLabels = [];
+                $serviceChartCounts = [];
+                $recentActivities = collect();
 
-                    $disetujuiNon = \App\Models\PpkprApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
-                    $disetujuiBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
-                    $disetujuiKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->where('status', 'disetujui')->count();
+                foreach ($serviceModels as $svc) {
+                    $baseQuery = $svc['class']::query();
+                    if ($user->isPelakuUsaha()) {
+                        $baseQuery->where('user_id', $user->id);
+                    }
 
-                    $ditolakNon = \App\Models\PpkprApplication::where('user_id', $user->id)->where('status', 'ditolak')->count();
-                    $ditolakBerusaha = \App\Models\PpkprBerusahaApplication::where('user_id', $user->id)->where('status', 'ditolak')->count();
-                    $ditolakKebijakan = \App\Models\KebijakanApplication::where('user_id', $user->id)->where('status', 'ditolak')->count();
-                } else {
-                    $totalNon = \App\Models\PpkprApplication::count();
-                    $totalBerusaha = \App\Models\PpkprBerusahaApplication::count();
-                    $totalKebijakan = \App\Models\KebijakanApplication::count();
-                    $countLapolpak = \App\Models\LapolpaBooking::count();
+                    $svcTotal = (clone $baseQuery)->count();
+                    $svcUnpaid = (clone $baseQuery)
+                        ->whereNotIn('status', ['disetujui', 'terbit_pkpr', 'ditolak'])
+                        ->where(function ($q) {
+                            $q->whereNull('bpn_pembayaran_status')
+                              ->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar');
+                        })
+                        ->count();
+                    $svcPending = (clone $baseQuery)
+                        ->whereNotIn('status', ['disetujui', 'terbit_pkpr', 'ditolak'])
+                        ->where('bpn_pembayaran_status', 'sudah_bayar')
+                        ->count();
+                    $svcDisetujui = (clone $baseQuery)
+                        ->whereIn('status', ['disetujui', 'terbit_pkpr'])
+                        ->count();
+                    $svcDitolak = (clone $baseQuery)
+                        ->where('status', 'ditolak')
+                        ->count();
 
-                    $unpaidNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
-                    $unpaidBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
-                    $unpaidKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where(function($q) { $q->whereNull('bpn_pembayaran_status')->orWhere('bpn_pembayaran_status', '!=', 'sudah_bayar'); })->count();
+                    $totalPermohonan += $svcTotal;
+                    $totalUnpaid += $svcUnpaid;
+                    $totalPending += $svcPending;
+                    $totalDisetujui += $svcDisetujui;
+                    $totalDitolak += $svcDitolak;
 
-                    $pendingNon = \App\Models\PpkprApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
-                    $pendingBerusaha = \App\Models\PpkprBerusahaApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
-                    $pendingKebijakan = \App\Models\KebijakanApplication::whereNotIn('status', ['disetujui', 'ditolak'])->where('bpn_pembayaran_status', 'sudah_bayar')->count();
+                    $serviceChartLabels[] = $svc['short'];
+                    $serviceChartCounts[] = $svcTotal;
 
-                    $disetujuiNon = \App\Models\PpkprApplication::where('status', 'disetujui')->count();
-                    $disetujuiBerusaha = \App\Models\PpkprBerusahaApplication::where('status', 'disetujui')->count();
-                    $disetujuiKebijakan = \App\Models\KebijakanApplication::where('status', 'disetujui')->count();
+                    $recentQuery = (clone $baseQuery)->with('user')->where('bpn_pembayaran_status', 'sudah_bayar');
+                    foreach ($recentQuery->latest()->take(5)->get() as $item) {
+                        $statusKey = 'pending';
+                        if (in_array($item->status, ['disetujui', 'terbit_pkpr'])) {
+                            $statusKey = 'approved';
+                        } elseif ($item->status === 'ditolak') {
+                            $statusKey = 'rejected';
+                        } elseif ($item->bpn_pembayaran_status === 'sudah_bayar') {
+                            $statusKey = 'review';
+                        } else {
+                            $statusKey = 'unpaid';
+                        }
 
-                    $ditolakNon = \App\Models\PpkprApplication::where('status', 'ditolak')->count();
-                    $ditolakBerusaha = \App\Models\PpkprBerusahaApplication::where('status', 'ditolak')->count();
-                    $ditolakKebijakan = \App\Models\KebijakanApplication::where('status', 'ditolak')->count();
+                        $recentActivities->push((object)[
+                            'id'           => $item->id,
+                            'title'        => ($item->nama_pemilik_usaha ?? ($item->user->name ?? $item->user->username)) . ' (' . ($item->application_number ?? 'No. Berkas #' . $item->id) . ')',
+                            'type'         => $svc['label'],
+                            'created_at'   => $item->created_at,
+                            'status_key'   => $statusKey,
+                            'status_label' => $item->status_label,
+                            'url'          => route($svc['route'], $item->id),
+                        ]);
+                    }
                 }
 
-                $totalPermohonan = $totalNon + $totalBerusaha + $totalKebijakan;
-                $totalUnpaid = $unpaidNon + $unpaidBerusaha + $unpaidKebijakan;
-                $totalPending = $pendingNon + $pendingBerusaha + $pendingKebijakan;
-                $totalDisetujui = $disetujuiNon + $disetujuiBerusaha + $disetujuiKebijakan;
-                $totalDitolak = $ditolakNon + $ditolakBerusaha + $ditolakKebijakan;
-                
-                $countNonBerusaha = $totalNon;
-                $countBerusaha = $totalBerusaha;
-                $countKebijakan = $totalKebijakan;
+                $recentActivities = $recentActivities->sortByDesc('created_at')->take(5);
+
+                // --- Tambahkan layanan non-Pertek (LAPOL PAK & INFORMAL) ke grafik overview ---
+                $lapolpaCount = $user->isPelakuUsaha()
+                    ? \App\Models\LapolpaBooking::where('user_id', $user->id)->count()
+                    : \App\Models\LapolpaBooking::count();
+                $informalCount = $user->isPelakuUsaha()
+                    ? \App\Models\InformalRating::where('user_id', $user->id)->count()
+                    : \App\Models\InformalRating::count();
+
+                $serviceChartLabels[] = 'LAPOL PAK';
+                $serviceChartCounts[] = $lapolpaCount;
+                $serviceChartLabels[] = 'INFORMAL';
+                $serviceChartCounts[] = $informalCount;
+                $totalSeluruhLayanan = $totalPermohonan + $lapolpaCount + $informalCount;
+
+                // --- Overview Ulasan & Kepuasan Layanan ---
+                $reviewQuery = \App\Models\Review::query();
+                $informalQuery = \App\Models\InformalRating::query();
+                if ($user->isPelakuUsaha()) {
+                    $reviewQuery->where('is_approved', true);
+                    $informalQuery->where('is_approved', true);
+                }
+
+                $allReviews = (clone $reviewQuery)->select('rating', 'is_approved')->get();
+                $allInformal = (clone $informalQuery)->select('rating', 'is_approved')->get();
+                $combinedRatings = $allReviews->concat($allInformal);
+
+                $reviewTotal = $combinedRatings->count();
+                $reviewApproved = $combinedRatings->where('is_approved', true)->count();
+                $reviewPending = $reviewTotal - $reviewApproved;
+                $reviewAverage = $reviewTotal > 0 ? round($combinedRatings->avg('rating'), 1) : 0;
+
+                $ratingStars = [5, 4, 3, 2, 1];
+                $ratingDist = [];
+                foreach ($ratingStars as $star) {
+                    $ratingDist[] = $combinedRatings->where('rating', $star)->count();
+                }
 
                 if (!$user->isPelakuUsaha()) {
                     // --- Kalkulasi Pending Souvenirs (> 10 hari kerja SLA Pertek) ---
@@ -624,11 +749,8 @@
                         foreach ($apps as $app) {
                             $startDate = $app->tgl_mulai_layanan ? \Carbon\Carbon::parse($app->tgl_mulai_layanan) : $app->created_at;
                             $pertekDate = $app->bpn_pertek_uploaded_at ? \Carbon\Carbon::parse($app->bpn_pertek_uploaded_at) : $app->updated_at;
-
-                            // Durasi pengerjaan Pertek BPN (hari kerja) dari awal pengajuan s/d pertek terunggah
                             $pertekWorkingDays = $startDate->getEffectiveWorkingDayNumber($pertekDate);
 
-                            // Gift / Souvenir HANYA dipicu jika pengerjaan Pertek BPN melebihi SLA 10 Hari Kerja (> 10)
                             if ($pertekWorkingDays > 10) {
                                 $pendingSouvenirs[] = [
                                     'id'                 => $app->id,
@@ -644,56 +766,6 @@
                         }
                     }
                 }
-
-                // --- Fetch Aktivitas Terkini (5 Permohonan Terbaru) ---
-                $recentActivities = collect();
-                $recentModels = [
-                    ['class' => \App\Models\PpkprBerusahaApplication::class, 'type' => 'PKKPR Berusaha', 'route' => 'berusaha.show'],
-                    ['class' => \App\Models\PpkprApplication::class,        'type' => 'PKKPR Non Berusaha', 'route' => 'non-berusaha.show'],
-                    ['class' => \App\Models\KebijakanApplication::class,    'type' => 'Kebijakan', 'route' => 'kebijakan.show'],
-                    ['class' => \App\Models\TanahTimbulApplication::class,  'type' => 'Tanah Timbul', 'route' => 'tanah-timbul.show'],
-                    ['class' => \App\Models\PsnApplication::class,          'type' => 'PSN', 'route' => 'psn.show'],
-                ];
-
-                foreach ($recentModels as $m) {
-                    $query = $m['class']::with('user')->where('bpn_pembayaran_status', 'sudah_bayar');
-                    if ($user->isPelakuUsaha()) {
-                        $query->where('user_id', $user->id);
-                    }
-                    $items = $query->latest()->take(5)->get();
-                    foreach ($items as $item) {
-                        $statusKey = 'pending';
-                        $statusLabel = $item->status_label;
-                        $statusColor = 'yellow';
-
-                        if (in_array($item->status, ['disetujui', 'terbit_pkpr'])) {
-                            $statusKey = 'approved';
-                            $statusColor = 'green';
-                        } elseif ($item->status === 'ditolak') {
-                            $statusKey = 'rejected';
-                            $statusColor = 'red';
-                        } elseif ($item->bpn_pembayaran_status === 'sudah_bayar') {
-                            $statusKey = 'review';
-                            $statusColor = 'blue';
-                        } else {
-                            $statusKey = 'unpaid';
-                            $statusColor = 'yellow';
-                        }
-
-                        $recentActivities->push((object)[
-                            'id'           => $item->id,
-                            'title'        => ($item->nama_pemilik_usaha ?? ($item->user->name ?? $item->user->username)) . ' (' . ($item->application_number ?? 'No. Berkas #' . $item->id) . ')',
-                            'type'         => $m['type'],
-                            'created_at'   => $item->created_at,
-                            'status_key'   => $statusKey,
-                            'status_label' => $statusLabel,
-                            'status_color' => $statusColor,
-                            'url'          => route($m['route'], $item->id),
-                        ]);
-                    }
-                }
-
-                $recentActivities = $recentActivities->sortByDesc('created_at')->take(5);
             @endphp
 
             <!-- Header Sambutan Flat & Clean -->
@@ -899,124 +971,218 @@
                 </div>
             </div>
 
-            <!-- Two-column grid -->
-            <div class="grid-2col" {!! Auth::user()->isPelakuUsaha() ? 'style="grid-template-columns: 1fr;"' : '' !!}>
-
-                <!-- Left: Recent activity -->
-                <div style="display:flex;flex-direction:column;gap:18px;">
-                    <div class="panel">
-                        <div class="panel-head">
-                            <h2>Aktivitas Terkini</h2>
-                            <span style="font-size: 11.5px; color: #64748B; font-weight: 600;">5 Terbaru</span>
-                        </div>
-                        <div class="activity-list">
-                            @forelse($recentActivities as $activity)
-                                <a href="{{ $activity->url }}" class="activity-item" style="text-decoration: none;">
-                                    <div class="activity-body">
-                                        <div class="activity-title">{{ $activity->title }}</div>
-                                        <div class="activity-meta">{{ $activity->type }} · {{ $activity->created_at->diffForHumans() }}</div>
-                                    </div>
-                                    <span class="activity-status status-{{ $activity->status_key }}">
-                                        {{ $activity->status_label }}
-                                    </span>
-                                </a>
-                            @empty
-                                <div class="activity-item" style="padding:24px 18px;justify-content:center;flex-direction:column;text-align:center;gap:8px;">
-                                    <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="#B3D4EC" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                                    <span style="font-size:12.5px;color:#64748B;">Belum ada aktivitas permohonan.</span>
-                                </div>
-                            @endforelse
+            <!-- Row 2: Grafik Overview (Permohonan per Layanan & Ulasan Kepuasan) -->
+            <div class="grid-overview">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h2>Aktivitas Seluruh Layanan</h2>
+                        <span class="panel-head-meta">{{ $totalSeluruhLayanan }} Total Data</span>
+                    </div>
+                    <div class="panel-body-chart">
+                        <div class="chart-wrap">
+                            <canvas id="serviceStatsChart"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column -->
-                <div class="right-col" style="display:flex;flex-direction:column;gap:20px;">
-
-                    <!-- Status Overview -->
-                    @if(!Auth::user()->isPelakuUsaha())
-                    <div class="panel">
-                        <div class="panel-head">
-                            <h2>Status Permohonan</h2>
+                <div class="panel">
+                    <div class="panel-head">
+                        <h2>Ulasan & Kepuasan Layanan</h2>
+                        @if(Auth::user()->isDpn() || Auth::user()->isBpn() || Auth::user()->isDinasPu() || Auth::user()->isDinasPutr() || Auth::user()->isSatuPintu())
+                            <a href="{{ route('admin.reviews.index') }}" class="panel-head-link">Kelola →</a>
+                        @else
+                            <a href="{{ route('ulasan.index') }}" class="panel-head-link">Lihat →</a>
+                        @endif
+                    </div>
+                    <div class="panel-body-chart">
+                        <div class="review-summary-bar">
+                            <div class="review-score-group">
+                                <span class="review-score-big">{{ number_format($reviewAverage, 1) }}</span>
+                                <span class="review-score-max">/ 5.0</span>
+                            </div>
+                            <div class="review-meta-right">
+                                <div><strong>{{ $reviewTotal }}</strong> Total Ulasan</div>
+                                @if(!Auth::user()->isPelakuUsaha())
+                                    <div>{{ $reviewApproved }} Disetujui · {{ $reviewPending }} Menunggu</div>
+                                @else
+                                    <div>Indeks Kepuasan Publik</div>
+                                @endif
+                            </div>
                         </div>
+                        <div class="chart-wrap" style="height: 155px;">
+                            <canvas id="reviewRatingChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: Aktivitas Terkini & Jadwal Konsultasi (Proporsional 7fr : 5fr) -->
+            <div class="grid-overview">
+                <div class="panel">
+                    <div class="panel-head">
+                        <h2>Aktivitas Terkini</h2>
+                        <span class="panel-head-meta">5 Terbaru</span>
+                    </div>
+                    <div class="activity-list">
+                        @forelse($recentActivities as $activity)
+                            <a href="{{ $activity->url }}" class="activity-item" style="text-decoration: none;">
+                                <div class="activity-body">
+                                    <div class="activity-title">{{ $activity->title }}</div>
+                                    <div class="activity-meta">{{ $activity->type }} · {{ $activity->created_at->diffForHumans() }}</div>
+                                </div>
+                                <span class="activity-status status-{{ $activity->status_key }}">
+                                    {{ $activity->status_label }}
+                                </span>
+                            </a>
+                        @empty
+                            <div class="activity-item" style="padding:24px 18px;justify-content:center;flex-direction:column;text-align:center;gap:8px;">
+                                <svg width="30" height="30" fill="none" viewBox="0 0 24 24" stroke="#B3D4EC" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                <span style="font-size:12.5px;color:#64748B;">Belum ada aktivitas permohonan.</span>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Jadwal Konsultasi -->
+                <div class="panel">
+                    <div class="panel-head">
+                        <h2>Jadwal Konsultasi</h2>
+                        <a href="{{ route('lapolpa.index') }}" class="panel-head-link">Kelola →</a>
+                    </div>
+                    @php
+                        if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->role === 'admin') {
+                            $upcomingSchedules = \App\Models\LapolpaBooking::whereIn('status', ['booked', 'diterima'])
+                                ->orderBy('booking_date', 'asc')
+                                ->take(5)
+                                ->get();
+                        } else {
+                            $upcomingSchedules = \App\Models\LapolpaBooking::where('user_id', Auth::id())
+                                ->whereIn('status', ['booked', 'diterima'])
+                                ->orderBy('booking_date', 'asc')
+                                ->take(5)
+                                ->get();
+                        }
+                    @endphp
+                    @if(isset($upcomingSchedules) && $upcomingSchedules->count())
                         <div class="activity-list">
-                            @php
-                                $total = max(($totalPermohonan ?? 1), 1);
-                                $statuses = [
-                                    ['label' => 'Disetujui',        'value' => $totalDisetujui ?? 0, 'color' => 'green'],
-                                    ['label' => 'Sedang Diproses',  'value' => $totalPending ?? 0,   'color' => 'blue'],
-                                    ['label' => 'Belum Bayar',      'value' => $totalUnpaid ?? 0,    'color' => 'yellow'],
-                                    ['label' => 'Ditolak',          'value' => $totalDitolak ?? 0,   'color' => 'red'],
-                                ];
-                            @endphp
-                            @foreach($statuses as $s)
-                                <div class="progress-item">
-                                    <div class="progress-head">
-                                        <span>{{ $s['label'] }}</span>
-                                        <strong>{{ $s['value'] }}</strong>
+                            @foreach($upcomingSchedules as $sched)
+                                <div class="schedule-item">
+                                    <div class="schedule-date-box">
+                                        <span class="day">{{ Carbon\Carbon::parse($sched->booking_date)->format('d') }}</span>
+                                        <span class="month">{{ Carbon\Carbon::parse($sched->booking_date)->format('M') }}</span>
                                     </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill {{ $s['color'] }}" style="width: {{ $total > 0 ? round($s['value']/$total*100) : 0 }}%"></div>
+                                    <div class="schedule-info">
+                                        <h4>{{ $sched->nama_pemohon ?? ($sched->user->name ?? 'Tamu') }}</h4>
+                                        <span>{{ $sched->formatted_time_range }} · LAPOL PAK ({{ ucfirst($sched->status) }})</span>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                    </div>
-                    @endif
-
-                    <!-- Upcoming Schedule -->
-                    <div class="panel">
-                        <div class="panel-head">
-                            <h2>Jadwal Konsultasi</h2>
-                            <a href="{{ route('lapolpa.index') }}" class="panel-head-link">Kelola →</a>
+                    @else
+                        <div class="schedule-empty">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <p>Belum ada jadwal konsultasi terdaftar.</p>
+                            <a href="{{ route('lapolpa.index') }}" class="btn-primary">
+                                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Pesan Jadwal
+                            </a>
                         </div>
-                        @php
-                            if (Auth::user()->isBpn() || Auth::user()->isDpn() || Auth::user()->role === 'admin') {
-                                $upcomingSchedules = \App\Models\LapolpaBooking::whereIn('status', ['booked', 'diterima'])
-                                    ->orderBy('booking_date', 'asc')
-                                    ->take(5)
-                                    ->get();
-                            } else {
-                                $upcomingSchedules = \App\Models\LapolpaBooking::where('user_id', Auth::id())
-                                    ->whereIn('status', ['booked', 'diterima'])
-                                    ->orderBy('booking_date', 'asc')
-                                    ->take(5)
-                                    ->get();
-                            }
-                        @endphp
-                        @if(isset($upcomingSchedules) && $upcomingSchedules->count())
-                            <div class="activity-list">
-                                @foreach($upcomingSchedules as $sched)
-                                    <div class="schedule-item">
-                                        <div class="schedule-date-box">
-                                            <span class="day">{{ Carbon\Carbon::parse($sched->booking_date)->format('d') }}</span>
-                                            <span class="month">{{ Carbon\Carbon::parse($sched->booking_date)->format('M') }}</span>
-                                        </div>
-                                        <div class="schedule-info">
-                                            <h4>{{ $sched->nama_pemohon ?? ($sched->user->name ?? 'Tamu') }}</h4>
-                                            <span>{{ $sched->formatted_time_range }} · LAPOL PAK ({{ ucfirst($sched->status) }})</span>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="schedule-empty">
-                                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                                <p>Belum ada jadwal konsultasi terdaftar.</p>
-                                <a href="{{ route('lapolpa.index') }}" class="btn-primary">
-                                    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                                    Pesan Jadwal
-                                </a>
-                            </div>
-                        @endif
-                    </div>
-
+                    @endif
                 </div>
             </div>
             @endif
 
         </div><!-- /content -->
     </div><!-- /main-wrap -->
+
+    @if(!Auth::user()->isAdminBerita())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof Chart === 'undefined') return;
+
+            const serviceCtx = document.getElementById('serviceStatsChart');
+            if (serviceCtx) {
+                new Chart(serviceCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: @json($serviceChartLabels),
+                        datasets: [{
+                            label: 'Jumlah Layanan',
+                            data: @json($serviceChartCounts),
+                            backgroundColor: ['#003B64', '#218AC9', '#2C5272', '#475569', '#0284C7', '#D97706', '#16A34A'],
+                            borderRadius: 3,
+                            barPercentage: 0.56
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#003B64',
+                                cornerRadius: 4,
+                                padding: 10
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#334155', font: { family: 'Poppins', size: 11, weight: '600' } }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: '#E8F0F6' },
+                                ticks: { precision: 0, color: '#64748B', font: { family: 'Poppins', size: 11 } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const reviewCtx = document.getElementById('reviewRatingChart');
+            if (reviewCtx) {
+                new Chart(reviewCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['5 ★', '4 ★', '3 ★', '2 ★', '1 ★'],
+                        datasets: [{
+                            label: 'Jumlah Ulasan',
+                            data: @json($ratingDist),
+                            backgroundColor: ['#16A34A', '#218AC9', '#D97706', '#EA580C', '#DC2626'],
+                            borderRadius: 3,
+                            barPercentage: 0.65
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#003B64',
+                                cornerRadius: 4,
+                                padding: 8
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                grid: { color: '#E8F0F6' },
+                                ticks: { precision: 0, color: '#64748B', font: { family: 'Poppins', size: 10.5 } }
+                            },
+                            y: {
+                                grid: { display: false },
+                                ticks: { color: '#003B64', font: { family: 'Poppins', size: 11, weight: '700' } }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    @endif
 
     <script>
         // Maintain sidebar scroll position
