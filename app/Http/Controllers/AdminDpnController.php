@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SiteSetting;
+use App\Services\BackupService;
+use App\Services\GoogleDriveBackupService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class AdminDpnController extends Controller
@@ -17,17 +21,20 @@ class AdminDpnController extends Controller
             abort(403, 'Akses khusus Super Admin DPN.');
         }
 
+        // Ambil data statistik dari tabel site_settings (database MySQL) agar permanen & tahan reset
         $stats = [
-            'count' => 0,
-            'permohonan_diproses' => '',
-            'rata_rata_penyelesaian' => '10 hari',
-            'rating_override' => '',
+            'count'                  => (int) SiteSetting::get('visitor_count', 2800),
+            'permohonan_diproses'    => SiteSetting::get('permohonan_diproses', ''),
+            'rata_rata_penyelesaian' => SiteSetting::get('rata_rata_penyelesaian', '10 hari'),
+            'rating_override'        => SiteSetting::get('rating_override', ''),
         ];
 
-        if (Storage::exists($this->filePath)) {
+        // Sinkronisasi fallback jika DB masih default atau file json punya nilai valid
+        if ($stats['count'] <= 0 && Storage::exists($this->filePath)) {
             $data = json_decode(Storage::get($this->filePath), true);
             if (is_array($data)) {
-                $stats = array_merge($stats, $data);
+                $stats = array_merge($stats, array_filter($data));
+                SiteSetting::set('visitor_count', $stats['count']);
             }
         }
 
@@ -90,7 +97,24 @@ class AdminDpnController extends Controller
 
         $backupArchives = \App\Services\BackupService::getBackupArchives();
 
-        return view('admin_dpn.index', compact('stats', 'count', 'totalPermohonanDb', 'realAverageRating', 'realAvgDays', 'totalApprovedCount', 'backupArchives'));
+        // Status Google Drive Cloud Backup
+        $gdriveFolderId = GoogleDriveBackupService::getFolderId() ?? '';
+        $gdriveIsConfigured = GoogleDriveBackupService::isConfigured();
+        $gdriveCreds = GoogleDriveBackupService::getCredentials();
+        $gdriveClientEmail = $gdriveCreds['client_email'] ?? null;
+
+        return view('admin_dpn.index', compact(
+            'stats',
+            'count',
+            'totalPermohonanDb',
+            'realAverageRating',
+            'realAvgDays',
+            'totalApprovedCount',
+            'backupArchives',
+            'gdriveFolderId',
+            'gdriveIsConfigured',
+            'gdriveClientEmail'
+        ));
     }
 
     public function update(Request $request)
@@ -109,16 +133,24 @@ class AdminDpnController extends Controller
         $permVal  = $request->input('permohonan_diproses');
         $penyVal  = $request->input('rata_rata_penyelesaian');
         $rateVal  = $request->input('rating_override');
+        $countVal = (int) $request->count;
 
+        // 1. Simpan ke Database MySQL (site_settings) agar permanen & tahan reset
+        SiteSetting::set('visitor_count', $countVal);
+        SiteSetting::set('permohonan_diproses', $permVal ?? '');
+        SiteSetting::set('rata_rata_penyelesaian', ($penyVal !== null && $penyVal !== '') ? $penyVal : '10 hari');
+        SiteSetting::set('rating_override', $rateVal ?? '');
+
+        // 2. Sinkronkan juga ke visitor_stats.json sebagai backup lokal
         $stats = [
-            'count'                  => (int) $request->count,
-            'permohonan_diproses'    => $permVal ?? '',                                                          // kosong = auto hitung DB
+            'count'                  => $countVal,
+            'permohonan_diproses'    => $permVal ?? '',
             'rata_rata_penyelesaian' => ($penyVal !== null && $penyVal !== '') ? $penyVal : '10 hari',
             'rating_override'        => $rateVal ?? '',
         ];
         Storage::put($this->filePath, json_encode($stats));
 
-        return redirect()->back()->with('success', 'Statistik website beranda berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Statistik website beranda berhasil disimpan permanen ke database!');
     }
 
     public function resetVisitorCount()
@@ -127,22 +159,19 @@ class AdminDpnController extends Controller
             abort(403, 'Akses khusus Super Admin DPN.');
         }
 
+        // Reset di Database
+        SiteSetting::set('visitor_count', 0);
+
+        // Reset di file JSON
         $stats = [
             'count' => 0,
-            'permohonan_diproses' => '',
-            'rata_rata_penyelesaian' => '10 hari',
-            'rating_override' => '',
+            'permohonan_diproses' => SiteSetting::get('permohonan_diproses', ''),
+            'rata_rata_penyelesaian' => SiteSetting::get('rata_rata_penyelesaian', '10 hari'),
+            'rating_override' => SiteSetting::get('rating_override', ''),
         ];
-        if (Storage::exists($this->filePath)) {
-            $data = json_decode(Storage::get($this->filePath), true);
-            if (is_array($data)) {
-                $stats = array_merge($stats, $data);
-            }
-        }
-        $stats['count'] = 0;
         Storage::put($this->filePath, json_encode($stats));
 
-        return redirect()->back()->with('success', 'Jumlah kunjungan berhasil di-reset ke 0!');
+        return redirect()->back()->with('success', 'Jumlah kunjungan pengunjung berhasil di-reset ke 0 di database!');
     }
 
     public function markSouvenirSent($type, $id)
@@ -624,6 +653,111 @@ class AdminDpnController extends Controller
             return redirect()->back()->with('success', $msg);
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Gagal membuat cadangan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Simpan pengaturan kredensial & folder Google Drive (Khusus Super Admin DPN).
+     */
+    public function saveGdriveSettings(Request $request)
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
+        $request->validate([
+            'gdrive_folder_id'        => 'nullable|string|max:500',
+            'gdrive_credentials_file' => 'nullable|file|max:2048',
+            'gdrive_credentials_json' => 'nullable|string',
+        ]);
+
+        // 1. Simpan Folder ID
+        if ($request->filled('gdrive_folder_id')) {
+            $cleanedFolderId = GoogleDriveBackupService::extractFolderId($request->gdrive_folder_id);
+            SiteSetting::set('gdrive_folder_id', $cleanedFolderId);
+        }
+
+        // 2. Simpan Credentials dari File Upload atau Textarea
+        $jsonContent = null;
+        if ($request->hasFile('gdrive_credentials_file')) {
+            $jsonContent = file_get_contents($request->file('gdrive_credentials_file')->getRealPath());
+        } elseif ($request->filled('gdrive_credentials_json')) {
+            $jsonContent = trim($request->gdrive_credentials_json);
+        }
+
+        if ($jsonContent) {
+            $decoded = json_decode($jsonContent, true);
+            if (!is_array($decoded) || empty($decoded['client_email']) || empty($decoded['private_key'])) {
+                return redirect()->back()->with('error', 'Format berkas JSON kredensial tidak valid. Pastikan berkas adalah Google Service Account JSON resmi yang memuat "client_email" dan "private_key".');
+            }
+
+            SiteSetting::set('gdrive_credentials', $jsonContent);
+
+            // Simpan juga salinan ke storage/app/google_drive_credentials.json
+            try {
+                File::put(storage_path('app/google_drive_credentials.json'), $jsonContent);
+            } catch (\Throwable $e) {}
+        }
+
+        return redirect()->back()->with('success', 'Pengaturan Google Drive Cloud Backup berhasil disimpan!');
+    }
+
+    /**
+     * Uji koneksi ke Google Drive (Khusus Super Admin DPN).
+     */
+    public function testGdriveConnection(Request $request)
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Akses ditolak.'], 403);
+            }
+            abort(403, 'Akses khusus Super Admin DPN.');
+        }
+
+        $result = GoogleDriveBackupService::testConnection();
+
+        if ($request->expectsJson()) {
+            return response()->json($result);
+        }
+
+        if ($result['success']) {
+            return redirect()->back()->with('success', $result['message']);
+        }
+
+        return redirect()->back()->with('error', $result['message']);
+    }
+
+    /**
+     * Unggah cadangan Database SQL atau Full Dokumen ZIP ke Google Drive (Khusus Super Admin DPN).
+     */
+    public function uploadToGoogleDrive(Request $request)
+    {
+        if (!\Illuminate\Support\Facades\Auth::check() || !\Illuminate\Support\Facades\Auth::user()->isDpn()) {
+            return redirect()->back()->with('error', 'Akses ditolak.');
+        }
+
+        if (!GoogleDriveBackupService::isConfigured()) {
+            return redirect()->back()->with('error', 'Google Drive belum dikonfigurasi. Silakan lengkapi Folder ID dan Service Account JSON di menu Kelola Web.');
+        }
+
+        $format = $request->input('backup_format', 'sql');
+        $selectedCategories = $request->input('categories', []);
+        if (is_string($selectedCategories)) {
+            $selectedCategories = array_filter(explode(',', $selectedCategories));
+        }
+
+        try {
+            if ($format === 'zip') {
+                $result = GoogleDriveBackupService::uploadFullZip((array)$selectedCategories);
+            } else {
+                $result = GoogleDriveBackupService::uploadDatabaseSql();
+            }
+
+            $linkHtml = !empty($result['web_view_link']) ? " <a href='{$result['web_view_link']}' target='_blank' style='font-weight: bold; text-decoration: underline;'>[Buka di Google Drive]</a>" : "";
+
+            return redirect()->back()->with('success', $result['message'] . $linkHtml);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Gagal mengunggah backup ke Google Drive: ' . $e->getMessage());
         }
     }
 }

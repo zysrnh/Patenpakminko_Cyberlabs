@@ -105,18 +105,21 @@ Route::get('/', function () {
     }
     $averageRating = number_format((float)$averageRating, 1);
     
-    // Hitung visitor & statistik web
-    $visitorFile = 'visitor_stats.json';
+    // Hitung visitor & statistik web (disimpan di database via SiteSetting agar permanen & tahan race condition)
     $statsData = [
-        'count' => 0,
-        'permohonan_diproses' => '',
-        'rata_rata_penyelesaian' => '10 hari',
-        'rating_override' => '',
+        'count' => (int) \App\Models\SiteSetting::get('visitor_count', 2800),
+        'permohonan_diproses' => \App\Models\SiteSetting::get('permohonan_diproses', ''),
+        'rata_rata_penyelesaian' => \App\Models\SiteSetting::get('rata_rata_penyelesaian', '10 hari'),
+        'rating_override' => \App\Models\SiteSetting::get('rating_override', ''),
     ];
-    if (\Illuminate\Support\Facades\Storage::exists($visitorFile)) {
+
+    // Fallback sinkronisasi dari visitor_stats.json jika DB bernilai 0
+    $visitorFile = 'visitor_stats.json';
+    if ($statsData['count'] <= 0 && \Illuminate\Support\Facades\Storage::exists($visitorFile)) {
         $loaded = json_decode(\Illuminate\Support\Facades\Storage::get($visitorFile), true);
         if (is_array($loaded)) {
-            $statsData = array_merge($statsData, $loaded);
+            $statsData = array_merge($statsData, array_filter($loaded));
+            \App\Models\SiteSetting::set('visitor_count', $statsData['count']);
         }
     }
     
@@ -124,13 +127,13 @@ Route::get('/', function () {
         $statsData['permohonan_diproses'] = '';
     }
     
-    $visitorCount = (int) $statsData['count'];
     $isNewVisitor = false;
     if (!request()->cookie('visited')) {
-        $visitorCount++;
+        $visitorCount = \App\Models\SiteSetting::incrementVisitor();
         $statsData['count'] = $visitorCount;
-        \Illuminate\Support\Facades\Storage::put($visitorFile, json_encode($statsData));
         $isNewVisitor = true;
+    } else {
+        $visitorCount = (int) $statsData['count'];
     }
 
     // Hitung total permohonan otomatis dari semua layanan di database (5 modul permohonan)
@@ -375,6 +378,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin_dpn/backup-archive/download/{filename}', [AdminDpnController::class, 'downloadBackupArchive'])->name('admin_dpn.backup_archive.download');
     Route::delete('/admin_dpn/backup-archive/delete/{filename}', [AdminDpnController::class, 'deleteBackupArchive'])->name('admin_dpn.backup_archive.delete');
     Route::post('/admin_dpn/backup-archive/manual', [AdminDpnController::class, 'createManualBackupArchive'])->name('admin_dpn.backup_archive.manual');
+
+    // Integrasi Google Drive Cloud Backup
+    Route::post('/admin_dpn/gdrive-settings', [AdminDpnController::class, 'saveGdriveSettings'])->name('admin_dpn.gdrive_settings');
+    Route::post('/admin_dpn/gdrive-test', [AdminDpnController::class, 'testGdriveConnection'])->name('admin_dpn.gdrive_test');
+    Route::post('/admin_dpn/backup-gdrive', [AdminDpnController::class, 'uploadToGoogleDrive'])->name('admin_dpn.backup_gdrive');
 
     Route::post('/souvenir/send/{type}/{id}', [AdminDpnController::class, 'markSouvenirSent'])->name('souvenir.mark_sent');
     Route::post('/application/rollback/{type}/{id}', [AdminDpnController::class, 'rollbackStatus'])->name('application.rollback');

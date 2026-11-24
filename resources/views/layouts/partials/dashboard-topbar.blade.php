@@ -422,8 +422,11 @@
             </style>
 
             <!-- MODAL PILIHAN BACKUP -->
+            @php
+                $isGdriveConfigured = \App\Services\GoogleDriveBackupService::isConfigured();
+            @endphp
             <div id="backupChoiceModal" class="backup-modal-backdrop" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); z-index: 999999; align-items: center; justify-content: center; padding: 16px; overflow-y: auto;">
-                <div class="backup-modal-box" style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 660px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto;">
+                <div class="backup-modal-box" style="background: #ffffff; border-radius: 16px; width: 100%; max-width: 960px; max-height: calc(100vh - 32px); display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); overflow: hidden; border: 1px solid #E2E8F0; text-align: left; margin: auto;">
                     
                     <!-- Header -->
                     <div style="background: #0F172A; padding: 16px 20px; color: #ffffff; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; border-bottom: 1px solid #1E293B;">
@@ -521,8 +524,8 @@
                             </div>
                         </div>
 
-                        <!-- SEKSI 2: DUA OPSI TINDAKAN (DOWNLOAD VS KIRIM EMAIL) -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; align-items: stretch;">
+                        <!-- SEKSI 2: TIGA OPSI TINDAKAN (DOWNLOAD, EMAIL, GOOGLE DRIVE) -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; align-items: stretch;">
                             
                             <!-- A. Form Download -->
                             <form id="downloadBackupForm" action="{{ route('admin_dpn.backup_database') }}" method="GET" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%; transition: all 0.2s;" onmouseover="this.style.borderColor='#0284C7';" onmouseout="this.style.borderColor='#E2E8F0';">
@@ -533,7 +536,7 @@
                                         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                         <span>Unduh Ke Perangkat</span>
                                     </div>
-                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Unduh berkas terkompresi (.ZIP) atau database SQL langsung ke perangkat Anda.</div>
+                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Unduh berkas terkompresi (.ZIP) atau database SQL langsung ke komputer Anda.</div>
 
                                     <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 8px 10px; background: #F8FAFC; min-height: 72px; display: flex; flex-direction: column; justify-content: center; gap: 2px;">
                                         <div style="font-size: 10.5px; font-weight: 700; color: #0284C7; text-transform: uppercase;">Penyimpanan Berkas:</div>
@@ -569,7 +572,7 @@
                                         <div style="font-size: 10.5px; font-weight: 700; color: #7C3AED; text-transform: uppercase;">Alamat Email Tujuan:</div>
                                         <div style="display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #1E293B;">
                                             <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                                <input type="radio" name="target_option" value="both" checked style="accent-color: #7C3AED;">
+                                                 <input type="radio" name="target_option" value="both" checked style="accent-color: #7C3AED;">
                                                 <span>Kirim ke Keduanya</span>
                                             </label>
                                             @if(Auth::user()->email)
@@ -589,8 +592,59 @@
                                 <div style="display: flex; flex-direction: column; gap: 8px;">
                                     <button type="submit" onclick="submitEmailForm()" style="width: 100%; height: 42px; padding: 0 12px; background: #7C3AED; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#6D28D9';" onmouseout="this.style.background='#7C3AED';">
                                         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                        <span>Kirim Database SQL ke Email (~2 MB)</span>
+                                        <span>Kirim Database SQL ke Email</span>
                                     </button>
+                                </div>
+                            </form>
+
+                            <!-- C. Form Google Drive Cloud -->
+                            <form id="gdriveBackupForm" action="{{ route('admin_dpn.backup_gdrive') }}" method="POST" style="margin: 0; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; height: 100%; transition: all 0.2s;" onmouseover="this.style.borderColor='#059669';" onmouseout="this.style.borderColor='#E2E8F0';">
+                                @csrf
+                                <input type="hidden" name="backup_format" id="gdrive_backup_format" value="zip">
+                                <input type="hidden" name="categories" id="gdrive_categories_input" value="">
+                                
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #059669; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                        <span>Google Drive Cloud</span>
+                                    </div>
+                                    <div style="font-size: 11.5px; color: #64748B; line-height: 1.35;">Simpan berkas fisik atau database langsung ke Google Drive tanpa membebani email.</div>
+
+                                    <div style="border: 1px solid {{ $isGdriveConfigured ? '#A7F3D0' : '#FED7AA' }}; border-radius: 8px; padding: 8px 10px; background: {{ $isGdriveConfigured ? '#ECFDF5' : '#FFF7ED' }}; min-height: 72px; display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+                                        @if($isGdriveConfigured)
+                                            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #065F46;">
+                                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                                                <span>Google Drive Terhubung</span>
+                                            </div>
+                                            <div style="font-size: 10.5px; color: #047857;">File tersimpan langsung ke Google Drive resmi sistem.</div>
+                                        @else
+                                            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #9A3412;">
+                                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #F97316; display: inline-block;"></span>
+                                                <span>Belum Dikonfigurasi</span>
+                                            </div>
+                                            <div style="font-size: 10.5px; color: #C2410C;">
+                                                Atur Google Drive di menu <a href="{{ route('admin_dpn.index') }}" style="color: #0369A1; font-weight: 700; text-decoration: underline;">Kelola Web</a>.
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    @if($isGdriveConfigured)
+                                        <button type="submit" onclick="submitGdriveForm('zip')" style="width: 100%; height: 40px; padding: 0 12px; background: #059669; color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#047857';" onmouseout="this.style.background='#059669';">
+                                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                            <span>Upload Berkas (.ZIP) ke Drive</span>
+                                        </button>
+                                        <button type="submit" onclick="submitGdriveForm('sql')" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 36px; padding: 0 12px; background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; border-radius: 8px; font-weight: 600; font-size: 11.5px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#D1FAE5';" onmouseout="this.style.background='#ECFDF5';">
+                                            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                            <span>Upload DB SQL ke Drive (~2 MB)</span>
+                                        </button>
+                                    @else
+                                        <a href="{{ route('admin_dpn.index') }}#gdrive-config-section" onclick="closeBackupChoiceModal()" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 40px; padding: 0 12px; background: #F8FAFC; color: #64748B; border: 1px dashed #CBD5E1; border-radius: 8px; font-weight: 700; font-size: 11.5px; text-decoration: none;">
+                                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            <span>Buka Pengaturan Google Drive</span>
+                                        </a>
+                                    @endif
                                 </div>
                             </form>
 
@@ -655,6 +709,8 @@
                     const val = selected.join(',');
                     const dlInput = document.getElementById('download_categories_input');
                     if (dlInput) dlInput.value = val;
+                    const gdInput = document.getElementById('gdrive_categories_input');
+                    if (gdInput) gdInput.value = val;
 
                     const summaryBadge = document.getElementById('liveTotalSizeSummary');
                     const btnSizeText = document.getElementById('btnDownloadZipSizeText');
@@ -675,6 +731,12 @@
                     closeBackupChoiceModal();
                 }
                 function submitEmailForm() {
+                    closeBackupChoiceModal();
+                }
+                function submitGdriveForm(format) {
+                    syncCategoriesToForms();
+                    const fmtInput = document.getElementById('gdrive_backup_format');
+                    if (fmtInput) fmtInput.value = format;
                     closeBackupChoiceModal();
                 }
             </script>

@@ -64,6 +64,11 @@
         color: #0369A1;
         border: 1px solid #BAE6FD;
     }
+    .preview-card-badge.warning {
+        background: #FEF3C7;
+        color: #92400E;
+        border: 1px solid #FDE68A;
+    }
     .preview-card-val {
         font-size: 24px;
         font-weight: 800;
@@ -119,13 +124,17 @@
             <span style="color: #64748B;">Kelola Web</span>
         </div>
         <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">
-            Kelola Statistik Beranda
+            Kelola Statistik Beranda &amp; Cloud Backup
         </h1>
         <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">
-            Atur parameter nilai statistik beranda publik serta pantau perbandingan metrik otomatis database.
+            Atur parameter nilai statistik beranda, pantau counter pengunjung di database MySQL, dan kelola cadangan cloud Google Drive.
         </p>
     </div>
-    <div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <a href="#gdrive-config-section" class="btn btn-secondary" style="font-weight: 700; font-size: 12.5px; padding: 9px 15px; border-radius: 4px; color: #059669; border-color: #A7F3D0;">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            Google Drive Cloud
+        </a>
         <a href="{{ url('/') }}" target="_blank" class="btn btn-secondary" style="font-weight: 700; font-size: 12.5px; padding: 9px 15px; border-radius: 4px;" title="Buka beranda publik di tab baru">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
             Lihat Beranda Publik
@@ -201,11 +210,11 @@
     <div class="preview-card">
         <div class="preview-card-top">
             <span class="preview-card-title">Kunjungan Web</span>
-            <span class="preview-card-badge auto">Live Counter</span>
+            <span class="preview-card-badge auto" title="Tersimpan di tabel site_settings">Database MySQL</span>
         </div>
         <div class="preview-card-val">{{ number_format($count) }}</div>
         <div class="preview-card-sub">
-            Akumulasi pengunjung unik browser
+            Akumulasi pengunjung (Live &amp; Permanen di DB)
         </div>
     </div>
 </div>
@@ -220,7 +229,7 @@
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2" style="display:inline-block; vertical-align:middle; margin-right:6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
                 Form Pengaturan Statistik Beranda
             </h2>
-            <span style="font-size: 11.5px; color: #64748B; font-weight: 600;">visitor_stats.json</span>
+            <span style="font-size: 11px; font-weight: 700; color: #166534; background: #DCFCE7; padding: 3px 8px; border-radius: 4px; border: 1px solid #BBF7D0;">MySQL (site_settings)</span>
         </div>
         <div class="panel-body">
             <form action="{{ route('admin_dpn.update') }}" method="POST">
@@ -264,12 +273,12 @@
                     </label>
                     <input type="number" name="count" class="form-control" value="{{ $stats['count'] ?? 0 }}" required min="0" style="font-size: 16px; font-weight: 800; color: #003B64; padding: 10px 14px;">
                     <div class="form-hint" style="font-size: 11.5px; color: #64748B; margin-top: 5px;">
-                        Counter ini bertambah 1 secara otomatis setiap kali ada pengunjung baru yang mengakses halaman beranda.
+                        Angka ini disimpan langsung di tabel database <code>site_settings</code> dan di-increment secara atomic (tidak akan hilang atau ter-reset saat clear cache/storage).
                     </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-full" style="padding: 11px 18px; font-size: 13.5px; font-weight: 700;">
-                    Simpan Perubahan Statistik
+                    Simpan Perubahan ke Database
                 </button>
             </form>
         </div>
@@ -283,21 +292,21 @@
             <div class="panel-head" style="background: #F8FAFC;">
                 <h2>
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#218AC9" stroke-width="2.2" style="display:inline-block; vertical-align:middle; margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    Panduan & Cara Kerja
+                    Panduan &amp; Keamanan Data
                 </h2>
             </div>
             <div class="panel-body" style="padding: 18px; font-size: 12px; color: #334155; line-height: 1.55;">
                 <div style="margin-bottom: 12px;">
-                    <strong style="color: #003B64; display: block; margin-bottom: 2px;">⚡ Otomatisasi Database:</strong>
-                    Jika input override dikosongkan, angka beranda akan selalu sinkron dengan data asli transaksi permohonan dan ulasan kepuasan masyarakat.
+                    <strong style="color: #003B64; display: block; margin-bottom: 2px;">⚡ Live Counter Database:</strong>
+                    Counter pengunjung kini menggunakan tabel database MySQL (atomic increment) sehingga tidak ada kemungkinan ter-reset sendiri akibat konflik request bersamaan.
                 </div>
                 <div style="margin-bottom: 12px;">
                     <strong style="color: #003B64; display: block; margin-bottom: 2px;">✏️ Override Manual:</strong>
                     Gunakan kolom override jika Anda ingin menampilkan angka publisitas tertentu (misal pembulatan atau promosi layanan).
                 </div>
                 <div>
-                    <strong style="color: #003B64; display: block; margin-bottom: 2px;">💾 Backup Database:</strong>
-                    Untuk melakukan unduhan atau pengiriman cadangan database ke email, gunakan tombol <strong>Backup DB</strong> di bilah navigasi atas (topbar).
+                    <strong style="color: #003B64; display: block; margin-bottom: 2px;">☁️ Cadangan Google Drive:</strong>
+                    Untuk berkas dokumen PDF/DOCX yang berukuran besar, gunakan fitur integrasi Google Drive di bawah agar tidak membebani limit email SMTP (25 MB).
                 </div>
             </div>
         </div>
@@ -312,10 +321,10 @@
             </div>
             <div class="panel-body" style="padding: 18px;">
                 <p style="font-size: 12.5px; color: #64748B; line-height: 1.5; margin-bottom: 14px;">
-                    Kembalikan hitungan total kunjungan pengunjung website kembali ke <strong style="color: #0F172A;">0 (nol)</strong>.
+                    Kembalikan hitungan total kunjungan pengunjung website di database kembali ke <strong style="color: #0F172A;">0 (nol)</strong>.
                 </p>
 
-                <form action="{{ route('admin_dpn.reset_visitor') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin me-reset jumlah kunjungan pengunjung kembali ke 0?')">
+                <form action="{{ route('admin_dpn.reset_visitor') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin me-reset jumlah kunjungan pengunjung di database kembali ke 0?')">
                     @csrf
                     <button type="submit" class="btn btn-danger btn-full" style="padding: 10px 14px; font-size: 12.5px; font-weight: 700;">
                         Reset Counter Kunjungan ke 0
@@ -326,6 +335,174 @@
 
     </div>
 
+</div>
+
+<!-- INTEGRASI GOOGLE DRIVE CLOUD BACKUP -->
+<div id="gdrive-config-section" class="panel" style="border-radius: 4px; margin-top: 24px; border: 1px solid {{ $gdriveIsConfigured ? '#A7F3D0' : '#E2E8F0' }};">
+    <div class="panel-head" style="background: {{ $gdriveIsConfigured ? '#F0FDF4' : '#F8FAFC' }}; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid {{ $gdriveIsConfigured ? '#BBF7D0' : '#E2E8F0' }};">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 38px; height: 38px; border-radius: 8px; background: #059669; color: #fff; display: flex; align-items: center; justify-content: center;">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            </div>
+            <div>
+                <h2 style="font-size: 16px; font-weight: 800; color: #003B64; margin: 0; display: flex; align-items: center; gap: 8px;">
+                    Google Drive Cloud Backup
+                </h2>
+                <div style="font-size: 12px; color: #64748B; margin-top: 2px;">
+                    Pencadangan berkas dokumen fisik (PDF/DOCX) &amp; database langsung ke Google Drive institusi (Zero-Dependency API).
+                </div>
+            </div>
+        </div>
+        <div>
+            @if($gdriveIsConfigured)
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; border-radius: 20px; font-size: 11.5px; font-weight: 700;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981; display: inline-block;"></span>
+                    Terhubung ke Google Drive
+                </span>
+            @else
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; border-radius: 20px; font-size: 11.5px; font-weight: 700;">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span>
+                    Belum Dikonfigurasi
+                </span>
+            @endif
+        </div>
+    </div>
+    
+    <div class="panel-body" style="padding: 20px;">
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: start;">
+            
+            <!-- Form Konfigurasi Google Drive -->
+            <div>
+                <form action="{{ route('admin_dpn.gdrive_settings') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 700; color: #003B64; margin-bottom: 5px;">
+                            1. Google Drive Folder ID / URL Folder
+                        </label>
+                        <input type="text" name="gdrive_folder_id" class="form-control" value="{{ $gdriveFolderId }}" placeholder="Contoh: 1A2B3C4D5E... atau paste link folder Google Drive" required style="font-size: 13.5px; padding: 10px 14px;">
+                        <div class="form-hint" style="font-size: 11.5px; color: #64748B; margin-top: 5px; line-height: 1.45;">
+                            Anda dapat menyalin ID folder atau link URL lengkap folder Google Drive (contoh: <code>https://drive.google.com/drive/folders/1A2B3C...</code>). Sistem akan otomatis mengekstrak ID folder tersebut.
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 700; color: #003B64; margin-bottom: 5px;">
+                            2. Unggah File Credentials Service Account (.json)
+                        </label>
+                        <input type="file" name="gdrive_credentials_file" accept=".json,application/json" class="form-control" style="font-size: 12.5px; padding: 8px 12px;">
+                        <div class="form-hint" style="font-size: 11.5px; color: #64748B; margin-top: 5px;">
+                            Unggah berkas kunci JSON Service Account yang diunduh dari Google Cloud Console.
+                            @if(!empty($gdriveClientEmail))
+                                <br><span style="color: #059669; font-weight: 600;">Email Akun Saat Ini:</span> <code>{{ $gdriveClientEmail }}</code>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label class="form-label" style="font-size: 12.5px; font-weight: 600; color: #475569; margin-bottom: 4px;">
+                            Atau Tempel (Paste) Isi JSON Kredensial Langsung:
+                        </label>
+                        <textarea name="gdrive_credentials_json" rows="3" class="form-control" placeholder='{"type": "service_account", "project_id": "...", "private_key": "...", ...}' style="font-family: monospace; font-size: 11.5px;"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 18px; font-size: 13px; font-weight: 700;">
+                            Simpan Pengaturan Google Drive
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Panel Uji Koneksi & Aksi Instan -->
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                
+                <!-- Uji Koneksi -->
+                <div style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px; background: #F8FAFC;">
+                    <div style="font-size: 12px; font-weight: 800; color: #003B64; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Uji Status Koneksi</span>
+                    </div>
+                    <p style="font-size: 11.5px; color: #64748B; margin-bottom: 10px; line-height: 1.4;">
+                        Periksa apakah Service Account Google Anda dapat membaca dan menulis ke folder Google Drive tujuan.
+                    </p>
+                    <form action="{{ route('admin_dpn.gdrive_test') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-secondary btn-full" style="font-weight: 700; font-size: 12px; padding: 9px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            <span>Uji Koneksi Google Drive</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Aksi Upload Instan -->
+                @if($gdriveIsConfigured)
+                <div style="border: 1px solid #BBF7D0; border-radius: 8px; padding: 14px; background: #F0FDF4;">
+                    <div style="font-size: 12px; font-weight: 800; color: #166534; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                        <span>Aksi Unggah Instan</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+                        <form action="{{ route('admin_dpn.backup_gdrive') }}" method="POST" onsubmit="return confirm('Mulai pencadangan dan pengunggahan Database SQL ke Google Drive?')">
+                            @csrf
+                            <input type="hidden" name="backup_format" value="sql">
+                            <button type="submit" class="btn btn-primary btn-full" style="background: #059669; border-color: #059669; font-weight: 700; font-size: 12px; padding: 9px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+                                <span>Upload Database SQL ke Drive (~2 MB)</span>
+                            </button>
+                        </form>
+
+                        <form action="{{ route('admin_dpn.backup_gdrive') }}" method="POST" onsubmit="return confirm('Proses kompresi berkas dokumen fisik (.ZIP) dan upload ke Google Drive akan berjalan. Lanjutkan?')">
+                            @csrf
+                            <input type="hidden" name="backup_format" value="zip">
+                            <button type="submit" class="btn btn-secondary btn-full" style="font-weight: 700; font-size: 12px; padding: 9px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                                <span>Upload Seluruh Dokumen (.ZIP) ke Drive</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                @endif
+
+            </div>
+
+        </div>
+
+        <!-- Panduan Setup Ringkas -->
+        <div style="margin-top: 20px; border-top: 1px solid #E2E8F0; padding-top: 16px;">
+            <details style="font-size: 12px; color: #334155; cursor: pointer;">
+                <summary style="font-weight: 700; color: #0284C7; user-select: none;">
+                    📖 Klik di sini untuk melihat Panduan Ringkas Cara Membuat Service Account Google Drive (Gratis &amp; Aman)
+                </summary>
+                <div style="margin-top: 10px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 6px; padding: 14px 18px; line-height: 1.6;">
+                    <ol style="margin: 0; padding-left: 20px;">
+                        <li style="margin-bottom: 6px;">
+                            Buka <a href="https://console.cloud.google.com/" target="_blank" style="color: #0284C7; font-weight: 600;">Google Cloud Console</a>, lalu buat atau pilih Project yang ada.
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            Masuk ke menu <strong>APIs &amp; Services &gt; Library</strong>, cari <strong>Google Drive API</strong>, lalu klik <strong>Enable (Aktifkan)</strong>.
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            Buka menu <strong>IAM &amp; Admin &gt; Service Accounts</strong>, klik <strong>Create Service Account</strong> (beri nama misal: <code>paten-backup-drive</code>).
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            Klik Service Account yang baru dibuat, buka tab <strong>Keys</strong> &gt; klik <strong>Add Key &gt; Create new key &gt; JSON</strong>. File JSON kredensial akan otomatis terunduh.
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            Buka Google Drive pribadi atau Drive Bersama institusi Anda, buat folder khusus (misal: <code>Backup PATEN PAK MIKO</code>).
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            Klik kanan folder tersebut &gt; pilih <strong>Share (Bagikan)</strong> &gt; tempelkan alamat email Service Account Anda (berakhiran <code>@...iam.gserviceaccount.com</code>) dengan peran <strong>Editor</strong>.
+                        </li>
+                        <li>
+                            Salin ID folder atau link URL folder tersebut dan unggah berkas JSON kredensial pada formulir di atas. Selesai!
+                        </li>
+                    </ol>
+                </div>
+            </details>
+        </div>
+
+    </div>
 </div>
 
 <!-- RAK ARSIP CADANGAN DATA (AUTO-BACKUP PERMOHONAN & EMAIL BLAST) -->
