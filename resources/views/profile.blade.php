@@ -35,24 +35,41 @@
     .avatar-section {
         display: flex;
         align-items: center;
-        gap: 20px;
-        padding: 20px 24px;
+        justify-content: space-between;
+        gap: 16px;
+        padding: clamp(12px, 1.8vh, 20px) 22px;
         border-bottom: 1px solid #D6E4EF;
         background: #F8FAFC;
+        flex-wrap: wrap;
+    }
+    .avatar-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-width: 0;
+    }
+    .avatar-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+        flex-shrink: 0;
     }
     .avatar-preview-lg {
-        width: 72px; height: 72px;
+        width: clamp(56px, 7vh, 68px);
+        height: clamp(56px, 7vh, 68px);
         border-radius: 4px;
         object-fit: cover;
         border: 1px solid #D6E4EF;
         flex-shrink: 0;
     }
     .avatar-placeholder-lg {
-        width: 72px; height: 72px;
+        width: clamp(56px, 7vh, 68px);
+        height: clamp(56px, 7vh, 68px);
         border-radius: 4px;
         background: #003B64;
         color: #FFFFFF;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 800;
         display: flex;
         align-items: center;
@@ -102,10 +119,10 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        padding: 16px 24px 12px;
-        margin-bottom: 18px;
+        padding: clamp(10px, 1.4vh, 15px) 22px;
+        margin-bottom: clamp(10px, 1.4vh, 16px);
         border-bottom: 1px solid #E8F0F6;
-        font-size: 12px;
+        font-size: 11.5px;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: .06em;
@@ -115,27 +132,30 @@
         width: 15px; height: 15px; stroke: #218AC9; stroke-width: 2; fill: none;
     }
     .form-body {
-        padding: 0 24px 24px;
+        padding: 0 22px clamp(14px, 2vh, 22px);
     }
     .form-group {
-        margin-bottom: 18px;
+        margin-bottom: clamp(10px, 1.4vh, 16px);
     }
     .form-label {
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 700;
         color: #003B64;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
         display: block;
     }
     .form-control {
         width: 100%;
-        padding: 9px 12px;
-        font-size: 13.5px;
+        padding: 8px 12px;
+        font-size: 13px;
         border: 1px solid #CBD5E1;
         border-radius: 4px;
         background: #FFFFFF;
         color: #0F172A;
         transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    textarea.form-control {
+        min-height: 62px;
     }
     .form-control:focus {
         border-color: #218AC9;
@@ -146,16 +166,16 @@
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: 14px;
     }
     .form-footer {
         display: flex;
         align-items: center;
         justify-content: flex-end;
         gap: 10px;
-        padding-top: 18px;
+        padding-top: clamp(10px, 1.4vh, 16px);
         border-top: 1px solid #E8F0F6;
-        margin-top: 22px;
+        margin-top: clamp(10px, 1.5vh, 18px);
     }
     .btn-save {
         display: inline-flex;
@@ -200,6 +220,26 @@
         transform: scale(0.98);
     }
 
+    /* ─── DESKTOP SINGLE-VIEWPORT FIT (1025px+) ─────────── */
+    @media (min-width: 1025px) and (min-height: 560px) {
+        .content {
+            padding: clamp(12px, 1.8vh, 22px) clamp(18px, 2.2vw, 28px);
+        }
+        .profile-intro {
+            padding: clamp(10px, 1.4vh, 16px) 20px;
+            margin-bottom: clamp(10px, 1.4vh, 16px);
+        }
+        .profile-intro h1 {
+            font-size: clamp(15.5px, 2vh, 18px);
+        }
+        .profile-intro p {
+            font-size: clamp(11.5px, 1.45vh, 12.5px);
+        }
+        .profile-card {
+            margin-bottom: 0;
+        }
+    }
+
     /* ─── MOBILE RESPONSIVE ────────────────────────────── */
     @media (max-width: 640px) {
         .profile-intro {
@@ -213,11 +253,16 @@
             padding: 18px 16px;
             gap: 14px;
         }
-        .avatar-section > div {
-            display: flex;
+        .avatar-left {
             flex-direction: column;
             align-items: center;
+            text-align: center;
+            gap: 10px;
             width: 100%;
+        }
+        .avatar-right {
+            width: 100%;
+            align-items: center;
         }
         .avatar-user-head {
             justify-content: center;
@@ -267,33 +312,37 @@
 
         {{-- Foto Profil Section --}}
         <div class="avatar-section">
-            @if($user->profile_photo)
-                <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" class="avatar-preview-lg" id="avatarPreview">
-            @else
-                <div class="avatar-placeholder-lg" id="avatarPlaceholder">{{ strtoupper(substr($user->username, 0, 2)) }}</div>
-            @endif
-            <div>
-                <div class="avatar-user-head" style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
-                    <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0;">{{ $user->name ?? $user->username }}</h2>
-                    <span class="avatar-role-badge">
-                        @if($user->isDpn()) Super Admin
-                        @elseif($user->isBpn()) Admin Instansi
-                        @elseif($user->isDinasPu()) Admin PUTR
-                        @elseif($user->isSatuPintu()) Admin DPMPTSP
-                        @elseif($user->isPelakuUsaha()) Pelaku Usaha
-                        @else Pengguna Terverifikasi @endif
-                    </span>
+            <div class="avatar-left">
+                @if($user->profile_photo)
+                    <img src="{{ route('file.view', ['path' => $user->profile_photo]) }}" alt="Foto Profil" class="avatar-preview-lg" id="avatarPreview">
+                @else
+                    <div class="avatar-placeholder-lg" id="avatarPlaceholder">{{ strtoupper(substr($user->username, 0, 2)) }}</div>
+                @endif
+                <div style="min-width: 0;">
+                    <div class="avatar-user-head" style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
+                        <h2 style="font-size: 15px; font-weight: 800; color: #003B64; margin: 0;">{{ $user->name ?? $user->username }}</h2>
+                        <span class="avatar-role-badge">
+                            @if($user->isDpn()) Super Admin
+                            @elseif($user->isBpn()) Admin Instansi
+                            @elseif($user->isDinasPu()) Admin PUTR
+                            @elseif($user->isSatuPintu()) Admin DPMPTSP
+                            @elseif($user->isPelakuUsaha()) Pelaku Usaha
+                            @else Pengguna Terverifikasi @endif
+                        </span>
+                    </div>
+                    <div style="font-size: 12px; color: #64748B; font-weight: 500;">WhatsApp: {{ $user->phone_number }}</div>
                 </div>
-                <div style="font-size: 12px; color: #64748B; margin-bottom: 10px; font-weight: 500;">WhatsApp: {{ $user->phone_number }}</div>
-                
+            </div>
+
+            <div class="avatar-right">
                 <label for="profile_photo" class="avatar-upload-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     Ganti Foto Profil
                 </label>
                 <input type="file" id="profile_photo" name="profile_photo" accept="image/*" onchange="previewAvatar(event)">
-                <div style="font-size: 11px; color: #94A3B8; margin-top: 6px;">Format JPG, PNG, GIF. Ukuran maksimum 2MB.</div>
+                <div style="font-size: 11px; color: #94A3B8;">Format JPG, PNG, GIF. Maks 2MB.</div>
                 @error('profile_photo')
-                    <div style="color: #DC2626; font-size: 12px; font-weight: 600; margin-top: 4px;">{{ $message }}</div>
+                    <div style="color: #DC2626; font-size: 12px; font-weight: 600;">{{ $message }}</div>
                 @enderror
             </div>
         </div>
@@ -318,20 +367,22 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="name" class="form-label">Nama Lengkap <span class="badge-optional">Opsional</span></label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="cth: Budi Hartono" value="{{ old('name', $user->name) }}">
-            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name" class="form-label">Nama Lengkap <span class="badge-optional">Opsional</span></label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="cth: Budi Hartono" value="{{ old('name', $user->name) }}">
+                </div>
 
-            <div class="form-group">
-                <label for="email" class="form-label">Email <span class="badge-optional">Opsional</span></label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="cth: budi@gmail.com" value="{{ old('email', $user->email) }}">
-                @error('email')<div style="color: #DC2626; font-size: 12px; font-weight: 600; margin-top: 4px;">{{ $message }}</div>@enderror
+                <div class="form-group">
+                    <label for="email" class="form-label">Email <span class="badge-optional">Opsional</span></label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="cth: budi@gmail.com" value="{{ old('email', $user->email) }}">
+                    @error('email')<div style="color: #DC2626; font-size: 12px; font-weight: 600; margin-top: 4px;">{{ $message }}</div>@enderror
+                </div>
             </div>
 
             <div class="form-group" style="margin-bottom:0;">
                 <label for="address" class="form-label">Alamat <span class="badge-optional">Opsional</span></label>
-                <textarea id="address" name="address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap">{{ old('address', $user->address) }}</textarea>
+                <textarea id="address" name="address" class="form-control" rows="2" placeholder="Masukkan alamat lengkap">{{ old('address', $user->address) }}</textarea>
             </div>
 
             <div class="form-footer">

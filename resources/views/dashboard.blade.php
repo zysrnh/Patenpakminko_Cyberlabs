@@ -625,6 +625,155 @@
             }
         }
 
+        .chart-wrap-reviews {
+            height: 155px;
+        }
+
+        /* ─── DESKTOP SINGLE-VIEWPORT FIT (1025px+) ─────────── */
+        @media (min-width: 1025px) and (min-height: 560px) {
+            .main-wrap {
+                height: 100dvh;
+                overflow: hidden;
+            }
+            .main-wrap:has(.alert-warning, .berita-item) {
+                height: auto;
+                min-height: 100dvh;
+                overflow: visible;
+            }
+            .content {
+                flex: 1;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                gap: clamp(8px, 1.25vh, 14px);
+                padding: clamp(10px, 1.5vh, 18px) clamp(16px, 2vw, 24px);
+                overflow: hidden;
+            }
+            .main-wrap:has(.alert-warning, .berita-item) .content {
+                overflow: visible;
+            }
+            .alert-success {
+                padding: 8px 14px;
+                margin-bottom: 0;
+                flex-shrink: 0;
+                font-size: 12px;
+            }
+            .welcome-card {
+                margin-bottom: 0;
+                padding: clamp(8px, 1.05vh, 13px) 16px;
+                flex-shrink: 0;
+            }
+            .welcome-avatar,
+            .welcome-avatar-fallback {
+                width: clamp(34px, 4.4vh, 42px);
+                height: clamp(34px, 4.4vh, 42px);
+            }
+            .welcome-card-title {
+                font-size: clamp(14.5px, 1.95vh, 17px);
+                margin-bottom: 1px;
+            }
+            .welcome-card-sub {
+                font-size: clamp(11px, 1.4vh, 12.5px);
+            }
+            .kpi-row {
+                margin-bottom: 0;
+                gap: clamp(10px, 1vw, 14px);
+                flex-shrink: 0;
+            }
+            .kpi-card {
+                padding: clamp(9px, 1.2vh, 14px) 14px;
+            }
+            .kpi-top {
+                margin-bottom: clamp(4px, 0.7vh, 10px);
+            }
+            .kpi-icon {
+                width: clamp(26px, 3.3vh, 30px);
+                height: clamp(26px, 3.3vh, 30px);
+            }
+            .kpi-number {
+                font-size: clamp(20px, 2.7vh, 26px);
+            }
+            .grid-overview {
+                margin-bottom: 0;
+                gap: clamp(12px, 1.2vw, 16px);
+                min-height: 0;
+            }
+            .grid-overview--charts {
+                flex: 1.08;
+            }
+            .grid-overview--activity {
+                flex: 1;
+            }
+            .grid-overview > .panel {
+                min-height: 0;
+            }
+            .panel-head {
+                padding: clamp(7px, 0.95vh, 11px) 15px;
+                flex-shrink: 0;
+            }
+            .panel-head h2 {
+                font-size: clamp(12.5px, 1.55vh, 14px);
+            }
+            .panel-body-chart {
+                padding: clamp(8px, 1.1vh, 14px) 15px;
+                flex: 1;
+                min-height: 0;
+                gap: clamp(6px, 0.9vh, 10px);
+            }
+            .chart-wrap,
+            .chart-wrap-services,
+            .chart-wrap-reviews {
+                flex: 1;
+                min-height: 92px;
+                height: auto !important;
+            }
+            .review-summary-bar {
+                padding: clamp(6px, 0.85vh, 10px) 12px;
+                flex-shrink: 0;
+            }
+            .review-score-big {
+                font-size: clamp(19px, 2.4vh, 25px);
+            }
+            .activity-list {
+                flex: 1;
+                min-height: 0;
+                overflow-y: auto;
+            }
+            .activity-list::-webkit-scrollbar {
+                width: 5px;
+            }
+            .activity-list::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .activity-list::-webkit-scrollbar-thumb {
+                background: #CBD5E1;
+                border-radius: 2px;
+            }
+            .activity-list::-webkit-scrollbar-thumb:hover {
+                background: #94B8D4;
+            }
+            .activity-item,
+            .schedule-item {
+                padding: clamp(7px, 0.95vh, 11px) 15px;
+            }
+            .schedule-empty {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: clamp(10px, 1.5vh, 20px);
+            }
+            .schedule-empty svg {
+                width: clamp(26px, 3.2vh, 34px);
+                height: clamp(26px, 3.2vh, 34px);
+                margin-bottom: 6px;
+            }
+            .schedule-empty p {
+                margin-bottom: 8px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -1021,7 +1170,7 @@
             </div>
 
             <!-- Row 2: Grafik Overview (Permohonan per Layanan & Ulasan Kepuasan) -->
-            <div class="grid-overview">
+            <div class="grid-overview grid-overview--charts">
                 <div class="panel">
                     <div class="panel-head">
                         <h2>Aktivitas Seluruh Layanan</h2>
@@ -1058,7 +1207,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="chart-wrap" style="height: 155px;">
+                        <div class="chart-wrap chart-wrap-reviews">
                             <canvas id="reviewRatingChart"></canvas>
                         </div>
                     </div>
@@ -1066,7 +1215,7 @@
             </div>
 
             <!-- Row 3: Aktivitas Terkini & Jadwal Konsultasi (Proporsional 7fr : 5fr) -->
-            <div class="grid-overview">
+            <div class="grid-overview grid-overview--activity">
                 <div class="panel">
                     <div class="panel-head">
                         <h2>Aktivitas Terkini</h2>
