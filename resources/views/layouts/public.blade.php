@@ -61,6 +61,29 @@
         html {
             scroll-behavior: smooth;
             -webkit-text-size-adjust: 100%;
+            overflow-x: clip;
+        }
+
+        html::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        html::-webkit-scrollbar-track,
+        html::-webkit-scrollbar-track-piece {
+            background: #E8F2FA;
+        }
+        html::-webkit-scrollbar-thumb {
+            background: #94B8D4;
+            border-radius: 2px;
+        }
+        html::-webkit-scrollbar-thumb:hover {
+            background: #218AC9;
+        }
+        html::-webkit-scrollbar-button,
+        html::-webkit-scrollbar-corner {
+            display: none;
+            width: 0;
+            height: 0;
         }
 
         body {
@@ -69,7 +92,6 @@
             color: var(--ink);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            overflow-x: hidden;
             min-width: 320px;
         }
 
@@ -103,15 +125,12 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(255,255,255,.97);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--line);
-            box-shadow: 0 4px 12px rgba(0,0,0,.06);
-            transition: box-shadow .3s;
+            background: #FFFFFF;
+            border-bottom: 1px solid #D6E4EF;
+            transition: border-color .2s;
         }
         #site-header.scrolled {
-            box-shadow: 0 6px 24px rgba(0,59,100,.18);
+            border-bottom-color: #B3D4EC;
         }
 
         .header-inner {
@@ -179,9 +198,13 @@
             transition: all .18s;
             white-space: nowrap;
         }
-        .nav-link:hover {
+        .nav-link:hover,
+        .nav-link.active {
             color: var(--blue-dk);
             background: var(--blue-lt);
+        }
+        .nav-link.active {
+            font-weight: 600;
         }
 
         /* Dropdown */
@@ -271,41 +294,74 @@
         }
         .nav-sep {
             width: 1px;
-            height: 20px;
-            background: var(--line);
-            margin: 0 12px;
+            height: 22px;
+            background: #D6E4EF;
+            margin: 0 8px;
             flex-shrink: 0;
         }
 
-        /* CTA Button */
+        /* Secondary Outline Button (Kontak Kami) */
+        .btn-nav-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #FFFFFF;
+            color: var(--blue-dk);
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid #CBD5E1;
+            cursor: pointer;
+            transition: background .16s ease, border-color .16s ease, color .16s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .btn-nav-outline svg {
+            width: 15px;
+            height: 15px;
+            fill: none;
+            stroke: var(--blue);
+            flex-shrink: 0;
+        }
+        .btn-nav-outline:hover,
+        .btn-nav-outline.active {
+            background: var(--blue-lt);
+            border-color: var(--blue);
+            color: var(--blue-dk);
+        }
+
+        /* Primary CTA Button (Dashboard / Login) */
         .btn-nav {
             display: inline-flex;
             align-items: center;
             gap: 7px;
             background: var(--blue-dk);
-            color: #fff;
-            padding: 9px 18px;
-            border-radius: 5px;
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 4px;
             font-family: inherit;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 600;
             text-decoration: none;
-            border: none;
+            border: 1px solid var(--blue-dk);
             cursor: pointer;
-            transition: all .2s;
+            transition: background .16s ease, border-color .16s ease;
             white-space: nowrap;
             flex-shrink: 0;
         }
         .btn-nav svg {
-            width: 14px;
-            height: 14px;
-            fill: var(--yellow);
+            width: 15px;
+            height: 15px;
+            fill: none;
+            stroke: var(--yellow);
             flex-shrink: 0;
         }
         .btn-nav:hover {
-            background: #00294a;
-            box-shadow: 0 4px 16px rgba(0,59,100,.3);
-            transform: translateY(-1px);
+            background: var(--blue);
+            border-color: var(--blue);
         }
 
         /* Hamburger */
@@ -1801,7 +1857,7 @@
             .container { padding: 0 14px; }
 
             /* Header */
-            .btn-nav { display: none; }
+            .btn-nav, .btn-nav-outline { display: none; }
             .header-inner { height: 56px; }
             .logo-img { width: 34px; height: 34px; }
             .logo-text strong { font-size: 12px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1902,7 +1958,7 @@
 
             <!-- Desktop Nav -->
             <nav class="site-nav" aria-label="Main navigation">
-                <a href="{{ url('/') }}" class="nav-link">Beranda</a>
+                <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Beranda</a>
 
                 <div class="nav-dropdown">
                     <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
@@ -1951,8 +2007,8 @@
                     </div>
                 </div>
 
-                <a href="{{ route('alur') }}" class="nav-link">Alur Proses</a>
-                <a href="{{ route('testimoni') }}" class="nav-link">Ulasan</a>
+                <a href="{{ route('alur') }}" class="nav-link {{ request()->routeIs('alur') ? 'active' : '' }}">Alur Proses</a>
+                <a href="{{ route('testimoni') }}" class="nav-link {{ request()->routeIs('testimoni') ? 'active' : '' }}">Ulasan</a>
 
                 <div class="nav-dropdown">
                     <button class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
@@ -1972,7 +2028,7 @@
 
                 <div class="nav-sep" aria-hidden="true"></div>
 
-                <a href="{{ route('kontak') }}" class="btn-nav">
+                <a href="{{ route('kontak') }}" class="btn-nav-outline {{ request()->routeIs('kontak') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                     </svg>
