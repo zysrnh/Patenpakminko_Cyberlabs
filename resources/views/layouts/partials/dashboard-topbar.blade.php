@@ -29,13 +29,8 @@
     padding: 0 24px;
     gap: 14px;
 
-    /* Glassmorphism */
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-
-    border-bottom: 1px solid #E2E8F0;
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    background: #FFFFFF;
+    border-bottom: 1px solid #D6E4EF;
 
     position: sticky;
     top: 0;
@@ -49,7 +44,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 8px;
+    border-radius: 4px;
     background: transparent;
     border: none;
     color: #0F172A;
@@ -121,10 +116,10 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 0 14px;
+    padding: 0 12px;
     height: 36px;
-    border-radius: 8px;
-    background: #F1F5F9;
+    border-radius: 4px;
+    background: #F8FAFC;
     border: 1px solid #E2E8F0;
     color: #334155;
     font-size: 13px;
@@ -152,7 +147,7 @@
 .topbar-backup-btn {
     height: 36px;
     padding: 0 14px;
-    border-radius: 8px;
+    border-radius: 4px;
     background: #E0F2FE;
     color: #0284C7;
     border: 1px solid #BAE6FD;
@@ -164,6 +159,7 @@
     text-decoration: none;
     white-space: nowrap;
     flex-shrink: 0;
+    cursor: pointer;
     transition: all 0.15s ease;
 }
 .topbar-backup-btn:hover {
@@ -176,7 +172,7 @@
     position: relative;
     width: 36px;
     height: 36px;
-    border-radius: 8px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -196,7 +192,7 @@
     min-width: 15px;
     height: 15px;
     padding: 0 4px;
-    border-radius: 8px;
+    border-radius: 4px;
     background: #EF4444;
     color: #fff;
     font-size: 9.5px;
@@ -217,7 +213,7 @@
     gap: 8px;
     padding: 3px 12px 3px 3px;
     height: 36px;
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid #E2E8F0;
     background: #F8FAFC;
     text-decoration: none;
@@ -232,9 +228,9 @@
 }
 
 .topbar-user-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -247,7 +243,7 @@
 }
 
 .topbar-user-avatar--initials {
-    background: linear-gradient(135deg, #0d3b6e 0%, #1565a8 100%);
+    background: #003B64;
     color: #fff;
     font-size: 11px;
     font-weight: 700;
@@ -267,7 +263,7 @@
     gap: 6px;
     height: 36px;
     padding: 0 14px;
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid #FCA5A5;
     background: #FEF2F2;
     color: #EF4444;
@@ -282,7 +278,6 @@
     background: #EF4444;
     color: #ffffff;
     border-color: #EF4444;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
 }
 
 /* ─── MOBILE RESPONSIVE ──────────────────────────────────────── */
@@ -357,7 +352,7 @@
             <span class="topbar-breadcrumb-current">
                 @if(isset($pageTitle))
                     {{ $pageTitle }}
-                @else
+                @elseif(Auth::check())
                     @if(Auth::user()->isPelakuUsaha())   Dashboard Pelaku Usaha
                     @elseif(Auth::user()->isBpn())        Dashboard Admin Kantor Pertanahan
                     @elseif(Auth::user()->isDinasPu())    Dashboard Dinas Pekerjaan Umum dan Tata Ruang (PUTR)
@@ -366,6 +361,8 @@
                     @elseif(Auth::user()->isAdminBerita()) Dashboard Berita
                     @else Dashboard
                     @endif
+                @else
+                    Portal Informasi
                 @endif
             </span>
         </div>
@@ -742,6 +739,7 @@
             </script>
         @endif
 
+        @if(Auth::check())
         {{-- Mailbox / Notification --}}
         <a href="{{ route('mailbox.index') }}"
            class="topbar-notif-btn"
@@ -775,7 +773,6 @@
         </a>
 
         {{-- Topbar Logout Button --}}
-        @if(Auth::check())
         <form action="{{ route('logout') }}" method="POST" style="margin: 0; display: inline-flex;">
             @csrf
             <button type="submit" class="topbar-logout-btn" title="Keluar dari Akun">
@@ -787,6 +784,10 @@
                 <span>Keluar</span>
             </button>
         </form>
+        @else
+        <a href="{{ route('login') }}" class="topbar-backup-btn" title="Masuk ke Akun">
+            Masuk ke Akun
+        </a>
         @endif
 
     </div>

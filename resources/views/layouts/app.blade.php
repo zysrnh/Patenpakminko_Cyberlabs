@@ -60,8 +60,8 @@
         }
 
         html, body {
-            height: 100%;
-            overflow-x: hidden !important;
+            min-height: 100%;
+            overflow-x: clip !important;
             max-width: 100vw;
         }
 
@@ -72,7 +72,6 @@
             -webkit-font-smoothing: antialiased;
             display: flex;
             width: 100%;
-            overflow-x: hidden !important;
         }
 
         /* ─── OVERLAY (mobile) ───────────────── */
@@ -81,7 +80,7 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,.45);
-            z-index: 19;
+            z-index: 999;
         }
         .sidebar-overlay.open { display: block; }
 
@@ -493,12 +492,7 @@
     </div>
 
     <script>
-        // Topbar date
-        const d = new Date();
-        const el = document.getElementById('current-date');
-        if (el) el.textContent = d.toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-
-        // Sidebar mobile toggle
+        // Sidebar scroll persistence & mobile toggle
         document.addEventListener("DOMContentLoaded", function() {
             const sidebar = document.querySelector('.sidebar');
             if (sidebar) {
@@ -576,7 +570,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-</script>
 </script>
 
     <!-- Flatpickr JS -->

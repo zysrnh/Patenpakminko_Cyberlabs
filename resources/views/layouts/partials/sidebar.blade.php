@@ -13,11 +13,10 @@
         position: fixed;
         top: 0; left: 0; bottom: 0;
         z-index: 20;
+        padding-bottom: 20px;
         overflow-y: auto;
         overflow-x: hidden;
         transition: transform .25s ease;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
     }
     .sidebar > * {
         flex-shrink: 0;
@@ -25,7 +24,8 @@
     .sidebar::-webkit-scrollbar {
         width: 5px;
     }
-    .sidebar::-webkit-scrollbar-track {
+    .sidebar::-webkit-scrollbar-track,
+    .sidebar::-webkit-scrollbar-track-piece {
         background: transparent;
     }
     .sidebar::-webkit-scrollbar-thumb {
@@ -35,7 +35,8 @@
     .sidebar::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.4);
     }
-    .sidebar::-webkit-scrollbar-button {
+    .sidebar::-webkit-scrollbar-button,
+    .sidebar::-webkit-scrollbar-corner {
         display: none;
         width: 0;
         height: 0;
@@ -478,31 +479,11 @@
     </div>
     @endif
 
+    @if(!Auth::check())
     <div class="sidebar-bottom">
-        <div class="sidebar-user">
-            @if(Auth::check() && Auth::user()->profile_photo)
-                <img src="{{ route('file.view', ['path' => Auth::user()->profile_photo]) }}" alt="Foto Profil" class="sidebar-avatar" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
-                <div class="sidebar-avatar" style="display:none;">{{ strtoupper(substr(Auth::user()->name ?? Auth::user()->username ?? 'U', 0, 2)) }}</div>
-            @else
-                <div class="sidebar-avatar">{{ Auth::check() ? strtoupper(substr(Auth::user()->name ?? Auth::user()->username ?? 'U', 0, 2)) : 'G' }}</div>
-            @endif
-            <div class="sidebar-user-info">
-                <strong>{{ Auth::check() ? (Auth::user()->name ?? Auth::user()->username) : 'Guest / Tamu' }}</strong>
-                <span>{{ Auth::check() ? Auth::user()->phone_number : 'Publik' }}</span>
-            </div>
-        </div>
-        @if(Auth::check())
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn-logout-sidebar">
-                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                Keluar dari Akun
-            </button>
-        </form>
-        @else
-        <a href="{{ route('login') }}" class="btn-logout-sidebar" style="color: var(--blue); border-color: var(--blue); text-decoration: none; justify-content: center;">
+        <a href="{{ route('login') }}" class="btn-logout-sidebar" style="color: #FFFFFF; background: var(--blue); border-color: var(--blue); text-decoration: none; justify-content: center;">
             Masuk ke Akun
         </a>
-        @endif
     </div>
+    @endif
 </aside>

@@ -38,7 +38,8 @@
         }
 
         html, body {
-            height: 100%;
+            min-height: 100%;
+            overflow-x: clip;
         }
 
         body {
@@ -1474,10 +1475,6 @@
     </div><!-- /main-wrap -->
 
     <script>
-        const d = new Date();
-        const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-        document.getElementById('current-date').textContent = d.toLocaleDateString('id-ID', opts);
-
         // Maintain sidebar scroll position
         document.addEventListener("DOMContentLoaded", function() {
             const sidebar = document.querySelector('.sidebar');
