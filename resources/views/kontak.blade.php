@@ -29,62 +29,66 @@
 
 @section('content')
 <style>
+    @keyframes kontakFadeUp {
+        from { opacity: 0; transform: translateY(8px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
     .contact-wrapper {
         background-color: #FFFFFF;
-        padding: 60px 0 40px;
+        padding: clamp(28px, 4vh, 52px) 0;
     }
     .contact-grid-main {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 60px;
-        align-items: start;
+        gap: clamp(28px, 4vw, 56px);
+        align-items: center;
     }
 
     /* Left Side Styling */
     .contact-tag-sub {
-        font-size: 14px;
-        font-weight: 700;
+        font-size: 12px;
+        font-weight: 800;
         color: #218AC9;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
     .contact-main-heading {
-        font-size: 44px;
+        font-size: clamp(28px, 3vw, 40px);
         font-weight: 900;
         color: #003B64;
         line-height: 1.15;
         letter-spacing: -0.03em;
-        margin-bottom: 20px;
+        margin-bottom: 14px;
     }
     .contact-main-heading span {
         color: #218AC9;
     }
     .contact-lead-text {
-        font-size: 15px;
+        font-size: 14px;
         color: #64748B;
-        line-height: 1.6;
-        margin-bottom: 36px;
-        max-width: 480px;
+        line-height: 1.55;
+        margin-bottom: 22px;
+        max-width: 500px;
     }
 
     /* Contact Details Block */
     .contact-detail-list {
         display: flex;
         flex-direction: column;
-        gap: 18px;
-        margin-bottom: 32px;
+        gap: 12px;
+        margin-bottom: 20px;
     }
     .contact-detail-item {
         display: flex;
         align-items: flex-start;
-        gap: 14px;
+        gap: 12px;
     }
     .contact-detail-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        background: #F1F5F9;
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        background: #E3F0F9;
         color: #003B64;
         display: flex;
         align-items: center;
@@ -92,127 +96,148 @@
         flex-shrink: 0;
     }
     .contact-detail-content {
-        font-size: 14px;
-        color: #1E293B;
-        line-height: 1.5;
+        font-size: 13.5px;
+        color: #0F172A;
+        line-height: 1.45;
         font-weight: 600;
     }
     .contact-detail-content span {
         display: block;
-        font-size: 12px;
+        font-size: 11.5px;
         color: #64748B;
         font-weight: 500;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
+    }
+
+    .contact-dev-card {
+        margin-bottom: 20px;
+        padding: 12px 16px;
+        background: #F8FAFC;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+    }
+    .contact-actions-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
     }
 
     /* WhatsApp Button */
     .btn-wa-direct {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        background: #25D366;
+        gap: 8px;
+        background: #16A34A;
         color: #FFFFFF;
-        padding: 12px 24px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 800;
+        padding: 10px 18px;
+        border-radius: 4px;
+        font-size: 13.5px;
+        font-weight: 700;
         text-decoration: none;
-        box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
-        transition: all 0.2s;
-        margin-bottom: 36px;
+        transition: background 0.15s ease, transform 0.1s ease;
     }
     .btn-wa-direct:hover {
-        background: #1EBE5D;
+        background: #15803D;
         color: #FFFFFF;
-        transform: translateY(-2px);
+    }
+    .btn-wa-direct:active {
+        transform: scale(0.98);
     }
 
-    /* Minimalist Bule Social Icons */
+    /* Social Icons */
     .social-section-title {
-        font-size: 13px;
+        font-size: 11px;
         font-weight: 700;
-        color: #94A3B8;
+        color: #64748B;
         text-transform: uppercase;
         letter-spacing: 0.06em;
-        margin-bottom: 12px;
+        margin-bottom: 8px;
     }
     .social-icon-row {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 8px;
         flex-wrap: wrap;
     }
     .social-icon-btn {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
         background: #F8FAFC;
-        border: 1px solid #E2E8F0;
-        color: #334155;
+        border: 1px solid #D6E4EF;
+        color: #003B64;
         display: flex;
         align-items: center;
         justify-content: center;
         text-decoration: none;
-        transition: all 0.2s;
+        transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
     }
     .social-icon-btn:hover {
         background: #003B64;
         color: #FFFFFF;
         border-color: #003B64;
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(0, 59, 100, 0.15);
+    }
+    .social-icon-btn:active {
+        transform: scale(0.96);
     }
 
     /* Right Form Card Styling */
     .form-card-minimal {
         background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 16px;
-        padding: 36px;
-        box-shadow: 0 10px 30px rgba(0, 38, 66, 0.04);
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        padding: clamp(20px, 2.8vh, 28px);
+        animation: kontakFadeUp 0.26s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
     .form-card-title {
-        font-size: 22px;
+        font-size: 19px;
         font-weight: 800;
         color: #003B64;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
     .form-card-sub {
-        font-size: 13.5px;
+        font-size: 13px;
         color: #64748B;
-        margin-bottom: 28px;
+        margin-bottom: 18px;
+    }
+    .contact-form-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
     }
     .form-field-group {
-        margin-bottom: 20px;
+        margin-bottom: 14px;
     }
     .form-field-label {
         display: block;
-        font-size: 13px;
+        font-size: 12.5px;
         font-weight: 700;
-        color: #334155;
-        margin-bottom: 6px;
+        color: #003B64;
+        margin-bottom: 5px;
     }
     .form-field-label span {
-        color: #EF4444;
+        color: #DC2626;
     }
     .form-field-input {
         width: 100%;
-        padding: 12px 16px;
-        border: 1.5px solid #CBD5E1;
-        border-radius: 8px;
-        font-size: 14px;
+        padding: 9px 12px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        font-size: 13.5px;
         color: #0F172A;
         background: #FFFFFF;
         outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
         font-family: inherit;
     }
     .form-field-input:focus {
         border-color: #218AC9;
-        box-shadow: 0 0 0 3px rgba(33, 138, 201, 0.12);
+        box-shadow: 0 0 0 2px #E3F0F9;
     }
     textarea.form-field-input {
-        min-height: 120px;
+        min-height: 90px;
         resize: vertical;
     }
     .btn-send-message {
@@ -220,26 +245,131 @@
         background: #003B64;
         color: #FFFFFF;
         border: none;
-        padding: 14px 24px;
-        border-radius: 8px;
-        font-size: 14.5px;
-        font-weight: 800;
+        padding: 11px 20px;
+        border-radius: 4px;
+        font-size: 13.5px;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.2s;
-        margin-top: 8px;
+        transition: background 0.15s ease, transform 0.1s ease;
+        margin-top: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
     .btn-send-message:hover {
-        background: #002642;
-        box-shadow: 0 4px 14px rgba(0, 38, 66, 0.2);
+        background: #218AC9;
+    }
+    .btn-send-message:active {
+        transform: scale(0.98);
+    }
+
+    /* Map Section */
+    .contact-map-section {
+        background: #F4F7FA;
+        padding: clamp(24px, 3.2vh, 40px) 0;
+        border-top: 1px solid #D6E4EF;
+    }
+    .contact-map-card {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        padding: clamp(16px, 2vh, 22px);
+    }
+    .contact-map-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+    .contact-map-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #F8FAFC;
+        color: #003B64;
+        border: 1px solid #CBD5E1;
+        padding: 7px 14px;
+        border-radius: 4px;
+        font-size: 12.5px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .contact-map-btn:hover {
+        background: #E3F0F9;
+        border-color: #218AC9;
+    }
+    .contact-map-frame {
+        width: 100%;
+        height: 340px;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid #D6E4EF;
+    }
+
+    /* Desktop Single-Screen per Section */
+    @media (min-width: 1025px) and (min-height: 580px) {
+        html:has(.contact-page-sec) {
+            scroll-snap-type: y proximity;
+        }
+        .contact-page-sec {
+            scroll-snap-align: start;
+            scroll-margin-top: 68px;
+        }
+        .contact-wrapper.contact-page-sec {
+            min-height: calc(100dvh - 68px);
+            display: flex;
+            align-items: center;
+            padding: clamp(14px, 2.2vh, 32px) 0;
+        }
+        .contact-lead-text {
+            margin-bottom: clamp(12px, 1.8vh, 20px);
+        }
+        .contact-detail-list {
+            gap: clamp(8px, 1.2vh, 14px);
+            margin-bottom: clamp(12px, 1.8vh, 20px);
+        }
+        .contact-dev-card {
+            margin-bottom: clamp(12px, 1.8vh, 20px);
+            padding: clamp(10px, 1.3vh, 14px) 14px;
+        }
+        .form-field-group {
+            margin-bottom: clamp(10px, 1.3vh, 15px);
+        }
+        textarea.form-field-input {
+            min-height: clamp(68px, 10.5vh, 105px);
+        }
+        .contact-map-section.contact-page-sec {
+            padding: clamp(16px, 2.4vh, 30px) 0;
+        }
+        .contact-map-frame {
+            height: clamp(185px, 27vh, 310px);
+        }
+        body:has(.contact-page-sec) .site-footer {
+            padding-top: clamp(22px, 3vh, 44px);
+        }
+        body:has(.contact-page-sec) .footer-grid {
+            gap: clamp(18px, 2.2vw, 32px);
+            padding-bottom: clamp(18px, 2.8vh, 40px);
+        }
+        body:has(.contact-page-sec) .f-col-title {
+            margin-bottom: clamp(8px, 1.1vh, 14px);
+        }
+        body:has(.contact-page-sec) .f-links {
+            gap: clamp(6px, 0.9vh, 10px);
+        }
     }
 
     @media (max-width: 992px) {
         .contact-grid-main {
             grid-template-columns: 1fr;
-            gap: 36px;
+            gap: 32px;
         }
         .contact-main-heading {
-            font-size: 34px;
+            font-size: 32px;
         }
     }
 
@@ -248,97 +378,35 @@
             padding: 24px 0 32px !important;
         }
         .contact-grid-main {
-            gap: 28px !important;
-        }
-        .contact-tag-sub {
-            font-size: 12px !important;
-            margin-bottom: 8px !important;
+            gap: 24px !important;
         }
         .contact-main-heading {
-            font-size: 26px !important;
-            line-height: 1.25 !important;
-            margin-bottom: 12px !important;
+            font-size: 25px !important;
         }
-        .contact-lead-text {
-            font-size: 13.5px !important;
-            line-height: 1.55 !important;
-            margin-bottom: 24px !important;
-        }
-        .contact-detail-list {
-            gap: 14px !important;
-            margin-bottom: 24px !important;
-        }
-        .contact-detail-item {
-            gap: 12px !important;
-        }
-        .contact-detail-icon {
-            width: 38px !important;
-            height: 38px !important;
-            border-radius: 10px !important;
-        }
-        .contact-detail-content {
-            font-size: 13.5px !important;
-        }
-        .contact-detail-content span {
-            font-size: 11.5px !important;
+        .contact-form-grid-2 {
+            grid-template-columns: 1fr;
+            gap: 0;
         }
         .btn-wa-direct {
-            width: 100% !important;
-            justify-content: center !important;
-            padding: 12px 18px !important;
-            font-size: 13.5px !important;
-            margin-bottom: 28px !important;
-            border-radius: 10px !important;
+            width: 100%;
+            justify-content: center;
         }
         .form-card-minimal {
-            padding: 20px 16px !important;
-            border-radius: 16px !important;
+            padding: 18px 16px;
         }
-        .form-card-title {
-            font-size: 19px !important;
-            margin-bottom: 4px !important;
-        }
-        .form-card-sub {
-            font-size: 12.5px !important;
-            margin-bottom: 20px !important;
-        }
-        .form-field-group {
-            margin-bottom: 16px !important;
-        }
-        .form-field-label {
-            font-size: 12px !important;
-            margin-bottom: 5px !important;
-        }
-        .form-field-input {
-            padding: 11px 14px !important;
-            font-size: 14px !important;
-            border-radius: 8px !important;
-        }
-        textarea.form-field-input {
-            min-height: 96px !important;
-        }
-        .btn-send-message {
-            padding: 12px 18px !important;
-            font-size: 13.5px !important;
-            border-radius: 10px !important;
-        }
-        .social-icon-row {
-            gap: 10px !important;
-        }
-        .social-icon-btn {
-            width: 38px !important;
-            height: 38px !important;
+        .contact-map-frame {
+            height: 260px;
         }
     }
 
-    @media (max-width: 480px) {
-        .contact-main-heading {
-            font-size: 23px !important;
+    @media (prefers-reduced-motion: reduce) {
+        .form-card-minimal {
+            animation: none !important;
         }
     }
 </style>
 
-<div class="contact-wrapper">
+<div class="contact-wrapper contact-page-sec">
     <div class="container">
         <div class="contact-grid-main">
             
@@ -390,46 +458,47 @@
 
                 @if($showDevBadge)
                 <!-- Legal Entity Information (PT ATOM REKADAYA CIPTA) -->
-                <div style="margin-bottom: 28px; padding: 18px 20px; background: #F8FAFC; border: 1.5px solid #E2E8F0; border-left: 4px solid #218AC9; border-radius: 8px;">
-                    <div style="font-size: 11px; font-weight: 800; color: #0284C7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Pengembang &amp; Mitra Teknologi Sistem</div>
-                    <div style="font-size: 15px; font-weight: 800; color: #003B64; margin-bottom: 4px;">PT. ATOM REKADAYA CIPTA</div>
-                    <div style="font-size: 13px; color: #475569; line-height: 1.6;">
-                        Alamat Kantor: Jl. Guntur Sari II No. 37 RT. 003 RW. 004, Kel. Turangga, Kec. Lengkong, Kota Bandung, Jawa Barat 40264<br>
-                        Telepon: (022) 73514006 &bull; Email: info@patenpakmiko.com
+                <div class="contact-dev-card">
+                    <div style="font-size: 10.5px; font-weight: 800; color: #218AC9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px;">Pengembang &amp; Mitra Teknologi Sistem</div>
+                    <div style="font-size: 14px; font-weight: 800; color: #003B64; margin-bottom: 3px;">PT. ATOM REKADAYA CIPTA</div>
+                    <div style="font-size: 12px; color: #475569; line-height: 1.5;">
+                        Jl. Guntur Sari II No. 37 RT. 003 RW. 004, Kel. Turangga, Kec. Lengkong, Kota Bandung 40264 &bull; Telp: (022) 73514006 &bull; info@patenpakmiko.com
                     </div>
                 </div>
                 @endif
 
-                <!-- WhatsApp CS Direct Button -->
-                <a href="{{ $waUrl }}" target="_blank" class="btn-wa-direct">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.228-1.157z"/></svg>
-                    Chat Helpdesk WhatsApp
-                </a>
+                <div class="contact-actions-row">
+                    <!-- WhatsApp CS Direct Button -->
+                    <a href="{{ $waUrl }}" target="_blank" class="btn-wa-direct">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.228-1.157z"/></svg>
+                        Chat Helpdesk WhatsApp
+                    </a>
 
-                <!-- Minimalist Social Icons -->
-                <div>
-                    <div class="social-section-title">Media Sosial Resmi</div>
-                    <div class="social-icon-row">
-                        <!-- TikTok -->
-                        <a href="{{ $socialTiktok }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg>
-                        </a>
-                        <!-- Instagram -->
-                        <a href="{{ $socialInstagram }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Instagram">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.012-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-                        </a>
-                        <!-- Threads -->
-                        <a href="{{ $socialThreads }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Threads">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.086-4.798-.31-.705-.87-1.29-1.629-1.723-.19 1.361-.617 2.44-1.28 3.229-.878 1.048-2.132 1.63-3.774 1.665-1.238.027-2.436-.256-3.246-.902-.943-.752-1.402-1.827-1.29-3.028.108-1.163.68-2.083 1.649-2.665.98-.589 2.302-.767 3.729-.51.192.035.379.075.559.121-.017-1.098-.294-1.928-.826-2.472-.628-.643-1.596-.968-2.876-.968h-.037c-1.245.011-2.187.395-2.803 1.14l-1.622-1.291c.878-1.113 2.203-1.727 3.833-1.774h.078c1.912 0 3.427.501 4.505 1.489 1.045.958 1.605 2.328 1.663 4.07.096.03.19.061.283.094 1.446.508 2.507 1.404 3.15 2.664.74 1.447 1.096 3.941-1.049 6.077C17.63 22.98 15.303 23.98 12.186 24z"/></svg>
-                        </a>
-                        <!-- YouTube -->
-                        <a href="{{ $socialYoutube }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="YouTube">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        </a>
-                        <!-- Facebook -->
-                        <a href="{{ $socialFacebook }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.494v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
-                        </a>
+                    <!-- Minimalist Social Icons -->
+                    <div>
+                        <div class="social-section-title">Media Sosial Resmi</div>
+                        <div class="social-icon-row">
+                            <!-- TikTok -->
+                            <a href="{{ $socialTiktok }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="TikTok">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/></svg>
+                            </a>
+                            <!-- Instagram -->
+                            <a href="{{ $socialInstagram }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Instagram">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.012-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                            </a>
+                            <!-- Threads -->
+                            <a href="{{ $socialThreads }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Threads">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.086-4.798-.31-.705-.87-1.29-1.629-1.723-.19 1.361-.617 2.44-1.28 3.229-.878 1.048-2.132 1.63-3.774 1.665-1.238.027-2.436-.256-3.246-.902-.943-.752-1.402-1.827-1.29-3.028.108-1.163.68-2.083 1.649-2.665.98-.589 2.302-.767 3.729-.51.192.035.379.075.559.121-.017-1.098-.294-1.928-.826-2.472-.628-.643-1.596-.968-2.876-.968h-.037c-1.245.011-2.187.395-2.803 1.14l-1.622-1.291c.878-1.113 2.203-1.727 3.833-1.774h.078c1.912 0 3.427.501 4.505 1.489 1.045.958 1.605 2.328 1.663 4.07.096.03.19.061.283.094 1.446.508 2.507 1.404 3.15 2.664.74 1.447 1.096 3.941-1.049 6.077C17.63 22.98 15.303 23.98 12.186 24z"/></svg>
+                            </a>
+                            <!-- YouTube -->
+                            <a href="{{ $socialYoutube }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="YouTube">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            </a>
+                            <!-- Facebook -->
+                            <a href="{{ $socialFacebook }}" target="_blank" rel="noopener noreferrer" class="social-icon-btn" title="Facebook">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.494v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -446,14 +515,16 @@
                         <input type="text" id="inquiry_name" class="form-field-input" placeholder="contoh: Ridwan Kustiyadi" required>
                     </div>
 
-                    <div class="form-field-group">
-                        <label class="form-field-label">Alamat Email <span>*</span></label>
-                        <input type="email" id="inquiry_email" class="form-field-input" placeholder="contoh: ridwan@company.com" required>
-                    </div>
+                    <div class="contact-form-grid-2">
+                        <div class="form-field-group">
+                            <label class="form-field-label">Alamat Email <span>*</span></label>
+                            <input type="email" id="inquiry_email" class="form-field-input" placeholder="contoh: ridwan@company.com" required>
+                        </div>
 
-                    <div class="form-field-group">
-                        <label class="form-field-label">Nomor WhatsApp <span>*</span></label>
-                        <input type="text" id="inquiry_phone" class="form-field-input" placeholder="contoh: +62 812 3456 7890" required>
+                        <div class="form-field-group">
+                            <label class="form-field-label">Nomor WhatsApp <span>*</span></label>
+                            <input type="text" id="inquiry_phone" class="form-field-input" placeholder="contoh: +62 812 3456 7890" required>
+                        </div>
                     </div>
 
                     <div class="form-field-group">
@@ -462,7 +533,7 @@
                     </div>
 
                     <button type="submit" class="btn-send-message">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; vertical-align: -3px;"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.228-1.157z"/></svg>
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.228-1.157z"/></svg>
                         Kirim Pesan via WhatsApp Helpdesk
                     </button>
                 </form>
@@ -473,19 +544,19 @@
 </div>
 
 <!-- Map Section Wrapped in Container -->
-<div style="background: #F8FAFC; padding: 40px 0 80px; border-top: 1px solid #E2E8F0;">
+<div class="contact-map-section contact-page-sec">
     <div class="container">
-        <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 16px; padding: 24px; box-shadow: 0 4px 16px rgba(0,38,66,0.03);">
-            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+        <div class="contact-map-card">
+            <div class="contact-map-head">
                 <div>
-                    <h3 style="font-size: 18px; font-weight: 800; color: #003B64; margin: 0 0 4px;">Lokasi Kantor Pertanahan Kota Sukabumi</h3>
-                    <p style="font-size: 13px; color: #64748B; margin: 0;">{{ $address }} · Jam Kerja: Senin–Jumat (08.00–16.00 WIB)</p>
+                    <h3 style="font-size: 16.5px; font-weight: 800; color: #003B64; margin: 0 0 3px;">Lokasi Kantor Pertanahan Kota Sukabumi</h3>
+                    <p style="font-size: 12.5px; color: #64748B; margin: 0;">{{ $address }} · Jam Kerja: Senin–Jumat (08.00–16.00 WIB)</p>
                 </div>
-                <a href="https://maps.google.com/?q={{ urlencode($address) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: #F1F5F9; color: #003B64; border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
+                <a href="https://maps.google.com/?q={{ urlencode($address) }}" target="_blank" class="contact-map-btn">
                     Buka Google Maps ↗
                 </a>
             </div>
-            <div style="width: 100%; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid #E2E8F0;">
+            <div class="contact-map-frame">
                 <iframe src="{{ $mapUrl }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
