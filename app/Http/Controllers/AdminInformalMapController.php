@@ -314,10 +314,13 @@ class AdminInformalMapController extends Controller
                 return back()->with('error', 'Gagal membuka file ZIP shapefile.');
             }
 
-            // Cari file .shp di dalam folder hasil ekstrak
-            $shpFiles = File::glob($tempDir . '/*.shp');
-            if (empty($shpFiles)) {
-                $shpFiles = File::glob($tempDir . '/*/*.shp');
+            // Cari file .shp di dalam folder hasil ekstrak secara rekursif
+            $allFiles = File::allFiles($tempDir);
+            $shpFiles = [];
+            foreach ($allFiles as $file) {
+                if (strtolower($file->getExtension()) === 'shp') {
+                    $shpFiles[] = $file->getRealPath();
+                }
             }
 
             if (empty($shpFiles)) {
@@ -374,9 +377,22 @@ PY;
                 @File::put($scriptPath, $pyScript);
             }
 
+            // Deteksi binary python yang tersedia (python3 di Linux/Ubuntu, atau python)
+            $pythonBin = 'python';
+            $candidates = ['python3', '/usr/bin/python3', '/usr/local/bin/python3', 'python'];
+            foreach ($candidates as $candidate) {
+                $testOut = [];
+                $testRet = 0;
+                @exec($candidate . ' --version 2>&1', $testOut, $testRet);
+                if ($testRet === 0) {
+                    $pythonBin = $candidate;
+                    break;
+                }
+            }
+
             // Eksekusi script python
             $tempOutput = $tempDir . '/converted.geojson';
-            $cmd = sprintf('python "%s" "%s" "%s" "%s"', $scriptPath, $shpPath, $tempOutput, $layerKey);
+            $cmd = sprintf('%s "%s" "%s" "%s" "%s"', $pythonBin, $scriptPath, $shpPath, $tempOutput, $layerKey);
             $output = [];
             $returnVar = 0;
             exec($cmd . ' 2>&1', $output, $returnVar);
