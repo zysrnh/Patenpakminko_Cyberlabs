@@ -63,8 +63,10 @@
             @if($application->bpn_pertek_document)
                 <div class="pertek-ready-banner" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
                     <div style="display: flex; align-items: center; gap: 14px;">
-                        <div style="width: 44px; height: 44px; background: #10B981; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; font-size: 22px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
-                            📄
+                                                <div style="width: 38px; height: 38px; background: #16A34A; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #FFFFFF;">
+                            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
                         </div>
                         <div>
                             <div style="font-size: 14.5px; font-weight: 800; color: #065F46; margin-bottom: 2px;">
@@ -75,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" class="pertek-ready-btn" style="color: #ffffff; font-weight: 700; font-size: 13px; padding: 9px 18px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                    <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" class="pertek-ready-btn" style="color: #ffffff; font-weight: 700; font-size: 13px; padding: 9px 18px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;" >
                         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         Unduh Hasil Pertek (BPN)
                     </a>
@@ -83,18 +85,11 @@
             @endif
 
             <!-- BUTTON DOWNLOAD DOKUMEN Pertimbangan Teknis Pertanahan SELESAI -->
-            @if($application->status === 'disetujui')
-                @if($application->bpn_pertek_document)
-                    <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" class="btn-download-cert" style="background:#79A73A; margin-bottom: 20px;">
-                        <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        Unduh Dokumen Pertek Pertanahan
-                    </a>
-                @elseif($application->approval_document)
-                    <a href="{{ route('file.view', ['path' => $application->approval_document]) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
+            @if($application->status === 'disetujui' && $application->approval_document)
+                <a href="{{ route('file.view', ['path' => $application->approval_document]) }}" target="_blank" class="btn-download-cert" style="margin-bottom: 20px;">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         Unduh Dokumen PKKPR Tanah Timbul (PDF)
                     </a>
-                @endif
             @endif
  
             <!-- FITUR ULASAN LAYANAN (ANTI-SPAM) -->
@@ -885,7 +880,7 @@
                                 <li class="detail-item" style="padding: 12px 0;">
                                     <span class="detail-label" style="font-weight: 800; color: #065F46;">Dokumen Pertek Pertanahan Tanah Timbul (BPN)</span>
                                     <span class="detail-val">
-                                        <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #16A34A; color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                                        <a href="{{ route('file.view', ['path' => $application->bpn_pertek_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #16A34A; color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); transition: all 0.2s;" >
                                             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                             📄 Unduh Pertek Pertanahan Tanah Timbul (BPN)
                                         </a>
@@ -905,7 +900,7 @@
                                 <li class="detail-item" style="padding: 12px 0;">
                                     <span class="detail-label" style="font-weight: 800; color: #B45309;">Dokumen PKKPR Tanah Timbul (Final)</span>
                                     <span class="detail-val">
-                                        <a href="{{ route('file.view', ['path' => $application->approval_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #D97706; color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+                                        <a href="{{ route('file.view', ['path' => $application->approval_document]) }}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: #D97706; color: #ffffff; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 800; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); transition: all 0.2s;" >
                                             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                             📜 Unduh Dokumen PKKPR (Final)
                                         </a>
@@ -1879,123 +1874,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     </script>
-<!-- POPUP MODAL REMINDER UNTUK DOKUMEN BELUM DIUNDUH -->
-@if($application->bpn_pertek_document || $application->approval_document)
-    @php
-        $docPertekUrl = $application->bpn_pertek_document ? route('file.view', ['path' => $application->bpn_pertek_document]) : '';
-        $docApprovalUrl = $application->approval_document ? route('file.view', ['path' => $application->approval_document]) : '';
-        
-        $appId = $application->id;
-        $appNo = $application->application_number;
-    @endphp
-
-    <div id="docReminderModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(4px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
-        <div style="background: #FFFFFF; border-radius: 16px; width: 100%; max-width: 460px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); overflow: hidden; border: 1px solid #E2E8F0; text-align: center; position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
-            <!-- Header Decorative -->
-            <div style="background: #003B64; padding: 28px 24px 20px; color: #FFFFFF; position: relative;">
-                <button type="button" onclick="closeDocReminderModal()" style="position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.2); border: none; color: #fff; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;">✕</button>
-                <div style="width: 56px; height: 56px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.3);">
-                    📄
-                </div>
-                <h3 id="reminderModalTitle" style="font-size: 17px; font-weight: 800; margin: 0 0 6px; color: #ffffff;">Dokumen Telah Terbit!</h3>
-                <div style="font-size: 12px; color: #E0F2FE;">Nomor Permohonan: <strong>{{ $appNo }}</strong></div>
-            </div>
-            
-            <!-- Body Content -->
-            <div style="padding: 24px;">
-                <p id="reminderModalDesc" style="font-size: 13.5px; color: #334155; line-height: 1.5; margin: 0 0 16px; font-weight: 500;">
-                    Dokumen resmi Anda telah diterbitkan. Silakan unduh dan simpan berkas Anda.
-                </p>
-                
-                <div style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #92400E; margin-bottom: 20px; text-align: left; display: flex; align-items: center; gap: 8px;">
-                    <span style="font-size: 16px;">⚠️</span>
-                    <span>Anda belum pernah mengunduh berkas ini di perangkat Anda. Harap segera mengunduh & menyimpannya.</span>
-                </div>
-                
-                <!-- Actions -->
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <a id="reminderModalBtn" href="#" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #16A34A; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-size: 13.5px; font-weight: 800; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); transition: all 0.2s;">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        📥 Unduh Dokumen Sekarang
-                    </a>
-                    <button type="button" onclick="closeDocReminderModal()" style="background: transparent; border: none; color: #64748B; font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 6px;" onmouseover="this.style.color='#0F172A'" onmouseout="this.style.color='#64748B'">
-                        Nanti Saja
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <style>
-        @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.9) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-    </style>
-
-    <script>
-        function closeDocReminderModal() {
-            const modal = document.getElementById('docReminderModal');
-            if (modal) modal.style.display = 'none';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const appId = '{{ $appId }}';
-            const pertekUrl = '{{ $docPertekUrl }}';
-            const approvalUrl = '{{ $docApprovalUrl }}';
-
-            let activeDocKey = '';
-            let activeUrl = '';
-            let activeTitle = '';
-            let activeDesc = '';
-
-            // Prioritas pengecekan dokumen yang belum pernah diunduh:
-            // 1. Dokumen PKKPR (Final)
-            // 2. Dokumen Pertek Pertanahan (BPN)
-            if (approvalUrl && !localStorage.getItem('downloaded_doc_approval_' + appId)) {
-                activeDocKey = 'approval_' + appId;
-                activeUrl = approvalUrl;
-                activeTitle = 'Dokumen Pertek Pertanahan Tanah Timbul Telah Terbit!';
-                activeDesc = 'Selamat! Dokumen resmi Pertek Pertanahan Tanah Timbul milik Anda telah diterbitkan secara lengkap.';
-            } else if (pertekUrl && !localStorage.getItem('downloaded_doc_pertek_' + appId)) {
-                activeDocKey = 'pertek_' + appId;
-                activeUrl = pertekUrl;
-                activeTitle = 'Dokumen Pertek Pertanahan Tanah Timbul Telah Terbit!';
-                activeDesc = 'Selamat! Dokumen resmi Pertek Pertanahan Tanah Timbul milik Anda telah diterbitkan secara lengkap.';
-            }
-
-            if (activeUrl) {
-                const modalTitle = document.getElementById('reminderModalTitle');
-                const modalDesc = document.getElementById('reminderModalDesc');
-                const modalBtn = document.getElementById('reminderModalBtn');
-
-                if (modalTitle) modalTitle.innerText = activeTitle;
-                if (modalDesc) modalDesc.innerText = activeDesc;
-                if (modalBtn) {
-                    modalBtn.href = activeUrl;
-                    modalBtn.onclick = function() {
-                        localStorage.setItem('downloaded_doc_' + activeDocKey, 'true');
-                        closeDocReminderModal();
-                    };
-                }
-
-                setTimeout(function() {
-                    const modal = document.getElementById('docReminderModal');
-                    if (modal) modal.style.display = 'flex';
-                }, 500);
-            }
-
-            if (approvalUrl) {
-                document.querySelectorAll('a[href*="' + approvalUrl + '"]').forEach(function(l) {
-                    l.addEventListener('click', function() { localStorage.setItem('downloaded_doc_approval_' + appId, 'true'); });
-                });
-            }
-            if (pertekUrl) {
-                document.querySelectorAll('a[href*="' + pertekUrl + '"]').forEach(function(l) {
-                    l.addEventListener('click', function() { localStorage.setItem('downloaded_doc_pertek_' + appId, 'true'); });
-                });
-            }
-        });
-    </script>
-@endif
+@include('layouts.partials.doc-reminder-modal', [
+    'moduleSlug' => 'tanah_timbul',
+    'serviceLabel' => 'PKKPR Tanah Timbul',
+])
 @endsection
