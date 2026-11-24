@@ -3,206 +3,384 @@
 @section('title', 'Pengelolaan Dokumen - PATEN PAK MIKO')
 @section('page-title', 'Pengelolaan Dokumen')
 
-@section('head-extra')
-<style>
-    /* Filters */
-    .filters { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
-    .filters form { display: flex; gap: 12px; width: 100%; }
-    .filters select, .filters input { padding: 8px 12px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13px; }
-    input[type="date"] { background-color: #ffffff !important; color: #0f172a !important; }
+@section('extra-styles')
+    @keyframes docFadeUp {
+        from { opacity: 0; transform: translateY(5px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
 
-    /* Pagination Fix (Bootstrap Style) */
-    .pagination {
+    .doc-hero {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        padding: 15px 18px;
+        margin-bottom: 14px;
         display: flex;
-        padding-left: 0;
-        list-style: none;
-        gap: 4px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
         flex-wrap: wrap;
-        margin-top: 20px;
+        animation: docFadeUp .2s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .doc-hero-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: #003B64;
+        letter-spacing: -0.02em;
+        margin: 0 0 2px;
+    }
+    .doc-hero-sub {
+        font-size: 12.5px;
+        color: #64748B;
+        margin: 0;
+    }
+    .doc-toggle-upload {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #003B64;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 14px;
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background .15s ease;
+    }
+    .doc-toggle-upload:hover { background: #218AC9; }
+
+    /* Collapsible Upload Drawer */
+    .doc-upload-drawer {
+        display: none;
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        margin-bottom: 14px;
+        overflow: hidden;
+        animation: docFadeUp .18s ease-out both;
+    }
+    .doc-upload-drawer.is-open { display: block; }
+    .doc-drawer-head {
+        padding: 12px 16px;
+        background: #F8FAFC;
+        border-bottom: 1px solid #E8F0F6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .doc-drawer-head h2 {
+        font-size: 14px;
+        font-weight: 800;
+        color: #003B64;
+        margin: 0;
+    }
+    .doc-upload-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    /* Main Table Panel */
+    .doc-panel {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        overflow: hidden;
+        animation: docFadeUp .24s cubic-bezier(0.22, 1, 0.36, 1) .04s both;
+    }
+    .doc-panel-head {
+        padding: 13px 16px;
+        background: #F8FAFC;
+        border-bottom: 1px solid #E8F0F6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .doc-panel-head h2 {
+        font-size: 14.5px;
+        font-weight: 800;
+        color: #003B64;
+        margin: 0;
+    }
+    .doc-total-pill {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #003B64;
+        background: #E3F0F9;
+        border: 1px solid #BFD9EC;
+        padding: 2px 8px;
+        border-radius: 4px;
+    }
+
+    /* Filter Bar Grid */
+    .doc-filter-bar {
+        padding: 12px 16px;
+        border-bottom: 1px solid #E8F0F6;
+        background: #FFFFFF;
+    }
+    .doc-filter-form {
+        display: grid;
+        grid-template-columns: minmax(180px, 1.5fr) minmax(140px, 1fr) 140px minmax(150px, 1fr) auto;
+        gap: 8px;
         align-items: center;
     }
-    .page-item .page-link {
-        padding: 6px 12px;
-        border: 1px solid var(--line);
-        border-radius: var(--r-md);
-        color: var(--blue);
-        font-size: 13px;
+    .doc-input, .doc-select {
+        width: 100%;
+        height: 34px;
+        padding: 0 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 12.5px;
+        color: #0F172A;
+        background: #FFFFFF;
+        outline: none;
+    }
+    .doc-input:focus, .doc-select:focus { border-color: #218AC9; }
+    .doc-filter-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .doc-btn-filter {
+        height: 34px;
+        padding: 0 13px;
+        border: 1px solid #003B64;
+        background: #003B64;
+        color: #FFFFFF;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    .doc-btn-filter:hover { background: #218AC9; border-color: #218AC9; }
+    .doc-btn-reset {
+        height: 34px;
+        padding: 0 11px;
+        border: 1px solid #CBD5E1;
+        background: #FFFFFF;
+        color: #475569;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+    .doc-btn-reset:hover { background: #F1F5F9; color: #0F172A; }
+
+    /* Batch Bar */
+    .doc-batch-bar {
+        padding: 10px 16px;
+        border-bottom: 1px solid #E8F0F6;
+        background: #F8FAFC;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .doc-batch-btns {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    .doc-btn-batch {
+        height: 30px;
+        padding: 0 11px;
+        border-radius: 4px;
+        border: none;
+        font-family: inherit;
+        font-size: 11.5px;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #FFFFFF;
+    }
+    .doc-btn-batch:disabled { opacity: 0.45; cursor: not-allowed; }
+    .doc-btn-batch--dl { background: #218AC9; }
+    .doc-btn-batch--dl:hover:not(:disabled) { background: #003B64; }
+    .doc-btn-batch--del { background: #DC2626; }
+    .doc-btn-batch--del:hover:not(:disabled) { background: #B91C1C; }
+    .doc-btn-batch--all { background: #991B1B; }
+    .doc-btn-batch--all:hover { background: #7F1D1D; }
+
+    /* Table */
+    .doc-table-wrap { width: 100%; overflow-x: auto; }
+    .doc-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+    .doc-table th {
+        padding: 10px 12px;
+        font-size: 10.5px;
+        font-weight: 800;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: #F8FAFC;
+        border-bottom: 1px solid #D6E4EF;
+        text-align: left;
+    }
+    .doc-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #EFF4F8;
+        vertical-align: middle;
+        font-size: 12.5px;
+    }
+    .doc-table tbody tr:hover { background: #F8FAFC; }
+
+    .doc-title-txt {
+        font-weight: 700;
+        color: #003B64;
+        display: block;
+        word-break: break-word;
+    }
+    .doc-sub-txt {
+        font-size: 11px;
+        color: #64748B;
+        margin-top: 2px;
+        display: block;
+    }
+    .doc-cat-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        border-radius: 4px;
+        background: #F1F5F9;
+        border: 1px solid #CBD5E1;
+        color: #334155;
+        font-size: 11px;
+        font-weight: 600;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .doc-ext-badge {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: #E3F0F9;
+        color: #003B64;
+        font-size: 10.5px;
+        font-weight: 800;
+    }
+    .doc-row-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 5px;
+        flex-wrap: nowrap;
+    }
+    .doc-act-btn {
+        height: 28px;
+        padding: 0 9px;
+        border-radius: 4px;
+        font-size: 11.5px;
+        font-weight: 700;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: #fff;
+        cursor: pointer;
+        border: 1px solid transparent;
+        white-space: nowrap;
     }
-    .page-item.active .page-link {
-        background: var(--blue);
-        color: white;
-        border-color: var(--blue);
-        font-weight: 700;
-    }
-    .page-item.disabled .page-link {
-        color: #a0aec0;
-        background: #f8fafc;
-        cursor: not-allowed;
-    }
-    nav[role="navigation"] { width: 100%; display: flex; justify-content: center; }
-    @media (min-width: 640px) {
-        nav[role="navigation"] { justify-content: flex-start; }
-    }
+    .doc-act-view { background: #F1F5F9; color: #334155; border-color: #CBD5E1; }
+    .doc-act-view:hover { background: #E2E8F0; color: #003B64; }
+    .doc-act-dl { background: #218AC9; color: #FFFFFF; }
+    .doc-act-dl:hover { background: #003B64; color: #FFFFFF; }
+    .doc-act-del { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+    .doc-act-del:hover { background: #DC2626; color: #FFFFFF; border-color: #DC2626; }
 
-    /* ─── STYLE MODAL PREVIEW ───────────────── */
-    .modal-backdrop {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 1040;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease;
-        backdrop-filter: blur(2px);
-    }
-    .modal-backdrop.show {
-        opacity: 1;
-        visibility: visible;
-    }
-    .modal-slide {
-        position: fixed;
-        top: 0; right: -600px;
-        width: 100%; max-width: 600px;
-        height: 100vh;
-        background: #fff;
-        z-index: 1050;
-        box-shadow: -4px 0 24px rgba(0,0,0,0.1);
-        transition: right 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* Pagination */
+    .doc-pag-bar {
+        padding: 12px 16px;
+        background: #F8FAFC;
+        border-top: 1px solid #E8F0F6;
         display: flex;
-        flex-direction: column;
-    }
-    .modal-slide.open {
-        right: 0;
-    }
-    .modal-header {
-        padding: 20px 24px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
         align-items: center;
-        background: var(--surface);
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
     }
-    .modal-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--ink);
+    .pagination { display: flex; list-style: none; gap: 4px; margin: 0; padding: 0; flex-wrap: wrap; }
+    .page-item .page-link {
+        padding: 5px 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        color: #003B64;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        background: #FFFFFF;
+        display: inline-flex;
     }
-    .btn-close {
-        background: none; border: none;
-        font-size: 24px; color: var(--muted);
-        cursor: pointer; padding: 0;
-        line-height: 1; transition: color 0.2s;
-    }
-    .btn-close:hover { color: var(--red); }
-    .modal-body {
-        flex: 1;
-        padding: 0;
-        overflow: hidden;
-    }
-    #previewFrame {
-        width: 100%; height: 100%;
-        border: none; background: #f8fafc;
-    }
+    .page-item.active .page-link { background: #003B64; color: #FFFFFF; border-color: #003B64; }
+    .page-item.disabled .page-link { color: #94A3B8; background: #F1F5F9; cursor: not-allowed; }
 
-    /* ─── MOBILE RESPONSIVE ────────────────────────────── */
-    @media (max-width: 768px) {
-        .filters form {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 10px !important;
-        }
-        .filters input, .filters select, .filters button, .filters a {
-            width: 100% !important;
-            min-width: 0 !important;
-        }
-        .batch-bar-wrap {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 10px !important;
-        }
-        .batch-buttons-group {
-            width: 100% !important;
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch !important;
-            flex-wrap: nowrap !important;
-            padding-bottom: 4px !important;
-        }
-        .batch-buttons-group .btn {
-            white-space: nowrap !important;
-            flex-shrink: 0 !important;
-            font-size: 12px !important;
-            padding: 7px 12px !important;
-        }
-        .table-wrap {
-            overflow-x: auto !important;
-            -webkit-overflow-scrolling: touch !important;
-            width: 100% !important;
-        }
-        .table-wrap table {
-            min-width: 860px !important;
-        }
+    @media (max-width: 1080px) {
+        .doc-filter-form { grid-template-columns: 1fr 1fr; }
+        .doc-upload-grid { grid-template-columns: 1fr; }
+        .doc-table { table-layout: auto; min-width: 820px; }
     }
-</style>
+    @media (max-width: 640px) {
+        .doc-filter-form { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .doc-hero, .doc-upload-drawer, .doc-panel { animation: none !important; }
+    }
 @endsection
 
 @section('content')
-<div class="page-header" style="flex-direction: row; justify-content: space-between; align-items: flex-end;">
-    <div class="page-header-left">
-        <div class="breadcrumb">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <span>›</span>
-            <span>Pengelolaan Dokumen</span>
+    <div class="doc-hero">
+        <div>
+            <h1 class="doc-hero-title">Pengelolaan Dokumen</h1>
+            <p class="doc-hero-sub">Arsip terpusat berkas persyaratan &amp; dokumen terbit dari seluruh layanan permohonan.</p>
         </div>
-        <h1>Pengelolaan Dokumen</h1>
-        <p>Unggah, simpan, dan kelola dokumen lintas instansi.</p>
+        <button type="button" class="doc-toggle-upload" onclick="toggleDocUploadDrawer(this)">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            <span>Unggah Dokumen</span>
+        </button>
     </div>
 
-</div>
+    @if($errors->any())
+        <div class="alert alert-error" style="border-radius: 4px; margin-bottom: 14px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <ul style="margin-left: 16px;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-@if(session('success'))
-    <div class="alert alert-success">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span>{{ session('success') }}</span>
-    </div>
-@endif
-@if(session('error'))
-    <div class="alert alert-error">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        <span>{{ session('error') }}</span>
-    </div>
-@endif
-@if ($errors->any())
-    <div class="alert alert-error">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        <ul style="margin-left: 20px;">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-<div class="panel">
-    <div class="panel-head">
-        <h2>Unggah Dokumen Baru</h2>
-    </div>
-    <div class="panel-body">
-        <form action="{{ route('dokumen.store') }}" method="POST" enctype="multipart/form-data">
+    <!-- Collapsible Form Upload -->
+    <div id="docUploadDrawer" class="doc-upload-drawer">
+        <div class="doc-drawer-head">
+            <h2>Unggah Dokumen Baru</h2>
+            <button type="button" onclick="toggleDocUploadDrawer()" style="background:none;border:none;font-size:18px;color:#64748B;cursor:pointer;line-height:1;">&times;</button>
+        </div>
+        <form action="{{ route('dokumen.store') }}" method="POST" enctype="multipart/form-data" style="padding: 16px;">
             @csrf
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Nama Pemohon/Pelaku Usaha</label>
-                    <input type="text" name="nama_dokumen" class="form-control" required placeholder="Contoh: PT Telkom Pasero TBK">
+            <div class="doc-upload-grid">
+                <div>
+                    <label class="form-label" style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">Nama Pemohon / Judul</label>
+                    <input type="text" name="nama_dokumen" class="doc-input" required placeholder="Contoh: PT Telkom Persero Tbk">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Kategori</label>
-                    <select name="kategori" class="form-control" required {!! request('kategori') ? 'style="pointer-events: none; background: #f1f5f9; color: var(--muted); font-weight: 500;" tabindex="-1"' : '' !!}>
+                <div>
+                    <label class="form-label" style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">Kategori</label>
+                    <select name="kategori" class="doc-select" required {!! request('kategori') ? 'style="pointer-events: none; background: #F1F5F9; color: #64748B;" tabindex="-1"' : '' !!}>
                         <option value="">-- Pilih Jenis Dokumen --</option>
                         <option value="PKKPR Otomatis" {{ request('kategori') == 'PKKPR Otomatis' ? 'selected' : '' }}>PKKPR Otomatis</option>
                         <option value="Peta Lokasi" {{ request('kategori') == 'Peta Lokasi' ? 'selected' : '' }}>Peta Lokasi</option>
@@ -224,118 +402,109 @@
                         <option value="Persyaratan Lainnya" {{ request('kategori') == 'Persyaratan Lainnya' ? 'selected' : '' }}>Lainnya</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Pilih File (PDF, JPG, PNG, DOCX - Max 100MB)</label>
-                    <input type="file" name="file" class="form-control" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" style="background:#fff;">
+                <div>
+                    <label class="form-label" style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">File (PDF/JPG/PNG/DOCX, Maks 100MB)</label>
+                    <input type="file" name="file" class="doc-input" style="padding:4px 8px;" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Keterangan Tambahan (Opsional)</label>
-                <textarea name="keterangan" class="form-control" rows="2" placeholder="Tuliskan keterangan mengenai dokumen ini..."></textarea>
-            </div>
-            <div style="margin-top: 16px;">
-                <button type="submit" class="btn btn-primary">Unggah Dokumen</button>
+            <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+                <div style="flex:1; min-width:220px;">
+                    <label class="form-label" style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">Keterangan (Opsional)</label>
+                    <input type="text" name="keterangan" class="doc-input" placeholder="Catatan singkat dokumen...">
+                </div>
+                <button type="submit" class="doc-btn-filter" style="height:34px; padding:0 18px;">Simpan Dokumen</button>
             </div>
         </form>
     </div>
-</div>
 
-<div class="panel">
-    <div class="panel-head">
-        <h2>Daftar Dokumen Tersimpan</h2>
-    </div>
-    <div class="panel-body">
-        
-        <div class="filters">
-            <form action="{{ route('dokumen.index') }}" method="GET" style="display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center;">
-                <input type="text" name="search" placeholder="Cari nama dokumen atau pengunggah..." value="{{ request('search') }}" style="flex: 1; min-width: 250px;">
-                <select name="user_id" style="min-width: 180px;">
+    <!-- Panel Daftar Dokumen -->
+    <div class="doc-panel">
+        <div class="doc-panel-head">
+            <h2>Daftar Dokumen Tersimpan</h2>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span class="doc-total-pill">{{ number_format($dokumen->total()) }} Dokumen</span>
+                @if(request('user_id'))
+                    <form action="{{ route('dokumen.download_zip') }}" method="POST" style="margin:0;">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ request('user_id') }}">
+                        <button type="submit" class="doc-btn-batch" style="background:#16A34A; height:28px;">
+                            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            <span>Unduh ZIP Pemohon</span>
+                        </button>
+                    </form>
+                @endif
+            </div>
+        </div>
+
+        <!-- Bar Filter 1 Baris Rapi -->
+        <div class="doc-filter-bar">
+            <form action="{{ route('dokumen.index') }}" method="GET" class="doc-filter-form">
+                <input type="text" name="search" class="doc-input" placeholder="Cari nama dokumen atau pengunggah..." value="{{ request('search') }}">
+                <select name="user_id" class="doc-select">
                     <option value="">Semua Pemohon</option>
                     @foreach($pemohonList as $pemohon)
                         <option value="{{ $pemohon->id }}" {{ request('user_id') == $pemohon->id ? 'selected' : '' }}>
-                            {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin ('.$pemohon->id.')' }}</option>
+                            {{ $pemohon->name ?? $pemohon->business_name ?? 'Admin (' . $pemohon->id . ')' }}
+                        </option>
                     @endforeach
                 </select>
-                <input type="date" name="tanggal" value="{{ request('tanggal') }}" style="min-width: 140px;" title="Filter berdasarkan Tanggal Unggah">
-                <select name="kategori" style="min-width: 200px;">
-                    <option value="">Semua Jenis Dokumen</option>
+                <input type="date" name="tanggal" class="doc-input" value="{{ request('tanggal') }}" title="Tanggal unggah">
+                <select name="kategori" class="doc-select">
+                    <option value="">Semua Jenis</option>
                     @foreach($kategoriList as $kat)
                         <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="btn btn-secondary" style="padding: 8px 16px;">Filter</button>
-                @if(request('search') || request('kategori') || request('tanggal'))
-                    <a href="{{ route('dokumen.index') }}" class="btn btn-secondary" style="padding: 8px 16px;">Reset</a>
-                @endif
-            </form>
-            @if(request('user_id'))
-            <form action="{{ route('dokumen.download_zip') }}" method="POST" style="margin:0;">
-                @csrf
-                <input type="hidden" name="user_id" value="{{ request('user_id') }}">
-                <button type="submit" class="btn btn-primary" style="padding: 8px 16px; background-color: #10b981; border-color: #10b981;">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Unduh ZIP (Semua Dokumen)
-                </button>
-            </form>
-            @endif
-        </div>
-
-        <form action="{{ route('dokumen.download_batch') }}" method="POST" id="batchDownloadForm">
-            @csrf
-            <div class="batch-bar-wrap" style="margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;">
-                <div style="font-size: 13px; color: var(--muted); font-weight: 600;">
-                    <span id="selectedCount">0</span> dokumen terpilih
-                </div>
-                <div class="batch-buttons-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button type="button" class="btn btn-primary" id="btnBatchDownload" disabled style="background-color: #6366f1; border-color: #6366f1; white-space: nowrap;" onclick="submitBatchDoc('{{ route('dokumen.download_batch') }}')">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        Unduh Batch
-                    </button>
-                    @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
-                    <button type="button" class="btn btn-danger" id="btnBatchDelete" disabled style="background-color: #e53e3e; border-color: #e53e3e; color:#fff; white-space: nowrap;" onclick="submitBatchDoc('{{ route('dokumen.bulk-destroy') }}', 'Apakah Anda yakin ingin menghapus permanen semua dokumen yang dipilih? Data tidak bisa dikembalikan!')">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        Hapus Batch
-                    </button>
-                    <button type="button" class="btn btn-danger" style="background-color: #991b1b; border-color: #991b1b; color:#fff; white-space: nowrap;" onclick="if(confirm('Apakah Anda yakin ingin menghapus SELURUH dokumen yang ada di sistem?')) { if(confirm('Tindakan ini TIDAK BISA DIBATALKAN! Kamu benar-benar yakin ingin menghapus semua dokumen sekarang?')) { document.getElementById('deleteAllForm').submit(); } }">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        Hapus Semua
-                    </button>
+                <div class="doc-filter-actions">
+                    <button type="submit" class="doc-btn-filter">Filter</button>
+                    @if(request('search') || request('kategori') || request('tanggal') || request('user_id'))
+                        <a href="{{ route('dokumen.index') }}" class="doc-btn-reset">Reset</a>
                     @endif
                 </div>
-            </div>
+            </form>
+        </div>
 
-            <div class="table-wrap" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
-                <table style="width: 100%; min-width: 950px; border-collapse: collapse;">
+        <form action="{{ route('dokumen.download_batch') }}" method="POST" id="batchDownloadForm" style="display:none;">
+            @csrf
+            <div id="batchHiddenInputs"></div>
+        </form>
+
+        <div class="doc-batch-bar">
+            <div style="font-size: 12px; color: #475569; font-weight: 700;">
+                <span id="selectedCount">0</span> dokumen terpilih
+            </div>
+            <div class="doc-batch-btns">
+                <button type="button" class="doc-btn-batch doc-btn-batch--dl" id="btnBatchDownload" disabled onclick="submitBatchDoc('{{ route('dokumen.download_batch') }}')">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Unduh Batch</span>
+                </button>
+                @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
+                    <button type="button" class="doc-btn-batch doc-btn-batch--del" id="btnBatchDelete" disabled onclick="submitBatchDoc('{{ route('dokumen.bulk-destroy') }}', 'Hapus permanen semua dokumen yang dipilih?')">
+                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        <span>Hapus Batch</span>
+                    </button>
+                    <button type="button" class="doc-btn-batch doc-btn-batch--all" onclick="if(confirm('Hapus SELURUH dokumen di sistem?') && confirm('Tindakan ini tidak dapat dibatalkan. Lanjutkan?')) { document.getElementById('deleteAllForm').submit(); }">
+                        <span>Hapus Semua</span>
+                    </button>
+                @endif
+            </div>
+        </div>
+
+        <div class="doc-table-wrap">
+            <table class="doc-table">
                 <thead>
                     <tr>
-                        <th style="width: 40px; text-align: center;">
-                            <input type="checkbox" id="selectAll" style="cursor: pointer; width: 16px; height: 16px;">
-                        </th>
-                        <th style="min-width: 320px;">Nama Dokumen</th>
-                        <th style="min-width: 180px;">Kategori</th>
-                        <th style="min-width: 150px;">Informasi File</th>
-                        <th style="min-width: 200px;">Pemohon / Akun</th>
-                        <th style="min-width: 120px;">Tanggal</th>
-                        <th style="min-width: 120px; text-align: center;">Aksi</th>
+                        <th style="width: 38px; text-align: center;"><input type="checkbox" id="selectAll" style="cursor:pointer;"></th>
+                        <th style="width: 27%;">Nama Dokumen</th>
+                        <th style="width: 17%;">Kategori</th>
+                        <th style="width: 12%;">File</th>
+                        <th style="width: 16%;">Pemohon</th>
+                        <th style="width: 12%;">Tanggal</th>
+                        <th style="width: 16%; text-align: right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($dokumen as $item)
-                    <tr>
-                        <td style="text-align: center;">
-                            <input type="checkbox" name="dokumen_ids[]" value="{{ $item->id }}" class="doc-checkbox" style="cursor: pointer; width: 16px; height: 16px;">
-                        </td>
-                        <td style="min-width: 320px; padding: 12px 14px;">
-                            <strong>{{ $item->nama_dokumen }}</strong>
-                            @if($item->keterangan)
-                                <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">{{ Str::limit($item->keterangan, 50) }}</div>
-                            @endif
-                        </td>
-                        <td style="white-space: nowrap;"><span class="badge badge-gray">{{ $item->kategori ?? 'Umum' }}</span></td>
-                        <td>
-                            <span class="badge badge-blue">{{ strtoupper($item->tipe_file) }}</span>
-                            <span style="font-size:12px;color:var(--muted);margin-left:6px;">{{ $item->ukuran_file }}</span>
-                        </td>
                         @php
                             $pengajuInfo = null;
                             if (strpos($item->nama_dokumen, '[') === 0 && strpos($item->nama_dokumen, '] ') !== false) {
@@ -362,95 +531,122 @@
                             }
                             $finalName = $pengajuInfo ?: ($item->user->name ?? 'Admin');
                         @endphp
-                        <td>
-                            <span style="font-weight: 500; color: var(--ink);">{{ $finalName }}</span><br>
-                            <span style="font-size: 11px; color: var(--muted);">(Akun: PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }})</span>
-                        </td>
-                        <td style="white-space: nowrap;">{{ $item->created_at->format('d M Y, H:i') }}</td>
-                        <td style="white-space: nowrap;">
-                            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                                <a href="{{ route('dokumen.preview', $item->id) }}" target="_blank" class="btn btn-secondary btn-sm">
-                                    Lihat
-                                </a>
-                                <a href="{{ route('dokumen.download', $item->id) }}" class="btn btn-primary btn-sm">Unduh</a>
-                                @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
-                                <button type="submit" form="delete-form-{{ $item->id }}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');">Hapus</button>
+                        <tr>
+                            <td style="text-align: center;">
+                                <input type="checkbox" value="{{ $item->id }}" class="doc-checkbox" style="cursor:pointer;">
+                            </td>
+                            <td>
+                                <span class="doc-title-txt">{{ $item->nama_dokumen }}</span>
+                                @if($item->keterangan)
+                                    <span class="doc-sub-txt">{{ Str::limit($item->keterangan, 45) }}</span>
                                 @endif
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td>
+                                <span class="doc-cat-badge" title="{{ $item->kategori ?? 'Umum' }}">{{ $item->kategori ?? 'Umum' }}</span>
+                            </td>
+                            <td style="white-space: nowrap;">
+                                <span class="doc-ext-badge">{{ strtoupper($item->tipe_file) }}</span>
+                                <span style="font-size:11.5px; color:#64748B; margin-left:4px;">{{ $item->ukuran_file }}</span>
+                            </td>
+                            <td>
+                                <span style="font-weight:600; color:#0F172A; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ $finalName }}</span>
+                                <span style="font-size:11px; color:#64748B;">PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</span>
+                            </td>
+                            <td style="white-space: nowrap; color:#334155; font-size:12px;">
+                                {{ $item->created_at->format('d M Y') }}<br>
+                                <span style="font-size:11px; color:#64748B;">{{ $item->created_at->format('H:i') }} WIB</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="doc-row-actions">
+                                    <a href="{{ route('dokumen.preview', $item->id) }}" target="_blank" class="doc-act-btn doc-act-view">Lihat</a>
+                                    <a href="{{ route('dokumen.download', $item->id) }}" class="doc-act-btn doc-act-dl">Unduh</a>
+                                    @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
+                                        <button type="submit" form="delete-form-{{ $item->id }}" class="doc-act-btn doc-act-del" onclick="return confirm('Hapus dokumen ini?');">Hapus</button>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--muted);">
-                            Belum ada dokumen yang diunggah.
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 36px 20px; color: #64748B;">
+                                Belum ada dokumen yang sesuai filter.
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
-            </form>
+        </div>
 
-            @foreach($dokumen as $item)
+        @foreach($dokumen as $item)
             <form id="delete-form-{{ $item->id }}" action="{{ route('dokumen.destroy', $item->id) }}" method="POST" style="display:none;">
                 @csrf
                 @method('DELETE')
             </form>
-            @endforeach
+        @endforeach
 
-            <form id="deleteAllForm" action="{{ route('dokumen.destroy_all') }}" method="POST" style="display:none;">
-                @csrf
-            </form>
+        <form id="deleteAllForm" action="{{ route('dokumen.destroy_all') }}" method="POST" style="display:none;">
+            @csrf
+        </form>
 
-            <div style="margin-top: 20px;">
-                {{ $dokumen->links() }}
+        <div class="doc-pag-bar">
+            <span style="font-size:12px; color:#64748B;">
+                Menampilkan {{ $dokumen->firstItem() ?? 0 }}–{{ $dokumen->lastItem() ?? 0 }} dari {{ $dokumen->total() }} dokumen
+            </span>
+            <div>
+                {{ $dokumen->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    function submitBatchDoc(url, msg) {
-        if (msg && !confirm(msg)) return false;
-        const form = document.getElementById('batchDownloadForm');
-        if (form) {
+    <script>
+        function toggleDocUploadDrawer() {
+            const drawer = document.getElementById('docUploadDrawer');
+            if (drawer) drawer.classList.toggle('is-open');
+        }
+
+        function submitBatchDoc(url, msg) {
+            const checked = Array.from(document.querySelectorAll('.doc-checkbox:checked'));
+            if (!checked.length) return false;
+            if (msg && !confirm(msg)) return false;
+
+            const form = document.getElementById('batchDownloadForm');
+            const holder = document.getElementById('batchHiddenInputs');
+            if (!form || !holder) return false;
+
+            holder.innerHTML = '';
+            checked.forEach(cb => {
+                const inp = document.createElement('input');
+                inp.type = 'hidden';
+                inp.name = 'dokumen_ids[]';
+                inp.value = cb.value;
+                holder.appendChild(inp);
+            });
             form.action = url;
             form.submit();
         }
-    }
 
-    function openPreview(url, title) {
-        window.open(url, '_blank');
-    }
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.doc-checkbox');
+            const btnBatch = document.getElementById('btnBatchDownload');
+            const btnBatchDelete = document.getElementById('btnBatchDelete');
+            const countDisplay = document.getElementById('selectedCount');
 
-    // Script for Checkbox Batch Download
-    document.addEventListener('DOMContentLoaded', function() {
-        const selectAll = document.getElementById('selectAll');
-        const checkboxes = document.querySelectorAll('.doc-checkbox');
-        const btnBatch = document.getElementById('btnBatchDownload');
-        const btnBatchDelete = document.getElementById('btnBatchDelete');
-        const countDisplay = document.getElementById('selectedCount');
+            function updateState() {
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+                if (countDisplay) countDisplay.innerText = checkedCount;
+                if (btnBatch) btnBatch.disabled = checkedCount === 0;
+                if (btnBatchDelete) btnBatchDelete.disabled = checkedCount === 0;
+                if (selectAll) selectAll.checked = (checkedCount === checkboxes.length && checkboxes.length > 0);
+            }
 
-        function updateState() {
-            let checkedCount = 0;
-            checkboxes.forEach(cb => {
-                if(cb.checked) checkedCount++;
-            });
-            countDisplay.innerText = checkedCount;
-            if (btnBatch) btnBatch.disabled = checkedCount === 0;
-            if (btnBatchDelete) btnBatchDelete.disabled = checkedCount === 0;
-            selectAll.checked = (checkedCount === checkboxes.length && checkboxes.length > 0);
-        }
-
-        if(selectAll) {
-            selectAll.addEventListener('change', function() {
-                checkboxes.forEach(cb => cb.checked = this.checked);
-                updateState();
-            });
-        }
-
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', updateState);
+            if (selectAll) {
+                selectAll.addEventListener('change', function() {
+                    checkboxes.forEach(cb => cb.checked = this.checked);
+                    updateState();
+                });
+            }
+            checkboxes.forEach(cb => cb.addEventListener('change', updateState));
         });
-    });
-</script>
+    </script>
 @endsection

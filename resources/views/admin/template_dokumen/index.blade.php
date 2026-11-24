@@ -3,363 +3,404 @@
 @section('title', 'Kelola Template Dokumen - PATEN PAK MIKO')
 @section('page-title', 'Kelola Template Dokumen')
 
-@section('head-extra')
-<style>
-    .card-custom {
-        background: #ffffff;
-        border-radius: 6px;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 2px 6px rgba(0,38,66,0.02);
-        padding: 20px;
-        margin-bottom: 24px;
-    }
-    
-    .filters-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    
-    .search-filter-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        flex: 1;
-        align-items: center;
-    }
-    
-    .form-control-sm, .form-select-sm {
-        padding: 6px 12px;
-        border: 1.5px solid #CBD5E1;
-        border-radius: 4px;
-        font-size: 12.5px;
-        outline: none;
-        transition: all 0.2s ease;
-        height: 36px;
-        box-sizing: border-box;
-        color: #0F172A;
-    }
-    .form-control-sm:focus, .form-select-sm:focus {
-        border-color: #218AC9;
+@section('extra-styles')
+    @keyframes tplFadeUp {
+        from { opacity: 0; transform: translateY(5px); }
+        to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Pagination Fix */
-    .pagination {
+    .tpl-hero {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        padding: 15px 18px;
+        margin-bottom: 14px;
         display: flex;
-        padding-left: 0;
-        list-style: none;
-        gap: 4px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
         flex-wrap: wrap;
-        margin: 0;
-        align-items: center;
+        animation: tplFadeUp .2s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
-    .page-item .page-link {
-        padding: 6px 12px;
-        border: 1px solid #CBD5E1;
+    .tpl-hero-title { font-size: 17px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0 0 2px; }
+    .tpl-hero-sub { font-size: 12.5px; color: #64748B; margin: 0; }
+    .tpl-add-btn {
+        background: #003B64;
+        color: #FFFFFF;
+        border: none;
         border-radius: 4px;
-        color: #218AC9;
-        font-size: 12px;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #ffffff;
-    }
-    .page-item.active .page-link {
-        background: #218AC9;
-        color: white;
-        border-color: #218AC9;
-        font-weight: 700;
-    }
-    .page-item.disabled .page-link {
-        color: #94A3B8;
-        background: #F8FAFC;
-        cursor: not-allowed;
-    }
-    
-    .btn-action {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        padding: 6px 14px;
-        border-radius: 4px;
+        padding: 8px 14px;
+        font-family: inherit;
         font-size: 12.5px;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.18s ease;
-        border: none;
-        text-decoration: none;
-        height: 36px;
-        box-sizing: border-box;
-    }
-    
-    .btn-primary-custom {
-        background: #218AC9;
-        color: white !important;
-    }
-    .btn-primary-custom:hover {
-        background: #1A74AB;
-    }
-    
-    .table-responsive {
-        overflow-x: auto;
-        border-radius: 6px;
-        border: 1px solid #E2E8F0;
-    }
-    
-    .table-custom {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: left;
-        font-size: 13px;
-    }
-    
-    .table-custom th {
-        background: #F8FAFC;
-        color: #475569;
-        font-weight: 800;
-        padding: 10px 14px;
-        border-bottom: 1.5px solid #E2E8F0;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-size: 11px;
-    }
-    
-    .table-custom td {
-        padding: 12px 14px;
-        border-bottom: 1px solid #F1F5F9;
-        vertical-align: middle;
-    }
-    
-    .table-custom tbody tr:hover {
-        background-color: #F8FAFC;
-    }
-
-    .badge-file {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: 6px;
+    }
+    .tpl-add-btn:hover { background: #218AC9; }
+
+    .tpl-panel {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        overflow: hidden;
+        animation: tplFadeUp .24s cubic-bezier(0.22, 1, 0.36, 1) .04s both;
+    }
+    .tpl-filter-bar {
+        padding: 12px 16px;
+        background: #F8FAFC;
+        border-bottom: 1px solid #E8F0F6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .tpl-filter-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        flex: 1;
+    }
+    .tpl-input, .tpl-select {
+        height: 34px;
+        padding: 0 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 12.5px;
+        color: #0F172A;
+        background: #FFFFFF;
+        outline: none;
+    }
+    .tpl-input:focus, .tpl-select:focus { border-color: #218AC9; }
+    .tpl-btn-filter {
+        height: 34px;
+        padding: 0 13px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        background: #FFFFFF;
+        color: #003B64;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    .tpl-btn-filter:hover { background: #E3F0F9; border-color: #218AC9; }
+    .tpl-btn-reset {
+        height: 34px;
+        padding: 0 11px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        background: #FFFFFF;
+        color: #DC2626;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .tpl-table-wrap { width: 100%; overflow-x: auto; }
+    .tpl-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+    .tpl-table th {
+        padding: 10px 12px;
+        font-size: 10.5px;
+        font-weight: 800;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: #F8FAFC;
+        border-bottom: 1px solid #D6E4EF;
+        text-align: left;
+    }
+    .tpl-table td {
+        padding: 11px 12px;
+        border-bottom: 1px solid #EFF4F8;
+        vertical-align: middle;
+        font-size: 12.5px;
+    }
+    .tpl-table tbody tr:hover { background: #F8FAFC; }
+
+    .tpl-name { font-weight: 700; color: #003B64; font-size: 13px; display: block; word-break: break-word; }
+    .tpl-desc { font-size: 11px; color: #64748B; margin-top: 2px; display: block; }
+    .tpl-code {
+        display: inline-block;
+        margin-top: 4px;
+        background: #F1F5F9;
+        color: #0284C7;
+        border: 1px solid #CBD5E1;
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-family: 'DM Mono', monospace;
+        font-size: 10.5px;
+        font-weight: 600;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .tpl-cat-badge {
+        display: inline-block;
         padding: 3px 8px;
         border-radius: 4px;
+        background: #E3F0F9;
+        color: #003B64;
+        border: 1px solid #BFD9EC;
         font-size: 11px;
         font-weight: 700;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .badge-file {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 10.5px;
+        font-weight: 800;
         text-transform: uppercase;
     }
     .badge-docx { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
-    .badge-pdf { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
-    .badge-doc { background: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; }
+    .badge-pdf  { background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
+    .badge-doc  { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
 
     .badge-status {
-        padding: 4px 8px;
+        padding: 4px 9px;
         border-radius: 4px;
         font-size: 11px;
         font-weight: 700;
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
     }
-    .badge-active { background: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; }
-    .badge-inactive { background: #F1F5F9; color: #64748B; border: 1px solid #CBD5E1; }
+    .badge-active   { background: #DCFCE7; color: #166534; border-color: #BBF7D0; }
+    .badge-inactive { background: #F1F5F9; color: #64748B; border-color: #CBD5E1; }
 
-    /* Modal */
+    .tpl-actions {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px;
+    }
+    .tpl-icon-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: 1px solid transparent;
+        text-decoration: none;
+    }
+    .tpl-icon-view { background: #EFF6FF; color: #0284C7; border-color: #BFDBFE; }
+    .tpl-icon-view:hover { background: #218AC9; color: #FFFFFF; }
+    .tpl-icon-dl   { background: #DCFCE7; color: #166534; border-color: #BBF7D0; }
+    .tpl-icon-dl:hover { background: #16A34A; color: #FFFFFF; }
+    .tpl-icon-edit { background: #FEF3C7; color: #B45309; border-color: #FDE68A; }
+    .tpl-icon-edit:hover { background: #D97706; color: #FFFFFF; }
+    .tpl-icon-del  { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+    .tpl-icon-del:hover { background: #DC2626; color: #FFFFFF; }
+
+    /* Pagination */
+    .tpl-pag-bar {
+        padding: 12px 16px;
+        background: #F8FAFC;
+        border-top: 1px solid #E8F0F6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .pagination { display: flex; list-style: none; gap: 4px; margin: 0; padding: 0; flex-wrap: wrap; }
+    .page-item .page-link {
+        padding: 5px 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        color: #003B64;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        background: #FFFFFF;
+        display: inline-flex;
+    }
+    .page-item.active .page-link { background: #003B64; color: #FFFFFF; border-color: #003B64; }
+    .page-item.disabled .page-link { color: #94A3B8; background: #F1F5F9; }
+
+    /* Flat Modals */
     .modal-backdrop-custom {
         position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0, 38, 66, 0.6);
-        backdrop-filter: blur(4px);
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
         display: none;
         align-items: center;
         justify-content: center;
         z-index: 9999;
         padding: 16px;
     }
-    .modal-backdrop-custom.active {
-        display: flex;
-    }
+    .modal-backdrop-custom.active { display: flex; }
     .modal-box {
-        background: white;
-        border-radius: 6px;
+        background: #FFFFFF;
+        border-radius: 4px;
         width: 100%;
-        max-width: 580px;
-        box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        max-width: 520px;
         overflow: hidden;
-        animation: modalSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        border: 1px solid #E2E8F0;
-    }
-    @keyframes modalSlide {
-        from { transform: translateY(16px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        border: 1px solid #CBD5E1;
+        animation: tplFadeUp .18s ease-out both;
     }
     .modal-header-custom {
-        padding: 14px 20px;
-        background: #F8FAFC;
-        border-bottom: 1px solid #E2E8F0;
+        padding: 13px 18px;
+        background: #003B64;
+        color: #FFFFFF;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
-    .modal-title-custom {
-        font-size: 15px;
-        font-weight: 800;
-        color: #003B64;
-        margin: 0;
-    }
+    .modal-title-custom { font-size: 14.5px; font-weight: 700; margin: 0; color: #FFFFFF; }
     .modal-close-btn {
-        background: none;
-        border: none;
-        font-size: 20px;
-        color: #64748B;
+        background: rgba(255,255,255,0.14);
+        border: 1px solid rgba(255,255,255,0.22);
+        border-radius: 4px;
+        width: 26px;
+        height: 26px;
+        font-size: 16px;
+        color: #FFFFFF;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
-    .modal-body-custom {
-        padding: 20px;
-        max-height: 75vh;
-        overflow-y: auto;
-    }
+    .modal-body-custom { padding: 18px; max-height: 75vh; overflow-y: auto; }
     .modal-footer-custom {
-        padding: 14px 20px;
+        padding: 12px 18px;
         background: #F8FAFC;
-        border-top: 1px solid #E2E8F0;
+        border-top: 1px solid #E8F0F6;
         display: flex;
         justify-content: flex-end;
-        gap: 10px;
+        gap: 8px;
     }
-</style>
+    .m-label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 12px; color: #003B64; }
+
+    @media (max-width: 1024px) {
+        .tpl-table { table-layout: auto; min-width: 720px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .tpl-hero, .tpl-panel, .modal-box { animation: none !important; }
+    }
 @endsection
 
 @section('content')
-<!-- Header Card -->
-<div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 6px; padding: 18px 24px; margin-bottom: 20px; box-shadow: 0 2px 6px rgba(0,38,66,0.02); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+<div class="tpl-hero">
     <div>
-        <div style="font-size: 12px; color: #64748B; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-            <a href="{{ route('dashboard') }}" style="color: #218AC9; text-decoration: none; font-weight: 600;">Dashboard</a>
-            <span>›</span>
-            <span style="color: #64748B;">Kelola Template Dokumen</span>
-        </div>
-        <h1 style="font-size: 19px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0;">
-            Kelola Template Dokumen
-        </h1>
-        <p style="font-size: 12.5px; color: #64748B; margin: 4px 0 0;">Kelola master file template Word/PDF pendukung permohonan tata ruang & pertanahan.</p>
+        <h1 class="tpl-hero-title">Kelola Template Dokumen</h1>
+        <p class="tpl-hero-sub">Kelola master template Word/PDF untuk formulir permohonan dan acuan berkas.</p>
     </div>
+    <button type="button" class="tpl-add-btn" onclick="openAddModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Tambah Template</span>
+    </button>
 </div>
 
-<div class="card-custom">
-    @if(session('success'))
-        <div style="background: #DCFCE7; color: #15803D; border: 1px solid #86EFAC; padding: 10px 14px; border-radius: 4px; margin-bottom: 20px; font-size: 13px; font-weight: 700;">
-            ✓ {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div style="background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 10px 14px; border-radius: 4px; margin-bottom: 20px; font-size: 13px; font-weight: 700;">
-            ⚠️ {{ session('error') }}
-        </div>
-    @endif
-
-    <div class="filters-bar">
-        <form action="{{ route('admin.templates.index') }}" method="GET" class="search-filter-group">
-            <input type="text" name="search" class="form-control-sm" style="min-width: 220px;" placeholder="Cari nama / kode / keterangan..." value="{{ request('search') }}">
-            <select name="kategori" class="form-select-sm" onchange="this.form.submit()">
-                <option value="">-- Semua Kategori --</option>
+<div class="tpl-panel">
+    <div class="tpl-filter-bar">
+        <form action="{{ route('admin.templates.index') }}" method="GET" class="tpl-filter-form">
+            <input type="text" name="search" class="tpl-input" style="flex:1; min-width:190px; max-width:300px;" placeholder="Cari nama atau kode template..." value="{{ request('search') }}">
+            <select name="kategori" class="tpl-select" onchange="this.form.submit()">
+                <option value="">Semua Kategori</option>
                 @foreach($kategoriList as $kat)
                     <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
                 @endforeach
             </select>
-            <button type="submit" class="btn-action" style="background:#F1F5F9; color:#475569; border:1px solid #CBD5E1;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg> Cari
-            </button>
+            <button type="submit" class="tpl-btn-filter">Cari</button>
             @if(request('search') || request('kategori'))
-                <a href="{{ route('admin.templates.index') }}" class="btn-action" style="background:#F8FAFC; color:#64748B; border:1px solid #CBD5E1;">Reset</a>
+                <a href="{{ route('admin.templates.index') }}" class="tpl-btn-reset">Reset</a>
             @endif
         </form>
-
-        <button type="button" class="btn-action btn-primary-custom" onclick="openAddModal()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Tambah Template Dokumen
-        </button>
+        <span style="font-size:12px; font-weight:700; color:#475569;">{{ $templates->total() }} Template</span>
     </div>
 
-    <div class="table-responsive">
-        <table class="table-custom">
+    <div class="tpl-table-wrap">
+        <table class="tpl-table">
             <thead>
                 <tr>
-                    <th style="width: 40px;">No</th>
-                    <th>Nama Template</th>
-                    <th>Kode Template</th>
-                    <th>Kategori</th>
-                    <th>Format & Ukuran</th>
-                    <th style="text-align: center;">Status</th>
-                    <th style="text-align: center; width: 140px;">Aksi</th>
+                    <th style="width: 44px; text-align:center;">No</th>
+                    <th style="width: 36%;">Template &amp; Kode</th>
+                    <th style="width: 20%;">Kategori</th>
+                    <th style="width: 14%;">Format</th>
+                    <th style="width: 12%; text-align: center;">Status</th>
+                    <th style="width: 18%; text-align: right;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($templates as $index => $item)
-                <tr>
-                    <td style="font-weight: 600; color: #64748B;">{{ $templates->firstItem() + $index }}</td>
-                    <td>
-                        <strong style="color: #003B64; font-size: 13px;">{{ $item->nama_template }}</strong>
-                        @if($item->keterangan)
-                            <div style="color: #64748B; font-size: 11.5px; margin-top: 2px;">{{ Str::limit($item->keterangan, 70) }}</div>
-                        @endif
-                    </td>
-                    <td>
-                        <code style="background: #F1F5F9; color: #0284C7; border: 1px solid #BAE6FD; padding: 3px 8px; border-radius: 4px; font-size: 11.5px; font-weight: 700; white-space: nowrap;">{{ $item->kode_template }}</code>
-                    </td>
-                    <td>
-                        <span style="background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; white-space: nowrap; display: inline-block;">
-                            {{ $item->kategori }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="badge-file badge-{{ $item->tipe_file }}">
-                            {{ strtoupper($item->tipe_file) }}
-                        </span>
-                        <span style="color: #64748B; font-size: 11px; margin-left: 4px;">{{ $item->ukuran_file }}</span>
-                    </td>
-                    <td style="text-align: center;">
-                        <form action="{{ route('admin.templates.toggle_active', $item->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="badge-status {{ $item->is_active ? 'badge-active' : 'badge-inactive' }}" style="border:none; cursor:pointer;" title="Klik untuk mengubah status">
-                                {{ $item->is_active ? '● Aktif' : '○ Non-Aktif' }}
-                            </button>
-                        </form>
-                    </td>
-                    <td style="text-align: center;">
-                        <div style="display: flex; gap: 4px; justify-content: center;">
-                            <a href="{{ route('admin.templates.preview', $item->id) }}" target="_blank" class="btn-action" style="background:#EFF6FF; color:#0284C7; border:1px solid #BFDBFE; padding:0; width:30px; height:30px;" title="Pratinjau File">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            </a>
-                            <a href="{{ route('admin.templates.download', $item->id) }}" class="btn-action" style="background:#DCFCE7; color:#15803D; border:1px solid #86EFAC; padding:0; width:30px; height:30px;" title="Unduh File">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            </a>
-                            <button type="button" class="btn-action" style="background:#FEF3C7; color:#D97706; border:1px solid #FDE68A; padding:0; width:30px; height:30px;" onclick='openEditModal(@json($item))' title="Edit Template">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                            </button>
-                            <form action="{{ route('admin.templates.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus template {{ $item->nama_template }}?');" style="display:inline;">
+                    <tr>
+                        <td style="text-align:center; font-weight: 700; color: #64748B;">{{ $templates->firstItem() + $index }}</td>
+                        <td>
+                            <span class="tpl-name">{{ $item->nama_template }}</span>
+                            @if($item->keterangan)
+                                <span class="tpl-desc">{{ Str::limit($item->keterangan, 60) }}</span>
+                            @endif
+                            <code class="tpl-code" title="{{ $item->kode_template }}">{{ $item->kode_template }}</code>
+                        </td>
+                        <td>
+                            <span class="tpl-cat-badge" title="{{ $item->kategori }}">{{ $item->kategori }}</span>
+                        </td>
+                        <td style="white-space: nowrap;">
+                            <span class="badge-file badge-{{ $item->tipe_file }}">{{ strtoupper($item->tipe_file) }}</span>
+                            <span style="color: #64748B; font-size: 11px; margin-left: 4px;">{{ $item->ukuran_file }}</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <form action="{{ route('admin.templates.toggle_active', $item->id) }}" method="POST" style="display:inline;">
                                 @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-action" style="background:#DC2626; color:#ffffff; border:1px solid #DC2626; padding:0; width:30px; height:30px;" title="Hapus Template">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                <button type="submit" class="badge-status {{ $item->is_active ? 'badge-active' : 'badge-inactive' }}" title="Klik untuk ubah status">
+                                    {{ $item->is_active ? 'Aktif' : 'Non-Aktif' }}
                                 </button>
                             </form>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="tpl-actions">
+                                <a href="{{ route('admin.templates.preview', $item->id) }}" target="_blank" class="tpl-icon-btn tpl-icon-view" title="Lihat">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </a>
+                                <a href="{{ route('admin.templates.download', $item->id) }}" class="tpl-icon-btn tpl-icon-dl" title="Unduh">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </a>
+                                <button type="button" class="tpl-icon-btn tpl-icon-edit" onclick='openEditModal(@json($item))' title="Edit">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                </button>
+                                <form action="{{ route('admin.templates.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus template {{ $item->nama_template }}?');" style="display:inline; margin:0;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="tpl-icon-btn tpl-icon-del" title="Hapus">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
                 @empty
-                <tr>
-                    <td colspan="7" style="text-align: center; padding: 40px; color: #64748B;">
-                        Belum ada template dokumen yang didaftarkan.
-                    </td>
-                </tr>
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 36px; color: #64748B;">
+                            Belum ada template dokumen.
+                        </td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 
-    <div style="margin-top: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div class="tpl-pag-bar">
         <div style="font-size: 12px; color: #64748B; font-weight: 500;">
-            Menampilkan {{ $templates->firstItem() ?? 0 }} - {{ $templates->lastItem() ?? 0 }} dari total {{ $templates->total() }} template
+            Menampilkan {{ $templates->firstItem() ?? 0 }}–{{ $templates->lastItem() ?? 0 }} dari {{ $templates->total() }} template
         </div>
         <div>
             {{ $templates->links('pagination::bootstrap-4') }}
@@ -368,115 +409,108 @@
 </div>
 
 <!-- Modal Tambah Template -->
-<div id="addModal" class="modal-backdrop-custom">
+<div id="addModal" class="modal-backdrop-custom" onclick="if(event.target === this) closeAddModal()">
     <div class="modal-box">
         <div class="modal-header-custom">
-            <h3 class="modal-title-custom" style="display:flex; align-items:center; gap:8px;">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#218AC9" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-                Tambah Template Dokumen
-            </h3>
+            <h3 class="modal-title-custom">Tambah Template Dokumen</h3>
             <button type="button" class="modal-close-btn" onclick="closeAddModal()">&times;</button>
         </div>
         <form action="{{ route('admin.templates.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body-custom">
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Kategori Template <span style="color:#DC2626;">*</span></label>
-                    <select name="kategori" id="add_kategori" class="form-select-sm" style="width:100%; font-size:12.5px; border-radius:4px;" required onchange="autoFillKode('add')">
-                        <option value="Formulir Pertek">Formulir Pertek (Template Word PTP Utama)</option>
-                        <option value="Contoh Format Requirements">Contoh Format Requirements (Acuan Persyaratan Pemohon)</option>
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">Kategori Template <span style="color:#DC2626;">*</span></label>
+                    <select name="kategori" id="add_kategori" class="tpl-select" style="width:100%;" required onchange="autoFillKode('add')">
+                        <option value="Formulir Pertek">Formulir Pertek (Template Word PTP)</option>
+                        <option value="Contoh Format Requirements">Contoh Format Persyaratan Pemohon</option>
                         <option value="Surat Kuasa">Surat Kuasa</option>
                         <option value="Surat Pernyataan">Surat Pernyataan</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Nama Template <span style="color:#DC2626;">*</span></label>
-                    <input type="text" name="nama_template" id="add_nama_template" class="form-control-sm" style="width:100%; border-radius:4px;" required placeholder="Contoh: Formulir Pertek 2026 Template" oninput="autoFillKode('add')">
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">Nama Template <span style="color:#DC2626;">*</span></label>
+                    <input type="text" name="nama_template" id="add_nama_template" class="tpl-input" style="width:100%;" required placeholder="Contoh: Formulir Pertek 2026" oninput="autoFillKode('add')">
                 </div>
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Kode Unik Template <span style="color:#DC2626;">*</span></label>
-                    <input type="text" name="kode_template" id="add_kode_template" class="form-control-sm" style="width:100%; border-radius:4px;" required placeholder="Contoh: pertek_2026">
-                    <small style="color:#64748B; font-size:11px; margin-top:4px; display:block;">Otomatis terisi atau gunakan huruf kecil dan garis bawah (`_`). Dipakai sistem untuk mengacu ke template ini.</small>
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">Kode Unik Template <span style="color:#DC2626;">*</span></label>
+                    <input type="text" name="kode_template" id="add_kode_template" class="tpl-input" style="width:100%; font-family:monospace;" required placeholder="contoh: pertek_2026">
                 </div>
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">File Template (.docx, .doc, .pdf) <span style="color:#DC2626;">*</span></label>
-                    <input type="file" name="file" class="form-control-sm" style="width:100%; border-radius:4px;" accept=".docx,.doc,.pdf" required>
-                    <small style="color:#64748B; font-size:11px; margin-top:4px; display:block;">Maksimal ukuran file: 20 MB.</small>
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">File Template (.docx, .doc, .pdf, Maks 20MB) <span style="color:#DC2626;">*</span></label>
+                    <input type="file" name="file" class="tpl-input" style="width:100%; padding:4px 8px;" accept=".docx,.doc,.pdf" required>
                 </div>
                 <div>
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Keterangan / Catatan</label>
-                    <textarea name="keterangan" class="form-control-sm" style="width:100%; height:80px; resize:none; border-radius:4px;" placeholder="Penjelasan kegunaan template..."></textarea>
+                    <label class="m-label">Keterangan (Opsional)</label>
+                    <textarea name="keterangan" class="tpl-input" style="width:100%; height:68px; padding:8px 10px; resize:none;" placeholder="Penjelasan singkat kegunaan template..."></textarea>
                 </div>
             </div>
             <div class="modal-footer-custom">
-                <button type="button" class="btn-action" style="background:#F1F5F9; color:#475569; border:1px solid #CBD5E1;" onclick="closeAddModal()">Batal</button>
-                <button type="submit" class="btn-action btn-primary-custom">Simpan Template</button>
+                <button type="button" class="tpl-btn-filter" onclick="closeAddModal()">Batal</button>
+                <button type="submit" class="tpl-add-btn">Simpan Template</button>
             </div>
         </form>
     </div>
 </div>
 
 <!-- Modal Edit Template -->
-<div id="editModal" class="modal-backdrop-custom">
+<div id="editModal" class="modal-backdrop-custom" onclick="if(event.target === this) closeEditModal()">
     <div class="modal-box">
         <div class="modal-header-custom">
-            <h3 class="modal-title-custom" style="display:flex; align-items:center; gap:8px;">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#218AC9" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit / Ganti File Template
-            </h3>
+            <h3 class="modal-title-custom">Edit / Ganti File Template</h3>
             <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
         </div>
         <form id="editForm" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="modal-body-custom">
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Nama Template <span style="color:#DC2626;">*</span></label>
-                    <input type="text" id="edit_nama_template" name="nama_template" class="form-control-sm" style="width:100%; border-radius:4px;" required>
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">Nama Template <span style="color:#DC2626;">*</span></label>
+                    <input type="text" id="edit_nama_template" name="nama_template" class="tpl-input" style="width:100%;" required>
                 </div>
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Kode Unik Template <span style="color:#DC2626;">*</span></label>
-                    <input type="text" id="edit_kode_template" name="kode_template" class="form-control-sm" style="width:100%; border-radius:4px;" required>
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">Kode Unik Template <span style="color:#DC2626;">*</span></label>
+                    <input type="text" id="edit_kode_template" name="kode_template" class="tpl-input" style="width:100%; font-family:monospace;" required>
                 </div>
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Kategori Template <span style="color:#DC2626;">*</span></label>
-                    <select id="edit_kategori" name="kategori" class="form-select-sm" style="width:100%; font-size:12.5px; border-radius:4px;" required>
-                        <option value="Formulir Pertek">Formulir Pertek (Template Word PTP Utama)</option>
-                        <option value="Contoh Format Requirements">Contoh Format Requirements (Acuan Persyaratan Pemohon)</option>
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">Kategori Template <span style="color:#DC2626;">*</span></label>
+                    <select id="edit_kategori" name="kategori" class="tpl-select" style="width:100%;" required>
+                        <option value="Formulir Pertek">Formulir Pertek (Template Word PTP)</option>
+                        <option value="Contoh Format Requirements">Contoh Format Persyaratan Pemohon</option>
                         <option value="Surat Kuasa">Surat Kuasa</option>
                         <option value="Surat Pernyataan">Surat Pernyataan</option>
                         <option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
-                <div style="margin-bottom: 14px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Ganti File Template (Opsional)</label>
-                    <input type="file" name="file" class="form-control-sm" style="width:100%; border-radius:4px;" accept=".docx,.doc,.pdf">
-                    <small style="color:#64748B; font-size:11px; margin-top:4px; display:block;">Biarkan kosong jika tidak ingin mengganti file fisik template.</small>
+                <div style="margin-bottom: 12px;">
+                    <label class="m-label">Ganti File Template (Opsional)</label>
+                    <input type="file" name="file" class="tpl-input" style="width:100%; padding:4px 8px;" accept=".docx,.doc,.pdf">
+                    <small style="color:#64748B; font-size:11px; margin-top:3px; display:block;">Kosongkan jika tidak ingin mengganti file fisik.</small>
                 </div>
                 <div>
-                    <label style="display:block; font-weight:700; margin-bottom:6px; font-size:12.5px; color:#003B64;">Keterangan / Catatan</label>
-                    <textarea id="edit_keterangan" name="keterangan" class="form-control-sm" style="width:100%; height:80px; resize:none; border-radius:4px;"></textarea>
+                    <label class="m-label">Keterangan</label>
+                    <textarea id="edit_keterangan" name="keterangan" class="tpl-input" style="width:100%; height:68px; padding:8px 10px; resize:none;"></textarea>
                 </div>
             </div>
             <div class="modal-footer-custom">
-                <button type="button" class="btn-action" style="background:#F1F5F9; color:#475569; border:1px solid #CBD5E1;" onclick="closeEditModal()">Batal</button>
-                <button type="submit" class="btn-action btn-primary-custom">Simpan Perubahan</button>
+                <button type="button" class="tpl-btn-filter" onclick="closeEditModal()">Batal</button>
+                <button type="submit" class="tpl-add-btn">Simpan Perubahan</button>
             </div>
         </form>
     </div>
 </div>
+@endsection
 
+@section('scripts')
 <script>
     function autoFillKode(prefix) {
         const kat = document.getElementById(prefix + '_kategori').value;
         const nama = document.getElementById(prefix + '_nama_template').value;
         const kodeInput = document.getElementById(prefix + '_kode_template');
-        
+
         if (kat === 'Formulir Pertek') {
             kodeInput.value = 'pertek_2026';
         } else if (nama.trim() !== '') {
-            // Slugify nama template
             kodeInput.value = nama.toLowerCase()
                 .replace(/[^a-z0-9]/g, '_')
                 .replace(/_+/g, '_')
@@ -484,12 +518,8 @@
         }
     }
 
-    function openAddModal() {
-        document.getElementById('addModal').classList.add('active');
-    }
-    function closeAddModal() {
-        document.getElementById('addModal').classList.remove('active');
-    }
+    function openAddModal() { document.getElementById('addModal').classList.add('active'); }
+    function closeAddModal() { document.getElementById('addModal').classList.remove('active'); }
 
     function openEditModal(item) {
         document.getElementById('editForm').action = "{{ url('/admin/templates') }}/" + item.id;
@@ -499,8 +529,13 @@
         document.getElementById('edit_keterangan').value = item.keterangan || '';
         document.getElementById('editModal').classList.add('active');
     }
-    function closeEditModal() {
-        document.getElementById('editModal').classList.remove('active');
-    }
+    function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAddModal();
+            closeEditModal();
+        }
+    });
 </script>
 @endsection

@@ -3,392 +3,401 @@
 @section('title', 'Pengelolaan Berkas - PATEN PAK MIKO')
 @section('page-title', 'Pengelolaan Berkas')
 
-@section('head-extra')
-<style>
-    /* Filters */
-    .filters { display: flex; gap: 12px; margin-bottom: 20px; align-items: center; }
-    .filters form { display: flex; gap: 12px; width: 100%; }
-    .filters select, .filters input { padding: 8px 12px; border: 1.5px solid var(--line); border-radius: var(--r-md); font-size: 13px; }
-    input[type="date"] { background-color: #ffffff !important; color: #0f172a !important; }
+@section('extra-styles')
+    @keyframes berkasFadeUp {
+        from { opacity: 0; transform: translateY(5px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
 
-    /* Pagination Fix (Bootstrap Style) */
-    .pagination {
+    .berkas-hero {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        padding: 15px 18px;
+        margin-bottom: 14px;
         display: flex;
-        padding-left: 0;
-        list-style: none;
-        gap: 4px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
         flex-wrap: wrap;
-        margin-top: 20px;
+        animation: berkasFadeUp .2s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .berkas-hero-title { font-size: 17px; font-weight: 800; color: #003B64; letter-spacing: -0.02em; margin: 0 0 2px; }
+    .berkas-hero-sub { font-size: 12.5px; color: #64748B; margin: 0; }
+    .berkas-toggle-upload {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #003B64;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 14px;
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    .berkas-toggle-upload:hover { background: #218AC9; }
+
+    .berkas-upload-drawer {
+        display: none;
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        margin-bottom: 14px;
+        overflow: hidden;
+        animation: berkasFadeUp .18s ease-out both;
+    }
+    .berkas-upload-drawer.is-open { display: block; }
+    .berkas-drawer-head {
+        padding: 12px 16px;
+        background: #F8FAFC;
+        border-bottom: 1px solid #E8F0F6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .berkas-drawer-head h2 { font-size: 14px; font-weight: 800; color: #003B64; margin: 0; }
+    .berkas-upload-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .berkas-panel {
+        background: #FFFFFF;
+        border: 1px solid #D6E4EF;
+        border-radius: 4px;
+        overflow: hidden;
+        animation: berkasFadeUp .24s cubic-bezier(0.22, 1, 0.36, 1) .04s both;
+    }
+    .berkas-panel-head {
+        padding: 13px 16px;
+        background: #F8FAFC;
+        border-bottom: 1px solid #E8F0F6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .berkas-panel-head h2 { font-size: 14.5px; font-weight: 800; color: #003B64; margin: 0; }
+    .berkas-total-pill {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #003B64;
+        background: #E3F0F9;
+        border: 1px solid #BFD9EC;
+        padding: 2px 8px;
+        border-radius: 4px;
+    }
+
+    .berkas-filter-bar {
+        padding: 12px 16px;
+        border-bottom: 1px solid #E8F0F6;
+        background: #FFFFFF;
+    }
+    .berkas-filter-grid {
+        display: grid;
+        grid-template-columns: minmax(180px, 1.5fr) 150px minmax(180px, 1fr) auto;
+        gap: 8px;
         align-items: center;
     }
-    .page-item .page-link {
-        padding: 6px 12px;
-        border: 1px solid var(--line);
-        border-radius: var(--r-md);
-        color: var(--blue);
-        font-size: 13px;
+    .b-input, .b-select {
+        width: 100%;
+        height: 34px;
+        padding: 0 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 12.5px;
+        color: #0F172A;
+        background: #FFFFFF;
+        outline: none;
+    }
+    .b-input:focus, .b-select:focus { border-color: #218AC9; }
+    .b-btn-primary {
+        height: 34px;
+        padding: 0 14px;
+        border: none;
+        border-radius: 4px;
+        background: #003B64;
+        color: #FFFFFF;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+    .b-btn-primary:hover { background: #218AC9; }
+    .b-btn-reset {
+        height: 34px;
+        padding: 0 11px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        background: #FFFFFF;
+        color: #DC2626;
+        font-size: 12px;
+        font-weight: 700;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        background: #fff;
-    }
-    .page-item.active .page-link {
-        background: var(--blue);
-        color: white;
-        border-color: var(--blue);
-        font-weight: 700;
-    }
-    .page-item.disabled .page-link {
-        color: #a0aec0;
-        background: #f8fafc;
-        cursor: not-allowed;
-    }
-    nav[role="navigation"] { width: 100%; display: flex; justify-content: center; }
-    @media (min-width: 640px) {
-        nav[role="navigation"] { justify-content: flex-start; }
     }
 
-    /* ─── STYLE MODAL PREVIEW ───────────────── */
-    .modal-backdrop {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 1040;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease;
-        backdrop-filter: blur(2px);
-    }
-    .modal-backdrop.show {
-        opacity: 1;
-        visibility: visible;
-    }
-    .modal-slide {
-        position: fixed;
-        top: 0; right: -600px;
-        width: 100%; max-width: 600px;
-        height: 100vh;
-        background: #fff;
-        z-index: 1050;
-        box-shadow: -4px 0 24px rgba(0,0,0,0.1);
-        transition: right 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        display: flex;
-        flex-direction: column;
-    }
-    .modal-slide.open {
-        right: 0;
-    }
-    .modal-header {
-        padding: 20px 24px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: var(--surface);
-    }
-    .modal-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--ink);
-    }
-    .btn-close {
-        background: none; border: none;
-        font-size: 24px; color: var(--muted);
-        cursor: pointer; padding: 0;
-        line-height: 1; transition: color 0.2s;
-    }
-    .btn-close:hover { color: var(--red); }
-    .modal-body {
-        flex: 1;
-        padding: 0;
-        overflow: hidden;
-    }
-    #previewFrame {
-        width: 100%; height: 100%;
-        border: none; background: #f8fafc;
-    }
-
-    /* ─── ENHANCED UI ───────────────────────── */
-    .filter-card {
-        background: #f8fafc;
-        border: 1px solid var(--line);
-        border-radius: var(--r-md);
-        padding: 16px;
-        margin-bottom: 20px;
-    }
-    .filter-grid {
-        display: grid;
-        grid-template-columns: minmax(200px, 1.5fr) 1fr 1fr 1.2fr auto;
-        gap: 12px;
-        align-items: center;
-    }
-    @media (max-width: 900px) {
-        .filter-grid { grid-template-columns: 1fr 1fr; }
-        .filter-grid .search-col { grid-column: 1 / -1; }
-        .filter-grid .action-col { grid-column: 1 / -1; display: flex; gap: 8px; }
-    }
-    @media (max-width: 640px) {
-        .filter-card { padding: 12px; }
-        .filter-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
-        .filter-grid .action-col { grid-column: 1 / -1; display: flex; gap: 8px; width: 100%; }
-        .filter-grid .action-col .btn { flex: 1; justify-content: center; }
-        .panel-body button[type="submit"] { width: 100%; justify-content: center; }
-        .table-wrap { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; width: 100% !important; }
-        .table-modern { min-width: 780px !important; }
-        .table-modern th, .table-modern td { white-space: nowrap !important; }
-    }
-    .filter-grid .form-control {
-        padding: 8px 12px;
-        font-size: 13px;
-        height: 38px;
-    }
-    
-    .table-modern {
-        border-collapse: separate;
-        border-spacing: 0;
-        width: 100%;
-    }
-    .table-modern th {
-        background: #f1f5f9;
+    .berkas-table-wrap { width: 100%; overflow-x: auto; }
+    .berkas-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .berkas-table th {
+        padding: 10px 12px;
+        font-size: 10.5px;
+        font-weight: 800;
         color: #475569;
-        font-weight: 600;
-        font-size: 12px;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 12px 16px;
-        border-bottom: 2px solid var(--line);
+        letter-spacing: 0.04em;
+        background: #F8FAFC;
+        border-bottom: 1px solid #D6E4EF;
+        text-align: left;
     }
-    .table-modern td {
-        padding: 16px;
+    .berkas-table td {
+        padding: 11px 12px;
+        border-bottom: 1px solid #EFF4F8;
         vertical-align: middle;
-        border-bottom: 1px solid var(--line);
-        background: #fff;
-        transition: background 0.2s;
+        font-size: 12.5px;
     }
-    .table-modern tbody tr:hover td {
-        background: #f8fafc;
-    }
-    
+    .berkas-table tbody tr:hover { background: #F8FAFC; }
+
     .file-icon-box {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 36px; height: 36px;
-        border-radius: var(--r-md);
-        font-weight: 700; font-size: 11px;
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        font-weight: 800;
+        font-size: 10.5px;
     }
-    .bg-pdf { background: #fee2e2; color: #ef4444; }
-    .bg-img { background: #e0e7ff; color: #6366f1; }
-    .bg-doc { background: #dbeafe; color: #3b82f6; }
-    .bg-def { background: #f1f5f9; color: #64748b; }
+    .bg-pdf { background: #FEE2E2; color: #DC2626; }
+    .bg-img { background: #E3F0F9; color: #003B64; }
+    .bg-doc { background: #DBEAFE; color: #1E40AF; }
+    .bg-def { background: #F1F5F9; color: #475569; }
 
-    .btn-action-sm {
-        display: inline-flex; align-items: center; justify-content: center;
-        padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;
-        transition: all 0.2s; text-decoration: none; border: none; cursor: pointer; gap: 4px;
+    .b-badge {
+        display: inline-block;
+        padding: 2px 7px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
     }
-    .btn-action-light { background: #f1f5f9; color: #475569; }
-    .btn-action-light:hover { background: #e2e8f0; color: #0f172a; }
-    .btn-action-blue { background: #e0f2fe; color: #0369a1; }
-    .btn-action-blue:hover { background: #bae6fd; color: #0c4a6e; }
-    .btn-action-red { background: #fee2e2; color: #b91c1c; }
-    .btn-action-red:hover { background: #fecaca; color: #7f1d1d; }
-</style>
+    .b-badge--cat { background: #F1F5F9; border: 1px solid #CBD5E1; color: #334155; }
+    .b-badge--ptsp { background: #DCFCE7; border: 1px solid #BBF7D0; color: #166534; font-weight: 700; }
+
+    .b-actions { display: flex; justify-content: flex-end; gap: 5px; flex-wrap: nowrap; }
+    .b-act-btn {
+        height: 28px;
+        padding: 0 9px;
+        border-radius: 4px;
+        font-size: 11.5px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        white-space: nowrap;
+    }
+    .b-act-view { background: #F1F5F9; color: #334155; border-color: #CBD5E1; }
+    .b-act-view:hover { background: #E2E8F0; color: #003B64; }
+    .b-act-dl { background: #218AC9; color: #FFFFFF; }
+    .b-act-dl:hover { background: #003B64; color: #FFFFFF; }
+    .b-act-del { background: #FEF2F2; color: #DC2626; border-color: #FECACA; }
+    .b-act-del:hover { background: #DC2626; color: #FFFFFF; border-color: #DC2626; }
+
+    .berkas-pag-bar {
+        padding: 12px 16px;
+        background: #F8FAFC;
+        border-top: 1px solid #E8F0F6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .pagination { display: flex; list-style: none; gap: 4px; margin: 0; padding: 0; flex-wrap: wrap; }
+    .page-item .page-link {
+        padding: 5px 10px;
+        border: 1px solid #CBD5E1;
+        border-radius: 4px;
+        color: #003B64;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        background: #FFFFFF;
+        display: inline-flex;
+    }
+    .page-item.active .page-link { background: #003B64; color: #FFFFFF; border-color: #003B64; }
+    .page-item.disabled .page-link { color: #94A3B8; background: #F1F5F9; }
+
+    @media (max-width: 1024px) {
+        .berkas-filter-grid { grid-template-columns: 1fr 1fr; }
+        .berkas-upload-grid { grid-template-columns: 1fr; }
+        .berkas-table { table-layout: auto; min-width: 760px; }
+    }
+    @media (max-width: 640px) {
+        .berkas-filter-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .berkas-hero, .berkas-upload-drawer, .berkas-panel { animation: none !important; }
+    }
 @endsection
 
 @section('content')
-<div class="page-header" style="flex-direction: row; justify-content: space-between; align-items: flex-end;">
-    <div class="page-header-left">
-        <div class="breadcrumb">
-            <a href="{{ route('dashboard') }}">Dashboard</a>
-            <span>›</span>
-            <span>Pengelolaan Berkas</span>
+    <div class="berkas-hero">
+        <div>
+            <h1 class="berkas-hero-title">Pengelolaan Berkas PTSP</h1>
+            <p class="berkas-hero-sub">Unggah dan kelola dokumen hasil kerja instansi secara mandiri.</p>
         </div>
-        <h1>Pengelolaan Berkas</h1>
-        <p>Upload dan kelola dokumen hasil kerja PTSP secara mandiri. Tidak terkait data pengajuan pemohon.</p>
+        <button type="button" class="berkas-toggle-upload" onclick="toggleBerkasDrawer()">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            <span>Unggah Berkas</span>
+        </button>
     </div>
-</div>
 
-@if(session('success'))
-    <div class="alert alert-success">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span>{{ session('success') }}</span>
-    </div>
-@endif
-@if(session('error'))
-    <div class="alert alert-error">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        <span>{{ session('error') }}</span>
-    </div>
-@endif
-@if ($errors->any())
-    <div class="alert alert-error">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        <ul style="margin-left: 20px;">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+    @if($errors->any())
+        <div class="alert alert-error" style="border-radius:4px; margin-bottom:14px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <ul style="margin-left: 16px;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-<div class="panel">
-    <div class="panel-head">
-        <h2>Unggah Berkas Baru</h2>
-    </div>
-    <div class="panel-body">
-        <form action="{{ route('berkas.store') }}" method="POST" enctype="multipart/form-data">
+    <!-- Collapsible Upload Drawer -->
+    <div id="berkasUploadDrawer" class="berkas-upload-drawer">
+        <div class="berkas-drawer-head">
+            <h2>Unggah Berkas Baru</h2>
+            <button type="button" onclick="toggleBerkasDrawer()" style="background:none;border:none;font-size:18px;color:#64748B;cursor:pointer;line-height:1;">&times;</button>
+        </div>
+        <form action="{{ route('berkas.store') }}" method="POST" enctype="multipart/form-data" style="padding:16px;">
             @csrf
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">Judul / Nama Dokumen <span style="color:#e53e3e;">*</span></label>
-                    <input type="text" name="nama_berkas" class="form-control" required placeholder="Contoh: Sertifikat PKKPR No. 001/2026">
+            <div class="berkas-upload-grid">
+                <div>
+                    <label style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">Judul Dokumen <span style="color:#DC2626;">*</span></label>
+                    <input type="text" name="nama_berkas" class="b-input" required placeholder="Contoh: Sertifikat PKKPR No. 001/2026">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Kategori Dokumen <span style="color:#e53e3e;">*</span></label>
-                    <select name="kategori" class="form-control" required>
+                <div>
+                    <label style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">Kategori Dokumen <span style="color:#DC2626;">*</span></label>
+                    <select name="kategori" class="b-select" required>
                         <option value="">-- Pilih Kategori --</option>
-                        <optgroup label="📄 Dokumen PKKPR Berusaha">
+                        <optgroup label="Dokumen PKKPR Berusaha">
                             <option value="Dokumen PKKPR Final (PTSP)">Dokumen PKKPR Final (PTSP)</option>
                             <option value="Sertifikat PKKPR Berusaha">Sertifikat PKKPR Berusaha</option>
                             <option value="SK PKKPR Berusaha">SK PKKPR Berusaha</option>
                         </optgroup>
-                        <optgroup label="📄 Dokumen Pertimbangan Teknis">
+                        <optgroup label="Dokumen Pertimbangan Teknis">
                             <option value="Pertek PKKPR Berusaha">Pertek PKKPR Berusaha</option>
                             <option value="Pertek PKKPR Non Berusaha">Pertek PKKPR Non Berusaha</option>
                             <option value="Pertek Kebijakan Khusus">Pertek Kebijakan Khusus</option>
                             <option value="Pertek Tanah Timbul">Pertek Tanah Timbul</option>
                             <option value="Pertek PSN">Pertek PSN</option>
                         </optgroup>
-                        <optgroup label="🏛️ Dokumen Resmi PTSP">
+                        <optgroup label="Dokumen Resmi PTSP">
                             <option value="Berita Acara PTSP">Berita Acara PTSP</option>
                             <option value="Surat Keputusan PTSP">Surat Keputusan PTSP</option>
                             <option value="Surat Pengantar PTSP">Surat Pengantar PTSP</option>
                             <option value="Nota Dinas PTSP">Nota Dinas PTSP</option>
                         </optgroup>
-                        <optgroup label="📋 Lainnya">
+                        <optgroup label="Lainnya">
                             <option value="Dokumen Lainnya (PTSP)">Dokumen Lainnya (PTSP)</option>
                         </optgroup>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Pilih File (PDF, JPG, PNG, DOCX - Maks 100MB) <span style="color:#e53e3e;">*</span></label>
-                    <input type="file" name="file" class="form-control" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" style="background:#fff;">
+                <div>
+                    <label style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">File (PDF/JPG/PNG/DOCX, Maks 100MB) <span style="color:#DC2626;">*</span></label>
+                    <input type="file" name="file" class="b-input" style="padding:4px 8px;" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Keterangan Tambahan (Opsional)</label>
-                <textarea name="keterangan" class="form-control" rows="2" placeholder="Tuliskan keterangan mengenai dokumen ini..."></textarea>
-            </div>
-            <div style="margin-top: 16px;">
-                <button type="submit" class="btn btn-primary">Unggah Dokumen</button>
+            <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;">
+                <div style="flex:1; min-width:220px;">
+                    <label style="font-size:12px;font-weight:700;color:#003B64;display:block;margin-bottom:5px;">Keterangan (Opsional)</label>
+                    <input type="text" name="keterangan" class="b-input" placeholder="Catatan mengenai dokumen ini...">
+                </div>
+                <button type="submit" class="b-btn-primary">Simpan Berkas</button>
             </div>
         </form>
     </div>
-</div>
 
-<div class="panel">
-    <div class="panel-head">
-        <h2>Daftar Berkas Tersimpan</h2>
-    </div>
-    <div class="panel-body">
-        
-        <div class="filter-card">
-            <form action="{{ route('berkas.index') }}" method="GET" class="filter-grid">
-                <div class="search-col">
-                    <input type="text" name="search" class="form-control" placeholder="Cari nama berkas atau pengunggah..." value="{{ request('search') }}">
-                </div>
-                <div>
-                    <input type="date" name="tanggal" class="form-control" value="{{ request('tanggal') }}" title="Filter berdasarkan Tanggal Unggah">
-                </div>
-                <div>
-                    <select name="kategori" class="form-control">
-                        <option value="">Semua Kategori</option>
-                        <optgroup label="📄 PKKPR Berusaha">
-                            <option value="Dokumen PKKPR Final (PTSP)" {{ request('kategori') == 'Dokumen PKKPR Final (PTSP)' ? 'selected' : '' }}>Dokumen PKKPR Final (PTSP)</option>
-                            <option value="Sertifikat PKKPR Berusaha" {{ request('kategori') == 'Sertifikat PKKPR Berusaha' ? 'selected' : '' }}>Sertifikat PKKPR Berusaha</option>
-                            <option value="SK PKKPR Berusaha" {{ request('kategori') == 'SK PKKPR Berusaha' ? 'selected' : '' }}>SK PKKPR Berusaha</option>
-                        </optgroup>
-                        <optgroup label="📄 Pertimbangan Teknis">
-                            <option value="Pertek PKKPR Berusaha" {{ request('kategori') == 'Pertek PKKPR Berusaha' ? 'selected' : '' }}>Pertek PKKPR Berusaha</option>
-                            <option value="Pertek PKKPR Non Berusaha" {{ request('kategori') == 'Pertek PKKPR Non Berusaha' ? 'selected' : '' }}>Pertek PKKPR Non Berusaha</option>
-                            <option value="Pertek Kebijakan Khusus" {{ request('kategori') == 'Pertek Kebijakan Khusus' ? 'selected' : '' }}>Pertek Kebijakan Khusus</option>
-                            <option value="Pertek Tanah Timbul" {{ request('kategori') == 'Pertek Tanah Timbul' ? 'selected' : '' }}>Pertek Tanah Timbul</option>
-                            <option value="Pertek PSN" {{ request('kategori') == 'Pertek PSN' ? 'selected' : '' }}>Pertek PSN</option>
-                        </optgroup>
-                        <optgroup label="🏛️ Dokumen Resmi PTSP">
-                            <option value="Berita Acara PTSP" {{ request('kategori') == 'Berita Acara PTSP' ? 'selected' : '' }}>Berita Acara PTSP</option>
-                            <option value="Surat Keputusan PTSP" {{ request('kategori') == 'Surat Keputusan PTSP' ? 'selected' : '' }}>Surat Keputusan PTSP</option>
-                            <option value="Surat Pengantar PTSP" {{ request('kategori') == 'Surat Pengantar PTSP' ? 'selected' : '' }}>Surat Pengantar PTSP</option>
-                            <option value="Nota Dinas PTSP" {{ request('kategori') == 'Nota Dinas PTSP' ? 'selected' : '' }}>Nota Dinas PTSP</option>
-                        </optgroup>
-                        <optgroup label="📋 Lainnya">
-                            <option value="Dokumen Lainnya (PTSP)" {{ request('kategori') == 'Dokumen Lainnya (PTSP)' ? 'selected' : '' }}>Dokumen Lainnya (PTSP)</option>
-                        </optgroup>
-                        @php
-                            $ptspKats = ['Dokumen PKKPR Final (PTSP)','Sertifikat PKKPR Berusaha','SK PKKPR Berusaha','Pertek PKKPR Berusaha','Pertek PKKPR Non Berusaha','Pertek Kebijakan Khusus','Pertek Tanah Timbul','Pertek PSN','Berita Acara PTSP','Surat Keputusan PTSP','Surat Pengantar PTSP','Nota Dinas PTSP','Dokumen Lainnya (PTSP)'];
-                            $extraKats = $kategoriList->filter(fn($k) => !in_array($k, $ptspKats));
-                        @endphp
-                        @foreach($extraKats as $kat)
-                            <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="action-col" style="display: flex; gap: 8px;">
-                    <button type="submit" class="btn btn-secondary" style="padding: 8px 16px; height: 38px;">Filter</button>
+    <div class="berkas-panel">
+        <div class="berkas-panel-head">
+            <h2>Daftar Berkas Tersimpan</h2>
+            <span class="berkas-total-pill">{{ number_format($berkas->total()) }} Berkas</span>
+        </div>
+
+        <div class="berkas-filter-bar">
+            <form action="{{ route('berkas.index') }}" method="GET" class="berkas-filter-grid">
+                <input type="text" name="search" class="b-input" placeholder="Cari nama berkas atau keterangan..." value="{{ request('search') }}">
+                <input type="date" name="tanggal" class="b-input" value="{{ request('tanggal') }}" title="Tanggal unggah">
+                <select name="kategori" class="b-select">
+                    <option value="">Semua Kategori</option>
+                    <optgroup label="PKKPR Berusaha">
+                        <option value="Dokumen PKKPR Final (PTSP)" {{ request('kategori') == 'Dokumen PKKPR Final (PTSP)' ? 'selected' : '' }}>Dokumen PKKPR Final (PTSP)</option>
+                        <option value="Sertifikat PKKPR Berusaha" {{ request('kategori') == 'Sertifikat PKKPR Berusaha' ? 'selected' : '' }}>Sertifikat PKKPR Berusaha</option>
+                        <option value="SK PKKPR Berusaha" {{ request('kategori') == 'SK PKKPR Berusaha' ? 'selected' : '' }}>SK PKKPR Berusaha</option>
+                    </optgroup>
+                    <optgroup label="Pertimbangan Teknis">
+                        <option value="Pertek PKKPR Berusaha" {{ request('kategori') == 'Pertek PKKPR Berusaha' ? 'selected' : '' }}>Pertek PKKPR Berusaha</option>
+                        <option value="Pertek PKKPR Non Berusaha" {{ request('kategori') == 'Pertek PKKPR Non Berusaha' ? 'selected' : '' }}>Pertek PKKPR Non Berusaha</option>
+                        <option value="Pertek Kebijakan Khusus" {{ request('kategori') == 'Pertek Kebijakan Khusus' ? 'selected' : '' }}>Pertek Kebijakan Khusus</option>
+                        <option value="Pertek Tanah Timbul" {{ request('kategori') == 'Pertek Tanah Timbul' ? 'selected' : '' }}>Pertek Tanah Timbul</option>
+                        <option value="Pertek PSN" {{ request('kategori') == 'Pertek PSN' ? 'selected' : '' }}>Pertek PSN</option>
+                    </optgroup>
+                    <optgroup label="Dokumen Resmi PTSP">
+                        <option value="Berita Acara PTSP" {{ request('kategori') == 'Berita Acara PTSP' ? 'selected' : '' }}>Berita Acara PTSP</option>
+                        <option value="Surat Keputusan PTSP" {{ request('kategori') == 'Surat Keputusan PTSP' ? 'selected' : '' }}>Surat Keputusan PTSP</option>
+                        <option value="Surat Pengantar PTSP" {{ request('kategori') == 'Surat Pengantar PTSP' ? 'selected' : '' }}>Surat Pengantar PTSP</option>
+                        <option value="Nota Dinas PTSP" {{ request('kategori') == 'Nota Dinas PTSP' ? 'selected' : '' }}>Nota Dinas PTSP</option>
+                    </optgroup>
+                    <optgroup label="Lainnya">
+                        <option value="Dokumen Lainnya (PTSP)" {{ request('kategori') == 'Dokumen Lainnya (PTSP)' ? 'selected' : '' }}>Dokumen Lainnya (PTSP)</option>
+                    </optgroup>
+                    @php
+                        $ptspKats = ['Dokumen PKKPR Final (PTSP)','Sertifikat PKKPR Berusaha','SK PKKPR Berusaha','Pertek PKKPR Berusaha','Pertek PKKPR Non Berusaha','Pertek Kebijakan Khusus','Pertek Tanah Timbul','Pertek PSN','Berita Acara PTSP','Surat Keputusan PTSP','Surat Pengantar PTSP','Nota Dinas PTSP','Dokumen Lainnya (PTSP)'];
+                        $extraKats = $kategoriList->filter(fn($k) => !in_array($k, $ptspKats));
+                    @endphp
+                    @foreach($extraKats as $kat)
+                        <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
+                    @endforeach
+                </select>
+                <div style="display:flex; gap:6px;">
+                    <button type="submit" class="b-btn-primary">Filter</button>
                     @if(request('search') || request('kategori') || request('tanggal') || request('layanan') || request('pengunggah'))
-                        <a href="{{ route('berkas.index', request('layanan') ? ['layanan' => request('layanan'), 'kategori' => request('kategori')] : []) }}" class="btn btn-secondary" style="padding: 8px 16px; height: 38px; background: #fff; color: #ef4444; border-color: #fca5a5;">Reset</a>
+                        <a href="{{ route('berkas.index', request('layanan') ? ['layanan' => request('layanan'), 'kategori' => request('kategori')] : []) }}" class="b-btn-reset">Reset</a>
                     @endif
                 </div>
             </form>
         </div>
 
-        <div class="table-wrap" style="border: none; padding: 0;">
-            <table class="table-modern">
+        <div class="berkas-table-wrap">
+            <table class="berkas-table">
                 <thead>
                     <tr>
-                        <th style="width: 40px;"></th>
-                        <th>Info Berkas</th>
-                        <th>Pemohon / Akun</th>
-                        <th>Tanggal Unggah</th>
-                        <th style="text-align: right;">Aksi</th>
+                        <th style="width: 48px;">File</th>
+                        <th style="width: 36%;">Info Berkas</th>
+                        <th style="width: 22%;">Pengunggah</th>
+                        <th style="width: 15%;">Tanggal</th>
+                        <th style="width: 19%; text-align: right;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($berkas as $item)
-                    @php
-                        $ext = strtolower($item->tipe_file);
-                        $bgClass = 'bg-def';
-                        if(in_array($ext, ['pdf'])) $bgClass = 'bg-pdf';
-                        elseif(in_array($ext, ['jpg','jpeg','png'])) $bgClass = 'bg-img';
-                        elseif(in_array($ext, ['doc','docx','xls','xlsx'])) $bgClass = 'bg-doc';
-                    @endphp
-                    <tr>
-                        <td>
-                            <div class="file-icon-box {{ $bgClass }}">
-                                {{ strtoupper(substr($ext, 0, 3)) }}
-                            </div>
-                        </td>
-                        <td>
-                            <div style="font-weight: 600; color: #0f172a; font-size: 14px; margin-bottom: 4px;">{{ $item->nama_berkas }}</div>
-                            <div style="display: flex; gap: 8px; align-items: center; font-size: 12px; flex-wrap: wrap;">
-                                <span style="color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-weight: 500;">{{ $item->kategori ?? 'Umum' }}</span>
-                                @if($item->is_ptsp || $item->uploaded_by_role === 'satu_pintu' || str_contains(strtolower($item->kategori), 'ptsp'))
-                                    <span style="color: #047857; background: #D1FAE5; border: 1px solid #A7F3D0; padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;">
-                                        🛡️ Uploaded by PTSP
-                                    </span>
-                                @else
-                                    <span style="color: #475569; background: #F1F5F9; border: 1px solid #E2E8F0; padding: 2px 8px; border-radius: 4px; font-weight: 500; font-size: 11px;">
-                                        👤 Pemohon
-                                    </span>
-                                @endif
-                                <span style="color: #94a3b8;">•</span>
-                                <span style="color: #64748b;">{{ $item->ukuran_file }}</span>
-                            </div>
-                        </td>
                         @php
+                            $ext = strtolower($item->tipe_file);
+                            $bgClass = 'bg-def';
+                            if ($ext === 'pdf') $bgClass = 'bg-pdf';
+                            elseif (in_array($ext, ['jpg', 'jpeg', 'png'])) $bgClass = 'bg-img';
+                            elseif (in_array($ext, ['doc', 'docx', 'xls', 'xlsx'])) $bgClass = 'bg-doc';
+
                             $pengajuInfo = null;
                             if (strpos($item->nama_berkas, '[') === 0 && strpos($item->nama_berkas, '] ') !== false) {
                                 $parts = explode('] ', $item->nama_berkas);
@@ -414,59 +423,69 @@
                             }
                             $finalName = $pengajuInfo ?: ($item->user->name ?? 'Admin');
                         @endphp
-                        <td>
-                            <div style="font-weight: 600; color: #334155; font-size: 13px;">{{ $finalName }}</div>
-                            <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Akun: PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</div>
-                        </td>
-                        <td>
-                            <div style="font-size: 13px; color: #475569; font-weight: 500;">{{ $item->created_at->format('d M Y') }}</div>
-                            <div style="font-size: 11px; color: #94a3b8;">{{ $item->created_at->format('H:i') }} WIB</div>
-                        </td>
-                        <td style="text-align: right;">
-                            <div style="display: flex; justify-content: flex-end; gap: 6px;">
-                                <a href="{{ route('berkas.preview', $item->id) }}" target="_blank" class="btn-action-sm btn-action-light" title="Lihat">
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                    Lihat
-                                </a>
-                                <a href="{{ route('berkas.download', $item->id) }}" class="btn-action-sm btn-action-blue" title="Unduh">
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                    Unduh
-                                </a>
-                                @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
-                                <form action="{{ route('berkas.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berkas ini?');" style="margin: 0;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-action-sm btn-action-red" title="Hapus">
-                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                                        Hapus
-                                    </button>
-                                </form>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <div class="file-icon-box {{ $bgClass }}">{{ strtoupper(substr($ext, 0, 3)) }}</div>
+                            </td>
+                            <td>
+                                <div style="font-weight: 700; color: #003B64; font-size: 13px; margin-bottom: 4px; word-break: break-word;">{{ $item->nama_berkas }}</div>
+                                <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                                    <span class="b-badge b-badge--cat">{{ $item->kategori ?? 'Umum' }}</span>
+                                    @if($item->is_ptsp || $item->uploaded_by_role === 'satu_pintu' || str_contains(strtolower((string)$item->kategori), 'ptsp'))
+                                        <span class="b-badge b-badge--ptsp">PTSP / Instansi</span>
+                                    @else
+                                        <span class="b-badge b-badge--cat">Pemohon</span>
+                                    @endif
+                                    <span style="font-size: 11px; color: #64748B;">{{ $item->ukuran_file }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="font-weight: 600; color: #0F172A;">{{ $finalName }}</div>
+                                <div style="font-size: 11px; color: #64748B;">PMH{{ str_pad($item->user->id ?? 0, 3, '0', STR_PAD_LEFT) }}</div>
+                            </td>
+                            <td style="white-space: nowrap; color:#334155; font-size:12px;">
+                                {{ $item->created_at->format('d M Y') }}<br>
+                                <span style="font-size: 11px; color: #64748B;">{{ $item->created_at->format('H:i') }} WIB</span>
+                            </td>
+                            <td style="text-align: right;">
+                                <div class="b-actions">
+                                    <a href="{{ route('berkas.preview', $item->id) }}" target="_blank" class="b-act-btn b-act-view">Lihat</a>
+                                    <a href="{{ route('berkas.download', $item->id) }}" class="b-act-btn b-act-dl">Unduh</a>
+                                    @if(!Auth::user()->isDinasPu() && !Auth::user()->isDinasPutr() && !Auth::user()->isSatuPintu())
+                                        <form action="{{ route('berkas.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Hapus berkas ini?');" style="margin: 0;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="b-act-btn b-act-del">Hapus</button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="5" style="text-align: center; padding: 60px 20px;">
-                            <div style="color: #94a3b8; margin-bottom: 8px;">
-                                <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                            </div>
-                            <div style="color: #475569; font-weight: 500;">Belum ada berkas yang ditemukan.</div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px 20px; color: #64748B;">
+                                Belum ada berkas manual PTSP / Instansi yang tersimpan.
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
-            <div style="margin-top: 20px;">
-                {{ $berkas->links() }}
+        </div>
+
+        <div class="berkas-pag-bar">
+            <span style="font-size:12px; color:#64748B;">
+                Menampilkan {{ $berkas->firstItem() ?? 0 }}–{{ $berkas->lastItem() ?? 0 }} dari {{ $berkas->total() }} berkas
+            </span>
+            <div>
+                {{ $berkas->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    function openPreview(url, title) {
-        window.open(url, '_blank');
-    }
-</script>
+    <script>
+        function toggleBerkasDrawer() {
+            const drawer = document.getElementById('berkasUploadDrawer');
+            if (drawer) drawer.classList.toggle('is-open');
+        }
+    </script>
 @endsection
