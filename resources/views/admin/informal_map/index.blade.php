@@ -16,53 +16,26 @@
         to { transform: rotate(360deg); }
     }
 
-    /* ─── HERO HEADER STRIP (FLAT) ─────────────────────── */
+    /* ─── HERO HEADER (RINGKAS & FLAT) ─────────────────── */
     .informal-hero {
         background: #FFFFFF;
         border: 1px solid #D6E4EF;
         border-radius: 4px;
-        padding: 16px 20px;
-        margin-bottom: 18px;
+        padding: 15px 18px;
+        margin-bottom: 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
+        gap: 14px;
         flex-wrap: wrap;
         animation: informalFadeUp .2s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
-    .informal-hero-meta {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-bottom: 6px;
-    }
-    .informal-hero-pill {
-        font-size: 11px;
-        font-weight: 700;
-        color: #003B64;
-        background: #E3F0F9;
-        border: 1px solid #BFD9EC;
-        padding: 2px 8px;
-        border-radius: 4px;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-    }
-    .informal-hero-count {
-        font-size: 11px;
-        font-weight: 700;
-        color: #166534;
-        background: #DCFCE7;
-        border: 1px solid #BBF7D0;
-        padding: 2px 8px;
-        border-radius: 4px;
-    }
     .informal-hero-title {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 800;
         color: #003B64;
         letter-spacing: -0.02em;
-        margin: 0 0 3px;
+        margin: 0 0 2px;
     }
     .informal-hero-desc {
         font-size: 12.5px;
@@ -77,8 +50,8 @@
         color: #003B64;
         border: 1px solid #CBD5E1;
         border-radius: 4px;
-        padding: 8px 14px;
-        font-size: 12.5px;
+        padding: 8px 13px;
+        font-size: 12px;
         font-weight: 700;
         text-decoration: none;
         transition: background .15s ease, border-color .15s ease;
@@ -93,8 +66,8 @@
     .map-cards-container {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 16px;
-        margin-bottom: 18px;
+        gap: 14px;
+        margin-bottom: 16px;
         align-items: stretch;
     }
 
@@ -102,7 +75,7 @@
         background: #FFFFFF;
         border: 1px solid #D6E4EF;
         border-radius: 4px;
-        padding: 18px;
+        padding: 16px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -113,9 +86,7 @@
     }
     .clean-map-card:nth-child(2) { animation-delay: .04s; }
     .clean-map-card:nth-child(3) { animation-delay: .08s; }
-    .clean-map-card:hover {
-        border-color: #94B8D4;
-    }
+    .clean-map-card:hover { border-color: #94B8D4; }
     .clean-map-card::before {
         content: '';
         position: absolute;
@@ -135,22 +106,14 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 10px;
+        margin-bottom: 4px;
     }
-
-    .card-tag {
-        font-size: 11px;
+    .card-code-title {
+        font-size: 16px;
         font-weight: 800;
-        padding: 3px 8px;
-        border-radius: 4px;
-        letter-spacing: 0.04em;
-        display: inline-flex;
-        align-items: center;
+        color: #003B64;
+        letter-spacing: -0.01em;
     }
-    .tag-lp2b { background: #D1FAE5; color: #064E3B; border: 1px solid #A7F3D0; }
-    .tag-lbs  { background: #DBEAFE; color: #1E40AF; border: 1px solid #BFDBFE; }
-    .tag-lsd  { background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; }
-
     .card-status-badge {
         font-size: 11px;
         font-weight: 700;
@@ -167,33 +130,26 @@
     .status-dot.active { background: #16A34A; }
     .status-dot.inactive { background: #DC2626; }
 
-    .card-title-text {
-        font-size: 14.5px;
-        font-weight: 800;
-        color: #003B64;
-        line-height: 1.35;
-        min-height: 40px;
-        margin-bottom: 4px;
-    }
-    .card-desc-text {
-        font-size: 12px;
-        color: #64748B;
-        line-height: 1.45;
-        min-height: 36px;
-        margin-bottom: 14px;
+    .card-subtitle-text {
+        font-size: 12.5px;
+        color: #475569;
+        font-weight: 500;
+        line-height: 1.4;
+        min-height: 35px;
+        margin-bottom: 12px;
     }
 
     .card-info-box {
         background: #F8FAFC;
         border: 1px solid #E2E8F0;
         border-radius: 4px;
-        padding: 10px 12px;
+        padding: 9px 11px;
         margin-top: auto;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
         font-size: 11.5px;
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 8px 10px;
+        gap: 6px 10px;
     }
     .info-label {
         font-size: 10px;
@@ -202,45 +158,39 @@
         text-transform: uppercase;
         letter-spacing: 0.04em;
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 1px;
     }
     .info-value {
         color: #0F172A;
         font-weight: 700;
         font-size: 11.5px;
     }
-    .info-row-full {
+    .info-line-compact {
         grid-column: 1 / -1;
         border-top: 1px dashed #CBD5E1;
-        padding-top: 7px;
-        margin-top: 1px;
-    }
-    .info-inline-meta {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
+        padding-top: 6px;
         font-size: 11px;
-        font-weight: 600;
-        color: #003B64;
+        color: #475569;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
         word-break: break-all;
     }
-    .info-backup-strip {
+    .info-line-compact strong { color: #003B64; font-weight: 700; flex-shrink: 0; }
+    .info-backup-inline {
         grid-column: 1 / -1;
         background: #FFFBEB;
         border: 1px solid #FDE68A;
-        padding: 6px 8px;
+        padding: 5px 8px;
         border-radius: 4px;
-    }
-    .info-backup-strip .info-label { color: #92400E; margin-bottom: 1px; }
-    .info-backup-name {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
         font-size: 10.5px;
         color: #92400E;
+        display: flex;
+        align-items: center;
+        gap: 6px;
         word-break: break-all;
         font-family: 'DM Mono', monospace;
-        font-weight: 600;
     }
 
     .card-btn-group {
@@ -248,12 +198,8 @@
         grid-template-columns: 1.4fr 1fr 1fr;
         gap: 6px;
     }
-    .card-btn-group--compact {
-        grid-template-columns: 1fr 1fr;
-    }
-    .card-btn-group--single {
-        grid-template-columns: 1fr;
-    }
+    .card-btn-group--compact { grid-template-columns: 1fr 1fr; }
+    .card-btn-group--single { grid-template-columns: 1fr; }
     .btn-upload-action {
         background: #218AC9;
         color: #FFFFFF;
@@ -340,37 +286,32 @@
         background: #FFFFFF;
         border: 1px solid #D6E4EF;
         border-radius: 4px;
-        padding: 18px 20px;
+        padding: 16px 18px;
         animation: informalFadeUp .28s cubic-bezier(0.22, 1, 0.36, 1) .06s both;
     }
-
     .preview-top-bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 10px;
         padding-bottom: 12px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
         border-bottom: 1px solid #E8F0F6;
     }
-
     .preview-title {
-        font-size: 14.5px;
+        font-size: 14px;
         font-weight: 800;
         color: #003B64;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 7px;
     }
-
     .preview-filters {
         display: flex;
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
-        font-size: 12px;
-        font-weight: 700;
     }
     .filter-chip {
         display: inline-flex;
@@ -410,14 +351,12 @@
         background: #E2E8F0;
     }
     .preview-footer-bar {
-        margin-top: 10px;
+        margin-top: 8px;
         font-size: 11.5px;
         color: #64748B;
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
     }
 
     /* ─── MODAL UPLOAD (FLAT) ──────────────────────────── */
@@ -431,20 +370,16 @@
         justify-content: center;
         padding: 16px;
     }
-    .modal-backdrop-custom.open {
-        display: flex;
-    }
-
+    .modal-backdrop-custom.open { display: flex; }
     .modal-box-custom {
         background: #FFFFFF;
         border-radius: 4px;
         width: 100%;
-        max-width: 480px;
+        max-width: 460px;
         overflow: hidden;
         border: 1px solid #CBD5E1;
         animation: informalFadeUp 0.18s ease-out both;
     }
-
     .modal-head {
         background: #003B64;
         color: #FFFFFF;
@@ -453,11 +388,7 @@
         align-items: center;
         justify-content: space-between;
     }
-    .modal-head h3 {
-        font-size: 14.5px;
-        font-weight: 700;
-        margin: 0;
-    }
+    .modal-head h3 { font-size: 14.5px; font-weight: 700; margin: 0; }
     .modal-close-btn {
         background: rgba(255,255,255,0.12);
         border: 1px solid rgba(255,255,255,0.22);
@@ -474,15 +405,12 @@
         border-radius: 4px;
     }
     .modal-close-btn:hover { background: rgba(255,255,255,0.22); }
-
-    .modal-body {
-        padding: 18px 20px 20px;
-    }
+    .modal-body { padding: 18px 20px 20px; }
 
     .simple-dropzone {
         border: 1.5px dashed #94B8D4;
         border-radius: 4px;
-        padding: 26px 18px;
+        padding: 24px 16px;
         text-align: center;
         background: #F8FAFC;
         cursor: pointer;
@@ -493,27 +421,21 @@
         border-color: #218AC9;
         background: #E3F0F9;
     }
-    .dropzone-icon {
-        width: 36px;
-        height: 36px;
-        color: #218AC9;
-        margin-bottom: 8px;
-    }
+    .dropzone-icon { width: 34px; height: 34px; color: #218AC9; margin-bottom: 8px; }
 
     .modal-safety-note {
         background: #F0FDF4;
         border: 1px solid #BBF7D0;
         border-radius: 4px;
-        padding: 10px 12px;
-        margin-top: 14px;
+        padding: 9px 11px;
+        margin-top: 12px;
         font-size: 11.5px;
         color: #166534;
-        line-height: 1.5;
+        line-height: 1.45;
         display: flex;
         align-items: flex-start;
         gap: 8px;
     }
-
     .btn-submit-modal {
         width: 100%;
         background: #003B64;
@@ -535,13 +457,8 @@
     .btn-submit-modal:hover { background: #218AC9; }
 
     @media (max-width: 1080px) {
-        .map-cards-container {
-            grid-template-columns: 1fr;
-        }
-        .card-title-text,
-        .card-desc-text {
-            min-height: 0;
-        }
+        .map-cards-container { grid-template-columns: 1fr; }
+        .card-subtitle-text { min-height: 0; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -555,29 +472,19 @@
 @section('content')
     @php
         $mainKeys = ['lp2b', 'lbs', 'lsd'];
-        $activeLayerCount = 0;
-        foreach ($mainKeys as $mk) {
-            if (!empty($layers[$mk]['exists'])) {
-                $activeLayerCount++;
-            }
-        }
     @endphp
 
-    <!-- Hero Strip Flat -->
+    <!-- Hero Header Ringkas -->
     <div class="informal-hero">
         <div>
-            <div class="informal-hero-meta">
-                <span class="informal-hero-pill">Pengelolaan Layer Spasial</span>
-                <span class="informal-hero-count">{{ $activeLayerCount }} / {{ count($mainKeys) }} Layer Terpasang</span>
-            </div>
             <h1 class="informal-hero-title">Kelola Data Peta INFORMAL</h1>
-            <p class="informal-hero-desc">Perbarui data poligon LP2B, LBS, dan LSD menggunakan file GeoJSON atau Shapefile (.zip).</p>
+            <p class="informal-hero-desc">Perbarui data spasial GeoJSON atau Shapefile (.zip) untuk layer LP2B, LBS, dan LSD.</p>
         </div>
         <a href="{{ route('informal.index') }}" target="_blank" class="informal-public-btn">
             <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
             </svg>
-            <span>Buka Peta Publik INFORMAL</span>
+            <span>Buka Peta Publik</span>
         </a>
     </div>
 
@@ -587,47 +494,41 @@
             @if(isset($layers[$k]))
                 @php
                     $l = $layers[$k];
+                    $cleanSubtitle = preg_replace('/^[A-Z0-9]+\s*\((.+)\)$/', '$1', $l['name']);
                     $hasBackup = !$l['exists'] && !empty($l['latest_backup_file']);
                     $btnGroupClass = $l['exists'] ? 'card-btn-group' : ($hasBackup ? 'card-btn-group card-btn-group--compact' : 'card-btn-group card-btn-group--single');
                 @endphp
                 <div class="clean-map-card {{ $k }}">
                     <div class="card-body-stack">
                         <div class="card-top-row">
-                            <span class="card-tag tag-{{ $k }}">{{ $l['short_name'] }}</span>
+                            <span class="card-code-title">{{ $l['short_name'] }}</span>
                             <span class="card-status-badge" style="color: {{ $l['exists'] ? '#166534' : '#DC2626' }};">
                                 <span class="status-dot {{ $l['exists'] ? 'active' : 'inactive' }}"></span>
-                                {{ $l['exists'] ? 'Terpasang' : 'Belum Ada' }}
+                                {{ $l['exists'] ? 'Terpasang' : 'Kosong' }}
                             </span>
                         </div>
 
-                        <div class="card-title-text">{{ $l['name'] }}</div>
-                        <div class="card-desc-text">{{ $l['description'] }}</div>
+                        <div class="card-subtitle-text">{{ $cleanSubtitle }}</div>
 
                         <div class="card-info-box">
                             <div>
-                                <span class="info-label">Ukuran Data</span>
+                                <span class="info-label">Ukuran</span>
                                 <span class="info-value">{{ $l['size_human'] }}</span>
                             </div>
                             <div>
-                                <span class="info-label">Pembaruan</span>
+                                <span class="info-label">Diperbarui</span>
                                 <span class="info-value">{{ $l['updated_at'] }}</span>
                             </div>
                             @if(!empty($l['original_filename']))
-                                <div class="info-row-full">
-                                    <span class="info-label">File Sumber Diupload</span>
-                                    <span class="info-inline-meta">
-                                        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                                        <span>{{ $l['original_filename'] }}</span>
-                                    </span>
+                                <div class="info-line-compact">
+                                    <strong>Sumber:</strong>
+                                    <span>{{ $l['original_filename'] }}</span>
                                 </div>
                             @endif
                             @if(!empty($l['latest_backup_file']))
-                                <div class="info-backup-strip">
-                                    <span class="info-label">Cadangan Terakhir</span>
-                                    <span class="info-backup-name">
-                                        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
-                                        <span>{{ $l['latest_backup_file'] }}</span>
-                                    </span>
+                                <div class="info-backup-inline" title="Cadangan file terakhir">
+                                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                                    <span>Backup: {{ $l['latest_backup_file'] }}</span>
                                 </div>
                             @endif
                         </div>
@@ -643,7 +544,7 @@
                                 <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 <span>Backup</span>
                             </a>
-                            <button type="button" class="btn-delete-action" onclick="confirmDeleteLayer('{{ $k }}', '{{ $l['short_name'] }}')" title="Hapus file data dari peta aktif (otomatis dicadangkan)">
+                            <button type="button" class="btn-delete-action" onclick="confirmDeleteLayer('{{ $k }}', '{{ $l['short_name'] }}')" title="Hapus file data dari peta aktif">
                                 <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                 <span>Hapus</span>
                             </button>
@@ -666,12 +567,12 @@
     <div class="preview-map-card">
         <div class="preview-top-bar">
             <div class="preview-title">
-                <svg width="17" height="17" style="color:#218AC9;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg width="16" height="16" style="color:#218AC9;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
                     <line x1="8" y1="2" x2="8" y2="18"></line>
                     <line x1="16" y1="6" x2="16" y2="22"></line>
                 </svg>
-                <span>Pratinjau Peta INFORMAL (Kota Sukabumi)</span>
+                <span>Pratinjau Peta</span>
             </div>
 
             <div class="preview-filters">
@@ -701,7 +602,6 @@
 
         <div id="adminPreviewMap"></div>
         <div class="preview-footer-bar">
-            <span>Klik poligon pada peta untuk melihat koordinat dan atribut layer spasial.</span>
             <span id="previewStatus" style="font-weight:700; color:#003B64;">Memuat layer spasial...</span>
         </div>
     </div>
@@ -720,7 +620,7 @@
 
                 <div class="modal-body">
                     <div style="font-size:13px; color:#334155; margin-bottom:12px;">
-                        Pembaruan data untuk layer: <strong id="modalLayerName" style="color:#003B64;">-</strong>
+                        Pembaruan data layer: <strong id="modalLayerName" style="color:#003B64;">-</strong>
                     </div>
 
                     <div id="simpleDropzone" class="simple-dropzone" onclick="document.getElementById('modalFileInput').click()">
@@ -728,7 +628,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                         </svg>
                         <div id="dropzoneMainText" style="font-size:13.5px; font-weight:700; color:#003B64; margin-bottom:4px;">Klik atau seret file ke area ini</div>
-                        <div style="font-size:11.5px; color:#64748B;">Format didukung: <strong>.geojson</strong>, <strong>.json</strong>, atau <strong>.zip (Shapefile)</strong></div>
+                        <div style="font-size:11.5px; color:#64748B;">Format: <strong>.geojson</strong>, <strong>.json</strong>, atau <strong>.zip (Shapefile)</strong></div>
                         <div id="dropzoneSelectedFile" style="font-size:12px; font-weight:700; color:#003B64; margin-top:10px; display:none; background:#E3F0F9; border:1px solid #BFD9EC; padding:6px 10px; border-radius:4px;"></div>
                     </div>
                     <input type="file" name="map_file" id="modalFileInput" style="display:none;" accept=".geojson,.json,.zip" required onchange="handleModalFileChange(this)">
@@ -737,12 +637,12 @@
                         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#16A34A" stroke-width="2" style="flex-shrink:0; margin-top:1px;">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                         </svg>
-                        <span><strong>Backup Otomatis:</strong> File aktif di server otomatis dicadangkan sebagai <code>[layer]_bak_[tanggal]_[jam].geojson</code> sebelum ditimpa file baru.</span>
+                        <span>File aktif otomatis dicadangkan sebagai <code>[layer]_bak_[tanggal]_[jam].geojson</code> sebelum ditimpa.</span>
                     </div>
 
                     <button type="submit" id="btnSubmitModal" class="btn-submit-modal">
                         <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <span>Simpan &amp; Terapkan ke Peta</span>
+                        <span>Simpan &amp; Terapkan</span>
                     </button>
                 </div>
             </form>
@@ -802,7 +702,7 @@
             if (!l.exists) {
                 loadedCount++;
                 if (loadedCount >= total) {
-                    statusEl.innerText = 'Semua layer tersedia telah dimuat.';
+                    statusEl.innerText = 'Layer tersedia dimuat.';
                 }
                 return;
             }
@@ -849,7 +749,7 @@
 
                     loadedCount++;
                     if (loadedCount >= total) {
-                        statusEl.innerText = 'Semua data spasial berhasil dimuat.';
+                        statusEl.innerText = 'Semua data spasial dimuat.';
                     }
                 })
                 .catch(err => {
@@ -899,7 +799,7 @@
             const selEl = document.getElementById('dropzoneSelectedFile');
             const mainText = document.getElementById('dropzoneMainText');
             selEl.style.display = 'block';
-            selEl.innerText = 'File dipilih: ' + file.name + ' (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB)';
+            selEl.innerText = 'File: ' + file.name + ' (' + (file.size / (1024 * 1024)).toFixed(2) + ' MB)';
             mainText.innerText = 'Ganti File Lain';
         }
     }
@@ -943,7 +843,7 @@
     document.getElementById('modalUploadForm').addEventListener('submit', function() {
         const btn = document.getElementById('btnSubmitModal');
         btn.disabled = true;
-        btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="animation:informalSpin .8s linear infinite;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg><span>Menyimpan &amp; Mengonversi File...</span>';
+        btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="animation:informalSpin .8s linear infinite;"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg><span>Menyimpan...</span>';
     });
 </script>
 @endsection
