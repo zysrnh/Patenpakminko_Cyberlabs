@@ -16,10 +16,10 @@ class NaooSUSeeder extends Seeder
             ['username' => 'NaooSU'],
             [
                 'name' => 'NaooSU',
-                'email' => 'naoosu@patenpakmiko.go.id',
-                'password' => bcrypt('Paten_naoosu@2026'),
+                'email' => env('SEED_NAOOSU_EMAIL', 'naoosu@patenpakmiko.go.id'),
+                'password' => bcrypt(env('SEED_NAOOSU_PASSWORD', 'local-dev-password')),
                 'role' => 'dpn',
-                'phone_number' => '085555555599',
+                'phone_number' => env('SEED_NAOOSU_PHONE', '085555555599'),
             ]
         );
     }

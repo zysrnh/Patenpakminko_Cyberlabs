@@ -16,10 +16,10 @@ class SuperAdminSeeder extends Seeder
             ['username' => 'superadmin'],
             [
                 'name' => 'Super Admin PATEN PAK MIKO',
-                'email' => 'superadmin@patenpakmiko.go.id',
-                'password' => bcrypt('Paten_superadmin@2026'),
+                'email' => env('SEED_SUPERADMIN_EMAIL', 'superadmin@patenpakmiko.go.id'),
+                'password' => bcrypt(env('SEED_SUPERADMIN_PASSWORD', 'local-dev-password')),
                 'role' => 'dpn',
-                'phone_number' => '085555555599',
+                'phone_number' => env('SEED_SUPERADMIN_PHONE', '085555555599'),
             ]
         );
     }

@@ -396,8 +396,7 @@ Route::middleware(['auth'])->group(function () {
     
     // PPKPR Non-Berusaha
     Route::get('/non-berusaha', [PpkprNonBerusahaController::class, 'index'])->name('non-berusaha.index');
-    Route::match(['get', 'post'], '/non-berusaha/bulk-destroy', [PpkprNonBerusahaController::class, 'bulkDestroy'])->name('non-berusaha.bulk-destroy');
-    Route::match(['get', 'post'], '/non-berusaha/bulk{any}', [PpkprNonBerusahaController::class, 'bulkDestroy'])->where('any', '.*');
+    Route::post('/non-berusaha/bulk-destroy', [PpkprNonBerusahaController::class, 'bulkDestroy'])->name('non-berusaha.bulk-destroy');
     Route::get('/non-berusaha/{id}', [PpkprNonBerusahaController::class, 'show'])->name('non-berusaha.show');
     Route::get('/non-berusaha/{id}/ptp', [PpkprNonBerusahaController::class, 'ptpPdf'])->name('non-berusaha.ptp_pdf');
     Route::post('/non-berusaha/{id}/verifikasi', [PpkprNonBerusahaController::class, 'verify'])->name('non-berusaha.verify');
@@ -405,8 +404,7 @@ Route::middleware(['auth'])->group(function () {
  
     // Kebijakan
     Route::get('/kebijakan', [KebijakanController::class, 'index'])->name('kebijakan.index');
-    Route::match(['get', 'post'], '/kebijakan/bulk-destroy', [KebijakanController::class, 'bulkDestroy'])->name('kebijakan.bulk-destroy');
-    Route::match(['get', 'post'], '/kebijakan/bulk{any}', [KebijakanController::class, 'bulkDestroy'])->where('any', '.*');
+    Route::post('/kebijakan/bulk-destroy', [KebijakanController::class, 'bulkDestroy'])->name('kebijakan.bulk-destroy');
     Route::get('/kebijakan/{id}', [KebijakanController::class, 'show'])->name('kebijakan.show');
     Route::get('/kebijakan/{id}/ptp', [KebijakanController::class, 'ptpPdf'])->name('kebijakan.ptp_pdf');
     Route::post('/kebijakan/{id}/verifikasi', [KebijakanController::class, 'verify'])->name('kebijakan.verify');
@@ -414,8 +412,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Tanah Timbul
     Route::get('/tanah-timbul', [TanahTimbulController::class, 'index'])->name('tanah-timbul.index');
-    Route::match(['get', 'post'], '/tanah-timbul/bulk-destroy', [TanahTimbulController::class, 'bulkDestroy'])->name('tanah-timbul.bulk-destroy');
-    Route::match(['get', 'post'], '/tanah-timbul/bulk{any}', [TanahTimbulController::class, 'bulkDestroy'])->where('any', '.*');
+    Route::post('/tanah-timbul/bulk-destroy', [TanahTimbulController::class, 'bulkDestroy'])->name('tanah-timbul.bulk-destroy');
     Route::get('/tanah-timbul/{id}', [TanahTimbulController::class, 'show'])->name('tanah-timbul.show');
     Route::get('/tanah-timbul/{id}/ptp', [TanahTimbulController::class, 'ptpPdf'])->name('tanah-timbul.ptp_pdf');
     Route::post('/tanah-timbul/{id}/verifikasi', [TanahTimbulController::class, 'verify'])->name('tanah-timbul.verify');
@@ -423,8 +420,7 @@ Route::middleware(['auth'])->group(function () {
 
     // PSN
     Route::get('/psn', [PsnController::class, 'index'])->name('psn.index');
-    Route::match(['get', 'post'], '/psn/bulk-destroy', [PsnController::class, 'bulkDestroy'])->name('psn.bulk-destroy');
-    Route::match(['get', 'post'], '/psn/bulk{any}', [PsnController::class, 'bulkDestroy'])->where('any', '.*');
+    Route::post('/psn/bulk-destroy', [PsnController::class, 'bulkDestroy'])->name('psn.bulk-destroy');
     Route::get('/psn/{id}', [PsnController::class, 'show'])->name('psn.show');
     Route::get('/psn/{id}/ptp', [PsnController::class, 'ptpPdf'])->name('psn.ptp_pdf');
     Route::post('/psn/{id}/verifikasi', [PsnController::class, 'verify'])->name('psn.verify');
@@ -432,8 +428,7 @@ Route::middleware(['auth'])->group(function () {
  
     // PPKPR Berusaha
     Route::get('/berusaha', [PpkprBerusahaController::class, 'index'])->name('berusaha.index');
-    Route::match(['get', 'post'], '/berusaha/bulk-destroy', [PpkprBerusahaController::class, 'bulkDestroy'])->name('berusaha.bulk-destroy');
-    Route::match(['get', 'post'], '/berusaha/bulk{any}', [PpkprBerusahaController::class, 'bulkDestroy'])->where('any', '.*');
+    Route::post('/berusaha/bulk-destroy', [PpkprBerusahaController::class, 'bulkDestroy'])->name('berusaha.bulk-destroy');
     Route::get('/berusaha/{id}', [PpkprBerusahaController::class, 'show'])->name('berusaha.show');
     Route::get('/berusaha/{id}/ptp', [PpkprBerusahaController::class, 'ptpPdf'])->name('berusaha.ptp_pdf');
     Route::post('/berusaha/{id}/verifikasi', [PpkprBerusahaController::class, 'verify'])->name('berusaha.verify');
@@ -488,10 +483,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/berkas', [BerkasController::class, 'index'])->name('berkas.index');
     Route::post('/berkas', [BerkasController::class, 'store'])->name('berkas.store');
     Route::post('/berkas/sync', [BerkasController::class, 'sync'])->name('berkas.sync');
-    Route::match(['get', 'post'], '/berkas/bulk-destroy', [BerkasController::class, 'bulkDestroy'])->name('berkas.bulk-destroy');
-    Route::match(['get', 'post'], '/berkas/bulk_destroy', [BerkasController::class, 'bulkDestroy']);
-    Route::match(['get', 'post'], '/berkas/bulk%20destroy', [BerkasController::class, 'bulkDestroy']);
-    Route::match(['get', 'post'], '/berkas/bulk{any}', [BerkasController::class, 'bulkDestroy'])->where('any', '.*');
+    Route::post('/berkas/bulk-destroy', [BerkasController::class, 'bulkDestroy'])->name('berkas.bulk-destroy');
     Route::get('/berkas/{id}/download', [BerkasController::class, 'download'])->name('berkas.download');
     Route::get('/berkas/{id}/preview', [BerkasController::class, 'preview'])->name('berkas.preview');
     Route::delete('/berkas/{id}', [BerkasController::class, 'destroy'])->name('berkas.destroy');
@@ -500,12 +492,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
     Route::post('/dokumen', [DokumenController::class, 'store'])->name('dokumen.store');
     Route::post('/dokumen/destroy-all', [DokumenController::class, 'destroyAll'])->name('dokumen.destroy_all');
-    Route::match(['get', 'post'], '/dokumen/bulk-destroy', [DokumenController::class, 'bulkDestroy'])->name('dokumen.bulk-destroy');
-    Route::match(['get', 'post'], '/dokumen/bulk_destroy', [DokumenController::class, 'bulkDestroy']);
-    Route::match(['get', 'post'], '/dokumen/bulk%20destroy', [DokumenController::class, 'bulkDestroy']);
-    Route::match(['get', 'post'], '/dokumen/bulk-delete', [DokumenController::class, 'bulkDestroy']);
-    Route::match(['get', 'post'], '/dokumen/delete-batch', [DokumenController::class, 'bulkDestroy']);
-    Route::match(['get', 'post'], '/dokumen/bulk{any}', [DokumenController::class, 'bulkDestroy'])->where('any', '.*');
+    Route::post('/dokumen/bulk-destroy', [DokumenController::class, 'bulkDestroy'])->name('dokumen.bulk-destroy');
     Route::post('/dokumen/download-zip', [DokumenController::class, 'downloadZip'])->name('dokumen.download_zip');
     Route::post('/dokumen/download-batch', [DokumenController::class, 'downloadBatch'])->name('dokumen.download_batch');
     Route::get('/dokumen/{id}/download', [DokumenController::class, 'download'])->name('dokumen.download');
@@ -552,61 +539,4 @@ Route::get('/flowchart.pdf', function () {
         abort(404, 'File not found.');
     }
     return response()->file($path);
-});
-
-// ---------------------------------------------------------
-// ROUTE SETUP VPS (HAPUS ATAU COMMENT ROUTE INI JIKA SUDAH SELESAI!)
-// ---------------------------------------------------------
-// Route::get('/setup-vps', function() {
-//     return "Disabled for security.";
-// });
-
-Route::get('/setup-dokumens', function() {
-    if (!\Illuminate\Support\Facades\Schema::hasTable('dokumens')) {
-        \Illuminate\Support\Facades\Schema::create('dokumens', function (\Illuminate\Database\Schema\Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('nama_dokumen');
-            $table->string('kategori')->nullable();
-            $table->string('file_path');
-            $table->string('tipe_file', 10)->nullable();
-            $table->string('ukuran_file', 20)->nullable();
-            $table->text('keterangan')->nullable();
-            $table->timestamps();
-        });
-        return "Tabel dokumens berhasil dibuat!";
-    }
-    return "Tabel dokumens sudah ada.";
-});
-
-Route::get('/setup-copy', function() {
-    $content = file_get_contents(app_path('Http/Controllers/BerkasController.php'));
-    $content = str_replace('BerkasController', 'DokumenController', $content);
-    $content = str_replace('use App\Models\Berkas;', 'use App\Models\Dokumen;', $content);
-    $content = str_replace('Berkas::', 'Dokumen::', $content);
-    $content = str_replace('$berkas', '$dokumen', $content);
-    $content = str_replace('berkas.', 'dokumen.', $content);
-    $content = str_replace('berkas/', 'dokumen/', $content);
-    $content = str_replace('nama_berkas', 'nama_dokumen', $content);
-    $content = str_replace('berkas', 'dokumen', $content);
-    $content = str_replace('Berkas', 'Dokumen', $content);
-    file_put_contents(app_path('Http/Controllers/DokumenController.php'), $content);
-
-    $viewContent = file_get_contents(resource_path('views/berkas/index.blade.php'));
-    $viewContent = str_replace('Berkas', 'Dokumen', $viewContent);
-    $viewContent = str_replace('berkas', 'dokumen', $viewContent);
-    $viewContent = str_replace('nama_berkas', 'nama_dokumen', $viewContent);
-    
-    $viewPath = resource_path('views/dokumen');
-    if (!file_exists($viewPath)) {
-        mkdir($viewPath, 0777, true);
-    }
-    file_put_contents($viewPath.'/index.blade.php', $viewContent);
-
-    return "Copy done!";
-});
-
-Route::get('/debug-kat', function() {
-    $berkas = \App\Models\Berkas::where('nama_berkas', 'like', '%[PKKPR Berusaha]%')->pluck('kategori')->unique();
-    return response()->json($berkas);
 });

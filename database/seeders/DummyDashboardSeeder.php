@@ -161,6 +161,11 @@ class DummyDashboardSeeder extends Seeder
      */
     public function run(): void
     {
+        if (app()->isProduction()) {
+            $this->command?->error('DIBATALKAN: DummyDashboardSeeder dilarang dijalankan di environment production.');
+            return;
+        }
+
         $this->ensureSampleFiles();
 
         $pelakuIds = DB::table('users')
